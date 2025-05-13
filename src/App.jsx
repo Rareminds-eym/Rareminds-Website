@@ -6,22 +6,21 @@ import "./App.css";
 
 // Lazy-loaded pages
 const Home = lazy(() => import("./pages/Home"));
-const About = lazy(() => import("./pages/About"));
+const About = lazy(() => import("./pages/Corporate/Index"));
 
 function App() {
   return (
     <>
-    <div className="text-4xl">efv</div>
-    <Router>
-      <DefaultLayout>
-        <Suspense fallback={<LoaderComponent />}>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/corporate" element={<About />} />
-          </Routes>
-        </Suspense>
-      </DefaultLayout>
-    </Router>
+      <Router>
+        <DefaultLayout>
+          <Suspense fallback={<LoaderComponent />}>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/corporate" element={<About />} />
+            </Routes>
+          </Suspense>
+        </DefaultLayout>
+      </Router>
     </>
   );
 }
