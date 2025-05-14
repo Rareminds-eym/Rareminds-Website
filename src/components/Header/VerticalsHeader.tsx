@@ -3,15 +3,20 @@ import { Link, useLocation } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 
 const navItems = [
-  { label: "Corporate", path: "/corporate" },
-  { label: "Govt", path: "/govt" },
-  { label: "Colleges", path: "/colleges" },
-  { label: "School", path: "/school" },
-  { label: "Counselling", path: "https://career.rareminds.in", external: true },
+  { label: "Home", path: "/" },
+  { label: "Contact Us", path: "/contact" },
+];
+
+const verticalOptions = [
+  "Government",
+  "Corporate",
+  "Academia",
+  "University",
 ];
 
 const VerticalsHeader: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [currentVertical, setCurrentVertical] = useState("Corporate"); // Default value
   const location = useLocation();
 
   const toggleMenu = () => setIsOpen(!isOpen);
@@ -19,39 +24,42 @@ const VerticalsHeader: React.FC = () => {
   return (
     <header className="fixed top-0 left-0 w-full z-50 bg-white border-b shadow-sm">
       <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-        {/* Logo */}
+        {/* Left: Logo */}
         <Link to="/" className="text-xl font-bold text-blue-600">
           Rareminds
         </Link>
 
-        {/* Desktop Menu */}
+        {/* Center: Desktop Navigation */}
         <nav className="hidden md:flex space-x-6">
-          {navItems.map((item, i) =>
-            item.external ? (
-              <a
-                key={i}
-                href={`https://${item.path}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-gray-700 hover:text-blue-600"
-              >
-                {item.label}
-              </a>
-            ) : (
-              <Link
-                key={i}
-                to={item.path}
-                className={`${
-                  location.pathname === item.path
-                    ? "text-blue-600 font-semibold"
-                    : "text-gray-700"
-                } hover:text-blue-600`}
-              >
-                {item.label}
-              </Link>
-            )
-          )}
+          {navItems.map((item, i) => (
+            <Link
+              key={i}
+              to={item.path}
+              className={`${
+                location.pathname === item.path
+                  ? "text-blue-600 font-semibold"
+                  : "text-gray-700"
+              } hover:text-blue-600`}
+            >
+              {item.label}
+            </Link>
+          ))}
         </nav>
+
+        {/* Right: Business Vertical Select */}
+        <div className="hidden md:block">
+          <select
+            value={currentVertical}
+            onChange={(e) => setCurrentVertical(e.target.value)}
+            className="border border-gray-300 rounded-md px-3 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            {verticalOptions.map((option) => (
+              <option key={option} value={option}>
+                {option}
+              </option>
+            ))}
+          </select>
+        </div>
 
         {/* Mobile Menu Toggle */}
         <button onClick={toggleMenu} className="md:hidden text-gray-700">
@@ -59,35 +67,36 @@ const VerticalsHeader: React.FC = () => {
         </button>
       </div>
 
-      {/* Mobile Menu */}
+      {/* Mobile Navigation */}
       {isOpen && (
-        <div className="md:hidden bg-white border-t px-4 py-2">
-          {navItems.map((item, i) =>
-            item.external ? (
-              <a
-                key={i}
-                href={`https://${item.path}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="block py-2 text-gray-700 hover:text-blue-600"
-              >
-                {item.label}
-              </a>
-            ) : (
-              <Link
-                key={i}
-                to={item.path}
-                className={`block py-2 ${
-                  location.pathname === item.path
-                    ? "text-blue-600 font-semibold"
-                    : "text-gray-700"
-                } hover:text-blue-600`}
-                onClick={() => setIsOpen(false)}
-              >
-                {item.label}
-              </Link>
-            )
-          )}
+        <div className="md:hidden bg-white border-t px-4 py-2 space-y-2">
+          {navItems.map((item, i) => (
+            <Link
+              key={i}
+              to={item.path}
+              className={`block py-2 ${
+                location.pathname === item.path
+                  ? "text-blue-600 font-semibold"
+                  : "text-gray-700"
+              } hover:text-blue-600`}
+              onClick={() => setIsOpen(false)}
+            >
+              {item.label}
+            </Link>
+          ))}
+          <div className="pt-2">
+            <select
+              value={currentVertical}
+              onChange={(e) => setCurrentVertical(e.target.value)}
+              className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              {verticalOptions.map((option) => (
+                <option key={option} value={option}>
+                  {option}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
       )}
     </header>
