@@ -48,29 +48,3 @@
 .description-container::after{
   clip-path: polygon(0 0, 0% 100%, 90% 50%);
 }
-
-/* .brain-container {
-  --overlay-index: 0;
-  --overlay-color: #0000001a;
-  --part-index: 0;
-  --overlay-blur: 0px;
-} */
-
-/* .brain-overlay {
-  background-color: #0000001a;
-  filter: blur(0);
-  z-index: 0;
-}
-
-.brain-overlay-hover {
-  background-color: #00000066;
-  filter: blur(10);
-  z-index: 5;
-} */
-
-/* .brain-part:hover~.brain-overlay {
-  --overlay-index: 5;
-  --part-index: 5;
-  --overlay-blur: 10px;
-  --overlay-color: #000000;
-} */

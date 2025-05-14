@@ -53,62 +53,64 @@ const Index = () => {
 
   return (
     <>
-      <div className={`hidden lg:flex justify-center`}>
-        <div className="relative flex w-min -translate-x-[25%] xxl:-translate-x-[25%] -mt-[40px] scale-75 xxl:-mt-5 xxl:scale-75">
-          <Govt
-            onAction={redirectToPage}
-            overlayActive={togglePartHover}
-            partHover={partHover}
-            activePart={activePart}
-            setActivePart={setActivePart}
-            content={content[0]}
-          />
-          <Corporate
-            onAction={redirectToPage}
-            overlayActive={togglePartHover}
-            partHover={partHover}
-            activePart={activePart}
-            setActivePart={setActivePart}
-            content={content[1]}
-          />
-          <College
-            onAction={redirectToPage}
-            overlayActive={togglePartHover}
-            partHover={partHover}
-            setActivePart={setActivePart}
-            content={content[3]}
-            activePart={activePart}
-          />
-          <School
-            onAction={redirectToPage}
-            overlayActive={togglePartHover}
-            partHover={partHover}
-            setActivePart={setActivePart}
-            content={content[2]}
-            activePart={activePart}
-          />
-          <Counselling
-            onAction={redirectToPage}
-            overlayActive={togglePartHover}
-            partHover={partHover}
-            setActivePart={setActivePart}
-            activePart={activePart}
-            content={content[4]}
-          />
+      <div className="hidden lg:block">
+        <div className={`flex justify-center`}>
+          <div className="relative flex w-min -translate-x-[25%] xxl:-translate-x-[25%] -mt-[40px] scale-75 xxl:-mt-5 xxl:scale-75">
+            <Govt
+              onAction={redirectToPage}
+              overlayActive={togglePartHover}
+              partHover={partHover}
+              activePart={activePart}
+              setActivePart={setActivePart}
+              content={content[0]}
+            />
+            <Corporate
+              onAction={redirectToPage}
+              overlayActive={togglePartHover}
+              partHover={partHover}
+              activePart={activePart}
+              setActivePart={setActivePart}
+              content={content[1]}
+            />
+            <College
+              onAction={redirectToPage}
+              overlayActive={togglePartHover}
+              partHover={partHover}
+              setActivePart={setActivePart}
+              content={content[3]}
+              activePart={activePart}
+            />
+            <School
+              onAction={redirectToPage}
+              overlayActive={togglePartHover}
+              partHover={partHover}
+              setActivePart={setActivePart}
+              content={content[2]}
+              activePart={activePart}
+            />
+            <Counselling
+              onAction={redirectToPage}
+              overlayActive={togglePartHover}
+              partHover={partHover}
+              setActivePart={setActivePart}
+              activePart={activePart}
+              content={content[4]}
+            />
+          </div>
         </div>
-      </div>
-      <div className="container flex justify-center mx-auto mt-[160px] pb-[80px]">
-        <div className="max-w-[500px] xxl:max-w-[600px] -translate-x-[35%] xxl:-translate-x-[45%]">
-          <h1 className="text-2xl font-semibold">
-            Rareminds: Empowering Minds, Shaping Futures
-          </h1>
-          <p className="mt-3">
-            At Rareminds, we transform potential into excellence through
-            innovative talent acquisition, training, and consultation solutions.
-            Bridging aspirations with achievements, we empower students,
-            professionals, organizations, and academic institutions to unlock
-            limitless possibilities and drive impactful growth.
-          </p>
+        <div className="container flex justify-center mx-auto mt-[160px] pb-[80px]">
+          <div className="max-w-[500px] xxl:max-w-[600px] -translate-x-[35%] xxl:-translate-x-[45%]">
+            <h1 className="text-2xl font-semibold">
+              Rareminds: Empowering Minds, Shaping Futures
+            </h1>
+            <p className="mt-3">
+              At Rareminds, we transform potential into excellence through
+              innovative talent acquisition, training, and consultation
+              solutions. Bridging aspirations with achievements, we empower
+              students, professionals, organizations, and academic institutions
+              to unlock limitless possibilities and drive impactful growth.
+            </p>
+          </div>
         </div>
       </div>
     </>
