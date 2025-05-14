@@ -1,1 +1,1 @@
-type UserType = "government" | "corporate" | "college" | "career" | "schools" | "none";
+type UserType = "government" | "corporate" | "college" | "career" | "academia" | "none";

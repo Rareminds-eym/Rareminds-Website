@@ -14,7 +14,7 @@ const Index = () => {
     {
       heading: "Government collaborations",
       img: "2-crop.jpg",
-      path: "/",
+      path: "/government",
       description:
         "Collaborating on government skill development initiatives with customized training programs to uplift students beyond traditional curriculums.",
     },
@@ -28,14 +28,14 @@ const Index = () => {
     {
       heading: "Academia",
       img: "5-crop.png",
-      path: "/",
+      path: "/academia",
       description:
         "Transforming education through innovative learning solutions and advanced curriculum design, fostering impactful educational institution partnerships.",
     },
     {
-      heading: "University network",
+      heading: "Institutions network",
       img: "4-crop.png",
-      path: "/",
+      path: "/institutions",
       description:
         "Bridging skill gaps and enhancing capabilities to create a future-ready workforce through transformative partnerships with colleges and universities.",
     },

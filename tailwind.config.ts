@@ -9,7 +9,11 @@ export default {
       center: true,
       padding: '1rem',
     },
-    extend: {},
+    extend: {
+      fontFamily: {
+        sans: ['Poppins', 'sans-serif'],
+      },
+    },
   },
   plugins: [],
 } as const;
