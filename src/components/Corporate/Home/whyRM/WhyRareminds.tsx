@@ -52,7 +52,7 @@ const WhyRareminds = () => {
 
   const blocks = [
     {
-      src: "/images/corporate/recruitment/whyRM/role.webp",
+      src: "/Corporate/Images/Home/whyRM/role.webp",
       bottom: "10%",
       left: "10%",
       width: "w-[13%]",
@@ -60,7 +60,7 @@ const WhyRareminds = () => {
       description: "92% of roles closed within the first shortlist round",
     },
     {
-      src: "/images/corporate/recruitment/whyRM/offer.webp",
+      src: "/Corporate/Images/Home/whyRM/offer.webp",
       bottom: "18%",
       left: "23%",
       width: "w-[11%]",
@@ -68,7 +68,7 @@ const WhyRareminds = () => {
       description: "98% candidate offer acceptance rate",
     },
     {
-      src: "/images/corporate/recruitment/whyRM/csat.webp",
+      src: "/Corporate/Images/Home/whyRM/csat.webp",
       bottom: "24%",
       left: "35%",
       width: "w-[9%]",
@@ -77,7 +77,7 @@ const WhyRareminds = () => {
         "Rated 4.8/5 by corporate clients for quality and communication",
     },
     {
-      src: "/images/corporate/recruitment/whyRM/indian.webp",
+      src: "/Corporate/Images/Home/whyRM/indian.webp",
       bottom: "29%",
       left: "47%",
       width: "w-[8%]",
@@ -85,7 +85,7 @@ const WhyRareminds = () => {
       description: "Pan-India reach with regional hiring in",
     },
     {
-      src: "/images/corporate/recruitment/whyRM/brands.webp",
+      src: "/Corporate/Images/Home/whyRM/brands.webp",
       bottom: "24%",
       left: "57%",
       width: "w-[9%]",
@@ -93,7 +93,7 @@ const WhyRareminds = () => {
       description: "C-Suite hires in the past year",
     },
     {
-      src: "/images/corporate/recruitment/whyRM/roles.webp",
+      src: "/Corporate/Images/Home/whyRM/roles.webp",
       bottom: "18%",
       left: "67%",
       width: "w-[11%]",
@@ -101,7 +101,7 @@ const WhyRareminds = () => {
       description: "Job Families Successfully Placed",
     },
     {
-      src: "/images/corporate/recruitment/whyRM/countries.webp",
+      src: "/Corporate/Images/Home/whyRM/countries.webp",
       bottom: "10%",
       left: "79%",
       width: "w-[13%]",
@@ -111,7 +111,7 @@ const WhyRareminds = () => {
   ];
 
   return (
-    <section ref={containerRef} className="relative overflow-hidden">
+    <section ref={containerRef} className="relative overflow-hidden rounded-t-[50px] md:rounded-t-[200px] shadow-[0_-20px_30px_-22px_rgba(0,0,0,0.25)]">
       <div className="relative">
         <div className="absolute w-full h-full bg-[url('/Corporate/Images/Home/whyRM/bg.webp')] bg-center bg-fill opacity-[0.03]"></div>
         <div className="container relative z-10 px-4 mx-auto max-w-7xl pb-[100px]">
@@ -175,7 +175,7 @@ const WhyRareminds = () => {
 
       <div className="relative w-full">
         <img
-          src="/images/corporate/recruitment/matrics-bg.webp"
+          src="/Corporate/Images/Home/whyRM/matrics-bg.webp"
           width={1920}
           height={1080}
           alt="road image"

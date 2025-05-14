@@ -41,6 +41,8 @@ const Corporate: React.FC = () => {
       <div id="why-rareminds">
           <WhyRareminds />
         </div>
+
+        
     </>
   );
 };
