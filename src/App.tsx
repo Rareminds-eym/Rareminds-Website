@@ -8,7 +8,7 @@ import "./App.css";
 const Index = lazy(() => import("./pages/Index"));
 const About = lazy(() => import("./pages/Corporate/Index"));
 
-function App() {
+const App: React.FC = () => {
   return (
     <>
       <Router>
