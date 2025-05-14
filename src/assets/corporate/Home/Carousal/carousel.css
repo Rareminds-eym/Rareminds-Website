@@ -57,3 +57,16 @@
     right: 10px !important;
   }
 }
+
+@keyframes rotateLoop {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.scroll-rotate {
+  animation: rotateLoop 10s linear infinite;
+}

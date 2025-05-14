@@ -1,41 +1,46 @@
 import React from "react";
 import FullScreenCarousel from "../../components/Corporate/Home/Carousel/FullScreenCarousel";
+import WhyRareminds from "@/components/Corporate/Home/whyRM/WhyRareminds";
 
 const Corporate: React.FC = () => {
   const slides = [
     {
-      heading: "Don’t Just Hire. <br>Build High-Performing Teams",
+      heading: "<span class='corporate-heading-highlight'>Don’t Just Hire.</span> <br>Build High-Performing Teams",
       subheading:
         "Smart, scalable recruitment solutions trusted by 250+ corporates",
-      img: "/LandingPage/Brain/1-crop.jpg",
+      img: "/Corporate/Images/Home/Hero/BuildHigh.webp",
     },
     {
-      heading: "From Bulk to Boardroom <br>One Partner. Zero Compromise",
+      heading: "From Bulk to Boardroom <br><span class='corporate-heading-highlight'>One Partner.</span> Zero Compromise",
       subheading: "Technical hiring, leadership search, and everything in between — done right",
-      img: "/LandingPage/Brain/2-crop.jpg",
+      img: "/Corporate/Images/Home/Hero/OnePartner.webp",
     },
     {
-      heading: "When Time-to-Hire Matters, <br>So Does Who You Hire With",
+      heading: "When <span class='corporate-heading-highlight'>Time-to-Hire Matters,</span> <br>So Does Who You Hire With",
       subheading: "Rareminds delivers role-fit talent with speed, accuracy, and accountability",
-      img: "/LandingPage/Brain/3-crop.jpg",
+      img: "/Corporate/Images/Home/Hero/Time-to-Hire.webp",
     },
     {
-      heading: "Your Toughest Role? <br>Filled Faster Than You’d Believe",
+      heading: "<span class='corporate-heading-highlight'>Your Toughest Role?</span> <br>Filled Faster Than You’d Believe",
       subheading: "From CXOs to coders — precision hiring that drives business outcomes",
-      img: "/LandingPage/Brain/3-crop.jpg",
+      img: "/Corporate/Images/Home/Hero/ToughestRole.webp",
     },
     {
-      heading: "500+ Critical Roles <br>Closed This Quarter. <br>Yours Could Be Next",
+      heading: "<span class='corporate-heading-highlight'>500+ Critical Roles</span> Closed This Quarter. <br>Yours Could Be Next",
       subheading: "Partner with the recruitment team built for performance and outcomes",
-      img: "/LandingPage/Brain/3-crop.jpg",
+      img: "/Corporate/Images/Home/Hero/CriticalRoles.webp",
     },
   ];
 
   return (
     <>
-      <div className="bg-[url('/Corporate/Images/header-bg.webp')]">
+      <section className="bg-[url('/Corporate/Images/Home/Hero/header-bg.webp')]">
         <FullScreenCarousel slides={slides} />
-      </div>
+      </section>
+
+      <div id="why-rareminds">
+          <WhyRareminds />
+        </div>
     </>
   );
 };
