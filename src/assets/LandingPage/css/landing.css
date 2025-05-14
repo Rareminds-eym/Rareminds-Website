@@ -1,0 +1,76 @@
+.clipped-govt {
+  width: 681px;
+  height: 361px;
+  clip-path: url(#govt);
+  -webkit-clip-path: url(#govt);
+  overflow: hidden;
+}
+
+.clipped-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.clipped-corporate {
+  width: 608px;
+  height: 266px;
+  clip-path: url(#corporate);
+  -webkit-clip-path: url(#corporate);
+  overflow: hidden;
+}
+
+.clipped-college {
+  width: 782px;
+  height: 493px;
+  clip-path: url(#college);
+  -webkit-clip-path: url(#college);
+  overflow: hidden;
+}
+
+.clipped-school {
+  width: 261px;
+  height: 294px;
+  clip-path: url(#school);
+  -webkit-clip-path: url(#school);
+  overflow: hidden;
+}
+
+.clipped-counselling {
+  width: 316px;
+  height: 225px;
+  clip-path: url(#counselling);
+  -webkit-clip-path: url(#counselling);
+  overflow: hidden;
+}
+
+.description-container::after{
+  clip-path: polygon(0 0, 0% 100%, 90% 50%);
+}
+
+/* .brain-container {
+  --overlay-index: 0;
+  --overlay-color: #0000001a;
+  --part-index: 0;
+  --overlay-blur: 0px;
+} */
+
+/* .brain-overlay {
+  background-color: #0000001a;
+  filter: blur(0);
+  z-index: 0;
+}
+
+.brain-overlay-hover {
+  background-color: #00000066;
+  filter: blur(10);
+  z-index: 5;
+} */
+
+/* .brain-part:hover~.brain-overlay {
+  --overlay-index: 5;
+  --part-index: 5;
+  --overlay-blur: 10px;
+  --overlay-color: #000000;
+} */
