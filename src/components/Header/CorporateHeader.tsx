@@ -3,7 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 
 const navItems = [
-  { label: "Home", path: "/" },
+  { label: "Home", path: "/corporate" },
   { label: "Contact Us", path: "/contact" },
 ];
 
@@ -26,7 +26,7 @@ const CorporateHeader: React.FC = () => {
       <div className="container mx-auto h-[80px] px-4 py-4 flex justify-between items-center">
         {/* Left: Logo */}
         <Link to="/" className="text-xl font-bold text-blue-600">
-          Rareminds
+          <img src="/RareMinds.webp" alt="Rareminds Logo" width={200}/>
         </Link>
 
         {/* Center: Desktop Navigation */}
