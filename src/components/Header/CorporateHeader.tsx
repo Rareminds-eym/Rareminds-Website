@@ -11,12 +11,12 @@ const verticalOptions = [
   "Government",
   "Corporate",
   "Academia",
-  "University",
+  "Institutions",
 ];
 
-const VerticalsHeader: React.FC = () => {
+const CorporateHeader: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [currentVertical, setCurrentVertical] = useState("Corporate"); // Default value
+  const [currentVertical, setCurrentVertical] = useState("Corporate");
   const location = useLocation();
 
   const toggleMenu = () => setIsOpen(!isOpen);
@@ -46,7 +46,7 @@ const VerticalsHeader: React.FC = () => {
           ))}
         </nav>
 
-        {/* Right: Business Vertical Select */}
+        {/* Right: Vertical Select Box */}
         <div className="hidden md:block">
           <select
             value={currentVertical}
@@ -61,13 +61,13 @@ const VerticalsHeader: React.FC = () => {
           </select>
         </div>
 
-        {/* Mobile Menu Toggle */}
+        {/* Mobile Menu Button */}
         <button onClick={toggleMenu} className="md:hidden text-gray-700">
           {isOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
       </div>
 
-      {/* Mobile Navigation */}
+      {/* Mobile Dropdown Menu */}
       {isOpen && (
         <div className="md:hidden bg-white border-t px-4 py-2 space-y-2">
           {navItems.map((item, i) => (
@@ -103,4 +103,4 @@ const VerticalsHeader: React.FC = () => {
   );
 };
 
-export default VerticalsHeader;
+export default CorporateHeader;

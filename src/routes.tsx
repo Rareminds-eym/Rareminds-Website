@@ -1,62 +1,80 @@
 import { createBrowserRouter, Outlet } from "react-router-dom";
 import { lazy, Suspense } from "react";
-
-import DefaultLayout from "./layouts/DefaultLayout";
-import VerticalsLayout from "./layouts/VerticalsLayout";
 import LoaderComponent from "./components/LoaderComponent";
 import ErrorBoundary from "./components/ErrorBoundary";
 
-const Index = lazy(() => import("./pages/Index"));
-const About = lazy(() => import("./pages/Corporate/Index"));
+// Layouts
+import DefaultLayout from "./layouts/DefaultLayout";
+import CorporateLayout from "./layouts/CorporateLayout";
+import GovernmentLayout from "./layouts/GovernmentLayout";
+import AcademiaLayout from "./layouts/AcademiaLayout";
+import InstitutionsLayout from "./layouts/InstitutionsLayout";
 
-const WithSuspense = ({ children }: { children: React.ReactNode }) => (
-  <Suspense fallback={<LoaderComponent />}>{children}</Suspense>
+// Lazy pages
+const Home = lazy(() => import("./pages/Index"));
+const Corporate = lazy(() => import("./pages/Corporate/Index"));
+const Government = lazy(() => import("./pages/Government/Index"));
+const Academia = lazy(() => import("./pages/Academia/Index"));
+const Institutions = lazy(() => import("./pages/Institutions/Index"));
+
+const withSuspense = (Component: React.LazyExoticComponent<React.FC<{}>>) => (
+  <Suspense fallback={<LoaderComponent />}> <Component /> </Suspense>
 );
 
 const router = createBrowserRouter([
-  // DefaultLayout for home page "/"
   {
-    path: "/",
-    element: (
-      <DefaultLayout>
-        <WithSuspense>
-          <Outlet />
-        </WithSuspense>
-      </DefaultLayout>
-    ),
-    errorElement: <ErrorBoundary />,
+    element: <DefaultLayout><Outlet /></DefaultLayout>,
+    errorElement: <ErrorBoundary />, 
     children: [
       {
-        index: true,
-        element: <Index />,
+        path: "/",
+        element: withSuspense(Home),
       },
     ],
   },
-
-  // VerticalsLayout for other pages
   {
-    element: (
-      <VerticalsLayout>
-        <WithSuspense>
-          <Outlet />
-        </WithSuspense>
-      </VerticalsLayout>
-    ),
+    element: <CorporateLayout><Outlet /></CorporateLayout>,
     errorElement: <ErrorBoundary />,
     children: [
       {
-        path: "corporate",
-        element: <About />,
+        path: "/corporate",
+        element: withSuspense(Corporate),
       },
-      // Add other vertical routes here
     ],
   },
-
-  // Catch-all route
+  {
+    element: <GovernmentLayout><Outlet /></GovernmentLayout>,
+    errorElement: <ErrorBoundary />,
+    children: [
+      {
+        path: "/government",
+        element: withSuspense(Government),
+      },
+    ],
+  },
+  {
+    element: <AcademiaLayout><Outlet /></AcademiaLayout>,
+    errorElement: <ErrorBoundary />,
+    children: [
+      {
+        path: "/academia",
+        element: withSuspense(Academia),
+      },
+    ],
+  },
+  {
+    element: <InstitutionsLayout><Outlet /></InstitutionsLayout>,
+    errorElement: <ErrorBoundary />,
+    children: [
+      {
+        path: "/Institutions",
+        element: withSuspense(Institutions),
+      },
+    ],
+  },
   {
     path: "*",
     element: <ErrorBoundary />,
-    errorElement: <ErrorBoundary />,
   },
 ]);
 
