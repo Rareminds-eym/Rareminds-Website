@@ -3,25 +3,23 @@ import { Suspense, lazy } from "react";
 import DefaultLayout from "./layouts/DefaultLayout";
 import LoaderComponent from "@/components/LoaderComponent";
 import "./App.css";
-import Navbar from "./components/Navbar/Navbar"
 
 // Lazy-loaded pages
-const Home = lazy(() => import("./pages/Home"));
+const Index = lazy(() => import("./pages/Index"));
 const About = lazy(() => import("./pages/Corporate/Index"));
 
-function App() {
+const App: React.FC = () => {
   return (
     <>
       <Router>
-        {/* <DefaultLayout> */}
+        <DefaultLayout>
           <Suspense fallback={<LoaderComponent />}>
             <Routes>
-              <Route path="/" element={<Home />} />
+              <Route path="/" element={<Index />} />
               <Route path="/corporate" element={<About />} />
-              <Route path="/nav" element={<Navbar />} />
             </Routes>
           </Suspense>
-        {/* </DefaultLayout> */}
+        </DefaultLayout>
       </Router>
     </>
   );
