@@ -12,7 +12,7 @@ const DefaultLayout: React.FC<DefaultLayoutProps> = ({ children }) => {
   return (
     <div className="flex h-screen flex-col">
       <Header navbarOpen={navbarOpen} setNavbarOpen={setNavbarOpen} />
-      <main className="App w-full flex-1 mt-[80px]">{children}</main>
+      <main className="App w-full flex-1 mt-[80px] lg:mt-[180px]">{children}</main>
       <FooterBar />
     </div>
   );
