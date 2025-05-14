@@ -113,6 +113,15 @@ const Index = () => {
           </div>
         </div>
       </div>
+      <div className="lg:hidden container px-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 py-5">
+          {content.map((item, i) => (
+            <div className="h-[250px] bg-[#d5d5d5] rounded-2xl" key={i} style={{}}>
+
+            </div>
+          ))}
+        </div>
+      </div>
     </>
   );
 };

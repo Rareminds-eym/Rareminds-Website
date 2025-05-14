@@ -1,17 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, ReactNode } from "react";
 import FooterBar from "@/components/Footer/FooterBar";
 import Header from "@/components/Header/Index";
 
-const DefaultLayout: React.FC<{ children: React.ReactNode }> = ({
-  children,
-}) => {
-  const [navbarOpen, setNavbarOpen] = useState(false);
+interface DefaultLayoutProps {
+  children: ReactNode;
+}
+
+const DefaultLayout: React.FC<DefaultLayoutProps> = ({ children }) => {
+  const [navbarOpen, setNavbarOpen] = useState<boolean>(false);
 
   return (
     <div className="flex h-screen flex-col">
-        <Header navbarOpen={navbarOpen} setNavbarOpen={setNavbarOpen} />
-        <div className="App w-full flex-1 mt-[80px]">{children}</div>
-        <FooterBar />
+      <Header navbarOpen={navbarOpen} setNavbarOpen={setNavbarOpen} />
+      <main className="App w-full flex-1 mt-[80px]">{children}</main>
+      <FooterBar />
     </div>
   );
 };
