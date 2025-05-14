@@ -16,6 +16,7 @@ const Corporate = lazy(() => import("./pages/Corporate/Index"));
 const Government = lazy(() => import("./pages/Government/Index"));
 const Academia = lazy(() => import("./pages/Academia/Index"));
 const Institutions = lazy(() => import("./pages/Institutions/Index"));
+const Contact = lazy(() => import("./pages/Contact/Index"));
 
 const withSuspense = (Component: React.LazyExoticComponent<React.FC<{}>>) => (
   <Suspense fallback={<LoaderComponent />}>
@@ -50,6 +51,10 @@ const router = createBrowserRouter([
       {
         path: "/corporate",
         element: withSuspense(Corporate),
+      },
+      {
+        path: "/contact",
+        element: withSuspense(Contact),
       },
     ],
   },
