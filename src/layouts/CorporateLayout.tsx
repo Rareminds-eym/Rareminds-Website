@@ -12,7 +12,7 @@ const CorporateLayout: React.FC<CorporateLayoutProps> = ({ children }) => {
       {/* Use CorporateHeader for vertical-specific navigation */}
       <Header />
 
-      <main className="flex-1 mt-[100px] lg:mt-[140px] px-4 lg:px-12">
+      <main className="flex-1 mt-[80px]">
         {children}
       </main>
 

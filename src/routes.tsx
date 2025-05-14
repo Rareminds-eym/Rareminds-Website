@@ -18,13 +18,20 @@ const Academia = lazy(() => import("./pages/Academia/Index"));
 const Institutions = lazy(() => import("./pages/Institutions/Index"));
 
 const withSuspense = (Component: React.LazyExoticComponent<React.FC<{}>>) => (
-  <Suspense fallback={<LoaderComponent />}> <Component /> </Suspense>
+  <Suspense fallback={<LoaderComponent />}>
+    {" "}
+    <Component />{" "}
+  </Suspense>
 );
 
 const router = createBrowserRouter([
   {
-    element: <DefaultLayout><Outlet /></DefaultLayout>,
-    errorElement: <ErrorBoundary />, 
+    element: (
+      <DefaultLayout>
+        <Outlet />
+      </DefaultLayout>
+    ),
+    errorElement: <ErrorBoundary />,
     children: [
       {
         path: "/",
@@ -33,7 +40,11 @@ const router = createBrowserRouter([
     ],
   },
   {
-    element: <CorporateLayout><Outlet /></CorporateLayout>,
+    element: (
+      <CorporateLayout>
+        <Outlet />
+      </CorporateLayout>
+    ),
     errorElement: <ErrorBoundary />,
     children: [
       {
@@ -43,7 +54,11 @@ const router = createBrowserRouter([
     ],
   },
   {
-    element: <GovernmentLayout><Outlet /></GovernmentLayout>,
+    element: (
+      <GovernmentLayout>
+        <Outlet />
+      </GovernmentLayout>
+    ),
     errorElement: <ErrorBoundary />,
     children: [
       {
@@ -53,7 +68,11 @@ const router = createBrowserRouter([
     ],
   },
   {
-    element: <AcademiaLayout><Outlet /></AcademiaLayout>,
+    element: (
+      <AcademiaLayout>
+        <Outlet />
+      </AcademiaLayout>
+    ),
     errorElement: <ErrorBoundary />,
     children: [
       {
@@ -63,7 +82,11 @@ const router = createBrowserRouter([
     ],
   },
   {
-    element: <InstitutionsLayout><Outlet /></InstitutionsLayout>,
+    element: (
+      <InstitutionsLayout>
+        <Outlet />
+      </InstitutionsLayout>
+    ),
     errorElement: <ErrorBoundary />,
     children: [
       {

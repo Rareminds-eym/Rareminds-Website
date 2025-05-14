@@ -10,9 +10,9 @@ const CorporateLayout: React.FC<CorporateLayoutProps> = ({ children }) => {
   return (
     <div className="flex h-screen flex-col">
       {/* Use CorporateHeader for vertical-specific navigation */}
-      <Header />
+      {/* <Header /> */}
 
-      <main className="flex-1 mt-[100px] lg:mt-[140px] px-4 lg:px-12">
+      <main className="flex-1">
         {children}
       </main>
 

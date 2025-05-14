@@ -23,7 +23,7 @@ const CorporateHeader: React.FC = () => {
 
   return (
     <header className="fixed top-0 left-0 w-full z-50 bg-white border-b shadow-sm">
-      <div className="container mx-auto px-4 py-4 flex justify-between items-center">
+      <div className="container mx-auto h-[80px] px-4 py-4 flex justify-between items-center">
         {/* Left: Logo */}
         <Link to="/" className="text-xl font-bold text-blue-600">
           Rareminds
