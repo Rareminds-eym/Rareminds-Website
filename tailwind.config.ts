@@ -1,3 +1,5 @@
+import { color } from "framer-motion";
+
 /** @type {import('tailwindcss').Config} */
 export default {
   content: [
@@ -12,6 +14,16 @@ export default {
     extend: {
       fontFamily: {
         sans: ['Poppins', 'sans-serif'],
+      },
+      colors: {
+        corporate: {
+          primary: "#107DFE",
+          secondary: "#04DEBF",
+          accent: "#F64A89",
+          black: "#000000",
+          purple: "#4F2D91",
+          yellow: "#F4B128"
+        },
       },
     },
   },
