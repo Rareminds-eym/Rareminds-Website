@@ -192,7 +192,7 @@ const ServicesSection = () => {
           transition={{ duration: 0.5, delay: 0.2 }}
           className="mt-16 text-center flex justify-center"
         >
-          <Link to="/contact">
+          <Link to="/corporate/contact">
             <button className="corporate-btn-1">
               Try us on your toughest role{" "}
               <Icon

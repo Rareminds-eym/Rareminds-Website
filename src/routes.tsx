@@ -12,6 +12,7 @@ import InstitutionsLayout from "./layouts/InstitutionsLayout";
 
 // Lazy pages
 const Home = lazy(() => import("./pages/Index"));
+const Service = lazy(() => import("./pages/Corporate/Services/[service]"));
 const Corporate = lazy(() => import("./pages/Corporate/Index"));
 const Government = lazy(() => import("./pages/Government/Index"));
 const Academia = lazy(() => import("./pages/Academia/Index"));
@@ -53,8 +54,12 @@ const router = createBrowserRouter([
         element: withSuspense(Corporate),
       },
       {
-        path: "/contact",
+        path: "/corporate/contact",
         element: withSuspense(Contact),
+      },
+      {
+        path: "/corporate/services/:name",
+        element: withSuspense(Service),
       },
     ],
   },

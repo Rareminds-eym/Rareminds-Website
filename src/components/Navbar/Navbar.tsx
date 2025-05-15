@@ -64,7 +64,7 @@ const Navbar = () => {
                             <div className="flex flex-col items-center text-center space-y-8">
                                 <a href="/careers" onClick={handleLinkClick} className="text-3xl font-medium hover:text-blue-300">Careers</a>
                                 <a href="/blogs" onClick={handleLinkClick} className="text-3xl font-medium hover:text-blue-300">Blogs</a>
-                                <a href="/contact" onClick={handleLinkClick} className="text-3xl font-medium hover:text-blue-300">Contact us</a>
+                                <a href="/corporate/contact" onClick={handleLinkClick} className="text-3xl font-medium hover:text-blue-300">Contact us</a>
                             </div>
                         </div>
                     </div>

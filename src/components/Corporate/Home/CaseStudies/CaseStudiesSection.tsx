@@ -103,7 +103,7 @@ const CaseStudiesSection = () => {
             className="w-full"
           >
             {caseStudies.map((currentCase, idx) => (
-              <SwiperSlide key={`case-${idx}`}>
+              <SwiperSlide key={`case-${idx}`} className="!m-0">
                 <div className="bg-white rounded-3xl overflow-hidden border border-corporate-black/40">
                   <div className="grid grid-cols-1 lg:grid-cols-3 min-h-[70vh]">
                     {/* Left Panel - Image & Stats */}

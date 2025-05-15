@@ -4,7 +4,7 @@ import { Menu, X } from "lucide-react";
 
 const navItems = [
   { label: "Home", path: "/corporate" },
-  { label: "Contact Us", path: "/contact" },
+  { label: "Contact Us", path: "/corporate/contact" },
 ];
 
 const verticalOptions = [
