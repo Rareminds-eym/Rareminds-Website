@@ -2,7 +2,6 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Suspense, lazy } from "react";
 import DefaultLayout from "./layouts/DefaultLayout";
 import LoaderComponent from "@/components/LoaderComponent";
-import "./App.css";
 
 // Lazy-loaded pages
 const Index = lazy(() => import("./pages/Index"));

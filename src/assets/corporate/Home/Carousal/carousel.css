@@ -1,0 +1,74 @@
+.mySwiper {
+  position: relative;
+}
+
+.swiper {
+  width: 100%;
+  height: 100%;
+}
+
+.swiper-slide {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.swiper-pagination {
+  position: absolute !important;
+  right: 20px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  width: auto !important;
+  left: auto !important;
+  z-index: 999;
+  padding: 10px 5px;
+  border-radius: 20px;
+}
+
+.swiper-pagination-bullet {
+  width: 14px !important;
+  height: 14px !important;
+  margin: 4px 0 !important;
+  background: #dddddd !important;
+  opacity: 1;
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 700ms;
+}
+
+.swiper-pagination-bullet-active {
+  background: #000000 !important;
+  height: 26px !important;
+  border-radius: 20px;
+}
+
+.corporate-full-screen-h {
+  min-height: calc(100vh - 80px);
+}
+
+@media (max-width: 768px) {
+  .corporate-full-screen-h {
+    min-height: 600px;
+  }
+
+  .swiper-pagination-vertical {
+    right: 10px !important;
+  }
+}
+
+@keyframes rotateLoop {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.scroll-rotate {
+  animation: rotateLoop 10s linear infinite;
+}
