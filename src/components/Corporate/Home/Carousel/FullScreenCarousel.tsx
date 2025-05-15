@@ -92,15 +92,15 @@ const FullScreenCarousel: React.FC<FullScreenCarouselProps> = ({
         >
           <img
             src="/Corporate/Images/Home/Hero/scroll.png"
-            width="78"
-            height="78"
+            width="100"
+            height="100"
             alt="Scroll down"
             className="scroll-rotate"
           />
           <img
             src={arrowDown}
-            width="47"
-            height="47"
+            width="62"
+            height="62"
             alt="Scroll down"
             className="absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2"
           />

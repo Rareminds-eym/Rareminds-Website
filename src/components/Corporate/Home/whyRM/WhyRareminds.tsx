@@ -30,24 +30,24 @@ const WhyRareminds = () => {
       description: "Hiring Partners",
       subtext:
         "Corporates across India rely on us to scale their teams efficiently and effectively.",
-        color: "bg-corporate-accent",
-      },
+      color: "bg-corporate-accent",
+    },
     {
       icon: <Factory size={32} />,
       number: "20+",
       description: "Industries Served",
       subtext:
         "From IT to Manufacturing, BFSI to Healthcare — we understand your business language.",
-        color: "bg-corporate-purple",
-      },
+      color: "bg-corporate-purple",
+    },
     {
       icon: <Clock size={32} />,
       number: "2x",
       description: "Faster Turnaround Time",
       subtext:
         "We don't just find talent — we deliver it at speed, without compromising quality.",
-        color: "bg-corporate-yellow",
-      },
+      color: "bg-corporate-yellow",
+    },
   ];
 
   const blocks = [
@@ -111,10 +111,13 @@ const WhyRareminds = () => {
   ];
 
   return (
-    <section ref={containerRef} className="relative overflow-hidden rounded-t-[50px] md:rounded-t-[200px] shadow-[0_-20px_30px_-22px_rgba(0,0,0,0.25)]">
+    <section
+      ref={containerRef}
+      className="relative overflow-hidden rounded-t-[50px] md:rounded-t-[200px] shadow-[0_-20px_30px_-22px_rgba(0,0,0,0.25)]"
+    >
       <div className="relative">
         <div className="absolute w-full h-full bg-[url('/Corporate/Images/Home/whyRM/bg.webp')] bg-center bg-fill opacity-[0.03]"></div>
-        <div className="container relative z-10 px-4 mx-auto max-w-7xl pb-[100px]">
+        <div className="container relative z-10 px-4 mx-auto max-w-7xl pb-[60px]">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
@@ -133,7 +136,7 @@ const WhyRareminds = () => {
             </p>
           </motion.div>
 
-          <div className="flex flex-wrap lg:px-10 justify-center gap-8">
+          <div className="flex flex-wrap lg:px-10 justify-center gap-10 lg:gap-x-[60px]">
             {stats.map((stat, index) => (
               <motion.div
                 key={index}
@@ -150,7 +153,9 @@ const WhyRareminds = () => {
                     height={224}
                     className="absolute mb-4"
                   />
-                  <div className={`absolute right-0 shadow-[0_1px_10px_-2px_rgba(0,0,0,0.25)] w-[80px] h-[80px] rounded-full flex justify-center items-center ${stat.color}`}>
+                  <div
+                    className={`absolute right-0 shadow-[0_1px_10px_-2px_rgba(0,0,0,0.25)] w-[80px] h-[80px] rounded-full flex justify-center items-center ${stat.color}`}
+                  >
                     <div className="text-white w-min mx-auto">{stat.icon}</div>
                   </div>
                   <div className="absolute p-[40px] w-[389px]">
@@ -169,6 +174,29 @@ const WhyRareminds = () => {
             ))}
           </div>
         </div>
+      </div>
+
+      <div className="container mb-[60px]">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+        >
+          <p className="text-center font-semibold text-2xl">
+            From Startups to Established Brands - We’re Grateful for the Trust
+            They’ve Placed in Our Work.
+          </p>
+        </motion.div>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+          className="mt-5"
+        >
+          <div>sfv</div>
+        </motion.div>
       </div>
 
       {/* Matrics */}
