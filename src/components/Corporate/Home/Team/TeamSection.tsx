@@ -47,7 +47,7 @@ const teamMembers = [
 
 const TeamSection = () => {
   return (
-    <section className="pb-[160px] pt-[60px] relative overflow-hidden object-none object-bottom bg-no-repeat">
+    <section className="pb-[160px] pt-[60px] relative overflow-hidden object-none object-bottom bg-no-repeat bg-white">
       <div className="absolute flex w-full h-[100%] bg-[url(/Corporate/Images/Home/Team/team-bg.webp)] opacity-5"></div>
 
       <div className="container mx-auto relative z-10">
@@ -68,7 +68,7 @@ const TeamSection = () => {
           </h2>
         </motion.div>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5 lg:gap-8 max-w-6xl mx-auto px-5">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5 lg:gap-8 max-w-6xl mx-auto">
           {teamMembers.map((member, index) => (
             <motion.div
               key={member.name}

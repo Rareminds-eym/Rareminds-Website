@@ -7,7 +7,7 @@ const ProcessSection = () => {
   return (
     <section
       id="process"
-      className="py-16 relative overflow-hidden min-h-screen"
+      className="py-16 relative overflow-hidden min-h-screen bg-white"
     >
       <div className="mx-auto relative z-10">
         <motion.div

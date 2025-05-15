@@ -1,7 +1,5 @@
 import { motion } from "framer-motion";
-import {
-  Briefcase,
-} from "lucide-react";
+import { Briefcase } from "lucide-react";
 import TechnicalHiring from "@/assets/corporate/Home/services/TechnicalHiring.svg";
 import BulkHiring from "@/assets/corporate/Home/services/BulkHiring.svg";
 import LeadershipHiring from "@/assets/corporate/Home/services/LeadershipHiring.svg";
@@ -15,9 +13,9 @@ import TalentMapping from "@/assets/corporate/Home/services/TalentMapping.svg";
 import Interview from "@/assets/corporate/Home/services/Interview-as-a-Service.svg";
 import OnboardingSupport from "@/assets/corporate/Home/services/OnboardingSupport.svg";
 import { Link } from "react-router-dom";
+import { Icon } from "@iconify/react";
 
 const ServicesSection = () => {
-
   const services = [
     {
       icon: TechnicalHiring,
@@ -109,7 +107,7 @@ const ServicesSection = () => {
   ];
 
   return (
-    <section id="services" className="section relative">
+    <section id="services" className="section relative bg-white">
       {/* Background elements */}
       <div className="absolute inset-0 bg-white z-0"></div>
       <div className="absolute w-full h-full bg-[url('/Corporate/Images/Home/Services/bg.webp')] bg-center bg-cover opacity-[0.03]">
@@ -192,13 +190,17 @@ const ServicesSection = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.2 }}
-          className="mt-16 text-center"
+          className="mt-16 text-center flex justify-center"
         >
           <Link to="/contact">
-            <button
-              className="corporate-btn-1"
-            >
-              Try us on your toughest role
+            <button className="corporate-btn-1">
+              Try us on your toughest role{" "}
+              <Icon
+                icon="cil:arrow-right"
+                height={20}
+                width={20}
+                className="ml-2"
+              />
             </button>
           </Link>
         </motion.div>

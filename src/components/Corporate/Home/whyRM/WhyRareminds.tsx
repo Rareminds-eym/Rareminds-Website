@@ -113,7 +113,7 @@ const WhyRareminds = () => {
   return (
     <section
       ref={containerRef}
-      className="relative overflow-hidden rounded-t-[50px] md:rounded-t-[200px] shadow-[0_-20px_30px_-22px_rgba(0,0,0,0.25)]"
+      className="relative overflow-hidden rounded-t-[50px] md:rounded-t-[200px] shadow-[0_-20px_30px_-22px_rgba(0,0,0,0.25)] bg-white"
     >
       <div className="relative">
         <div className="absolute w-full h-full bg-[url('/Corporate/Images/Home/whyRM/bg.webp')] bg-center bg-fill opacity-[0.03]"></div>
@@ -228,8 +228,6 @@ const WhyRareminds = () => {
               hoveredIndex === index ? "z-[4]" : "z-[2]",
             ].join(" ")}`}
             style={{ bottom: block.bottom, left: block.left, width: "13%" }}
-            // onMouseEnter={() => setHoveredIndex(index)}
-            // onMouseLeave={() => setHoveredIndex(null)}
           >
             <div
               className={`relative flex transition-all duration-300 ease-in-out ${[
@@ -252,28 +250,21 @@ const WhyRareminds = () => {
                 />
                 <div
                   className={`absolute top-1/2 -translate-y-1/2 w-max ${
-                    hoveredIndex && hoveredIndex > 3
+                    index && index > 3
                       ? "right-[100%] mr-5"
                       : "left-[100%] ml-5"
                   }`}
                 >
                   <h3
-                    className={`text-white md:text-2xl max-w-[200px] md:max-w-[350px] lg:text-4xl lg:max-w-[400px] font-semibold lg:font-bold transition-all duration-300 ease-in-out ${[
+                    className={`text-white md:text-2xl max-w-[200px] md:max-w-[350px] lg:text-3xl lg:max-w-[400px] font-semibold lg:font-bold transition-all duration-300 ease-in-out ${[
                       hoveredIndex === index ? "opacity-100" : "opacity-0",
-                      hoveredIndex && hoveredIndex > 3
+                      index && index > 3
                         ? "text-right"
                         : "text-left",
                     ].join(" ")}`}
                   >
                     {block.description}
                   </h3>
-                  {/* <p
-                    className={`text-white text-[16px] transition-all duration-300 ease-in-out max-w-[500px] ${
-                      hoveredIndex === index ? "opacity-100" : "opacity-0"
-                    }`}
-                  >
-                    {block.description}
-                  </p> */}
                 </div>
               </div>
             </div>

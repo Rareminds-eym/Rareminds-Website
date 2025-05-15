@@ -10,7 +10,7 @@ import {
   CheckCircle2,
   ArrowRight,
 } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Icon } from "@iconify/react";
 import { useToast } from "@/hooks/use-toast";
 
 const ContactSection = () => {
@@ -62,28 +62,17 @@ const ContactSection = () => {
     }, 1500);
   };
 
-  const services = [
-    "Executive Search",
-    "Bulk Hiring",
-    "Technical Talent",
-    "Leadership Roles",
-    "Remote Teams",
-    "Contract Staffing",
-  ];
-
   return (
     <section
       id="contact"
-      className="section py-24 relative overflow-hidden bg-gradient-to-br from-blue-50 to-red-50 text-gray-800"
+      className="section py-24 relative overflow-hidden bg-gradient-to-br from-blue-50 to-red-50 text-gray-800 bg-white"
     >
-      {/* <div className="absolute inset-0 bg-[url('dat a:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmZmZmYiIGZpbGwtb3BhY2l0eT0iMC4xIj48cGF0aCBkPSJNMzYgMzRjMC0yLjIgMS44LTQgNC00czQgMS44IDQgNC0xLjggNC00IDQtNC0xLjgtNC00TTE2IDI0YzAtMi4yIDEuOC00IDQtNHM0IDEuOCA0IDQtMS44IDQtNCA0LTQtMS44LTQtNCIvPjwvZz48L2c+PC9zdmc+')] opacity-20"></div> */}
-
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
         viewport={{ once: true }}
-        className="container mx-auto px-5 relative z-10"
+        className="container mx-auto px-5 lg:px-14 relative z-10"
       >
         <div className="text-center mb-16">
           <div className="bg-corporate-black text-white w-16 h-16 rounded-[25px] mx-auto mb-4 flex items-center justify-center transform rotate-6">
@@ -221,44 +210,47 @@ const ContactSection = () => {
                           exit={{ opacity: 0 }}
                           className="flex flex-col sm:flex-row gap-4 flex-wrap"
                         >
-                          <Link to="/contact">
-                            <button
-                              type="submit"
-                              className="corporate-btn-1"
-                              disabled={isSubmitting}
-                            >
-                              {isSubmitting ? (
-                                <span className="flex items-center">
-                                  <svg
-                                    className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                  >
-                                    <circle
-                                      className="opacity-25"
-                                      cx="12"
-                                      cy="12"
-                                      r="10"
-                                      stroke="currentColor"
-                                      strokeWidth="4"
-                                    ></circle>
-                                    <path
-                                      className="opacity-75"
-                                      fill="currentColor"
-                                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                                    ></path>
-                                  </svg>
-                                  Sending...
-                                </span>
-                              ) : (
-                                <span className="flex items-center">
-                                  Request Talent{" "}
-                                  <ArrowRight size={18} className="ml-2" />
-                                </span>
-                              )}
-                            </button>
-                          </Link>
+                          <button
+                            type="submit"
+                            className="corporate-btn-1"
+                            disabled={isSubmitting}
+                          >
+                            {isSubmitting ? (
+                              <span className="flex items-center">
+                                <svg
+                                  className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  fill="none"
+                                  viewBox="0 0 24 24"
+                                >
+                                  <circle
+                                    className="opacity-25"
+                                    cx="12"
+                                    cy="12"
+                                    r="10"
+                                    stroke="currentColor"
+                                    strokeWidth="4"
+                                  ></circle>
+                                  <path
+                                    className="opacity-75"
+                                    fill="currentColor"
+                                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                                  ></path>
+                                </svg>
+                                Sending...
+                              </span>
+                            ) : (
+                              <span className="flex items-center">
+                                Request Talent{" "}
+                                <Icon
+                                  icon="cil:arrow-right"
+                                  height={20}
+                                  width={20}
+                                  className="ml-2"
+                                />
+                              </span>
+                            )}
+                          </button>
                         </motion.div>
                       ) : (
                         <motion.div

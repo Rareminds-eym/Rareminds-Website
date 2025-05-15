@@ -1,6 +1,7 @@
 import React from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination, Autoplay } from "swiper/modules";
+import { Icon } from "@iconify/react";
 
 import arrowDown from "@/assets/corporate/Home/Carousal/arrowDown.svg";
 
@@ -54,7 +55,7 @@ const FullScreenCarousel: React.FC<FullScreenCarouselProps> = ({
       >
         {slides.map((slide, index) => (
           <SwiperSlide key={index}>
-            <div className="container flex flex-col lg:flex-row items-center justify-between h-full w-full p-0">
+            <div className="container flex flex-col lg:flex-row items-center justify-between h-full w-full p-0 lg:px-14">
               {/* Left side - Text content */}
               <div className="w-full lg:w-[60%] py-10 lg:py-0 lg:pr-8 mb-6 lg:mb-0 text-center lg:text-left">
                 <h1
@@ -65,9 +66,11 @@ const FullScreenCarousel: React.FC<FullScreenCarouselProps> = ({
                 <div className="flex flex-col sm:flex-row gap-5 mt-6 justify-center lg:justify-start">
                   <button className="corporate-btn-1">
                     Request Talent Now
+                    <Icon icon="cil:arrow-right" height={20} width={20} className="ml-2"/>
                   </button>
                   <button className="corporate-btn-2">
                     Explore Our Solutions
+                    <Icon icon="line-md:compass-loop" height={20} width={20} className="ml-[6px]"/>
                   </button>
                 </div>
               </div>
@@ -87,7 +90,7 @@ const FullScreenCarousel: React.FC<FullScreenCarouselProps> = ({
       <div className="hidden lg:block container">
         <div
           onClick={handleScrollDown}
-          className="w-max absolute bottom-8 cursor-pointer transition-opacity z-10 scale-125"
+          className="w-max absolute bottom-8 cursor-pointer transition-opacity z-10 ml-14"
           aria-label="Scroll down"
         >
           <img

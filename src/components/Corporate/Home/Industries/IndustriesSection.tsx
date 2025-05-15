@@ -13,7 +13,7 @@ const IndustriesSection = () => {
   return (
     <section
       id="industries"
-      className="section w-full flex flex-col relative overflow-hidden"
+      className="section w-full flex flex-col relative overflow-hidden bg-white"
     >
       <div className="text-center mb-12 mt-16 relative">
         <motion.div
@@ -44,13 +44,16 @@ const IndustriesSection = () => {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.5, delay: 0.2 }}
-        className="my-10 text-center"
+        className="my-10 text-center flex justify-center"
       >
-        <button
-          onClick={scrollToCaseStudies}
-          className="corporate-btn-1"
-        >
-          See Our Impact Stories
+        <button onClick={scrollToCaseStudies} className="corporate-btn-1">
+          See Our Impact Stories{" "}
+          <Icon
+            icon="cil:arrow-right"
+            height={20}
+            width={20}
+            className="ml-2"
+          />
         </button>
       </motion.div>
     </section>
