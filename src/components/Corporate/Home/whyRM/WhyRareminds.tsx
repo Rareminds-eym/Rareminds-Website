@@ -50,6 +50,35 @@ const WhyRareminds = () => {
     },
   ];
 
+  const logos = [
+    "/Corporate/Images/Home/ClientLogos/ace.png",
+    "/Corporate/Images/Home/ClientLogos/ardent.png",
+    "/Corporate/Images/Home/ClientLogos/BNM.png",
+    "/Corporate/Images/Home/ClientLogos/bsvlogo.png",
+    "/Corporate/Images/Home/ClientLogos/csm.png",
+    "/Corporate/Images/Home/ClientLogos/DF.png",
+    "/Corporate/Images/Home/ClientLogos/e4m.png",
+    "/Corporate/Images/Home/ClientLogos/e4softwares.png",
+    "/Corporate/Images/Home/ClientLogos/ESSGEE.png",
+    "/Corporate/Images/Home/ClientLogos/fifthgen.png",
+    "/Corporate/Images/Home/ClientLogos/goldensource.png",
+    "/Corporate/Images/Home/ClientLogos/Infolob.png",
+    "/Corporate/Images/Home/ClientLogos/ITC.png",
+    "/Corporate/Images/Home/ClientLogos/motherson.png",
+    "/Corporate/Images/Home/ClientLogos/Msafe.png",
+    "/Corporate/Images/Home/ClientLogos/necb.png",
+    "/Corporate/Images/Home/ClientLogos/NES.png",
+    "/Corporate/Images/Home/ClientLogos/Nexgen.png",
+    "/Corporate/Images/Home/ClientLogos/PCC.png",
+    "/Corporate/Images/Home/ClientLogos/PFC.png",
+    "/Corporate/Images/Home/ClientLogos/Quadgen.png",
+    "/Corporate/Images/Home/ClientLogos/qwqer.png",
+    "/Corporate/Images/Home/ClientLogos/sssi.png",
+    "/Corporate/Images/Home/ClientLogos/Sugam.png",
+    "/Corporate/Images/Home/ClientLogos/Verastar.png",
+    "/Corporate/Images/Home/ClientLogos/Wipro-consumer-care.png",
+  ];
+
   const blocks = [
     {
       src: "/Corporate/Images/Home/whyRM/role.webp",
@@ -176,7 +205,7 @@ const WhyRareminds = () => {
         </div>
       </div>
 
-      <div className="container mb-[60px]">
+      <div className="container mt-[40px] mb-[100px]">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -193,9 +222,19 @@ const WhyRareminds = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.1 }}
-          className="mt-5"
+          className="mt-10 flex flex-wrap gap-4 justify-center"
         >
-          <div>sfv</div>
+          {logos.map((logo, index) => (
+            <div key={index} className="flex justify-center">
+              <img
+                src={logo}
+                alt={`logo-${index}`}
+                height={50}
+                width={100}
+                className="min-w-[100px] h-[100px] object-contain mx-2 grayscale hover:grayscale-0 transition-all"
+              />
+            </div>
+          ))}
         </motion.div>
       </div>
 
@@ -258,9 +297,7 @@ const WhyRareminds = () => {
                   <h3
                     className={`text-white md:text-2xl max-w-[200px] md:max-w-[350px] lg:text-3xl lg:max-w-[400px] font-semibold lg:font-bold transition-all duration-300 ease-in-out ${[
                       hoveredIndex === index ? "opacity-100" : "opacity-0",
-                      index && index > 3
-                        ? "text-right"
-                        : "text-left",
+                      index && index > 3 ? "text-right" : "text-left",
                     ].join(" ")}`}
                   >
                     {block.description}
