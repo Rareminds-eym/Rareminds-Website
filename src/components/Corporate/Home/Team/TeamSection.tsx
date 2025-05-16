@@ -78,7 +78,7 @@ const TeamSection = () => {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
               viewport={{ once: true }}
-              className={`group lg:row-span-4 ${
+              className={`relative group lg:row-span-4 ${
                 index % 2 == 1 ? "lg:row-start-2" : "lg:row-start-1"
               }`}
             >
@@ -90,15 +90,6 @@ const TeamSection = () => {
                     {member.name.toUpperCase()}
                   </p>
                   <p className="mt-1 text-center">{member.designation}</p>
-                  <Link
-                    to={member.linkedin}
-                    target="_blank"
-                    className="text-center mt-2 w-min mx-auto"
-                  >
-                    <div className="bg-[#1F2937] w-min rounded-full p-3 mt-5 ">
-                      <Linkedin className="text-white" />
-                    </div>
-                  </Link>
                 </div>
 
                 <div className="absolute pt-[50px] top-0 p-5 w-full h-[200px] opacity-0 group-hover:opacity-100 transition-all duration-300">
@@ -118,6 +109,15 @@ const TeamSection = () => {
                   />
                 </div>
               </div>
+              <Link
+                to={member.linkedin}
+                target="_blank"
+                className="absolute bottom-0 translate-y-1/2 left-1/2 -translate-x-1/2 text-center mt-2 w-min mx-auto"
+              >
+                <div className="bg-[#1F2937] w-min rounded-full p-3">
+                  <Linkedin className="text-white" />
+                </div>
+              </Link>
             </motion.div>
           ))}
         </div>
