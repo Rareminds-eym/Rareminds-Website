@@ -1,11 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, Dispatch, SetStateAction } from 'react';
 import { Menu } from 'lucide-react';
 
-const Index = () => {
+interface HeaderProps {
+    navbarOpen: boolean;
+    setNavbarOpen: Dispatch<SetStateAction<boolean>>;
+}
+
+const Index: React.FC<HeaderProps> = ({ navbarOpen, setNavbarOpen }) => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
     const toggleMenu = () => {
         setIsMenuOpen(!isMenuOpen);
+        setNavbarOpen(!navbarOpen);
     };
 
     const handleLinkClick = () => {

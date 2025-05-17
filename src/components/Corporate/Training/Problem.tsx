@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion';
+import { motion } from "framer-motion";
 
 export default function Problem() {
   return (
@@ -9,14 +9,14 @@ export default function Problem() {
       </div>
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-14 relative z-10">
-        <div className="flex flex-col lg:flex-row items-center justify-between gap-8 sm:gap-12 lg:gap-20">
+        <div className="flex flex-col lg:flex-row items-center justify-between gap-5">
           {/* LEFT TEXT SIDE */}
           <motion.div
             initial={{ opacity: 0, x: -50 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
-            className="w-full lg:w-[45%] text-center lg:text-left"
+            className="w-full lg:w-1/2 text-center lg:text-left"
           >
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-light mb-2 sm:mb-4 text-black">
               You're Producing Graduates.
@@ -25,13 +25,13 @@ export default function Problem() {
               But Are You Producing Professionals?
             </h2>
             <p className="text-base sm:text-lg text-black mt-2 max-w-2xl mx-auto lg:mx-0">
-              Most colleges tick the syllabus checkbox. We go beyond with employability-first, industry-validated training.
+              Most colleges tick the syllabus checkbox. We go beyond with
+              employability-first, industry-validated training.
             </p>
           </motion.div>
 
           {/* RIGHT SIDE - 3 CIRCULAR CARDS */}
-          <div className="relative w-full lg:w-[55%] h-[300px] sm:h-[350px] lg:h-[400px] mt-8 lg:mt-0 flex items-center justify-center">
-            {/* Top Left */}
+          {/* <div className="relative w-full lg:w-[55%] h-[300px] sm:h-[350px] lg:h-[400px] mt-8 lg:mt-0 flex items-center justify-center">
             <motion.div
               initial={{ opacity: 0, x: -20, y: -20 }}
               whileInView={{ opacity: 1, x: 0, y: 0 }}
@@ -44,7 +44,6 @@ export default function Problem() {
               </div>
             </motion.div>
 
-            {/* Top Right */}
             <motion.div
               initial={{ opacity: 0, x: 20, y: -20 }}
               whileInView={{ opacity: 1, x: 0, y: 0 }}
@@ -57,7 +56,6 @@ export default function Problem() {
               </div>
             </motion.div>
 
-            {/* Bottom Center */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -69,6 +67,18 @@ export default function Problem() {
                 <img src={"Solution"} alt="icon3" className="w-24 sm:w-32 lg:w-40 h-20 sm:h-24 lg:h-32 mb-1 object-cover rounded-full" />
               </div>
             </motion.div>
+          </div> */}
+
+          <div className="w-1/2 grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 lg:gap-8 mt-8 lg:mt-0">
+            <div className="flex justify-center">
+              <div className="w-32 sm:w-40 lg:w-48 h-32 sm:h-40 lg:h-48 rounded-full bg-pink-100 shadow-xl transition-all duration-300 hover:scale-105 hover:bg-pink-200"></div>
+            </div>
+            <div className="flex justify-center">
+              <div className="w-32 sm:w-40 lg:w-48 h-32 sm:h-40 lg:h-48 rounded-full bg-pink-100 shadow-xl transition-all duration-300 hover:scale-105 hover:bg-pink-200"></div>
+            </div>
+            <div className="flex justify-center col-span-2 -mt-10">
+              <div className="w-32 sm:w-40 lg:w-48 h-32 sm:h-40 lg:h-48 rounded-full bg-green-100 shadow-xl transition-all duration-300 hover:scale-105 hover:bg-green-200"></div>
+            </div>
           </div>
         </div>
       </div>
