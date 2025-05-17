@@ -20,7 +20,8 @@ import '@/assets/institutions/PageStyles.css'
 
 const Institutions: React.FC = () => {
   return (
-    <>
+    <div className="min-h-screen w-full bg-white relative">
+      
       <FDPButton />
       <FAQChatbot />
       <Hero />
@@ -34,7 +35,7 @@ const Institutions: React.FC = () => {
       <TestimonialVideos />
       <FinalCTA />
       <StickyButtons />
-    </>
+    </div>
   );
 };
 
