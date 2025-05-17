@@ -142,7 +142,7 @@ const WhyRareminds = () => {
   return (
     <section
       ref={containerRef}
-      className="relative overflow-hidden rounded-t-[50px] md:rounded-t-[200px] shadow-[0_-20px_30px_-22px_rgba(0,0,0,0.25)] bg-white"
+      className="relative overflow-hidden rounded-t-[50px] md:rounded-t-[200px] shadow-[0_-20px_30px_-22px_rgba(0,0,0,0.25)] bg-white z-10"
     >
       <div className="relative">
         <div className="absolute w-full h-full bg-[url('/Corporate/Images/Home/whyRM/bg.webp')] bg-center bg-fill opacity-[0.03]"></div>
@@ -205,39 +205,7 @@ const WhyRareminds = () => {
         </div>
       </div>
 
-      <div className="container mt-[40px] mb-[100px]">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.1 }}
-        >
-          <p className="text-center font-semibold text-2xl">
-            From Startups to Established Brands - We’re Grateful for the Trust
-            They’ve Placed in Our Work.
-          </p>
-        </motion.div>
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.1 }}
-          className="mt-10 flex flex-wrap gap-4 justify-center"
-        >
-          {logos.map((logo, index) => (
-            <div key={index} className="flex justify-center">
-              <img
-                src={logo}
-                alt={`logo-${index}`}
-                height={50}
-                width={100}
-                className="min-w-[100px] h-[100px] object-contain mx-2 grayscale hover:grayscale-0 transition-all"
-              />
-            </div>
-          ))}
-        </motion.div>
-      </div>
-
+      
       {/* Matrics */}
 
       <div className="relative w-full">

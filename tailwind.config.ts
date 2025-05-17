@@ -36,10 +36,10 @@ export default {
       transitionProperty: {
         width: "width",
       },
-      colors: {
-        "placeholder-red": "#D9D9D9", // or any shade of red you prefer
-        "overlay-color": "#000000e6",
-      },
+      // colors: {
+      //   "placeholder-red": "#D9D9D9", // or any shade of red you prefer
+      //   "overlay-color": "#000000e6",
+      // },
       animation: {
         'scroll': 'scroll 40s linear infinite',
         marquee: 'marquee 25s linear infinite',
