@@ -1,0 +1,9 @@
+/* pageStyles.css */
+
+/* Import Inter font */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+
+/* Scope font to the page */
+.inter-page {
+  font-family: 'Inter', sans-serif;
+}
