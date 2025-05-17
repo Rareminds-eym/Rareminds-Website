@@ -12,11 +12,12 @@ import InstitutionsLayout from "./layouts/InstitutionsLayout";
 
 // Lazy pages
 const Home = lazy(() => import("./pages/Index"));
-const Service = lazy(() => import("./pages/Corporate/Services/[service]"));
-const Corporate = lazy(() => import("./pages/Corporate/Index"));
+const Service = lazy(() => import("./pages/Corporate/Recruitment/Services/[service]"));
+const Corporate = lazy(() => import("./pages/Corporate/Recruitment/Index"));
 const Government = lazy(() => import("./pages/Government/Index"));
 const Academia = lazy(() => import("./pages/Academia/Index"));
 const Institutions = lazy(() => import("./pages/Institutions/Index"));
+const CorporateTraining = lazy(() => import("./pages/Corporate/Training"));
 const Contact = lazy(() => import("./pages/Government/Contact/Index"));
 
 const withSuspense = (Component: React.LazyExoticComponent<React.FC<{}>>) => (
@@ -54,12 +55,12 @@ const router = createBrowserRouter([
         element: withSuspense(Corporate),
       },
       {
-        path: "/corporate/contact",
-        element: withSuspense(Contact),
-      },
-      {
         path: "/corporate/services/:name",
         element: withSuspense(Service),
+      },
+      {
+        path: "/corporate/training",
+        element: withSuspense(CorporateTraining),
       },
     ],
   },

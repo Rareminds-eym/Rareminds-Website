@@ -1,13 +1,13 @@
 import React from "react";
-import FullScreenCarousel from "../../components/Corporate/Home/Carousel/FullScreenCarousel";
-import WhyRareminds from "@/components/Corporate/Home/whyRM/WhyRareminds";
-import ServicesSection from "@/components/Corporate/Home/services/ServicesSection";
-import IndustriesSection from "@/components/Corporate/Home/Industries/IndustriesSection";
-import TestimonialsSection from "@/components/Corporate/Home/Testimonials/TestimonialsSection";
-import CaseStudiesSection from "@/components/Corporate/Home/CaseStudies/CaseStudiesSection";
-import ProcessSection from "@/components/Corporate/Home/Process/ProcessSection";
-import TeamSection from "@/components/Corporate/Home/Team/TeamSection";
-import ContactSection from "@/components/Corporate/Home/Contact/ContactSection";
+import FullScreenCarousel from "../../../components/Corporate/Recruitment/Home/Carousel/FullScreenCarousel";
+import WhyRareminds from "@/components/Corporate/Recruitment/Home/whyRM/WhyRareminds";
+import ServicesSection from "@/components/Corporate/Recruitment/Home/services/ServicesSection";
+import IndustriesSection from "@/components/Corporate/Recruitment/Home/Industries/IndustriesSection";
+import TestimonialsSection from "@/components/Corporate/Recruitment/Home/Testimonials/TestimonialsSection";
+import CaseStudiesSection from "@/components/Corporate/Recruitment/Home/CaseStudies/CaseStudiesSection";
+import ProcessSection from "@/components/Corporate/Recruitment/Home/Process/ProcessSection";
+import TeamSection from "@/components/Corporate/Recruitment/Home/Team/TeamSection";
+import ContactSection from "@/components/Corporate/Recruitment/Home/Contact/ContactSection";
 import FAQChatbot from "@/components/Corporate/ChatBot/FAQChatbot";
 
 const Corporate: React.FC = () => {
