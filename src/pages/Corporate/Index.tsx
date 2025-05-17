@@ -8,6 +8,7 @@ import CaseStudiesSection from "@/components/Corporate/Home/CaseStudies/CaseStud
 import ProcessSection from "@/components/Corporate/Home/Process/ProcessSection";
 import TeamSection from "@/components/Corporate/Home/Team/TeamSection";
 import ContactSection from "@/components/Corporate/Home/Contact/ContactSection";
+import FAQChatbot from "@/components/Corporate/ChatBot/FAQChatbot";
 
 const Corporate: React.FC = () => {
   const slides = [
@@ -78,6 +79,7 @@ const Corporate: React.FC = () => {
       <div id="contact">
         <ContactSection />
       </div>
+      <FAQChatbot />
     </>
   );
 };

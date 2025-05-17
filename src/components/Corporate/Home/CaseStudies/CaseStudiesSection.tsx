@@ -107,7 +107,7 @@ const CaseStudiesSection = () => {
                 <div className="bg-white rounded-3xl overflow-hidden border border-corporate-black/40">
                   <div className="grid grid-cols-1 lg:grid-cols-3 min-h-[70vh]">
                     {/* Left Panel - Image & Stats */}
-                    <div className="bg-gradient-to-br from-corporate-black to-corporate-black/60 text-white p-8 flex flex-col justify-between">
+                    <div className="bg-gradient-to-br from-corporate-purple to-corporate-purple/60 text-white p-8 flex flex-col justify-between">
                       <div>
                         <motion.div
                           key={`case-title-${idx}`}
