@@ -6,6 +6,7 @@ import LoaderComponent from "@/components/LoaderComponent";
 // Lazy-loaded pages
 const Index = lazy(() => import("./pages/Index"));
 const About = lazy(() => import("./pages/Corporate/Index"));
+const Government = lazy(() => import("./pages/Government/Index"));
 
 const App: React.FC = () => {
   return (
@@ -16,6 +17,7 @@ const App: React.FC = () => {
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/corporate" element={<About />} />
+              <Route path="/government" element={<Government />} />
             </Routes>
           </Suspense>
         </DefaultLayout>
