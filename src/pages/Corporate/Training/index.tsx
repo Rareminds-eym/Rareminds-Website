@@ -1,3 +1,4 @@
+import FAQChatbot from "@/components/Corporate/ChatBot/FAQChatbot";
 import FullScreenCarousel from "@/components/Corporate/Recruitment/Home/Carousel/FullScreenCarousel";
 import CaseStudies from "@/components/Corporate/Training/CaseStudies";
 import ContactSection from "@/components/Corporate/Training/Contact/ContactSection";
@@ -68,6 +69,7 @@ const CorporateTraining: React.FC = () => {
       <div className="relative bg-white">
         <ContactSection />
       </div>
+      <FAQChatbot />
     </>
   );
 };

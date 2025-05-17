@@ -1,11 +1,11 @@
 import { motion, Variants } from "framer-motion";
 import {
-  GraduationCap,
-  Briefcase,
-  BookOpen,
-  Users,
-  School,
-  Building2,
+  Laptop,
+  Code,
+  Users2,
+  BadgeDollarSign,
+  UserCog,
+  Building,
   ArrowRight,
   Sparkles,
 } from "lucide-react";
@@ -13,12 +13,12 @@ import { useNavigate } from "react-router-dom";
 
 export const services = [
   {
-    id: "full-semester",
-    icon: GraduationCap,
-    name: "Full Semester Skill Program",
+    id: "workplace-productivity",
+    icon: Laptop,
+    name: "Workplace Productivity & Digital Fluency",
     subtitle: "(Naan Mudhalvan)",
     description:
-      "Multiple courses + internships + final evaluation + certification",
+      "Programs packed with tools, techniques, and habits—customized for real productivity.",
     image: "/Corporate/Images/Training/service-header.webp",
     color: "from-blue-600 to-purple-600",
     duration: "6 Months",
@@ -34,10 +34,11 @@ export const services = [
   },
   {
     id: "pre-placement",
-    icon: Briefcase,
-    name: "Pre-Placement Accelerator",
+    icon: Code,
+    name: "Tech Upskilling & Future Skills",
     subtitle: "Career Oriented",
-    description: "Final year focused bootcamp + placement tie-up",
+    description:
+      "AI, cloud, data & no-code skills—delivered through modular, flexible tech tracks.",
     image: "/Corporate/Images/Training/service-header.webp",
     color: "from-blue-600 to-purple-600",
     duration: "3 Months",
@@ -53,11 +54,11 @@ export const services = [
   },
   {
     id: "bridge-courses",
-    icon: BookOpen,
-    name: "Bridge Courses",
+    icon: Users2,
+    name: "Behavioral & Organizational Culture Programs",
     subtitle: "First Years",
     description:
-      "Foundational programs on communication, digital tools, work ethics",
+      "Behavioral training bundles to shape culture, inclusion, and ethics at every level.",
     image: "/Corporate/Images/Training/service-header.webp",
     color: "from-blue-600 to-purple-600",
     duration: "2 Months",
@@ -73,10 +74,11 @@ export const services = [
   },
   {
     id: "skill-based",
-    icon: School,
-    name: "Skill-Based Training",
+    icon: BadgeDollarSign,
+    name: "Sales, Marketing & Customer Centricity",
     subtitle: "Credit-Linked",
-    description: "Add-on courses that enhance your academic profile",
+    description:
+      "Sales and CX programs with multiple tracks—aligned to industry and team needs.",
     image: "/Corporate/Images/Training/service-header.webp",
     color: "from-blue-600 to-purple-600",
     duration: "Flexible",
@@ -92,10 +94,11 @@ export const services = [
   },
   {
     id: "faculty-development",
-    icon: Users,
-    name: "Faculty Development",
+    icon: UserCog,
+    name: "HR & Talent Development",
     subtitle: "NEP & Technology",
-    description: "Comprehensive training on NEP and Industry Integration",
+    description:
+      "HR-focused courses on analytics, PMS, L&D—customized for growing people functions.",
     image: "/Corporate/Images/Training/service-header.webp",
     color: "from-blue-600 to-purple-600",
     duration: "1 Week",
@@ -111,10 +114,11 @@ export const services = [
   },
   {
     id: "internship-placement",
-    icon: Building2,
-    name: "Internship & Placement",
+    icon: Building,
+    name: "Custom Corporate Academies",
     subtitle: "Industry Connect",
-    description: "Direct industry partnerships for real-world experience",
+    description:
+      "Create branded academies with curated modules for roles, stages, or functions.",
     image: "/Corporate/Images/Training/service-header.webp",
     color: "from-blue-600 to-purple-600",
     duration: "Ongoing",
@@ -130,26 +134,11 @@ export const services = [
   },
 ];
 
-const containerVariants = {
-  hidden: { 
-    opacity: 0,
-    y: 20 
-  },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.5,
-      staggerChildren: 0.2
-    }
-  }
-};
-
 const cardVariants: Variants = {
   hidden: {
     opacity: 0,
     y: 50,
-    scale: 0.9
+    scale: 0.9,
   },
   visible: {
     opacity: 1,
@@ -159,8 +148,8 @@ const cardVariants: Variants = {
       type: "spring",
       stiffness: 100,
       damping: 12,
-      duration: 0.6
-    }
+      duration: 0.6,
+    },
   },
   hover: {
     y: -8,
@@ -168,9 +157,9 @@ const cardVariants: Variants = {
     transition: {
       type: "spring",
       stiffness: 400,
-      damping: 10
-    }
-  }
+      damping: 10,
+    },
+  },
 };
 
 export default function Services() {
@@ -207,7 +196,8 @@ export default function Services() {
             transition={{ duration: 0.5, delay: 0.3 }}
             className="text-base sm:text-lg text-gray-600 mx-auto max-w-2xl"
           >
-            Transform your institution with our integrated learning programs
+            Drive digital transformation with our cutting-edge learning
+            solutions
           </motion.p>
         </motion.div>
 
@@ -236,7 +226,8 @@ export default function Services() {
                 whileHover={{
                   rotateY: -8,
                   translateX: 5,
-                  boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)"
+                  boxShadow:
+                    "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
                 }}
                 transition={{ type: "spring", stiffness: 200, damping: 15 }}
               >
@@ -325,7 +316,7 @@ export default function Services() {
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
             >
-              <span>Future-Proof Your Career!</span>
+              <span>Make Your Career Recession-Proof</span>
               <Sparkles className="w-4 h-4 sm:w-6 sm:h-6 animate-pulse" />
             </motion.button>
           </motion.div>
