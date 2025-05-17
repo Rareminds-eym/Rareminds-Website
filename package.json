@@ -15,10 +15,17 @@
     "clsx": "^2.1.1",
     "dotenv": "^16.5.0",
     "framer-motion": "^12.11.0",
+    "@radix-ui/react-scroll-area": "^1.2.8",
+    "@radix-ui/react-toast": "^1.2.13",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "framer-motion": "^12.11.4",
     "lucide-react": "^0.484.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-router-dom": "^7.6.0"
+    "react-modal": "^3.16.3",
+    "react-router-dom": "^7.6.0",
+    "swiper": "^11.2.6"
   },
   "devDependencies": {
     "@eslint/config-array": "^0.20.0",
