@@ -1,5 +1,5 @@
 import React from "react";
-import FullScreenCarousel from "../../components/Corporate/Home/Carousel/FullScreenCarousel";
+import FullScreenCarousel from "../../../components/Corporate/Home/Carousel/FullScreenCarousel";
 import WhyRareminds from "@/components/Corporate/Home/whyRM/WhyRareminds";
 import ServicesSection from "@/components/Corporate/Home/services/ServicesSection";
 import IndustriesSection from "@/components/Corporate/Home/Industries/IndustriesSection";
