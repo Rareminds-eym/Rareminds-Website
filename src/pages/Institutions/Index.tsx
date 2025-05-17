@@ -15,7 +15,7 @@ import FDPButton from "@/components/institutions/FDPButton";
 import FAQChatbot from '@/components/institutions/FAQChatbot';
 import StickyButtons from '@/components/institutions/StickyButtons';
 import '@/assets/institutions/index.css'
-import '@/assets/institutions/PageStyles.css'
+//import '@/assets/institutions/PageStyles.css'
 
 
 const Institutions: React.FC = () => {
