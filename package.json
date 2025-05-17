@@ -11,7 +11,9 @@
   },
   "dependencies": {
     "@iconify/react": "^4.1.1",
+    "@supabase/supabase-js": "^2.49.4",
     "clsx": "^2.1.1",
+    "dotenv": "^16.5.0",
     "framer-motion": "^12.11.0",
     "lucide-react": "^0.484.0",
     "react": "^18.2.0",
@@ -21,8 +23,8 @@
   "devDependencies": {
     "@eslint/config-array": "^0.20.0",
     "@eslint/object-schema": "^2.1.6",
-    "@types/react": "^18.2.55",
-    "@types/react-dom": "^18.2.19",
+    "@types/react": "^18.3.21",
+    "@types/react-dom": "^18.3.7",
     "@typescript-eslint/eslint-plugin": "^8.32.1",
     "@typescript-eslint/parser": "^8.32.1",
     "@vitejs/plugin-react": "^4.4.1",
