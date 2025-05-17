@@ -1,0 +1,90 @@
+import React, { useEffect } from "react";
+import { useState } from "react";
+import AOS from 'aos';
+import 'aos/dist/aos.css';
+import MainLayout from "../../components/Academy/MainLayout";
+import MethodCard from "../../components/Academy/Teacher/MethodCard";
+import MethodCardR from "../../components/Academy/Students/MethodCard";
+import { Card } from "@/components/ui/card";
+import { Check } from "lucide-react";
+import StudentCardR from "../../components/Academy/Students/StudentCard";
+import EducatorCard from "../../components/Academy/Teacher/EducatorCard";
+import { Book, Calendar, Circle, Users } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import StatsShowcase from "../../components/Academy/Teacher/StatsShowcase";
+import ProgramCard from "../../components/Academy/Students/ProgramCard";
+import Logos from "../../components/Academy/Teacher/Logos";
+import FacultyTransformation from "../../components/Academy/Teacher/FacultyTransformation";
+import Fdpcalender from "../../components/Academy/Teacher/Fdpcalender";
+import FAQ from "../../components/Academy/Teacher/FAQ";
+import FacultyForm from "../../components/Academy/Teacher/FacultyForm";
+import ResourcesPage from "../../components/Academy/Teacher/ResourcesPage";
+import ResourceDownloadForm from "../../components/Academy/Teacher/ResourceDownloadForm";
+import Testimonials from "../../components/Academy/Teacher/TestimonialSlider";
+import TestimonialsStudent from "../../components/Academy/Students/Testimonials";
+import VideoCarousel from "../../components/Academy/VideoCarousel";
+const Academia = () => ({ userType = "teacher" }: { userType?: "teacher" | "student" }) => {
+  const [activeTab, setActiveTab] = useState<"teacher" | "student">("teacher");
+
+  const navigate = useNavigate();
+
+  const stats = [
+    { icon: Book, value: "20,000+", label: "Faculty Trained" },
+    { icon: Users, value: "100+", label: "Schools Onboarded" },
+    { icon: Calendar, value: "250+", label: "Pilots Deployed" },
+    { icon: Circle, value: "92%", label: "Faculty Satisfaction Rate" },
+  ];
+
+   useEffect (() =>{
+    AOS.init({
+    
+    });
+    
+
+   },[])
+  return (
+        <MainLayout>
+      {/* Hero Banner */}
+       {/* Hero Banner (90% width) */}
+     <div className="w-full h-[30vh] md:h-[60vh]  ">
+    {/* <div className="h-full flex items-center justify-center"> */}
+     <h1 className="text-4xl font-bold text-white"></h1>
+      {/* </div> */}
+      <VideoCarousel />
+    </div>
+
+ 
+<div className="w-full hidden md:flex h-[330px] bg-white flex-row mt-12 relative ">
+      <div
+        onClick={() => navigate("/academy/teacher")}
+        className={`w-full flex justify-end items-center h-full cursor-pointer transition-all duration-300`}
+      >
+ <h1 className="text-xl md:text-4xl font-playfair ">Schools</h1>
+              <img
+          src="/images/academy/board.png"
+          alt="Teacher"
+          className="h-full object-contain"
+        />
+      </div>
+
+      <div
+        onClick={() => navigate("/academy/student")}
+        className={`w-full flex justify-start items-center h-full cursor-pointer transition-all duration-300`}
+      >
+       
+        <img
+          src="/images/academy/ai.png"
+          alt="Student"
+          className="h-full object-contain"
+        />
+         <h1 className="text-xl md:text-4xl font-playfair ">Students</h1>
+      </div>
+    </div>
+
+
+
+    </MainLayout>
+  );
+};
+
+export default Academia;
