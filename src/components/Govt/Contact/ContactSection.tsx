@@ -212,7 +212,7 @@ const ContactSection = () => {
                         >
                           <button
                             type="submit"
-                            className="corporate-btn-1"
+                            className=""
                             disabled={isSubmitting}
                           >
                             {isSubmitting ? (
