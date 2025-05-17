@@ -18,7 +18,7 @@ const Government = lazy(() => import("./pages/Government/Index"));
 const Academia = lazy(() => import("./pages/Academia/Index"));
 const Institutions = lazy(() => import("./pages/Institutions/Index"));
 const CorporateTraining = lazy(() => import("./pages/Corporate/Training"));
-const Contact = lazy(() => import("./pages/Corporate/Recruitment/Contact/Index"));
+const Contact = lazy(() => import("./pages/Government/Contact/Index"));
 
 const withSuspense = (Component: React.LazyExoticComponent<React.FC<{}>>) => (
   <Suspense fallback={<LoaderComponent />}>
@@ -55,10 +55,6 @@ const router = createBrowserRouter([
         element: withSuspense(Corporate),
       },
       {
-        path: "/corporate/contact",
-        element: withSuspense(Contact),
-      },
-      {
         path: "/corporate/services/:name",
         element: withSuspense(Service),
       },
@@ -79,6 +75,10 @@ const router = createBrowserRouter([
       {
         path: "/government",
         element: withSuspense(Government),
+      },
+      {
+        path: "/government/contact",
+        element: withSuspense(Contact),
       },
     ],
   },
