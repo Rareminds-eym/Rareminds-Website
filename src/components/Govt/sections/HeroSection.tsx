@@ -37,24 +37,24 @@ const heroSlides = [
     ),
     description: "Rareminds invites State Skill Development Missions (SSDMs), education departments,universities, \n& public sector initiatives to explore high-impact collaborations tailored for local needs."
   },
-  {
-    bg: "url('/Govt-Images/banner2.JPG')",
-    title: "Multi-language Support",
-    subtitle: "13+ Regional Languages",
-    description: "Reach every corner of India.\nLocalized content delivery and support."
-  },
-  {
-    bg: "url('/Govt-Images/banner3.JPG')",
-    title: "Proven Track Record",
-    subtitle: "Industry-leading Success Rate",
-    description: "Successful implementations across states.\nMeasurable impact and outcomes."
-  },
-  {
-    bg: "url('/Govt-Images/banner4.JPG')",
-    title: "Pan-India Presence",
-    subtitle: "Nationwide Coverage",
-    description: "Operating across all major states.\nStrong local partnerships and support network."
-  }
+  // {
+  //   bg: "url('/Govt-Images/banner2.JPG')",
+  //   title: "Multi-language Support",
+  //   subtitle: "13+ Regional Languages",
+  //   description: "Reach every corner of India.\nLocalized content delivery and support."
+  // },
+  // {
+  //   bg: "url('/Govt-Images/banner3.JPG')",
+  //   title: "Proven Track Record",
+  //   subtitle: "Industry-leading Success Rate",
+  //   description: "Successful implementations across states.\nMeasurable impact and outcomes."
+  // },
+  // {
+  //   bg: "url('/Govt-Images/banner4.JPG')",
+  //   title: "Pan-India Presence",
+  //   subtitle: "Nationwide Coverage",
+  //   description: "Operating across all major states.\nStrong local partnerships and support network."
+  // }
 ];
 
 const variants = {
@@ -171,7 +171,7 @@ export const HeroSection = () => {
                   heroSlides[slideIndex].title
                 )}
                 <br />
-                {heroSlides[slideIndex].subtitle}
+                {/* {heroSlides[slideIndex].subtitle} */}
               </motion.h1>
               
               <motion.p 
@@ -191,11 +191,11 @@ export const HeroSection = () => {
                 transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
                 className="flex flex-wrap gap-4"
               >
-                <button className="flex items-center bg-red-500 hover:bg-red-600 text-white px-6 py-3 rounded-md shadow transition-colors">
+                <button className="flex items-center px-6 py-3 bg-red-500/80 backdrop-blur rounded-full text-white shadow-sm shadow-red-400 border-2 border-red-300 hover:bg-red-600  transition-colors">
                   <Eye className="h-5 w-5 mr-2" />
                   View Our Government Training Portfolio
                 </button>
-                <button className="flex items-center bg-white/10 backdrop-blur border border-white/30 text-white px-6 py-3 rounded-md hover:bg-white/20 shadow transition-colors">
+                <button className="flex items-center  bg-white/80 hover:bg-white  transition-colors px-6 py-3  backdrop-blur rounded-full  shadow-sm shadow-white border-2 border-black/70 text-black ">
                   <Calendar className="h-5 w-5 mr-2" />
                   Schedule a Strategy Call
                 </button>
