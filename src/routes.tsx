@@ -12,12 +12,13 @@ import InstitutionsLayout from "./layouts/InstitutionsLayout";
 
 // Lazy pages
 const Home = lazy(() => import("./pages/Index"));
-const Service = lazy(() => import("./pages/Corporate/Services/[service]"));
-const Corporate = lazy(() => import("./pages/Corporate/Index"));
+const Service = lazy(() => import("./pages/Corporate/Recruitment/Services/[service]"));
+const Corporate = lazy(() => import("./pages/Corporate/Recruitment/Index"));
 const Government = lazy(() => import("./pages/Government/Index"));
 const Academia = lazy(() => import("./pages/Academia/Index"));
 const Institutions = lazy(() => import("./pages/Institutions/Index"));
-const Contact = lazy(() => import("./pages/Corporate/Contact/Index"));
+const CorporateTraining = lazy(() => import("./pages/Corporate/Training"));
+const Contact = lazy(() => import("./pages/Corporate/Recruitment/Contact/Index"));
 
 const withSuspense = (Component: React.LazyExoticComponent<React.FC<{}>>) => (
   <Suspense fallback={<LoaderComponent />}>
@@ -60,6 +61,10 @@ const router = createBrowserRouter([
       {
         path: "/corporate/services/:name",
         element: withSuspense(Service),
+      },
+      {
+        path: "/corporate/training",
+        element: withSuspense(CorporateTraining),
       },
     ],
   },

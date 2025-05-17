@@ -5,7 +5,7 @@ import LoaderComponent from "@/components/LoaderComponent";
 
 // Lazy-loaded pages
 const Index = lazy(() => import("./pages/Index"));
-const About = lazy(() => import("./pages/Corporate/Index"));
+const About = lazy(() => import("./pages/Corporate/Recruitment/Index"));
 const Government = lazy(() => import("./pages/Government/Index"));
 
 const App: React.FC = () => {
