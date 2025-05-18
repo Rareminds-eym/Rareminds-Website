@@ -79,7 +79,7 @@ const ContactSection = () => {
             <Send size={32} />
           </div>
           <h2 className="text-3xl md:text-5xl text-center font-bold mb-4 text-corporate-black">
-            Let's Build Your Success Team
+            Partner With Us
           </h2>
           <p className="text-corporate-grey max-w-3xl mx-auto text-lg text-center">
             Whether you're hiring 5 or 500, we'll help you get it right
@@ -212,7 +212,7 @@ const ContactSection = () => {
                         >
                           <button
                             type="submit"
-                            className="corporate-btn-1"
+                            className=""
                             disabled={isSubmitting}
                           >
                             {isSubmitting ? (
