@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 
 export default function Problem() {
   return (
-    <section className="relative overflow-hidden py-16 sm:py-20 lg:py-32 bg-white">
+    <section className="relative overflow-hidden py-16 sm:py-20 lg:py-32 bg-white rounded-t-[50px] md:rounded-t-[200px] shadow-[0_-20px_30px_-22px_rgba(0,0,0,0.25)]">
       {/* Diagonal split background */}
       <div className="absolute inset-0 z-0">
         <div className="w-full h-full [background:linear-gradient(-71deg,_#2C3E50,_#000000)] clip-diagonal-right" />

@@ -1,15 +1,15 @@
 import { motion } from "framer-motion";
-import { Blocks, GamepadIcon, GraduationCap, Languages } from "lucide-react";
+import { Timer, Laptop, GraduationCap, Languages } from "lucide-react";
 
 const features = [
   {
-    icon: Blocks,
+    icon: Timer,
     title: "45-Hour Experiential Modules",
     description: "Leadership, Tech, Sales, Compliance, DEI & more—built for impact, not just info.",
     bgColor: "from-blue-100/60 to-purple-100/60",
   },
   {
-    icon: GamepadIcon,
+    icon: Laptop,
     title: "Simulations + Final Assessments",
     description: "Scenarios, roleplays, and gamified tasks because growth doesn't come from slides.",
     bgColor: "from-pink-100/60 to-rose-100/60",

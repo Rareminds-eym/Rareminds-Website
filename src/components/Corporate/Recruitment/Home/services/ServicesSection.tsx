@@ -141,14 +141,14 @@ const ServicesSection = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-x-8 gap-y-10">
           {services.map((service, index) => (
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: index * 0.1 }}
+              viewport={{ once: true, amount: 0.2 }}
+              transition={{ duration: 0.5, delay: 0.1 + index * 0.08 }}
               className="relative"
               key={index}
             >
-              <div className="relative h-[230px]" key={index}>
+              <div className="relative h-[230px]">
                 <Link to={`/corporate/services/${service.title}`}>
                   <div className="mx-auto w-max relative">
                     <div className="absolute flex items-center">
@@ -188,21 +188,28 @@ const ServicesSection = () => {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.2 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.5, delay: 0.1 + services.length * 0.08 }}
           className="mt-16 text-center flex justify-center"
         >
-          <Link to="/corporate/contact">
-            <button className="corporate-btn-1">
-              Try us on your toughest role{" "}
-              <Icon
-                icon="cil:arrow-right"
-                height={20}
-                width={20}
-                className="ml-2"
-              />
-            </button>
-          </Link>
+          <button
+            className="corporate-btn-1"
+            onClick={() => {
+              const contactSection = document.getElementById('contact');
+              if (contactSection) {
+                contactSection.scrollIntoView({ behavior: 'smooth' });
+              }
+            }}
+            type="button"
+          >
+            Try us on your toughest role{' '}
+            <Icon
+              icon="cil:arrow-right"
+              height={20}
+              width={20}
+              className="ml-2"
+            />
+          </button>
         </motion.div>
       </div>
     </section>
