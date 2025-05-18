@@ -3,24 +3,24 @@ import { ArrowRight } from "lucide-react";
 
 const InstitutionDashboardSection = () => {
   return (
-    <section className="w-full bg-[#F5F7F8] py-20 px-4 md:px-20 text-center">
+    <section className="w-full bg-[#F5F7F8] py-16 px-4 md:px-20 text-center">
       <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-          className="text-center mb-16"
-        >
-          <h1 className="text-xl font-bold mb-4 bg-black bg-clip-text text-transparent">
-            Iterative Learning Meets Intelligent Tracking.
-          </h1>
-          <p className="text-sm text-gray-600 mx-auto">
-             Boost Engagement with Simulation Games while Leveraging real-time dashboards LMS tools to monitor and enhance outcomes across the board.
-          </p>
-        </motion.div>
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.8 }}
+        className="text-center mb-16"
+      >
+        <h1 className="text-xl font-bold mb-4 bg-black bg-clip-text text-transparent">
+          Interative Learning Meets Intelligent Tracking.
+        </h1>
+        <p className="text-sm text-gray-600 mx-auto max-w-xl">
+          Boost Engagement with Simulation Games while Leveraging real-time dashboards LMS tools to monitor and enhance outcomes across the board.
+        </p>
+      </motion.div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        {/* Simulation Games */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 px-10">
+        {/* Simulation Games (Single Box with Dummy Image & Animation) */}
         <motion.div
           className="bg-white rounded-2xl shadow-xl p-6"
           initial={{ opacity: 0, y: 40 }}
@@ -28,20 +28,17 @@ const InstitutionDashboardSection = () => {
           transition={{ duration: 0.5 }}
         >
           <h3 className="text-lg font-semibold text-[#495E57] mb-4">🎮 Simulation Games</h3>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div className="bg-[#0F172A] text-white rounded-xl p-4 flex flex-col items-start justify-between min-h-[160px]">
-              <h4 className="text-md font-semibold mb-2">EV Battery Fault Diagnostic System</h4>
-              <span className="text-xs text-gray-300">Track progress in real-time</span>
-            </div>
-            <div className="bg-[#34D399] text-black rounded-xl p-4 flex flex-col items-start justify-between min-h-[160px]">
-              <h4 className="text-md font-semibold mb-2">Sustainable Green Chemistry XP</h4>
-              <span className="text-xs text-gray-800">Gamified chemical education</span>
-            </div>
-            <div className="bg-[#0F172A] text-white rounded-xl p-4 flex flex-col items-start justify-between min-h-[160px] sm:col-span-2">
-              <h4 className="text-md font-semibold mb-2">Chemical Safety EVBMS</h4>
-              <span className="text-xs text-gray-300">Gamifies lab safety protocols</span>
-            </div>
-          </div>
+          <motion.div
+            className="rounded-xl overflow-hidden border-4 border-[#589ed7] p-1"
+            animate={{ boxShadow: ["0 0 0px #F4CE14", "0 0 20px #F4CE14", "0 0 0px #F4CE14"] }}
+            transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
+          >
+            <img
+              src="institutions/vectors/SimulationGame.png"
+              alt="Simulation Game Demo"
+              className="rounded-lg w-full object-cover"
+            />
+          </motion.div>
         </motion.div>
 
         {/* Real Time Dashboards & Analytics */}
@@ -52,38 +49,55 @@ const InstitutionDashboardSection = () => {
           transition={{ duration: 0.6, delay: 0.1 }}
         >
           <h3 className="text-lg font-semibold text-[#495E57] mb-4">📊 Real Time Dashboards & Analytics</h3>
-          <img
-            src="https://via.placeholder.com/400x200"
-            alt="Dashboard Preview"
-            className="rounded-xl w-full object-cover"
-          />
+          <motion.div
+            className="rounded-xl overflow-hidden border-4 border-[#589ed7] p-10"
+            animate={{ boxShadow: ["0 0 0px #F4CE14", "0 0 20px #F4CE14", "0 0 0px #F4CE14"] }}
+            transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
+          >
+            <img
+              src="institutions/vectors/Dashboard.jpg"
+              alt="Analytics Dashboard Demo"
+              className="rounded-lg w-full object-cover"
+            />
+          </motion.div>
         </motion.div>
 
+        
         {/* LMS */}
-        <motion.div
-          className="bg-white rounded-2xl shadow-xl p-6 md:col-span-2"
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-        >
-          <h3 className="text-lg font-semibold text-[#495E57] mb-4">📚 Learning Management System</h3>
-          <div className="flex flex-col md:flex-row items-center gap-6">
-            <img
-              src="https://via.placeholder.com/400x240"
-              alt="Rareprep LMS"
-              className="rounded-xl w-full md:w-1/2 object-cover"
-            />
-            <div className="text-left">
-              <h4 className="text-md font-bold mb-2">Rareprep</h4>
-              <p className="text-sm text-gray-600">
-                Streamlined course access, mock interviews, and tracking for student progress.
-              </p>
-              <button className="mt-4 inline-flex items-center gap-2 text-[#F4CE14] font-medium">
-                Explore More <ArrowRight className="w-4 h-4" />
-              </button>
+          <motion.div
+            className="bg-white rounded-2xl shadow-xl p-6 sm:col-span-2"
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+          >
+            <h3 className="text-lg font-semibold text-[#495E57] mb-4">📚 Learning Management System</h3>
+            <div className="flex flex-col md:flex-row gap-6 items-center">
+              {/* Image Section */}
+              <motion.div
+                className="flex-1 rounded-xl overflow-hidden border-4 border-[#589ed7] p-1 max-w-full"
+                animate={{ boxShadow: ["0 0 0px #F4CE14", "0 0 20px #F4CE14", "0 0 0px #F4CE14"] }}
+                transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
+              >
+                <img
+                  src="institutions/vectors/Dashboard.jpg"
+                  alt="Rareprep LMS"
+                  className="rounded-lg w-full h-full object-cover p-10"
+                />
+              </motion.div>
+
+              {/* Text Section */}
+              <div className="flex-1 text-left pl-10">
+                <h4 className="text-md font-bold mb-2">Rareminds Learning Management System</h4>
+                <p className="text-sm text-gray-600">
+                  Streamlined course access and tracking for student progress.
+                </p>
+                <button className="mt-4 inline-flex items-center gap-2 text-[#50b1f6] font-medium">
+                  Explore More <ArrowRight className="w-4 h-4" />
+                </button>
+              </div>
             </div>
-          </div>
-        </motion.div>
+          </motion.div>
+
       </div>
     </section>
   );

@@ -7,7 +7,7 @@ const caseStudies = [
   {
     icon: Trophy,
     title: 'One College, 2 Months, 40% Placement Jump',
-    institution: 'Vels University',
+    institution: 'VELS University',
     details: '600 Students | Soft Skills + Resume Bootcamp',
     pdfUrl: "/institutions/pdfs/Vels.pdf"
   },

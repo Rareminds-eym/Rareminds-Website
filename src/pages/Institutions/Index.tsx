@@ -10,12 +10,13 @@ import CaseStudies from "@/components/institutions/CaseStudies";
 import Services from "@/components/institutions/Services";
 import InstitutionDashboardSection from '@/components/institutions/InstitutionDashboardSection';
 import TestimonialVideos from "@/components/institutions/TestimonialVideos";
-import FinalCTA from '@/components/institutions/FinalCTA';
+//import FinalCTA from '@/components/institutions/FinalCTA';
 import FDPButton from "@/components/institutions/FDPButton";
 import FAQChatbot from '@/components/institutions/FAQChatbot';
 import StickyButtons from '@/components/institutions/StickyButtons';
 import '@/assets/institutions/index.css'
-//import '@/assets/institutions/PageStyles.css'
+import ContactSection from '@/components/institutions/Contact/ContactSection';
+import '@/assets/institutions/pageStyles.css'
 
 
 const Institutions: React.FC = () => {
@@ -33,7 +34,7 @@ const Institutions: React.FC = () => {
       <Services />
       <InstitutionDashboardSection />
       <TestimonialVideos />
-      <FinalCTA />
+      <ContactSection />
       <StickyButtons />
     </div>
   );
