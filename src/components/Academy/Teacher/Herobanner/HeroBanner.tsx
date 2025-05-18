@@ -8,12 +8,17 @@ import { Dialog, DialogContent } from '../../UI/dialog';
 import EnquiryForm from './EnquiryForm';
 import DownloadForm from './DownloadForm';
 import FloatingActionButton from '../FAB/FloatingActionButton';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { useCallback } from 'react';
 
 const HeroBanner = () => {
   const [activeServiceId, setActiveServiceId] = useState(services[0].id);
   const [showSchedule, setShowSchedule] = useState(false);
   const [showEnquiry, setShowEnquiry] = useState(false);
   const [showDownload, setShowDownload] = useState(false);
+
+    const location = useLocation();
+  const navigate = useNavigate();
   
   const activeService = services.find(service => service.id === activeServiceId) || services[0];
   
@@ -21,6 +26,23 @@ const HeroBanner = () => {
     setActiveServiceId(serviceId);
   };
   
+
+  const scrollToSection = () => {
+    const section = document.getElementById('contact-section');
+    if (section) {
+      section.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+    const isSchoolPage = location.pathname === '/academia/school';
+
+    const handleClick = useCallback(() => {
+      if (isSchoolPage) {
+        scrollToSection();
+      } else {
+        navigate('/academia/school#contact-section');
+      }
+    }, [isSchoolPage, navigate]);
 
   const toggleSchedule = () => {
     setShowSchedule(!showSchedule);
@@ -91,7 +113,7 @@ const HeroBanner = () => {
 
 <div className="relative w-full mb-8">
   {/* Left Column - Full Banner Carousel */}
-  <div className="w-full h-[250px] md:h-[500px] overflow-hidden">
+  <div className="w-full h-[250px] md:h-[70vh] overflow-hidden">
     <ServiceCarousel 
       services={services}
       activeServiceId={activeServiceId}
@@ -129,7 +151,7 @@ const HeroBanner = () => {
         <Button 
           variant="outline" 
           className="flex-1 py-4 border-2"
-          onClick={() => setShowEnquiry(true)}
+          onClick={handleClick}
         >
           <Mail className="mr-2 h-5 w-5" /> Enquiry
         </Button>
@@ -147,11 +169,11 @@ const HeroBanner = () => {
         
         {/* Service Navigation */}
         <div className="flex justify-center py-4 border-t">
-          <div className="flex flex-wrap justify-center gap-8 px-4">
+          <div className="flex flex-wrap justify-center md:gap-8 px-4">
             {services.map((service) => (
               <div
                 key={service.id}
-                className={`py-2 px-1 text-lg transition-all duration-300 ${
+                className={`py-2 px-1 md:text-lg text-[14px] font-bold  transition-all duration-300 ${
                   service.id === activeServiceId ? 'service-item-active' : 'service-item text-gray-500'
                 }`}
                 onClick={() => handleServiceClick(service.id)}
@@ -163,12 +185,12 @@ const HeroBanner = () => {
         </div>
       </div>
 
-      {/* Enquiry Form Dialog */}
+      {/* Enquiry Form Dialog
       <Dialog open={showEnquiry} onOpenChange={setShowEnquiry}>
         <DialogContent className="sm:max-w-[500px]">
           <EnquiryForm onClose={() => setShowEnquiry(false)} />
         </DialogContent>
-      </Dialog>
+      </Dialog> */}
 
       {/* Download Form Dialog */}
       <Dialog open={showDownload} onOpenChange={setShowDownload}>

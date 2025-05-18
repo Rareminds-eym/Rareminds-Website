@@ -25,36 +25,136 @@ const InstitutionDashboardSection = () => {
           transition={{ duration: 0.5 }}
         >
           <h3 className="text-lg font-semibold text-[#495E57] mb-4">🎮 Simulation Games</h3>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div className="bg-[#0F172A] text-white rounded-xl p-4 flex flex-col items-start justify-between min-h-[160px]">
-              <h4 className="text-md font-semibold mb-2">EV Battery Fault Diagnostic System</h4>
-              <span className="text-xs text-gray-300">Track progress in real-time</span>
-            </div>
-            <div className="bg-[#34D399] text-black rounded-xl p-4 flex flex-col items-start justify-between min-h-[160px]">
-              <h4 className="text-md font-semibold mb-2">Sustainable Green Chemistry XP</h4>
-              <span className="text-xs text-gray-800">Gamified chemical education</span>
-            </div>
-            <div className="bg-[#0F172A] text-white rounded-xl p-4 flex flex-col items-start justify-between min-h-[160px] sm:col-span-2">
-              <h4 className="text-md font-semibold mb-2">Chemical Safety EVBMS</h4>
-              <span className="text-xs text-gray-300">Gamifies lab safety protocols</span>
-            </div>
-          </div>
-        </motion.div>
+        
 
-        {/* Real Time Dashboards & Analytics */}
-        <motion.div
-          className="bg-white rounded-2xl shadow-xl p-6"
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.1 }}
-        >
-          <h3 className="text-lg font-semibold text-[#495E57] mb-4">📊 Real Time Dashboards & Analytics</h3>
-          <img
-            src="https://via.placeholder.com/400x200"
-            alt="Dashboard Preview"
-            className="rounded-xl w-full object-cover"
-          />
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-6 mt-10">
+  {/* Left Tilted Card */}
+
+    <div className="relative group w-[280px] h-[160px]">
+  {/* Hover Text Appears Above */}
+  <span className="absolute -top-8 left-1/2 -translate-x-1/2 bg-white font-bold text-black text-xs px-3 py-1 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-2 group-hover:-translate-y-2  z-20">
+    Track progress in real-time
+  </span>
+
+  {/* Rotated Card with Image */}
+  <div
+    onClick={() => (window.location.href = "/ev-battery-fault-diagnostic")}
+    className="relative rounded-xl p-6 cursor-pointer transform rotate-[-6deg] hover:rotate-[-3deg] transition-all duration-300 w-full h-full shadow-lg overflow-hidden z-10"
+    style={{
+      backgroundImage: 'url("/academy/ev.png")',
+      backgroundSize: 'cover',
+      backgroundPosition: 'center center',
+      backgroundRepeat: 'no-repeat',
+    }}
+  ></div>
+</div>
+
+
+
+
+  {/* Center Card */}
+
+    <div className="relative group w-[280px] h-[160px]">
+  {/* Hover Text Above the Card */}
+  <span className="absolute -top-8 left-1/2 -translate-x-1/2 text-black  font-bold text-xs px-3 py-1  opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-2 group-hover:-translate-y-2  z-20">
+    Gamified chemical education
+  </span>
+
+  {/* Card */}
+  <div
+    onClick={() => (window.location.href = "/sustainable-green-chemistry")}
+    className="relative text-black rounded-xl p-6 cursor-pointer hover:scale-105 transition-all duration-300 w-full h-full shadow-xl overflow-hidden z-10"
+    style={{
+      backgroundImage: 'url("/academy/sgc.png")',
+      backgroundSize: 'cover',
+      backgroundPosition: 'center center',
+      backgroundRepeat: 'no-repeat',
+    }}
+  ></div>
+</div>
+
+ 
+
+  {/* Right Tilted Card */}
+
+<div className="relative group w-[280px] h-[160px]">
+  {/* Hover Text Above Card */}
+  <span className="absolute -top-6 left-1/2 -translate-x-1/2 text-xs font-bold text-black  px-3 py-1  opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-2 group-hover:-translate-y-2 z-10 ">
+    Gamifies lab safety protocols
+  </span>
+
+  {/* Card */}
+  <div
+    onClick={() => (window.location.href = "/chemical-safety-evbms")}
+    className="relative text-white rounded-xl p-6 cursor-pointer transform rotate-[6deg] hover:rotate-[3deg] transition-all duration-300 w-full h-full shadow-lg overflow-hidden"
+    style={{
+      backgroundImage: 'url("/academy/cs.png")',
+      backgroundSize: 'cover',
+      backgroundPosition: 'center center',
+      backgroundRepeat: 'no-repeat',
+    }}
+  ></div>
+</div>
+
+ 
+
+
+<div className="relative group w-[280px] h-[160px]">
+  {/* Hover Text Above the Card */}
+  <span className="absolute -top-8 left-1/2 -translate-x-1/2 text-black font-bold text-xs px-3 py-1 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-2 group-hover:-translate-y-2 z-10">
+    Gamifies lab safety protocols
+  </span>
+
+  {/* Clickable Image Card */}
+  <div
+    onClick={() => (window.location.href = "/chemical-safety-evbms")}
+    className="relative text-white rounded-xl p-6 cursor-pointer transform rotate-[6deg] hover:rotate-[3deg] transition-all duration-300 w-full h-full shadow-lg overflow-hidden"
+    style={{
+      backgroundImage: 'url("/academy/fp.png")',
+      backgroundSize: 'cover',
+      backgroundPosition: 'center center',
+      backgroundRepeat: 'no-repeat',
+    }}
+  ></div>
+</div>
+
+
+  
+
+</div>
+
+
+
         </motion.div>
+{/* Real Time Dashboards & Analytics */}
+<motion.div
+  className="bg-white rounded-2xl shadow-xl p-6 text-center"
+  initial={{ opacity: 0, y: 40 }}
+  whileInView={{ opacity: 1, y: 0 }}
+  transition={{ duration: 0.6, delay: 0.1 }}
+>
+  <h3 className="text-lg font-semibold text-[#495E57] mb-6">
+    📊 Real Time Dashboards & Analytics
+  </h3>
+
+  {/* Wrapper to center image container */}
+  <div className="flex justify-center">
+    <div className="flex flex-col md:flex-row gap-4 items-center max-w-4xl w-full">
+      <img
+        src="/academy/Dashboardleft.png"
+        alt="Dashboard Preview 1"
+        className="rounded-xl w-full md:w-1/2 object-cover"
+      />
+      <img
+        src="/academy/Dashboardright.png"
+        alt="Dashboard Preview 2"
+        className="rounded-xl w-full md:w-1/2 object-cover"
+      />
+    </div>
+  </div>
+</motion.div>
+
+
 
         {/* LMS */}
         <motion.div

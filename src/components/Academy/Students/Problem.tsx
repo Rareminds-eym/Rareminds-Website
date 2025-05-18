@@ -120,9 +120,9 @@ const Problem = () => {
           </h2>
         
           <ul className="list-disc pl-5 text-black text-[20px] font-medium mb-4">
-          <li className="mb-2"> Skills that matter.</li>
-                  <li className="mb-2"> Confidence that stays. </li>
-          <li className="mb-2"> Opportunities that don’t wait.</li>
+          <li className="mb-2 text-start"> Skills that matter.</li>
+                  <li className="mb-2 text-start"> Confidence that stays. </li>
+          <li className="mb-2 text-start"> Opportunities that don’t wait.</li>
         </ul>
 
           <p className="text-md text-black">

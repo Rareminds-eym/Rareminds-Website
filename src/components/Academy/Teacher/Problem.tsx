@@ -127,10 +127,10 @@ const Problem = () => {
           <h2 className="text-2xl font-bold text-black mb-4">
           Careers that start in school.
           </h2> */}
-          <ul className="list-disc pl-5 text-black text-[20px] font-medium mb-4">
-  <li className="mb-2">Communication that works.</li>
-  <li className="mb-2">Confidence that shows.</li>
-  <li className="mb-2">Careers that start in school.</li>
+          <ul className="list-disc pl-5 text-black text-[16px] md:text-[20px] font-medium mb-4">
+  <li className="mb-2 text-start">Communication that works.</li>
+  <li className="mb-2 text-start">Confidence that shows.</li>
+  <li className="mb-2 text-start">Careers that start in school.</li>
 </ul>
 
           

@@ -82,7 +82,7 @@ const CaseStudy = () => {
             Proven Impact, Delivered
           </h1>
           <p className="text-base text-gray-600 max-w-2xl">
-            Real stories. Real results. See how our recruitment solutions transform businesses.
+            Real stories. Real results.
           </p>
         </div>
 

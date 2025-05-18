@@ -186,7 +186,8 @@
         </div>
         
         {/* Bottom section - two columns */}
-      <div className=" relative w-full h-[400px] md:h-[500px] grid grid-cols-2 gap-1 bg-[url('/academy/component-1.svg')] bg-cover bg-center object-contain ">
+      <div className=" relative w-full h-[400px] md:h-[500px] grid grid-cols-2 gap-1  bg-center object-contain  ">
+  <div className="absolute inset-0 bg-[url('/academy/component-1.svg')] bg-cover bg-center opacity-70 z-0"></div>
   {/* Left column */}
           {/* Left column with centered image */}
           <div 
@@ -197,7 +198,7 @@
           >
            <div className="flex flex-col items-center justify-center  h-full absolute -top-[10%] right-[55%]">
 
-           <div className="w-36 h-36 md:w-96 md:h-96 rounded-full flex cursor-pointer items-center justify-center overflow-hidden group" onClick={() => navigate("/academia/school")}>
+           <div className="w-48 h-48 md:w-96 md:h-96 rounded-full flex cursor-pointer items-center justify-center overflow-hidden group" onClick={() => navigate("/academia/school")}>
   <img
     src="/academy/school.png"
     alt="Technology"
@@ -218,7 +219,7 @@
           >
             <div className="flex flex-col items-center justify-center  h-full absolute  -top-[10%] left-[55%]">
 
-            <div className="w-36 h-36 md:w-96 md:h-96 rounded-full cursor-pointer flex items-center justify-center overflow-hidden group" onClick={() => navigate("/academia/student")}>
+            <div className="w-48 h-48 md:w-96 md:h-96 rounded-full cursor-pointer flex items-center justify-center overflow-hidden group" onClick={() => navigate("/academia/student")}>
   <img
     src="/academy/student.png"
     alt="Technology"
