@@ -132,7 +132,7 @@ export default function Hero() {
             <motion.div
               initial={{ opacity: 0, y: 50 }}
               animate={{ opacity: currentBanner === index ? 1 : 0, y: currentBanner === index ? 0 : 50 }}
-              transition={{ duration: 1, delay: 0.2 }}
+              transition={{ duration: 1, delay: 0.4 }}
               className="text-right max-w-2xl ml-auto"
             >
               <motion.h1 
@@ -155,11 +155,17 @@ export default function Hero() {
                 animate={{ opacity: currentBanner === index ? 1 : 0 }}
                 transition={{ duration: 0.5, delay: 0.8 }}
               >
-                {banner.subtitle.match(/[^:.&]+[:.&]?/g)?.map((part, idx) => (
-                <span key={idx} className="block">
-                  {part.trim()}
-                </span>
-              ))}
+                {banner.subtitle === "Build your future, with expert-led modules in trending domains."
+                    ? banner.subtitle.split(",").map((part, i) => (
+                        <span key={i} className="block">
+                          {part.trim()}
+                        </span>
+                      ))
+                    : banner.subtitle.match(/[^:.&]+[:.&]?/g)?.map((part, i) => (
+                        <span key={i} className="block">
+                          {part.trim()}
+                        </span>
+                      ))}
               </motion.p>
               
               <motion.div

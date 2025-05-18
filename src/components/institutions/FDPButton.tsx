@@ -6,7 +6,7 @@ export default function FDPButton() {
   const location = useLocation();
   const isFDPPage = location.pathname === '/fdp';
 
-  const buttonText = isFDPPage ? 'Back to main page' : 'Faculty Development';
+  const buttonText = isFDPPage ? 'Back to home page' : 'For Institutions';
   const subText = isFDPPage ? 'Click to return home' : 'Click to explore programs';
   const targetLink = isFDPPage ? '/' : '/fdp';
 
