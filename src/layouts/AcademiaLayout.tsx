@@ -1,5 +1,5 @@
 import React, { ReactNode } from "react";
-import FooterBar from "@/components/Footer/FooterBar"; // Optional: remove if not needed
+import AcademyFooterBar from "@/components/Footer/FooterBar"; // Optional: remove if not needed
 import Header from "@/components/Header/CorporateHeader"; // Updated to CorporateHeader
 
 interface CorporateLayoutProps {
@@ -17,7 +17,7 @@ const CorporateLayout: React.FC<CorporateLayoutProps> = ({ children }) => {
       </main>
 
       {/* Optional: include FooterBar if needed */}
-      <FooterBar />
+      <AcademyFooterBar />
     </div>
   );
 };
