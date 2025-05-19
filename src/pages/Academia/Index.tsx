@@ -278,7 +278,7 @@
 // };
 
 // export default Academy;
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import MainLayout from "../../components/Academy/MainLayout";
@@ -289,7 +289,7 @@ import { Check } from "lucide-react";
 import StudentCardR from "../../components/Academy/Students/StudentCard";
 import EducatorCard from "../../components/Academy/Teacher/EducatorCard";
 import { Book, Calendar, Circle, Users } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import StatsShowcase from "../../components/Academy/Teacher/StatsShowcase";
 import ProgramCard from "../../components/Academy/Students/ProgramCard";
 import Logos from "../../components/Academy/Teacher/Logos";
@@ -308,6 +308,17 @@ const Academia = ({ userType = "teacher" }: { userType?: "teacher" | "student" }
 
   const navigate = useNavigate();
 
+      const contactRef = useRef<HTMLDivElement>(null);
+        
+      const location = useLocation();
+  
+  
+       const scrollToContact = () => {
+      contactRef.current?.scrollIntoView({ behavior: "smooth" });
+    };
+  
+
+    
   const stats = [
     { icon: Book, value: "20,000+", label: "Faculty Trained" },
     { icon: Users, value: "100+", label: "Schools Onboarded" },

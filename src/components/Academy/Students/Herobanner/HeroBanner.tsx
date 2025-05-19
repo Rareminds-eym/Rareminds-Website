@@ -8,6 +8,8 @@ import { Dialog, DialogContent } from '../../UI/dialog';
 import EnquiryForm from './EnquiryForm';
 import DownloadForm from './DownloadForm';
 import FloatingActionButton from '../FAB/FloatingActionButton';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { useCallback } from 'react';
 
 const HeroBanner = () => {
   const [activeServiceId, setActiveServiceId] = useState(servicesStudent[0].id);
@@ -15,6 +17,9 @@ const HeroBanner = () => {
   const [showEnquiry, setShowEnquiry] = useState(false);
   const [showDownload, setShowDownload] = useState(false);
   
+    const location = useLocation();
+  const navigate = useNavigate();
+
   const activeService = servicesStudent.find(service => service.id === activeServiceId) || servicesStudent[0];
   
   const handleServiceClick = (serviceId: string) => {
@@ -25,6 +30,26 @@ const HeroBanner = () => {
   const toggleSchedule = () => {
     setShowSchedule(!showSchedule);
   };
+
+
+
+    const scrollToSection = () => {
+      const section = document.getElementById('contact-section');
+      if (section) {
+        section.scrollIntoView({ behavior: 'smooth' });
+      }
+    };
+  
+      const isSchoolPage = location.pathname === '/academia/school';
+  
+      const handleClick = useCallback(() => {
+        if (isSchoolPage) {
+          scrollToSection();
+        } else {
+          navigate('/academia/school#contact-section');
+        }
+      }, [isSchoolPage, navigate]);
+  
 
   return (
     <div className="w-full bg-white">
@@ -87,7 +112,7 @@ const HeroBanner = () => {
 
 <div className="relative w-full mb-8">
   {/* Left Column - Full Banner Carousel */}
-  <div className="w-full h-[300px] md:h-[400px] overflow-hidden">
+  <div className="w-full h-[300px] md:h-[70vh] overflow-hidden">
     <ServiceCarousel 
       services={servicesStudent}
       activeServiceId={activeServiceId}
@@ -125,7 +150,7 @@ const HeroBanner = () => {
         <Button 
           variant="outline" 
           className="flex-1 py-4 border-2"
-          onClick={() => setShowEnquiry(true)}
+          onClick={handleClick}
         >
           <Mail className="mr-2 h-5 w-5" /> Enquiry
         </Button>
@@ -141,32 +166,31 @@ const HeroBanner = () => {
   </div>
 </div>
 
-        
-        {/* Service Navigation */}
-        <div className="flex justify-center py-4 border-t">
-          <div className="flex flex-wrap justify-center gap-4 px-2">
-            {servicesStudent.map((service) => (
-              <div
-                key={service.id}
-                className={`py-2 px-1 text-[14px] md:text-lg font-bold  transition-all duration-300 ${
-                  service.id === activeServiceId ? 'service-item-active' : 'service-item text-gray-500'
-                }`}
-                onClick={() => handleServiceClick(service.id)}
-              >
-                {service.name}
-              </div>
-            ))}
-          </div>
-          {/* <FloatingActionButton  /> */}
-        </div>
-      </div>
 
-      {/* Enquiry Form Dialog */}
+       {/* Service Navigation */}
+              <div className="flex justify-center py-4 border-t">
+                <div className="flex flex-wrap justify-center md:gap-8 px-4">
+                  {servicesStudent.map((service) => (
+                    <div
+                      key={service.id}
+                      className={`py-2 px-1 md:text-lg text-[14px] font-bold  transition-all duration-300 ${
+                        service.id === activeServiceId ? 'service-item-active' : 'service-item text-gray-500'
+                      }`}
+                      onClick={() => handleServiceClick(service.id)}
+                    >
+                      {service.name}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+      {/* Enquiry Form Dialog
       <Dialog open={showEnquiry} onOpenChange={setShowEnquiry}>
         <DialogContent className="sm:max-w-[500px]">
           <EnquiryForm onClose={() => setShowEnquiry(false)} />
         </DialogContent>
-      </Dialog>
+      </Dialog> */}
 
       {/* Download Form Dialog */}
       <Dialog open={showDownload} onOpenChange={setShowDownload}>

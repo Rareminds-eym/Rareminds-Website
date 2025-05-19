@@ -151,7 +151,7 @@ useEffect(() => {
 </div>
 
         {/* New Method Section */}
-        <div className="max-w-7xl mx-auto bg-white py-16 px-4 sm:px-6 lg:px-8 rounded-2xl">
+        <div className="max-w-7xl mx-auto bg-white pb-16 pt-8 px-4 sm:px-6 lg:px-8 rounded-2xl">
           <div className="grid grid-cols-1 gap-12 items-center lg:grid-cols-2">
             {/* <div className="order-1 overflow-hidden rounded-xl shadow-2xl">
               <video

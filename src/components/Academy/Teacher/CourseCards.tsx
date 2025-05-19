@@ -52,7 +52,7 @@ const courses: CourseType[] = [
       text: "Book Orientation",
       icon: Calendar
     },
-    roles: ["Teacher"],
+    roles: ["Master Trainer", "HOD", "Academic Coach"],
     duration: "3 days",
     nepFocus: ["Skill Development", "Capacity Building", "Institutional Reform"]
   },
@@ -72,7 +72,7 @@ const courses: CourseType[] = [
       text: "Request Demo",
       icon: Calendar
     },
-    roles: ["Teacher"],
+    roles: ["Principal", "Director", "Dean"],
     duration: "2 days",
     nepFocus: ["Management", "Vision", "Strategic Planning"]
   },
@@ -92,7 +92,7 @@ const courses: CourseType[] = [
       text: "Download Brochure",
       icon: Download
     },
-    roles: ["Teacher"],
+    roles: ["Teacher", "Counselor", "Principal"],
     duration: "2 days",
     nepFocus: ["Wellbeing", "Holistic Education", "Culture"]
   },
@@ -110,7 +110,7 @@ const courses: CourseType[] = [
       text: "Book Orientation",
       icon: Calendar
     },
-    roles: ["Teacher"],
+    roles: ["Teacher", "ICT Coordinator", "EdTech Specialist"],
     duration: "4 days",
     nepFocus: ["Technology", "Innovation", "Digital Literacy"]
   },
@@ -130,7 +130,7 @@ const courses: CourseType[] = [
       text: "Book Orientation",
       icon: Calendar
     },
-    roles: ["Teacher"],
+    roles: ["Teacher", "ICT Coordinator", "EdTech Specialist"],
     duration: "4 days",
     nepFocus: ["Technology", "Innovation", "Digital Literacy"]
   },
@@ -152,7 +152,7 @@ const courses: CourseType[] = [
       text: "Book Orientation",
       icon: Calendar
     },
-    roles: ["Teacher"],
+    roles: ["Teacher", "ICT Coordinator", "EdTech Specialist"],
     duration: "4 days",
     nepFocus: ["Technology", "Innovation", "Digital Literacy"]
   }
@@ -243,7 +243,7 @@ const CourseCards = () => {
   };
 
   return (
-    <div className="py-16 bg-gray-50 courses"  id="course-cards-section">
+    <div className="py-16 bg-gray-50" id="courses">
       <div className="container mx-auto px-4 md:px-6">
         <div className="text-center max-w-3xl mx-auto mb-16">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">

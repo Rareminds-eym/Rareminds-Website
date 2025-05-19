@@ -19,7 +19,7 @@ import FaqAndContact from "../../../components/Academy/Students/FaqAndContact";
 import FacultyForm from "../../../components/Academy/Teacher/FacultyForm";
 import ResourcesPage from "../../../components/Academy/Students/ResourcesPage";
 import ResourceDownloadForm from "../../../components/Academy/Teacher/ResourceDownloadForm";
-import TestimonialsStudent from "../../../components/Academy/Students/Testimonials";
+import Testimonialss from "../../../components/Academy/Students/Testimonials";
 import VideoCarousel from "../../../components/Academy/Students/VideoCarousel";
 import Testimonials from "../../../components/Academy/Students/testimonials/testimonials"
 import Programs from "../../../components/Academy/Students/Programs";
@@ -33,6 +33,8 @@ import  TestimonialsCarousel from '../../../components/Academy/Students/Testimon
 import FAQChatbot from '../../../components/Academy/FAQChatbot'
 import FDPButton from '../../../components/Academy/Students/FDPButton'
 import DashboardSection from "../../../components/Academy/Students/DashboardSection"
+import ContactSection from "../../../components/Academy/Contact/ContactSection"
+import CorporateHeader from "../../../components/Footer/AcademyHeader"
 
 const Academy = ({ userType = "teacher" }: { userType?: "teacher" | "student" }) => {
   const [activeTab, setActiveTab] = useState<"teacher" | "student">("teacher");
@@ -52,11 +54,25 @@ const Academy = ({ userType = "teacher" }: { userType?: "teacher" | "student" })
 
    },[])
 
+
+   useEffect(() => {
+     const hash = location.hash;
+     if (hash === '#contact-section') {
+       const section = document.getElementById('contact-section');
+       if (section) {
+         setTimeout(() => {
+           section.scrollIntoView({ behavior: 'smooth' });
+         }, 100);
+       }
+     }
+   }, [location]);
+
   return (
    
         <div className="overflow-hidden">
       {/* Hero Banner */}
        {/* Hero Banner (90% width) */}
+       <CorporateHeader />
      <div className="w-full h-auto  ">
     {/* <div className="h-full flex items-center justify-center"> */}
      {/* <h1 className="text-4xl font-bold text-white"></h1> */}
@@ -73,7 +89,10 @@ const Academy = ({ userType = "teacher" }: { userType?: "teacher" | "student" })
       <Problem />
 
      {/* <Programs /> */}
+      <div id="course-cards-section">
      <StudentProgramsPage />
+      </div>
+    
       {/* <div className="w-full h-[65vh]"></div> */}
 
       <DashboardSection />
@@ -204,7 +223,7 @@ const Academy = ({ userType = "teacher" }: { userType?: "teacher" | "student" })
 
       {/* Testimonials Section */}
        {/* <Testimonials /> */}
-       <TestimonialsCarousel />
+       <Testimonialss />
       {/* <TestimonialsStudent /> */}
       
  
@@ -231,7 +250,12 @@ const Academy = ({ userType = "teacher" }: { userType?: "teacher" | "student" })
       {/* Resources Page */}
       <ResourcesPage />
       {/* <ResourceDownloadForm /> */}
-     
+       
+
+       <div id="contact-section">
+     <ContactSection />
+       </div>
+  
       </div>
   
   );
