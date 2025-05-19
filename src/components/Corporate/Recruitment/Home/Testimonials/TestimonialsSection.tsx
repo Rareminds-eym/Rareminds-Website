@@ -41,7 +41,7 @@ const testimonials = [
 
 const TestimonialsSection = () => {
 	return (
-		<section className="py-24 relative overflow-hidden bg-white">
+		<section className="py-24 relative overflow-hidden bg-gradient-to-br from-blue-50 via-white to-purple-50">
 			<div className="container lg:px-14 relative z-10">
 				<motion.div
 					initial={{ opacity: 0, y: 20 }}
@@ -60,21 +60,17 @@ const TestimonialsSection = () => {
 						Rareminds with their most important asset—their people.
 					</p>
 				</motion.div>
-
-				<div className="mx-auto">
+				<div className="mx-auto max-w-6xl">
 					<Swiper
 						modules={[Navigation, Autoplay]}
-						spaceBetween={30}
+						spaceBetween={32}
 						slidesPerView={1}
+						loop={false}
+						centeredSlides={true}
 						breakpoints={{
-							768: {
-								slidesPerView: 2,
-								spaceBetween: 20,
-							},
-							1024: {
-								slidesPerView: 3,
-								spaceBetween: 30,
-							},
+							640: { slidesPerView: 1, spaceBetween: 24 },
+							1024: { slidesPerView: 2, spaceBetween: 32 },
+							1440: { slidesPerView: 3, spaceBetween: 40 },
 						}}
 						navigation={{
 							nextEl: ".testimonials-next",
@@ -85,35 +81,32 @@ const TestimonialsSection = () => {
 							disableOnInteraction: false,
 							pauseOnMouseEnter: true,
 						}}
-						className="testimonials-swiper"
-						loop={false}
+						className="testimonials-swiper py-8"
 					>
 						{testimonials.map((testimonial, index) => (
 							<SwiperSlide key={index} className="!mr-0">
 								<motion.div
-									initial={{ opacity: 0, y: 20 }}
-									whileInView={{ opacity: 1, y: 0 }}
+									initial={{ opacity: 0, y: 40, scale: 0.95 }}
+									whileInView={{ opacity: 1, y: 0, scale: 1 }}
 									transition={{ duration: 0.5, delay: index * 0.1 }}
 									viewport={{ once: true }}
-									className="bg-white rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-shadow duration-300 relative h-full"
+									className="relative bg-white rounded-3xl p-10 shadow-2xl hover:shadow-3xl transition-shadow duration-300 flex flex-col border-2 border-transparent hover:border-corporate-primary-light/60 group"
 								>
-									<div className="absolute -top-3 -right-3 bg-corporate-black text-white p-2 rounded-xl transform rotate-12">
+									<div className="absolute -top-4 -right-4 bg-corporate-black text-white p-2 rounded-xl transform rotate-12 shadow-md">
 										<Icon icon="ph:quotes" width="20" height="20" />
 									</div>
-
-									<div className="mb-6">
+									<div className="mb-6 flex justify-center">
 										<img
 											src={testimonial.img}
 											alt={`${testimonial.company} logo`}
-											className="h-12 w-auto object-contain"
+											className="h-14 w-14 object-contain rounded-full border-2 border-corporate-primary-light shadow-md bg-white"
 										/>
 									</div>
-
-									<div className="flex items-center gap-1 mb-4">
+									<div className="flex items-center gap-1 mb-4 justify-center">
 										{[...Array(5)].map((_, i) => (
 											<Star
 												key={i}
-												size={16}
+												size={18}
 												className={`${
 													i < testimonial.rating
 														? "text-yellow-400 fill-current"
@@ -122,22 +115,20 @@ const TestimonialsSection = () => {
 											/>
 										))}
 									</div>
-
-									<div className="h-[200px] overflow-y-auto mb-6 prose prose-sm">
-										<p className="text-gray-600 leading-relaxed">
+									<div className="h-[180px] overflow-y-auto mb-6 prose prose-sm scrollbar-thin scrollbar-thumb-corporate-primary-light/30 scrollbar-track-transparent px-2">
+										<p className="text-gray-600 leading-relaxed text-center">
 											"{testimonial.content}"
 										</p>
 									</div>
-
-									<div className="flex items-start gap-4 mt-6 pt-6 border-t">
-										<div className="flex-grow">
-											<h4 className="font-semibold text-gray-900">
+									<div className="flex items-center gap-4 mt-auto pt-6 border-t border-corporate-primary-light/20">
+										<div className="flex-grow text-center">
+											<h4 className="font-semibold text-corporate-black text-lg">
 												{testimonial.author}
 											</h4>
 											<p className="text-sm text-gray-500 mt-1">
 												{testimonial.position}
 											</p>
-											<p className="text-xs text-corporate-black mt-1">
+											<p className="text-xs text-corporate-primary mt-1 font-semibold">
 												{testimonial.company}
 											</p>
 										</div>
@@ -147,11 +138,11 @@ const TestimonialsSection = () => {
 						))}
 					</Swiper>
 					<div className="flex justify-center items-center gap-4 mt-8">
-						<button className="testimonials-prev bg-white text-corporate-black hover:bg-gray-50 px-6 py-3 rounded-lg shadow-md transition-all duration-300 flex items-center gap-2">
+						<button className="testimonials-prev bg-white text-corporate-black hover:bg-corporate-primary-light/10 px-6 py-3 rounded-lg shadow-md transition-all duration-300 flex items-center gap-2 border border-corporate-primary-light/30">
 							<Icon icon="ph:arrow-left" width="24" height="24" />
 							<span>Previous</span>
 						</button>
-						<button className="testimonials-next bg-white text-corporate-black hover:bg-gray-50 px-6 py-3 rounded-lg shadow-md transition-all duration-300 flex items-center gap-2">
+						<button className="testimonials-next bg-white text-corporate-black hover:bg-corporate-primary-light/10 px-6 py-3 rounded-lg shadow-md transition-all duration-300 flex items-center gap-2 border border-corporate-primary-light/30">
 							<span>Next</span>
 							<Icon icon="ph:arrow-right" width="24" height="24" />
 						</button>

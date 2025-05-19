@@ -70,7 +70,7 @@ const TeamSection = () => {
           </h2>
         </motion.div>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5 lg:gap-8 max-w-6xl mx-auto">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-x-5 gap-y-8 lg:gap-8 max-w-6xl mx-auto">
           {teamMembers.map((member, index) => (
             <motion.div
               key={member.name}
@@ -83,7 +83,7 @@ const TeamSection = () => {
               }`}
             >
               <div
-                className={`relative ${member.bg} rounded-full flex flex-col h-[500px] overflow-hidden group`}
+                className={`relative ${member.bg} rounded-full flex flex-col h-[450px] sm:h-[500px] overflow-hidden group`}
               >
                 <div className="p-5 flex flex-col group-hover:opacity-0 transition-all duration-300">
                   <p className="text-lg font-bold text-center mt-10">

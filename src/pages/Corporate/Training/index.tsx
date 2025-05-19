@@ -1,11 +1,14 @@
 import FAQChatbot from "@/components/Corporate/ChatBot/FAQChatbot";
 import FullScreenCarousel from "@/components/Corporate/Recruitment/Home/Carousel/FullScreenCarousel";
+import BookCall from "@/components/Corporate/Training/BookCall";
 import CaseStudies from "@/components/Corporate/Training/CaseStudies";
 import ContactSection from "@/components/Corporate/Training/Contact/ContactSection";
+import Numbers from "@/components/Corporate/Training/Numbers";
 import Problem from "@/components/Corporate/Training/Problem";
 import Services from "@/components/Corporate/Training/Services";
 import Solution from "@/components/Corporate/Training/Solution";
 import TestimonialQuotes from "@/components/Corporate/Training/TestimonialQuotes";
+import WorkWith from "@/components/Corporate/Training/WorkWith";
 import React from "react";
 
 const CorporateTraining: React.FC = () => {
@@ -15,7 +18,7 @@ const CorporateTraining: React.FC = () => {
         "<span class='corporate-heading-highlight'>Don’t Just Hire.</span> <br/>Build High-Performing Teams",
       subheading:
         "Smart, scalable recruitment solutions trusted by 250+ corporates",
-      img: "/Corporate/Images/Home/Hero/BuildHigh.webp",
+      img: "/Corporate/Images/Training/hero/training-partner.webp",
     },
     {
       heading:
@@ -48,10 +51,10 @@ const CorporateTraining: React.FC = () => {
   ];
   return (
     <>
-      <section className="bg-[url('/Corporate/Images/Home/Hero/header-bg.webp')] sticky top-[80px]">
+      <section className="bg-[url('/Corporate/Images/Training/hero/header-bg.webp')] bg-cover sticky top-[80px]">
         <FullScreenCarousel slides={slides} />
       </section>
-      <div className="rounded-t-[50px] md:rounded-t-[200px] shadow-[0_-20px_30px_-22px_rgba(0,0,0,0.25)] overflow-hidden">
+      <div className="">
         <Problem />
       </div>
       <div className="relative bg-white">
@@ -65,6 +68,15 @@ const CorporateTraining: React.FC = () => {
       </div>
       <div className="relative bg-white">
         <Services />
+      </div>
+      <div className="relative bg-white">
+        <Numbers/>
+      </div>
+      <div className="relative bg-white">
+        <WorkWith />
+      </div>
+      <div className="relative bg-white">
+        <BookCall />
       </div>
       <div className="relative bg-white">
         <ContactSection />

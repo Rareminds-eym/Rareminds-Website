@@ -226,6 +226,13 @@ export default function Services() {
               flex items-center justify-center gap-3"
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
+            onClick={() => {
+              const contactSection = document.getElementById('contact');
+              if (contactSection) {
+                contactSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+              }
+            }}
+            type="button"
           >
             <span>Make Your Career Recession-Proof</span>
             <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 animate-pulse" />
