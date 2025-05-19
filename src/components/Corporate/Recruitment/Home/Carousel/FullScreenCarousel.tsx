@@ -13,6 +13,7 @@ import "swiper/css/pagination";
 // Custom styles for pagination
 import "@/assets/corporate/Home/Carousal/carousel.css";
 import { motion } from "framer-motion";
+import LogoCarousel from "./LogoCarousel";
 
 interface CarouselSlide {
   heading: string;
@@ -32,8 +33,8 @@ const FullScreenCarousel: React.FC<FullScreenCarouselProps> = ({
   className = "",
 }) => {
   const location = useLocation();
-  const isOnCorporatePage = location.pathname === '/corporate';
-  
+  const isOnCorporatePage = location.pathname === "/corporate";
+
   const handleScrollDown = () => {
     window.scrollTo({
       top: window.innerHeight,
@@ -96,7 +97,9 @@ const FullScreenCarousel: React.FC<FullScreenCarouselProps> = ({
                   className="text-2xl sm:text-3xl md:text-4xl lg:text-[40px] font-bold mb-3 lg:mb-4 !leading-[1.5] md:!leading-[1.4]"
                   dangerouslySetInnerHTML={{ __html: slide.heading }}
                 />
-                <p className="text-base sm:text-lg lg:text-xl max-w-2xl lg:max-w-none mx-auto lg:mx-0">{slide.subheading}</p>
+                <p className="text-base sm:text-lg lg:text-xl max-w-2xl lg:max-w-none mx-auto lg:mx-0">
+                  {slide.subheading}
+                </p>
                 <div className="flex flex-col sm:flex-row gap-4 mt-6 justify-center lg:justify-start">
                   <button className="corporate-btn-1">
                     Request Talent Now
@@ -134,58 +137,7 @@ const FullScreenCarousel: React.FC<FullScreenCarouselProps> = ({
       </Swiper>
 
       {/* Logos - Only shown on corporate page */}
-      {isOnCorporatePage && (
-        <div className="absolute bottom-0 left-0 right-0 bg-[#f9f9f9] py-3 sm:py-5 z-10 overflow-hidden">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-          >
-            <Swiper
-              modules={[Autoplay, FreeMode]}
-              spaceBetween={20}
-              slidesPerView="auto"
-              breakpoints={{
-                320: {
-                  slidesPerView: 2.5,
-                  spaceBetween: 15
-                },
-                640: {
-                  slidesPerView: 4.5,
-                  spaceBetween: 20
-                },
-                1024: {
-                  slidesPerView: "auto",
-                  spaceBetween: 30
-                }
-              }}
-              freeMode={true}
-              loop={true}
-              speed={2000}
-              autoplay={{
-                delay: 1,
-                disableOnInteraction: false,
-              }}
-              className="logos-swiper px-4 md:px-8"
-            >
-              {logos.map((logo, index) => (
-                <SwiperSlide key={index} className="!w-auto">
-                  <div className="flex justify-center">
-                    <img
-                      src={logo}
-                      alt={`logo-${index}`}
-                      height={40}
-                      width={85}
-                      className="h-[30px] sm:h-[40px] min-w-[70px] sm:min-w-[85px] object-contain transition-all"
-                    />
-                  </div>
-                </SwiperSlide>
-              ))}
-            </Swiper>
-          </motion.div>
-        </div>
-      )}
+      {isOnCorporatePage && <LogoCarousel logos={logos} />}
 
       {/* Arrow down button */}
       <div className="hidden lg:block container">

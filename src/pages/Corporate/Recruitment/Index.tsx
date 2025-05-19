@@ -51,7 +51,7 @@ const Corporate: React.FC = () => {
 
   return (
     <>
-      <section className="bg-[url('/Corporate/Images/Home/Hero/header-bg.webp')] sticky top-[80px]">
+      <section className="bg-[url('/Corporate/Images/Home/Hero/header-bg.webp')] sdticky top-[80px]">
         <FullScreenCarousel slides={slides} />
       </section>
 
