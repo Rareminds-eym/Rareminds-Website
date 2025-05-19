@@ -16,6 +16,8 @@ const Service = lazy(() => import("./pages/Corporate/Recruitment/Services/[servi
 const Corporate = lazy(() => import("./pages/Corporate/Recruitment/Index"));
 const Government = lazy(() => import("./pages/Government/Index"));
 const Academia = lazy(() => import("./pages/Academia/Index"));
+const Student = lazy(() => import("./pages/Academia/Student/student"));
+const School = lazy(() => import("./pages/Academia/School/teacher"));
 const Institutions = lazy(() => import("./pages/Institutions/Index"));
 const CorporateTraining = lazy(() => import("./pages/Corporate/Training"));
 const Contact = lazy(() => import("./pages/Government/Contact/Index"));
@@ -93,6 +95,14 @@ const router = createBrowserRouter([
       {
         path: "/academia",
         element: withSuspense(Academia),
+      },
+      {
+        path: "/academia/student",
+        element: withSuspense(Student),
+      },
+      {
+        path: "/academia/school",
+        element: withSuspense(School),
       },
     ],
   },
