@@ -9,6 +9,7 @@ import ProcessSection from "@/components/Corporate/Recruitment/Home/Process/Proc
 import TeamSection from "@/components/Corporate/Recruitment/Home/Team/TeamSection";
 import ContactSection from "@/components/Corporate/Recruitment/Home/Contact/ContactSection";
 import FAQChatbot from "@/components/Corporate/ChatBot/FAQChatbot";
+import Dashboard from "@/components/Corporate/Recruitment/Home/Dashboard";
 
 const Corporate: React.FC = () => {
   const slides = [
@@ -75,6 +76,9 @@ const Corporate: React.FC = () => {
       </div>
       <div id="team">
         <TeamSection />
+      </div>
+      <div id="dashboard" className="bg-white relative">
+        <Dashboard/>
       </div>
       <div id="contact">
         <ContactSection />

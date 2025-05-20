@@ -3,7 +3,6 @@ import FullScreenCarousel from "@/components/Corporate/Recruitment/Home/Carousel
 import BookCall from "@/components/Corporate/Training/BookCall";
 import CaseStudies from "@/components/Corporate/Training/CaseStudies";
 import ContactSection from "@/components/Corporate/Training/Contact/ContactSection";
-import Dashboard from "@/components/Corporate/Training/Dashboard";
 import Numbers from "@/components/Corporate/Training/Numbers";
 import Problem from "@/components/Corporate/Training/Problem";
 import Services from "@/components/Corporate/Training/Services";
@@ -61,9 +60,6 @@ const CorporateTraining: React.FC = () => {
       </div>
       <div className="relative bg-white">
         <WorkWith />
-      </div>
-      <div className="relative bg-white">
-        <Dashboard />
       </div>
       <div className="relative bg-white">
         <BookCall />
