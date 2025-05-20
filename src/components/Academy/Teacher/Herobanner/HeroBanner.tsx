@@ -11,7 +11,14 @@ import FloatingActionButton from '../FAB/FloatingActionButton';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useCallback } from 'react';
 
-const HeroBanner = () => {
+
+
+interface HeaderProps {
+   HeroToContact: () => void;
+}
+
+const HeroBanner = ({  HeroToContact }: HeaderProps) =>{
+
   const [activeServiceId, setActiveServiceId] = useState(services[0].id);
   const [showSchedule, setShowSchedule] = useState(false);
   const [showEnquiry, setShowEnquiry] = useState(false);
@@ -131,10 +138,10 @@ const HeroBanner = () => {
       </h1>
       <p className="text-lg text-gray-700 mb-6">
         {activeService.subtext}
-      </p>
-      <Button 
-        onClick={toggleSchedule}
-        className="mb-6 px-6 py-4 text-lg rounded-xl shadow-md bg-gradient-to-r from-red-400 to-red-500 hover:from-red-600"
+      </p>     
+       <Button 
+        onClick={HeroToContact}
+        className="mb-6 px-6 py-4 text-lg rounded-xl shadow-md bg-red-500 hover:bg-red-600"
       >
         Schedule <ArrowRight className="ml-2 h-5 w-5" />
       </Button>

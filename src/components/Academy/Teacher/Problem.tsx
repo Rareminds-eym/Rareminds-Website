@@ -94,9 +94,9 @@
 // export default Problem;
 // ...your existing imports
 import { motion } from 'framer-motion';
-import Problem1 from '/academy/1.both Students and Schools sections under Academia_video_1080.png';
-import Problem2 from '/academy/3.png';
-import Solution from '/academy/2.png';
+// import Problem1 from '/academy/1.both Students and Schools sections under Academia_video_1080.png';
+// import Problem2 from '/academy/3.png';
+// import Solution from '/academy/2.png';
 
 const Problem = () => {
   return (
@@ -115,7 +115,7 @@ const Problem = () => {
           transition={{ duration: 0.8 }}
           className="w-full lg:w-1/2 mb-10 lg:mb-0 md:text-left text-center"
         >
-          <h2 className="text-3xl font-light text-black mb-6">
+          <h2 className="text-3xl font-semibold text-black mb-6">
             Communication. Confidence. Clarity. The real essentials.
           </h2>
           {/* <h2 className="text-2xl font-bold text-black mb-2">

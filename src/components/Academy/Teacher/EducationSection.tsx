@@ -10,6 +10,7 @@ interface EducationSectionProps {
   scrollToContact: () => void;
 }
 
+
 // Button component
 interface CtaButtonProps {
   children: React.ReactNode;

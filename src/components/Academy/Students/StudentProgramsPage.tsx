@@ -3,7 +3,13 @@ import { Button } from "../UI/button";
 import { ArrowDown, Calendar, Download, FileText, FlipHorizontal } from "lucide-react";
 import { useIsMobile } from "../../../hooks/Academy/use-mobile";
 
-const StudentProgramsPage = () => {
+
+interface coursecardProps {
+  coursetocontact: () => void;
+}
+
+
+const StudentProgramsPage = ({coursetocontact}:coursecardProps) => {
   const isMobile = useIsMobile();
   
   // Original Program data for the cards
@@ -145,7 +151,7 @@ const StudentProgramsPage = () => {
                 readMoreUrl={program.readMoreUrl}
               />
               <div className="mt-4 flex justify-center">
-                <Button className="bg-red-500 hover:bg-red-600 text-white gap-2 text-sm md:text-base w-full md:w-auto">
+                <Button onClick={coursetocontact}  className="bg-red-500 hover:bg-red-600 text-white gap-2 text-sm md:text-base w-full md:w-auto">
                   {program.buttonText} {program.buttonIcon}
                 </Button>
               </div>

@@ -10,7 +10,7 @@ const InstitutionDashboardSection = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
       >
-        Your dashboard. Your reports. Your outcomes. Delivered weekly.
+        Your dashboard. Your reports. Your outcomes. Delivered Periodically.
       </motion.h2>
       <p className="text-sm md:text-base text-gray-500 mb-12">
         Complete transparency with real-time tracking and comprehensive reporting
