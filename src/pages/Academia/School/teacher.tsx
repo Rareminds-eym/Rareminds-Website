@@ -39,7 +39,7 @@
   import FDPButton from '../../../components/Academy/Teacher/FDPButton'
   import DashboardSection from "../../../components/Academy/Teacher/DashboardSection";
   import ContactSection from "../../../components/Academy/Contact/ContactSection"
-  import CorporateHeader from "../../../components/Footer/AcademyHeader"
+  import CorporateHeader from "../../../components/Header/AcademyHeader"
 
   const School = ({ userType = "teacher" }: { userType?: "teacher" | "student" }) => {
     const [activeTab, setActiveTab] = useState<"teacher" | "student">("teacher");

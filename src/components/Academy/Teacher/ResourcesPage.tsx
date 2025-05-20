@@ -150,7 +150,7 @@ const ResourcesPage = () => {
     </button> */}
 
 <a
-  href="/academy/pdfs/NEP-Ready.pdf" // Update the file path
+  href="/academia/coming-soon" // Update the file path
   target="_blank"
   rel="noopener noreferrer"
   className="w-[160px] absolute bottom-2 right-2 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded text-center"
@@ -204,7 +204,7 @@ const ResourcesPage = () => {
     </button> */}
 
 <a
-  href="/academy/pdfs/3_Day.pdf" // Update the file path
+  href="/academy/pdfs/NEP_Ready_School_Checklist.pdf" // Update the file path
   target="_blank"
   rel="noopener noreferrer"
   className="w-[160px] absolute bottom-2 right-2 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded text-center"

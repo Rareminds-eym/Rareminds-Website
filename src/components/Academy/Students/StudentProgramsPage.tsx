@@ -22,8 +22,9 @@ const StudentProgramsPage = () => {
       buttonIcon: <Calendar className="h-4 w-4" />,
       hasPdf: true,
       pdfUrl: "/spoken-english-brochure.pdf",
-      readMoreUrl: "/programs/spoken-english"
+      readMoreUrl: "/academia/coming-soon"
     },
+
     {
       title: "Career Counselling with Psychometric Assessments",
       tagline: "\"Guessing Your Career is Risky. Planning It Isn't.\"",
@@ -38,7 +39,7 @@ const StudentProgramsPage = () => {
       buttonIcon: <Download className="h-4 w-4" />,
       hasPdf: true,
       pdfUrl: "/career-blueprint.pdf",
-      readMoreUrl: "/programs/career-counselling"
+      readMoreUrl: "/academia/coming-soon"
     },
     {
       title: "The 3E Program: English, Employability, Entrepreneurship",
@@ -53,7 +54,7 @@ const StudentProgramsPage = () => {
       buttonText: "View EEE Program Curriculum",
       buttonIcon: <FileText className="h-4 w-4" />,
       hasPdf: false,
-      readMoreUrl: "/programs/eee-program"
+      readMoreUrl: "/academia/coming-soon"
     }
   ];
 
@@ -255,7 +256,7 @@ const ProgramCard = ({
           
           {hasPdf && (
             <>
-              <Button 
+              {/* <Button 
                 variant="outline" 
                 className="flex items-center gap-2 bg-red-500 mb-4"
                 onClick={(e) => {
@@ -264,7 +265,7 @@ const ProgramCard = ({
                 }}
               >
                 Download PDF <Download className="h-4 w-4 " />
-              </Button>
+              </Button> */}
               <a 
                 href={readMoreUrl} 
                 onClick={(e) => e.stopPropagation()} 
