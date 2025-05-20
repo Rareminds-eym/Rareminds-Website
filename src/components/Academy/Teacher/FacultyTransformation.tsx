@@ -10,6 +10,10 @@ import {
 import { MapPin, AlertCircle, BookOpen, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils";
 
+interface FacultyTransformationProps {
+  Facultytocontact: () => void;
+}
+
 // Helper to chunk array into pairs of 2
 function chunkArray<T>(array: T[], size: number): T[][] {
   const result: T[][] = [];
@@ -296,13 +300,13 @@ const FacultyTransformation=()=> {
             </CarouselContent>
             {/* Navigation arrows moved below cards and always visible */}
             <div className="flex justify-center mt-8 gap-4 relative z-10">
-              <CarouselPrevious className="static relative left-0 bg-red-500 text-black border-none shadow-lg hover:bg-red-600" />
-              <CarouselNext className="static relative right-0 bg-red-600 text-black border-none shadow-lg hover:bg-red-500" />
+              <CarouselPrevious className="static relative left-0 bg-red-500 text-white border-none shadow-lg hover:bg-red-600" />
+              <CarouselNext className="static relative right-0 bg-red-600 text-white border-none shadow-lg hover:bg-red-500" />
             </div>
           </Carousel>
         </div>
         <button
-          className="mt-9 bg-red-500 text-black font-semibold px-7 py-2 rounded-md text-xs shadow-none hover:bg-bg-red-600 transition-colors animate-fade-in"
+          className="mt-9 bg-red-500 text-white w-auto h-12 hover:bg-red-600 font-semibold px-7 py-2 rounded-md text-xs shadow-none hover:bg-bg-red-600 transition-colors animate-fade-in"
         >
           Read All Stories
         </button>

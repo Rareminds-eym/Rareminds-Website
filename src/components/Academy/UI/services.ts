@@ -61,7 +61,7 @@ type ServiceData = {
   const services: ServiceData[] = [
     {
       id: "design",
-      name: "Schedule Your FDP",
+      name: "Schedule Your TDP",
       headline: "“You Can’t Teach Tomorrow’s Students\nwith Yesterday’s Methods.”",
       subtext: "Train in NEP, Digital Pedagogy & Emotional Intelligence",
       illustration: "/academy/herobanner/1.png",

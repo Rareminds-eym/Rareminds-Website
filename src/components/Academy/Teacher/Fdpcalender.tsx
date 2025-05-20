@@ -2,7 +2,11 @@
 import { Calendar, BookOpen } from "lucide-react";
 import { Button } from "../UI/button";
 
-const Fdpcalender = () => {
+interface FdpcalenderProps {
+  Facultytocontact: () => void;
+}
+
+const Fdpcalender = ({ Facultytocontact }: FdpcalenderProps) => {
   return (
     
     <div className="min-h-screen bg-white flex flex-col items-center py-10 px-4 md:px-6" data-aos="fade-left">
@@ -220,8 +224,8 @@ const Fdpcalender = () => {
         </div>
         
         <div className="mt-10 flex justify-center">
-          <Button 
-            className="bg-red-500 hover:bg-red-600 text-black px-6 shadow-lg animate-fade-in scale-in transition-transform duration-200 hover:scale-105"
+          <Button onClick={Facultytocontact}
+            className="bg-red-500 hover:bg-red-600 text-white px-6 shadow-lg animate-fade-in scale-in transition-transform duration-200 hover:scale-105"
           >
             Get My TDP Calendar
           </Button>
