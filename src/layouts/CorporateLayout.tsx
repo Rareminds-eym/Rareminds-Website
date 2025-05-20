@@ -1,6 +1,6 @@
 import React, { ReactNode } from "react";
 import FooterBar from "@/components/Footer/FooterBar"; // Optional: remove if not needed
-import Header from "@/components/Header/CorporateHeader"; // Updated to CorporateHeader
+import CorporateHeader from "@/components/Header/CorporateHeader"; // Updated to CorporateHeader
 
 interface CorporateLayoutProps {
   children: ReactNode;
@@ -10,7 +10,7 @@ const CorporateLayout: React.FC<CorporateLayoutProps> = ({ children }) => {
   return (
     <div className="flex h-screen flex-col">
       {/* Use CorporateHeader for vertical-specific navigation */}
-      <Header />
+      <CorporateHeader />
 
       <main className="flex-1 mt-[80px]">
         {children}
