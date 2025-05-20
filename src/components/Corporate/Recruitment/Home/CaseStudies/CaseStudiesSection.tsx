@@ -100,11 +100,12 @@ const CaseStudiesSection = () => {
 						}}
 						spaceBetween={30}
 						slidesPerView={1}
+						centeredSlides={false}
 						className="w-full"
 					>
 						{caseStudies.map((currentCase, idx) => (
 							<SwiperSlide key={`case-${idx}`} className="!m-0">
-								<div className="bg-white rounded-3xl overflow-hidden border border-corporate-black/40">
+								<div className="bg-white rounded-3xl overflow-hidden border border-corporate-black/40 w-full max-w-6xl mx-auto">
 									<div className="grid grid-cols-1 lg:grid-cols-3 min-h-[70vh]">
 										{/* Left Panel - Image & Stats */}
 										<div className="bg-gradient-to-br from-corporate-purple to-corporate-purple/60 text-white p-8 flex flex-col justify-between">

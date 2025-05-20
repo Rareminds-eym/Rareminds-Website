@@ -26,7 +26,7 @@ const Dashboard: React.FC = () => {
           <h2 className="text-3xl md:text-5xl font-bold mb-4 text-corporate-black">
             Your dashboard. Your reports.Your outcomes.
             <br />
-            Delivered weekly.
+            Delivered periodically.
           </h2>
           <p className="text-corporate-grey max-w-3xl mx-auto">
             Complete transparency with real-time tracking and comprehensive
