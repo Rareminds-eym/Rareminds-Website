@@ -8,10 +8,10 @@ import {
   MapPin,
   Send,
   CheckCircle2,
-  ArrowRight,
 } from "lucide-react";
 import { Icon } from "@iconify/react";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/lib/supabase";
 
 const ContactSection = () => {
   const { toast } = useToast();
@@ -33,33 +33,55 @@ const ContactSection = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Simulate form submission
-    setTimeout(() => {
+    try {
+      const { error } = await supabase
+        .from('recruitment_forms')
+        .insert([
+          {
+            name: formData.name,
+            company: formData.company,
+            email: formData.email,
+            role: formData.role,
+            message: formData.message,
+            submitted_at: new Date().toISOString(),
+          },
+        ]);
+
+      if (error) throw error;
+
       toast({
         title: "Message Sent!",
-        description:
-          "Thank you for reaching out. Our team will contact you shortly.",
+        description: "Thank you for reaching out. Our team will contact you shortly.",
       });
 
       setSubmitted(true);
-      setIsSubmitting(false);
+      setFormData({
+        name: "",
+        company: "",
+        email: "",
+        role: "",
+        message: "",
+      });
+
+      if (formRef.current) formRef.current.reset();
 
       setTimeout(() => {
-        setFormData({
-          name: "",
-          company: "",
-          email: "",
-          role: "",
-          message: "",
-        });
         setSubmitted(false);
-        if (formRef.current) formRef.current.reset();
       }, 3000);
-    }, 1500);
+    } catch (error) {
+      console.error("Error submitting form:", error);
+      toast({
+        title: "Error",
+        description: "There was an error submitting your message. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
