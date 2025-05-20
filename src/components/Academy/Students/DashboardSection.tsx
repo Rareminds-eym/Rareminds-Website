@@ -38,7 +38,7 @@ const InstitutionDashboardSection = () => {
 
   {/* Rotated Card with Image */}
   <div
-    onClick={() => (window.location.href = "/ev-battery-fault-diagnostic")}
+    onClick={() => (window.location.href = "")}
     className="relative rounded-xl p-6 cursor-pointer transform rotate-[-6deg] hover:rotate-[-3deg] transition-all duration-300 w-full h-full shadow-lg overflow-hidden z-10"
     style={{
       backgroundImage: 'url("/academy/ev.png")',
@@ -62,7 +62,7 @@ const InstitutionDashboardSection = () => {
 
   {/* Card */}
   <div
-    onClick={() => (window.location.href = "/sustainable-green-chemistry")}
+    onClick={() => (window.location.href = "")}
     className="relative text-black rounded-xl p-6 cursor-pointer hover:scale-105 transition-all duration-300 w-full h-full shadow-xl overflow-hidden z-10"
     style={{
       backgroundImage: 'url("/academy/sgc.png")',
@@ -85,7 +85,7 @@ const InstitutionDashboardSection = () => {
 
   {/* Card */}
   <div
-    onClick={() => (window.location.href = "/chemical-safety-evbms")}
+    onClick={() => (window.location.href = "")}
     className="relative text-white rounded-xl p-6 cursor-pointer transform rotate-[6deg] hover:rotate-[3deg] transition-all duration-300 w-full h-full shadow-lg overflow-hidden"
     style={{
       backgroundImage: 'url("/academy/cs.png")',
@@ -107,7 +107,7 @@ const InstitutionDashboardSection = () => {
 
   {/* Clickable Image Card */}
   <div
-    onClick={() => (window.location.href = "/chemical-safety-evbms")}
+    onClick={() => (window.location.href = "")}
     className="relative text-white rounded-xl p-6 cursor-pointer transform rotate-[6deg] hover:rotate-[3deg] transition-all duration-300 w-full h-full shadow-lg overflow-hidden"
     style={{
       backgroundImage: 'url("/academy/fp.png")',
