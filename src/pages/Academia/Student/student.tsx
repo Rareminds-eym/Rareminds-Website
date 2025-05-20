@@ -34,7 +34,7 @@ import FAQChatbot from '../../../components/Academy/FAQChatbot'
 import FDPButton from '../../../components/Academy/Students/FDPButton'
 import DashboardSection from "../../../components/Academy/Students/DashboardSection"
 import ContactSection from "../../../components/Academy/Contact/ContactSection"
-import CorporateHeader from "../../../components/Footer/AcademyHeader"
+import CorporateHeader from "../../../components/Header/AcademyHeader"
 
 const Academy = ({ userType = "teacher" }: { userType?: "teacher" | "student" }) => {
   const [activeTab, setActiveTab] = useState<"teacher" | "student">("teacher");

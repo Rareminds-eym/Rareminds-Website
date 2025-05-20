@@ -52,7 +52,7 @@ const Fdpcalender = () => {
             
             <div className="mt-auto">
             <a
-  href="/images/academy/pdfs/3_Day.pdf" // path to your PDF
+  href="/academy/pdfs/3_Day.pdf" // path to your PDF
   target="_blank"
   rel="noopener noreferrer"
   className="w-full"
@@ -117,7 +117,7 @@ const Fdpcalender = () => {
             
             <div className="mt-auto">
             <a
-  href="/images/academy/pdfs/5_Day.pdf" // path to your PDF
+  href="/academy/pdfs/5_Day.pdf" // path to your PDF
   target="_blank"
   rel="noopener noreferrer"
   className="w-full"
@@ -201,7 +201,7 @@ const Fdpcalender = () => {
             
             <div className="mt-auto">
             <a
-  href="/images/academy/pdfs/Weekend_Program.pdf" // path to your PDF
+  href="/academy/pdfs/Weekend_Program.pdf" // path to your PDF
   target="_blank"
   rel="noopener noreferrer"
   className="w-full"
