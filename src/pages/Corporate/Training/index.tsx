@@ -16,38 +16,24 @@ const CorporateTraining: React.FC = () => {
   const slides = [
     {
       heading:
-        "<span class='corporate-heading-highlight'>Don’t Just Hire.</span> <br/>Build High-Performing Teams",
+        "Your Training ROI Partner",
       subheading:
-        "Smart, scalable recruitment solutions trusted by 250+ corporates",
+        "We're not just trainers. We're business enablers.",
       img: "/Corporate/Images/Training/hero/training-partner.webp",
     },
     {
       heading:
-        "From Bulk to Boardroom <br/><span class='corporate-heading-highlight'>One Partner.</span> Zero Compromise",
+        "Across 25 Sectors. In 13 Languages. With Zero Excuses.",
       subheading:
-        "Technical hiring, leadership search, and everything in between — done right",
+        "",
       img: "/Corporate/Images/Home/Hero/OnePartner.webp",
     },
     {
       heading:
-        "When <span class='corporate-heading-highlight'>Time-to-Hire Matters,</span> <br/>So Does Who You Hire With",
+        "Want Results?",
       subheading:
-        "Rareminds delivers role-fit talent with speed, accuracy, and accountability",
+        "We brought down post-training dropouts by 74%. Ask Toyota.",
       img: "/Corporate/Images/Home/Hero/Time-to-Hire.webp",
-    },
-    {
-      heading:
-        "<span class='corporate-heading-highlight'>Your Toughest Role?</span> <br/>Filled Faster Than You’d Believe",
-      subheading:
-        "From CXOs to coders — precision hiring that drives business outcomes",
-      img: "/Corporate/Images/Home/Hero/ToughestRole.webp",
-    },
-    {
-      heading:
-        "<span class='corporate-heading-highlight'>500+ Critical Roles</span> <br class='hidden sm:block'/>Closed This Quarter. <br/>Yours Could Be Next",
-      subheading:
-        "Partner with the recruitment team built for performance and outcomes",
-      img: "/Corporate/Images/Home/Hero/CriticalRoles.webp",
     },
   ];
   return (
