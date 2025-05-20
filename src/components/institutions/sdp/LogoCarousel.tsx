@@ -27,7 +27,7 @@ const collegeLogos = [
     url: "/institutions/logos/TUemblem.png",
   },
   {
-    name: "Vels University",
+    name: "VELS University",
     url: "/institutions/logos/Vels_University_logo.png",
   },
   {

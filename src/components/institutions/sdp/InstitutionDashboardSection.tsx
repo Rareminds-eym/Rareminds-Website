@@ -55,7 +55,7 @@ const InstitutionDashboardSection = () => {
             transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
           >
             <img
-              src="institutions/vectors/Dashboard.jpg"
+              src="institutions/vectors/Dashboard.png"
               alt="Analytics Dashboard Demo"
               className="rounded-lg w-full object-cover"
             />
@@ -79,7 +79,7 @@ const InstitutionDashboardSection = () => {
                 transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
               >
                 <img
-                  src="institutions/vectors/Dashboard.jpg"
+                  src="institutions/vectors/LMS.jpg"
                   alt="Rareprep LMS"
                   className="rounded-lg w-full h-full object-cover p-10"
                 />
