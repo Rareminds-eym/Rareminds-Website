@@ -131,7 +131,9 @@ useEffect(() => {
           {/* <h1 className="text-4xl font-bold text-white"></h1>
         {/* </div> */}
           {/* <VideoCarousel /> */}
-          <HeroBanner />
+   
+          <HeroBanner HeroToContact={scrollToContact} />
+        
           <Toaster />
         </div>
         <FAQChatbot />
@@ -272,7 +274,7 @@ useEffect(() => {
         {/* Testimonials Section */}
        
      <div id="course-cards-section">
-        <CourseCards  />
+        <CourseCards coursetocontact={scrollToContact}  />
       </div>
      
 
@@ -304,9 +306,9 @@ useEffect(() => {
 
 
 
-        {/* Faculty Transformation & Calendar */}
-        <FacultyTransformation />
-        <Fdpcalender />
+        {/* Faculty Transformation & Calendar */}     
+         <FacultyTransformation  />
+        <Fdpcalender Facultytocontact={scrollToContact} />
 
 
 

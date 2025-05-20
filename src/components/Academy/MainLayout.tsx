@@ -106,7 +106,7 @@
 
   import React from 'react';
   import { useNavigate } from "react-router-dom";
-
+ import CorporateHeader from "../../components/Header/AcademyHeader"
 
   interface MainLayoutProps {
     children: React.ReactNode;
@@ -154,9 +154,10 @@
           </div> */}
         {/* </div> */}
 
+        <CorporateHeader />
 
         
-        <div className="min-h-screen w-full bg-white mt-16">
+        <div className="min-h-screen w-full bg-white mt-20">
       {/* Main container */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
         

@@ -71,7 +71,7 @@ useEffect(() => {
           <h2 className=" text-2xl md:text-5xl font-bold text-black text-center pt-8">
             Why Schools Must <span className="text-red-600">Shift Now</span>
           </h2>
-          <h4 className="text-1xl font-bold text-black text-center pb-6">
+          <h4 className="text-1xl font-bold text-black text-center pt-4 pb-6">
             Traditional curriculum ≠ Future Careers
           </h4>
            </div>

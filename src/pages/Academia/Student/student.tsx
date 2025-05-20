@@ -1,5 +1,6 @@
 
 import { useState, useEffect } from "react";
+import React, { useRef } from "react";
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import MainLayout from "../../../components/Academy/MainLayout";
@@ -38,6 +39,12 @@ import CorporateHeader from "../../../components/Header/AcademyHeader"
 
 const Academy = ({ userType = "teacher" }: { userType?: "teacher" | "student" }) => {
   const [activeTab, setActiveTab] = useState<"teacher" | "student">("teacher");
+
+      const contactRef = useRef<HTMLDivElement>(null);
+      const scrollToContact = () => {
+      contactRef.current?.scrollIntoView({ behavior: "smooth" });
+    };
+  
 
   const stats = [
     { icon: Book, value: "20,000+", label: "Faculty Trained" },
@@ -78,7 +85,7 @@ const Academy = ({ userType = "teacher" }: { userType?: "teacher" | "student" })
      {/* <h1 className="text-4xl font-bold text-white"></h1> */}
       {/* </div> */}
       {/* <VideoCarousel />/ */}
-      <HeroBanner />
+      <HeroBanner HeroToContact={scrollToContact} />
       <Toaster />
     
     </div>
@@ -90,7 +97,8 @@ const Academy = ({ userType = "teacher" }: { userType?: "teacher" | "student" })
 
      {/* <Programs /> */}
       <div id="course-cards-section">
-     <StudentProgramsPage />
+
+     <StudentProgramsPage coursetocontact={scrollToContact} />
       </div>
     
       {/* <div className="w-full h-[65vh]"></div> */}
@@ -252,7 +260,7 @@ const Academy = ({ userType = "teacher" }: { userType?: "teacher" | "student" })
       {/* <ResourceDownloadForm /> */}
        
 
-       <div id="contact-section">
+       <div ref={contactRef} id="contact-section">
      <ContactSection />
        </div>
   

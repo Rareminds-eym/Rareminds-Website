@@ -89,7 +89,7 @@ const courses: CourseType[] = [
       "Creating a Safe Classroom"
     ],
     cta: {
-      text: "Download Brochure",
+      text: "speak to our councillor",
       icon: Download
     },
     roles: ["Teacher", "Counselor", "Principal"],
@@ -175,7 +175,11 @@ const filterOptions: FilterOption[] = [
   { name: "Assessment", value: "Assessment", category: "focus" }
 ];
 
-const CourseCards = () => {
+interface coursecardProps {
+  coursetocontact: () => void;
+}
+
+const CourseCards = ({coursetocontact}:coursecardProps) => {
   const [activeFilters, setActiveFilters] = useState<string[]>([]);
   const [hoveredCourse, setHoveredCourse] = useState<number | null>(null);
   const [searchQuery, setSearchQuery] = useState<string>("");
@@ -302,10 +306,9 @@ const CourseCards = () => {
             const isHovered = hoveredCourse === course.id;
             return (
               <div
-                key={course.id}
-                className={cn(
-                  "rounded-xl overflow-hidden card-hover relative flex flex-col transition-shadow duration-300 ease-in-out transform",
-                  isHovered ? "shadow-xl scale-105" : "shadow-sm"
+                key={course.id}                className={cn(
+                  "rounded-xl overflow-hidden card-hover relative flex flex-col transition-all duration-500 ease-in-out transform hover:shadow-xl will-change-transform",
+                  isHovered ? "shadow-xl scale-[1.02]" : "shadow-sm hover:shadow-lg"
                 )}
                 onMouseEnter={() => setHoveredCourse(course.id)}
                 onMouseLeave={() => setHoveredCourse(null)}
@@ -317,7 +320,11 @@ const CourseCards = () => {
                     `bg-${course.color}-500`,
                     isHovered ? "h-2" : "h-1"
                   )}
-                  style={{height: isHovered ? "0.5rem" : "0.25rem"}}
+                  style={{
+                    height: isHovered ? "0.5rem" : "0.25rem",
+                    transition: "height 500ms cubic-bezier(0.4, 0, 0.2, 1)",
+                    willChange: "height"
+                  }}
                 ></div>
                 <div className="p-6 flex-grow flex flex-col">
                   <div className="flex items-start gap-4 p-4 bg-white shadow-sm rounded-lg">
@@ -337,10 +344,10 @@ const CourseCards = () => {
                     </div>
                   </div>
 
-                  <div className={cn(
-                    "overflow-hidden transition-all duration-300 ease-in-out mt-3",
-                    isHovered ? "max-h-full opacity-100" : "max-h-0 opacity-0"
-                  )} style={{ transitionProperty: "max-height, opacity" }}>
+                  <div                  className={cn(
+                    "overflow-hidden transition-all duration-500 ease-in-out mt-3",
+                    isHovered ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"
+                  )} style={{ transitionProperty: "max-height, opacity", willChange: "max-height, opacity" }}>
                     <div className="pt-3 border-t flex-grow flex flex-col justify-between">
                       <div>
                         <p className="font-medium text-sm text-gray-700 mb-2">Key Features:</p>
@@ -365,7 +372,7 @@ const CourseCards = () => {
                         </div>
                       </div>
 
-                      <Button className={cn(
+                      <Button onClick={coursetocontact} className={cn(
                         "w-full group mt-auto",
                         course.color === "red" ? "bg-red-500 hover:bg-red-600" :
                         course.color === "gold" ? "bg-red-500 hover:bg-red-600" :
