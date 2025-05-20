@@ -1,18 +1,12 @@
-import React from "react";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Pagination, Autoplay, FreeMode } from "swiper/modules";
+import React, { useState, useEffect, useRef } from "react";
 import { Icon } from "@iconify/react";
 import { useLocation } from "react-router-dom";
-
+import { AnimatePresence, motion } from "framer-motion";
 import arrowDown from "@/assets/corporate/Home/Carousal/arrowDown.svg";
-
-// Import Swiper styles
-import "swiper/css";
-import "swiper/css/pagination";
 
 // Custom styles for pagination
 import "@/assets/corporate/Home/Carousal/carousel.css";
-import { motion } from "framer-motion";
+import LogoCarousel from "./LogoCarousel";
 
 interface CarouselSlide {
   heading: string;
@@ -22,23 +16,49 @@ interface CarouselSlide {
 
 interface FullScreenCarouselProps {
   slides: CarouselSlide[];
-  autoplayDelay?: number;
   className?: string;
 }
 
 const FullScreenCarousel: React.FC<FullScreenCarouselProps> = ({
   slides,
-  autoplayDelay = 5000,
   className = "",
 }) => {
   const location = useLocation();
-  const isOnCorporatePage = location.pathname === '/corporate';
-  
-  const handleScrollDown = () => {
-    window.scrollTo({
-      top: window.innerHeight,
-      behavior: "smooth",
-    });
+  const isOnCorporatePage = location.pathname === "/corporate";
+  const [activeIndex, setActiveIndex] = useState(0);
+  const touchStartX = useRef<number | null>(null);
+  const touchEndX = useRef<number | null>(null);
+
+  // Auto-advance slides every 8 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setActiveIndex((prev) => (prev + 1) % slides.length);
+    }, 8000);
+    return () => clearInterval(interval);
+  }, [slides.length]);
+
+  // Swipe handlers
+  const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
+    touchStartX.current = e.touches[0].clientX;
+  };
+  const handleTouchMove = (e: React.TouchEvent<HTMLDivElement>) => {
+    touchEndX.current = e.touches[0].clientX;
+  };
+  const handleTouchEnd = () => {
+    if (touchStartX.current !== null && touchEndX.current !== null) {
+      const diff = touchStartX.current - touchEndX.current;
+      if (Math.abs(diff) > 50) {
+        if (diff > 0) {
+          // Swipe left, next slide
+          setActiveIndex((prev) => (prev + 1) % slides.length);
+        } else {
+          // Swipe right, previous slide
+          setActiveIndex((prev) => (prev - 1 + slides.length) % slides.length);
+        }
+      }
+    }
+    touchStartX.current = null;
+    touchEndX.current = null;
   };
 
   const logos = [
@@ -70,123 +90,114 @@ const FullScreenCarousel: React.FC<FullScreenCarouselProps> = ({
     "/Corporate/Images/Home/ClientLogos/Wipro-consumer-care.png",
   ];
 
+  const handleScrollDown = () => {
+    window.scrollTo({
+      top: window.innerHeight,
+      behavior: "smooth",
+    });
+  };
+
   return (
     <div className={`corporate-full-screen-h w-full ${className} relative`}>
-      <Swiper
-        modules={[Pagination, Autoplay]}
-        spaceBetween={0}
-        slidesPerView={1}
-        pagination={{
-          clickable: true,
-          type: "bullets",
-          verticalClass: "swiper-pagination-vertical",
-        }}
-        autoplay={{
-          delay: autoplayDelay,
-          disableOnInteraction: false,
-        }}
-        className="h-full w-full mySwiper"
-      >
-        {slides.map((slide, index) => (
-          <SwiperSlide key={index}>
-            <div className="container flex flex-col lg:flex-row items-center justify-between w-full px-4 md:px-8 lg:px-14">
-              {/* Left side - Text content */}
-              <div className="w-full lg:w-[60%] py-6 lg:py-0 lg:pr-8 mb-4 lg:mb-0 text-center lg:text-left">
-                <h1
-                  className="text-2xl sm:text-3xl md:text-4xl lg:text-[40px] font-bold mb-3 lg:mb-4 !leading-[1.5] md:!leading-[1.4]"
-                  dangerouslySetInnerHTML={{ __html: slide.heading }}
-                />
-                <p className="text-base sm:text-lg lg:text-xl max-w-2xl lg:max-w-none mx-auto lg:mx-0">{slide.subheading}</p>
-                <div className="flex flex-col sm:flex-row gap-4 mt-6 justify-center lg:justify-start">
-                  <button className="corporate-btn-1">
-                    Request Talent Now
-                    <Icon
-                      icon="cil:arrow-right"
-                      height={20}
-                      width={20}
-                      className="ml-2"
-                    />
-                  </button>
-                  <button className="corporate-btn-2">
-                    Explore Our Solutions
-                    <Icon
-                      icon="line-md:compass-loop"
-                      height={20}
-                      width={20}
-                      className="ml-[6px]"
-                    />
-                  </button>
-                </div>
-              </div>
-              {/* Right side - Image */}
-              <div className="w-full lg:w-[40%] mt-4 lg:mt-0">
-                <img
-                  src={slide.img}
-                  alt={slide.heading}
-                  height={400}
-                  width={400}
-                  className="w-[300px] h-[300px] lg:w-[400px] lg:h-[400px] max-w-xl mx-auto lg:max-w-none object-cover rounded-lg"
-                />
-              </div>
-            </div>
-          </SwiperSlide>
-        ))}
-      </Swiper>
-
-      {/* Logos - Only shown on corporate page */}
-      {isOnCorporatePage && (
-        <div className="absolute bottom-0 left-0 right-0 bg-[#f9f9f9] py-3 sm:py-5 z-10 overflow-hidden">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-          >
-            <Swiper
-              modules={[Autoplay, FreeMode]}
-              spaceBetween={20}
-              slidesPerView="auto"
-              breakpoints={{
-                320: {
-                  slidesPerView: 2.5,
-                  spaceBetween: 15
-                },
-                640: {
-                  slidesPerView: 4.5,
-                  spaceBetween: 20
-                },
-                1024: {
-                  slidesPerView: "auto",
-                  spaceBetween: 30
-                }
-              }}
-              freeMode={true}
-              loop={true}
-              speed={2000}
-              autoplay={{
-                delay: 1,
-                disableOnInteraction: false,
-              }}
-              className="logos-swiper px-4 md:px-8"
-            >
-              {logos.map((logo, index) => (
-                <SwiperSlide key={index} className="!w-auto">
-                  <div className="flex justify-center">
-                    <img
-                      src={logo}
-                      alt={`logo-${index}`}
-                      height={40}
-                      width={85}
-                      className="h-[30px] sm:h-[40px] min-w-[70px] sm:min-w-[85px] object-contain transition-all"
-                    />
+      <div className="h-full w-full">
+        <div className="relative w-full h-full"
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
+        >
+          <AnimatePresence mode="wait" initial={false}>
+            {slides.map((slide, index) =>
+              index === activeIndex ? (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.4 }}
+                  className="absolute inset-0 flex items-center"
+                >
+                  <div className="container flex flex-col lg:flex-row items-center justify-between w-full px-4 md:px-8 lg:px-14">
+                    {/* Left side - Text content */}
+                    <div className="w-full lg:w-[60%] py-6 lg:py-0 lg:pr-8 mb-4 lg:mb-0 text-center lg:text-left">
+                      <motion.h1
+                        className="text-2xl sm:text-3xl md:text-4xl lg:text-[40px] font-bold mb-3 lg:mb-4 !leading-[1.5] md:!leading-[1.4]"
+                        dangerouslySetInnerHTML={{ __html: slide.heading }}
+                        initial={{ opacity: 0, x: -40 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: 40 }}
+                        transition={{ duration: 0.5, delay: 0.1 }}
+                      />
+                      <motion.p
+                        className="text-base sm:text-lg lg:text-xl max-w-2xl lg:max-w-none mx-auto lg:mx-0"
+                        initial={{ opacity: 0, y: 30 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -30 }}
+                        transition={{ duration: 0.5, delay: 0.2 }}
+                      >
+                        {slide.subheading}
+                      </motion.p>
+                      {/* Buttons - no animation wrapper */}
+                      <div className="flex flex-col sm:flex-row gap-4 mt-6 justify-center lg:justify-start">
+                        <button className="corporate-btn-1">
+                          Request Talent Now
+                          <Icon
+                            icon="cil:arrow-right"
+                            height={20}
+                            width={20}
+                            className="ml-2"
+                          />
+                        </button>
+                        <button className="corporate-btn-2">
+                          Explore Our Solutions
+                          <Icon
+                            icon="line-md:compass-loop"
+                            height={20}
+                            width={20}
+                            className="ml-[6px]"
+                          />
+                        </button>
+                      </div>
+                    </div>
+                    {/* Right side - Image */}
+                    <motion.div
+                      className="w-full lg:w-[40%] mt-4 lg:mt-0"
+                      initial={{ opacity: 0, scale: 0.8, x: 60 }}
+                      animate={{ opacity: 1, scale: 1, x: 0 }}
+                      exit={{ opacity: 0, scale: 0.8, x: 60 }}
+                      transition={{ duration: 0.6, delay: 0.2 }}
+                    >
+                      <img
+                        src={slide.img}
+                        alt={slide.heading}
+                        height={400}
+                        width={400}
+                        className="w-[300px] h-[300px] lg:w-[400px] lg:h-[400px] max-w-xl mx-auto lg:max-w-none object-cover rounded-lg"
+                      />
+                    </motion.div>
                   </div>
-                </SwiperSlide>
-              ))}
-            </Swiper>
-          </motion.div>
+                </motion.div>
+              ) : null
+            )}
+          </AnimatePresence>
+          {/* Dots - right center vertically for all screens */}
+          <div className="flex flex-col gap-3 absolute right-6 top-1/2 -translate-y-1/2 z-20">
+            {slides.map((_, idx) => (
+              <button
+                key={idx}
+                onClick={() => setActiveIndex(idx)}
+                className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                  activeIndex === idx
+                    ? "bg-corporate-black h-6"
+                    : "bg-[#DDDDDD]"
+                }`}
+                aria-label={`Go to slide ${idx + 1}`}
+              />
+            ))}
+          </div>
         </div>
-      )}
-
+      </div>
+      {/* Logos - Only shown on corporate page */}
+      {isOnCorporatePage && <LogoCarousel logos={logos} />}
       {/* Arrow down button */}
       <div className="hidden lg:block container">
         <div
