@@ -90,7 +90,7 @@ const FAQChatbot: React.FC = () => {
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           onClick={() => setIsOpen((prev) => !prev)}
-          className="group flex items-center gap-3 bg-[#434343] text-white p-4 rounded-full shadow-lg hover:bg-gray-600 focus:outline-none"
+          className="group flex items-center gap-3 bg-[#222B33] text-white p-4 rounded-full shadow-lg hover:bg-gray-600 focus:outline-none"
         ><div className="relative">
             <div className="absolute inset-0 bg-white rounded-full animate-ping opacity-20"></div>
           <MessageCircleQuestion size={24} />

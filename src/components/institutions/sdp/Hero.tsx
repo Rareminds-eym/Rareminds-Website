@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { Download, FileSpreadsheet, PhoneCall, Rocket, BadgeCheck, Users } from 'lucide-react';
 import { useState, useEffect } from 'react';
+import arrowDown from "@/assets/corporate/Home/Carousal/arrowDown.svg";
 
 
 
@@ -86,7 +87,12 @@ const banners = [
 export default function Hero() {
   const [currentBanner, setCurrentBanner] = useState(0);
   const [isComingSoonOpen, setIsComingSoonOpen] = useState(false);
-
+  const handleScrollDown = () => {
+    window.scrollTo({
+      top: window.innerHeight,
+      behavior: "smooth",
+    });
+  };
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -132,7 +138,7 @@ export default function Hero() {
             <motion.div
               initial={{ opacity: 0, y: 50 }}
               animate={{ opacity: currentBanner === index ? 1 : 0, y: currentBanner === index ? 0 : 50 }}
-              transition={{ duration: 1, delay: 0.2 }}
+              transition={{ duration: 1, delay: 0.4 }}
               className="text-right max-w-2xl ml-auto"
             >
               <motion.h1 
@@ -155,11 +161,17 @@ export default function Hero() {
                 animate={{ opacity: currentBanner === index ? 1 : 0 }}
                 transition={{ duration: 0.5, delay: 0.8 }}
               >
-                {banner.subtitle.match(/[^:.&]+[:.&]?/g)?.map((part, idx) => (
-                <span key={idx} className="block">
-                  {part.trim()}
-                </span>
-              ))}
+                {banner.subtitle === "Build your future, with expert-led modules in trending domains."
+                    ? banner.subtitle.split(",").map((part, i) => (
+                        <span key={i} className="block">
+                          {part.trim()}
+                        </span>
+                      ))
+                    : banner.subtitle.match(/[^:.&]+[:.&]?/g)?.map((part, i) => (
+                        <span key={i} className="block">
+                          {part.trim()}
+                        </span>
+                      ))}
               </motion.p>
               
               <motion.div
@@ -228,6 +240,31 @@ export default function Hero() {
         animate={{ opacity: 1 }}
         transition={{ duration: 1, delay: 1.2 }}
       />
+
+            {/* Arrow down button */}
+              <div className="hidden lg:block container ">
+                <div
+                  onClick={handleScrollDown}
+                  className="w-max absolute bottom-[60px] left-1/2 -translate-x-1/2 cursor-pointer transition-opacity z-10"
+                  aria-label="Scroll down"
+                >
+                  <img
+                    src="/Corporate/Images/Home/Hero/scroll.png"
+                    width="100"
+                    height="100"
+                    alt="Scroll down"
+                    className="scroll-rotate"
+                  />
+                  <img
+                    src={arrowDown}
+                    width="62"
+                    height="62"
+                    alt="Scroll down"
+                    className="absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2"
+                  />
+                </div>
+              </div>
+
     </section>
      {/*<ComingSoonModal isOpen={isComingSoonOpen} onClose={() => setIsComingSoonOpen(false)} />*/}
      </>
