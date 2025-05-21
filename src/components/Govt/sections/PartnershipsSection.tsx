@@ -7,7 +7,7 @@ export const PartnershipsSection: React.FC = () => {
  
 
   return (
-    <section className="md:py-5 " id="partnerships">
+    <section className="md:py-5 bg-white" id="partnerships">
       <div className="max-w-5xl mx-auto  md:px-4 flex flex-col items-center">
         <SectionHeader />
 
