@@ -33,7 +33,7 @@ const ProcessSection = () => {
 
         <div className="lg:hidden relative">
           <img
-            src="/Corporate/Images/Home/Process/bg-mobile.webp"
+            src="https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Corporate/Recruitment/Index/Process/bg-mobile.webp"
             className="object-center w-full h-[852px]"
             width={400}
           />
@@ -45,7 +45,7 @@ const ProcessSection = () => {
 
       <div className="hidden lg:block relative">
         <img
-          src="/Corporate/Images/Home/Process/process-bg.webp"
+          src="https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Corporate/Recruitment/Index/Process/process-bg.webp"
           className="object-center"
           height={626}
         />
