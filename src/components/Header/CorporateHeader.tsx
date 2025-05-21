@@ -9,8 +9,7 @@ const CorporateHeader: React.FC = () => {
   const toggleMenu = () => setIsOpen(!isOpen);
 
   const isTrainingPage = location.pathname.includes('/corporate/training');
-  const buttonLink = isTrainingPage ? '/corporate' : '/corporate/training';
-  const buttonText = isTrainingPage ? 'Recruitment' : 'Training';
+  const isRecruitmentPage = location.pathname.includes('/corporate') && !location.pathname.includes('/training');
 
   return (
     <header className="fixed top-0 left-0 w-full z-50 bg-white border-b shadow-sm">
@@ -20,13 +19,19 @@ const CorporateHeader: React.FC = () => {
           <img src="/RareMinds.webp" alt="Rareminds Logo" width={200}/>
         </Link>
 
-        {/* Right: Dynamic Button */}
-        <div className="hidden md:block">
+        {/* Right: Navigation Buttons */}
+        <div className="hidden md:flex gap-4">
           <Link
-            to={buttonLink}
-            className="corporate-btn-1"
+            to="/corporate"
+            className={isRecruitmentPage ? "corporate-btn-1" : "corporate-btn-2"}
           >
-            {buttonText}
+            Recruitment
+          </Link>
+          <Link
+            to="/corporate/training"
+            className={isTrainingPage ? "corporate-btn-1" : "corporate-btn-2"}
+          >
+            Training
           </Link>
         </div>
 
@@ -38,13 +43,20 @@ const CorporateHeader: React.FC = () => {
 
       {/* Mobile Dropdown Menu */}
       {isOpen && (
-        <div className="md:hidden bg-white border-t px-4 py-4">
+        <div className="md:hidden bg-white border-t px-4 py-4 space-y-3">
           <Link
-            to={buttonLink}
-            className="block w-full text-center bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition-colors"
+            to="/corporate"
+            className={`block w-full text-center ${isRecruitmentPage ? "corporate-btn-1" : "corporate-btn-2"}`}
             onClick={() => setIsOpen(false)}
           >
-            {buttonText}
+            Recruitment
+          </Link>
+          <Link
+            to="/corporate/training"
+            className={`block w-full text-center ${isTrainingPage ? "corporate-btn-1" : "corporate-btn-2"}`}
+            onClick={() => setIsOpen(false)}
+          >
+            Training
           </Link>
         </div>
       )}

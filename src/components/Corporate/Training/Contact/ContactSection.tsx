@@ -100,7 +100,7 @@ const ContactSection = () => {
                   <span className="bg-corporate-black w-10 h-10 rounded-full flex items-center justify-center text-white">
                     <Mail size={20} />
                   </span>
-                  Request Talent Now
+                  Request Training Now
                 </h3>
 
                 <form
