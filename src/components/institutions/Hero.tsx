@@ -1,7 +1,6 @@
 import { motion } from 'framer-motion';
 import { Download, FileSpreadsheet, PhoneCall, Rocket, BadgeCheck, Users } from 'lucide-react';
 import { useState, useEffect } from 'react';
-import arrowDown from "@/assets/corporate/Home/Carousal/arrowDown.svg";
 
 
 
@@ -9,7 +8,7 @@ import arrowDown from "@/assets/corporate/Home/Carousal/arrowDown.svg";
 const banners = [
   {
     title: "Graduate With Skills That Pay!",
-    subtitle: "Don't just pass exams.Get job-ready with our industry-aligned programs.",
+    subtitle: "Don't just pass exams. Get job-ready with our industry-aligned programs.",
     video: "https://player.vimeo.com/external/370467553.hd.mp4?...",
     poster: "/institutions/images/Banners/Banner1.jpeg",
     cta: [
@@ -29,7 +28,7 @@ const banners = [
   },
   {
     title: "From Campus to Career: We Bridge the Gap.",
-    subtitle: "Real world training, placement assistance & certifications that matter.",
+    subtitle: "Real-world training, placement assistance & certifications that matter.",
     video: "https://player.vimeo.com/external/370467553.hd.mp4?...",
     poster: "/institutions/images/Banners/Banner2.jpeg",
     cta: [
@@ -42,7 +41,7 @@ const banners = [
   },
   {
     title: "College is Temporary. Your Career Isn’t.",
-    subtitle: "Build your future, with expert-led modules in trending domains.",
+    subtitle: "Build your future with expert-led modules in trending domains.",
     video: "https://player.vimeo.com/external/370467553.hd.mp4?...",
     poster: "/institutions/images/Banners/Banner3.jpeg",
     cta: [
@@ -87,12 +86,7 @@ const banners = [
 export default function Hero() {
   const [currentBanner, setCurrentBanner] = useState(0);
   const [isComingSoonOpen, setIsComingSoonOpen] = useState(false);
-  const handleScrollDown = () => {
-    window.scrollTo({
-      top: window.innerHeight,
-      behavior: "smooth",
-    });
-  };
+
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -134,22 +128,22 @@ export default function Hero() {
             </video>
           </motion.div>
           
-          <div className="container mx-auto px-4 relative z-10 h-screen flex items-center">
+          <div className="container mx-auto px-6 relative z-10 h-screen flex items-center">
             <motion.div
               initial={{ opacity: 0, y: 50 }}
               animate={{ opacity: currentBanner === index ? 1 : 0, y: currentBanner === index ? 0 : 50 }}
-              transition={{ duration: 1, delay: 0.4 }}
+              transition={{ duration: 1, delay: 0.2 }}
               className="text-right max-w-2xl ml-auto"
             >
               <motion.h1 
-              className="text-3xl md:text-3xl font-bold mb-20 text-black leading-tight"
+              className="text-3xl md:text-3xl font-bold mb-8 text-black leading-tight"
               initial={{ scale: 0.95 }}
               animate={{ scale: currentBanner === index ? 1 : 0.95 }}
               transition={{ duration: 0.5, delay: 0.5 }}
             >
-              {banner.title.match(/[^:.]+[:.]?/g)?.map((part, idx) => (
+              {banner.title.split('.').map((part, idx) => (
                 <span key={idx} className="block">
-                  {part.trim()}
+                  {part.trim()}{idx < banner.title.split('.').length - 1 && '.'}
                 </span>
               ))}
              </motion.h1>
@@ -161,21 +155,11 @@ export default function Hero() {
                 animate={{ opacity: currentBanner === index ? 1 : 0 }}
                 transition={{ duration: 0.5, delay: 0.8 }}
               >
-                {banner.subtitle === "Build your future, with expert-led modules in trending domains."
-                    ? banner.subtitle.split(",").map((part, i) => (
-                        <span key={i} className="block">
-                          {part.trim()}
-                        </span>
-                      ))
-                    : banner.subtitle.match(/[^:.&]+[:.&]?/g)?.map((part, i) => (
-                        <span key={i} className="block">
-                          {part.trim()}
-                        </span>
-                      ))}
+                {banner.subtitle}
               </motion.p>
               
               <motion.div
-                className="flex flex-col sm:flex-row gap-8 justify-center pt-10"
+                className="flex flex-col sm:flex-row gap-8 justify-center"
                 initial={{ y: 20, opacity: 0 }}
                 animate={{ y: currentBanner === index ? 0 : 20, opacity: currentBanner === index ? 1 : 0 }}
                 transition={{ duration: 0.5, delay: 1 }}
@@ -240,31 +224,6 @@ export default function Hero() {
         animate={{ opacity: 1 }}
         transition={{ duration: 1, delay: 1.2 }}
       />
-
-            {/* Arrow down button */}
-              <div className="hidden lg:block container ">
-                <div
-                  onClick={handleScrollDown}
-                  className="w-max absolute bottom-[60px] left-1/2 -translate-x-1/2 cursor-pointer transition-opacity z-10"
-                  aria-label="Scroll down"
-                >
-                  <img
-                    src="/Corporate/Images/Home/Hero/scroll.png"
-                    width="100"
-                    height="100"
-                    alt="Scroll down"
-                    className="scroll-rotate"
-                  />
-                  <img
-                    src={arrowDown}
-                    width="62"
-                    height="62"
-                    alt="Scroll down"
-                    className="absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2"
-                  />
-                </div>
-              </div>
-
     </section>
      {/*<ComingSoonModal isOpen={isComingSoonOpen} onClose={() => setIsComingSoonOpen(false)} />*/}
      </>

@@ -27,7 +27,7 @@ const collegeLogos = [
     url: "/institutions/logos/TUemblem.png",
   },
   {
-    name: "VELS University",
+    name: "Vels University",
     url: "/institutions/logos/Vels_University_logo.png",
   },
   {
@@ -46,7 +46,7 @@ const collegeLogos = [
 
 export default function LogoCarousel() {
   return (
-    <div className="py-8 bg-white/10 backdrop-blur-md relative overflow-hidden sticky top-[0px]">
+    <div className="py-8 bg-white/10 backdrop-blur-md relative overflow-hidden">
       <div className="max-w-6xl mx-auto px-1">
         <h3 className="text-center text-sm font-semibold text-gray-600 mb-4">
           Trusted by Leading Institutions

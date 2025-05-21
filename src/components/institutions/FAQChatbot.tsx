@@ -90,7 +90,7 @@ const FAQChatbot: React.FC = () => {
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           onClick={() => setIsOpen((prev) => !prev)}
-          className="group flex items-center gap-3 bg-[#222B33] text-white p-4 rounded-full shadow-lg hover:bg-gray-600 focus:outline-none"
+          className="group flex items-center gap-3 bg-[#434343] text-white p-4 rounded-full shadow-lg hover:bg-gray-600 focus:outline-none"
         ><div className="relative">
             <div className="absolute inset-0 bg-white rounded-full animate-ping opacity-20"></div>
           <MessageCircleQuestion size={24} />
@@ -100,27 +100,24 @@ const FAQChatbot: React.FC = () => {
 
       {/* Chatbot Interface */}
       {isOpen && (
-        <div className="fixed bottom-24 right-6 w-[280px] bg-[#222B33] text-white rounded-lg shadow-2xl z-50 p-2">
+        <div className="max-w-lg mx-auto bg-white shadow-xl p-6 rounded-2xl fixed bottom-20 right-6 w-[300px] z-50">
+            {/* Close Button */}
           <button
             onClick={() => setIsOpen(false)}
-            className="absolute top-2 right-3 text-gray-300 hover:text-white text-xl font-bold focus:outline-none"
+            className="absolute top-2 right-2 text-gray-500 hover:text-gray-800 text-xl font-bold focus:outline-none"
+            aria-label="Close Chatbot"
           >
             &times;
           </button>
-          <div className="flex items-center mb-3 justify-center">
-            <img src="/RMLogo.webp" alt="Logo" className="w-8 h-8 object-contain" />
-            <h2 className="text-xl font-semibold ">FAQ</h2>
-          </div>
-
-
-          <div className="h-64 overflow-y-auto bg-[#d0e3fa] rounded p-2 mb-3 space-y-2">
-            {chatLog.map((entry, idx) => (
+          <h2 className="text-xl font-bold mb-4 text-[#434343]">FAQ Chatbot</h2>
+          <div className="h-80 overflow-y-auto space-y-2 mb-4 border p-3 rounded flex flex-col">
+            {chatLog.map((entry, index) => (
               <div
-                key={idx}
-                className={`p-2 text-sm rounded-md max-w-[80%] ${
+                key={index}
+                className={`p-2 rounded-md max-w-[80%] ${
                   entry.type === "user"
-                    ? "bg-yellow-200 text-black ml-auto text-right"
-                    : "bg-white text-black mr-auto"
+                    ? "bg-yellow-100 self-end ml-auto text-right"
+                    : "bg-gray-100 self-start mr-auto"
                 }`}
               >
                 {entry.message}
@@ -131,30 +128,30 @@ const FAQChatbot: React.FC = () => {
           <form onSubmit={handleSubmit} className="flex gap-2">
             <input
               type="text"
+              className="flex-1 border p-2 rounded-md"
               value={input}
               onChange={handleInputChange}
               placeholder="Ask a question..."
-              className="flex-1 p-2 rounded-md text-black text-sm"
             />
             <button
               type="submit"
-              className="bg-blue-400 hover:bg-blue-500 px-3 py-2 rounded-md text-sm font-medium text-white"
+              className="bg-yellow-400 px-4 py-2 rounded-md text-white font-semibold"
             >
               Ask
             </button>
           </form>
 
           {suggestions.length > 0 && (
-            <div className="mt-2 bg-[#ffffbd] p-2 rounded text-sm">
-              <p className="font-medium mb-1 text-yellow-500">Suggested:</p>
-              <ul className="space-y-1">
-                {suggestions.slice(0, 4).map((sug, idx) => (
+            <div className="mt-2 bg-gray-100 p-2 rounded-md">
+              <p className="font-semibold">Suggested Questions:</p>
+              <ul>
+                {suggestions.map((suggestion, index) => (
                   <li
-                    key={idx}
-                    onClick={() => handleSuggestionClick(sug)}
-                    className="cursor-pointer text-black hover:text-black-400"
+                    key={index}
+                    className="cursor-pointer text-blue-500 hover:text-blue-700"
+                    onClick={() => handleSuggestionClick(suggestion)}
                   >
-                    • {sug}
+                    {suggestion}
                   </li>
                 ))}
               </ul>

@@ -12,27 +12,24 @@ import {
 import { useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-export const services  = [
+export const services = [
   {
     id: 'full-semester',
     icon: GraduationCap,
     name: 'Full Semester Skill Program',
     subtitle: '(Naan Mudhalvan)',
     description: 'Multiple courses + internships + final evaluation + certification',
-    whatitis: `Offered in collaboration with the Tamil Nadu government’s Naan Mudhalvan initiative, this is a full-semester skill development program designed and delivered by Rareminds. It includes a series of industry-aligned certification courses, intensive hands-on training, and internship opportunities. The program ends with a final evaluation and certification that reflects the student's overall skill progression.
-Rareminds ensures that students not only gain technical skills but also master communication, problem-solving, and workplace adaptability – all essential for modern careers.`,
     image: "/institutions/images/services/1.png",
     color: 'from-blue-600 to-purple-600',
     duration: '6 Months',
     mode: 'Hybrid',
-    servicesimg: 'https://images.unsplash.com/photo-1532012197267-da84d127e765?auto=format&fit=crop&w=800',
     focus: 'Comprehensive skill development',
     benefits: [
       'Industry-aligned curriculum',
       'Hands-on projects',
       'Internship opportunities',
       'Professional certification',
-      'Placement assistance',
+      'Placement assistance'
     ]
   },
   {
@@ -41,12 +38,10 @@ Rareminds ensures that students not only gain technical skills but also master c
     name: 'Pre-Placement Accelerator',
     subtitle: 'Career Oriented',
     description: 'Final year focused bootcamp + placement tie-up',
-    whatitis: `This is Rareminds' flagship bootcamp-style training for final-year students, tailored to ensure placement readiness. It combines technical revision, aptitude training, mock interviews, group discussions, personality development, and career coaching. The program is integrated with strategic placement tie-ups, giving students access to recruitment drives and hiring partners.`,
     image: "/institutions/images/services/2.png",
     color: 'from-blue-600 to-purple-600',
     duration: '3 Months',
     mode: 'Intensive',
-    servicesimg: 'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?auto=format&fit=crop&w=800',
     focus: 'Placement preparation',
     benefits: [
       'Interview preparation',
@@ -62,12 +57,10 @@ Rareminds ensures that students not only gain technical skills but also master c
     name: 'Bridge Courses',
     subtitle: 'First Years',
     description: 'Foundational programs on communication, digital tools, work ethics',
-    whatitis: `Designed for newly admitted students, this Rareminds initiative focuses on building a strong foundation for college success. It covers effective communication, digital fluency (MS Office, Google tools, etc.), teamwork, and ethical behavior. The courses promote emotional intelligence and self-awareness to help students manage the transition to college life and adapt to a new learning environment.`,
     image: "/institutions/images/services/3.png",
     color: 'from-blue-600 to-purple-600',
     duration: '2 Months',
     mode: 'Regular',
-    servicesimg: 'https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?auto=format&fit=crop&w=800',
     focus: 'Foundation building',
     benefits: [
       'Basic communication skills',
@@ -83,12 +76,10 @@ Rareminds ensures that students not only gain technical skills but also master c
     name: 'Skill-Based Training',
     subtitle: 'Credit-Linked',
     description: 'Add-on courses that enhance your academic profile',
-    whatitis: `These modular training programs, developed by Rareminds, are either integrated into the curriculum (credit-linked) or offered as supplementary add-ons. Covering areas like data analytics, digital marketing, communication mastery, coding, food safety, and more – they align with industry trends and student aspirations. Each module is designed for hands-on, measurable learning.`,
     image: "/institutions/images/services/4.png",
     color: 'from-blue-600 to-purple-600',
     duration: 'Flexible',
     mode: 'Modular',
-    servicesimg: 'https://images.unsplash.com/photo-1516979187457-637abb4f9353?auto=format&fit=crop&w=800',
     focus: 'Specialized skills',
     benefits: [
       'Industry certifications',
@@ -104,12 +95,10 @@ Rareminds ensures that students not only gain technical skills but also master c
     name: 'Faculty Development',
     subtitle: 'NEP & Technology',
     description: 'Comprehensive training on NEP and Industry Integration',
-    whatitis: `Rareminds conducts specialized FDPs to help educators embrace National Education Policy (NEP) guidelines, integrate emerging technologies, and implement industry-relevant content. These programs are interactive, insightful, and practice-oriented—equipping faculty to become facilitators of innovation and mentors of the future workforce.`,
     image: "/institutions/images/services/1.png",
     color: 'from-blue-600 to-purple-600',
     duration: '1 Week',
     mode: 'Intensive',
-    servicesimg:'https://images.unsplash.com/photo-1550399105-c4db5fb85c18?auto=format&fit=crop&w=800',
     focus: 'Teacher training',
     benefits: [
       'NEP 2020 implementation',
@@ -125,12 +114,10 @@ Rareminds ensures that students not only gain technical skills but also master c
     name: 'Internship & Placement',
     subtitle: 'Industry Connect',
     description: 'Direct industry partnerships for real-world experience',
-    whatitis: `Rareminds acts as a bridge between institutions and industries by forming structured internship and placement partnerships. We facilitate student access to internships, project work, and job interviews with reputed companies across domains. Through close collaboration with Career Services Cells and Training & Placement Officers, Rareminds ensures seamless employability pathways.`,
     image: "/institutions/images/services/2.png",
     color: 'from-blue-600 to-purple-600',
     duration: 'Ongoing',
     mode: 'Facilitation',
-    servicesimg: 'https://images.unsplash.com/photo-1497633762265-9d179a990aa6?auto=format&fit=crop&w=800',
     focus: 'Career launch',
     benefits: [
       'Industry partnerships',
@@ -141,7 +128,6 @@ Rareminds ensures that students not only gain technical skills but also master c
     ]
   },
 ];
-
 
 export default function Services() {
   const containerRef = useRef(null);
