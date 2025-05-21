@@ -127,12 +127,12 @@ const FullScreenCarousel: React.FC<FullScreenCarouselProps> = ({
             >
               <div className="container flex flex-col lg:flex-row items-center justify-between w-full px-4 md:px-8 lg:px-14">
                 {/* Left side - Text content */}
-                <div className="w-full lg:w-[60%] py-6 lg:py-0 lg:pr-8 mb-4 lg:mb-0 text-center lg:text-left">
+                <div className="w-full lg:w-[60%] py-6 lg:py-0 lg:pr-8 mb-4 lg:mb-0 text-center lg:text-left lg:-mt-14">
                   <div className="relative min-h-[90px]">
                     <AnimatePresence mode="wait" initial={false}>
                       <motion.h1
                         key={slides[activeIndex].heading}
-                        className="text-2xl sm:text-3xl md:text-4xl lg:text-[40px] font-bold mb-3 lg:mb-6 !leading-[1.5] md:!leading-[1.4] w-full"
+                        className="text-2xl sm:text-3xl md:text-4xl lg:text-[40px] font-bold !leading-[1.5] md:!leading-[1.4] w-full"
                         dangerouslySetInnerHTML={{ __html: slides[activeIndex].heading }}
                         initial={{ opacity: 0, y: 40, scale: 0.95, filter: 'blur(4px)' }}
                         animate={{ opacity: 1, y: 0, scale: 1, filter: 'blur(0px)' }}

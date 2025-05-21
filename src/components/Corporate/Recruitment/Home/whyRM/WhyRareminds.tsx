@@ -108,7 +108,7 @@ const WhyRareminds = () => {
     {
       src: "/Corporate/Images/Home/whyRM/indian.webp",
       bottom: "29%",
-      left: "47%",
+      left: "46%",
       width: "w-[8%]",
       heading: "20+ states",
       description: "Pan-India reach with regional hiring in",
@@ -116,7 +116,7 @@ const WhyRareminds = () => {
     {
       src: "/Corporate/Images/Home/whyRM/brands.webp",
       bottom: "24%",
-      left: "57%",
+      left: "56%",
       width: "w-[9%]",
       heading: "20+ brands",
       description: "C-Suite hires in the past year",

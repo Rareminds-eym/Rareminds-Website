@@ -23,7 +23,7 @@ const ProcessSection = () => {
             </div>
           </div>
           <h2 className="text-3xl md:text-5xl font-bold mb-4 text-corporate-black">
-            Our Process, Your Peace of Mind
+            Our Process = Your Peace of Mind
           </h2>
           <p className="text-corporate-grey max-w-3xl mx-auto text-lg">
             At Rareminds, we believe a great hire is not a coincidence. <br/>It's the
