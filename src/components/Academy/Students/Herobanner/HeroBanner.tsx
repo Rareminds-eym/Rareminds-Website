@@ -60,7 +60,7 @@ const HeroBanner = ({  HeroToContact }: HeaderProps) =>{
   
 
   return (
-    <div className="w-full bg-white">
+    <div className="w-full bg-white fixed">
       <div className="container mx-auto px-4 py-8">
         {/* Main Hero Section */}
         {/* <div className="flex flex-col md:flex-row gap-8 mb-8">
