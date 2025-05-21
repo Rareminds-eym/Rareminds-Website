@@ -58,7 +58,7 @@ const Dashboard: React.FC = () => {
             <img
               src="/Corporate/Images/Home/Dashboard/dashboard-preview-2.webp"
               alt="Real Time Dashboard"
-              className="rounded-lg w-full shadow-lg"
+              className="rounded-lg w-full drop-shadow-lg"
             />
           </div>
         </div>
@@ -85,7 +85,7 @@ const Dashboard: React.FC = () => {
             <img
               src="/Corporate/Images/Home/Dashboard/dashboard-preview-1.webp"
               alt="Learning Management System Dashboard"
-              className="rounded-lg w-full shadow-lg"
+              className="rounded-lg w-full drop-shadow-lg"
             />
           </div>
         </div>
