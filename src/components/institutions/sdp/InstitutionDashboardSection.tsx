@@ -15,7 +15,7 @@ const InstitutionDashboardSection = () => {
           Interative Learning Meets Intelligent Tracking.
         </h1>
         <p className="text-sm text-gray-600 mx-auto max-w-xl">
-          Boost Engagement with Simulation Games. Leverage real-time dashboards <br/> and LMS tools. Monitor and enhance outcomes across the board.
+          Boost Engagement with Simulation Games while Leveraging real-time dashboards LMS tools to monitor and enhance outcomes across the board.
         </p>
       </motion.div>
 

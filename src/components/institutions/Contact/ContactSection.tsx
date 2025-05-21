@@ -76,10 +76,10 @@ const ContactSection = () => {
           className="text-center mb-16"
         >
           <h1 className="text-xl font-bold mb-4 bg-black bg-clip-text text-transparent">
-            Partner with Us
+            Partner With Us
           </h1>
           <p className="text-sm text-gray-600 mx-auto">
-             Results don't wait, neither should you.
+             Results don't Wait , Neither Should You.
           </p>
         </motion.div>
 
@@ -97,7 +97,7 @@ const ContactSection = () => {
                   
                     <School size={20} />
                   
-                      Book a Free University Demo Now. 
+                      Book A Free University Demo Now. 
                 </h3>
 
                 <form
@@ -166,14 +166,14 @@ const ContactSection = () => {
                         htmlFor="role"
                         className="block mb-4 font-medium text-gray-700 text-sm"
                       >
-                        Courses
+                        Role to Hire
                       </label>
                       <Input
                         id="role"
                         name="role"
                         value={formData.role}
                         onChange={handleChange}
-                        placeholder="Course Name"
+                        placeholder="Job Title/Position"
                         className="w-full bg-white/50 border-gray-200 text-gray-800 placeholder:text-gray-400"
                         required
                       />

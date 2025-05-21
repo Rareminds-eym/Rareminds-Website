@@ -72,7 +72,7 @@ export default function Testimonials() {
             Unfiltered Experiences
           </h1>
           <p className="text-sm text-gray-600 w-[406.1] mx-auto">
-            Students share their success stories and achievements.
+            Students Share their Success Stories and Achievements.
           </p>
         </motion.div>
 

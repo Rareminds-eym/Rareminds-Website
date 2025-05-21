@@ -13,7 +13,7 @@ const caseStudies = [
   },
   {
     icon: TrendingUp,
-    title: 'Fast Track Success: Interview Ready in 30 days',
+    title: 'Fast Track Success: From Tier-3 to Interview Ready in a Month',
     institution: 'PES University',
     details: '350 Students | Food Tech + Hackathon',
     pdfUrl: "/institutions/pdfs/Pes.pdf"
@@ -43,7 +43,7 @@ export default function CaseStudies() {
             Delivering on Outcomes: Success Stories.
           </h1>
           <p className="text-sm text-gray-600 mx-auto">
-             Colleges that chose outcomes and got them.
+             Colleges That Chose Outcomes. And Got Them.
           </p>
         </motion.div>
 
@@ -104,7 +104,7 @@ export default function CaseStudies() {
                 repeatType: "reverse"
               }}
             >
-              <span>See full Results by College Type</span>
+              <span>See full Results By College Type</span>
             </motion.button>
           </motion.div>
         </motion.div>
