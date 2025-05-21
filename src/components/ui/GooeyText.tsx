@@ -122,7 +122,7 @@ export function GooeyText({
       </svg>
 
       <div
-        className="flex items-center justify-center min-h-[75px]  md:min-h-[100px] w-full"
+        className="flex items-center justify-center min-h-[75px]  md:min-h-[1px] w-full"
         style={{ filter: "url(#threshold)" }}
       >
         <span

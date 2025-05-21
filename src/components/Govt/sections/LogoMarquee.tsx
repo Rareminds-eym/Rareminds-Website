@@ -90,9 +90,8 @@ const TrustedInstitutions: React.FC<{ className?: string }> = ({ className }) =>
   }, [isPaused]);
 
   return (
-    <section className={` pt-3 px-4 bg-white relative ${className || ""}`}>
-
-      <div className="container mx-auto " >
+    <section className={`pt-3 px-4  relative ${className || ''}`}>
+      <div className="container mx-auto">
         <h2 className="text-center text-[18px] md:text-4xl font-semibold mb-10 text-gray-800">
           Trusted by Leading Institutions
         </h2>
@@ -116,7 +115,7 @@ const TrustedInstitutions: React.FC<{ className?: string }> = ({ className }) =>
                 key={i}
                 className="flex flex-col items-center justify-center flex-shrink-0 w-[160px] pr-10 mx-2"
               >
-                <div className="w-32 h-32 mb-3 rounded-full flex items-center justify-center  institution-logo hover-scale transition-transform duration-200 overflow-hidden">
+                <div className="w-32 h-32 mb-3 rounded-full bg-white/80 backdrop-blur flex items-center justify-center p-4 shadow-lg institution-logo hover-scale transition-transform duration-200 overflow-hidden">
                   <img
                     src={logo.imgSrc}
                     alt={logo.label}
@@ -141,8 +140,8 @@ const TrustedInstitutions: React.FC<{ className?: string }> = ({ className }) =>
 
 const Logos = () => {
   return (
-    <div className=" bg-white">
-      <main className="w-full pt-12 pb-12">
+    <div className="bg-white">
+      <main className="w-full ">
         {/* Hero Section */}
         {/* <div className="py-16 md:py-24 bg-gradient-to-b from-gray-50 to-white">
           <div className="container mx-auto text-center px-4">
