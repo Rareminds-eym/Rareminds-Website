@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360.35 423.09">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: none;
+        stroke: #262626;
+        stroke-dasharray: 12;
+        stroke-miterlimit: 10;
+        stroke-width: 5px;
+      }
+
+      .cls-2 {
+        fill: #fff;
+        font-family: Roboto-Black, Roboto;
+        font-size: 34px;
+        font-weight: 800;
+      }
+    </style>
+  </defs>
+  <path class="cls-1" d="M166.62.77c-1.84,8.11-4.04,20.39-4.3,35.39-1.2,70.57,41.99,122.65,62.93,147.97,35.46,42.88,78.03,68.18,95.55,78.41,11.31,6.6,21.09,11.54,28.08,14.88"/>
+  <circle cx="322.87" cy="267.17" r="37.48"/>
+  <text class="cls-2" transform="translate(313.03 280.2)"><tspan x="0" y="0">4</tspan></text>
+</svg>

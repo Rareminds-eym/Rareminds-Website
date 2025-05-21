@@ -9,6 +9,7 @@ import ProcessSection from "@/components/Corporate/Recruitment/Home/Process/Proc
 import TeamSection from "@/components/Corporate/Recruitment/Home/Team/TeamSection";
 import ContactSection from "@/components/Corporate/Recruitment/Home/Contact/ContactSection";
 import FAQChatbot from "@/components/Corporate/ChatBot/FAQChatbot";
+import Dashboard from "@/components/Corporate/Recruitment/Home/Dashboard";
 
 const Corporate: React.FC = () => {
   const slides = [
@@ -28,7 +29,7 @@ const Corporate: React.FC = () => {
     },
     {
       heading:
-        "When <span class='corporate-heading-highlight'>Time-to-Hire Matters,</span> <br/>So Does Who You Hire With",
+        "If <span class='corporate-heading-highlight'>Time-to-Hire Matters,</span> <br/>Who Hires Makes the Difference",
       subheading:
         "Rareminds delivers role-fit talent with speed, accuracy, and accountability",
       img: "/Corporate/Images/Home/Hero/Time-to-Hire.webp",
@@ -42,7 +43,7 @@ const Corporate: React.FC = () => {
     },
     {
       heading:
-        "<span class='corporate-heading-highlight'>500+ Critical Roles</span> <br class='hidden sm:block'/>Closed This Quarter. <br/>Yours Could Be Next",
+        "<span class='corporate-heading-highlight'>500+ Roles</span> Closed This Quarter. <br/>Yours Could Be Next",
       subheading:
         "Partner with the recruitment team built for performance and outcomes",
       img: "/Corporate/Images/Home/Hero/CriticalRoles.webp",
@@ -51,7 +52,7 @@ const Corporate: React.FC = () => {
 
   return (
     <>
-      <section className="bg-[url('/Corporate/Images/Home/Hero/header-bg.webp')] sticky top-[80px]">
+      <section className="bg-[url('/Corporate/Images/Home/Hero/header-bg.webp')] sticky top-[80px] w-full overflow-hidden">
         <FullScreenCarousel slides={slides} />
       </section>
 
@@ -75,6 +76,9 @@ const Corporate: React.FC = () => {
       </div>
       <div id="team">
         <TeamSection />
+      </div>
+      <div id="dashboard" className="bg-white relative">
+        <Dashboard/>
       </div>
       <div id="contact">
         <ContactSection />
