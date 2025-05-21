@@ -8,8 +8,8 @@ import FDPButton from "@/components/institutions/sdp/FDPButton";
 import FAQChatbot from '@/components/institutions/sdp/FAQChatbot';
 import StickyButtons from '@/components/institutions/sdp/StickyButtons';
 import CourseCards from '@/components/institutions/sdp/CourseCards';
-import '@/assets/institutions/index.css'
-import '@/assets/institutions/pageStyles.css'
+
+//import '@/assets/institutions/pageStyles.css'
 
 
 const InstitutionsServices: React.FC = () => {
