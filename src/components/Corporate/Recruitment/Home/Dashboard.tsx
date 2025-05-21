@@ -4,8 +4,8 @@ import { motion } from "framer-motion";
 
 const Dashboard: React.FC = () => {
   return (
-    <div className="bg-white bg-cover py-12 px-6 text-center">
-      <div className="text-center mb-8 relative">
+    <div className="bg-white bg-cover py-8 md:py-16 px-4 md:px-8 text-center">
+      <div className="text-center mb-8 md:mb-16 relative">
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -16,76 +16,76 @@ const Dashboard: React.FC = () => {
             <div className="bg-corporate-black text-white w-14 h-14 rounded-[20px] mx-auto mb-3 flex items-center justify-center transform rotate-6">
               <Icon
                 icon="hugeicons:analytics-up"
-                className="text-[28px]"
-                width={28}
-                height={28}
+                className="text-[32px]"
+                width={32}
+                height={32}
                 color="white"
               />
             </div>
           </div>
-          <h2 className="text-2xl md:text-4xl font-bold mb-3 text-corporate-black">
-            Your dashboard. Your reports.Your outcomes.
-            <br />
+          <h2 className="text-2xl md:text-4xl font-bold mb-3 text-corporate-black px-4">
+            Your dashboard. Your reports. Your outcomes.
+            <br className="hidden md:block" />
             Delivered periodically.
           </h2>
-          <p className="text-corporate-grey text-sm md:text-base max-w-2xl mx-auto">
+          <p className="text-corporate-grey text-sm md:text-base max-w-2xl mx-auto px-4">
             Complete transparency with real-time tracking and comprehensive
             reporting
           </p>
         </motion.div>
       </div>
 
-      <div className="max-w-5xl mx-auto grid md:grid-cols-1 gap-8 items-start">
+      <div className="max-w-5xl mx-auto grid gap-8 md:gap-16 items-start">
         {/* Real Time Dashboards */}
-        <div className="flex items-center text-left">
-          <div className="flex items-start mb-3 w-1/2">
+        <div className="flex flex-col md:flex-row items-center text-left space-y-6 md:space-y-0 md:space-x-8">
+          <div className="flex items-start w-full md:w-1/2 px-4 md:px-0">
             <Icon
               icon="carbon:dashboard"
-              className="text-3xl mr-3 mt-1"
-              width={32}
-              height={32}
+              className="text-2xl md:text-3xl mr-4 md:mr-6 mt-1 flex-shrink-0"
+              width="1em"
+              height="1em"
             />
-            <div>
-              <h3 className="font-semibold text-xl md:text-2xl mb-2">
+            <div className="space-y-2 md:space-y-3">
+              <h3 className="font-semibold text-lg md:text-2xl">
                 Real Time Dashboards And Analytics
               </h3>
               <p className="text-gray-600 text-sm md:text-base">
-                 Streamlined sourcing, tracking, and hiring candidates.
+                Streamlined sourcing, tracking, and hiring candidates.
               </p>
             </div>
           </div>
-          <div className="w-1/2">
+          <div className="w-full md:w-1/2 px-4 md:px-0">
             <img
               src="/Corporate/Images/Home/Dashboard/dashboard-preview-2.webp"
               alt="Real Time Dashboard"
-              className="rounded-lg"
+              className="rounded-lg w-full shadow-lg"
             />
           </div>
         </div>
 
         {/* Learning Management System */}
-        <div className="flex items-center text-left">
-          <div className="flex items-start mb-3 w-1/2">
+        <div className="flex flex-col md:flex-row items-center text-left space-y-6 md:space-y-0 md:space-x-8">
+          <div className="flex items-start w-full md:w-1/2 px-4 md:px-0">
             <Icon
               icon="hugeicons:online-learning-01"
-              className="text-3xl mr-3 mt-1"
-              width={32}
-              height={32}
+              className="text-2xl md:text-3xl mr-4 md:mr-6 mt-1 flex-shrink-0"
+              width="1em"
+              height="1em"
             />
-            <div>
-              <h3 className="font-semibold text-xl md:text-2xl mb-2">
+            <div className="space-y-2 md:space-y-3">
+              <h3 className="font-semibold text-lg md:text-2xl">
                 Learning Management System
               </h3>
               <p className="text-gray-600 text-sm md:text-base">
-                 Streamlined course access and tracking for progress.
+                Streamlined course access and tracking for progress.
               </p>
             </div>
           </div>
-          <div className="w-1/2">
+          <div className="w-full md:w-1/2 px-4 md:px-0">
             <img
               src="/Corporate/Images/Home/Dashboard/dashboard-preview-1.webp"
-              alt="Real Time Dashboard"
-              className="rounded-lg"
+              alt="Learning Management System Dashboard"
+              className="rounded-lg w-full shadow-lg"
             />
           </div>
         </div>
