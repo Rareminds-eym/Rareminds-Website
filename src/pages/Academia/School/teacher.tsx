@@ -139,7 +139,7 @@ useEffect(() => {
         <FAQChatbot />
         <FDPButton />
         {/* Logos */}
-        <div className="relative z-0">
+        <div className="relative z-0 mt-[700px] rounded-tl-3xl rounded-tr-3xl shadow-2xl shadow-black">
           <Logos />
         </div>
       
@@ -219,8 +219,9 @@ useEffect(() => {
           </button>
         </div> */}
 
-
+ <div className="min-h-screen flex items-center justify-center relative z-10 bg-white">
         <Oldandnewmethod />
+        </div>
         {/* Desktop (2 Columns) + Mobile (Conditional Rendering) */}
         {/* <div className="hidden md:grid grid-cols-[47%_4%_47%] gap-0"> */}
         {/* Left Column */}
@@ -273,14 +274,25 @@ useEffect(() => {
 
         {/* Testimonials Section */}
        
-     <div id="course-cards-section">
-        <CourseCards coursetocontact={scrollToContact}  />
-      </div>
+   
      
+ <div id="course-cards-section" className="min-h-screen flex items-center justify-center relative z-10 bg-white">
+    <CourseCards coursetocontact={scrollToContact}  />
 
-        <DashboardSection />
+</div>
+
+
+      
+               <div className="min-h-screen flex items-center justify-center relative z-10 bg-white">
+      <DashboardSection />
+
+</div>
         {/* <Testimonials /> */}
+         <div className="min-h-screen flex items-center justify-center relative z-10 bg-white">
         <Testimonial />
+
+</div>
+     
         <div className="hidden md:grid grid-cols-[47%_0%_47%] gap-0">
           <div className="space-y-4" data-aos="fade-down-right">
 
@@ -290,10 +302,14 @@ useEffect(() => {
 
 
 
+ <div className="min-h-screen flex items-center justify-center relative z-10 bg-white">
+       <EducationSection scrollToContact={scrollToContact} />
 
-        <EducationSection scrollToContact={scrollToContact} />
+</div>
+      
+       
         {/* <EducatorCard /> */}
-        <div className="min-h-screen flex items-center justify-center bg-white">
+        <div className="min-h-screen flex items-center justify-center relative z-10 bg-white">
           <StatsShowcase
             title="We've Trained Over 20,000 Educators Across 100+ Institutions"
             stats={stats}
@@ -307,10 +323,13 @@ useEffect(() => {
 
 
         {/* Faculty Transformation & Calendar */}     
+        <div className="min-h-screen flex items-center justify-center relative z-10 bg-white">
          <FacultyTransformation  />
+         </div>
+          <div className="min-h-screen flex items-center justify-center relative z-10 bg-white">
         <Fdpcalender Facultytocontact={scrollToContact} />
 
-
+</div>
 
         {/* FAQ
         <FAQ /> */}
@@ -335,8 +354,11 @@ useEffect(() => {
       
       </div> */}
         {/* Resources Page */}
-
+ <div className="min-h-screen flex items-center justify-center relative z-10 bg-white">
         <ResourcesPage />
+
+</div>
+      
 
         {/* <div className="w-full h-450px flex justify-center  p-8 mt-8 mb-6">
         <DownloadForm />

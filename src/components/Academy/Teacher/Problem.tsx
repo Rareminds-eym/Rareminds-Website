@@ -100,6 +100,7 @@ import { motion } from 'framer-motion';
 
 const Problem = () => {
   return (
+    <div  className=" bg-white">
     <section className="relative overflow-hidden py-10 bg-white">
       {/* Diagonal split background */}
       <div className="absolute inset-0 z-0">
@@ -212,6 +213,7 @@ const Problem = () => {
         }
       `}</style>
     </section>
+    </div>
   );
 };
 

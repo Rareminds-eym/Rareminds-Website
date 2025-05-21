@@ -36,9 +36,15 @@ import FDPButton from '../../../components/Academy/Students/FDPButton'
 import DashboardSection from "../../../components/Academy/Students/DashboardSection"
 import ContactSection from "../../../components/Academy/Contact/ContactSection"
 import CorporateHeader from "../../../components/Header/AcademyHeader"
+import { caseStudies } from '../../../components/Academy/Students/CaseStudy/caseStudies';
+import { CaseStudy as CaseStudyType } from '../../../components/Academy/Students/CaseStudy/caseStudy';
+import { Button } from '../../../components/Academy/UI/button';
+import CaseStudyDetail from '../../../components/Academy/Students/CaseStudy/CaseStudyDetail';
+
 
 const Academy = ({ userType = "teacher" }: { userType?: "teacher" | "student" }) => {
   const [activeTab, setActiveTab] = useState<"teacher" | "student">("teacher");
+  const [selectedCaseStudy, setSelectedCaseStudy] = useState<CaseStudyType>(caseStudies[0]);
 
       const contactRef = useRef<HTMLDivElement>(null);
       const scrollToContact = () => {
@@ -60,6 +66,18 @@ const Academy = ({ userType = "teacher" }: { userType?: "teacher" | "student" })
     
 
    },[])
+
+     const handleCaseStudySelect = (caseStudy: CaseStudyType) => {
+    setSelectedCaseStudy(caseStudy);
+    
+    // Scroll to detail section on mobile
+    if (window.innerWidth < 768) {
+      const detailSection = document.getElementById('case-study-detail');
+      if (detailSection) {
+        detailSection.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+  };
 
 
    useEffect(() => {
@@ -91,19 +109,22 @@ const Academy = ({ userType = "teacher" }: { userType?: "teacher" | "student" })
     </div>
     <FAQChatbot />
     <FDPButton />
-     <Logo />
-
+   <div className="relative z-0 mt-[700px] rounded-tl-3xl rounded-tr-3xl shadow-2xl shadow-black">
+          <Logos />
+        </div>
+      
       <Problem />
 
      {/* <Programs /> */}
-      <div id="course-cards-section">
-
-     <StudentProgramsPage coursetocontact={scrollToContact} />
-      </div>
+          <div id="course-cards-section" className="min-h-screen flex items-center justify-center relative z-10 bg-white">
+     <StudentProgramsPage coursetocontact={scrollToContact} />      
+       </div>
     
       {/* <div className="w-full h-[65vh]"></div> */}
-
-      <DashboardSection />
+  <div  className="min-h-screen flex items-center justify-center relative z-10 bg-white">
+  <DashboardSection />     
+       </div>
+    
      {/* old one */}
       {/* <div className="w-full bg-gradient-to-r mt-6">
         <div className="h-[80%] bg-white justify-center">
@@ -231,11 +252,90 @@ const Academy = ({ userType = "teacher" }: { userType?: "teacher" | "student" })
 
       {/* Testimonials Section */}
        {/* <Testimonials /> */}
-       <Testimonialss />
-      {/* <TestimonialsStudent /> */}
+        <div  className="min-h-screen flex items-center justify-center relative z-10 bg-white">
+ <Testimonialss />     
+       </div>
       
- 
-      <CaseStudy />
+      {/* <TestimonialsStudent /> */}
+       {/* <div  className="min-h-screen flex items-center justify-center relative z-10 bg-white">
+<CaseStudy />   
+       </div> */}
+
+ <div  className="min-h-screen flex items-center justify-center relative z-10 bg-white">
+<div className="container mx-auto px-8 mb-24" id="case-studies">
+           <div className="flex flex-col items-center justify-center text-center mb-12">
+          <h1 className="text-4xl font-bold text-gray-900 mb-4">
+            Proven Impact, Delivered
+          </h1>
+          <p className="text-base text-gray-600 max-w-2xl">
+            Real stories. Real results.
+          </p>
+        </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
+            {/* Case Study Cards - Sidebar */}
+            <div className="md:col-span-4 lg:col-span-2">
+              <div className="sticky top-4 space-y-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-1 gap-4 ">
+                  {caseStudies.map((caseStudy) => (
+                    <Button
+                      key={caseStudy.id}
+                      variant={selectedCaseStudy.id === caseStudy.id ? "default" : "outline"}
+                      className="justify-start h-auto p-4 text-left "
+                      onClick={() => handleCaseStudySelect(caseStudy)}
+                    >
+                      {caseStudy.header.split('–')[0].trim()}
+                    </Button>
+                  ))}
+                </div>
+                
+                <div className="hidden md:block p-6 bg-white rounded-lg shadow-sm border border-gray-200">
+                  <h3 className="text-lg font-semibold mb-3 text-brand-blue">Need More Information?</h3>
+                  <p className="text-gray-600 mb-4">Contact our team for detailed information about our educational programs and how we can help your institution.</p>
+                  <Button className="w-full bg-brand-blue hover:bg-brand-blue/90">
+                    Request Information
+                  </Button>
+                </div>
+              </div>
+            </div>
+            
+            {/* Case Study Detail */}
+            <div className="md:col-span-8 lg:col-span-10 "  id="case-study-detail">
+              <div className="bg-white rounded-xl shadow-md border border-gray-100 p-6 md:p-8">
+                <CaseStudyDetail caseStudy={selectedCaseStudy} />
+              </div>
+              
+              <div className="mt-8 flex justify-start gap-28 items-center">
+                <Button 
+                  variant="outline" 
+                  onClick={() => {
+                    const currentIndex = caseStudies.findIndex(cs => cs.id === selectedCaseStudy.id);
+                    const prevIndex = (currentIndex - 1 + caseStudies.length) % caseStudies.length;
+                    setSelectedCaseStudy(caseStudies[prevIndex]);
+                  }}
+                  disabled={caseStudies.length <= 1}
+                  className="bg-red-500 hover:bg-red-600 text-white"
+                >
+                  Previous Case Study
+                </Button>
+                
+                <Button 
+                  variant="outline" 
+                  onClick={() => {
+                    const currentIndex = caseStudies.findIndex(cs => cs.id === selectedCaseStudy.id);
+                    const nextIndex = (currentIndex + 1) % caseStudies.length;
+                    setSelectedCaseStudy(caseStudies[nextIndex]);
+                  }}
+                  disabled={caseStudies.length <= 1}
+                  className="bg-red-500 hover:bg-red-600 text-white"
+                >
+                  Next Case Study
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+       </div>
       {/* Educator & Student Cards */}
       {/* <StudentCardR /> */}
       {/* <ProgramCard /> */}
@@ -256,7 +356,10 @@ const Academy = ({ userType = "teacher" }: { userType?: "teacher" | "student" })
       {/* <FacultyForm /> */}
 
       {/* Resources Page */}
-      <ResourcesPage />
+    
+       <div  className="min-h-screen flex items-center justify-center relative z-10 bg-white">
+  <ResourcesPage />  
+       </div>
       {/* <ResourceDownloadForm /> */}
        
 

@@ -234,7 +234,7 @@ const Testimonial = () => {
   };
 
   return (
-    <section className="bg-background py-20 relative overflow-hidden">
+    <section className="bg-background py-20 relative bg-white overflow-hidden">
       <div className="container mx-auto px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
