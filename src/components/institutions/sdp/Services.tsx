@@ -17,7 +17,7 @@ export const services  = [
     id: 'full-semester',
     icon: GraduationCap,
     name: 'Full Semester Skill Program',
-    subtitle: '(Naan Mudhalvan)',
+    subtitle: 'Naan Mudhalvan',
     description: 'Multiple courses + internships + final evaluation + certification',
     whatitis: `Offered in collaboration with the Tamil Nadu government’s Naan Mudhalvan initiative, this is a full-semester skill development program designed and delivered by Rareminds. It includes a series of industry-aligned certification courses, intensive hands-on training, and internship opportunities. The program ends with a final evaluation and certification that reflects the student's overall skill progression.
 Rareminds ensures that students not only gain technical skills but also master communication, problem-solving, and workplace adaptability – all essential for modern careers.`,
@@ -168,7 +168,7 @@ export default function Services() {
             Our Services
           </h1>
           <p className="text-sm text-gray-600 mx-auto">
-            Transform your institution with our integrated learning programs
+            Transform your institution with our integrated learning programs.
           </p>
         </motion.div>
 

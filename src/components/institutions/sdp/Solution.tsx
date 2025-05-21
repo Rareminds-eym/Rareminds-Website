@@ -17,13 +17,13 @@ const features = [
   {
     icon: Brain,
     title: 'Trainer + LMS + Certification',
-    description: 'Full-stack execution, not DIY chaos',
+    description: 'Structured, full stack learning experience guided by experts.',
     bgColor: 'from-green-100/60 to-teal-100/60',
   },
   {
     icon: Globe,
     title: 'Delivered in 13+ Indian Languages',
-    description: 'Regional reach, national results',
+    description: 'Regional reach, national results.',
     bgColor: 'from-yellow-100/60 to-orange-100/60',
   },
 ];
@@ -40,10 +40,10 @@ export default function Solution() {
           className="text-center mb-14"
         >
           <h1 className="text-xl font-bold mb-4 bg-black bg-clip-text text-transparent">
-            Learn. Build. Belong
+            Learn. Build. Grow.
           </h1>
           <p className="text-sm text-gray-600 mx-auto">
-             Turning Education Into Employability.
+             Turning Education into Employability
           </p>
         </motion.div>
 
