@@ -14,7 +14,6 @@ import TestimonialVideos from "@/components/institutions/sdp/TestimonialVideos";
 import FDPButton from "@/components/institutions/sdp/FDPButton";
 import FAQChatbot from '@/components/institutions/sdp/FAQChatbot';
 import StickyButtons from '@/components/institutions/sdp/StickyButtons';
-import '@/assets/institutions/index.css'
 import ContactSection from '@/components/institutions/Contact/ContactSection';
 import '@/assets/institutions/pageStyles.css'
 

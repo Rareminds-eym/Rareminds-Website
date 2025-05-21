@@ -21,3 +21,108 @@
     min-height: 600px; /* Ensure minimum height for smaller screens */
 }
 
+@layer components {
+  .gradient-text {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-primary-600 to-secondary-600;
+  }
+  
+  .card-hover {
+    @apply transition-all duration-300 hover:shadow-2xl hover:-translate-y-2;
+  }
+  
+  .button-primary {
+  @apply bg-white text-[#1E3A8A] border border-[#1E3A8A] px-4 py-3 rounded-full text-sm font-medium 
+  hover:bg-[#f0f4ff] hover:text-[#1E3A8A] transition-all duration-300 transform hover:scale-105 
+  active:scale-95 shadow-md flex items-center;
+}
+
+
+.button-secondary {
+  @apply bg-[#222B33] text-white px-4 py-3 rounded-full text-sm font-medium 
+  hover:bg-[#2f3942] transition-all duration-300 transform hover:scale-105 
+  active:scale-95 shadow-md flex items-center;
+}
+
+
+  .perspective-1000 {
+    perspective: 1000px;
+  }
+
+  .preserve-3d {
+    transform-style: preserve-3d;
+  }
+
+  .backface-hidden {
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+  }
+
+  .book-container {
+    @apply relative h-[400px] cursor-pointer;
+    perspective: 1500px;
+  }
+
+  .book {
+    @apply relative w-full h-full;
+    transform-style: preserve-3d;
+    transition: transform 1s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .book-cover {
+    @apply absolute inset-0;
+    backface-visibility: hidden;
+  }
+
+  .book-page {
+    @apply absolute inset-0 bg-white;
+    backface-visibility: hidden;
+    transform: rotateY(180deg);
+  }
+
+  .book.flipped {
+    transform: rotateY(-180deg);
+  }
+
+  .book-spine {
+    @apply absolute left-0 top-0 bottom-0 w-6 rounded-l-lg transform -skew-y-12;
+  }
+
+  .floating-card {
+    @apply animate-float shadow-xl;
+  }
+
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-20px);
+    }
+  }
+
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  @keyframes pageFlip {
+    0% {
+      transform: rotateY(0deg);
+    }
+    100% {
+      transform: rotateY(-180deg);
+    }
+  }
+  /* Animation for scroll button */
+@keyframes rotateLoop {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.scroll-rotate {
+  animation: rotateLoop 10s linear infinite;
+}
+}
