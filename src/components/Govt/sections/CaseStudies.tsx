@@ -41,10 +41,10 @@ export default function CaseStudies() {
           className="text-center mb-16"
         >
           <h1 className="text-xl font-bold mb-4 bg-black bg-clip-text text-transparent">
-            Delivering on Outcomes: Success Stories.
+            Success Stories
           </h1>
           <p className="text-sm text-gray-600 mx-auto">
-             Colleges That Chose Outcomes. And Got Them.
+             Colleges that choose outcomes. And got them.
           </p>
         </motion.div>
 
