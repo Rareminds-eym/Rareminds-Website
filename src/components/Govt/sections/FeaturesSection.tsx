@@ -4,7 +4,7 @@ import { SparklesText } from "@/components/ui/sparkles-text";
 
 export const FeaturesSection = () => {
   return (
-    <Section className="" id="feature-section">
+    <Section className="bg-white" id="feature-section">
       <div className="text-center ">
         <h2 className="mb-4 text-3xl font-bold md:text-4xl">
           Why Governments Choose{" "}

@@ -16,10 +16,26 @@
     }
   }
 
+@layer utilities {
+    .pt-screen {
+        padding-top: 100vh;
+    }
+    
+    .mt-screen {
+        margin-top: 100vh;
+    }
+
+    .backdrop-blur-hero {
+        backdrop-filter: blur(2px);
+        -webkit-backdrop-filter: blur(2px);
+    }
+}
+
 .corporate-full-screen-h {
     height: calc(100vh - 80px);
     min-height: 600px; /* Ensure minimum height for smaller screens */
 }
+
 
 @layer components {
   .gradient-text {
@@ -125,4 +141,23 @@
 .scroll-rotate {
   animation: rotateLoop 10s linear infinite;
 }
+/* Modern scrollbar for case studies (light grey variant) */
+.modern-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #e5e7eb #f9fafb;
+}
+.modern-scrollbar::-webkit-scrollbar {
+  width: 10px;
+  background: #f9fafb;
+  border-radius: 12px;
+}
+.modern-scrollbar::-webkit-scrollbar-thumb {
+  background: #e5e7eb;
+  border-radius: 12px;
+  min-height: 32px;
+  border: 2px solid #f9fafb;
+  box-shadow: 0 2px 8px 0 rgba(125,100,255,0.08);
+}
+.modern-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #d1d5db;
 }

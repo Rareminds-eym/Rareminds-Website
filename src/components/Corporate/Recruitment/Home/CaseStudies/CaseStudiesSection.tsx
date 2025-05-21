@@ -1,13 +1,52 @@
 import { motion } from "framer-motion";
 import { CheckCircle, TrendingUp, Award, CheckCheck } from "lucide-react";
 import { Icon } from "@iconify/react";
-import { useCallback, useRef } from "react";
-// Import Swiper React components
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation } from "swiper/modules";
-import type { Swiper as SwiperType } from "swiper";
+import React, { useCallback } from "react";
+import useEmblaCarousel from "embla-carousel-react";
 
 const caseStudies = [
+	{
+		title: "Ace Engineering, Bangalore",
+		subtitle: "Skilled Blue-Collar to Mid-Level: Talent that Fits",
+		client: "Ace Engineering – a growing industrial and manufacturing company in Bangalore.",
+		challenge:
+			"Hiring requirements spanned across completely different skill levels: A Skilled Painter for immediate factory deployment, A Purchase Engineer with cost optimization and vendor management experience.",
+		solution: [
+			"Ran dual-track sourcing: one for blue-collar recruitment via local skill networks, another for mid-level technical sourcing.",
+			"Matched candidates not just on skill, but attitude and reliability.",
+			"Fast-tracked selection with skill validation and real-time coordination.",
+		],
+		outcomes: [
+			"Rajesh Mahato onboarded as Skilled Painter on 29th Aug 2024",
+			"Mohan Kumar was placed as Purchase Engineer on 15th Oct 2024",
+			"Both roles were filled within tight deadlines",
+			"Reinforced client operations with minimal downtime",
+		],
+		testimonial:
+			"It’s rare to find one partner who gets both factory-floor and white-collar hiring right. Rareminds did.",
+		author: "Hiring Manager, Ace Engineering",
+	},
+	{
+		title: "GoldenSource",
+		subtitle: "Strategic FinTech Hires in a High-Growth Phase",
+		client: "Golden Source– A global leader in data management software for financial services, with headquarters in New York and global offices including Mumbai.",
+		challenge:
+			"GoldenSource needed skilled Implementation Specialists in Mumbai to support rapid growth post-acquisition and meet global client delivery timelines.",
+		solution: [
+			"Sourced candidates with deep experience in data management, fintech workflows, and client-facing tech roles.",
+			"Conducted skill and culture-fit screening tailored to the collaborative and international environment.",
+			"Accelerated hiring timelines to match project pipeline and internal onboarding cycles.",
+		],
+		outcomes: [
+			"Nitesh Parmar joined as Implementation Specialist on 3rd June 2024 – Mumbai",
+			"Jeffin Phillip joined as Implementation Specialist on 18th July 2024 – Mumbai",
+			"Enabled seamless onboarding during a critical delivery window",
+			"Matched talent with both domain: skill and cultural alignment",
+		],
+		testimonial:
+			"Rareminds understood our niche requirements and delivered with precision. The hires have already made an impact on client delivery.",
+		author: "Talent Acquisition Partner, GoldenSource",
+	},
 	{
 		title: "Park Controls and Communication (PCC)",
 		subtitle: "Three Critical Hires, One Seamless Strategy",
@@ -50,20 +89,47 @@ const caseStudies = [
 			"For a role that needed both heart and hustle, Rareminds delivered someone perfect.",
 		author: "CEO, PFC",
 	},
+	{
+		title: "Bharat Serums – Global Leadership Hires, Across 3 Continents",
+		subtitle: "Global Success, Seamlessly Delivered",
+		client:
+			"Bharat Serums and Vaccines Ltd. (BSV) – a biopharmaceutical leader accelerating global expansion across the US, Russia, Southeast Asia, and Africa.",
+		challenge:
+			"BSV needed to urgently place multiple Country Managers across high-potential yet challenging international markets. Each location demanded not just domain expertise, but deep cultural and regulatory adaptability and competence.",
+		solution: [
+			"Deployed global search strategies customized to each region.",
+			"Activated international talent pipelines across Africa, South America, and Central Asia.",
+			"Assessed candidates for pharma leadership, market penetration skills, and local alignment.",
+			"Orchestrated cross-time-zone panel interviews with precision coordination.",
+		],
+		outcomes: [
+			"Prince Singh – Country Manager, Angola – Joined 5th Aug 2024",
+			"Mohsin Qureshi – Country Manager, Senegal – Joined 7th May 2024",
+			"Jay Bhattacharya – Country Manager, Kazakhstan – Joined 11th Nov 2024",
+			"Simone Xella de Oliva – Country Lead, Brazil – Joining 23rd May 2025",
+			"Prakash Om Jaiswal – Country Manager, Cameroon – Joining 16th June 2025",
+			"Expansion enabled across 5 strategic international markets",
+			"Strengthened BSV’s leadership footprint across Africa, Central Asia, and South America",
+			"Maintained time-to-join benchmarks despite cross-border complexities",
+		],
+		testimonial:
+			"These were mission-critical roles in unfamiliar markets, but Rareminds made it feel effortless.",
+		author: "Global HR Head, Bharat Serums",
+	},
 ];
 
 const CaseStudiesSection = () => {
-	const swiperRef = useRef<SwiperType>();
+	const [emblaRef, emblaApi] = useEmblaCarousel({ loop: false, align: "center" });
 
 	const handlePrev = useCallback(() => {
-		if (!swiperRef.current) return;
-		swiperRef.current.slidePrev();
-	}, []);
+		if (!emblaApi) return;
+		emblaApi.scrollPrev();
+	}, [emblaApi]);
 
 	const handleNext = useCallback(() => {
-		if (!swiperRef.current) return;
-		swiperRef.current.slideNext();
-	}, []);
+		if (!emblaApi) return;
+		emblaApi.scrollNext();
+	}, [emblaApi]);
 
 	return (
 		<section
@@ -93,83 +159,78 @@ const CaseStudiesSection = () => {
 				</motion.div>
 
 				<div className="relative">
-					<Swiper
-						modules={[Navigation]}
-						onBeforeInit={(swiper) => {
-							swiperRef.current = swiper;
-						}}
-						spaceBetween={30}
-						slidesPerView={1}
-						className="w-full"
-					>
-						{caseStudies.map((currentCase, idx) => (
-							<SwiperSlide key={`case-${idx}`} className="!m-0">
-								<div className="bg-white rounded-3xl overflow-hidden border border-corporate-black/40">
-									<div className="grid grid-cols-1 lg:grid-cols-3 min-h-[70vh]">
-										{/* Left Panel - Image & Stats */}
-										<div className="bg-gradient-to-br from-corporate-purple to-corporate-purple/60 text-white p-8 flex flex-col justify-between">
-											<div>
-												<motion.div
-													key={`case-title-${idx}`}
-													initial={{ opacity: 0, y: 20 }}
-													animate={{ opacity: 1, y: 0 }}
-													transition={{ duration: 0.5 }}
-													className="mb-8"
-												>
-													<h3 className="text-2xl font-bold mb-2 flex items-center">
-														<span className="mr-2 bg-white min-w-8 min-h-8 rounded-full flex items-center justify-center text-[#7d64ff]">
-															{idx + 1}
-														</span>
-														{currentCase.title}
-													</h3>
-													<p className="">{currentCase.subtitle}</p>
-												</motion.div>
+					<div className="overflow-hidden" ref={emblaRef}>
+						<div className="flex">
+							{caseStudies.map((currentCase, idx) => (
+								<div
+									key={`case-${idx}`}
+									className="flex-[0_0_100%] px-2 md:px-6"
+								>
+									<div className="bg-white rounded-3xl overflow-hidden border border-corporate-black/40 w-full max-w-6xl mx-auto">
+										<div className="grid grid-cols-1 lg:grid-cols-3 min-h-[70vh]">
+											{/* Left Panel - Image & Stats */}
+											<div className="bg-gradient-to-br from-corporate-purple to-corporate-purple/60 text-white p-8 flex flex-col justify-between">
+												<div>
+													<motion.div
+														key={`case-title-${idx}`}
+														initial={{ opacity: 0, y: 20 }}
+														animate={{ opacity: 1, y: 0 }}
+														transition={{ duration: 0.5 }}
+														className="mb-8"
+													>
+														<h3 className="text-2xl font-bold mb-2 flex items-center">
+															<span className="mr-2 bg-white min-w-8 min-h-8 rounded-full flex items-center justify-center text-[#7d64ff]">
+																{idx + 1}
+															</span>
+															{currentCase.title}
+														</h3>
+														<p className="">{currentCase.subtitle}</p>
+													</motion.div>
 
-												<div className="space-y-4">
-													<div className="bg-white/10 backdrop-blur-sm rounded-xl p-6">
-														<TrendingUp size={24} className="mb-2" />
-														<h4 className="font-semibold mb-1">Key Outcomes</h4>
-														<ul className="space-y-2">
-															{currentCase.outcomes.map((outcome, i) => (
-																<motion.li
-																	key={`outcome-${idx}-${i}`}
-																	initial={{ opacity: 0, x: -10 }}
-																	animate={{ opacity: 1, x: 0 }}
-																	transition={{ duration: 0.3, delay: i * 0.1 }}
-																	className="flex items-start gap-2"
-																>
-																	<CheckCheck
-																		size={18}
-																		className="mt-1 flex-shrink-0"
-																	/>
-																	<span className="text-sm">{outcome}</span>
-																</motion.li>
-															))}
-														</ul>
+													<div className="space-y-4">
+														<div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 max-h-40 overflow-y-auto modern-scrollbar">
+															<TrendingUp size={24} className="mb-2" />
+															<h4 className="font-semibold mb-1">Key Outcomes</h4>
+															<ul className="space-y-2">
+																{currentCase.outcomes.map((outcome, i) => (
+																	<motion.li
+																		key={`outcome-${idx}-${i}`}
+																		initial={{ opacity: 0, x: -10 }}
+																		animate={{ opacity: 1, x: 0 }}
+																		transition={{ duration: 0.3, delay: i * 0.1 }}
+																		className="flex items-start gap-2"
+																	>
+																		<CheckCheck
+																			size={18}
+																			className="mt-1 flex-shrink-0"
+																		/>
+																		<span className="text-sm">{outcome}</span>
+																	</motion.li>
+																))}
+															</ul>
+														</div>
 													</div>
+												</div>
+
+												<div>
+													<blockquote className="border-l-4 border-s-[#7d64ff] pl-4 italic mt-5">
+														"{currentCase.testimonial}"
+													</blockquote>
+													<p className="text-right text-sm mt-2">
+														— {currentCase.author}
+													</p>
 												</div>
 											</div>
 
-											<div>
-												<blockquote className="border-l-4 border-s-[#7d64ff] pl-4 italic">
-													"{currentCase.testimonial}"
-												</blockquote>
-												<p className="text-right text-sm mt-2">
-													— {currentCase.author}
-												</p>
-											</div>
-										</div>
-
-										{/* Right Panel - Case Study Details */}
-										<div className="col-span-2 p-8">
-											<div className="grid grid-cols-1 h-full">
-												<div className="space-y-6">
+											{/* Right Panel - Case Study Details */}
+											<div className="col-span-2 p-8">
+												<div className="grid grid-cols-1 h-full gap-6">
 													<motion.div
 														key={`client-${idx}`}
 														initial={{ opacity: 0, y: 20 }}
 														animate={{ opacity: 1, y: 0 }}
 														transition={{ duration: 0.4 }}
-														className="bg-corporate-black/5 p-6 rounded-xl border border-corporate-primary-light/20"
+														className="bg-corporate-black/5 p-6 rounded-xl border border-corporate-primary-light/20 max-h-32 overflow-y-auto modern-scrollbar"
 													>
 														<h4 className="text-corporate-black font-bold mb-3 flex items-center gap-2">
 															<span className="bg-[#7d64ff]/10 p-2 mr-1 rounded-lg">
@@ -191,7 +252,7 @@ const CaseStudiesSection = () => {
 														initial={{ opacity: 0, y: 20 }}
 														animate={{ opacity: 1, y: 0 }}
 														transition={{ duration: 0.4, delay: 0.1 }}
-														className="bg-corporate-black/5 p-6 rounded-xl border border-corporate-primary-light/20"
+														className="bg-corporate-black/5 p-6 rounded-xl border border-corporate-primary-light/20 max-h-32 overflow-y-auto modern-scrollbar"
 													>
 														<h4 className="text-corporate-black font-bold mb-3 flex items-center gap-2">
 															<span className="bg-[#7d64ff]/10 p-2 mr-1 rounded-lg">
@@ -213,7 +274,7 @@ const CaseStudiesSection = () => {
 														initial={{ opacity: 0, y: 20 }}
 														animate={{ opacity: 1, y: 0 }}
 														transition={{ duration: 0.4, delay: 0.2 }}
-														className="bg-corporate-black/5 p-6 rounded-xl flex flex-col justify-between border border-corporate-primary-light/20"
+														className="bg-corporate-black/5 p-6 rounded-xl flex flex-col justify-between border border-corporate-primary-light/20 max-h-40 overflow-y-auto modern-scrollbar"
 													>
 														<div>
 															<h4 className="text-corporate-black font-bold mb-3 flex items-center gap-2">
@@ -249,9 +310,9 @@ const CaseStudiesSection = () => {
 										</div>
 									</div>
 								</div>
-							</SwiperSlide>
-						))}
-					</Swiper>
+							))}
+						</div>
+					</div>
 					<div className="flex justify-center gap-4 mt-8">
 						<motion.button
 							whileHover={{ scale: 1.02 }}

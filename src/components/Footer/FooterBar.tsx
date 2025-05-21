@@ -1,5 +1,16 @@
-import React from 'react';
 
+import React from "react";
+import { motion } from "framer-motion";
+import {
+  Phone,
+  FileText,
+  Mail,
+  MapPin,
+  Facebook,
+  Twitter,
+  Linkedin,
+  Instagram,
+} from "lucide-react";
 const FooterBar: React.FC = () => {
   return (
     <footer className="bg-gray-800 text-white py-4">

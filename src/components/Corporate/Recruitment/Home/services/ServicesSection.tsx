@@ -19,7 +19,7 @@ const ServicesSection = () => {
   const services = [
     {
       icon: TechnicalHiring,
-      title: "Technical Hiring Services",
+      title: "Technical Hiring",
       heading: "Build Tech Teams That Deliver",
       subheading:
         "Hire top developers, engineers, and IT experts with precision.",
@@ -27,14 +27,14 @@ const ServicesSection = () => {
     },
     {
       icon: BulkHiring,
-      title: "Bulk Hiring Services",
+      title: "Bulk Hiring",
       heading: "Scale Fast Without Compromising Quality",
       subheading: "Volume hiring solutions for fast-paced growth.",
       industries: "Hospitality, Agriculture, Retail, BPO",
     },
     {
       icon: LeadershipHiring,
-      title: "Leadership Hiring Services",
+      title: "Leadership Hiring",
       heading: "Hire Leaders Who Transform",
       subheading: "Executive search for growth-driven organizations.",
       industries: "Pharma, IT, Energy, EdTech",
@@ -155,7 +155,7 @@ const ServicesSection = () => {
                       <div className="h-[42px] w-[42px] p-2 bg-corporate-yellow rounded-[15px]">
                         <img src={service.icon} />
                       </div>
-                      <h3 className="ml-3 font-semibold text-lg max-w-[225px]">
+                      <h3 className="ml-3 font-semibold text-lg max-w-[225px] leading-5">
                         {service.title}
                       </h3>
                     </div>
