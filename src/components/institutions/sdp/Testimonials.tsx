@@ -1,5 +1,5 @@
 import React from "react";
-import TestimonialsQuotes from "./TestimonialQuotes";
+import TestimonialsQuotes from "./sdp/TestimonialQuotes";
 import { motion } from "framer-motion";
 import testimonials from "@/utils/testimonials";
 

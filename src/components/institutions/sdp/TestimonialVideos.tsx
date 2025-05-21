@@ -58,7 +58,7 @@ export default function Testimonials() {
   }
 
   return (
-    <section className="py-20 bg-white relative">
+    <section className="py-16 bg-white relative">
       <div className="container mx-auto px-6">
         {/* Heading */}
         <motion.div
@@ -77,7 +77,7 @@ export default function Testimonials() {
         </motion.div>
 
         {/* Scrolling Video Carousel */}
-        <div className="overflow-hidden mb-16">
+        <div className="overflow-hidden mb-6">
           <motion.div
             className="flex gap-20"
             animate={{ x: ['0%', '-100%'] }}
