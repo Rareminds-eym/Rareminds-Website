@@ -67,6 +67,10 @@ const router = createBrowserRouter([
         path: "/corporate/training",
         element: withSuspense(CorporateTraining),
       },
+      {
+        path: "/corporate/training/services/:name",
+        element: withSuspense(Service),
+      },
     ],
   },
   {

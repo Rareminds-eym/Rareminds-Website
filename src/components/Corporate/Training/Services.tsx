@@ -107,7 +107,7 @@ const animations = {
 
 const ServiceCard = ({ service, index }: { service: Service; index: number }) => {
   return (
-    <Link to={`/service/${service.id}`} className="block h-full no-underline">
+    <Link to={`/corporate/training/services/${service.id}`} className="block h-full no-underline">
       <motion.div
         key={index}
         initial={animations.card.initial}
