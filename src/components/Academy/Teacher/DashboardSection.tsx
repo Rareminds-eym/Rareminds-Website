@@ -3,7 +3,7 @@ import { ArrowRight } from "lucide-react";
 
 const InstitutionDashboardSection = () => {
   return (
-    <section className="w-full bg-[#F5F7F8] py-20 px-4 md:px-20 text-center">
+    <section className="w-full bg-white py-20 px-4 md:px-20 text-center">
       <motion.h2
         className="text-2xl md:text-4xl font-bold text-[#45474B] mb-2"
         initial={{ opacity: 0, y: -20 }}

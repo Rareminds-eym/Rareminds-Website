@@ -145,8 +145,8 @@ const TrustedInstitutions: React.FC<{ className?: string }> = ({ className }) =>
 
 const Logos = () => {
   return (
-    <div className=" bg-white">
-      <main className="w-full pt-12 pb-12">
+    <div className=" bg-white ">
+      <main className="w-full pt-12 pb-12 bg-white rounded-tl-[25px] rounded-tr-[25px] shadow-2xl">
         {/* Hero Section */}
         {/* <div className="py-16 md:py-24 bg-gradient-to-b from-gray-50 to-white">
           <div className="container mx-auto text-center px-4">
