@@ -66,32 +66,32 @@ const FullScreenCarousel: React.FC<FullScreenCarouselProps> = ({
   };
 
   const logos = [
-    "/Corporate/Images/Home/ClientLogos/ace.png",
-    "/Corporate/Images/Home/ClientLogos/ardent.png",
-    "/Corporate/Images/Home/ClientLogos/BNM.png",
-    "/Corporate/Images/Home/ClientLogos/bsvlogo.png",
-    "/Corporate/Images/Home/ClientLogos/csm.png",
-    "/Corporate/Images/Home/ClientLogos/DF.png",
-    "/Corporate/Images/Home/ClientLogos/e4m.png",
-    "/Corporate/Images/Home/ClientLogos/e4softwares.png",
-    "/Corporate/Images/Home/ClientLogos/ESSGEE.png",
-    "/Corporate/Images/Home/ClientLogos/fifthgen.png",
-    "/Corporate/Images/Home/ClientLogos/goldensource.png",
-    "/Corporate/Images/Home/ClientLogos/Infolob.png",
-    "/Corporate/Images/Home/ClientLogos/ITC.png",
-    "/Corporate/Images/Home/ClientLogos/motherson.png",
-    "/Corporate/Images/Home/ClientLogos/Msafe.png",
-    "/Corporate/Images/Home/ClientLogos/necb.png",
-    "/Corporate/Images/Home/ClientLogos/NES.png",
-    "/Corporate/Images/Home/ClientLogos/Nexgen.png",
-    "/Corporate/Images/Home/ClientLogos/PCC.png",
-    "/Corporate/Images/Home/ClientLogos/PFC.png",
-    "/Corporate/Images/Home/ClientLogos/Quadgen.png",
-    "/Corporate/Images/Home/ClientLogos/qwqer.png",
-    "/Corporate/Images/Home/ClientLogos/sssi.png",
-    "/Corporate/Images/Home/ClientLogos/Sugam.png",
-    "/Corporate/Images/Home/ClientLogos/Verastar.png",
-    "/Corporate/Images/Home/ClientLogos/Wipro-consumer-care.png",
+    "ace.png",
+    "ardent.png",
+    "BNM.png",
+    "bsvlogo.png",
+    "csm.png",
+    "DF.png",
+    "e4m.png",
+    "e4softwares.png",
+    "ESSGEE.png",
+    "fifthgen.png",
+    "goldensource.png",
+    "Infolob.png",
+    "ITC.png",
+    "motherson.png",
+    "Msafe.png",
+    "necb.png",
+    "NES.png",
+    "Nexgen.png",
+    "PCC.png",
+    "PFC.png",
+    "Quadgen.png",
+    "qwqer.png",
+    "sssi.png",
+    "Sugam.png",
+    "Verastar.png",
+    "Wipro-consumer-care.png",
   ];
 
   const handleScrollDown = () => {
@@ -237,7 +237,7 @@ const FullScreenCarousel: React.FC<FullScreenCarouselProps> = ({
           aria-label="Scroll down"
         >
           <img
-            src="/Corporate/Images/Home/Hero/scroll.png"
+            src="https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Corporate/Recruitment/Index/Hero/scroll.png"
             width="100"
             height="100"
             alt="Scroll down"

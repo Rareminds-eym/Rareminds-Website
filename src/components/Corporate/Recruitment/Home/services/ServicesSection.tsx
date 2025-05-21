@@ -110,7 +110,7 @@ const ServicesSection = () => {
     <section id="services" className="section relative bg-white">
       {/* Background elements */}
       <div className="absolute inset-0 bg-white z-0"></div>
-      <div className="absolute w-full h-full bg-[url('/Corporate/Images/Home/Services/bg.webp')] bg-center bg-cover opacity-[0.03]">
+      <div className="absolute w-full h-full bg-[url('https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Corporate/Recruitment/Index/Services/bg.webp')] bg-center bg-cover opacity-[0.03]">
         {/* <div className="h-[50px] bg-gradient-to-b from-white to-transparent"></div> */}
       </div>
 
@@ -171,7 +171,7 @@ const ServicesSection = () => {
                     </div>
                     <div className="pt-1 w-max">
                       <img
-                        src="/Corporate/Images/Home/Services/service-bg.png"
+                        src="https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Corporate/Recruitment/Index/Services/service-bg.png"
                         alt="Curved Background"
                         className="w-"
                         width="384"
