@@ -101,6 +101,21 @@ const FullScreenCarousel: React.FC<FullScreenCarouselProps> = ({
     });
   };
 
+  // Scroll to Contact Form
+  const handleScrollToContact = () => {
+    const el = document.getElementById("contact");
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+  // Scroll to Services Section
+  const handleScrollToServices = () => {
+    const el = document.getElementById("services");
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
   // Update setActiveIndex to reset timer on manual dot or swipe
   const handleDotClick = (idx: number) => {
     setActiveIndex(idx);
@@ -155,7 +170,7 @@ const FullScreenCarousel: React.FC<FullScreenCarouselProps> = ({
                   </div>
                   {/* Buttons - no animation wrapper */}
                   <div className="flex flex-col sm:flex-row gap-4 mt-6 justify-center lg:justify-start">
-                    <button className="corporate-btn-1">
+                    <button className="corporate-btn-1" onClick={handleScrollToContact}>
                       Request Talent Now
                       <Icon
                         icon="cil:arrow-right"
@@ -164,7 +179,7 @@ const FullScreenCarousel: React.FC<FullScreenCarouselProps> = ({
                         className="ml-2"
                       />
                     </button>
-                    <button className="corporate-btn-2">
+                    <button className="corporate-btn-2" onClick={handleScrollToServices}>
                       Explore Our Solutions
                       <Icon
                         icon="line-md:compass-loop"
