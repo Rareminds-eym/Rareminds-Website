@@ -54,13 +54,11 @@ const DashboardSection = () => {
         >
           <h3 className="text-lg font-semibold text-[#495E57] mb-4">📊 Real Time Dashboards & Analytics</h3>
           <div className="grid grid-cols-1 gap-4">
-            <div className="bg-gray-100 rounded-3xl p-6 flex flex-col items-center h-72">
-              <h4 className="text-md font-semibold mb-2">Performance Metrics</h4>
-              <img src="/Govt-Images/dashboard1.png" alt="Performance Dashboard" className="rounded-xl mb-2 w-full h-52 object-contain" />
+            <div className="bg-gray-100 rounded-3xl p-4 flex flex-col items-center h-72">
+              <img src="/Govt-Images/dashboard1.png" alt="Performance Dashboard" className="rounded-xl  w-full h-60 object-contain" />
             </div>
             <div className="bg-gray-100 rounded-3xl p-6 flex flex-col items-center h-72">
-              <h4 className="text-md font-semibold mb-2">Analytics Overview</h4>
-              <img src="/Govt-Images/dashboard2.png" alt="Analytics Dashboard" className="rounded-xl mb-2 w-full h-52 object-contain" />
+              <img src="/Govt-Images/dashboard2.png" alt="Analytics Dashboard" className="rounded-xl mb-2 w-full h-60 object-contain" />
             </div>
           </div>
         </motion.div>
