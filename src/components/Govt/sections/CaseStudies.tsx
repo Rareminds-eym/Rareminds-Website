@@ -14,7 +14,7 @@ const caseStudies = [
   },
   {
     icon: TrendingUp,
-    title: 'From Tier-3 to Interview-Ready in 30 Days',
+    title: 'Interview-Ready in 30 Days',
     institution: 'Salem College',
     details: '350 Students | Food Tech + Hackathon',
     pdfUrl: '/pdfs/salem-college-case-study.pdf'
