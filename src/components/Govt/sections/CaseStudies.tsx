@@ -40,10 +40,10 @@ export default function CaseStudies() {
           transition={{ duration: 0.8 }}
           className="text-center mb-16"
         >
-          <h1 className="text-xl font-bold mb-4 bg-black bg-clip-text text-transparent">
+          <h1 className="text-3xl md:text-4xl font-bold mb-4 text-academy-blue animate-fade-in">
             Success Stories
           </h1>
-          <p className="text-sm text-gray-600 mx-auto">
+          <p className="text-xl md:text-2xl text-gray-700 animate-fade-in">
              Colleges that choose outcomes. And got them.
           </p>
         </motion.div>

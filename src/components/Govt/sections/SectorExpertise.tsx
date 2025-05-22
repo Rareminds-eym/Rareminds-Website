@@ -1,6 +1,6 @@
 import React from 'react';
-import { Battery, Sprout, Dna, Heart, ShoppingBag, Brain, MonitorSmartphone, Briefcase, CheckCircle } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Battery, Sprout, Dna,Folders, Heart, Eye, ShoppingBag, Brain, MonitorSmartphone, Briefcase } from 'lucide-react';
+
 
 // Util to combine class names
 const cn = (...classes: string[]) => classes.filter(Boolean).join(' ');
@@ -25,6 +25,7 @@ interface ProgramListProps {
 interface CTAButtonProps {
   children: React.ReactNode;
   variant: 'primary' | 'secondary';
+  onClick?: () => void;
 }
 
 
@@ -83,15 +84,14 @@ const SectorCard = ({ title, icon, color, description }: SectorCardProps) => {
 //   );
 // };
 
-// CTAButton Component
-const CTAButton = ({ children, variant }: CTAButtonProps) => {
-  const base = 'px-6 py-3 font-semibold rounded-2xl  transition duration-300';
+const CTAButton = ({ children, variant, onClick }: CTAButtonProps) => {
+  const base = 'px-6 py-3 font-semibold rounded-2xl flex items-center  transition duration-300';
   const styles = variant === 'primary'
      ? 'border border-gray-300 border-b-4 border-gray-300  hover:bg-gray-100 '
     : 'bg-red-500 text-white border-b-4 border-red-300 hover:bg-red-600';
 
   return (
-    <button className={`${base} ${styles}`}>
+    <button className={`${base} ${styles}`} onClick={onClick}>
       {children}
     </button>
   );
@@ -189,14 +189,24 @@ const SectorExpertise = () => {
         </div> */}
 
         <div className="flex flex-col md:flex-row justify-center gap-6 animate-fade-in">
-          <CTAButton variant="primary">
+          <CTAButton variant="primary"
+          onClick={() => {
+            const contactElement = document.getElementById('contact');
+            if (contactElement) {
+              contactElement.scrollIntoView({ behavior: 'smooth' });
+            }
+          }}><Folders className="h-5 w-5 mr-2" /> 
             Request Sample Curriculum by Sector
           </CTAButton>
-          <Link to="/govt/ViewGovtProject" className="no-underline">
-            <CTAButton variant="secondary">
-              View Government Projects
+            <CTAButton variant="secondary" 
+            onClick={() => {
+            const contactElement = document.getElementById('contact');
+            if (contactElement) {
+              contactElement.scrollIntoView({ behavior: 'smooth' });
+            }
+          }}
+            ><Eye className="h-5 w-5 mr-2" /> View Government Projects
             </CTAButton>
-          </Link>
         </div>
       </div>
     </section>

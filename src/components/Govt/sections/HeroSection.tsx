@@ -76,25 +76,35 @@ const variants = {
 		x: direction > 0 ? 1000 : -1000,
 		opacity: 0,
 		zIndex: 0,
+		scale: 0.9, // Add scale effect for smoother entry
+		transition: {
+			x: { type: "spring", stiffness: 300, damping: 30 },
+			opacity: { duration: 0.4 },
+			scale: { duration: 0.4 },
+		},
 	}),
 	center: {
 		x: 0,
 		opacity: 1,
 		zIndex: 1,
+		scale: 1, // Ensure scale returns to normal
 		transition: {
 			x: { type: "spring", stiffness: 300, damping: 30 },
-			opacity: { duration: 0.4 }
-		}
+			opacity: { duration: 0.4 },
+			scale: { duration: 0.4 },
+		},
 	},
 	exit: (direction: number) => ({
 		x: direction < 0 ? 1000 : -1000,
 		opacity: 0,
 		zIndex: 0,
+		scale: 0.9, // Add scale effect for smoother exit
 		transition: {
 			x: { type: "spring", stiffness: 300, damping: 30 },
-			opacity: { duration: 0.4 }
-		}
-	})
+			opacity: { duration: 0.4 },
+			scale: { duration: 0.4 },
+		},
+	}),
 };
 
 export const HeroSection = () => {
@@ -239,15 +249,23 @@ export const HeroSection = () => {
 			</motion.div>
 
 			{/* Scroll Down Icon */}
-			
-			<button
-				onClick={scrollToGovOutcome}
-				className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center animate-bounce cursor-pointer outline-none z-50 bg-black/20 px-4 py-2 rounded-full hover:bg-black/40 transition-colors"
-				aria-label="Scroll down"
+			<div className="absolute bottom-6 left-6 flex flex-col items-center z-50 animate-pulse bg-white/90 p-2 backdrop-blur-sm shadow-md shadow-red-600 ring-4 ring-white/50 rounded-full"
+			onClick={scrollToGovOutcome}
 			>
-				<ArrowDown size={32} className="text-white drop-shadow-lg" />
-				<span className="text-white text-xs mt-1 font-medium drop-shadow-lg">Scroll</span>
-			</button>
+				<img
+					src="https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Corporate/Recruitment/Index/Hero/scroll.png"
+					width="60"
+					height="60"
+					alt="Scroll down"
+					className="animate-spin-slow"
+				/>
+				<ArrowDown
+					size={32}
+					className="absolute  top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 cursor-pointer"
+					onClick={scrollToGovOutcome}
+				/>
+			</div>
+			
 		</section>
 	);
 };
