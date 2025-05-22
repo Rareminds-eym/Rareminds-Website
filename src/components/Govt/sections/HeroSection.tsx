@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Calendar, ArrowDown, Eye, ChevronLeft, ChevronRight } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { GooeyText } from "../../ui/GooeyText";
+import { ParticleButton } from "@/components/ui/particle-button";
 
 const heroSlides = [
 	{
@@ -193,10 +194,16 @@ export const HeroSection = () => {
 								transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
 								className="flex flex-wrap gap-4 justify-center"
 							>
-								<button className="flex items-center px-6 py-3 bg-red-500/80 backdrop-blur rounded-full text-white shadow-sm shadow-red-400 border-2 border-red-300 hover:bg-red-600  transition-colors">
-									<Eye className="h-5 w-5 mr-2" />
+								<ParticleButton 
+									className="flex items-center px-6 py-3 bg-red-500/80 backdrop-blur rounded-full text-white shadow-sm shadow-red-400 border-2 border-red-300 hover:bg-red-600  transition-colors "
+									successDuration={1200}
+									size={"lg"}
+									particleColor="#ffffff"
+									particleSize={7}
+								>
+									<Eye className="h-6 w-6 mr-2" />
 									View Our Government Training Portfolio
-								</button>
+								</ParticleButton>
 								<button className="flex items-center  bg-white/80 hover:bg-white  transition-colors px-6 py-3  backdrop-blur rounded-full  shadow-sm shadow-white border-2 border-black/70 text-black ">
 									<Calendar className="h-5 w-5 mr-2" />
 									Schedule a Strategy Call
@@ -227,10 +234,12 @@ export const HeroSection = () => {
 						}`}
 						aria-label={`Go to slide ${index + 1}`}
 					/>
+					
 				))}
 			</motion.div>
 
 			{/* Scroll Down Icon */}
+			
 			<button
 				onClick={scrollToGovOutcome}
 				className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center animate-bounce cursor-pointer outline-none z-50 bg-black/20 px-4 py-2 rounded-full hover:bg-black/40 transition-colors"

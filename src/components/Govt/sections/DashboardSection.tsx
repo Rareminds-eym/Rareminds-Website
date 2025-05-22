@@ -25,18 +25,22 @@ const DashboardSection = () => {
           transition={{ duration: 0.5 }}
         >
           <h3 className="text-lg font-semibold text-[#495E57] mb-4">🎮 Simulation Games</h3>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div className="bg-[#0F172A] text-white rounded-xl p-4 flex flex-col items-start justify-between min-h-[160px]">
+          <div className="grid grid-cols-2 gap-4">
+            <div className="bg-gray-100 rounded-3xl p-6 flex flex-col items-center h-64">
               <h4 className="text-md font-semibold mb-2">EV Battery Fault Diagnostic System</h4>
-              <span className="text-xs text-gray-300">Track progress in real-time</span>
+              <img src="/Govt-Images/Ev.svg" alt="EV Battery Fault Diagnostic System" className="rounded-xl mb-2 w-48 h-40 object-contain" />
             </div>
-            <div className="bg-[#34D399] text-black rounded-xl p-4 flex flex-col items-start justify-between min-h-[160px]">
+            <div className="bg-gray-100 text-black rounded-3xl p-6 flex flex-col items-center h-64">
               <h4 className="text-md font-semibold mb-2">Sustainable Green Chemistry XP</h4>
-              <span className="text-xs text-gray-800">Gamified chemical education</span>
+              <img src="/Govt-Images/Chemistry.svg" alt="Sustainable Green Chemistry XP" className="rounded-xl mb-2 w-48 h-40 object-contain" />
             </div>
-            <div className="bg-[#0F172A] text-white rounded-xl p-4 flex flex-col items-start justify-between min-h-[160px] sm:col-span-2">
+            <div className="bg-gray-100 rounded-3xl p-6 flex flex-col items-center h-64">
               <h4 className="text-md font-semibold mb-2">Chemical Safety EVBMS</h4>
-              <span className="text-xs text-gray-300">Gamifies lab safety protocols</span>
+              <img src="/Govt-Images/Chemical.svg" alt="Chemical Safety EVBMS" className="rounded-xl mb-2 w-48 h-40 object-contain" />
+            </div>
+            <div className="bg-gray-100 rounded-3xl p-6 flex flex-col items-center h-64">
+              <h4 className="text-md font-semibold mb-2">Food Safety Management</h4>
+              <img src="/Govt-Images/Food.svg" alt="Food Safety Management" className="rounded-xl mb-2 w-48 h-40 object-contain" />
             </div>
           </div>
         </motion.div>
@@ -49,11 +53,16 @@ const DashboardSection = () => {
           transition={{ duration: 0.6, delay: 0.1 }}
         >
           <h3 className="text-lg font-semibold text-[#495E57] mb-4">📊 Real Time Dashboards & Analytics</h3>
-          <img
-            src="https://via.placeholder.com/400x200"
-            alt="Dashboard Preview"
-            className="rounded-xl w-full object-cover"
-          />
+          <div className="grid grid-cols-1 gap-4">
+            <div className="bg-gray-100 rounded-3xl p-6 flex flex-col items-center h-72">
+              <h4 className="text-md font-semibold mb-2">Performance Metrics</h4>
+              <img src="/Govt-Images/dashboard1.png" alt="Performance Dashboard" className="rounded-xl mb-2 w-full h-52 object-contain" />
+            </div>
+            <div className="bg-gray-100 rounded-3xl p-6 flex flex-col items-center h-72">
+              <h4 className="text-md font-semibold mb-2">Analytics Overview</h4>
+              <img src="/Govt-Images/dashboard2.png" alt="Analytics Dashboard" className="rounded-xl mb-2 w-full h-52 object-contain" />
+            </div>
+          </div>
         </motion.div>
 
         {/* LMS */}
