@@ -30,12 +30,12 @@ const FullScreenCarousel: React.FC<FullScreenCarouselProps> = ({
   const touchStartX = useRef<number | null>(null);
   const touchEndX = useRef<number | null>(null);
 
-  // Auto-advance slides every 8 seconds, reset on manual change
+  // Auto-advance slides every 12 seconds, reset on manual change
   useEffect(() => {
     if (timerRef.current) clearInterval(timerRef.current);
     timerRef.current = setInterval(() => {
       setActiveIndex((prev) => (prev + 1) % slides.length);
-    }, 8000);
+    }, 12000);
     return () => {
       if (timerRef.current) clearInterval(timerRef.current);
     };

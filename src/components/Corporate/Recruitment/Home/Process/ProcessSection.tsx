@@ -26,8 +26,9 @@ const ProcessSection = () => {
             Our Process = Your Peace of Mind
           </h2>
           <p className="text-corporate-grey max-w-3xl mx-auto text-lg">
-            At Rareminds, we believe a great hire is not a coincidence. <br/>It's the
-            outcome of a structured, insight-driven, and human-centric process.
+            At Rareminds, we believe a great hire is not a coincidence. <br />
+            It's the outcome of a structured, insight-driven, and human-centric
+            process.
           </p>
         </motion.div>
 
@@ -46,12 +47,24 @@ const ProcessSection = () => {
       <div className="hidden lg:block relative">
         <img
           src="https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Corporate/Recruitment/Index/Process/process-bg.webp"
-          className="object-center"
+          className="w-full h-[720px] object-cover"
           height={626}
         />
-        <div className="absolute top-1/2 left-1/2 -translate-x-[50%] -translate-y-[50%]">
+        <div className="absolute top-1/2 left-1/2 -translate-x-[50%] -translate-y-[50%] max-h-[626px] -mt-5">
           <ProcessSVG className="scale-[0.8] xl:scale-110" />
         </div>
+        <button
+          className="absolute left-1/2 -translate-x-[50%] bottom-10 corporate-btn-1"
+          onClick={() => {
+            const contactSection = document.getElementById('contact');
+            if (contactSection) {
+              contactSection.scrollIntoView({ behavior: 'smooth' });
+            }
+          }}
+          type="button"
+        >
+          Start Your Talent Journey
+        </button>
       </div>
     </section>
   );

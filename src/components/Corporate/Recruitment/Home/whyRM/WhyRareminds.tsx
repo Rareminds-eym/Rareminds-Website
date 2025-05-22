@@ -27,7 +27,7 @@ const WhyRareminds = () => {
     {
       icon: <Building2 size={32} />,
       number: "250+",
-      description: "Hiring Partners",
+      description: "Corporates Partnered with",
       subtext:
         "Corporates across India rely on us to scale their teams efficiently and effectively.",
       color: "bg-corporate-accent",
