@@ -86,7 +86,6 @@ const ContactSection = () => {
 
   return (
     <section
-      id="contact"
       className="section py-24 relative overflow-hidden bg-gradient-to-br from-blue-50 to-red-50 text-gray-800 bg-white"
     >
       <motion.div
@@ -355,6 +354,73 @@ const ContactSection = () => {
                     </div>
                   </div>
                 </div>
+              </div>
+
+              <div className="bg-white/80 backdrop-blur-sm border border-white/30 rounded-3xl px-8 py-7 shadow-xl">
+                <h3 className="text-xl font-bold mb-2 text-gray-800 flex items-center gap-2">
+                  <Icon icon="mdi:share-variant" width={22} height={22} className="text-corporate-black" />
+                  Follow Us
+                </h3>
+                <motion.div
+                  className="flex items-center gap-4 mt-2"
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true }}
+                  variants={{
+                    hidden: {},
+                    visible: { transition: { staggerChildren: 0.12 } },
+                  }}
+                >
+                  {[
+                    {
+                      href: "https://www.linkedin.com/company/rareminds/",
+                      icon: "mdi:linkedin",
+                      color: "#0A66C2",
+                      label: "LinkedIn",
+                    },
+                    {
+                      href: "https://www.instagram.com/rareminds_eym/",
+                      icon: "mdi:instagram",
+                      color: "#E4405F",
+                      label: "Instagram",
+                    },
+                    {
+                      href: "https://www.facebook.com/raremindsgroup",
+                      icon: "mdi:facebook",
+                      color: "#1877F3",
+                      label: "Facebook",
+                    },
+                    {
+                      href: "https://x.com/minds_rare",
+                      icon: "mdi:twitter",
+                      color: "#1DA1F2",
+                      label: "Twitter (X)",
+                    },
+                    {
+                      href: "https://www.youtube.com/channel/UClkBtwJsScYxFzNoFdlifeA",
+                      icon: "mdi:youtube",
+                      color: "#FF0000",
+                      label: "YouTube",
+                      size: 40,
+                    },
+                  ].map((item, idx) => (
+                    <motion.a
+                      key={item.label}
+                      href={item.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={item.label}
+                      className="hover:scale-110 transition-transform"
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      whileHover={{ scale: 1.18, rotate: -6 }}
+                      transition={{ type: 'spring', stiffness: 300, damping: 20, delay: 0.1 * idx }}
+                      viewport={{ once: true }}
+                    >
+                      <Icon icon={item.icon} width={item.size || 32} height={item.size || 32} className="" style={{ color: item.color }} />
+                    </motion.a>
+                  ))}
+                </motion.div>
               </div>
             </div>
           </motion.div>
