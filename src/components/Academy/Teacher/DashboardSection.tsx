@@ -156,17 +156,16 @@ const InstitutionDashboardSection = () => {
 
 
 
-        {/* LMS */}
         <motion.div
           className="bg-white rounded-2xl shadow-xl p-6 md:col-span-2"
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
         >
-          <h3 className="text-lg font-semibold text-[#495E57] mb-4">📚 Learning Management System</h3>
+          <h3 className="text-lg font-semibold text-[#495E57] mb-4">Learning Management System</h3>
           <div className="flex flex-col md:flex-row items-center gap-6">
             <img
-              src="https://via.placeholder.com/400x240"
+              src="/academy/Rareprep.png"
               alt="Rareprep LMS"
               className="rounded-xl w-full md:w-1/2 object-cover"
             />
@@ -175,7 +174,7 @@ const InstitutionDashboardSection = () => {
               <p className="text-sm text-gray-600">
                 Streamlined course access, mock interviews, and tracking for student progress.
               </p>
-              <button className="mt-4 inline-flex items-center gap-2 text-[#F4CE14] font-medium">
+              <button className="mt-4 inline-flex items-center gap-2 text-red-500 font-medium">
                 Explore More <ArrowRight className="w-4 h-4" />
               </button>
             </div>

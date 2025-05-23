@@ -45,12 +45,12 @@ function Projectlist() {
           ))}
         </div>
 
-        {selectedProject && (
+        {/* {selectedProject && (
           <ProjectModal
             project={selectedProject}
             onClose={() => setSelectedProject(null)}
           />
-        )}
+        )} */}
       </main>
     </div>
   );

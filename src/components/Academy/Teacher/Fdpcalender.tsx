@@ -10,7 +10,7 @@ const Fdpcalender = ({ Facultytocontact }: FdpcalenderProps) => {
   return (
     
     <div className="min-h-screen bg-white flex flex-col items-center py-10 px-4 md:px-6" data-aos="fade-left">
-      <div className="w-full max-w-5xl mt-10">
+      <div className="w-full max-w-6xl mt-10">
         <div className="text-center mb-12">
           <h1 className="text-lg md:text-4xl  font-bold mb-2">Pick from Ready-to-Run TDP Calendars</h1>
           <p className="text-gray-600 text-8px">Choose the perfect faculty development program format for your institution</p>
@@ -20,8 +20,11 @@ const Fdpcalender = ({ Facultytocontact }: FdpcalenderProps) => {
           {/* 3-Day Intensive TDP Card */}
           <div className="border rounded-lg p-6 flex flex-col h-full animate-fade-in hover:scale-105 transition-transform duration-200">
             <div className="flex justify-center mb-6">
-              <div className="w-12 h-12 bg-amber-50 rounded-full flex items-center justify-center">
-                <Calendar className="w-6 h-6 text-red-500" />
+              <div className="w-auto h-auto  rounded-full flex items-center justify-center">
+             
+                <div className="w-auto h-auto ">
+                 <img src="/academy/3-Day Intensive TDP.svg" alt="" className="w-[100px] h-[100px]" />
+                </div>
               </div>
             </div>
             
@@ -78,12 +81,14 @@ const Fdpcalender = ({ Facultytocontact }: FdpcalenderProps) => {
           
           {/* 5-Day NEP Mastery TDP Card */}
           <div className="border rounded-lg p-4 flex flex-col h-full animate-fade-in hover:scale-105 transition-transform duration-200">
-            <div className="flex justify-center mb-6">
-              <div className="w-12 h-12 bg-amber-50 rounded-full flex items-center justify-center">
-                <BookOpen className="w-6 h-6 text-red-500  " />
+              <div className="flex justify-center mb-6">
+              <div className="w-auto h-auto  rounded-full flex items-center justify-center">
+             
+                <div className="w-auto h-auto ">
+                 <img src="/academy/5-Day TDP Calendar (Customizable).svg" alt="" className="w-[100px] h-[100px]" />
+                </div>
               </div>
             </div>
-            
             <h2 className="text-xl font-bold text-center mb-2">5-Day NEP Mastery TDP</h2>
             <p className="text-gray-600 text-center text-5px mb-6">
               Comprehensive program covering NEP principles, implementation strategies and pedagogical transformation
@@ -144,9 +149,12 @@ const Fdpcalender = ({ Facultytocontact }: FdpcalenderProps) => {
 
            {/* 5-Day NEP Mastery TDP Card */}
            <div className="border rounded-lg p-4 flex flex-col h-full animate-fade-in hover:scale-105 transition-transform duration-200">
-            <div className="flex justify-center mb-6">
-              <div className="w-12 h-12 bg-amber-50 rounded-full flex items-center justify-center">
-                <BookOpen className="w-6 h-6 text-red-500  " />
+             <div className="flex justify-center mb-6">
+              <div className="w-auto h-auto  rounded-full flex items-center justify-center">
+             
+                <div className="w-auto h-auto ">
+                 <img src="/academy/Weekend Program -Reimagining Education with Transformational Leadership.svg" alt="" className="w-[100px] h-[100px]" />
+                </div>
               </div>
             </div>
             

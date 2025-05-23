@@ -1,6 +1,7 @@
 import React from 'react';
 import { ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 
 export function HeroBanner({hero_data}) {
   console.log("Props received:",hero_data);
@@ -15,7 +16,7 @@ export function HeroBanner({hero_data}) {
           backgroundAttachment: 'fixed'
         }}
       /> */}
-      <img src="/images/naan_Mudhalvan/Naan-Mudalvan_banner.jpg" alt="" width="100%" height={600} className='object-center'  />
+      <img src="/academy/Projects/naan_Mudhalvan/Naan-Mudalvan_banner_m.jpg" alt="" width="100%" height={600} className='object-center'  />
       <div className="absolute inset-0 bg-gradient-to-br" />
       
        
