@@ -403,7 +403,7 @@ const ContactSection = () => {
                       label: "YouTube",
                       size: 40,
                     },
-                  ].map((item, idx) => (
+                  ].map((item) => (
                     <motion.a
                       key={item.label}
                       href={item.href}
@@ -411,13 +411,13 @@ const ContactSection = () => {
                       rel="noopener noreferrer"
                       aria-label={item.label}
                       className="hover:scale-110 transition-transform"
-                      initial={{ opacity: 0, y: 20 }}
-                      whileInView={{ opacity: 1, y: 0 }}
+                      variants={{
+                        hidden: { opacity: 0, y: 24 },
+                        visible: { opacity: 1, y: 0, transition: { type: 'spring', stiffness: 300, damping: 24 } },
+                      }}
                       whileHover={{ scale: 1.18, rotate: -6 }}
-                      transition={{ type: 'spring', stiffness: 300, damping: 20, delay: 0.1 * idx }}
-                      viewport={{ once: true }}
                     >
-                      <Icon icon={item.icon} width={item.size || 32} height={item.size || 32} className="" style={{ color: item.color }} />
+                      <Icon icon={item.icon} width={item.size || 32} height={item.size || 32} style={{ color: item.color }} />
                     </motion.a>
                   ))}
                 </motion.div>

@@ -2,6 +2,33 @@ import { CaseStudy } from "@/types/corporate/recruitment/types";
 
 export const caseStudies: CaseStudy[] = [
   {
+    title: "Bharat Serums",
+    subtitle: "Global Success, Seamlessly Delivered",
+    client:
+      "Bharat Serums and Vaccines Ltd. (BSV) – a biopharmaceutical leader accelerating global expansion across the US, Russia, Southeast Asia, and Africa.",
+    challenge:
+      "BSV needed to urgently place multiple Country Managers across high-potential yet challenging international markets. Each location demanded not just domain expertise, but deep cultural and regulatory adaptability and competence.",
+    solution: [
+      "Deployed global search strategies customized to each region.",
+      "Activated international talent pipelines across Africa, South America, and Central Asia.",
+      "Assessed candidates for pharma leadership, market penetration skills, and local alignment.",
+      "Orchestrated cross-time-zone panel interviews with precision coordination.",
+    ],
+    outcomes: [
+      "Prince Singh – Country Manager, Angola – Joined 5th Aug 2024",
+      "Mohsin Qureshi – Country Manager, Senegal – Joined 7th May 2024",
+      "Jay Bhattacharya – Country Manager, Kazakhstan – Joined 11th Nov 2024",
+      "Simone Xella de Oliva – Country Lead, Brazil – Joining 23rd May 2025",
+      "Prakash Om Jaiswal – Country Manager, Cameroon – Joining 16th June 2025",
+      "Expansion enabled across 5 strategic international markets",
+      "Strengthened BSV’s leadership footprint across Africa, Central Asia, and South America",
+      "Maintained time-to-join benchmarks despite cross-border complexities",
+    ],
+    testimonial:
+      "These were mission-critical roles in unfamiliar markets, but Rareminds made it feel effortless.",
+    author: "Global HR Head, Bharat Serums",
+  },
+  {
     title: "Ace Engineering, Bangalore",
     subtitle: "Skilled Blue-Collar to Mid-Level: Talent that Fits",
     client:
@@ -86,32 +113,5 @@ export const caseStudies: CaseStudy[] = [
     testimonial:
       "For a role that needed both heart and hustle, Rareminds delivered someone perfect.",
     author: "CEO, PFC",
-  },
-  {
-    title: "Bharat Serums – Global Leadership Hires, Across 3 Continents",
-    subtitle: "Global Success, Seamlessly Delivered",
-    client:
-      "Bharat Serums and Vaccines Ltd. (BSV) – a biopharmaceutical leader accelerating global expansion across the US, Russia, Southeast Asia, and Africa.",
-    challenge:
-      "BSV needed to urgently place multiple Country Managers across high-potential yet challenging international markets. Each location demanded not just domain expertise, but deep cultural and regulatory adaptability and competence.",
-    solution: [
-      "Deployed global search strategies customized to each region.",
-      "Activated international talent pipelines across Africa, South America, and Central Asia.",
-      "Assessed candidates for pharma leadership, market penetration skills, and local alignment.",
-      "Orchestrated cross-time-zone panel interviews with precision coordination.",
-    ],
-    outcomes: [
-      "Prince Singh – Country Manager, Angola – Joined 5th Aug 2024",
-      "Mohsin Qureshi – Country Manager, Senegal – Joined 7th May 2024",
-      "Jay Bhattacharya – Country Manager, Kazakhstan – Joined 11th Nov 2024",
-      "Simone Xella de Oliva – Country Lead, Brazil – Joining 23rd May 2025",
-      "Prakash Om Jaiswal – Country Manager, Cameroon – Joining 16th June 2025",
-      "Expansion enabled across 5 strategic international markets",
-      "Strengthened BSV’s leadership footprint across Africa, Central Asia, and South America",
-      "Maintained time-to-join benchmarks despite cross-border complexities",
-    ],
-    testimonial:
-      "These were mission-critical roles in unfamiliar markets, but Rareminds made it feel effortless.",
-    author: "Global HR Head, Bharat Serums",
   },
 ];
