@@ -11,7 +11,7 @@ const Testimonials: React.FC = () => {
 
   return (
      <div className="bg-[#F9FAFB]">
-    <section className="testimonials max-w-4xl mx-auto py-24 ">
+    <section className="testimonials max-w-4xl mx-auto py-20 ">
       {/* Animated Heading */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}

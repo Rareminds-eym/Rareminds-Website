@@ -6,8 +6,8 @@ import { Trophy, TrendingUp, Puzzle , X } from 'lucide-react';
 const caseStudies = [
   {
     icon: Trophy,
-    title: 'One College, 2 Months, 40% Placement Jump',
-    institution: 'Vels University',
+    title: 'One College, 2 Months, 40% Jump in Placement ',
+    institution: 'VELS University',
     details: '600 Students | Soft Skills + Resume Bootcamp',
     pdfUrl: "/institutions/pdfs/Vels.pdf"
   },
