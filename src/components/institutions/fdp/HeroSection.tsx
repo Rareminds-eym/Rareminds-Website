@@ -2,7 +2,6 @@ import { motion } from 'framer-motion';
 import { Download, CalendarCheck , MessageSquareMore, Users, School, Target, Award, Rocket, Landmark } from 'lucide-react';
 import { useState, useEffect, useRef } from 'react';
 import CountUp from 'react-countup';
-import arrowDown from "@/assets/corporate/Home/Carousal/arrowDown.svg";
 
 
 const banners = [
@@ -290,14 +289,14 @@ export default function HeroSection() {
           aria-label="Scroll down"
           >
           <img
-          src="/Corporate/Images/Home/Hero/scroll.png"
+          src="/institutions/vectors/scroll.png"
           width="100"
           height="100"
           alt="Scroll down"
           className="scroll-rotate"
           />
           <img
-           src={arrowDown}
+           src="/institutions/vectors/arrowDown.svg"
            width="62"
            height="62"
            alt="Scroll down"
