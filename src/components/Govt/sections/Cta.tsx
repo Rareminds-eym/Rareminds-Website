@@ -34,19 +34,19 @@ export const Cta = () => {
   return (
     <>
       <div className="fixed bottom-0 left-0 right-0 bg-white/90 backdrop-blur-md border-t border-gray-200 py-3 px-4 sm:px-8 z-50 shadow-lg">
-        <div className="container mx-auto flex flex-col sm:flex-row justify-center items-center gap-3 sm:gap-4">
+        <div className="container mx-auto flex flex-row sm:flex-row justify-center items-center gap-3 sm:gap-4">
           <ParticleButton
-            className="bg-[#222B33] hover:bg-[#2c363f] text-white px-4 py-2 rounded-full text-base sm:text-sm w-full sm:w-auto flex items-center justify-center gap-2 transition-colors"
+            className="bg-[#222B33] hover:bg-[#2c363f] text-white px-4 py-2 rounded-full text-base sm:text-sm w-full  sm:w-auto flex items-center justify-center gap-2 transition-colors"
             successDuration={1200}
             onClick={() => setIsModalOpen(true)}
           >
             <MessageCircle size={16} />
-            Chat
+            <span className="hidden md:block">Chat</span>
           </ParticleButton>
 
-          <button className="flex items-center justify-center gap-2 bg-gray-100 hover:bg-gray-200 active:scale-95 text-gray-800 px-4 py-2 rounded-full text-base sm:text-sm w-full sm:w-auto transition-all duration-200">
+          <button className="flex items-center justify-center gap-2 bg-gray-100 hover:bg-gray-200 w-full active:scale-95 text-gray-800 px-4 py-2 rounded-full text-base sm:text-sm sm:w-auto transition-all duration-200">
             <DownloadCloud size={20} />
-            Download Government Brochure
+            <span className="hidden md:block">Download Government Brochure</span>
           </button>
         </div>
       </div>
