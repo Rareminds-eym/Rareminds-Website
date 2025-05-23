@@ -1,8 +1,8 @@
-
 import { useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Input } from "../../../components/Academy/UI/input";
 import { Textarea } from "../../../components/Academy/UI/textarea";
+import { supabase } from "../../../lib/supabase";
 import {
   Phone,
   Mail,
@@ -34,12 +34,28 @@ const AcademyContactSection = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Simulate form submission
-    setTimeout(() => {
+    try {
+      // Insert data into Supabase
+      const { error } = await supabase
+        .from("academia_form")
+        .insert([
+          {
+            name: formData.name,
+            email: formData.email,
+            phone: formData.phone,
+            course_interest: formData.course,
+            message: formData.message,
+            submitted_at: new Date().toISOString(),
+          },
+        ]);      if (error) {
+        console.error('Supabase error:', error.message, error.details, error.hint);
+        throw error;
+      }
+
       toast({
         title: "Inquiry Submitted!",
         description:
@@ -47,20 +63,34 @@ const AcademyContactSection = () => {
       });
 
       setSubmitted(true);
-      setIsSubmitting(false);
+      setFormData({
+        name: "",
+        phone: "",
+        email: "",
+        course: "",
+        message: "",
+      });
+
+      if (formRef.current) formRef.current.reset();
 
       setTimeout(() => {
-        setFormData({
-          name: "",
-          phone: "",
-          email: "",
-          course: "",
-          message: "",
-        });
         setSubmitted(false);
-        if (formRef.current) formRef.current.reset();
       }, 3000);
-    }, 1500);
+    } catch (error) {      const supabaseError = error as any;
+      console.error("Error submitting form:", {
+        message: supabaseError.message,
+        details: supabaseError.details,
+        hint: supabaseError.hint,
+        error: supabaseError
+      });
+      toast({
+        title: "Error",
+        description: "There was an error submitting your inquiry. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -80,7 +110,7 @@ const AcademyContactSection = () => {
             <Send size={32} />
           </div>
           <h2 className="text-3xl md:text-5xl text-center font-bold mb-4 text-gray-800">
-            Join Our Academy
+            Partner With US
           </h2>
           <p className="text-gray-600 max-w-3xl mx-auto text-lg text-center">
             Take the first step towards your tech career with our specialized training programs
@@ -285,7 +315,7 @@ const AcademyContactSection = () => {
             <div className="h-full flex flex-col justify-between gap-6">
               <div className="bg-white/80 backdrop-blur-sm border border-white/30 rounded-3xl p-8 shadow-xl">
                 <h3 className="text-2xl font-bold mb-6 text-gray-800">
-                  Academy Information
+                 Get In Touch
                 </h3>
                 <div className="space-y-6">
                   <div className="flex items-start gap-4">
@@ -296,8 +326,8 @@ const AcademyContactSection = () => {
                       <h4 className="font-semibold mb-1 text-gray-800">
                         Academy Helpline
                       </h4>
-                      <p className="text-gray-600">+91 95624 81100</p>
-                      <p className="text-gray-600">+91 82960 61534</p>
+                      <p className="text-gray-600">+91 99023 26951</p>
+                      {/* <p className="text-gray-600">+91 82960 61534</p> */}
                     </div>
                   </div>
                   <div className="flex items-start gap-4">
@@ -308,8 +338,8 @@ const AcademyContactSection = () => {
                       <h4 className="font-semibold mb-1 text-gray-800">
                         Email
                       </h4>
-                      <p className="text-gray-600">academy@rareminds.com</p>
-                      <p className="text-gray-600">training@rareminds.com</p>
+                      <p className="text-gray-600">info@rareminds.in</p>
+                      {/* <p className="text-gray-600">training@rareminds.com</p> */}
                     </div>
                   </div>
                   <div className="flex items-start gap-4">
@@ -318,14 +348,13 @@ const AcademyContactSection = () => {
                     </div>
                     <div>
                       <h4 className="font-semibold mb-1 text-gray-800">
-                        Training Center
+                        Address
                       </h4>
                       <p className="text-gray-600 max-w-[300px]">
-                        231, 2nd stage, 13th Cross Road, Hoysala Nagar,
-                        Indiranagar
+                        Rareminds 231, 13th Cross Rd, 2nd Stage, Indira Nagar II Stage, Hoysala Nagar, Indiranagar,
                       </p>
                       <p className="text-gray-600">
-                        Bengaluru, Karnataka 560001
+                         Bengaluru, Karnataka 560038
                       </p>
                     </div>
                   </div>
@@ -333,7 +362,7 @@ const AcademyContactSection = () => {
               </div>
 
               <div className="bg-black/50 text-white rounded-3xl p-8 shadow-xl">
-                <h3 className="text-xl font-bold mb-4">Why Join Our Academy?</h3>
+                <h3 className="text-xl font-bold mb-4">Why Choosen Us?</h3>
                 <ul className="space-y-3">
                   <li className="flex items-start gap-2">
                     <CheckCircle2 size={20} className="mt-1 flex-shrink-0" />

@@ -3,7 +3,7 @@ import { Button } from '../../UI/button';
 import { services } from '../../UI/services'; 
 import ServiceCarousel from './ServiceCarousel';
 import Schedule from './Schedule';
-import { ArrowRight, Download, Mail } from 'lucide-react';
+import { ArrowDown,ArrowRight, Download, Mail } from 'lucide-react';
 import { Dialog, DialogContent } from '../../UI/dialog';
 import EnquiryForm from './EnquiryForm';
 import DownloadForm from './DownloadForm';
@@ -13,11 +13,13 @@ import { useCallback } from 'react';
 
 
 
+
 interface HeaderProps {
    HeroToContact: () => void;
+    HeroToLogo: () => void;
 }
 
-const HeroBanner = ({  HeroToContact }: HeaderProps) =>{
+const HeroBanner = ({  HeroToContact,HeroToLogo }: HeaderProps) =>{
 
   const [activeServiceId, setActiveServiceId] = useState(services[0].id);
   const [showSchedule, setShowSchedule] = useState(false);
@@ -192,6 +194,26 @@ const HeroBanner = ({  HeroToContact }: HeaderProps) =>{
         </div>
       </div>
 
+
+  <div className="hidden lg:block container">
+   <div
+  onClick={HeroToLogo}
+  className="w-max absolute left-0 bottom-[20%] cursor-pointer transition-opacity z-10 ml-4 md:ml-8 lg:ml-14"
+  aria-label="Scroll down"
+>
+  <div className="relative w-[100px] h-[100px]">
+    <img
+      src="/Corporate/Images/Home/Hero/scroll.png"
+      alt="Scroll down"
+      className="w-full h-full object-contain scroll-rotate animate-spin-slow"
+    />
+    <div className="absolute inset-0 flex items-center justify-center">
+      <ArrowDown className="text-black w-5 h-5 animate-ping" />
+    </div>
+  </div>
+</div>
+
+      </div>
       {/* Enquiry Form Dialog
       <Dialog open={showEnquiry} onOpenChange={setShowEnquiry}>
         <DialogContent className="sm:max-w-[500px]">

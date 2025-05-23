@@ -64,63 +64,12 @@ const StudentProgramsPage = ({coursetocontact}:coursecardProps) => {
     }
   ];
 
-  // Dummy Program data for additional programs
-  const dummyPrograms = [
-    // {
-    //   title: "Creative Writing Workshop",
-    //   tagline: "\"Unleash Your Imagination.\"",
-    //   learningPoints: [
-    //     "Explore different writing styles and genres",
-    //     "Develop storytelling techniques",
-    //     "Receive feedback on your writing",
-    //     "Publish your work in a collaborative anthology"
-    //   ],
-    //   leadText: "In this workshop, students will:",
-    //   buttonText: "Join the Creative Writing Workshop",
-    //   buttonIcon: <Calendar className="h-4 w-4" />,
-    //   hasPdf: true,
-    //   pdfUrl: "/creative-writing-brochure.pdf",
-    //   readMoreUrl: "/programs/creative-writing"
-    // },
-    // {
-    //   title: "Digital Marketing Essentials",
-    //   tagline: "\"Master the Art of Online Promotion.\"",
-    //   learningPoints: [
-    //     "Understand SEO, SEM, and social media marketing",
-    //     "Create effective digital marketing strategies",
-    //     "Analyze marketing data and metrics",
-    //     "Build a personal brand online"
-    //   ],
-    //   leadText: "This program covers:",
-    //   buttonText: "Download the Digital Marketing Guide",
-    //   buttonIcon: <Download className="h-4 w-4" />,
-    //   hasPdf: true,
-    //   pdfUrl: "/digital-marketing-guide.pdf",
-    //   readMoreUrl: "/programs/digital-marketing"
-    // },
-    // {
-    //   title: "Introduction to Coding",
-    //   tagline: "\"Start Your Journey in Tech.\"",
-    //   learningPoints: [
-    //     "Learn the basics of programming languages",
-    //     "Build simple applications and websites",
-    //     "Understand algorithms and data structures",
-    //     "Collaborate on coding projects"
-    //   ],
-    //   leadText: "This beginner-friendly program includes:",
-    //   buttonText: "Explore the Coding Program",
-    //   buttonIcon: <FileText className="h-4 w-4" />,
-    //   hasPdf: false,
-    //   readMoreUrl: "/programs/introduction-to-coding"
-    // }
-  ];
-
   // State to track if all programs are displayed
   const [showAllPrograms, setShowAllPrograms] = useState(false);
 
   // Combine original and dummy programs based on the view state
   const displayedPrograms = showAllPrograms
-    ? [...originalPrograms, ...dummyPrograms]
+    ? [...originalPrograms]
     : originalPrograms;
 
   return (
