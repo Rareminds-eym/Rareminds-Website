@@ -27,6 +27,7 @@ const Contact = lazy(() => import("./pages/Government/Contact/Index"));
 const handleSubscribe = lazy(() => import("./pages/Academia/ComingSoon"));
 const Projectlist = lazy(() => import ("./pages/Academia/projects/projectlist"))
 const Naan = lazy(() => import ("./pages/Academia/projects/[name]"));
+const CaseStudy = lazy(() => import ("./pages/Academia/School/CaseStudy"));
 
 const withSuspense = (Component: React.LazyExoticComponent<React.FC<{}>>) => (
   <Suspense fallback={<LoaderComponent />}>
@@ -123,8 +124,12 @@ const router = createBrowserRouter([
         path: "/academia/projects/",
         element: withSuspense(Projectlist),
       },      {
-        path: "/projects/:name",
+        path: "/academia/projects/:name",
         element: withSuspense(Naan),
+      },
+           {
+        path: "/academia/case-study/:id",
+        element: withSuspense(CaseStudy),
       },
     ],
   },

@@ -65,7 +65,7 @@ useEffect(() => {
         </div> */}
 
         {/* Old Method Section */}
-        <div className="max-w-7xl mx-auto mb-20 pl-10">
+        <div className="max-w-7xl mx-auto mb-20 md:mb-0 pl-10">
 
         <div className="h-[80%] bg-white justify-center">
           <h2 className=" text-2xl md:text-5xl font-bold text-black text-center pt-8">
@@ -151,7 +151,7 @@ useEffect(() => {
 </div>
 
         {/* New Method Section */}
-        <div className="max-w-7xl mx-auto bg-white pb-16 pt-8 px-4 sm:px-6 lg:px-8 rounded-2xl">
+        <div className="max-w-7xl mx-auto bg-white pb-16 pt-8 md:pt-0 px-4 sm:px-6 lg:px-8 rounded-2xl">
           <div className="grid grid-cols-1 gap-12 items-center lg:grid-cols-2">
             {/* <div className="order-1 overflow-hidden rounded-xl shadow-2xl">
               <video
@@ -190,7 +190,7 @@ useEffect(() => {
                   <h3 className="font-semibold text-xl text-red-600"></h3>
                   <ul className="list-disc pl-5 space-y-2">
                     <li className="animate-fade-in" style={{ animationDelay: "0s" }}>
-                    <span className='font-bold'> Interactive collaborative learning  </span>    sparks engagement and teamwork.
+                    <span className='font-bold'> Interactive & collaborative learning  </span>    sparks engagement and teamwork.
                     </li>
                     <li className="animate-fade-in" style={{ animationDelay: "0.1s" }}>
                     <span className='font-bold'>AI-enhanced teaching tools  </span>    advance learning with real-time support.
