@@ -3,7 +3,7 @@ import {
   Phone, FileText, 
 } from 'lucide-react';
 
-export default function StickyButtons() {
+export default function Buttons() {
   
 
   return (
