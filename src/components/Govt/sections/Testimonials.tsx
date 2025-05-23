@@ -10,7 +10,7 @@ const Testimonials: React.FC = () => {
   const duplicate = (arr: typeof testimonialsdata) => [...arr, ...arr];
 
   return (
-    <section className="testimonials max-w-4xl mx-auto py-24">
+    <section className="testimonials max-w-4xl mx-auto py-12 md:py-24">
       {/* Animated Heading */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
