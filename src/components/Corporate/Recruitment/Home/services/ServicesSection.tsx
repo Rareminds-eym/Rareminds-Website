@@ -110,8 +110,7 @@ const ServicesSection = () => {
     <section id="services" className="section relative bg-white">
       {/* Background elements */}
       <div className="absolute inset-0 bg-white z-0"></div>
-      <div className="absolute w-full h-full bg-[url('/Corporate/Images/Home/Services/bg.webp')] bg-center bg-cover opacity-[0.03]">
-        {/* <div className="h-[50px] bg-gradient-to-b from-white to-transparent"></div> */}
+      <div className="absolute w-full h-full bg-[url('https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Corporate/Recruitment/Index/Services/bg.webp')] bg-center bg-cover opacity-[0.03]">
       </div>
 
       <div className="max-w-[1300px] mx-auto relative z-10 py-20">
@@ -150,28 +149,28 @@ const ServicesSection = () => {
             >
               <div className="relative h-[230px]">
                 <Link to={`/corporate/services/${service.title}`}>
-                  <div className="mx-auto w-max relative">
-                    <div className="absolute flex items-center">
-                      <div className="h-[42px] w-[42px] p-2 bg-corporate-yellow rounded-[15px]">
+                  <div className="mx-auto w-max relative group">
+                    <div className="absolute flex items-center top-1/2 left-1/2 -translate-x-1/2 w-max group-hover:top-0 group-hover:left-0 group-hover:translate-x-0 group-hover:translate-y-0 transition-all duration-300">
+                      <div className="h-[50px] w-[50px] group-hover:h-[42px] group-hover:w-[42px] p-2 bg-corporate-yellow rounded-[15px] transition-all duration-300">
                         <img src={service.icon} />
                       </div>
-                      <h3 className="ml-3 font-semibold text-lg max-w-[225px] leading-5">
+                      <h3 className="ml-3 font-semibold text-lg max-w-[225px] leading-5 text-center group-hover:text-left transition-all duration-300">
                         {service.title}
                       </h3>
                     </div>
-                    <div className="absolute top-[80px] left-[30px] max-w-[320px]">
+                    <div className="opacity-0 group-hover:opacity-100 transition-all duration-300 group-hover:block absolute top-[80px] left-[30px] max-w-[320px]">
                       <p className="font-[500]">{service.heading}</p>
                       <p className="text-corporate-grey mt-1 leading-5 text-sm">
                         {service.subheading}
                       </p>
                     </div>
-                    <div className="absolute bottom-[30px] left-[30px] flex leading-5 text-[12px] max-w-[320px]">
+                    <div className="flex opacity-0 group-hover:opacity-100 transition-all duration-300 absolute bottom-[30px] left-[30px]  leading-5 text-[12px] max-w-[320px]">
                       <p className="min-w-max font-semibold">Key Industries:</p>
                       <p className="ml-1">{service.industries}</p>
                     </div>
                     <div className="pt-1 w-max">
                       <img
-                        src="/Corporate/Images/Home/Services/service-bg.png"
+                        src="https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Corporate/Recruitment/Index/Services/service-bg.png"
                         alt="Curved Background"
                         className="w-"
                         width="384"

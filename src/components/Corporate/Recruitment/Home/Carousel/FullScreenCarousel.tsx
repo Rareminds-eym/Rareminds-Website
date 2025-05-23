@@ -30,12 +30,12 @@ const FullScreenCarousel: React.FC<FullScreenCarouselProps> = ({
   const touchStartX = useRef<number | null>(null);
   const touchEndX = useRef<number | null>(null);
 
-  // Auto-advance slides every 8 seconds, reset on manual change
+  // Auto-advance slides every 12 seconds, reset on manual change
   useEffect(() => {
     if (timerRef.current) clearInterval(timerRef.current);
     timerRef.current = setInterval(() => {
       setActiveIndex((prev) => (prev + 1) % slides.length);
-    }, 8000);
+    }, 12000);
     return () => {
       if (timerRef.current) clearInterval(timerRef.current);
     };
@@ -66,32 +66,32 @@ const FullScreenCarousel: React.FC<FullScreenCarouselProps> = ({
   };
 
   const logos = [
-    "/Corporate/Images/Home/ClientLogos/ace.png",
-    "/Corporate/Images/Home/ClientLogos/ardent.png",
-    "/Corporate/Images/Home/ClientLogos/BNM.png",
-    "/Corporate/Images/Home/ClientLogos/bsvlogo.png",
-    "/Corporate/Images/Home/ClientLogos/csm.png",
-    "/Corporate/Images/Home/ClientLogos/DF.png",
-    "/Corporate/Images/Home/ClientLogos/e4m.png",
-    "/Corporate/Images/Home/ClientLogos/e4softwares.png",
-    "/Corporate/Images/Home/ClientLogos/ESSGEE.png",
-    "/Corporate/Images/Home/ClientLogos/fifthgen.png",
-    "/Corporate/Images/Home/ClientLogos/goldensource.png",
-    "/Corporate/Images/Home/ClientLogos/Infolob.png",
-    "/Corporate/Images/Home/ClientLogos/ITC.png",
-    "/Corporate/Images/Home/ClientLogos/motherson.png",
-    "/Corporate/Images/Home/ClientLogos/Msafe.png",
-    "/Corporate/Images/Home/ClientLogos/necb.png",
-    "/Corporate/Images/Home/ClientLogos/NES.png",
-    "/Corporate/Images/Home/ClientLogos/Nexgen.png",
-    "/Corporate/Images/Home/ClientLogos/PCC.png",
-    "/Corporate/Images/Home/ClientLogos/PFC.png",
-    "/Corporate/Images/Home/ClientLogos/Quadgen.png",
-    "/Corporate/Images/Home/ClientLogos/qwqer.png",
-    "/Corporate/Images/Home/ClientLogos/sssi.png",
-    "/Corporate/Images/Home/ClientLogos/Sugam.png",
-    "/Corporate/Images/Home/ClientLogos/Verastar.png",
-    "/Corporate/Images/Home/ClientLogos/Wipro-consumer-care.png",
+    "ace.png",
+    "ardent.png",
+    "BNM.png",
+    "bsvlogo.png",
+    "csm.png",
+    "DF.png",
+    "e4m.png",
+    "e4softwares.png",
+    "ESSGEE.png",
+    "fifthgen.png",
+    "goldensource.png",
+    "Infolob.png",
+    "ITC.png",
+    "motherson.png",
+    "Msafe.png",
+    "necb.png",
+    "NES.png",
+    "Nexgen.png",
+    "PCC.png",
+    "PFC.png",
+    "Quadgen.png",
+    "qwqer.png",
+    "sssi.png",
+    "Sugam.png",
+    "Verastar.png",
+    "Wipro-consumer-care.png",
   ];
 
   const handleScrollDown = () => {
@@ -99,6 +99,21 @@ const FullScreenCarousel: React.FC<FullScreenCarouselProps> = ({
       top: window.innerHeight,
       behavior: "smooth",
     });
+  };
+
+  // Scroll to Contact Form
+  const handleScrollToContact = () => {
+    const el = document.getElementById("contact");
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+  // Scroll to Services Section
+  const handleScrollToServices = () => {
+    const el = document.getElementById("services");
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth" });
+    }
   };
 
   // Update setActiveIndex to reset timer on manual dot or swipe
@@ -155,7 +170,7 @@ const FullScreenCarousel: React.FC<FullScreenCarouselProps> = ({
                   </div>
                   {/* Buttons - no animation wrapper */}
                   <div className="flex flex-col sm:flex-row gap-4 mt-6 justify-center lg:justify-start">
-                    <button className="corporate-btn-1">
+                    <button className="corporate-btn-1" onClick={handleScrollToContact}>
                       Request Talent Now
                       <Icon
                         icon="cil:arrow-right"
@@ -164,7 +179,7 @@ const FullScreenCarousel: React.FC<FullScreenCarouselProps> = ({
                         className="ml-2"
                       />
                     </button>
-                    <button className="corporate-btn-2">
+                    <button className="corporate-btn-2" onClick={handleScrollToServices}>
                       Explore Our Solutions
                       <Icon
                         icon="line-md:compass-loop"
@@ -222,7 +237,7 @@ const FullScreenCarousel: React.FC<FullScreenCarouselProps> = ({
           aria-label="Scroll down"
         >
           <img
-            src="/Corporate/Images/Home/Hero/scroll.png"
+            src="https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Corporate/Recruitment/Index/Hero/scroll.png"
             width="100"
             height="100"
             alt="Scroll down"

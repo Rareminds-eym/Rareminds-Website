@@ -47,18 +47,19 @@ const Dashboard: React.FC = () => {
             />
             <div className="space-y-2 md:space-y-3">
               <h3 className="font-semibold text-lg md:text-2xl">
-                Real Time Dashboards And Analytics
+                AI-Powered Recruitment Dashboards
               </h3>
               <p className="text-gray-600 text-sm md:text-base">
-                Streamlined sourcing, tracking, and hiring candidates.
+                Track funnel health, drop-offs, and hiring velocity in real time
+                with our AI-powered recruitment engine.
               </p>
             </div>
           </div>
           <div className="w-full md:w-1/2 px-4 md:px-0">
             <img
-              src="/Corporate/Images/Home/Dashboard/dashboard-preview-2.webp"
+              src="https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Corporate/Recruitment/Index/Dashboard/dashboard-preview-3.webp"
               alt="Real Time Dashboard"
-              className="rounded-lg w-full shadow-lg"
+              className="rounded-lg w-full drop-shadow-lg"
             />
           </div>
         </div>
@@ -74,18 +75,19 @@ const Dashboard: React.FC = () => {
             />
             <div className="space-y-2 md:space-y-3">
               <h3 className="font-semibold text-lg md:text-2xl">
-                Learning Management System
+                Smart Learning Management Dashboards
               </h3>
               <p className="text-gray-600 text-sm md:text-base">
-                Streamlined course access and tracking for progress.
+                Track learner behaviour, engagement patterns, and performance
+                gaps in real time with our AI-powered LMS dashboards.
               </p>
             </div>
           </div>
           <div className="w-full md:w-1/2 px-4 md:px-0">
             <img
-              src="/Corporate/Images/Home/Dashboard/dashboard-preview-1.webp"
+              src="https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Corporate/Recruitment/Index/Dashboard/dashboard-preview-2.webp"
               alt="Learning Management System Dashboard"
-              className="rounded-lg w-full shadow-lg"
+              className="rounded-lg w-full drop-shadow-lg"
             />
           </div>
         </div>

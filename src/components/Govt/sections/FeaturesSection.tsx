@@ -10,7 +10,7 @@ export const FeaturesSection = () => {
           Why Governments Choose{" "}
           <SparklesText
             text="Rareminds"
-            className="inline-block text-gray-700 text-3xl md:text-5xl z-10"
+            className="inline-block text-gray-700 text-3xl md:text-5xl"
             colors={{ first: "#fa564b", second: "#33C3F0" }}
             sparklesCount={10}
           />

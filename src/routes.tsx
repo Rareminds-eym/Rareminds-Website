@@ -19,6 +19,9 @@ const Academia = lazy(() => import("./pages/Academia/Index"));
 const Student = lazy(() => import("./pages/Academia/Student/student"));
 const School = lazy(() => import("./pages/Academia/School/teacher"));
 const Institutions = lazy(() => import("./pages/Institutions/Index"));
+const InstitutionsServices = lazy(() => import("./pages/Institutions/InstitutionsServices"));
+const FDP = lazy(() => import("./pages/Institutions/Fdp"));
+const ServicePage = lazy(() => import("./components/institutions/sdp/ServicePage"));
 const CorporateTraining = lazy(() => import("./pages/Corporate/Training"));
 const Contact = lazy(() => import("./pages/Government/Contact/Index"));
 const handleSubscribe = lazy(() => import("./pages/Academia/ComingSoon"));
@@ -67,6 +70,10 @@ const router = createBrowserRouter([
       {
         path: "/corporate/training",
         element: withSuspense(CorporateTraining),
+      },
+      {
+        path: "/corporate/training/services/:name",
+        element: withSuspense(Service),
       },
     ],
   },
@@ -137,6 +144,22 @@ const router = createBrowserRouter([
       {
         path: "/Institutions",
         element: withSuspense(Institutions),
+      },
+      {
+      path: "/institutions/services",
+      element: withSuspense(InstitutionsServices),
+    },
+     {
+  path: "/service/:id",
+  element: (
+    <Suspense fallback={<LoaderComponent />}>
+      <ServicePage />
+    </Suspense>
+  ),
+   },
+{
+        path: "/institutions/fdp",
+        element: withSuspense(FDP),
       },
     ],
   },

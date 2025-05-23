@@ -27,7 +27,7 @@ const WhyRareminds = () => {
     {
       icon: <Building2 size={32} />,
       number: "250+",
-      description: "Hiring Partners",
+      description: "Corporates Partnered with",
       subtext:
         "Corporates across India rely on us to scale their teams efficiently and effectively.",
       color: "bg-corporate-accent",
@@ -50,38 +50,9 @@ const WhyRareminds = () => {
     },
   ];
 
-  const logos = [
-    "/Corporate/Images/Home/ClientLogos/ace.png",
-    "/Corporate/Images/Home/ClientLogos/ardent.png",
-    "/Corporate/Images/Home/ClientLogos/BNM.png",
-    "/Corporate/Images/Home/ClientLogos/bsvlogo.png",
-    "/Corporate/Images/Home/ClientLogos/csm.png",
-    "/Corporate/Images/Home/ClientLogos/DF.png",
-    "/Corporate/Images/Home/ClientLogos/e4m.png",
-    "/Corporate/Images/Home/ClientLogos/e4softwares.png",
-    "/Corporate/Images/Home/ClientLogos/ESSGEE.png",
-    "/Corporate/Images/Home/ClientLogos/fifthgen.png",
-    "/Corporate/Images/Home/ClientLogos/goldensource.png",
-    "/Corporate/Images/Home/ClientLogos/Infolob.png",
-    "/Corporate/Images/Home/ClientLogos/ITC.png",
-    "/Corporate/Images/Home/ClientLogos/motherson.png",
-    "/Corporate/Images/Home/ClientLogos/Msafe.png",
-    "/Corporate/Images/Home/ClientLogos/necb.png",
-    "/Corporate/Images/Home/ClientLogos/NES.png",
-    "/Corporate/Images/Home/ClientLogos/Nexgen.png",
-    "/Corporate/Images/Home/ClientLogos/PCC.png",
-    "/Corporate/Images/Home/ClientLogos/PFC.png",
-    "/Corporate/Images/Home/ClientLogos/Quadgen.png",
-    "/Corporate/Images/Home/ClientLogos/qwqer.png",
-    "/Corporate/Images/Home/ClientLogos/sssi.png",
-    "/Corporate/Images/Home/ClientLogos/Sugam.png",
-    "/Corporate/Images/Home/ClientLogos/Verastar.png",
-    "/Corporate/Images/Home/ClientLogos/Wipro-consumer-care.png",
-  ];
-
   const blocks = [
     {
-      src: "/Corporate/Images/Home/whyRM/role.webp",
+      src: "https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Corporate/Recruitment/Index/whyRM/role.webp",
       bottom: "10%",
       left: "10%",
       width: "w-[13%]",
@@ -89,7 +60,7 @@ const WhyRareminds = () => {
       description: "92% of roles closed within the first shortlist round",
     },
     {
-      src: "/Corporate/Images/Home/whyRM/offer.webp",
+      src: "https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Corporate/Recruitment/Index/whyRM/offer.webp",
       bottom: "18%",
       left: "23%",
       width: "w-[11%]",
@@ -97,7 +68,7 @@ const WhyRareminds = () => {
       description: "98% candidate offer acceptance rate",
     },
     {
-      src: "/Corporate/Images/Home/whyRM/csat.webp",
+      src: "https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Corporate/Recruitment/Index/whyRM/csat.webp",
       bottom: "24%",
       left: "35%",
       width: "w-[9%]",
@@ -106,7 +77,7 @@ const WhyRareminds = () => {
         "Rated 4.8/5 by corporate clients for quality and communication",
     },
     {
-      src: "/Corporate/Images/Home/whyRM/indian.webp",
+      src: "https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Corporate/Recruitment/Index/whyRM/indian.webp",
       bottom: "29%",
       left: "46%",
       width: "w-[8%]",
@@ -114,7 +85,7 @@ const WhyRareminds = () => {
       description: "Pan-India reach with regional hiring in",
     },
     {
-      src: "/Corporate/Images/Home/whyRM/brands.webp",
+      src: "https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Corporate/Recruitment/Index/whyRM/brands.webp",
       bottom: "24%",
       left: "56%",
       width: "w-[9%]",
@@ -122,7 +93,7 @@ const WhyRareminds = () => {
       description: "C-Suite hires in the past year",
     },
     {
-      src: "/Corporate/Images/Home/whyRM/roles.webp",
+      src: "https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Corporate/Recruitment/Index/whyRM/roles.webp",
       bottom: "18%",
       left: "67%",
       width: "w-[11%]",
@@ -130,7 +101,7 @@ const WhyRareminds = () => {
       description: "Job Families Successfully Placed",
     },
     {
-      src: "/Corporate/Images/Home/whyRM/countries.webp",
+      src: "https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Corporate/Recruitment/Index/whyRM/countries.webp",
       bottom: "10%",
       left: "79%",
       width: "w-[13%]",
@@ -145,7 +116,7 @@ const WhyRareminds = () => {
       className="relative overflow-hidden rounded-t-[50px] md:rounded-t-[200px] shadow-[0_-20px_30px_-22px_rgba(0,0,0,0.25)] bg-white z-10"
     >
       <div className="relative">
-        <div className="absolute w-full h-full bg-[url('/Corporate/Images/Home/whyRM/bg.webp')] bg-center bg-fill opacity-[0.03]"></div>
+        <div className="absolute w-full h-full bg-[url('https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Corporate/Recruitment/Index/whyRM/bg.webp')] bg-center bg-fill opacity-[0.03]"></div>
         <div className="container relative z-10 px-4 mx-auto max-w-7xl pb-[60px]">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -176,7 +147,7 @@ const WhyRareminds = () => {
               >
                 <div className="relative w-[389px] h-[224px]">
                   <img
-                    src="/Corporate/Images/Home/whyRM/shape.webp"
+                    src="https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Corporate/Recruitment/Index/whyRM/shape.webp"
                     alt="Shape"
                     width={389}
                     height={224}
@@ -210,7 +181,7 @@ const WhyRareminds = () => {
 
       <div className="relative w-full">
         <img
-          src="/Corporate/Images/Home/whyRM/matrics-bg.webp"
+          src="https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Corporate/Recruitment/Index/whyRM/matrics-bg.webp"
           width={1920}
           height={1080}
           alt="road image"

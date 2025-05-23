@@ -62,11 +62,23 @@ export const DeploymentSection = () => {
         >
           <button
             className="bg-white hover:bg-gray-50 border-b-4 border-gray-200 rounded-2xl md:rounded-3xl text-gray-800 shadow-md px-4 py-5 md:px-8 md:py-6 h-auto text-xs md:text-base"
+            onClick={() => {
+            const contactElement = document.getElementById('contact');
+            if (contactElement) {
+              contactElement.scrollIntoView({ behavior: 'smooth' });
+            }
+          }}
           >
-            <Send></Send>Submit Training Requirement
+            <Send/>Submit Training Requirement
           </button>
           <button
             className="bg-red-500 border-b-4 border-red-700 text-white  hover:bg-white hover:text-black rounded-2xl md:rounded-3xl shadow-md px-4 py-5 md:px-8 md:py-6 h-auto md:text-base  duration-300 text-xs active:translate-y-1 active:scale-95 transition-all "
+            onClick={() => {
+            const contactElement = document.getElementById('contact');
+            if (contactElement) {
+              contactElement.scrollIntoView({ behavior: 'smooth' });
+            }
+          }}
           >
             <Book></Book>Book Tender Discussion
           </button>

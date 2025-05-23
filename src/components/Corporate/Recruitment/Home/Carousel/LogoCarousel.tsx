@@ -46,7 +46,7 @@ const LogoCarousel: React.FC<LogoCarouselProps> = ({ logos }) => (
           <SwiperSlide key={index} className="!w-auto">
             <div className="flex justify-center">
               <img
-                src={logo}
+                src={`https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Corporate/Recruitment/Index/ClientLogos/${logo}`}
                 alt={`logo-${index}`}
                 height={40}
                 width={85}

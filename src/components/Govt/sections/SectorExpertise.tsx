@@ -1,6 +1,6 @@
 import React from 'react';
-import { Battery, Sprout, Dna, Heart, ShoppingBag, Brain, MonitorSmartphone, Briefcase, CheckCircle } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Battery, Sprout, Dna,Folders, Heart, Eye, ShoppingBag, Brain, MonitorSmartphone, Briefcase } from 'lucide-react';
+
 
 // Util to combine class names
 const cn = (...classes: string[]) => classes.filter(Boolean).join(' ');
@@ -25,12 +25,13 @@ interface ProgramListProps {
 interface CTAButtonProps {
   children: React.ReactNode;
   variant: 'primary' | 'secondary';
+  onClick?: () => void;
 }
 
 
 const SectorCard = ({ title, icon, color, description }: SectorCardProps) => {
   return (
-    <div className="relative group h-64 [perspective:1000px]">
+    <div className="relative group h-36 md:h-64 [perspective:1000px]">
       <div className="relative w-full h-full transition-transform  duration-700 [transform-style:preserve-3d] group-hover:[transform:rotateX(-180deg)]">
 
         {/* Front Side */}
@@ -38,11 +39,11 @@ const SectorCard = ({ title, icon, color, description }: SectorCardProps) => {
           className="absolute w-full h-full bg-white rounded-2xl shadow-md flex flex-col items-center justify-center text-center p-6"
           style={{ backfaceVisibility: 'hidden' }}
         >
-          <div className={`w-16 h-16 rounded-2xl flex items-center justify-center mb-4 shadow-lg transform transition-all duration-300 
+          <div className={`w-14 h-14 md:w-16 md:h-16 rounded-2xl flex items-center justify-center mb-4 shadow-lg transform transition-all duration-300 
             bg-gradient-to-b from-red-400 via-red-500 to-red-400  border-2 border-red-300`}>
             {icon}
           </div>
-          <h3 className="text-lg font-semibold">{title}</h3>
+          <h3 className="text-sm md:text-lg font-semibold">{title}</h3>
         </div>
 
         {/* Back Side */}
@@ -83,15 +84,14 @@ const SectorCard = ({ title, icon, color, description }: SectorCardProps) => {
 //   );
 // };
 
-// CTAButton Component
-const CTAButton = ({ children, variant }: CTAButtonProps) => {
-  const base = 'px-6 py-3 font-semibold rounded-2xl  transition duration-300';
+const CTAButton = ({ children, variant, onClick }: CTAButtonProps) => {
+  const base = 'px-6 py-3 font-semibold rounded-2xl flex items-center  transition duration-300';
   const styles = variant === 'primary'
      ? 'border border-gray-300 border-b-4 border-gray-300  hover:bg-gray-100 '
     : 'bg-red-500 text-white border-b-4 border-red-300 hover:bg-red-600';
 
   return (
-    <button className={`${base} ${styles}`}>
+    <button className={`${base} ${styles}`} onClick={onClick}>
       {children}
     </button>
   );
@@ -158,19 +158,19 @@ const SectorExpertise = () => {
     }
   ];
   return (
-    <section className="py-20 px-4 bg-gradient-to-b from-gray-50 to-white ">
+    <section className="py-10 md:py-20 px-0 ">
       <div className="container max-w-7xl mx-auto">
         <div className="text-center mb-6">
           <h2 className="text-3xl md:text-4xl font-bold mb-4 text-academy-blue animate-fade-in">
-            CROSS-SECTOR EXPERTISE
+            Cross-Sector Expertise
           </h2>
           <p className="text-xl md:text-2xl text-gray-700 animate-fade-in">
             Not Just Training. <span className="font-bold">Transformation.</span>
           </p>
         </div>
 
-        <div className="mb-6">
-          <h3 className="text-xl font-semibold mb-8 text-center">Sectors We Cover</h3>
+        <div className=" md:mb-6">
+          <h3 className=" md:text-xl font-semibold mb-8 text-center">Sectors We Cover</h3>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-6 overflow-hidden pb-6 px-2 md:px-6">
             {sectorData.map((sector, index) => (
               <SectorCard
@@ -189,14 +189,24 @@ const SectorExpertise = () => {
         </div> */}
 
         <div className="flex flex-col md:flex-row justify-center gap-6 animate-fade-in">
-          <CTAButton variant="primary">
+          <CTAButton variant="primary"
+          onClick={() => {
+            const contactElement = document.getElementById('contact');
+            if (contactElement) {
+              contactElement.scrollIntoView({ behavior: 'smooth' });
+            }
+          }}><Folders className="h-5 w-5 mr-2" /> 
             Request Sample Curriculum by Sector
           </CTAButton>
-          <Link to="/govt/ViewGovtProject" className="no-underline">
-            <CTAButton variant="secondary">
-              View Government Projects
+            <CTAButton variant="secondary" 
+            onClick={() => {
+            const contactElement = document.getElementById('contact');
+            if (contactElement) {
+              contactElement.scrollIntoView({ behavior: 'smooth' });
+            }
+          }}
+            ><Eye className="h-5 w-5 mr-2" /> View Government Projects
             </CTAButton>
-          </Link>
         </div>
       </div>
     </section>

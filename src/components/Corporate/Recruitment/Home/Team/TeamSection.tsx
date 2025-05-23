@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 const teamMembers = [
   {
     name: "Visakh Madhu",
-    photo: "/Corporate/Images/Home/Team/Visakh.webp",
+    photo: "https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Corporate/Recruitment/Index/Team/Visakh.webp",
     designation: "Director HR",
     linkedin: "https://www.linkedin.com/in/visakh-madhu-6599b614a/",
     mission: "Help business succeed by aligning people and strategy.",
@@ -13,7 +13,7 @@ const teamMembers = [
   },
   {
     name: "RONNIE Poulose",
-    photo: "/Corporate/Images/Home/Team/Ronnie.webp",
+    photo: "https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Corporate/Recruitment/Index/Team/Ronnie.webp",
     designation: "Head of Recruitment, BD & Delivery",
     linkedin: "https://www.linkedin.com/in/ronniepoulose/",
     mission:
@@ -22,7 +22,7 @@ const teamMembers = [
   },
   {
     name: "Rohit Bhandiye",
-    photo: "/Corporate/Images/Home/Team/Rohit.webp",
+    photo: "https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Corporate/Recruitment/Index/Team/Rohit.webp",
     designation: "Senior Recruiter",
     linkedin: "https://www.linkedin.com/in/rohit-bhandiye-267a0719/",
     mission: "Rareminds to be a Global Brand.",
@@ -30,7 +30,7 @@ const teamMembers = [
   },
   {
     name: "Subiksha Karthikeyan",
-    photo: "/Corporate/Images/Home/Team/Subiksha.webp",
+    photo: "https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Corporate/Recruitment/Index/Team/Subiksha.webp",
     designation: "Talent Acquisition Executive",
     linkedin: "https://www.linkedin.com/in/subiksha-k/",
     mission: "Connecting exceptional talent with transformative opportunities.",
@@ -38,7 +38,7 @@ const teamMembers = [
   },
   {
     name: "Varalakshmi M",
-    photo: "/Corporate/Images/Home/Team/Varalakshmi.webp",
+    photo: "https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Corporate/Recruitment/Index/Team/Varalakshmi.webp",
     designation: "Recruitment Executive",
     linkedin: "https://www.linkedin.com/in/varalakshmi-m-183001278/",
     mission:
@@ -50,7 +50,7 @@ const teamMembers = [
 const TeamSection = () => {
   return (
     <section className="pb-[160px] pt-[60px] relative overflow-hidden object-none object-bottom bg-no-repeat bg-white">
-      <div className="absolute flex w-full h-[100%] bg-[url(/Corporate/Images/Home/Team/team-bg.webp)] opacity-5"></div>
+      <div className="absolute flex w-full h-[100%] bg-[url(https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Corporate/Recruitment/Index/Team/team-bg.webp)] opacity-5"></div>
 
       <div className="container mx-auto relative z-10">
         <motion.div

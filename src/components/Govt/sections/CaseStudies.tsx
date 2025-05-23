@@ -14,7 +14,7 @@ const caseStudies = [
   },
   {
     icon: TrendingUp,
-    title: 'From Tier-3 to Interview-Ready in 30 Days',
+    title: 'Interview-Ready in 30 Days',
     institution: 'Salem College',
     details: '350 Students | Food Tech + Hackathon',
     pdfUrl: '/pdfs/salem-college-case-study.pdf'
@@ -31,7 +31,7 @@ const caseStudies = [
 export default function CaseStudies() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   return (
-    <section className="py-16 ">
+    <section className="py-16 bg-gray-50">
       <div className="container mx-auto px-12">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -40,10 +40,10 @@ export default function CaseStudies() {
           transition={{ duration: 0.8 }}
           className="text-center mb-16"
         >
-          <h1 className="text-xl font-bold mb-4 bg-black bg-clip-text text-transparent">
+          <h1 className="text-3xl md:text-4xl font-bold mb-4 text-academy-blue animate-fade-in">
             Success Stories
           </h1>
-          <p className="text-sm text-gray-600 mx-auto">
+          <p className="text-xl md:text-2xl text-gray-700 animate-fade-in">
              Colleges that choose outcomes. And got them.
           </p>
         </motion.div>

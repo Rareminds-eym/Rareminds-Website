@@ -9,7 +9,7 @@ import "./testimonials.css";
 
 const testimonials = [
 	{
-		img: "/Corporate/Images/Home/Testimonials/PCC.webp",
+		img: "https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Corporate/Recruitment/Index/Testimonials/PCC.webp",
 		content:
 			"I want to take a moment to express our sincere appreciation for your outstanding support in our recruitment efforts at Park Controls and Communications Private Limited. The quality of service from you and your team has been truly commendable, and we are consistently impressed by your dedication and professionalism. A special thanks for successfully onboarding for three candidates whose contributions are already making a positive impact. Your commitment to excellence and ability to identify top talent reaffirm the strength of our partnership. We are grateful for this collaboration with Rareminds and look forward to continued success together.",
 		author: "Manisha Borse",
@@ -18,7 +18,7 @@ const testimonials = [
 		rating: 5,
 	},
 	{
-		img: "/Corporate/Images/Home/Testimonials/PFC.webp",
+		img: "https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Corporate/Recruitment/Index/Testimonials/PFC.webp",
 		content:
 			"A big 'Thank you' to you and your team for being consistent and diligent and finally closing this vacancy for us. Hope to continue our collaboration with Rareminds.",
 		author: "Aarohee Aaron",
@@ -27,7 +27,7 @@ const testimonials = [
 		rating: 5,
 	},
 	{
-		img: "/Corporate/Images/Home/Testimonials/infolab.webp",
+		img: "https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Corporate/Recruitment/Index/Testimonials/infolab.webp",
 		content:
 			"I wish to convey our profound appreciation for your outstanding support. The quality of service from your team has consistently impressed us. Special thanks for onboarding Riyaaz; his contributions are already proving invaluable. Additionally, the introductions of Sireesha and Rajireddy align perfectly with our needs. Your commitment to excellence and the caliber of talent you provide reinforce our partnership's strength. We're grateful for our collaboration and look forward to continued success together.",
 		author: "Srikanth M",

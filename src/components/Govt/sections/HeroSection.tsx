@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
-import { Calendar, ArrowDown, Eye, ChevronLeft, ChevronRight } from "lucide-react";
+import { Calendar, ArrowDown, Eye } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { GooeyText } from "../../ui/GooeyText";
+import { ParticleButton } from "@/components/ui/particle-button";
 
 const heroSlides = [
 	{
@@ -23,7 +24,7 @@ const heroSlides = [
 					]}
 					morphTime={1}
 					cooldownTime={3}
-					className="font-bold text-4xl md:text-5xl lg:text-6xl text-center text-white relative z-10 whitespace-nowrap inline-block mx-auto w-full"
+					className="font-bold text-4xl md:text-5xl lg:text-6xl text-center text-white relative z-10 whitespace-wrap inline-block mx-auto w-full"
 				/>
 			</div>
 		),
@@ -42,7 +43,7 @@ const heroSlides = [
 					]}
 					morphTime={1}
 					cooldownTime={3}
-					className="font-bold text-4xl md:text-5xl lg:text-6xl text-center text-white relative z-10 whitespace-nowrap inline-block mx-auto w-full"
+					className="font-bold text-4xl md:text-5xl lg:text-6xl text-center text-white relative z-10 whitespace-wrap inline-block mx-auto w-full"
 				/>
 			</div>
 		),
@@ -61,7 +62,7 @@ const heroSlides = [
 					]}
 					morphTime={1}
 					cooldownTime={3}
-					className="font-bold text-4xl md:text-5xl lg:text-6xl text-center text-white relative z-10 whitespace-nowrap inline-block mx-auto w-full"
+					className="font-bold text-4xl md:text-5xl lg:text-6xl text-center text-white relative z-10 whitespace-wrap inline-block mx-auto w-full"
 				/>
 			</div>
 		),
@@ -72,28 +73,38 @@ const heroSlides = [
 
 const variants = {
 	enter: (direction: number) => ({
-		x: direction > 0 ? 1000 : -1000,
+		x: direction > 0 ? window.innerWidth : -window.innerWidth,
 		opacity: 0,
 		zIndex: 0,
+		scale: 0.95,
+		transition: {
+			x: { type: "spring", stiffness: 200, damping: 25 },
+			opacity: { duration: 0.3 },
+			scale: { duration: 0.3 },
+		},
 	}),
 	center: {
 		x: 0,
 		opacity: 1,
 		zIndex: 1,
+		scale: 1, // Ensure scale returns to normal
 		transition: {
 			x: { type: "spring", stiffness: 300, damping: 30 },
-			opacity: { duration: 0.4 }
-		}
+			opacity: { duration: 0.4 },
+			scale: { duration: 0.4 },
+		},
 	},
 	exit: (direction: number) => ({
 		x: direction < 0 ? 1000 : -1000,
 		opacity: 0,
 		zIndex: 0,
+		scale: 0.9, // Add scale effect for smoother exit
 		transition: {
 			x: { type: "spring", stiffness: 300, damping: 30 },
-			opacity: { duration: 0.4 }
-		}
-	})
+			opacity: { duration: 0.4 },
+			scale: { duration: 0.4 },
+		},
+	}),
 };
 
 export const HeroSection = () => {
@@ -112,24 +123,31 @@ export const HeroSection = () => {
 	}
 
 	useEffect(() => {
-		let interval: NodeJS.Timeout;
-		if (autoPlay) {
-			interval = setInterval(() => {
-				paginate(1);
-			}, 12000);
-		}
-		return () => clearInterval(interval);
+		// Optimize animations for mobile
+		const isMobile = window.innerWidth < 768;
+		const interval = autoPlay ? setInterval(() => {
+			paginate(1);
+		}, isMobile ? 8000 : 12000) : null; // Shorter interval on mobile
+		
+		return () => {
+			if (interval) clearInterval(interval);
+		};
 	}, [autoPlay, currentSlide]);
 
 	const scrollToGovOutcome = () => {
 		const el = document.getElementById("feature-section");
 		if (el) {
-			el.scrollIntoView({ behavior: "smooth" });
+			// Smoother scroll on mobile
+			const isMobile = window.innerWidth < 768;
+			el.scrollIntoView({ 
+				behavior: "smooth",
+				block: isMobile ? "start" : "center" 
+			});
 		}
 	};
 
 	return (
-		<section className="fixed inset-0 h-[93%] flex items-center overflow-hidden">
+		<section className="fixed inset-0 h-[85%] md:h-[93%] flex items-center overflow-hidden flex-col sm:flex-row">
 			<AnimatePresence initial={false} custom={direction} mode="popLayout">
 				<motion.div
 					key={slideIndex}
@@ -138,10 +156,15 @@ export const HeroSection = () => {
 					initial="enter"
 					animate="center"
 					exit="exit"
-					className="absolute inset-0 will-change-transform"
+					className="absolute inset-0 will-change-transform translate-z-0"
+					style={{
+						backfaceVisibility: 'hidden',
+						WebkitBackfaceVisibility: 'hidden',
+						transform: 'translateZ(0)'
+					}}
 				>
 					<motion.div
-						className="min-h-screen w-full bg-cover bg-center flex items-center"
+						className="min-h-screen w-full bg-cover bg-center flex items-center justify-center sm:justify-start"
 						style={{
 							backgroundImage: heroSlides[slideIndex].bg,
 						}}
@@ -160,13 +183,13 @@ export const HeroSection = () => {
 						/>
 
 						{/* Content */}
-						<div className="relative w-full flex flex-col items-center justify-center px-8 md:px-16 lg:px-24 text-white max-w-7xl mx-auto z-10">
+						<div className="relative w-full flex flex-col items-center justify-center px-4 sm:px-8 md:px-16 lg:px-24 text-white max-w-7xl mx-auto z-10">
 							<motion.h1
 								initial={{ opacity: 0, y: 30 }}
 								animate={{ opacity: 1, y: 0 }}
 								exit={{ opacity: 0, y: -30 }}
 								transition={{ duration: 0.6, ease: "easeOut" }}
-								className="text-3xl md:text-4xl lg:text-5xl font-bold leading-snug mb-4 text-center w-full"
+								className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold leading-snug mb-4 text-center w-full"
 							>
 								{typeof heroSlides[slideIndex].title === 'string' ? (
 									heroSlides[slideIndex].title
@@ -181,7 +204,7 @@ export const HeroSection = () => {
 								animate={{ opacity: 1, y: 0 }}
 								exit={{ opacity: 0, y: -30 }}
 								transition={{ duration: 0.6, delay: 0.1, ease: "easeOut" }}
-								className="text-sm md:text-lg text-gray-100 mb-8 text-center whitespace-pre-line max-w-4xl"
+								className="text-sm sm:text-base md:text-lg text-gray-100 mb-6 sm:mb-8 text-center whitespace-pre-line max-w-4xl"
 							>
 								{heroSlides[slideIndex].description}
 							</motion.p>
@@ -191,14 +214,20 @@ export const HeroSection = () => {
 								animate={{ opacity: 1, y: 0 }}
 								exit={{ opacity: 0, y: -30 }}
 								transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
-								className="flex flex-wrap gap-4 justify-center"
+								className="flex text-xs md:text-base flex-wrap gap-2 sm:gap-4 justify-center"
 							>
-								<button className="flex items-center px-6 py-3 bg-red-500/80 backdrop-blur rounded-full text-white shadow-sm shadow-red-400 border-2 border-red-300 hover:bg-red-600  transition-colors">
-									<Eye className="h-5 w-5 mr-2" />
+								<ParticleButton 
+									className="flex  items-center p-2 md:px-4  md:py-2  bg-red-500/80 backdrop-blur rounded-full text-white shadow-sm shadow-red-400 border-2 border-red-300 hover:bg-red-600 transition-colors"
+									successDuration={1200}
+									size={"lg"}
+									particleColor="#ffffff"
+									particleSize={7}
+								>
+									<Eye className="h-5 sm:h-6 w-5 sm:w-6 mr-2" />
 									View Our Government Training Portfolio
-								</button>
-								<button className="flex items-center  bg-white/80 hover:bg-white  transition-colors px-6 py-3  backdrop-blur rounded-full  shadow-sm shadow-white border-2 border-black/70 text-black ">
-									<Calendar className="h-5 w-5 mr-2" />
+								</ParticleButton>
+								<button className="flex items-center bg-white/80 hover:bg-white transition-colors px-4 sm:px-6 py-2 sm:py-3 backdrop-blur rounded-full shadow-sm shadow-white border-2 border-black/70 text-black">
+									<Calendar className="h-4 sm:h-5 w-4 sm:w-5 mr-2" />
 									Schedule a Strategy Call
 								</button>
 							</motion.div>
@@ -211,7 +240,7 @@ export const HeroSection = () => {
 			<motion.div
 				initial={{ opacity: 0 }}
 				animate={{ opacity: 1 }}
-				className="fixed right-8 top-1/2 -translate-y-1/2 flex flex-col items-center gap-4 z-50 bg-black/20 px-2 py-4 rounded-full"
+				className="fixed right-4 sm:right-8 top-1/2 -translate-y-1/2 md:flex flex-col items-center gap-2 sm:gap-4 z-50 bg-black/20 px-2 py-3 sm:py-4 rounded-full hidden"
 			>
 				{heroSlides.map((_, index) => (
 					<button
@@ -220,25 +249,34 @@ export const HeroSection = () => {
 							setDirection(index > slideIndex ? 1 : -1);
 							setCurrentSlide(index);
 						}}
-						className={`w-2 transition-all duration-300 rounded-full ${
+						className={`w-2 sm:w-3 transition-all duration-300 rounded-full ${
 							slideIndex === index
-								? "bg-white h-6 shadow-lg shadow-white/30"
-								: "bg-white/50 hover:bg-white/70 h-2"
+								? "bg-white h-4 sm:h-6 shadow-lg shadow-white/30"
+								: "bg-white/50 hover:bg-white/70 h-2 sm:h-3"
 						}`}
 						aria-label={`Go to slide ${index + 1}`}
 					/>
+					
 				))}
 			</motion.div>
 
 			{/* Scroll Down Icon */}
-			<button
-				onClick={scrollToGovOutcome}
-				className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center animate-bounce cursor-pointer outline-none z-50 bg-black/20 px-4 py-2 rounded-full hover:bg-black/40 transition-colors"
-				aria-label="Scroll down"
+			<div className="absolute bottom-2 md:bottom-6 left-10 sm:left-20 md:left-32 flex flex-col items-center z-50 animate-pulse bg-white/90 p-1 sm:p-2 backdrop-blur-sm shadow-md shadow-red-600 ring-2 sm:ring-4 ring-white/50 rounded-full"
+			onClick={scrollToGovOutcome}
 			>
-				<ArrowDown size={32} className="text-white drop-shadow-lg" />
-				<span className="text-white text-xs mt-1 font-medium drop-shadow-lg">Scroll</span>
-			</button>
+				<img
+					src="https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Corporate/Recruitment/Index/Hero/scroll.png"
+					width="40" style={{ width: '60px' }}
+					alt="Scroll down"
+					className="animate-spin-slow"
+				/>
+				<ArrowDown
+					size={30}
+					className=" absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 cursor-pointer"
+					onClick={scrollToGovOutcome}
+				/>
+			</div>
+			
 		</section>
 	);
 };
