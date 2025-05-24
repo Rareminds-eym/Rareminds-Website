@@ -3,8 +3,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { MessageCircleQuestion } from "lucide-react"; // Correct import for the message-circle-question icon
 import { motion } from "framer-motion"; // For animation
-import faqData from "@/data/faqData";
-
+import { useFAQ } from '@/hooks/useFAQ';
 
 interface ChatEntry {
   type: "user" | "bot";
@@ -12,7 +11,9 @@ interface ChatEntry {
 }
 
 const FAQChatbot: React.FC = () => {
+  const faqsFromRedux = useFAQ();
   const chatContainerRef = useRef<HTMLDivElement>(null);
+  const chatbotWindowRef = useRef<HTMLDivElement>(null);
   const [input, setInput] = useState("");
   const [chatLog, setChatLog] = useState<ChatEntry[]>([
     {
@@ -24,7 +25,7 @@ const FAQChatbot: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false); // Toggle for showing/hiding chatbot
 
   const findAnswer = (question: string): string => {
-    for (const section of faqData) {
+    for (const section of faqsFromRedux) {
       for (const q of section.faqs) {
         if (
           q.question.toLowerCase().includes(question.toLowerCase()) ||
@@ -60,7 +61,7 @@ const FAQChatbot: React.FC = () => {
     if (userInput.trim()) {
       // Filter suggestions based on user input
       const filteredSuggestions = [];
-      for (const section of faqData) {
+      for (const section of faqsFromRedux) {
         for (const q of section.faqs) {
           if (q.question.toLowerCase().includes(userInput.toLowerCase())) {
             filteredSuggestions.push(q.question);
@@ -84,6 +85,23 @@ const FAQChatbot: React.FC = () => {
     }
   }, [chatLog]);
 
+  // Close chatbot when clicking outside
+  useEffect(() => {
+    if (!isOpen) return;
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        chatbotWindowRef.current &&
+        !chatbotWindowRef.current.contains(event.target as Node)
+      ) {
+        setIsOpen(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isOpen]);
+
   return (
     <div>
       {/* Chatbot Toggle Button */}
@@ -106,16 +124,18 @@ const FAQChatbot: React.FC = () => {
         </motion.div>
       </motion.div>
 
-      {/* Chatbot Interface */}      {isOpen && (
+      {/* Chatbot Interface */}
+      {isOpen && (
         <motion.div
+          ref={chatbotWindowRef}
           initial={{ opacity: 0, y: 50, scale: 0.3 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: 50, scale: 0.3 }}
-          transition={{ 
+          transition={{
             duration: 0.3,
             type: "spring",
             stiffness: 260,
-            damping: 20
+            damping: 20,
           }}
           className="fixed bottom-24 right-6 w-[350px] max-h-[80vh] bg-white shadow-2xl rounded-2xl z-50 overflow-hidden flex flex-col"
         >
