@@ -47,7 +47,7 @@ export default function Solution() {
           </p>
         </motion.div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 px-16">
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 px-12">
           {features.map((feature, index) => (
             <motion.div
               key={index}
@@ -58,7 +58,7 @@ export default function Solution() {
               className="relative group mb-4"
             >
               <div className={`absolute inset-0 bg-gradient-to-br ${feature.bgColor} rounded-2xl transform group-hover:scale-105 transition-transform duration-300 `}></div>
-              <div className="relative bg-white/40 backdrop-blur-sm p-2 rounded-2xl transform hover:translate-y-[-1rem] transition-all duration-300 border border-white/20">
+              <div className="relative bg-white/40 backdrop-blur-sm p-6 rounded-2xl transform hover:translate-y-[-1rem] transition-all duration-300 border border-white/20">
                 <feature.icon className="w-7 h-7 text-gray-700 mb-6 transform group-hover:scale-110 transition-transform duration-300" />
                 <h3 className="text-medium font-bold mb-4 text-gray-800">{feature.title}</h3>
                 <p className="text-gray-600 text-sm">{feature.description}</p>
