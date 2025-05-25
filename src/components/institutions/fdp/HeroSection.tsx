@@ -152,7 +152,7 @@ export default function HeroSection() {
               loop
               muted
               playsInline
-              className="absolute inset-0 w-full h-full object-cover z-0 pt-2"
+              className="absolute inset-0 w-full h-full object-cover z-0 "
               poster={banner.poster}
             >
               <source src={banner.video} type="video/mp4" />
