@@ -47,7 +47,7 @@ export default function Solution() {
           </p>
         </motion.div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 px-16">
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 px-12">
           {features.map((feature, index) => (
             <motion.div
               key={index}

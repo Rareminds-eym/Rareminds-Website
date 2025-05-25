@@ -47,7 +47,7 @@ export default function CaseStudies() {
           </p>
         </motion.div>
 
-        <div className="grid md:grid-cols-3 gap-6 px-16">
+        <div className="grid md:grid-cols-3 gap-10 px-12">
           {caseStudies.map((study, index) => (
             <motion.div
               key={index}
