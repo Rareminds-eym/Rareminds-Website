@@ -47,7 +47,7 @@ export default function CaseStudies() {
           </p>
         </motion.div>
 
-        <div className="grid md:grid-cols-3 gap-6 px-16">
+        <div className="grid md:grid-cols-3 gap-10 px-12">
           {caseStudies.map((study, index) => (
             <motion.div
               key={index}
@@ -55,7 +55,7 @@ export default function CaseStudies() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8, delay: index * 0.2 }}
-              className="bg-gradient-to-br from-blue-50 to-indigo-50 p-4 rounded-2xl shadow-lg hover:shadow-xl transition-shadow"
+              className="bg-gradient-to-br from-blue-50 to-indigo-50 p-6 rounded-2xl shadow-lg hover:shadow-xl transition-shadow"
             >
               <study.icon className="w-7 h-7 text-blue-600 mb-4" />
               <h3 className="text-medium font-bold mb-4">{study.title}</h3>
