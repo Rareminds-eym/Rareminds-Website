@@ -19,9 +19,9 @@ const ContactSection = () => {
   const { toast } = useToast();
   const [formData, setFormData] = useState({
     name: "",
-    company: "",
+    university: "",
     email: "",
-    role: "",
+    course: "",
     message: "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -53,9 +53,9 @@ const ContactSection = () => {
       setTimeout(() => {
         setFormData({
           name: "",
-          company: "",
+          university: "",
           email: "",
-          role: "",
+          course: "",
           message: "",
         });
         setSubmitted(false);
@@ -83,7 +83,7 @@ const ContactSection = () => {
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-5 gap-10 px-20">
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-10 px-8">
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -125,17 +125,17 @@ const ContactSection = () => {
                     </div>
                     <div>
                       <label
-                        htmlFor="company"
+                        htmlFor="university"
                         className="block mb-4 font-medium text-gray-700 text-sm"
                       >
                         University Name
                       </label>
                       <Input
-                        id="company"
-                        name="company"
-                        value={formData.company}
+                        id="university"
+                        name="university"
+                        value={formData.university}
                         onChange={handleChange}
-                        placeholder="Company Name"
+                        placeholder="Univeristy Name"
                         className="w-full bg-white/50 border-gray-200 text-gray-800 placeholder:text-gray-400"
                         required
                       />
@@ -163,17 +163,17 @@ const ContactSection = () => {
                     </div>
                     <div>
                       <label
-                        htmlFor="role"
+                        htmlFor="course"
                         className="block mb-4 font-medium text-gray-700 text-sm"
                       >
-                        Role to Hire
+                        Course Applied for
                       </label>
                       <Input
                         id="role"
                         name="role"
-                        value={formData.role}
+                        value={formData.course}
                         onChange={handleChange}
-                        placeholder="Job Title/Position"
+                        placeholder="Course Name"
                         className="w-full bg-white/50 border-gray-200 text-gray-800 placeholder:text-gray-400"
                         required
                       />
@@ -192,7 +192,7 @@ const ContactSection = () => {
                       name="message"
                       value={formData.message}
                       onChange={handleChange}
-                      placeholder="Tell us about your hiring needs or challenges"
+                      placeholder="Tell us about your univeristy or course requirements"
                       className="w-full min-h-[120px] bg-white/50 border-gray-200 text-gray-800 placeholder:text-gray-400"
                       required
                     />
