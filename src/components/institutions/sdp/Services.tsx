@@ -8,6 +8,8 @@ import {
   Building2,
   ArrowRight,
   Sparkles,
+  Download,
+  FileSpreadsheet
 } from 'lucide-react';
 import { useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -268,27 +270,35 @@ export default function Services() {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
-            <div className="absolute inset-0 bg-gradient-to-r from-blue-400 to-purple-400 rounded-full blur-xl opacity-75 animate-pulse" />
             
-            <motion.button
-              className="relative bg-[#222B33] text-white px-4 py-4 rounded-full w-68 h-10
-                font-semibold text-sm shadow-xl hover:shadow-2xl transition-all duration-300 flex items-center gap-2"
-              animate={{
-                boxShadow: [
-                  "0 0 20px rgba(79, 70, 229, 0.5)",
-                  "0 0 40px rgba(79, 70, 229, 0.3)",
-                  "0 0 20px rgba(79, 70, 229, 0.5)"
-                ]
-              }}
-              transition={{
-                duration: 2,
-                repeat: Infinity,
-                repeatType: "reverse"
-              }}
-            >
-              <span>Future-Proof Your Career!</span>
-              <Sparkles className="w-6 h-6 animate-pulse" />
-            </motion.button>
+            
+            <div className="flex flex-col sm:flex-row gap-8 pt-8 justify-center">
+              <motion.a
+                href="/institutions/pdfs/Course_List.pdf"
+                download
+                target="_blank"
+                rel="noopener noreferrer"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="button-primary py-2"
+              >
+                <Download className="inline-block mr-2 h-5 w-5" />
+                Download Course List
+              </motion.a>
+
+              <motion.a
+                href="/institutions/pdfs/Blueprint.pdf"
+                download
+                target="_blank"
+                rel="noopener noreferrer"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="button-secondary py-2"
+              >
+                <FileSpreadsheet className="inline-block mr-2 h-5 w-5" />
+                Request Blueprint
+              </motion.a>
+            </div>
           </motion.div>
         </motion.div>
       </div>

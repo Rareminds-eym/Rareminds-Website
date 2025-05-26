@@ -11,7 +11,7 @@ const verticalOptions = [
 const InstitutionsHeader: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
-  const [currentVertical, setCurrentVertical] = useState("Institutions");
+  const [currentVertical, setCurrentVertical] = useState("SDP");
 
   const dropdownRef = useRef<HTMLDivElement>(null);
 
