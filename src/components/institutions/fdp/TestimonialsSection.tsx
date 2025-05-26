@@ -14,9 +14,15 @@ const mappedTestimonials = fdptestimonials.map((t, index) => ({
 const duplicate = (arr: typeof mappedTestimonials) => [...arr, ...arr];
 
 const sideImages = [
-  'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=800',
-  'https://images.unsplash.com/photo-1523580494863-6f3031224c94?auto=format&fit=crop&w=800',
-  'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=800',
+  '/institutions/images/Testimonials/Pic1.jpg',
+  '/institutions/images/Testimonials/Pic2.jpg', 
+  '/institutions/images/Testimonials/Pic3.jpg',
+  '/institutions/images/Testimonials/Pic5.jpg',
+  '/institutions/images/Testimonials/Pic6.jpg',
+  '/institutions/images/Testimonials/Pic7.jpg',
+  '/institutions/images/Testimonials/Pic8.jpg',
+  '/institutions/images/Testimonials/Pic9.jpg',
+  '/institutions/images/Testimonials/Pic10.jpg',
 ];
 
 const TestimonialsSection: React.FC = () => {
@@ -114,12 +120,12 @@ const TestimonialsSection: React.FC = () => {
             transform: translateY(0%);
           }
           100% {
-            transform: translateY(-50%);
+            transform: translateY(-2560px);
           }
         }
 
         .animate-scroll-y {
-          animation: scroll-y 30s linear infinite;
+          animation: scroll-y 90s linear infinite;
         }
       `}</style>
     </section>
