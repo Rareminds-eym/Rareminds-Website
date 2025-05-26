@@ -37,7 +37,7 @@ export default function ServicePage() {
         <div className="absolute inset-0 flex items-center">
           <div className="container mx-auto px-6">
             <motion.button
-              onClick={() => navigate('/')}
+              onClick={() => navigate('/institutions#services')}
               whileHover={{ x: -5 }}
               className="text-white text-sm mb-4 flex items-center gap-2"
             >

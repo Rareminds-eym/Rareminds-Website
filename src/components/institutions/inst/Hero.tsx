@@ -37,7 +37,7 @@ export default function Hero() {
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentBanner((prev) => (prev + 1) % banners.length);
-    }, 6000);
+    }, 9000);
     return () => clearInterval(timer);
   }, []);
 
