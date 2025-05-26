@@ -19,11 +19,15 @@ const Academia = lazy(() => import("./pages/Academia/Index"));
 const Student = lazy(() => import("./pages/Academia/Student/student"));
 const School = lazy(() => import("./pages/Academia/School/teacher"));
 const Institutions = lazy(() => import("./pages/Institutions/Index"));
+const InstitutionsServices = lazy(() => import("./pages/Institutions/InstitutionsServices"));
+const FDP = lazy(() => import("./pages/Institutions/Fdp"));
+const ServicePage = lazy(() => import("./components/institutions/sdp/ServicePage"));
 const CorporateTraining = lazy(() => import("./pages/Corporate/Training"));
 const Contact = lazy(() => import("./pages/Government/Contact/Index"));
 const handleSubscribe = lazy(() => import("./pages/Academia/ComingSoon"));
 const Projectlist = lazy(() => import ("./pages/Academia/projects/projectlist"))
 const Naan = lazy(() => import ("./pages/Academia/projects/[name]"));
+const CaseStudy = lazy(() => import ("./pages/Academia/School/CaseStudy"));
 
 const withSuspense = (Component: React.LazyExoticComponent<React.FC<{}>>) => (
   <Suspense fallback={<LoaderComponent />}>
@@ -120,8 +124,12 @@ const router = createBrowserRouter([
         path: "/academia/projects/",
         element: withSuspense(Projectlist),
       },      {
-        path: "/projects/:name",
+        path: "/academia/projects/:name",
         element: withSuspense(Naan),
+      },
+           {
+        path: "/academia/case-study/:id",
+        element: withSuspense(CaseStudy),
       },
     ],
   },
@@ -136,6 +144,22 @@ const router = createBrowserRouter([
       {
         path: "/Institutions",
         element: withSuspense(Institutions),
+      },
+      {
+      path: "/institutions/services",
+      element: withSuspense(InstitutionsServices),
+    },
+     {
+  path: "/service/:id",
+  element: (
+    <Suspense fallback={<LoaderComponent />}>
+      <ServicePage />
+    </Suspense>
+  ),
+   },
+{
+        path: "/institutions/fdp",
+        element: withSuspense(FDP),
       },
     ],
   },

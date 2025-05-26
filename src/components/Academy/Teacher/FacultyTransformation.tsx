@@ -1,4 +1,5 @@
 import React, { useRef } from "react";
+import { Link } from "react-router-dom";
 import {
   Carousel,
   CarouselContent,
@@ -25,144 +26,97 @@ function chunkArray<T>(array: T[], size: number): T[][] {
 
 // Dummy structure for multiple sections
 const facultySections = [
-  {
-    label: "See What Happens When Faculty Get Future-Ready",
-    stories: [
-      {
-        schoolName: "Kangeyam School",
-        location: "Tamil Nadu",
-        problem: {
-          title: "Problem Faced",
-          description: "Low digital adoption among faculty",
-        },
-        solution: {
-          title: "Training Delivered",
-          description: "5-day intensive digital pedagogy training",
-        },
-        outcome: {
-          title: "Outcome",
-          description: "Improved teacher digital fluency by 78% in just 5 days",
-        },
+ {
+  label: "See What Happens When Faculty Gets Future-Ready",
+  stories: [
+    {
+      schoolName: "St. Joseph's School",
+      location: "Location: St. Joseph's School",
+      link: "/academia/case-study/st-josephs",
+      problem: {
+        title: "Challenge",
+        description: "Early math felt abstract; robotics and coding treated as extras rather than essentials."
       },
-      {
-        schoolName: "Sunrise Academy",
-        location: "Bangalore",
-        problem: {
-          title: "Problem Faced",
-          description: "Poor student engagement in traditional classes",
-        },
-        solution: {
-          title: "Training Delivered",
-          description: "Interactive teaching methods workshop",
-        },
-        outcome: {
-          title: "Outcome",
-          description: "Student participation increased by 64% within one term",
-        },
+      solution: {
+        title: "Intervention",
+        description: "Introduced STEM education via LEGO blocks, creative building, and robotics workshops."
       },
-      {
-        schoolName: "Greenfield Public School",
-        location: "Delhi",
-        problem: {
-          title: "Problem Faced",
-          description: "Outdated teaching methodologies",
-        },
-        solution: {
-          title: "Training Delivered",
-          description: "Modern pedagogical approaches workshop",
-        },
-        outcome: {
-          title: "Outcome",
-          description: "85% of teachers implemented new techniques successfully",
-        },
+      outcome: {
+        title: "Impact",
+        description: "95% student engagement; 70+ robotics prototypes; teachers trained in LEGO pedagogy."
       },
-      {
-        schoolName: "Westside High",
-        location: "Mumbai",
-        problem: {
-          title: "Problem Faced",
-          description: "Limited tech integration in classrooms",
-        },
-        solution: {
-          title: "Training Delivered",
-          description: "EdTech integration certification program",
-        },
-        outcome: {
-          title: "Outcome",
-          description: "Technology usage in lessons increased by 92%",
-        },
+    },
+    {
+      schoolName: "Global International School",
+      location: "Location: Global International School",
+      link: "/academia/case-study/global-international",
+      problem: {
+        title: "Challenge",
+        description: "Teachers lacked NEP-aligned pedagogy, tech integration, and learner-centric strategies."
       },
-      {
-        schoolName: "Valley View Institute",
-        location: "Himachal Pradesh",
-        problem: {
-          title: "Problem Faced",
-          description: "Teacher burnout and low morale",
-        },
-        solution: {
-          title: "Training Delivered",
-          description: "Wellness and teaching effectiveness program",
-        },
-        outcome: {
-          title: "Outcome",
-          description: "Teacher satisfaction scores improved by 47%",
-        },
+      solution: {
+        title: "Intervention",
+        description: "2-day hands-on workshops focusing on digital tools, engagement, feedback culture, and personalized action plans."
       },
-      {
-        schoolName: "Coastal Academy",
-        location: "Kerala",
-        problem: {
-          title: "Problem Faced",
-          description: "Inconsistent assessment methods",
-        },
-        solution: {
-          title: "Training Delivered",
-          description: "Standardized evaluation techniques workshop",
-        },
-        outcome: {
-          title: "Outcome",
-          description: "Assessment consistency improved by 71% across faculty",
-        },
+      outcome: {
+        title: "Impact",
+        description: "100% teacher participation; micro-innovation plans; improved lesson planning and engagement."
       },
-    ],
-  },
-  {
-    label: "",
-    stories: [
-      {
-        schoolName: "Riverdale School",
-        location: "Assam",
-        problem: {
-          title: "Problem Faced",
-          description: "Students lacked motivation for assignments",
-        },
-        solution: {
-          title: "Training Delivered",
-          description: "Gamified lesson planning workshop",
-        },
-        outcome: {
-          title: "Outcome",
-          description: "Assignments completed increased to 90%",
-        },
+    },
+    {
+      schoolName: "Ryan International School",
+      location: "Location: Ryan International School",
+      link: "/academia/case-study/ryan-international",
+      problem: {
+        title: "Challenge",
+        description: "Sustainability remained abstract, disconnected from students' daily lives."
       },
-      {
-        schoolName: "Bluebell School",
-        location: "Mysore",
-        problem: {
-          title: "Problem Faced",
-          description: "Low parent-teacher communication",
-        },
-        solution: {
-          title: "Training Delivered",
-          description: "Digital collaboration tools session",
-        },
-        outcome: {
-          title: "Outcome",
-          description: "Parent engagement increased by 2x",
-        },
-      }
-    ],
-  },
+      solution: {
+        title: "Intervention",
+        description: "One-day program with sessions on climate change, eco-crafts, upcycling, and tree planting."
+      },
+      outcome: {
+        title: "Impact",
+        description: "300+ eco pledges; 100+ handmade eco-products; student-generated campus greening ideas."
+      },
+    },
+    {
+      schoolName: "BLDEA Schools",
+      location: "Karnataka",
+      link: "/academia/case-study/bldea-schools",
+      problem: {
+        title: "Challenge",
+        description: "Teachers needed structured development in pedagogy, communication, and emotional intelligence."
+      },
+      solution: {
+        title: "Intervention",
+        description: "3-day intensive program covering NEP, assessment, inclusive education, empathy, roleplays, and lesson design labs."
+      },
+      outcome: {
+        title: "Impact",
+        description: "90%+ teachers submitted revised lesson plans; ongoing mentoring circles established."
+      },
+    },
+    {
+      schoolName: "GHSS Tamil Nadu",
+      location: "Tamil Nadu",
+      link: "/academia/case-study/ghss-tamil-nadu",
+      problem: {
+        title: "Challenge",
+        description: "Limited exposure to real-world agriculture and entrepreneurship opportunities."
+      },
+      solution: {
+        title: "Intervention",
+        description: "7-day program on organic farming, supply chain, cloud kitchen models, and project-based entrepreneurship."
+      },
+      outcome: {
+        title: "Impact",
+        description: "10+ student teams pitched agri-startups; strong linkages to local livelihood opportunities."
+      },
+    }
+  ]
+}
+
 ];
 
 // SchoolCard component now inside this file
@@ -172,6 +126,7 @@ function SchoolCard({
   problem,
   solution,
   outcome,
+  link,
   className,
 }: {
   schoolName: string;
@@ -179,48 +134,63 @@ function SchoolCard({
   problem: { title: string; description: string };
   solution: { title: string; description: string };
   outcome: { title: string; description: string };
+  link?: string;
   className?: string;
 }) {
   return (
-    <div
-      className={cn(
-        "rounded-lg border border-gray-300 bg-white shadow-sm p-6 flex flex-col gap-6 min-h-[230px]",
-        className
-      )}
-      style={{
-        borderLeft: "2px solid #FFD700"
-      }}
-    >
-      <div className="flex items-center gap-2 mb-3">
-        <MapPin size={16} className="text-red-500" />
-        <h3 className="font-semibold text-xl text-[#222]">
-          {schoolName}, {location}
-        </h3>
+   <div
+  className={cn(
+    "rounded-lg border border-gray-300 bg-white shadow-sm p-6 flex flex-col justify-between gap-6 min-h-[320px]",
+    
+  )}
+>
+  <div >
+    <div className="flex items-center gap-2 mb-3">
+      <MapPin size={16} className="text-grey-500" />
+      <h3 className="font-semibold text-xl text-[#222]">
+        {schoolName}, {location}
+      </h3>
+    </div>
+
+    <div className="flex flex-col gap-5">
+      <div className="flex items-start gap-3">
+        <AlertCircle size={18} className="text-gray-600 mt-[2px]" />
+        <div>
+          <div className="font-medium text-xl text-gray-600">{problem.title}</div>
+          <div className="text-sm text-[#222]">{problem.description}</div>
+        </div>
       </div>
-      <div className="flex flex-col gap-5">
-        <div className="flex items-start gap-3">
-          <AlertCircle size={18} className="text-gray-600 mt-[2px]" />
-          <div>
-            <div className="font-medium text-xl text-gray-600">{problem.title}</div>
-            <div className="text-sm text-[#222]">{problem.description}</div>
-          </div>
+
+      <div className="flex items-start gap-3">
+        <BookOpen size={17} className="text-gray-600 mt-[2px]" />
+        <div>
+          <div className="font-medium text-xl text-gray-600">{solution.title}</div>
+          <div className="text-sm text-[#222]">{solution.description}</div>
         </div>
-        <div className="flex items-start gap-3">
-          <BookOpen size={17} className="text-gray-600 mt-[2px]" />
-          <div>
-            <div className="font-medium text-xl text-gray-600">{solution.title}</div>
-            <div className="text-sm text-[#222]">{solution.description}</div>
-          </div>
-        </div>
-        <div className="flex items-start gap-3">
-          <Sparkles size={18} className="text-red-500 mt-[2px]" />
-          <div>
-            <div className="font-medium text-xl text-gray-600">{outcome.title}</div>
-            <div className="text-sm text-[#222]">{outcome.description}</div>
-          </div>
+      </div>
+
+      <div className="flex items-start gap-3">
+        <Sparkles size={18} className="text-gray-600 mt-[2px]" />
+        <div>
+          <div className="font-medium text-xl text-gray-600">{outcome.title}</div>
+          <div className="text-sm text-[#222]">{outcome.description}</div>
         </div>
       </div>
     </div>
+  </div>
+
+  {link && (
+    <div className="flex justify-center mt-auto">
+      <Link
+        to={link}
+        className="text-sm font-semibold text-red-600 hover:underline"
+      >
+        Read More →
+      </Link>
+    </div>
+  )}
+</div>
+
   );
 }
 
@@ -287,6 +257,7 @@ const FacultyTransformation=()=> {
                         problem={data.problem}
                         solution={data.solution}
                         outcome={data.outcome}
+                          link={data.link} 
                         className={cn("w-full md:w-[400px] border bg-white", subIdx==0 ? "" : "md:ml-0")}
                       />
                     ))}
@@ -315,4 +286,4 @@ const FacultyTransformation=()=> {
   );
 }
 
-export default FacultyTransformation
+export default FacultyTransformation;

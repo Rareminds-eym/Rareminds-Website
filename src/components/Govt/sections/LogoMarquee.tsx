@@ -109,13 +109,18 @@ const TrustedInstitutions: React.FC<{ className?: string }> = ({ className }) =>
             maskImage: "linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%)",
           }}
         >
-          <div className="flex items-center gap-8 md:gap-16 py-6" style={{ minWidth: "180%" }}>
+          <div
+            className="flex items-center gap-10 md:gap-16 md:py-6"
+            style={{ minWidth: "180%" }}
+          >
             {repeatedLogos.map((logo, i) => (
               <div
                 key={i}
-                className="flex flex-col items-center justify-center flex-shrink-0 w-[160px] pr-10 mx-2"
+                className="flex flex-col items-center justify-center flex-shrink-0 w-[100px] md:w-[160px] pr-4 md:pr-10 mx-1 md:mx-2"
               >
-                <div className="w-32 h-32 mb-3 rounded-full bg-white/80 backdrop-blur flex items-center justify-center p-4 shadow-lg institution-logo hover-scale transition-transform duration-200 overflow-hidden">
+                <div
+                  className="w-20 h-20 md:w-32 md:h-32 mb-2 md:mb-3 rounded-full bg-white/80 backdrop-blur flex items-center justify-center p-2 md:p-4 shadow-lg institution-logo hover-scale transition-transform duration-200 overflow-hidden"
+                >
                   <img
                     src={logo.imgSrc}
                     alt={logo.label}
@@ -123,7 +128,11 @@ const TrustedInstitutions: React.FC<{ className?: string }> = ({ className }) =>
                   />
                 </div>
 
-                <span className="text-center  text-[12px] md:text-xs font-medium text-gray-700 select-none break-words leading-tight">{logo.label}</span>
+                <span
+                  className="text-center text-[10px] md:text-xs font-medium text-gray-700 select-none break-words leading-tight"
+                >
+                  {logo.label}
+                </span>
               </div>
             ))}
           </div>
@@ -141,6 +150,7 @@ const TrustedInstitutions: React.FC<{ className?: string }> = ({ className }) =>
 const Logos = () => {
   return (
     <div className="bg-white">
+      
       <main className="w-full ">
         {/* Hero Section */}
         {/* <div className="py-16 md:py-24 bg-gradient-to-b from-gray-50 to-white">

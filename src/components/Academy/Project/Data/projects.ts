@@ -94,7 +94,7 @@ export const projects = [
     year: '2024',
     location: 'TamilNadu',
     technologies: [],
-    imageUrl: '/academy/Projects/vels.jpg',
+    imageUrl: '/academy/Projects/vels.png',
     timeline: 'Jan 2024',
     team: ['Lisa Thompson', 'James Wilson', 'Maria Garcia'],
     goals: ['Improve patient outcomes', 'Optimize resource allocation', 'Enhance decision making']
@@ -110,6 +110,20 @@ export const projects = [
     location: 'TamilNadu',
     technologies: ['React', 'Node.js', 'TensorFlow', 'MongoDB'],
     imageUrl: '/academy/Projects/nanmudhalvan.jpg',
+    timeline: 'Jan 2025 - Present',
+    team: [],
+    goals: []
+  },
+  {
+   id: '9',
+    name: 'PES',
+    description: '',
+    category: 'PES',
+    status: 'Active',
+    year: '2025',
+    location: 'TamilNadu',
+    technologies: [],
+    imageUrl: '/academy/Projects/pes.png',
     timeline: 'Jan 2025 - Present',
     team: [],
     goals: []

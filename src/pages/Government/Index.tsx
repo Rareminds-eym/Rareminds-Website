@@ -14,6 +14,9 @@ import FDPButton from "@/components/Govt/sections/FDPButton";
 import { Cta } from "@/components/Govt/sections/Cta";
 import ContactSection from "@/components/Govt/Contact/ContactSection";
 import { Sparkles } from "@/components/ui/sparkles";
+import { GradientTracing } from "@/components/ui/gradient-tracing";
+
+import FloatingActionMenu from "@/components/Govt/FloatingAction";
 
 
 const Govt = () => {
@@ -22,29 +25,27 @@ const Govt = () => {
       <HeroSection />
       <div className="relative">
         {/* Scrollable content that appears on top of hero */}
-        <div className="relative z-10 mt-[90vh] overflow-hidden">
-          {/* Top circular decoration with sparkles */}
-          <div className="relative z-10">
-            <div className="relative -mt-32 h-96 w-full overflow-hidden">
-              <div className="absolute inset-0 before:absolute before:inset-0 before:bg-[radial-gradient(circle_at_bottom_center,#8350e8,transparent_70%)] before:opacity-40 z-20" />
-              <div className="absolute -left-1/2 top-1/2 aspect-[1/0.7] z-20 w-[200%] rounded-[100%] border-t-2 border-zinc-900/20 dark:border-white/20 bg-white
-                shadow-[0_0_40px_#c7ddff,0_0_80px_rgba(13,80,232,0.6),0_0_120px_rgba(131,80,232,0.3)]" />
-              {/* <div className="absolute inset-0 z-30">
-                <Sparkles
-                  density={400}
-                  color={"#8350e8"}
-                  speed={0.3}
-                  opacity={1}
-                  size={2}
-                />
-              </div> */}
+
+
+        <div className="relative z-50 mt-[90vh] overflow-hidden">
+         
+          <div className="relative z-0">
+            <div className="relative -mt-0 h-[5em] md:h-[22em] w-full overflow-hidden">
+           
+              <div className="absolute inset-0 before:absolute before:inset-0 before:bg-[radial-gradient(circle_at_bottom_center,transparent_0%,transparent_100%)] before:opacity-60 z-50">
+                <div className="hidden sm:block">{/* Spacer for mobile */}</div>
+              </div>
+
+              {/* Glowing arc with visible border glow */}
+              <div className="absolute -left-1/2 top-1/2 aspect-[1/0.7] z-0 w-[200%] rounded-[45%]  md:rounded-[100%] border-t-4 border-[#96d3ff] dark:border-white/20 bg-white
+        md:shadow-[inset_0_0_20px_#96d3ff,0_0_60px_#96d3ff,0_0_100px_rgba(13,80,232,0.8),0_0_160px_rgba(131,80,232,0.5)] shadow-[inset_0_0_20px_#96d3ff,0_0_60px_#96d3ff,0_0_50px_rgba(13,80,232,0.8),0_0_60px_rgba(131,80,232,0.5)]
+        blur-sm backdrop-blur-xl" />
             </div>
           </div>
         </div>
 
-        <div className="relative  bg-white pt-8">
+        <div className="relative  bg-white p-0">
           <LogoMarquee />
-          <div className="bg-white">
             <FeaturesSection />
             <DashboardSection />
             <PartnershipsSection />
@@ -55,14 +56,16 @@ const Govt = () => {
             <Video />
             <DeploymentSection />
             <GovernmentOutcomesSection />
-            <FAQChatbot />
+            
             <Video />
             <ContactSection />
             <Cta />
+            <FloatingActionMenu/>
+            {/* <FAQChatbot />   */}
           </div>
         </div>
       </div>
-    </div>
+  
   );
 };
 

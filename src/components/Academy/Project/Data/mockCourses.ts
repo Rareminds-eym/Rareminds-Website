@@ -6,7 +6,7 @@ export const naamMudhalvanCourses = [
       duration: '12 weeks',
       level: 'Intermediate',
       category: 'Technology',
-      imageUrl: '/images/naan_Mudhalvan/Electric-Vehicle-Battery-Management-System.jpg?auto=format&fit=crop&q=80&w=800',
+      imageUrl: '/academy/Projects/naan_Mudhalvan/Electric-Vehicle-Battery-Management-System.jpg?auto=format&fit=crop&q=80&w=800',
     },
     {
       id: '2',
@@ -15,7 +15,7 @@ export const naamMudhalvanCourses = [
       duration: '10 weeks',
       level: 'Beginner',
       category: 'Technology',
-      imageUrl: '/images/naan_Mudhalvan/Chemical-Safety.jpg?auto=format&fit=crop&q=80&w=800',
+      imageUrl: '/academy/Projects/naan_Mudhalvan/Chemical-Safety.jpg?auto=format&fit=crop&q=80&w=800',
     },
     {
       id: '3',
@@ -24,7 +24,7 @@ export const naamMudhalvanCourses = [
       duration: '8 weeks',
       level: 'Advanced',
       category: 'Technology',
-      imageUrl: '/images/naan_Mudhalvan/Organic-Food-Production.jpg?auto=format&fit=crop&q=80&w=800',
+      imageUrl: '/academy/Projects/naan_Mudhalvan/Organic-Food-Production.jpg?auto=format&fit=crop&q=80&w=800',
     },
     {
       id: '4',
@@ -33,7 +33,7 @@ export const naamMudhalvanCourses = [
       duration: '8 weeks',
       level: 'Advanced',
       category: 'Technology',
-      imageUrl: '/images/naan_Mudhalvan/Food-Analysis-QC-and-QA.jpg?auto=format&fit=crop&q=80&w=800',
+      imageUrl: '/academy/Projects/naan_Mudhalvan/Food-Analysis-QC-and-QA.jpg?auto=format&fit=crop&q=80&w=800',
     },
   ];
   

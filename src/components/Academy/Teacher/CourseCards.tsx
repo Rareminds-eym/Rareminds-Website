@@ -20,7 +20,7 @@ type CourseType = {
   id: number;
   title: string;
   description: string;
-  icon: React.ElementType;
+  image: string;
   color: string;
   features: string[];
   cta: {
@@ -37,7 +37,7 @@ const courses: CourseType[] = [
     id: 1,
     title: "Teacher Training Programs (21st Century)",
     description: "",
-    icon: Users,
+    image: "/academy/Course/Teacher-Training.svg",
     color: "",
     features: [
       "NEP Implementation for Foundational, Preparatory, Middle & Secondary Stages",
@@ -60,7 +60,7 @@ const courses: CourseType[] = [
     id: 2,
     title: " Communication and Personality Development",
     description: "",
-    icon: LineChart,
+    image: "/academy/Course/communication and personality development.svg",
     color: "",
     features: [
       "English Fluency & Public Speaking for Teachers",
@@ -80,7 +80,7 @@ const courses: CourseType[] = [
     id: 3,
     title: "Mental Health and Counseling Training",
     description: "",
-    icon: Heart,
+    image: "/academy/Course/mental health and consunselling training.svg",
     color: "",
     features: [
       "Recognizing At-Risk Student",
@@ -89,7 +89,7 @@ const courses: CourseType[] = [
       "Creating a Safe Classroom"
     ],
     cta: {
-      text: "speak to our councillor",
+      text: "Speak to our counsellors",
       icon: Download
     },
     roles: ["Teacher", "Counselor", "Principal"],
@@ -100,7 +100,7 @@ const courses: CourseType[] = [
     id: 4,
     title: "Domain-Specific Certification Programs",
     description: "",
-    icon: Laptop,
+    image: "/academy/Course/Domain-Specific.svg",
     color: "",
     features: [
       "In partnership with industries (AgriTech, EV, EdTech, AI, Biotechnology, etc.)",
@@ -118,7 +118,7 @@ const courses: CourseType[] = [
     id: 5,
     title: " Leadership and Career Growth",
     description: "",
-    icon: Laptop,
+    image: "/academy/Course/leadership & career growth.svg",
     color: "",
     features: [
       "Aspiring Academic Leaders Program (For HODs/Coordinators)",
@@ -138,7 +138,7 @@ const courses: CourseType[] = [
     id: 6,
     title: "  Institutional Value-Add Services",
     description: "",
-    icon: Laptop,
+    image: "/academy/Course/insititutional_value add_services.svg",
     color: "",
     features: [
       "(Benefits both teachers and management)",
@@ -328,14 +328,11 @@ const CourseCards = ({coursetocontact}:coursecardProps) => {
                 ></div>
                 <div className="p-6 flex-grow flex flex-col">
                   <div className="flex items-start gap-4 p-4 bg-white shadow-sm rounded-lg">
-                    <div
-                      className={cn(
-                        "p-3 rounded-full flex items-center justify-center",
-                        getColorClass(course.color)
-                      )}
-                    >
-                      <course.icon
-                        className={cn("w-6 h-6", getColorClass(course.color, false))}
+                    <div className="p-3 rounded-full flex items-center justify-center">
+                      <img
+                        src={course.image} // Render the image instead of the icon
+                        alt={course.title}
+                        className="w-20 h-20 "
                       />
                     </div>
                     <div>
