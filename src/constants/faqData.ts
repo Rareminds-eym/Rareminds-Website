@@ -10,32 +10,32 @@ export interface FAQCategory {
 
 const faqData: FAQCategory[] = [
   {
-    section: "Tracking (Measuring Student Progress)",
+    section: "Skilling & Employability Programs ",
     faqs: [
       {
-        question: "How can I monitor student progress during the program?",
+        question: "What kind of skilling programs does Rareminds offer to governments?",
         answer:
-          "Rareminds provides real-time dashboards and periodic reports detailing student attendance, assessment scores, and engagement levels.",
+          "We offer 45-hour industry-ready skilling programs designed for public colleges and universities, aligned with NEP and employabilitybenchmarks",
       },
       {
-        question: "Are there assessments to evaluate student learning?",
+        question: "Are your programs mapped to real job roles or sectors?",
         answer:
-          "Yes, each module includes formative and summative assessments to gauge understanding and skill acquisition.",
+          "Yes. All training modules align with high-demand industries like EV, Agri-tech, Healthcare, Digital Services, and Startups.",
       },
       {
-        question: "Can I receive updates on student performance?",
+        question: "Do students get practical exposure through these programs?",
         answer:
-          "Absolutely. Regular progress reports are shared with stakeholders to keep them informed about student achievements and areas needing improvement.",
+          "Yes. We include case studies, simulations, role-plays, and final projects tied to real-world problems.",
       },
       {
-        question: "Is there a system for tracking skill development?",
+        question: "How do you track student attendance and engagement?",
         answer:
-          "Yes, Rareminds employs competency-based tracking to monitor the development of specific skills aligned with industry standards.",
+          "Through an integrated LMS and Zoho-powered dashboard with geo-tagged tracking and auto-generated reports.",
       },
       {
-        question: "How are learning outcomes measured?",
+        question: "Are these courses credit-eligible under the university system?",
         answer:
-          "Learning outcomes are assessed through a combination of quizzes, assignments, projects, and participation metrics.",
+          "Yes. Programs are designed to fit into the credit system—6 credits (2 per semester) across three semesters.",
       },
       {
         question: "Do students receive feedback on their performance?",
@@ -55,12 +55,12 @@ const faqData: FAQCategory[] = [
       {
         question: "Are there alerts for students falling behind?",
         answer:
-          "The system flags students who may need additional support, enabling timely interventions.",
+          "Yes. Programs are designed to fit into the credit system—6 credits (2 per semester) across three semesters.",
       },
       {
-        question: "How is data privacy maintained in tracking systems?",
+        question: "What is the typical duration of the program?",
         answer:
-          "RareMinds adheres to strict data protection policies, ensuring that all student information is securely stored and accessed only by authorized personnel.",
+          "75 hours split across three semesters, integrating English, Employability, and Entrepreneurship modules.",
       },
     ],
   },

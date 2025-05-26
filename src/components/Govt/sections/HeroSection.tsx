@@ -3,6 +3,7 @@ import { Calendar, ArrowDown, Eye } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { GooeyText } from "../../ui/GooeyText";
 import { ParticleButton } from "@/components/ui/particle-button";
+import { PopupButton } from "react-calendly";
 
 const heroSlides = [
 	{
@@ -111,7 +112,14 @@ export const HeroSection = () => {
 	const [currentSlide, setCurrentSlide] = useState(0);
 	const [autoPlay] = useState(true);
 	const [direction, setDirection] = useState(0);
-	const slideIndex = wrap(0, heroSlides.length, currentSlide);  const paginate = (newDirection: number) => {
+	const [root, setRoot] = useState<HTMLElement | null>(null);
+	const slideIndex = wrap(0, heroSlides.length, currentSlide);
+
+	useEffect(() => {
+		setRoot(document.getElementById('root'));
+	}, []);
+
+	const paginate = (newDirection: number) => {
     setDirection(newDirection);
     setCurrentSlide(currentSlide + newDirection);
   };
@@ -217,7 +225,7 @@ export const HeroSection = () => {
 								className="flex text-xs md:text-base flex-wrap gap-2 sm:gap-4 justify-center"
 							>
 								<ParticleButton 
-									className="flex  items-center p-2 md:px-4  md:py-2  bg-red-500/80 backdrop-blur rounded-full text-white shadow-sm shadow-red-400 border-2 border-red-300 hover:bg-red-600 transition-colors"
+									className="flex items-center p-2 md:px-4 md:py-2 bg-red-500/80 backdrop-blur rounded-full text-white shadow-sm shadow-red-400 border-2 border-red-300 hover:bg-red-600 transition-colors"
 									successDuration={1200}
 									size={"lg"}
 									particleColor="#ffffff"
@@ -226,10 +234,16 @@ export const HeroSection = () => {
 									<Eye className="h-5 sm:h-6 w-5 sm:w-6 mr-2" />
 									View Our Government Training Portfolio
 								</ParticleButton>
-								<button className="flex items-center bg-white/80 hover:bg-white transition-colors px-4 sm:px-6 py-2 sm:py-3 backdrop-blur rounded-full shadow-sm shadow-white border-2 border-black/70 text-black">
+								<div className="flex items-center bg-white/80 hover:bg-white transition-colors px-4 sm:px-6 py-2 sm:py-3 backdrop-blur rounded-full shadow-sm shadow-white border-2 border-black/70 text-black">
 									<Calendar className="h-4 sm:h-5 w-4 sm:w-5 mr-2" />
-									Schedule a Strategy Call
-								</button>
+									{root && (
+										<PopupButton
+											url="https://calendly.com/gowdanavi279/new-meeting"
+											text="Schedule a Strategy Call"
+											rootElement={root}
+										/>
+									)}
+								</div>
 							</motion.div>
 						</div>
 					</motion.div>
