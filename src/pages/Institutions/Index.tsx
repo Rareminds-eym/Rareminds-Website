@@ -1,5 +1,6 @@
 // src/pages/Institutions.tsx
-
+import { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import React from 'react';
 import Hero from "@/components/institutions/sdp/Hero";
 import LogoCarousel from "@/components/institutions/sdp/LogoCarousel";
@@ -20,6 +21,16 @@ import ContactSection from '@/components/institutions/Contact/ContactSection';
 
 
 const Institutions: React.FC = () => {
+   const location = useLocation();
+
+  useEffect(() => {
+    if (location.hash === '#services') {
+      const target = document.getElementById('services-section');
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+  }, [location]);
   return (
     
       <div className="pt-20">
@@ -32,7 +43,9 @@ const Institutions: React.FC = () => {
       <TestimonialQuotes />
       <Solution />
       <CaseStudies />
-      <Services />
+      <div id="services-section">
+        <Services />
+      </div>
       <InstitutionDashboardSection />
       <TestimonialVideos />
       <ContactSection />
