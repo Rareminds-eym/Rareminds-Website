@@ -3,37 +3,40 @@
 @tailwind utilities;
 
 @layer components {
-    .corporate-btn-1 {
-      @apply bg-[#107DFE] hover:bg-[#107DFE]/90 text-white font-semibold py-2 px-5 rounded-[6px] shadow-[3px_4px_0px_0px_rgba(0,0,0,1)] w-max mx-auto sm:mx-0 flex items-center;
-    }
-
-    .corporate-btn-2 {
-        @apply border-2 border-black font-semibold py-2 px-5 rounded-[6px] shadow-[3px_4px_0px_0px_rgba(0,0,0,1)] w-max mx-auto sm:mx-0 flex items-center;
-      }
-
-    .corporate-heading-highlight{
-        @apply bg-[#107DFE] px-2 shadow-[7px_7px_0px_0px_rgba(0,0,0,1)] text-white mr-1;
-    }
+  .corporate-container {
+    @apply container px-4;
+  }
+  .corporate-btn-1 {
+    @apply bg-[#107DFE] hover:bg-[#107DFE]/90 text-white font-semibold py-2 px-5 rounded-[6px] shadow-[3px_4px_0px_0px_rgba(0,0,0,1)] w-max mx-auto sm:mx-0 flex items-center;
   }
 
-@layer utilities {
-    .pt-screen {
-        padding-top: 100vh;
-    }
-    
-    .mt-screen {
-        margin-top: 100vh;
-    }
+  .corporate-btn-2 {
+    @apply border-2 border-black font-semibold py-2 px-5 rounded-[6px] shadow-[3px_4px_0px_0px_rgba(0,0,0,1)] w-max mx-auto sm:mx-0 flex items-center;
+  }
 
-    .backdrop-blur-hero {
-        backdrop-filter: blur(2px);
-        -webkit-backdrop-filter: blur(2px);
-    }
+  .corporate-heading-highlight {
+    @apply bg-[#107DFE] px-2 shadow-[7px_7px_0px_0px_rgba(0,0,0,1)] text-white mr-1;
+  }
+}
+
+@layer utilities {
+  .pt-screen {
+    padding-top: 100vh;
+  }
+
+  .mt-screen {
+    margin-top: 100vh;
+  }
+
+  .backdrop-blur-hero {
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+  }
 }
 
 .corporate-full-screen-h {
-    height: calc(100vh - 80px);
-    min-height: 600px; /* Ensure minimum height for smaller screens */
+  height: calc(100vh - 80px);
+  min-height: 600px; /* Ensure minimum height for smaller screens */
 }
 
 /* Modern scrollbar for case studies (light grey variant) */
@@ -51,7 +54,7 @@
   border-radius: 12px;
   min-height: 32px;
   border: 2px solid #f3f4f6;
-  box-shadow: 0 2px 8px 0 rgba(189,189,189,0.18);
+  box-shadow: 0 2px 8px 0 rgba(189, 189, 189, 0.18);
   transition: background 0.2s;
 }
 .modern-scrollbar::-webkit-scrollbar-thumb:hover {
@@ -59,22 +62,27 @@
 }
 
 @layer utilities {
-    @keyframes loading {
-        0% {
-            width: 0%;
-            margin-left: 0;
-        }
-        50% {
-            width: 100%;
-            margin-left: 0;
-        }
-        100% {
-            width: 0%;
-            margin-left: 100%;
-        }
+  @keyframes loading {
+    0% {
+      width: 0%;
+      margin-left: 0;
     }
+    50% {
+      width: 100%;
+      margin-left: 0;
+    }
+    100% {
+      width: 0%;
+      margin-left: 100%;
+    }
+  }
 
-    .animate-loading-bar {
-        animation: loading 2s ease-in-out infinite;
-    }
+  .animate-loading-bar {
+    animation: loading 2s ease-in-out infinite;
+  }
+}
+@media (min-width: 1024px) {
+  .corporate-container{
+    @apply px-14;
+  }
 }
