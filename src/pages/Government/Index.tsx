@@ -14,8 +14,9 @@ import FDPButton from "@/components/Govt/sections/FDPButton";
 import { Cta } from "@/components/Govt/sections/Cta";
 import ContactSection from "@/components/Govt/Contact/ContactSection";
 import { Sparkles } from "@/components/ui/sparkles";
+import { GradientTracing } from "@/components/ui/gradient-tracing";
 
-
+import FloatingActionMenu from "@/components/Govt/FloatingAction";
 
 
 const Govt = () => {
@@ -55,10 +56,12 @@ const Govt = () => {
             <Video />
             <DeploymentSection />
             <GovernmentOutcomesSection />
-            <FAQChatbot />
+            
             <Video />
             <ContactSection />
             <Cta />
+            <FloatingActionMenu/>
+            {/* <FAQChatbot />   */}
           </div>
         </div>
       </div>
