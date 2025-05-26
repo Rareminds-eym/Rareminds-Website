@@ -10,7 +10,12 @@ interface ChatEntry {
   message: string;
 }
 
-const FAQChatbot: React.FC = () => {
+interface FAQChatbotProps {
+  open?: boolean;
+  onClose?: () => void;
+}
+
+const FAQChatbot: React.FC<FAQChatbotProps> = ({ open = true, onClose }) => {
   const faqsFromRedux = useFAQ();
   const chatContainerRef = useRef<HTMLDivElement>(null);
   const chatbotWindowRef = useRef<HTMLDivElement>(null);
@@ -22,7 +27,7 @@ const FAQChatbot: React.FC = () => {
     },
   ]);
   const [suggestions, setSuggestions] = useState<string[]>([]);
-  const [isOpen, setIsOpen] = useState(false); // Toggle for showing/hiding chatbot
+  const [isOpen, setIsOpen] = useState(open); // Toggle for showing/hiding chatbot
 
   const findAnswer = (question: string): string => {
     for (const section of faqsFromRedux) {
@@ -102,6 +107,11 @@ const FAQChatbot: React.FC = () => {
     };
   }, [isOpen]);
 
+  // Sync open prop with local isOpen state
+  useEffect(() => {
+    setIsOpen(open);
+  }, [open]);
+
   return (
     <div>
       {/* Chatbot Toggle Button */}
@@ -109,7 +119,7 @@ const FAQChatbot: React.FC = () => {
         initial={{ opacity: 0, x: 100 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.5 }}
-        className="fixed right-6 bottom-6 z-50"
+        className="fixed right-10 bottom-6 z-50"
       >
         <motion.div
           whileHover={{ scale: 1.05 }}
@@ -142,7 +152,7 @@ const FAQChatbot: React.FC = () => {
           <div className="bg-[#434343] p-4 flex justify-between items-center shrink-0">
             <h2 className="text-lg font-semibold text-white">FAQ Assistant</h2>
             <button
-              onClick={() => setIsOpen(false)}
+              onClick={onClose ? onClose : () => setIsOpen(false)}
               className="text-white hover:text-gray-200 focus:outline-none"
               aria-label="Close Chatbot"
             >
