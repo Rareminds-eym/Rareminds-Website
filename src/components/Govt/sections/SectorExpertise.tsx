@@ -200,7 +200,7 @@ const SectorExpertise = () => {
           </CTAButton>
             <CTAButton variant="secondary" 
             onClick={() => {
-            const contactElement = document.getElementById('contact');
+            const contactElement = document.getElementById('government-outcomes');
             if (contactElement) {
               contactElement.scrollIntoView({ behavior: 'smooth' });
             }
