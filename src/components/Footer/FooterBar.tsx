@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { Facebook, Twitter, Instagram, Youtube, Linkedin } from "lucide-react";
+import { Facebook, Instagram, Youtube, Linkedin } from "lucide-react";
+import { Icon } from "@iconify/react";
 import { motion } from "framer-motion";
 
 const socialIcons = [
@@ -12,9 +13,9 @@ const socialIcons = [
   },
   {
     id: 2,
-    icon: Twitter,
+    icon: "ri:twitter-x-fill",
     link: "https://x.com/minds_rare",
-    label: "Twitter (X)",
+    label: "X (Twitter)",
   },
   {
     id: 3,
@@ -246,32 +247,60 @@ const FooterBar = () => {
         }}
       >
         {socialIcons.map((social) => {
-          const Icon = social.icon;
-          return (
-            <motion.a
-              key={social.id}
-              href={social.link}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label={social.label}
-              className="bg-gray-800 hover:bg-red-600 transition-colors p-3 rounded-full focus:outline-none focus:ring-2 focus:ring-red-500"
-              variants={{
-                hidden: { opacity: 0, y: 24 },
-                visible: {
-                  opacity: 1,
-                  y: 0,
-                  transition: {
-                    type: "spring",
-                    stiffness: 300,
-                    damping: 24,
+          if (typeof social.icon === "string") {
+            return (
+              <motion.a
+                key={social.id}
+                href={social.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={social.label}
+                className="bg-gray-800 hover:bg-red-600 transition-colors p-3 rounded-full focus:outline-none focus:ring-2 focus:ring-red-500"
+                variants={{
+                  hidden: { opacity: 0, y: 24 },
+                  visible: {
+                    opacity: 1,
+                    y: 0,
+                    transition: {
+                      type: "spring",
+                      stiffness: 300,
+                      damping: 24,
+                    },
                   },
-                },
-              }}
-              whileHover={{ scale: 1.18, rotate: -6 }}
-            >
-              <Icon size={20} className="text-white" />
-            </motion.a>
-          );
+                }}
+                whileHover={{ scale: 1.18, rotate: -6 }}
+              >
+                <Icon icon={social.icon} width={20} height={20} className="text-white" />
+              </motion.a>
+            );
+          } else {
+            const IconComponent = social.icon;
+            return (
+              <motion.a
+                key={social.id}
+                href={social.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={social.label}
+                className="bg-gray-800 hover:bg-red-600 transition-colors p-3 rounded-full focus:outline-none focus:ring-2 focus:ring-red-500"
+                variants={{
+                  hidden: { opacity: 0, y: 24 },
+                  visible: {
+                    opacity: 1,
+                    y: 0,
+                    transition: {
+                      type: "spring",
+                      stiffness: 300,
+                      damping: 24,
+                    },
+                  },
+                }}
+                whileHover={{ scale: 1.18, rotate: -6 }}
+              >
+                <IconComponent size={20} className="text-white" />
+              </motion.a>
+            );
+          }
         })}
       </motion.div>
 
