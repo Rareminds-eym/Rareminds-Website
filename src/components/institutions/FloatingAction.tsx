@@ -12,7 +12,7 @@ interface MenuItem {
 
 const iconCycle = [MessageCircleQuestion, Download, Calendar];
 const cycleIntervalMs = 1500;
-const showPlusDuration = 2000;
+const showPlusDuration = 4000;
 
 const FloatingActionMenu = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -159,8 +159,11 @@ const FloatingActionMenu = () => {
                     <motion.div
                       initial={{ opacity: 0, x: 10 }}
                       animate={{ opacity: 1, x: 0 }}
-                      className="absolute right-14 bg-black/60 text-white px-2 py-1 rounded text-sm whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity"
+                      className={`absolute right-14 ${
+                        item.id === "download" ? "-top-6" : "top-0"
+                      } bg-black/60 text-white px-2 py-1 rounded text-sm whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity`}
                     >
+                    
                       {item.label}
                     </motion.div>
                   </motion.button>
@@ -187,7 +190,7 @@ const FloatingActionMenu = () => {
                 onClick={toggleMenu}
                 onMouseEnter={() => setIsHovered(true)}
                 onMouseLeave={() => setIsHovered(false)}
-                className="w-14 h-14 bg-[#222B33] rounded-full shadow-lg flex items-center justify-center text-white hover:bg-gray-700 transition-all duration-200"
+                className="w-14 h-14 bg-gradient-to-tr from-gray-700 to-gray-900 rounded-full shadow-lg flex items-center justify-center text-white hover:opacity-90 transition-all duration-200"
                 aria-label="Toggle menu"
                 >
 
