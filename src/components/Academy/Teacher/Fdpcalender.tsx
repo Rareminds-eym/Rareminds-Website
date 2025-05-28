@@ -13,7 +13,7 @@ const Fdpcalender = ({ Facultytocontact }: FdpcalenderProps) => {
       <div className="w-full max-w-6xl mt-10">
         <div className="text-center mb-12">
           <h1 className="text-lg md:text-4xl  font-bold mb-2">Pick from Ready-to-Run TDP Calendars</h1>
-          <p className="text-gray-600 text-8px">Choose the perfect faculty development program format for your institution</p>
+          <p className="text-gray-600 text-8px">Choose the perfect Teacher development program format for your institution</p>
         </div>
         
         <div className="grid md:grid-cols-3 gap-6">

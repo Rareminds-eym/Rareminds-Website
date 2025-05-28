@@ -154,7 +154,7 @@ const Problem = () => {
           >
           <div className="w-44 h-44 md:w-64 md:h-64 rounded-full bg-pink-100 p-2 shadow-xl transform transition-all duration-300 hover:scale-105 hover:bg-pink-200 flex items-center justify-center">
          <img
-           src="/academy/1.both Students and Schools sections under Academia_video_1080.png"
+           src="/academy/1.png"
            alt="icon1"
            className="w-full h-full object-cover rounded-full"
          />
