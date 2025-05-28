@@ -18,7 +18,6 @@ import ContactSection from '@/components/institutions/Contact/ContactSection';
 
 
 
-
 const Institutions: React.FC = () => {
    const location = useLocation();
 
@@ -46,7 +45,7 @@ const Institutions: React.FC = () => {
       </div>
       <InstitutionDashboardSection />
       <TestimonialVideos />
-      <ContactSection />
+      <ContactSection /> 
       </section>
       <FloatingActionMenu />
       
