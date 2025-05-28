@@ -59,10 +59,14 @@ const StatsShowcase = () => {
 
   return (
     <div className=" bg-white">
-      <div className="container mx-auto px-4 py-8 md:py-16 max-w-6xl">
-        <h1 className="text-2xl md:text-4xl font-bold text-center leading-[50px] mb-20">
-          We've Trained over 20,000 Educators across 100+ Institutions
+      <div>
+       <h1 className="text-xl md:text-4xl w-full font-bold text-center p-1 leading-[50px] mb-20">
+         We've Trained over 20,000 Educators across 100+ Institutions
+
         </h1>
+        </div>
+      <div className="container mx-auto px-4 py-8 md:py-16 max-w-6xl">
+       
 
         <div ref={ref} className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12 md:mt-6">
           {statsData.map((stat, index) => (

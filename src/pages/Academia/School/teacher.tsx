@@ -39,6 +39,8 @@ import { useState, useEffect } from "react";
   import DashboardSection from "../../../components/Academy/Teacher/DashboardSection";
   import ContactSection from "../../../components/Academy/Contact/ContactSection"
   import CorporateHeader from "../../../components/Header/AcademyHeader"
+  import FloatingActionMenu from '../../../components/Academy/StickyButton/StickyButton/FloatingAction'
+  import TestimonialViedoCarousel from '../../../components/Academy/Teacher/TestimonialCarouselVideo';
 
   const School = ({ userType = "teacher" }: { userType?: "teacher" | "student" }) => {
   const [activeTab, setActiveTab] = useState<"teacher" | "student">("teacher");
@@ -46,6 +48,8 @@ import { useState, useEffect } from "react";
       const contactRef = useRef<HTMLDivElement>(null);
       const logoRef = useRef<HTMLDivElement>(null);
       const facultyTransformationRef = useRef<HTMLDivElement>(null);
+      
+      
 
     const scrollToContact = () => {
       contactRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -152,7 +156,7 @@ useEffect(() => {
         {/* Hero Banner */}
         {/* Hero Banner (90% width) */}
         <CorporateHeader />
-        <div className="w-full h-auto  ">
+        <div className="w-full h-auto mt-20">
           {/* <div className="h-full flex items-center justify-center"> */}
           {/* <h1 className="text-4xl font-bold text-white"></h1>
         {/* </div> */}
@@ -162,9 +166,22 @@ useEffect(() => {
         
           <Toaster />
         </div>
-        <FAQChatbot />
-        <FDPButton />        {/* Logos */}
-        <div ref={logoRef} className="relative z-0 mt-[700px] rounded-tl-3xl rounded-tr-3xl shadow-2xl shadow-black" id="logo-section">
+        {/* <FAQChatbot /> */}
+        {/* <FDPButton />        Logos */}
+          <FloatingActionMenu />
+       <div ref={logoRef} className="relative z-0 mt-[800px]" id="logo-section">
+  {/* <div className="w-full h-[200px]">
+    <img src="/academy/school.svg" alt="Wave" className="w-full h-full object-cover" />
+  </div> */}
+  
+  {/* Add white space below image */}
+  {/* <div className="w-full bg-white h-[20px]"></div> You can tweak height */}
+</div>
+
+
+
+   
+        <div ref={logoRef} className="relative z-0  rounded-tl-3xl rounded-tr-3xl shadow-2xl shadow-black" id="logo-section">
           <Logos  />
         </div>
       
@@ -324,6 +341,12 @@ useEffect(() => {
           </div>
 
         </div>
+
+ <div className="h-auto flex items-center justify-center relative z-10 bg-white">
+        <TestimonialViedoCarousel />
+
+</div>
+
 
 
 

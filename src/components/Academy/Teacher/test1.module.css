@@ -1,0 +1,36 @@
+/* 
+.svgBase {
+  fill: green;
+  opacity: 0;
+  visibility: hidden;
+  animation-name: svgSequentialAnimation;
+  animation-duration: 3s;
+  animation-timing-function: ease-in-out;
+  animation-fill-mode: forwards;
+  animation-iteration-count: infinite;
+}
+
+
+@keyframes svgSequentialAnimation {
+  0% {
+    opacity: 0;
+    visibility: visible;
+    fill: rgb(254, 0, 144);
+  }
+  10% {
+    opacity: 1;
+    visibility: visible;
+    fill: yellow;
+  }
+  90% {
+    opacity: 1;
+    visibility: visible;
+    fill: yellow;
+  }
+  100% {
+    opacity: 0;
+    visibility: hidden;
+    fill: green;
+  }
+}
+  */

@@ -299,7 +299,7 @@ export const getAllUniversities = (): ClientType[] => {
       name: "Dr. Priya Singh",
       designation: "Associate Professor",
       contact: "priya.singh@tvu.edu",
-      image: "https://randomuser.me/api/portraits/women/1.jpg",
+      image: "",
       universityId: "TVU"
     },
     {
@@ -307,7 +307,7 @@ export const getAllUniversities = (): ClientType[] => {
       name: "Vikram Mehta",
       designation: "SPOC Coordinator",
       contact: "vikram.mehta@tvu.edu",
-      image: "https://randomuser.me/api/portraits/men/2.jpg",
+      image: "",
       universityId: "TVU"
     },
     // ANM
@@ -316,7 +316,7 @@ export const getAllUniversities = (): ClientType[] => {
       name: "Dr. Sanjay Patel",
       designation: "Professor",
       contact: "sanjay.patel@anm.edu",
-      image: "https://randomuser.me/api/portraits/men/3.jpg",
+      image: "",
       universityId: "ANM"
     },
     {
@@ -324,7 +324,7 @@ export const getAllUniversities = (): ClientType[] => {
       name: "Dr. Anita Sharma",
       designation: "Assistant Professor",
       contact: "anita.sharma@anm.edu",
-      image: "https://randomuser.me/api/portraits/women/2.jpg",
+      image: "",
       universityId: "ANM"
     },
     {
@@ -332,7 +332,7 @@ export const getAllUniversities = (): ClientType[] => {
       name: "Ravi Verma",
       designation: "SPOC Admin",
       contact: "ravi.verma@anm.edu",
-      image: "https://randomuser.me/api/portraits/men/4.jpg",
+      image: "",
       universityId: "ANM"
     },
     // MKU
@@ -341,7 +341,7 @@ export const getAllUniversities = (): ClientType[] => {
       name: "Dr. Divya Gupta",
       designation: "Professor",
       contact: "divya.gupta@mku.edu",
-      image: "https://randomuser.me/api/portraits/women/3.jpg",
+      image: "",
       universityId: "MKU"
     },
     {
@@ -349,7 +349,7 @@ export const getAllUniversities = (): ClientType[] => {
       name: "Dr. Arjun Reddy",
       designation: "Associate Professor",
       contact: "arjun.reddy@mku.edu",
-      image: "https://randomuser.me/api/portraits/men/5.jpg",
+      image: "",
       universityId: "MKU"
     },
     {
@@ -357,7 +357,7 @@ export const getAllUniversities = (): ClientType[] => {
       name: "Neha Choudhury",
       designation: "SPOC Manager",
       contact: "neha.choudhury@mku.edu",
-      image: "https://randomuser.me/api/portraits/women/4.jpg",
+      image: "",
       universityId: "MKU"
     },
     // ALU
@@ -366,7 +366,7 @@ export const getAllUniversities = (): ClientType[] => {
       name: "Dr. Ramesh Iyer",
       designation: "Professor",
       contact: "ramesh.iyer@alu.edu",
-      image: "https://randomuser.me/api/portraits/men/6.jpg",
+      image: "",
       universityId: "ALU"
     },
     {
@@ -374,7 +374,7 @@ export const getAllUniversities = (): ClientType[] => {
       name: "Dr. Meena Kapoor",
       designation: "Associate Professor",
       contact: "meena.kapoor@alu.edu",
-      image: "https://randomuser.me/api/portraits/women/5.jpg",
+      image: "",
       universityId: "ALU"
     },
     {
@@ -382,7 +382,7 @@ export const getAllUniversities = (): ClientType[] => {
       name: "Ajay Kumar",
       designation: "SPOC Coordinator",
       contact: "ajay.kumar@alu.edu",
-      image: "https://randomuser.me/api/portraits/men/7.jpg",
+      image: "",
       universityId: "ALU"
     },
     // BDU
@@ -391,7 +391,7 @@ export const getAllUniversities = (): ClientType[] => {
       name: "Dr. Sunil Menon",
       designation: "Professor",
       contact: "sunil.menon@bdu.edu",
-      image: "https://randomuser.me/api/portraits/men/8.jpg",
+      image: "",
       universityId: "BDU"
     },
     {
@@ -399,7 +399,7 @@ export const getAllUniversities = (): ClientType[] => {
       name: "Dr. Kavita Nair",
       designation: "Assistant Professor",
       contact: "kavita.nair@bdu.edu",
-      image: "https://randomuser.me/api/portraits/women/6.jpg",
+      image: "",
       universityId: "BDU"
     },
     {
@@ -407,7 +407,7 @@ export const getAllUniversities = (): ClientType[] => {
       name: "Rohit Sharma",
       designation: "SPOC Admin",
       contact: "rohit.sharma@bdu.edu",
-      image: "https://randomuser.me/api/portraits/men/9.jpg",
+      image: "",
       universityId: "BDU"
     },
     // BRU
@@ -416,7 +416,7 @@ export const getAllUniversities = (): ClientType[] => {
       name: "Dr. Prakash Joshi",
       designation: "Professor",
       contact: "prakash.joshi@bru.edu",
-      image: "https://randomuser.me/api/portraits/men/10.jpg",
+      image: "",
       universityId: "BRU"
     },
     {
@@ -424,7 +424,7 @@ export const getAllUniversities = (): ClientType[] => {
       name: "Dr. Sunita Mishra",
       designation: "Associate Professor",
       contact: "sunita.mishra@bru.edu",
-      image: "https://randomuser.me/api/portraits/women/7.jpg",
+      image: "",
       universityId: "BRU"
     },
     {
@@ -432,7 +432,7 @@ export const getAllUniversities = (): ClientType[] => {
       name: "Alok Patel",
       designation: "SPOC Manager",
       contact: "alok.patel@bru.edu",
-      image: "https://randomuser.me/api/portraits/men/11.jpg",
+      image: "",
       universityId: "BRU"
     },
     // MSU
@@ -441,7 +441,7 @@ export const getAllUniversities = (): ClientType[] => {
       name: "Dr. Mohan Das",
       designation: "Professor",
       contact: "mohan.das@msu.edu",
-      image: "https://randomuser.me/api/portraits/men/12.jpg",
+      image: "",
       universityId: "MSU"
     },
     {
@@ -449,7 +449,7 @@ export const getAllUniversities = (): ClientType[] => {
       name: "Dr. Rekha Pillai",
       designation: "Associate Professor",
       contact: "rekha.pillai@msu.edu",
-      image: "https://randomuser.me/api/portraits/women/8.jpg",
+      image: "",
       universityId: "MSU"
     },
     {
@@ -457,7 +457,7 @@ export const getAllUniversities = (): ClientType[] => {
       name: "Anil Kumar",
       designation: "SPOC Coordinator",
       contact: "anil.kumar@msu.edu",
-      image: "https://randomuser.me/api/portraits/men/13.jpg",
+      image: "",
       universityId: "MSU"
     },
   ];

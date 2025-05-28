@@ -106,7 +106,7 @@ const FAQChatbot: React.FC = () => {
   return (
     <div className="z-50">
       {/* Chatbot Toggle Button */}
-      <motion.div
+      {/* <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, ease: "easeOut" }}
@@ -126,7 +126,7 @@ const FAQChatbot: React.FC = () => {
             <MessageCircleQuestion size={24} className="text-white" />
           </div>
         </motion.button>
-      </motion.div>
+      </motion.div> */}
 
       {/* Chatbot Interface */}
       <AnimatePresence>

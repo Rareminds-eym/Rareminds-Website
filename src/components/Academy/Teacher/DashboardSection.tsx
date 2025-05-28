@@ -80,7 +80,7 @@ const InstitutionDashboardSection = () => {
 <div className="relative group w-[280px] h-[160px]">
   {/* Hover Text Above Card */}
   <span className="absolute -top-6 left-1/2 -translate-x-1/2 text-xs font-bold text-black  px-3 py-1  opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-2 group-hover:-translate-y-2 z-10 ">
-    Gamifies lab safety protocols
+    Gamified lab safety protocols
   </span>
 
   {/* Card */}
@@ -102,7 +102,7 @@ const InstitutionDashboardSection = () => {
 <div className="relative group w-[280px] h-[160px]">
   {/* Hover Text Above the Card */}
   <span className="absolute -top-8 left-1/2 -translate-x-1/2 text-black font-bold text-xs px-3 py-1 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-2 group-hover:-translate-y-2 z-10">
-    Gamifies lab safety protocols
+    Gamified lab safety protocols
   </span>
 
   {/* Clickable Image Card */}
@@ -143,12 +143,12 @@ const InstitutionDashboardSection = () => {
       <img
         src="/academy/Dashboardleft.png"
         alt="Dashboard Preview 1"
-        className="rounded-xl w-full md:w-1/2 object-cover"
+        className="rounded-xl w-full md:w-1/2 object-cover  transition-transform duration-500 ease-in-out hover:scale-110 cursor-pointer"
       />
       <img
         src="/academy/Dashboardright.png"
         alt="Dashboard Preview 2"
-        className="rounded-xl w-full md:w-1/2 object-cover"
+        className="rounded-xl w-full md:w-1/2 object-cover  transition-transform duration-500 ease-in-out hover:scale-110 cursor-pointer"
       />
     </div>
   </div>

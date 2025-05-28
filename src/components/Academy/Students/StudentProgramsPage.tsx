@@ -28,7 +28,8 @@ const StudentProgramsPage = ({coursetocontact}:coursecardProps) => {
       buttonIcon: <Calendar className="h-4 w-4" />,
       hasPdf: true,
       pdfUrl: "/spoken-english-brochure.pdf",
-      readMoreUrl: "/academia/coming-soon"
+      // readMoreUrl: "/academia/student/course/Spoken-English"
+        readMoreUrl: "/academia/coming-soon"
     },
 
     {
@@ -45,7 +46,7 @@ const StudentProgramsPage = ({coursetocontact}:coursecardProps) => {
       buttonIcon: <Download className="h-4 w-4" />,
       hasPdf: true,
       pdfUrl: "/career-blueprint.pdf",
-      readMoreUrl: "/academia/coming-soon"
+      readMoreUrl: "/academia/student/course/career-counselling"
     },
     {
       title: "The 3E Program: English, Employability, Entrepreneurship",
@@ -80,8 +81,9 @@ const StudentProgramsPage = ({coursetocontact}:coursecardProps) => {
           Welcome to India's Most Trusted Student Skill Training Platform
         </h1>
         <p className="text-sm sm:text-md md:text-lg max-w-4xl mx-auto text-gray-700 px-2">
-          Our training programs empower students with the 4Cs of Education—Communication, Collaboration, Critical Thinking, and 
-          Creativity—while aligning with NEP 2020, 21st-century job market needs, and career clarity.
+         Empowering students with the 4Cs of Education: Communication, Collaboration, Critical Thinking, and Creativity, 
+while aligning with NEP 2020, 21st-century job market needs, and career clarity.
+
         </p>
       </header>
       
