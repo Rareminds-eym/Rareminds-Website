@@ -62,7 +62,7 @@ type ServiceData = {
     {
       id: "design",
       name: "Schedule Your TDP",
-      headline: "“You Can’t Teach Tomorrow’s Students\nwith Yesterday’s Methods.”",
+      headline: "“Teach the Future, Not the Past”",
       subtext: "Train in NEP, Digital Pedagogy & Emotional Intelligence",
       illustration: "/academy/herobanner/1.png",
   
@@ -93,7 +93,7 @@ type ServiceData = {
     },
     {
       id: "business",
-      name: "Join EI Training",
+      name: "Join Emotional Intelligence Training",
       headline: "“Empathy is a Superpower\nin Every Classroom.”",
       subtext: "Build emotional intelligence and inclusive practices",
       illustration: "/academy/herobanner/5.png",

@@ -5,12 +5,16 @@ interface ServiceCarouselProps {
   services: ServiceData[];
   activeServiceId: string;
   onServiceChange: (serviceId: string) => void;
+  transitionDuration?: number; // Transition duration in milliseconds
+  rotationInterval?: number; // Rotation interval in milliseconds
 }
 
 const ServiceCarousel: React.FC<ServiceCarouselProps> = ({ 
   services, 
   activeServiceId,
-  onServiceChange 
+  onServiceChange,
+  transitionDuration = 500, // Default 500ms transition
+  rotationInterval = 5000 // Default 5s rotation
 }) => {
   const [activeIndex, setActiveIndex] = useState(0);
   
@@ -25,10 +29,10 @@ const ServiceCarousel: React.FC<ServiceCarouselProps> = ({
     const interval = setInterval(() => {
       const nextIndex = (activeIndex + 1) % services.length;
       onServiceChange(services[nextIndex].id);
-    }, 5000);
+    }, rotationInterval);
     
     return () => clearInterval(interval);
-  }, [activeIndex, services, onServiceChange]);
+  }, [activeIndex, services, onServiceChange, rotationInterval]);
 
   const activeService = services[activeIndex];
 
@@ -38,13 +42,22 @@ const ServiceCarousel: React.FC<ServiceCarouselProps> = ({
       <div 
         className={`absolute inset-0 opacity-20 transition-colors duration-500 ${activeService.color}`} 
       />
-      
-      {/* Illustration */}
-      <div className="relative w-4/5 h-4/5 hero-fade-in">
+        {/* Illustration */}
+      <div 
+        className="relative w-4/5 h-4/5"
+        style={{
+          transition: `opacity ${transitionDuration}ms ease-out`,
+          opacity: 1
+        }}
+      >
         <img 
           src={activeService.illustration} 
           alt={activeService.name}
           className="w-full h-full object-contain"
+          style={{
+            transition: `transform ${transitionDuration}ms ease-out`,
+            transform: 'translateY(0)'
+          }}
         />
       </div>
     </div>
