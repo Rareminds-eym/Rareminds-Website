@@ -19,9 +19,9 @@ const ContactSection = () => {
   const { toast } = useToast();
   const [formData, setFormData] = useState({
     name: "",
-    company: "",
+    university: "",
     email: "",
-    role: "",
+    course: "",
     message: "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -53,9 +53,9 @@ const ContactSection = () => {
       setTimeout(() => {
         setFormData({
           name: "",
-          company: "",
+          university: "",
           email: "",
-          role: "",
+          course: "",
           message: "",
         });
         setSubmitted(false);
@@ -67,13 +67,13 @@ const ContactSection = () => {
   return (
     <section className="section py-12 relative overflow-hidden bg-gradient-to-br from-blue-50 via-pink-30 to-purple-30 text-gray-800 "
     >
-      <div className="container mx-auto px-6">
+      <div className="container mx-auto px-5">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-          className="text-center mb-16"
+          transition={{ duration: 0.6 }}
+          className="text-center mb-16 lg:px-14 relative z-10" 
         >
           <h1 className="text-xl font-bold mb-4 bg-black bg-clip-text text-transparent">
             Partner With Us
@@ -83,7 +83,7 @@ const ContactSection = () => {
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-5 gap-10 px-20">
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 ">
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -92,7 +92,7 @@ const ContactSection = () => {
             className="lg:col-span-3"
           >
             <div className="bg-gray-50 backdrop-blur-sm border border-white/30 rounded-3xl overflow-hidden shadow-xl">
-              <div className="p-8">
+              <div className="p-16">
                 <h3 className="text-lg font-semibold mb-10 flex items-center gap-3 text-gray-800">
                   
                     <School size={20} />
@@ -103,13 +103,13 @@ const ContactSection = () => {
                 <form
                   ref={formRef}
                   onSubmit={handleSubmit}
-                  className="space-y-4"
+                  className="space-y-6"
                 >
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6 ">
                     <div>
                       <label
                         htmlFor="name"
-                        className="block mb-4 font-medium text-gray-700 text-sm"
+                        className="block mb-2 font-medium text-gray-700 text-sm"
                       >
                         Name
                       </label>
@@ -125,17 +125,17 @@ const ContactSection = () => {
                     </div>
                     <div>
                       <label
-                        htmlFor="company"
-                        className="block mb-4 font-medium text-gray-700 text-sm"
+                        htmlFor="university"
+                        className="block mb-2 font-medium text-gray-700 text-sm"
                       >
                         University Name
                       </label>
                       <Input
-                        id="company"
-                        name="company"
-                        value={formData.company}
+                        id="university"
+                        name="university"
+                        value={formData.university}
                         onChange={handleChange}
-                        placeholder="Company Name"
+                        placeholder="Univeristy Name"
                         className="w-full bg-white/50 border-gray-200 text-gray-800 placeholder:text-gray-400"
                         required
                       />
@@ -146,7 +146,7 @@ const ContactSection = () => {
                     <div>
                       <label
                         htmlFor="email"
-                        className="block mb-4 font-medium text-gray-700 text-sm"
+                        className="block mb-2 font-medium text-gray-700 text-sm"
                       >
                         Email Address
                       </label>
@@ -163,17 +163,17 @@ const ContactSection = () => {
                     </div>
                     <div>
                       <label
-                        htmlFor="role"
+                        htmlFor="course"
                         className="block mb-4 font-medium text-gray-700 text-sm"
                       >
-                        Role to Hire
+                        Course Applied for
                       </label>
                       <Input
                         id="role"
                         name="role"
-                        value={formData.role}
+                        value={formData.course}
                         onChange={handleChange}
-                        placeholder="Job Title/Position"
+                        placeholder="Course Name"
                         className="w-full bg-white/50 border-gray-200 text-gray-800 placeholder:text-gray-400"
                         required
                       />
@@ -183,7 +183,7 @@ const ContactSection = () => {
                   <div>
                     <label
                       htmlFor="message"
-                      className="block mb-4 font-medium text-gray-700 text-sm"
+                      className="block mb-2 font-medium text-gray-700 text-sm"
                     >
                       Message
                     </label>
@@ -192,13 +192,13 @@ const ContactSection = () => {
                       name="message"
                       value={formData.message}
                       onChange={handleChange}
-                      placeholder="Tell us about your hiring needs or challenges"
+                      placeholder="Tell us about your univeristy or course requirements"
                       className="w-full min-h-[120px] bg-white/50 border-gray-200 text-gray-800 placeholder:text-gray-400"
                       required
                     />
                   </div>
 
-                  <div className="pt-2">
+                  <div className="pt-4">
                     <AnimatePresence mode="wait">
                       {!submitted ? (
                         <motion.div
@@ -263,7 +263,8 @@ const ContactSection = () => {
                                 animate={{ opacity: 1, y: 0 }}
                                 className="bg-green-100 border border-green-300 rounded-xl p-4 text-center"
                               >
-                                <CheckCircle2 size={32} className="mx-auto mb-2 text-green-600" />
+                                <CheckCircle2 size={32} 
+                                className="mx-auto mb-2 text-green-600" />
                                 <p className="font-medium text-green-800">
                                   Message sent successfully!
                                 </p>
@@ -271,9 +272,9 @@ const ContactSection = () => {
                                   Our team will contact you shortly.
                                 </p>
                               </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
+                            )}
+                          </AnimatePresence>
+                        </div>
 
                 </form>
               </div>
@@ -338,6 +339,72 @@ const ContactSection = () => {
                     </div>
                   </div>
                 </div>
+              </div>
+              <div className="bg-white/80 backdrop-blur-sm border border-white/30 rounded-3xl px-8 py-7 shadow-xl">
+                <h3 className="text-lg font-semibold mb-2 text-gray-800 flex items-center gap-2">
+                  <Icon icon="mdi:share-variant" width={20} height={20} className="text-corporate-black" />
+                  Follow Us.
+                </h3>
+                <motion.div
+                  className="flex items-center gap-4 mt-3"
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true }}
+                  variants={{
+                    hidden: {},
+                    visible: { transition: { staggerChildren: 0.12 } },
+                  }}
+                >
+                  {[
+                    {
+                      href: "https://www.linkedin.com/company/rareminds/",
+                      icon: "mdi:linkedin",
+                      hoverColor: "hover:text-[#0A66C2]",
+                      label: "LinkedIn",
+                    },
+                    {
+                      href: "https://www.instagram.com/rareminds_eym/",
+                      icon: "mdi:instagram",
+                      hoverColor: "hover:text-[#E4405F]",
+                      label: "Instagram",
+                    },
+                    {
+                      href: "https://www.facebook.com/raremindsgroup",
+                      icon: "mdi:facebook",
+                      hoverColor: "hover:text-[#1877F3]",
+                      label: "Facebook",
+                    },
+                    {
+                      href: "https://x.com/minds_rare",
+                      icon: "mdi:twitter",
+                      hoverColor: "hover:text-[#1DA1F2]",
+                      label: "Twitter (X)",
+                    },
+                    {
+                      href: "https://www.youtube.com/channel/UClkBtwJsScYxFzNoFdlifeA",
+                      icon: "mdi:youtube",
+                      hoverColor: "hover:text-[#FF0000]",
+                      label: "YouTube",
+                      size: 40,
+                    },
+                  ].map((item, idx) => (
+                    <motion.a
+                      key={item.label}
+                      href={item.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={item.label}
+                      className={`text-gray-800 ${item.hoverColor} hover:scale-110 transition-transform`}
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      whileHover={{ scale: 1.18, rotate: -6 }}
+                      transition={{ type: 'spring', stiffness: 300, damping: 20, delay: 0.1 * idx }}
+                      viewport={{ once: true }}
+                    >
+                      <Icon icon={item.icon} width={item.size || 32} height={item.size || 32} />
+                    </motion.a>
+                  ))}
+                </motion.div>
               </div>
             </div>
           </motion.div>

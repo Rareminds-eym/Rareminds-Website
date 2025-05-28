@@ -5,13 +5,13 @@ import { Menu, X, ChevronDown } from "lucide-react";
 const verticalOptions = [
   { label: "SDP", path: "/institutions" },
   { label: "Institutions", path: "/institutions/services" },
-  { label: "FDP", path: null }, // not linked yet
+  { label: "FDP", path: "/institutions/fdp" }, // not linked yet
 ];
 
 const InstitutionsHeader: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
-  const [currentVertical, setCurrentVertical] = useState("Institutions");
+  const [currentVertical, setCurrentVertical] = useState("SDP");
 
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -54,7 +54,7 @@ const InstitutionsHeader: React.FC = () => {
     <header className="fixed top-0 left-0 w-full z-50 bg-white border-b shadow-sm">
       <div className="container mx-auto h-[80px] px-4 py-4 flex justify-between items-center">
         {/* Left: Logo */}
-        <Link to="/institutions/sdp" className="text-xl font-bold text-blue-600 flex items-center">
+        <Link to="/" className="text-xl font-bold text-blue-600 flex items-center">
           <img src="/RareMinds.webp" alt="Rareminds Logo" width={200} />
         </Link>
 

@@ -6,6 +6,7 @@ const courses = [
   {
     id: "01",
     title: "Faculty Development Programs",
+    image: "/institutions/vectors/insticons/1.png",
     subCards: [
       { label: "Faculty", icon: <Globe size={20} /> },
       { label: "Development", icon: <Briefcase size={20} /> },
@@ -15,6 +16,7 @@ const courses = [
   {
     id: "02",
     title: "Communication & Personality Development",
+     image: "/institutions/vectors/insticons/2.png",
     subCards: [
       { label: "Communication", icon: <Globe size={20} /> },
       { label: "Personality", icon: <Briefcase size={20} /> },
@@ -24,6 +26,7 @@ const courses = [
   {
     id: "03",
     title: "Mental Health & Counselling Training",
+    image: "/institutions/vectors/insticons/3.png",
     subCards: [
       { label: "Mental Health", icon: <Globe size={20} /> },
       { label: "Counselling", icon: <Briefcase size={20} /> },
@@ -33,6 +36,7 @@ const courses = [
   {
     id: "04",
     title: "Domain Specific Classification Programs",
+    image: "/institutions/vectors/insticons/4.png",
     subCards: [
       { label: "Domain", icon: <Globe size={20} /> },
       { label: "Classification", icon: <Briefcase size={20} /> },
@@ -42,6 +46,7 @@ const courses = [
   {
     id: "05",
     title: "Leadership & Career Growth",
+    image: "/institutions/vectors/insticons/5.png",
     subCards: [
       { label: "Leadership", icon: <Globe size={20} /> },
       { label: "Career", icon: <Briefcase size={20} /> },
@@ -51,6 +56,7 @@ const courses = [
   {
     id: "06",
     title: "Institutional Value-add Services",
+     image: "/institutions/vectors/insticons/6.png",
     subCards: [
       { label: "Institutional", icon: <Globe size={20} /> },
       { label: "Value-add", icon: <Briefcase size={20} /> },
@@ -241,8 +247,8 @@ const CourseCards = () => {
                   style={{ transform: "translateZ(30px)" }}
                 >
                   <img
-                    src="https://via.placeholder.com/80"
-                    alt="Course"
+                    src={course.image}
+                    alt={course.title}
                     className="w-full h-full object-cover rounded-full"
                   />
                 </div>
@@ -258,7 +264,7 @@ const CourseCards = () => {
                   <div className="w-8 h-8 bg-blue-200 rounded-full flex items-center justify-center text-blue-600">
                     <Briefcase size={20} />
                   </div>
-                  <button className="text-sm font-medium text-blue-600 hover:underline">
+                  <button className="text-sm font-medium text-blue-600 hover:text-blue-800">
                     Schedule
                   </button>
                 </motion.div>

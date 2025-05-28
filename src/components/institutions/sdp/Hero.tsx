@@ -94,7 +94,7 @@ export default function Hero() {
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentBanner((prev) => (prev + 1) % banners.length);
-    }, 6000);
+    }, 12000);
     return () => clearInterval(timer);
   }, []);
 
@@ -124,7 +124,7 @@ export default function Hero() {
               autoPlay
               loop
               muted
-              className="absolute inset-0 w-full h-full object-cover z-0 pt-2"
+              className="absolute inset-0 w-full h-full object-cover z-0 "
               poster={banner.poster}
             >
               <source src={banner.video} type="video/mp4" />

@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Input } from "./input";
 import { Textarea } from "./textarea";
 import { supabase } from "@/lib/supabaseClient";
+
 import {
   Phone,
   Mail,
@@ -15,6 +16,8 @@ import {
 } from "lucide-react";
 import { Icon } from "@iconify/react";
 import { useToast } from "@/hooks/use-toast";
+import { AiFillYoutube,AiFillLinkedin } from "react-icons/ai";
+import { FaXTwitter,FaFacebookF } from "react-icons/fa6";
 
 const ContactSection = () => {
   const { toast } = useToast();
@@ -88,7 +91,7 @@ const ContactSection = () => {
       });
 
       setSubmitted(true);
-      
+
       setTimeout(() => {
         setFormData({
           name: "",
@@ -235,7 +238,7 @@ const ContactSection = () => {
                       value={formData.message}
                       onChange={handleChange}
                       placeholder="Please tell us how we can help you..."
-                      className="w-full min-h-[120px] bg-white/50 border-gray-200 text-gray-800 placeholder:text-gray-400"
+                      className="w-full min-h-[180px] bg-white/50 border-gray-200 text-gray-800 placeholder:text-gray-400"
                       required
                     />
                   </div>
@@ -373,8 +376,8 @@ const ContactSection = () => {
                   </div>
                 </div>
 
-                <div className="mt-8 border-t border-gray-200 pt-8 h-full">
-                  <h4 className="text-xl font-bold mb-6 text-gray-800 flex items-center gap-3">
+                <div className="">
+                  <h4 className="text-xl font-bold mb-6 text-gray-800 flex items-center gap-3 mt-3">
                     <span className="bg-black w-8 h-8 rounded-full flex items-center justify-center text-white">
                       <Icon icon="mdi:web" className="text-lg" />
                     </span>
@@ -385,37 +388,45 @@ const ContactSection = () => {
                       href="https://facebook.com/rareminds"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex flex-col items-center p-4 bg-black/5 rounded-2xl hover:bg-black/10 transition-colors group"
+                      className="flex flex-col items-center justify-center group bg-gray-100 p-4  rounded-2xl"
                     >
-                      <Facebook size={28} className="text-gray-600 group-hover:text-blue-600 transition-colors" />
-                      <span className="mt-2 text-sm font-medium text-gray-600 group-hover:text-gray-800">Facebook</span>
+                      <div className="w-12 h-12 flex items-center justify-center">
+                        <FaFacebookF className="text-[#1877F2] w-7 h-7 group-hover:rotate-12 group-hover:scale-125 transition-all duration-300"/>
+                      </div>
+                      <span className="mt-2 text-sm font-medium text-gray-600  group-hover:-translate-y-3 group-hover:bg-blue-600 group-hover:text-white group-hover:rounded-full group-hover:px-4 px-4 py-1 group-hover:py-1 transition-all duration-300">Facebook</span>
                     </a>
                     <a
                       href="https://twitter.com/rareminds"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex flex-col items-center p-4 bg-black/5 rounded-2xl hover:bg-black/10 transition-colors group"
+                      className="flex flex-col items-center justify-center group bg-gray-100 rounded-2xl"
                     >
-                      <Twitter size={28} className="text-gray-600 group-hover:text-blue-400 transition-colors" />
-                      <span className="mt-2 text-sm font-medium text-gray-600 group-hover:text-gray-800">Twitter</span>
+                      <div className="w-12 h-12 flex items-center justify-center">
+                        <FaXTwitter className="w-7 h-7 group-hover:rotate-12 group-hover:scale-125 transition-all duration-300"/>
+                      </div>
+                      <span className="mt-2 text-sm font-medium text-gray-600  group-hover:-translate-y-3 group-hover:bg-black group-hover:text-white  group-hover:rounded-full group-hover:px-4 group-hover:py-1 transition-all duration-300">Twitter</span>
                     </a>
                     <a
                       href="https://youtube.com/rareminds"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex flex-col items-center p-4 bg-black/5 rounded-2xl hover:bg-black/10 transition-colors group"
+                      className="flex flex-col items-center justify-center group bg-gray-100 rounded-2xl"
                     >
-                      <Youtube size={28} className="text-gray-600 group-hover:text-red-600 transition-colors" />
-                      <span className="mt-2 text-sm font-medium text-gray-600 group-hover:text-gray-800">YouTube</span>
+                      <div className="w-12 h-12 flex items-center justify-center">
+                        <AiFillYoutube className="text-[#FF0000] w-10 h-10 group-hover:rotate-12 group-hover:scale-125 transition-all duration-300"/>
+                      </div>
+                      <span className="mt-2 text-sm font-medium text-gray-600  group-hover:-translate-y-3 group-hover:bg-[#FF0000] group-hover:text-white  group-hover:rounded-full group-hover:px-4 group-hover:py-1 transition-all duration-300">YouTube</span>
                     </a>
                     <a
                       href="https://linkedin.com/company/rareminds"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex flex-col items-center p-4 bg-black/5 rounded-2xl hover:bg-black/10 transition-colors group"
+                      className="flex flex-col items-center justify-center group bg-gray-100 rounded-2xl"
                     >
-                      <Icon icon="mdi:linkedin" className="text-3xl text-gray-600 group-hover:text-blue-700 transition-colors" />
-                      <span className="mt-2 text-sm font-medium text-gray-600 group-hover:text-gray-800">LinkedIn</span>
+                      <div className="w-12 h-12 flex items-center justify-center">
+                        <AiFillLinkedin className="text-[#0A66C2] w-10 h-10 group-hover:rotate-12 group-hover:scale-125 transition-all duration-300"/>
+                      </div>
+                      <span className="mt-2 text-sm font-medium text-gray-600  group-hover:-translate-y-3 group-hover:bg-[#0A66C2] group-hover:text-white  group-hover:rounded-full group-hover:px-4 group-hover:py-1 transition-all duration-300">LinkedIn</span>
                     </a>
                   </div>
                 </div>

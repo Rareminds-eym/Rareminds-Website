@@ -54,7 +54,7 @@ export default {
         'slide-up': 'slide-up 0.3s ease-out',
         'fade-out': 'fade-out 0.2s ease-in forwards',
         'slide-down': 'slide-down 0.2s ease-in forwards',
-        'spin-slow': 'spin 4s linear infinite',
+        'spin-slow': 'spin 9s linear infinite',
       },
       keyframes: {
         float: {
