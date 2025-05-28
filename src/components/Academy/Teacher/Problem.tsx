@@ -117,8 +117,9 @@ const Problem = () => {
           className="w-full lg:w-1/2 mb-10 lg:mb-0 md:text-left text-center"
         >
           <h2 className="text-3xl font-semibold text-black mb-6">
-            Communication. Confidence. Clarity. The real essentials.
-          </h2>
+  Communication. Confidence. Clarity. <br />The real essentials.
+</h2>
+
           {/* <h2 className="text-2xl font-bold text-black mb-2">
             Communication that works.
           </h2>

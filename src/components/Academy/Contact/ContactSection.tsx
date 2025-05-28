@@ -233,7 +233,7 @@ const AcademyContactSection = () => {
                     />
                   </div>
 
-                  <div className="pt-4">
+                  <div className="pt-4 pb-10">
                     <AnimatePresence mode="wait">
                       {!submitted ? (
                         <motion.div
@@ -244,7 +244,7 @@ const AcademyContactSection = () => {
                         >
                           <button
                             type="submit"
-                            className="bg-red-500 hover:bg-red-600 text-white font-medium py-3 px-6 rounded-xl transition-all flex items-center justify-center"
+                            className="bg-red-500  hover:bg-red-600 text-white font-medium py-3 px-6 rounded-xl transition-all flex items-center justify-center"
                             disabled={isSubmitting}
                           >
                             {isSubmitting ? (
@@ -302,7 +302,11 @@ const AcademyContactSection = () => {
                   </div>
                 </form>
               </div>
+
+
+              
             </div>
+            
           </motion.div>
 
           <motion.div
@@ -324,7 +328,7 @@ const AcademyContactSection = () => {
                     </div>
                     <div>
                       <h4 className="font-semibold mb-1 text-gray-800">
-                        Academy Helpline
+                        Helpline
                       </h4>
                       <p className="text-gray-600">+91 99023 26951</p>
                       {/* <p className="text-gray-600">+91 82960 61534</p> */}
@@ -361,7 +365,75 @@ const AcademyContactSection = () => {
                 </div>
               </div>
 
-              <div className="bg-black/50 text-white rounded-3xl p-8 shadow-xl">
+
+               <div className="bg-white/80 backdrop-blur-sm border border-white/30 rounded-3xl px-8 py-7 shadow-xl flex flex-col items-center ">
+                            <h3 className="text-xl font-bold mb-2 text-gray-800 flex items-center gap-2">
+                              <Icon icon="mdi:share-variant" width={22} height={22} className="text-corporate-black" />
+                              Follow Us
+                            </h3>
+                            <motion.div
+                              className="flex items-center gap-4 mt-2"
+                              initial="hidden"
+                              whileInView="visible"
+                              viewport={{ once: true }}
+                              variants={{
+                                hidden: {},
+                                visible: { transition: { staggerChildren: 0.12 } },
+                              }}
+                            >
+                              {[
+                                {
+                                  href: "https://www.linkedin.com/company/rareminds/",
+                                  icon: "mdi:linkedin",
+                                  color: "#0A66C2",
+                                  label: "LinkedIn",
+                                },
+                                {
+                                  href: "https://www.instagram.com/rareminds_eym/",
+                                  icon: "mdi:instagram",
+                                  color: "#E4405F",
+                                  label: "Instagram",
+                                },
+                                {
+                                  href: "https://www.facebook.com/raremindsgroup",
+                                  icon: "mdi:facebook",
+                                  color: "#1877F3",
+                                  label: "Facebook",
+                                },
+                                {
+                                  href: "https://x.com/minds_rare",
+                                  icon: "mdi:twitter",
+                                  color: "#1DA1F2",
+                                  label: "Twitter (X)",
+                                },
+                                {
+                                  href: "https://www.youtube.com/channel/UClkBtwJsScYxFzNoFdlifeA",
+                                  icon: "mdi:youtube",
+                                  color: "#FF0000",
+                                  label: "YouTube",
+                                  size: 40,
+                                },
+                              ].map((item) => (
+                                <motion.a
+                                  key={item.label}
+                                  href={item.href}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  aria-label={item.label}
+                                  className="hover:scale-110 transition-transform"
+                                  variants={{
+                                    hidden: { opacity: 0, y: 24 },
+                                    visible: { opacity: 1, y: 0, transition: { type: 'spring', stiffness: 300, damping: 24 } },
+                                  }}
+                                  whileHover={{ scale: 1.18, rotate: -6 }}
+                                >
+                                  <Icon icon={item.icon} width={item.size || 32} height={item.size || 32} style={{ color: item.color }} />
+                                </motion.a>
+                              ))}
+                            </motion.div>
+                          </div>
+
+              {/* <div className="bg-black opacity-30 text-white rounded-3xl p-8 shadow-xl">
                 <h3 className="text-xl font-bold mb-4">Why Choosen Us?</h3>
                 <ul className="space-y-3">
                   <li className="flex items-start gap-2">
@@ -381,7 +453,7 @@ const AcademyContactSection = () => {
                     <span>Hands-on practical training</span>
                   </li>
                 </ul>
-              </div>
+              </div> */}
             </div>
           </motion.div>
         </div>

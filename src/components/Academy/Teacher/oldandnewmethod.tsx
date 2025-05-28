@@ -78,7 +78,7 @@ useEffect(() => {
           <div className="grid grid-cols-1 gap-4 items-center lg:grid-cols-2">
             <div className="order-2 lg:order-1 flex justify-center md:justify-center">
                <div className='  max-w-xl'>
-              <h2 className="text-2xl md:text-4xl font-bold text-gray-900 mb-8">Why Traditional TeachingNo Longer Works</h2>
+              <h2 className="text-2xl md:text-4xl font-bold text-gray-900 mb-8">Why Traditional Teaching No Longer Works</h2>
               <div className="text-lg text-gray-600 mb-8 leading-relaxed">
                 <div className="space-y-3">
                   <h3 className="font-semibold text-xl text-red-600"></h3>
@@ -184,7 +184,7 @@ useEffect(() => {
 
             <div className="order-2 flex justify-center md:justify-center">
             <div className='  max-w-xl'>
-              <h2 className="text-2xl md:text-4xl font-bold text-gray-900 mb-8">How Rareminds Transforms Learning </h2>
+              <h2 className="text-2xl md:text-4xl font-bold text-gray-900 mb-8">How <span className="text-red-500">Rareminds</span> Transforms Learning </h2>
               <div className="text-lg text-gray-600 mb-8 leading-relaxed">
                 <div className="space-y-3 ">
                   <h3 className="font-semibold text-xl text-red-600"></h3>

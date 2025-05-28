@@ -12,7 +12,7 @@ type ServiceData = {
     {
       id: "design",
       name: "Talk to a Career Mentor",
-      headline: "“Turn Your Degree Into a Career.”",
+      headline: "“Turn Your Degree into a Career.”",
       subtext: "1000+ students trained. Real companies. Real results.",
       illustration: "/academy/herobanner/6.png",
       color: ""
