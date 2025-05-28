@@ -41,6 +41,7 @@ import { useState, useEffect } from "react";
   import CorporateHeader from "../../../components/Header/AcademyHeader"
   import FloatingActionMenu from '../../../components/Academy/StickyButton/StickyButton/FloatingAction'
   import TestimonialViedoCarousel from '../../../components/Academy/Teacher/TestimonialCarouselVideo';
+  import Hero from '../../../components/Academy/Teacher/Herobanner/Hero'
 
   const School = ({ userType = "teacher" }: { userType?: "teacher" | "student" }) => {
   const [activeTab, setActiveTab] = useState<"teacher" | "student">("teacher");
@@ -156,20 +157,21 @@ useEffect(() => {
         {/* Hero Banner */}
         {/* Hero Banner (90% width) */}
         <CorporateHeader />
-        <div className="w-full h-auto mt-20">
+        <div className="w-full">
           {/* <div className="h-full flex items-center justify-center"> */}
           {/* <h1 className="text-4xl font-bold text-white"></h1>
         {/* </div> */}
           {/* <VideoCarousel /> */}
    
-          <HeroBanner HeroToContact={scrollToContact} HeroToLogo={scrollToLogo} />
+          {/* <HeroBanner HeroToContact={scrollToContact} HeroToLogo={scrollToLogo} />
         
-          <Toaster />
+          <Toaster /> */}
+          <Hero HeroToLogo={scrollToLogo} HeroToContact={scrollToContact} />
         </div>
         {/* <FAQChatbot /> */}
         {/* <FDPButton />        Logos */}
           <FloatingActionMenu />
-       <div ref={logoRef} className="relative z-0 mt-[800px]" id="logo-section">
+       <div ref={logoRef} className="relative z-0 " id="logo-section">
   {/* <div className="w-full h-[200px]">
     <img src="/academy/school.svg" alt="Wave" className="w-full h-full object-cover" />
   </div> */}
@@ -181,7 +183,7 @@ useEffect(() => {
 
 
    
-        <div ref={logoRef} className="relative z-0  rounded-tl-3xl rounded-tr-3xl shadow-2xl shadow-black" id="logo-section">
+        <div ref={logoRef} className="relative z-0  rounded-tl-3xl rounded-tr-3xl shadow-2xl shadow-black 0" id="logo-section">
           <Logos  />
         </div>
       
