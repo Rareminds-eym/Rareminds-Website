@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { useState } from 'react';
-import { Trophy, TrendingUp, Puzzle, X } from 'lucide-react';
+import { Trophy, TrendingUp, Puzzle, X , EyeIcon} from 'lucide-react';
 
 const caseStudies = [
   {
@@ -43,7 +43,7 @@ export default function CaseStudies() {
             Delivering on Outcomes: Success Stories.
           </h1>
           <p className="text-sm text-gray-600 mx-auto">
-            Colleges That Chose Outcomes. And Got Them.
+            Colleges That Chose Outcomes and achieved them.
           </p>
         </motion.div>
 
@@ -84,7 +84,6 @@ export default function CaseStudies() {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
-            <div className="absolute inset-0 bg-gradient-to-r from-blue-400 to-purple-400 rounded-full blur-xl opacity-75 animate-pulse " />
 
             <motion.button
               onClick={() => setIsModalOpen(true)}
@@ -102,7 +101,7 @@ export default function CaseStudies() {
                 repeat: Infinity,
                 repeatType: "reverse"
               }}
-            >
+            ><EyeIcon className="inline-block mr-1 h-5 w-5" />
               <span>See full Results By College Type</span>
             </motion.button>
           </motion.div>
