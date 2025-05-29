@@ -19,13 +19,14 @@ interface MenuItem {
 const FloatingActionMenu = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenFaq, setIsOpenFaq] = useState(false);
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
   const menuItems: MenuItem[] = [
     {
-      id: "faq",
-      icon: HelpCircle,
-      label: "FAQ",
-      onClick: () => console.log("FAQ clicked"),
+      id: "download",
+      icon: Download,
+      label: "Download",
+      onClick: () => console.log("Download clicked"),
     },
     {
       id: "chat",
@@ -40,10 +41,10 @@ const FloatingActionMenu = () => {
       onClick: () => console.log("Book a Demo clicked"),
     },
     {
-      id: "download",
-      icon: Download,
-      label: "Download",
-      onClick: () => console.log("Download clicked"),
+      id: "faq",
+      icon: HelpCircle,
+      label: "FAQ",
+      onClick: () => console.log("FAQ clicked"),
     },
   ];
 
@@ -128,16 +129,23 @@ const FloatingActionMenu = () => {
                     whileTap={{ scale: 0.9 }}
                     onClick={() => handleMenuItemClick(item)}
                     className="w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center text-gray-700 hover:bg-gray-50 transition-colors group relative"
+                    onMouseEnter={() => setHoveredIndex(index)}
+                    onMouseLeave={() => setHoveredIndex(null)}
                   >
                     <IconComponent size={20} />
                     {/* Tooltip */}
-                    <motion.div
-                      initial={{ opacity: 0, x: 10 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      className="absolute right-14 bg-gray-800 text-white px-2 py-1 rounded text-sm whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity"
-                    >
-                      {item.label}
-                    </motion.div>
+                    <AnimatePresence>
+                      {hoveredIndex === index && (
+                        <motion.div
+                          initial={{ opacity: 0, x: 10 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          exit={{ opacity: 0, x: 10 }}
+                          className="absolute right-14 bg-gray-800 text-white px-2 py-1 rounded text-sm whitespace-nowrap transition-opacity"
+                        >
+                          {item.label}
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
                   </motion.button>
                 </motion.div>
               );
