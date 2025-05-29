@@ -11,32 +11,6 @@ const TechTeamSection: React.FC<TechTeamSectionProps> = ({
   title = "",
   description = [""],
 }) => {
-  const stats = [
-    {
-      icon: Users,
-      stat: "500+",
-      label: "Tech Roles Filled",
-      color: "from-blue-600 to-cyan-500",
-    },
-    {
-      icon: Gauge,
-      stat: "48hrs",
-      label: "Average Response Time",
-      color: "from-purple-600 to-pink-500",
-    },
-    {
-      icon: Award,
-      stat: "95%",
-      label: "Success Rate",
-      color: "from-green-600 to-emerald-500",
-    },
-    {
-      icon: Target,
-      stat: "100+",
-      label: "Happy Clients",
-      color: "from-orange-600 to-yellow-500",
-    },
-  ];
 
   return (
     <section className="relative py-24 overflow-hidden bg-gradient-to-b from-gray-50/50 to-white">
@@ -88,7 +62,7 @@ const TechTeamSection: React.FC<TechTeamSectionProps> = ({
         </div>
 
         {/* CTA Section */}
-        <motion.div
+        {/* <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -99,7 +73,7 @@ const TechTeamSection: React.FC<TechTeamSectionProps> = ({
             Get Started
             <ArrowUpRight className="ml-2" size={20} />
           </button>
-        </motion.div>
+        </motion.div> */}
       </div>
     </section>
   );
