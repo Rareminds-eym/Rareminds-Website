@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 
+
 const logos = [
   {
     label: "UNIVERSITY OF MADRAS",
@@ -90,11 +91,13 @@ const TrustedInstitutions: React.FC<{ className?: string }> = ({ className }) =>
   }, [isPaused]);
 
   return (
+    
     <section className={`pt-3 px-4  relative ${className || ''}`}>
       <div className="container mx-auto">
         <h2 className="text-center text-[18px] md:text-4xl font-semibold mb-10 text-gray-800">
           Trusted by Leading Institutions
         </h2>
+        
         {/* Carousel wrapper */}
         <div
           ref={scrollRef}

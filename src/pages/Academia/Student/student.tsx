@@ -13,7 +13,6 @@ import EducatorCard from "../../../components/Academy/Teacher/EducatorCard";
 import { Book, Calendar, Circle, Users } from "lucide-react";
 import StatsShowcase from "../../../components/Academy/Teacher/StatsShowcase";
 import ProgramCard from "../../../components/Academy/Students/ProgramCard";
-import Logos from "../../../components/Academy/Teacher/Logos";
 import FacultyTransformation from "../../../components/Academy/Teacher/FacultyTransformation";
 import Fdpcalender from "../../../components/Academy/Teacher/Fdpcalender";
 import FaqAndContact from "../../../components/Academy/Students/FaqAndContact";
@@ -24,14 +23,14 @@ import Testimonialss from "../../../components/Academy/Students/Testimonials";
 import VideoCarousel from "../../../components/Academy/Students/VideoCarousel";
 import Testimonials from "../../../components/Academy/Students/testimonials/testimonials"
 import Programs from "../../../components/Academy/Students/Programs";
-import Logo from "../../../components/Academy/Students/Logos";
+import Logos from "../../../components/Academy/Students/Logos";
 import Problem from "../../../components/Academy/Students/Problem";
 import HeroBanner from '../../../components/Academy/Students/Herobanner/HeroBanner';
 import { Toaster } from '../../../components/Academy/UI/toaster';
 import CaseStudy from "../../../components/Academy/Students/educators/caseStudy";
 import StudentProgramsPage from "../../../components/Academy/Students/StudentProgramsPage";
 import  TestimonialsCarousel from '../../../components/Academy/Students/TestimonialsCarousel';
-import FAQChatbot from '../../../components/Academy/FAQChatbot'
+// import FAQChatbot from '../../../components/Academy/FAQChatbot'
 import FDPButton from '../../../components/Academy/Students/FDPButton'
 import DashboardSection from "../../../components/Academy/Students/DashboardSection"
 import ContactSection from "../../../components/Academy/Contact/ContactSection"
@@ -40,6 +39,8 @@ import { caseStudies } from '../../../components/Academy/Students/CaseStudy/case
 import { CaseStudy as CaseStudyType } from '../../../components/Academy/Students/CaseStudy/caseStudy';
 import { Button } from '../../../components/Academy/UI/button';
 // import CaseStudyDetail from '../../../components/Academy/Students/CaseStudy/CaseStudyDetail';
+// import FloatingActionMenu from '../../../components/Academy/Floatingbutton'
+import FloatingActionMenu from '../../../components/Academy/StickyButton/StickyButton/FloatingAction'
 
 
 const Academy = ({ userType = "teacher" }: { userType?: "teacher" | "student" }) => {
@@ -131,9 +132,11 @@ const Academy = ({ userType = "teacher" }: { userType?: "teacher" | "student" })
       <Toaster />
     
     </div>
-    <FAQChatbot />
-    <FDPButton />
-   <div ref={logoRef} className="relative z-0 mt-[700px] rounded-tl-3xl rounded-tr-3xl shadow-2xl shadow-black" id="logo-section-student">
+    {/* <FAQChatbot />   */}
+    {/* <FDPButton />  */}
+
+    <FloatingActionMenu />
+   <div ref={logoRef} className="relative z-0 mt-[800px] rounded-tl-3xl rounded-tr-3xl shadow-2xl shadow-black" id="logo-section-student">
           <Logos />
         </div>
       

@@ -10,8 +10,7 @@ import DownloadForm from './DownloadForm';
 import FloatingActionButton from '../FAB/FloatingActionButton';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useCallback } from 'react';
-
-
+import { PopupButton } from 'react-calendly';
 
 
 interface HeaderProps {
@@ -122,31 +121,34 @@ const HeroBanner = ({  HeroToContact,HeroToLogo }: HeaderProps) =>{
 
 <div className="relative w-full mb-8">
   {/* Left Column - Full Banner Carousel */}
-  <div className="w-full h-[300px] md:h-[70vh] overflow-hidden">
-    <ServiceCarousel 
+  <div className="w-full h-[300px] md:h-[80vh] overflow-hidden">    <ServiceCarousel 
       services={servicesStudent}
       activeServiceId={activeServiceId}
       onServiceChange={setActiveServiceId}
+      transitionDuration={300} // Faster transition for better sync
+      rotationInterval={5000} // Keep same rotation interval
     />
   </div>
 
-  {/* Right Column - Content (overlay on md+, stacked below on mobile) */}
-  <div className="w-full md:w-1/2 p-6  md:pl-12  md:pr-12
+  {/* Right Column - Content (overlay on md+, stacked below on mobile) */}  <div className="w-full md:w-1/2 p-6  md:pl-12  md:pr-12
                   md:absolute md:top-0 md:right-0 md:h-full 
-                  flex items-center bg-white/90 md:bg-transparent">
-    <div className="hero-fade-in">
-      <h1 className="text-xl md:text-3xl lg:text-4xl font-bold mb-4 whitespace-pre-line">
+                  flex items-center bg-white/90 md:bg-transparent"
+                  style={{ transition: 'none' }}>
+    <div style={{ transition: 'none' }}>
+      <h1 className="text-xl md:text-3xl lg:text-4xl font-bold mb-4 whitespace-pre-line"
+          style={{ transition: 'none' }}>
         {activeService.headline}
       </h1>
       <p className="text-lg text-gray-700 mb-6">
         {activeService.subtext}
       </p>
-      <Button 
-        onClick={HeroToContact}
-        className="mb-6 px-6 py-4 text-lg rounded-xl shadow-md bg-red-500 hover:bg-red-600"
-      >
-        Schedule <ArrowRight className="ml-2 h-5 w-5" />
-      </Button>
+  <PopupButton 
+  url="https://calendly.com/karthikeyan-rareminds/30min"
+  rootElement={document.getElementById('root')!}
+  text="Schedule"
+  className="mb-6 px-4 py-2 text-lg rounded-xl shadow-md bg-red-500 hover:bg-red-600"
+/>
+
 
       {/* Schedule Component */}
       {showSchedule && (
@@ -198,12 +200,12 @@ const HeroBanner = ({  HeroToContact,HeroToLogo }: HeaderProps) =>{
 <div className="hidden lg:block container">
    <div
   onClick={HeroToLogo}
-  className="w-max absolute left-0 bottom-[25%] cursor-pointer transition-opacity z-10 ml-4 md:ml-8 lg:ml-14"
+  className="w-max absolute left-[50%] bottom-[20%] cursor-pointer transition-opacity z-10 "
   aria-label="Scroll down"
 >
-  <div className="relative animate-bounce w-[100px] h-[100px]">
+  <div className="relative animate-bounce w-[90px] h-[90px] right-[50%]">
     <img
-      src="/Corporate/Images/Home/Hero/scroll.png"
+      src="https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Corporate/Recruitment/Index/Hero/scroll.png"
       alt="Scroll down"
       className="w-full h-full object-contain scroll-rotate animate-spin-slow"
     />

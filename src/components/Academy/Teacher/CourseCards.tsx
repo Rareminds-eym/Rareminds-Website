@@ -35,18 +35,18 @@ type CourseType = {
 const courses: CourseType[] = [
   {
     id: 1,
-    title: "Teacher Training Programs (21st Century)",
+    title: " Teacher Development Programs (TDP)",
     description: "",
     image: "/academy/Course/Teacher-Training.svg",
     color: "",
     features: [
       "NEP Implementation for Foundational, Preparatory, Middle & Secondary Stages",
       "Pedagogy : Activity-Based Learning (ABL), Experiential Learning, Gamification and EdTech Integration , Blended Learning Methods, Assessment Design and Bloom’s Taxonomy Mapping",
-      "Differentiated Instruction & Inclusive Classrooms & holisticRemedial & Special Education Support Training",
+      "Differentiated Instruction and Inclusive Classrooms, Holistic Development, Remedial and Special Education Support Training",
       "Remote teaching methods",
-      "Entrepreneurial teacher(How to mentor startups, incubation programs, IIC involvement)",
+      "Entrepreneurial teacher(Mentoring startups, incubation programs, IIC involvement)",
       "Green Campus & Sustainability Education (ESG, SDGs, climate literacy integration)",
-      "Digital and Pedagogical Upskilling (, Google Suite, Canva for Education, Microsoft Teams,, Padlet, Kahoot, Mentimeter) - technical"
+      "Digital and Pedagogical Upskilling  (Google Suite, Canva for Education, Microsoft Teams, Padlet, Kahoot, Mentimeter) - technical"
     ],
     cta: {
       text: "Book Orientation",
@@ -83,7 +83,7 @@ const courses: CourseType[] = [
     image: "/academy/Course/mental health and consunselling training.svg",
     color: "",
     features: [
-      "Recognizing At-Risk Student",
+      "Recognizing At-Risk Students",
       "Peer Counseling & First Response Techniques",
       "Faculty as Mentors: Empathy & Active Listening",
       "Creating a Safe Classroom"
@@ -136,12 +136,12 @@ const courses: CourseType[] = [
   },
   {
     id: 6,
-    title: "  Institutional Value-Add Services",
+    title: "  Institutional Value-Added Services",
     description: "",
     image: "/academy/Course/insititutional_value add_services.svg",
     color: "",
     features: [
-      "(Benefits both teachers and management)",
+      "Benefits both teachers and management",
       "Teacher Performance Audits",
       "School/College Ranking Preparation (NAAC/NIRF Readiness)",
       "Building Teacher-Led Clubs & Innovation Cells",

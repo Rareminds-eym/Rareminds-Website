@@ -27,7 +27,7 @@ function chunkArray<T>(array: T[], size: number): T[][] {
 // Dummy structure for multiple sections
 const facultySections = [
  {
-  label: "See What Happens When Faculty Gets Future-Ready",
+  label: "See What Happens When Teacher Gets Future-Ready",
   stories: [
     {
       schoolName: "St. Joseph's School",
@@ -148,8 +148,11 @@ function SchoolCard({
     <div className="flex items-center gap-2 mb-3">
       <MapPin size={16} className="text-grey-500" />
       <h3 className="font-semibold text-xl text-[#222]">
-        {schoolName}, {location}
+        {schoolName}
       </h3>
+       {/* <h3 className="font-semibold text-xl text-[#222]">
+        {schoolName}, {location}
+      </h3> */}
     </div>
 
     <div className="flex flex-col gap-5">
