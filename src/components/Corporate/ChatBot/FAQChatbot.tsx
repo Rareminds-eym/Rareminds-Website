@@ -116,7 +116,7 @@ const FAQChatbot: React.FC<FAQChatbotProps> = ({ open = true, onClose }) => {
     <div>
       {/* Chatbot Toggle Button */}
       <motion.div
-        initial={{ opacity: 0, x: 100 }}
+        initial={{ opacity: 0, x: 0 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.5 }}
         className="fixed right-10 bottom-6 z-50"

@@ -213,7 +213,7 @@ const FooterBar = () => {
             <input
               type="email"
               placeholder="Email address"
-              className="p-3 w-full bg-rareminds-dark/50 border border-red-400/30 text-white rounded focus:outline-none focus:ring-2 focus:ring-red-500"
+              className="p-3 w-full bg-rareminds-dark/50 border border-red-400/30 text-black rounded focus:outline-none focus:ring-2 focus:ring-red-500"
               onChange={(e) => {
                 setSuccessMessage(null);
                 setSubscriberEmail(e.target.value);
