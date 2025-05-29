@@ -119,7 +119,7 @@ const FAQChatbot: React.FC<FAQChatbotProps> = ({ open = true, onClose }) => {
         initial={{ opacity: 0, x: 0 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.5 }}
-        className="fixed right-10 bottom-6 z-50"
+        className="fixed right-10 bottom-6 z-50 animate-bounce"
       >
         <motion.div
           whileHover={{ scale: 1.05 }}

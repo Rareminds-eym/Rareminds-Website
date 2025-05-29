@@ -7,7 +7,7 @@ import {
   Calendar,
   Download,
 } from "lucide-react";
-import FAQChatbot from "../ChatBot/FAQChatbot";
+import FAQChatbot from "./ChatBot/FAQChatbot";
 
 interface MenuItem {
   id: string;
@@ -28,7 +28,9 @@ const FloatingActionMenu = () => {
       const windowHeight = window.innerHeight;
       const docHeight = document.documentElement.scrollHeight;
       const footer = document.querySelector("#footer");
-      const footerHeight = footer ? (footer as HTMLElement).offsetHeight + 10 : 120; // fallback if no footer
+      const footerHeight = footer
+        ? (footer as HTMLElement).offsetHeight + 10
+        : 120; // fallback if no footer
       if (scrollY + windowHeight >= docHeight - footerHeight) {
         setIsOpen(true);
       } else {
@@ -176,7 +178,9 @@ const FloatingActionMenu = () => {
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
         onClick={toggleMenu}
-        className="w-14 h-14 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full shadow-lg flex items-center justify-center text-white hover:from-blue-600 hover:to-purple-700 transition-all duration-200"
+        className={`w-14 h-14 bg-[#434343] rounded-full shadow-lg flex items-center justify-center text-white hover:from-blue-600 hover:to-purple-700 transition-all duration-200 ${
+          !isOpen && "animate-bounce"
+        }`}
       >
         <motion.div
           animate={{ rotate: isOpen ? 45 : 0 }}
@@ -193,7 +197,7 @@ const FloatingActionMenu = () => {
             animate={{ scale: 4, opacity: 0 }}
             exit={{ scale: 0, opacity: 0 }}
             transition={{ duration: 0.6 }}
-            className="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full -z-10"
+            className="absolute inset-0 bg-[#434343] rounded-full -z-10"
           />
         )}
       </AnimatePresence>

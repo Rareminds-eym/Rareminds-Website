@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import { useRecruitmentService } from "@/hooks/useRecruitmentService";
 import RecruitmentServiceSection from "./sections/RecruitmentServiceSection";
 import TechTeamSection from "./sections/TechTeamSection";
+import ErrorComponent from "@/components/ErrorComponent";
 import DeliverySection from "./sections/DeliverySection";
 import ApproachSection from "./sections/ApproachSection";
 import ContactSection from "./sections/ContactSection";
@@ -18,7 +19,7 @@ const Service: React.FC = () => {
   );
 
   if (loading) return <LoaderComponent />;
-  if (error) return <div>Error: {error}</div>;
+  if (error) return <ErrorComponent message={error} />;
   if (!foundService) {
     return <ComingSoon />;
   }
