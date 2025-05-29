@@ -1,7 +1,7 @@
 import React, { ReactNode } from "react";
 import FooterBar from "@/components/Footer/FooterBar"; // Optional: remove if not needed
 import CorporateHeader from "@/components/Header/CorporateHeader"; // Updated to CorporateHeader
-import FloatingActionMenu from "@/components/Corporate/Recruitment/FloatingAction";
+import FloatingActionMenu from "@/components/Corporate/FloatingAction";
 
 interface CorporateLayoutProps {
   children: ReactNode;
