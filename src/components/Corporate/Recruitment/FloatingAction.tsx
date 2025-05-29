@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Plus,
@@ -20,6 +20,24 @@ const FloatingActionMenu = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenFaq, setIsOpenFaq] = useState(false);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+
+  // Open menu when user scrolls near the bottom (before footer)
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollY = window.scrollY || window.pageYOffset;
+      const windowHeight = window.innerHeight;
+      const docHeight = document.documentElement.scrollHeight;
+      const footer = document.querySelector("#footer");
+      const footerHeight = footer ? (footer as HTMLElement).offsetHeight + 10 : 120; // fallback if no footer
+      if (scrollY + windowHeight >= docHeight - footerHeight) {
+        setIsOpen(true);
+      } else {
+        setIsOpen(false);
+      }
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const menuItems: MenuItem[] = [
     {
@@ -81,14 +99,14 @@ const FloatingActionMenu = () => {
         {isOpen && (
           <>
             {/* Background overlay */}
-            <motion.div
+            {/* <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.2 }}
               className="fixed inset-0 bg-black/20 backdrop-blur-sm -z-10"
               onClick={() => setIsOpen(false)}
-            />
+            /> */}
 
             {menuItems.map((item, index) => {
               const position = getItemPosition(index, menuItems.length);
@@ -186,7 +204,7 @@ const FloatingActionMenu = () => {
             className="absolute inset-0 bg-black/20"
             onClick={() => setIsOpenFaq(false)}
           />
-          <div className="relative z-10" onClick={e => e.stopPropagation()}>
+          <div className="relative z-10" onClick={(e) => e.stopPropagation()}>
             <FAQChatbot open={isOpenFaq} onClose={() => setIsOpenFaq(false)} />
           </div>
         </div>
