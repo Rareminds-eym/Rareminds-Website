@@ -71,7 +71,7 @@ const FooterBar = () => {
   };
 
   return (
-    <div className="relative bg-[url('https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/general/footer.webp')] text-white font-medium">
+    <div className="relative bg-[url('https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/general/footer.webp')] text-white font-medium" id="footer">
       <div className="absolute w-full h-full bg-black/90"></div>
       <div
         className="relative lg:px-14 grid lg:grid-cols-5 grid-cols-1 gap-4 container mx-auto py-12"

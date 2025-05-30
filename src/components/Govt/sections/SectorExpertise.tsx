@@ -165,7 +165,7 @@ const SectorExpertise = () => {
             Cross-Sector Expertise
           </h2>
           <p className="text-xl md:text-2xl text-gray-700 animate-fade-in">
-            Not Just Training. <span className="font-bold">Transformation.</span>
+            It is not just a training. It is a Transformation.
           </p>
         </div>
 
@@ -198,7 +198,7 @@ const SectorExpertise = () => {
           }}><Folders className="h-5 w-5 mr-2" /> 
             Request Sample Curriculum by Sector
           </CTAButton>
-            <CTAButton variant="secondary" 
+            {/* <CTAButton variant="secondary" 
             onClick={() => {
             const contactElement = document.getElementById('government-outcomes');
             if (contactElement) {
@@ -206,7 +206,7 @@ const SectorExpertise = () => {
             }
           }}
             ><Eye className="h-5 w-5 mr-2" /> View Government Projects
-            </CTAButton>
+            </CTAButton> */}
         </div>
       </div>
     </section>
