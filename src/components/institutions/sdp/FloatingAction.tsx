@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Plus, Calendar, Download, MessageCircleQuestion } from "lucide-react";
+import { Plus, Calendar, Download, MessageCircleQuestion, MessageCircle } from "lucide-react";
 import FAQChatbot from "@/components/institutions/sdp/FAQChatbot";
+import { ChatButton } from "@/components/institutions/ChatButton";
 
 interface MenuItem {
   id: string;
@@ -20,6 +21,8 @@ const FloatingActionMenu = () => {
   const [iconIndex, setIconIndex] = useState(0);
   const [showPlusIcon, setShowPlusIcon] = useState(true);
   const [isHovered, setIsHovered] = useState(false);
+  const [isChatOpen, setIsChatOpen] = useState(false);
+
 
   useEffect(() => {
     let plusTimeout: NodeJS.Timeout;
@@ -43,6 +46,30 @@ const FloatingActionMenu = () => {
       clearInterval(cycleInterval);
     };
   }, [isOpen]);
+  useEffect(() => {
+    let lastScrollY = window.scrollY;
+  
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      const scrollDown = currentScrollY > lastScrollY;
+      const scrollUp = currentScrollY < lastScrollY;
+  
+      const scrollBottom = currentScrollY + window.innerHeight >= document.body.scrollHeight - 50;
+  
+      if (scrollDown && scrollBottom && !isOpen) {
+        setIsOpen(true);
+      }
+  
+      if (scrollUp && isOpen) {
+        setIsOpen(false);
+      }
+  
+      lastScrollY = currentScrollY;
+    };
+  
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [isOpen]);
 
   const toggleMenu = () => setIsOpen((prev) => !prev);
   const toggleChatbot = () => {
@@ -57,6 +84,16 @@ const FloatingActionMenu = () => {
       icon: MessageCircleQuestion,
       label: "FAQ",
       onClick: toggleChatbot,
+    },
+    {
+      id: "chat",
+      icon: MessageCircle,
+      label: "Live Chat",
+      onClick: () => {
+        setIsChatOpen((prev) => !prev);
+        setIsChatbotOpen(false); // Close chatbot if chat is opened
+        setIsOpen(false);
+      },
     },
     {
       id: "demo",
@@ -83,7 +120,7 @@ const FloatingActionMenu = () => {
   };
 
   const getItemPosition = (index: number, total: number) => {
-    const radius = 100;
+    const radius = 120;
     const angleStep = 90 / (total - 1);
     const angleDeg = 180 - index * angleStep;
     const angleRad = (angleDeg * Math.PI) / 180;
@@ -108,7 +145,7 @@ const FloatingActionMenu = () => {
         <AnimatePresence>
           {isOpen && (
             <motion.div
-              className="fixed inset-0 bg-black/20 backdrop-blur-sm -z-10"
+              className="fixed inset-0 -z-10"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
@@ -156,16 +193,14 @@ const FloatingActionMenu = () => {
                     </div>
 
                     {/* Tooltip */}
-                    <motion.div
-                      initial={{ opacity: 0, x: 10 }}
-                      animate={{ opacity: 1, x: 0 }}
+                    <div
                       className={`absolute right-14 ${
                         item.id === "download" ? "-top-6" : "top-0"
                       } bg-black/60 text-white px-2 py-1 rounded text-sm whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity`}
                     >
                     
                       {item.label}
-                    </motion.div>
+                    </div>
                   </motion.button>
                 </motion.div>
               );
@@ -176,7 +211,7 @@ const FloatingActionMenu = () => {
         <motion.button
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
-                animate={isOpen ? {} : { y: [0, -18, 0] }}
+                animate={isOpen ? {} : { y: [0, -27, 0] }}
                 transition={
                     isOpen
                     ? {}
@@ -205,6 +240,7 @@ const FloatingActionMenu = () => {
 
       {/* FAQ Chatbot Panel */}
       <FAQChatbot isOpen={isChatbotOpen} onClose={closeChatbot} />
+      <ChatButton isVisible={isChatOpen} onClose={() => setIsChatOpen(false)} />
     </>
   );
 };

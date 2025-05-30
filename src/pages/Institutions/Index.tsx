@@ -13,7 +13,7 @@ import InstitutionDashboardSection from '@/components/institutions/sdp/Instituti
 import TestimonialVideos from "@/components/institutions/sdp/TestimonialVideos";
 //import FinalCTA from '@/components/institutions/FinalCTA';
 import FDPButton from "@/components/institutions/sdp/FDPButton";
-import FloatingActionMenu from '@/components/institutions/FloatingAction';
+import FloatingActionMenu from '@/components/institutions/sdp/FloatingAction';
 import ContactSection from '@/components/institutions/Contact/ContactSection';
 
 
