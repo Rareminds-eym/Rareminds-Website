@@ -1,16 +1,28 @@
 import React from "react";
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
+import { Icon } from "@iconify/react";
 
 const ComingSoon: React.FC = () => {
+  const navigate = useNavigate();
   const handleSubscribe = (e: React.FormEvent) => {
     e.preventDefault();
     // Handle subscription logic here
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 relative">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 text-center">
         <div className="space-y-8">
+          {/* Back Button */}
+          <button
+            onClick={() => navigate(-1)}
+            className="fixed top-[100px] left-8 bg-white/20 hover:bg-white/40 text-white font-semibold px-4 py-2 rounded-lg shadow transition-all duration-200 z-50 backdrop-blur flex items-center gap-2"
+            style={{ backdropFilter: "blur(6px)" }}
+          >
+            <Icon icon="mdi:arrow-left" className="w-5 h-5" />
+            Back
+          </button>
           {/* Logo */}
           <motion.img
             src="/RMLogo.webp"

@@ -23,7 +23,7 @@ const CorporateLayout: React.FC<CorporateLayoutProps> = ({ children }) => {
 
       {/* Optional: include FooterBar if needed */}
       <FooterBar />
-
+{/* 
  <motion.div
         initial={{ y: 100 }}
         animate={{ y: 0 }}
@@ -51,7 +51,7 @@ const CorporateLayout: React.FC<CorporateLayoutProps> = ({ children }) => {
             Download Course List
           </motion.a>
         </div>
-      </motion.div>
+      </motion.div> */}
 
     </div>
   );

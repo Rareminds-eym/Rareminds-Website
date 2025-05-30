@@ -46,7 +46,7 @@ const FeatureItem = ({
   title,
 }: {
   icon: React.ReactNode;
-  title: string;
+  title: React.ReactNode;
 }) => {
   return (
     <div className="flex flex-col items-center text-center">
@@ -78,20 +78,31 @@ const EducationSection = ({ scrollToContact }: EducationSectionProps) => {
             Teach the way tomorrow learns. Lead the shift.
           </h2>
           <p className="text-lg md:text-xl text-gray-700 max-w-3xl mx-auto">
-            Empower Gen Z through active, real-world learning.
+            Empower Gen Z through active,real-world learning.
           </p>
         </div>
 
         {/* Feature Items */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 mb-20">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 mb-20 ">
           <FeatureItem
             icon={<GraduationCap strokeWidth={1.5} size={40} />}
-            title="Gen Z is empowered through active, real-world learning."
+            title={
+    <>
+      Gen Z is empowered through active, <br />
+      real-world learning.
+    </>
+  }
           />
           <FeatureItem
-            icon={<Laptop strokeWidth={1.5} size={40} />}
-            title="NEP prioritises learner-led, outcome-driven methods."
-          />
+  icon={<Laptop strokeWidth={1.5} size={40} />}
+  title={
+    <>
+      NEP prioritises <br />
+      learner-led,  <br /> outcome-driven methods.
+    </>
+  }
+/>
+
           <FeatureItem
             icon={<ChartBar strokeWidth={1.5} size={40} />}
             title="Digital classrooms require tech-confident faculty."
@@ -108,7 +119,7 @@ const EducationSection = ({ scrollToContact }: EducationSectionProps) => {
             onClick={scrollToContact}
             className="bg-gradient-to-r from-red-400 to-red-500 text-white px-6 py-2 h-[60px] rounded-md shadow-md"
           >
-            Lead the Change at your Institution
+            Lead the Change at Your Institution
           </button>
           <p className="mt-4 text-gray-600">
             Connect with us to empower your faculty for tomorrow's classroom.

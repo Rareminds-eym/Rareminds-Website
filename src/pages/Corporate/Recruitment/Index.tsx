@@ -8,9 +8,7 @@ import CaseStudiesSection from "@/components/Corporate/Recruitment/Home/CaseStud
 import ProcessSection from "@/components/Corporate/Recruitment/Home/Process/ProcessSection";
 import TeamSection from "@/components/Corporate/Recruitment/Home/Team/TeamSection";
 import ContactSection from "@/components/Corporate/Recruitment/Home/Contact/ContactSection";
-import FAQChatbot from "@/components/Corporate/ChatBot/FAQChatbot";
 import Dashboard from "@/components/Corporate/Recruitment/Home/Dashboard";
-import FloatingActionMenu from "@/components/Corporate/Recruitment/FloatingAction";
 
 const Corporate: React.FC = () => {
   const slides = [
@@ -84,8 +82,7 @@ const Corporate: React.FC = () => {
       <div id="contact">
         <ContactSection />
       </div>
-      {/* <FAQChatbot /> */}
-      <FloatingActionMenu/>
+
     </>
   );
 };

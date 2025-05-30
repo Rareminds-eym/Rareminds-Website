@@ -13,7 +13,7 @@ const Fdpcalender = ({ Facultytocontact }: FdpcalenderProps) => {
       <div className="w-full max-w-6xl mt-10">
         <div className="text-center mb-12">
           <h1 className="text-lg md:text-4xl  font-bold mb-2">Pick from Ready-to-Run TDP Calendars</h1>
-          <p className="text-gray-600 text-8px">Choose the perfect faculty development program format for your institution</p>
+          <p className="text-gray-600 text-8px">Choose the perfect Teacher development program format for your institution</p>
         </div>
         
         <div className="grid md:grid-cols-3 gap-6">
@@ -158,56 +158,35 @@ const Fdpcalender = ({ Facultytocontact }: FdpcalenderProps) => {
               </div>
             </div>
             
-            <h2 className="text-xl font-bold text-center mb-2">Weekend Program for School Leaders: </h2>
+            <h2 className="text-xl font-bold text-center mb-2">Weekend Program for School Leaders</h2>
             <p className="text-gray-600 text-center text-5px mb-6">
-            Reimagining Education with Transformational Leadership
+           Reimagining Education with Transformational Leadership
+
 
             </p>
             
             <div className="mb-6">
-
-            
-            <div className="flex items-center">
-                  {/* <div className="w-5 h-5 rounded-full border-2 border-black flex items-center justify-center mr-3">
-                    {/* <div className="w-2.5 h-2.5 bg-black rounded-full"></div> */}
-                  {/* </div>  */}
-                 
-                  <h2><span className="font-bold">Designed for:  </span>  Principals, School Heads, Academic Directors</h2>
-                  
-                </div>
-              <div className="flex items-center">
-                  {/* <div className="w-5 h-5 rounded-full border-2 border-black flex items-center justify-center mr-3">
-                    {/* <div className="w-2.5 h-2.5 bg-black rounded-full"></div> */}
-                  {/* </div>  */}
-                  <h2><span className="font-bold">Duration: </span> 2 Days | 1 Focus Theme per Day</h2>
-                  
-                </div>
-              <p className="font-medium mb-3 mt-6">Goals:</p>
+              <p className="font-medium mb-3">Program Includes:</p>
               <div className="space-y-2">
                 <div className="flex items-center">
                   <div className="w-5 h-5 rounded-full border-2 border-black flex items-center justify-center mr-3">
                     <div className="w-2.5 h-2.5 bg-black rounded-full"></div>
                   </div>
-                  <span className=" ">Equip school leaders to align with NEP 2020</span>
+                  <span className=" ">NEP Framework and Objectives</span>
                 </div>
                 <div className="flex items-center">
                   <div className="w-5 h-5 rounded-full border-2 border-black flex items-center justify-center mr-3">
                     <div className="w-2.5 h-2.5 bg-black rounded-full"></div>
                   </div>
-                  <span>embrace technology</span>
+                  <span>Technology Integration to accelerate future-forward learning.</span>
                 </div>
                 <div className="flex items-center">
                   <div className="w-5 h-5 rounded-full border-2 border-black flex items-center justify-center mr-3">
                     <div className="w-2.5 h-2.5 bg-black rounded-full"></div>
                   </div>
-                  <span>build empowered educator communities.</span>
+                  <span>Building empowered educator communities.</span>
                 </div>
-                {/* <div className="flex items-center">
-                  <div className="w-5 h-5 rounded-full border-2 border-black flex items-center justify-center mr-3">
-                    <div className="w-2.5 h-2.5 bg-black rounded-full"></div>
-                  </div>
-                  <span>Outcome Mapping</span>
-                </div> */}
+              
               </div>
             </div>
             

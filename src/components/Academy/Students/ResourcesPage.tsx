@@ -113,7 +113,7 @@ const ResourcesPage = () => {
 </div>
     {/* Button */}
     <a
-  href="/academy/pdfs/5_Day.pdf"
+  href=""
   target="_blank"
   rel="noopener noreferrer"
   className="w-[160px] absolute bottom-2 right-2 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded text-center"
@@ -146,7 +146,7 @@ const ResourcesPage = () => {
 </div>
     {/* Button */}
     <a
-  href="/academy/pdfs/5_Day.pdf"
+  href=""
   target="_blank"
   rel="noopener noreferrer"
   className="w-[160px] absolute bottom-2 right-2 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded text-center"
@@ -197,7 +197,7 @@ const ResourcesPage = () => {
 </div>
     {/* Button */}
     <a
-  href="/academy/pdfs/5_Day.pdf"
+  href=""
   target="_blank"
   rel="noopener noreferrer"
   className="w-[160px] absolute bottom-2 right-2 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded text-center"
@@ -245,7 +245,7 @@ const ResourcesPage = () => {
 </div>
     {/* Button */}
     <a
-  href="/academy/pdfs/5_Day.pdf"
+  href=""
   target="_blank"
   rel="noopener noreferrer"
   className="w-[160px] absolute bottom-2 right-2 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded text-center"
