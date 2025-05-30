@@ -8,13 +8,10 @@ import GovtServiceSection from "@/components/Govt/sections/GovtServiceSection";
 import LogoMarquee from "@/components/Govt/sections/LogoMarquee";
 import Video from "@/components/Govt/sections/Video";
 import DashboardSection from "@/components/Govt/sections/DashboardSection";
-import CaseStudies from "@/components/Govt/sections/CaseStudies";
+// import CaseStudies from "@/components/Govt/sections/CaseStudies";
 import FloatingActionMenu from "@/components/Govt/StickyButton/FloatingAction";
 import ContactSection from "@/components/Govt/Contact/ContactSection";
-
-
-
-
+import CaseStudies from "@/components/Govt/CaseStudies/CaseStudies";
 
 
 const Govt = () => {
@@ -23,7 +20,7 @@ const Govt = () => {
       <HeroSection />
       {/* <div className="relative"> */}
         {/* Scrollable content that appears on top of hero */}
-        <div className="relative z-50 mt-[65vh] overflow-hidden">
+        <div className="relative z-50 mt-[90vh] overflow-hidden">
           <div className="relative z-0">
             <div className="relative -mt-0 h-[5em] md:h-[22em] w-full overflow-hidden">
               <img

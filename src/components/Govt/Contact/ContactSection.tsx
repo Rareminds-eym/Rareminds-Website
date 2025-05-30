@@ -128,15 +128,15 @@ const ContactSection = () => {
         className="container mx-auto px-5 lg:px-14 relative z-10"
       >
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5 }}
             viewport={{ once: true }}
-            className="lg:col-span-1 h-full"
+            className="flex"
           >
-            <div className="bg-gray-50 backdrop-blur-sm border border-white/30 rounded-3xl overflow-hidden shadow-xl h-full">
+            <div className="bg-gray-50 backdrop-blur-sm border border-white/30 rounded-3xl overflow-hidden shadow-xl w-full">
               <div className="p-8">
                 <h3 className="text-2xl font-bold mb-6 flex items-center gap-3 text-gray-800">
                   <span className="bg-black w-10 h-10 rounded-full flex items-center justify-center text-white">
@@ -238,7 +238,7 @@ const ContactSection = () => {
                       value={formData.message}
                       onChange={handleChange}
                       placeholder="Please tell us how we can help you..."
-                      className="w-full min-h-[180px] bg-white/50 border-gray-200 text-gray-800 placeholder:text-gray-400"
+                      className="w-full min-h-[170px] bg-white/50 border-gray-200 text-gray-800 placeholder:text-gray-400"
                       required
                     />
                   </div>
@@ -254,7 +254,7 @@ const ContactSection = () => {
                         >
                           <button
                             type="submit"
-                            className="flex items-center px-6 py-3 bg-red-500 rounded-full text-white shadow-lg hover:bg-red-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="flex items-center px-6 shadow-xl shadow-red-400/40 border-2 border-red-300 py-3 bg-gradient-to-br from-red-400 to-red-600 rounded-full text-white hover:bg-red-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                             disabled={isSubmitting}
                           >
                             {isSubmitting ? (
@@ -325,14 +325,14 @@ const ContactSection = () => {
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
             viewport={{ once: true }}
-            className="lg:col-span-1"
+            className="flex"
           >
-            <div className="h-full flex flex-col justify-between gap-6">
-              <div className="bg-gray-50 backdrop-blur-sm border border-white/30 rounded-3xl p-8 shadow-xl">
+            <div className="bg-gray-50 backdrop-blur-sm border border-white/30 rounded-3xl shadow-xl w-full">
+              <div className="p-8 h-full flex flex-col">
                 <h3 className="text-2xl font-bold mb-6 text-gray-800">
                   Get in Touch
                 </h3>
-                <div className="space-y-6">
+                <div className="space-y-6 flex-1">
                   <div className="flex items-start gap-4">
                     <div className="bg-black/10 text-black p-3 rounded-xl">
                       <Phone size={24} />
@@ -376,8 +376,8 @@ const ContactSection = () => {
                   </div>
                 </div>
 
-                <div className="">
-                  <h4 className="text-xl font-bold mb-6 text-gray-800 flex items-center gap-3 mt-3">
+                <div className="mt-8">
+                  <h4 className="text-xl font-bold mb-6 text-gray-800 flex items-center gap-3">
                     <span className="bg-black w-8 h-8 rounded-full flex items-center justify-center text-white">
                       <Icon icon="mdi:web" className="text-lg" />
                     </span>
@@ -388,45 +388,45 @@ const ContactSection = () => {
                       href="https://facebook.com/rareminds"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex flex-col items-center justify-center group bg-gray-100 p-4  rounded-2xl"
+                      className="flex flex-col items-center justify-center group bg-gray-100 p-4 rounded-2xl"
                     >
                       <div className="w-12 h-12 flex items-center justify-center">
                         <FaFacebookF className="text-[#1877F2] w-7 h-7 group-hover:rotate-12 group-hover:scale-125 transition-all duration-300"/>
                       </div>
-                      <span className="mt-2 text-sm font-medium text-gray-600  group-hover:-translate-y-3 group-hover:bg-blue-600 group-hover:text-white group-hover:rounded-full group-hover:px-4 px-4 py-1 group-hover:py-1 transition-all duration-300">Facebook</span>
+                      <span className="mt-2 text-sm font-medium text-gray-600 group-hover:-translate-y-3 group-hover:bg-blue-600 group-hover:text-white group-hover:rounded-full group-hover:px-4 px-4 py-1 group-hover:py-1 transition-all duration-300">Facebook</span>
                     </a>
                     <a
                       href="https://twitter.com/rareminds"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex flex-col items-center justify-center group bg-gray-100 rounded-2xl"
+                      className="flex flex-col items-center justify-center group bg-gray-100 p-4 rounded-2xl"
                     >
                       <div className="w-12 h-12 flex items-center justify-center">
                         <FaXTwitter className="w-7 h-7 group-hover:rotate-12 group-hover:scale-125 transition-all duration-300"/>
                       </div>
-                      <span className="mt-2 text-sm font-medium text-gray-600  group-hover:-translate-y-3 group-hover:bg-black group-hover:text-white  group-hover:rounded-full group-hover:px-4 group-hover:py-1 transition-all duration-300">Twitter</span>
+                      <span className="mt-2 text-sm font-medium text-gray-600 group-hover:-translate-y-3 group-hover:bg-black group-hover:text-white group-hover:rounded-full group-hover:px-4 group-hover:py-1 transition-all duration-300">Twitter</span>
                     </a>
                     <a
                       href="https://youtube.com/rareminds"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex flex-col items-center justify-center group bg-gray-100 rounded-2xl"
+                      className="flex flex-col items-center justify-center group bg-gray-100 p-4 rounded-2xl"
                     >
                       <div className="w-12 h-12 flex items-center justify-center">
                         <AiFillYoutube className="text-[#FF0000] w-10 h-10 group-hover:rotate-12 group-hover:scale-125 transition-all duration-300"/>
                       </div>
-                      <span className="mt-2 text-sm font-medium text-gray-600  group-hover:-translate-y-3 group-hover:bg-[#FF0000] group-hover:text-white  group-hover:rounded-full group-hover:px-4 group-hover:py-1 transition-all duration-300">YouTube</span>
+                      <span className="mt-2 text-sm font-medium text-gray-600 group-hover:-translate-y-3 group-hover:bg-[#FF0000] group-hover:text-white group-hover:rounded-full group-hover:px-4 group-hover:py-1 transition-all duration-300">YouTube</span>
                     </a>
                     <a
                       href="https://linkedin.com/company/rareminds"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex flex-col items-center justify-center group bg-gray-100 rounded-2xl"
+                      className="flex flex-col items-center justify-center group bg-gray-100 p-4 rounded-2xl"
                     >
                       <div className="w-12 h-12 flex items-center justify-center">
                         <AiFillLinkedin className="text-[#0A66C2] w-10 h-10 group-hover:rotate-12 group-hover:scale-125 transition-all duration-300"/>
                       </div>
-                      <span className="mt-2 text-sm font-medium text-gray-600  group-hover:-translate-y-3 group-hover:bg-[#0A66C2] group-hover:text-white  group-hover:rounded-full group-hover:px-4 group-hover:py-1 transition-all duration-300">LinkedIn</span>
+                      <span className="mt-2 text-sm font-medium text-gray-600 group-hover:-translate-y-3 group-hover:bg-[#0A66C2] group-hover:text-white group-hover:rounded-full group-hover:px-4 group-hover:py-1 transition-all duration-300">LinkedIn</span>
                     </a>
                   </div>
                 </div>
