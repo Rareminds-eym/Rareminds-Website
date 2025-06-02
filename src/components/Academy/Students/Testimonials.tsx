@@ -5,66 +5,86 @@ import { TestimonialsColumn, type Testimonial } from "../../Academy/UI/testimoni
 
 const testimonials: Testimonial[] = [
   {
-    text: "The course materials were comprehensive and easy to follow. I've learned so much!",
-    image: "https://randomuser.me/api/portraits/women/1.jpg",
-    name: "Emma Johnson",
-    role: "Student",
+    text: "“Our teachers now use videos and smartboards. It makes it easier for us to understand things.” ",
+    image: "/academy/traditionalmethod/RareMinds ISO Logo-01.png",
+    name: "Student",
+    role: "Kangeyam School, Tamil Nadu",
     rating: 5
   },
   {
-    text: "The instructors were always available to help when I had questions. Great learning experience.",
-    image: "https://randomuser.me/api/portraits/men/2.jpg",
-    name: "James Smith",
-    role: "Student",
+    text: "“Earlier, we had only lectures. Now, we have quizzes and group activities on the screen. It’s more fun to learn.”",
+    image: "/academy/traditionalmethod/RareMinds ISO Logo-01.png",
+    name: "Student",
+    role: "Kangeyam School, Tamil Nadu",
     rating: 4
   },
   {
-    text: "I appreciate how the concepts were broken down into manageable pieces. Very effective teaching.",
-    image: "https://randomuser.me/api/portraits/women/3.jpg",
-    name: "Sophia Williams",
-    role: "Student",
+    text: "“Classes are more interesting now. We play games and do activities to understand topics.” ",
+    image: "/academy/traditionalmethod/RareMinds ISO Logo-01.png",
+    name: "Student",
+    role: "Sunrise Academy, Bangalore",
     rating: 5
   },
   {
-    text: "The practical exercises really helped me understand the theoretical concepts. Excellent program!",
-    image: "https://randomuser.me/api/portraits/men/4.jpg",
-    name: "Michael Brown",
-    role: "Student",
+    text: "“I used to feel sleepy in class. Now I enjoy coming to school because the teaching is more exciting.”",
+    image: "/academy/traditionalmethod/RareMinds ISO Logo-01.png",
+    name: "Student",
+    role: "Sunrise Academy, Bangalore",
     rating: 4
   },
   {
-    text: "I was able to apply what I learned immediately in my projects. Very practical curriculum.",
-    image: "https://randomuser.me/api/portraits/women/5.jpg",
-    name: "Olivia Davis",
-    role: "Student",
+    text: "“ Our teachers are trying new ideas. Sometimes we even learn through stories or real-life examples.”",
+    image: "/academy/traditionalmethod/RareMinds ISO Logo-01.png",
+    name: "Student",
+    role: "Greenfield Public School, Delhi",
     rating: 5
   },
   {
-    text: "The collaborative projects taught me how to work effectively in teams. Valuable experience.",
-    image: "https://randomuser.me/api/portraits/women/6.jpg",
-    name: "Ava Miller",
-    role: "Student",
+    text: "“Earlier classes felt boring, but now they ask us questions and make us do creative work. It’s fun.”",
+    image: "/academy/traditionalmethod/RareMinds ISO Logo-01.png",
+    name: "Student",
+    role: "Greenfield Public School, Delhi",
     rating: 4
   },
   {
-    text: "Clear explanations and excellent resources. I feel much more confident in my skills now.",
-    image: "https://randomuser.me/api/portraits/men/7.jpg",
-    name: "Ethan Wilson",
-    role: "Student",
+    text: "“Now we use tablets and online tools in class. It helps me learn better and faster.” ",
+    image: "/academy/traditionalmethod/RareMinds ISO Logo-01.png",
+    name: "Student",
+    role: "Westside High, Mumbai",
     rating: 5
   },
   {
-    text: "The course exceeded my expectations. I'm grateful for the knowledge and skills gained.",
-    image: "https://randomuser.me/api/portraits/women/8.jpg",
-    name: "Isabella Taylor",
-    role: "Student",
+    text: "“I love the new way of learning with videos and apps. It’s like studying and playing together.”",
+    image: "/academy/traditionalmethod/RareMinds ISO Logo-01.png",
+    name: "Student",
+    role: "Westside High, Mumbai",
     rating: 5
   },
   {
-    text: "The mentorship aspect of this program was invaluable. Thank you for the guidance!",
-    image: "https://randomuser.me/api/portraits/men/9.jpg",
-    name: "Noah Anderson",
-    role: "Student",
+    text: "“Teachers seem happier now. They give us more attention and are less stressed.”",
+    image: "/academy/traditionalmethod/RareMinds ISO Logo-01.png",
+    name: "Student",
+    role: "Valley View Institute, Himachal Pradesh",
+    rating: 4
+  },
+  {
+    text: "“Class is more relaxed. We also do small mindfulness activities sometimes, which I like.”",
+    image: "/academy/traditionalmethod/RareMinds ISO Logo-01.png",
+    name: "Student",
+    role: "Valley View Institute, Himachal Pradesh",
+    rating: 4
+  },
+  {
+    text: "“Now we know how teachers will mark our tests. It feels fair and clear.”",
+    image: "/academy/traditionalmethod/RareMinds ISO Logo-01.png",
+    name: "Student",
+    role: "Coastal Academy, Kerala",
+    rating: 4
+  },{
+    text: "“Before, every teacher gave marks differently. Now it’s the same system, and we understand it better.”",
+    image: "/academy/traditionalmethod/RareMinds ISO Logo-01.png",
+    name: "Student",
+    role: "Coastal Academy, Kerala",
     rating: 4
   },
 ];

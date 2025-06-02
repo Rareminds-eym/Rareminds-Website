@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "../UI/button";
 import { 
   GraduationCap, 
@@ -20,7 +21,7 @@ type CourseType = {
   id: number;
   title: string;
   description: string;
-  icon: React.ElementType;
+  image: string;
   color: string;
   features: string[];
   cta: {
@@ -35,18 +36,18 @@ type CourseType = {
 const courses: CourseType[] = [
   {
     id: 1,
-    title: "Teacher Training Programs (21st Century)",
+    title: " Teacher Development Programs (TDP)",
     description: "",
-    icon: Users,
+    image: "/academy/Course/Teacher-Training.svg",
     color: "",
     features: [
       "NEP Implementation for Foundational, Preparatory, Middle & Secondary Stages",
       "Pedagogy : Activity-Based Learning (ABL), Experiential Learning, Gamification and EdTech Integration , Blended Learning Methods, Assessment Design and Bloom’s Taxonomy Mapping",
-      "Differentiated Instruction & Inclusive Classrooms & holisticRemedial & Special Education Support Training",
+      "Differentiated Instruction and Inclusive Classrooms, Holistic Development, Remedial and Special Education Support Training",
       "Remote teaching methods",
-      "Entrepreneurial teacher(How to mentor startups, incubation programs, IIC involvement)",
+      "Entrepreneurial teacher(Mentoring startups, incubation programs, IIC involvement)",
       "Green Campus & Sustainability Education (ESG, SDGs, climate literacy integration)",
-      "Digital and Pedagogical Upskilling (, Google Suite, Canva for Education, Microsoft Teams,, Padlet, Kahoot, Mentimeter) - technical"
+      "Digital and Pedagogical Upskilling  (Google Suite, Canva for Education, Microsoft Teams, Padlet, Kahoot, Mentimeter) - technical"
     ],
     cta: {
       text: "Book Orientation",
@@ -60,7 +61,7 @@ const courses: CourseType[] = [
     id: 2,
     title: " Communication and Personality Development",
     description: "",
-    icon: LineChart,
+    image: "/academy/Course/communication and personality development.svg",
     color: "",
     features: [
       "English Fluency & Public Speaking for Teachers",
@@ -80,16 +81,16 @@ const courses: CourseType[] = [
     id: 3,
     title: "Mental Health and Counseling Training",
     description: "",
-    icon: Heart,
+    image: "/academy/Course/mental health and consunselling training.svg",
     color: "",
     features: [
-      "Recognizing At-Risk Student",
+      "Recognizing At-Risk Students",
       "Peer Counseling & First Response Techniques",
       "Faculty as Mentors: Empathy & Active Listening",
       "Creating a Safe Classroom"
     ],
     cta: {
-      text: "speak to our councillor",
+      text: "Speak to our counsellors",
       icon: Download
     },
     roles: ["Teacher", "Counselor", "Principal"],
@@ -100,7 +101,7 @@ const courses: CourseType[] = [
     id: 4,
     title: "Domain-Specific Certification Programs",
     description: "",
-    icon: Laptop,
+    image: "/academy/Course/Domain-Specific.svg",
     color: "",
     features: [
       "In partnership with industries (AgriTech, EV, EdTech, AI, Biotechnology, etc.)",
@@ -118,7 +119,7 @@ const courses: CourseType[] = [
     id: 5,
     title: " Leadership and Career Growth",
     description: "",
-    icon: Laptop,
+    image: "/academy/Course/leadership & career growth.svg",
     color: "",
     features: [
       "Aspiring Academic Leaders Program (For HODs/Coordinators)",
@@ -136,12 +137,12 @@ const courses: CourseType[] = [
   },
   {
     id: 6,
-    title: "  Institutional Value-Add Services",
+    title: "  Institutional Value-Added Services",
     description: "",
-    icon: Laptop,
+    image: "/academy/Course/insititutional_value add_services.svg",
     color: "",
     features: [
-      "(Benefits both teachers and management)",
+      "Benefits both teachers and management",
       "Teacher Performance Audits",
       "School/College Ranking Preparation (NAAC/NIRF Readiness)",
       "Building Teacher-Led Clubs & Innovation Cells",
@@ -183,6 +184,7 @@ const CourseCards = ({coursetocontact}:coursecardProps) => {
   const [activeFilters, setActiveFilters] = useState<string[]>([]);
   const [hoveredCourse, setHoveredCourse] = useState<number | null>(null);
   const [searchQuery, setSearchQuery] = useState<string>("");
+  const navigate = useNavigate();
 
   const toggleFilter = (value: string) => {
     setActiveFilters(prev => 
@@ -306,7 +308,8 @@ const CourseCards = ({coursetocontact}:coursecardProps) => {
             const isHovered = hoveredCourse === course.id;
             return (
               <div
-                key={course.id}                className={cn(
+                key={course.id}
+                className={cn(
                   "rounded-xl overflow-hidden card-hover relative flex flex-col transition-all duration-500 ease-in-out transform hover:shadow-xl will-change-transform",
                   isHovered ? "shadow-xl scale-[1.02]" : "shadow-sm hover:shadow-lg"
                 )}
@@ -328,14 +331,11 @@ const CourseCards = ({coursetocontact}:coursecardProps) => {
                 ></div>
                 <div className="p-6 flex-grow flex flex-col">
                   <div className="flex items-start gap-4 p-4 bg-white shadow-sm rounded-lg">
-                    <div
-                      className={cn(
-                        "p-3 rounded-full flex items-center justify-center",
-                        getColorClass(course.color)
-                      )}
-                    >
-                      <course.icon
-                        className={cn("w-6 h-6", getColorClass(course.color, false))}
+                    <div className="p-3 rounded-full flex items-center justify-center">
+                      <img
+                        src={course.image} // Render the image instead of the icon
+                        alt={course.title}
+                        className="w-20 h-20 "
                       />
                     </div>
                     <div>
@@ -396,6 +396,7 @@ const CourseCards = ({coursetocontact}:coursecardProps) => {
                         getColorClass(course.color, false),
                         "hover:bg-gray-50"
                       )}
+                      onClick={() => navigate(`/academia/teacher/course/${course.id}`)}
                     >
                       View Details
                     </Button>

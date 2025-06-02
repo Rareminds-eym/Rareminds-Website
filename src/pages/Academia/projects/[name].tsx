@@ -13,6 +13,7 @@ import { Disclaimer } from "../../../components/Academy/Project/naanMudhalvan/Di
 import ClientsSection from "../../../components/Academy/Project/naanMudhalvan/ClientsSection";
 import { useState } from "react";
 import { useParams, Link } from "react-router-dom";
+import  AcademyHeader from '../../../components/Header/AcademyHeader'
 
 
 type EventTimeline = {
@@ -167,12 +168,18 @@ function Naan() {
 
   return (
     <div className="min-h-screen bg-white">
+
+       <AcademyHeader  />
       {/* <Header /> */}
-      <HeroBanner hero_data={pageData} />
+     <div className="w-full h-auto mt-[80px]">
+       <HeroBanner hero_data={pageData} />
       <div className="max-w-2xl mx-auto my-8">
         <Disclaimer />
       </div>
+     </div>
 
+
+     
       {/* <div className="max-w-6xl mx-auto my-8 px-4">
       <div className="flex flex-col md:flex-row gap-8 items-center">
         <div className="w-full md:w-1/2">

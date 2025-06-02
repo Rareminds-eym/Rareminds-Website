@@ -2,13 +2,7 @@ import { useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Input } from "./input";
 import { Textarea } from "./textarea";
-import {
-  Phone,
-  Mail,
-  MapPin,
-  Send,
-  CheckCircle2,
-} from "lucide-react";
+import { Phone, Mail, MapPin, Send, CheckCircle2 } from "lucide-react";
 import { Icon } from "@iconify/react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/lib/supabaseClient";
@@ -38,24 +32,23 @@ const ContactSection = () => {
     setIsSubmitting(true);
 
     try {
-      const { error } = await supabase
-        .from('recruitment_forms')
-        .insert([
-          {
-            name: formData.name,
-            company: formData.company,
-            email: formData.email,
-            role: formData.role,
-            message: formData.message,
-            submitted_at: new Date().toISOString(),
-          },
-        ]);
+      const { error } = await supabase.from("recruitment_forms").insert([
+        {
+          name: formData.name,
+          company: formData.company,
+          email: formData.email,
+          role: formData.role,
+          message: formData.message,
+          submitted_at: new Date().toISOString(),
+        },
+      ]);
 
       if (error) throw error;
 
       toast({
         title: "Message Sent!",
-        description: "Thank you for reaching out. Our team will contact you shortly.",
+        description:
+          "Thank you for reaching out. Our team will contact you shortly.",
       });
 
       setSubmitted(true);
@@ -76,7 +69,8 @@ const ContactSection = () => {
       console.error("Error submitting form:", error);
       toast({
         title: "Error",
-        description: "There was an error submitting your message. Please try again.",
+        description:
+          "There was an error submitting your message. Please try again.",
         variant: "destructive",
       });
     } finally {
@@ -85,9 +79,7 @@ const ContactSection = () => {
   };
 
   return (
-    <section
-      className="section py-24 relative overflow-hidden bg-gradient-to-br from-blue-50 to-red-50 text-gray-800 bg-white"
-    >
+    <section className="section py-24 relative overflow-hidden bg-gradient-to-br from-blue-50 to-red-50 text-gray-800 bg-white">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -358,7 +350,12 @@ const ContactSection = () => {
 
               <div className="bg-white/80 backdrop-blur-sm border border-white/30 rounded-3xl px-8 py-7 shadow-xl">
                 <h3 className="text-xl font-bold mb-2 text-gray-800 flex items-center gap-2">
-                  <Icon icon="mdi:share-variant" width={22} height={22} className="text-corporate-black" />
+                  <Icon
+                    icon="mdi:share-variant"
+                    width={22}
+                    height={22}
+                    className="text-corporate-black"
+                  />
                   Follow Us
                 </h3>
                 <motion.div
@@ -392,9 +389,9 @@ const ContactSection = () => {
                     },
                     {
                       href: "https://x.com/minds_rare",
-                      icon: "mdi:twitter",
-                      color: "#1DA1F2",
-                      label: "Twitter (X)",
+                      icon: "ri:twitter-x-fill",
+                      color: "#1A1A1A",
+                      label: "X (Twitter)",
                     },
                     {
                       href: "https://www.youtube.com/channel/UClkBtwJsScYxFzNoFdlifeA",
@@ -403,7 +400,7 @@ const ContactSection = () => {
                       label: "YouTube",
                       size: 40,
                     },
-                  ].map((item, idx) => (
+                  ].map((item) => (
                     <motion.a
                       key={item.label}
                       href={item.href}
@@ -411,13 +408,26 @@ const ContactSection = () => {
                       rel="noopener noreferrer"
                       aria-label={item.label}
                       className="hover:scale-110 transition-transform"
-                      initial={{ opacity: 0, y: 20 }}
-                      whileInView={{ opacity: 1, y: 0 }}
+                      variants={{
+                        hidden: { opacity: 0, y: 24 },
+                        visible: {
+                          opacity: 1,
+                          y: 0,
+                          transition: {
+                            type: "spring",
+                            stiffness: 300,
+                            damping: 24,
+                          },
+                        },
+                      }}
                       whileHover={{ scale: 1.18, rotate: -6 }}
-                      transition={{ type: 'spring', stiffness: 300, damping: 20, delay: 0.1 * idx }}
-                      viewport={{ once: true }}
                     >
-                      <Icon icon={item.icon} width={item.size || 32} height={item.size || 32} className="" style={{ color: item.color }} />
+                      <Icon
+                        icon={item.icon}
+                        width={item.size || 32}
+                        height={item.size || 32}
+                        style={{ color: item.color }}
+                      />
                     </motion.a>
                   ))}
                 </motion.div>

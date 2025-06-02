@@ -13,7 +13,6 @@ import EducatorCard from "../../../components/Academy/Teacher/EducatorCard";
 import { Book, Calendar, Circle, Users } from "lucide-react";
 import StatsShowcase from "../../../components/Academy/Teacher/StatsShowcase";
 import ProgramCard from "../../../components/Academy/Students/ProgramCard";
-import Logos from "../../../components/Academy/Teacher/Logos";
 import FacultyTransformation from "../../../components/Academy/Teacher/FacultyTransformation";
 import Fdpcalender from "../../../components/Academy/Teacher/Fdpcalender";
 import FaqAndContact from "../../../components/Academy/Students/FaqAndContact";
@@ -24,14 +23,14 @@ import Testimonialss from "../../../components/Academy/Students/Testimonials";
 import VideoCarousel from "../../../components/Academy/Students/VideoCarousel";
 import Testimonials from "../../../components/Academy/Students/testimonials/testimonials"
 import Programs from "../../../components/Academy/Students/Programs";
-import Logo from "../../../components/Academy/Students/Logos";
+import Logos from "../../../components/Academy/Students/Logos";
 import Problem from "../../../components/Academy/Students/Problem";
 import HeroBanner from '../../../components/Academy/Students/Herobanner/HeroBanner';
 import { Toaster } from '../../../components/Academy/UI/toaster';
 import CaseStudy from "../../../components/Academy/Students/educators/caseStudy";
 import StudentProgramsPage from "../../../components/Academy/Students/StudentProgramsPage";
 import  TestimonialsCarousel from '../../../components/Academy/Students/TestimonialsCarousel';
-import FAQChatbot from '../../../components/Academy/FAQChatbot'
+// import FAQChatbot from '../../../components/Academy/FAQChatbot'
 import FDPButton from '../../../components/Academy/Students/FDPButton'
 import DashboardSection from "../../../components/Academy/Students/DashboardSection"
 import ContactSection from "../../../components/Academy/Contact/ContactSection"
@@ -39,7 +38,10 @@ import CorporateHeader from "../../../components/Header/AcademyHeader"
 import { caseStudies } from '../../../components/Academy/Students/CaseStudy/caseStudies';
 import { CaseStudy as CaseStudyType } from '../../../components/Academy/Students/CaseStudy/caseStudy';
 import { Button } from '../../../components/Academy/UI/button';
-import CaseStudyDetail from '../../../components/Academy/Students/CaseStudy/CaseStudyDetail';
+// import CaseStudyDetail from '../../../components/Academy/Students/CaseStudy/CaseStudyDetail';
+// import FloatingActionMenu from '../../../components/Academy/Floatingbutton'
+import FloatingActionMenu from '../../../components/Academy/StickyButton/StickyButton/FloatingAction'
+import  Courses from '../../../components/Academy/Students/Courses'
 
 
 const Academy = ({ userType = "teacher" }: { userType?: "teacher" | "student" }) => {
@@ -47,9 +49,14 @@ const Academy = ({ userType = "teacher" }: { userType?: "teacher" | "student" })
   const [selectedCaseStudy, setSelectedCaseStudy] = useState<CaseStudyType>(caseStudies[0]);
 
       const contactRef = useRef<HTMLDivElement>(null);
+       const logoRef = useRef<HTMLDivElement>(null);
+
       const scrollToContact = () => {
       contactRef.current?.scrollIntoView({ behavior: "smooth" });
     };
+     const scrollToLogo = () => {
+    logoRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
   
 
   const stats = [
@@ -66,6 +73,11 @@ const Academy = ({ userType = "teacher" }: { userType?: "teacher" | "student" })
     
 
    },[])
+
+    useEffect(() => {
+       window.scrollTo(0, 0);
+     }, []);
+   
 
      const handleCaseStudySelect = (caseStudy: CaseStudyType) => {
     setSelectedCaseStudy(caseStudy);
@@ -92,6 +104,20 @@ const Academy = ({ userType = "teacher" }: { userType?: "teacher" | "student" })
      }
    }, [location]);
 
+   
+   useEffect(() => {
+     const hash = location.hash;
+     if (hash === '#logo-section-student') {
+       const section = document.getElementById('logo-section-student');
+       if (section) {
+         setTimeout(() => {
+           section.scrollIntoView({ behavior: 'smooth' });
+         }, 100);
+       }
+     }
+   }, [location]);
+   
+
   return (
    
         <div className="overflow-hidden">
@@ -103,22 +129,28 @@ const Academy = ({ userType = "teacher" }: { userType?: "teacher" | "student" })
      {/* <h1 className="text-4xl font-bold text-white"></h1> */}
       {/* </div> */}
       {/* <VideoCarousel />/ */}
-      <HeroBanner HeroToContact={scrollToContact} />
+      <HeroBanner HeroToContact={scrollToContact} HeroToLogo={scrollToLogo}  />
       <Toaster />
     
     </div>
-    <FAQChatbot />
-    <FDPButton />
-   <div className="relative z-0 mt-[700px] rounded-tl-3xl rounded-tr-3xl shadow-2xl shadow-black">
+    {/* <FAQChatbot />   */}
+    {/* <FDPButton />  */}
+
+    <FloatingActionMenu />
+   <div ref={logoRef} className="relative z-0 mt-[800px] rounded-tl-3xl rounded-tr-3xl shadow-2xl shadow-black" id="logo-section-student">
           <Logos />
         </div>
       
       <Problem />
 
-     {/* <Programs /> */}
+  <div id="course-cards-section" className="min-h-screen flex items-center justify-center relative z-10 bg-white">
+     <Courses />      
+       </div>
+ 
+     {/* <Programs />
           <div id="course-cards-section" className="min-h-screen flex items-center justify-center relative z-10 bg-white">
      <StudentProgramsPage coursetocontact={scrollToContact} />      
-       </div>
+       </div> */}
     
       {/* <div className="w-full h-[65vh]"></div> */}
   <div  className="min-h-screen flex items-center justify-center relative z-10 bg-white">
@@ -255,13 +287,18 @@ const Academy = ({ userType = "teacher" }: { userType?: "teacher" | "student" })
         <div  className="min-h-screen flex items-center justify-center relative z-10 bg-white">
  <Testimonialss />     
        </div>
+
+       {/* <div  className="min-h-screen flex items-center justify-center relative z-10 bg-white">
+  <CaseStudy />   
+       </div> */}
+     
       
       {/* <TestimonialsStudent /> */}
        {/* <div  className="min-h-screen flex items-center justify-center relative z-10 bg-white">
 <CaseStudy />   
        </div> */}
 
- <div  className="min-h-screen flex items-center justify-center relative z-10 bg-white">
+ {/* <div  className="min-h-screen flex items-center justify-center relative z-10 bg-white">
 <div className="container mx-auto px-8 mb-24" id="case-studies">
            <div className="flex flex-col items-center justify-center text-center mb-12">
           <h1 className="text-4xl font-bold text-gray-900 mb-4">
@@ -274,7 +311,7 @@ const Academy = ({ userType = "teacher" }: { userType?: "teacher" | "student" })
           
           <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
             {/* Case Study Cards - Sidebar */}
-            <div className="md:col-span-4 lg:col-span-2">
+            {/* <div className="md:col-span-4 lg:col-span-2">
               <div className="sticky top-4 space-y-6">
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-1 gap-4 ">
                   {caseStudies.map((caseStudy) => (
@@ -298,9 +335,9 @@ const Academy = ({ userType = "teacher" }: { userType?: "teacher" | "student" })
                 </div>
               </div>
             </div>
-            
+             */}
             {/* Case Study Detail */}
-            <div className="md:col-span-8 lg:col-span-10 "  id="case-study-detail">
+            {/* <div className="md:col-span-8 lg:col-span-10 "  id="case-study-detail">
               <div className="bg-white rounded-xl shadow-md border border-gray-100 p-6 md:p-8">
                 <CaseStudyDetail caseStudy={selectedCaseStudy} />
               </div>
@@ -335,7 +372,7 @@ const Academy = ({ userType = "teacher" }: { userType?: "teacher" | "student" })
             </div>
           </div>
         </div>
-       </div>
+       </div> */} 
       {/* Educator & Student Cards */}
       {/* <StudentCardR /> */}
       {/* <ProgramCard /> */}

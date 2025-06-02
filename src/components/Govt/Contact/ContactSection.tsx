@@ -2,24 +2,30 @@ import { useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Input } from "./input";
 import { Textarea } from "./textarea";
+import { supabase } from "@/lib/supabaseClient";
+
 import {
   Phone,
   Mail,
   MapPin,
   Send,
   CheckCircle2,
-  ArrowRight,
+  Facebook,
+  Twitter,
+  Youtube,
 } from "lucide-react";
 import { Icon } from "@iconify/react";
 import { useToast } from "@/hooks/use-toast";
+import { AiFillYoutube,AiFillLinkedin } from "react-icons/ai";
+import { FaXTwitter,FaFacebookF } from "react-icons/fa6";
 
 const ContactSection = () => {
   const { toast } = useToast();
   const [formData, setFormData] = useState({
     name: "",
-    company: "",
     email: "",
-    role: "",
+    phone: "",
+    address: "",
     message: "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -33,12 +39,51 @@ const ContactSection = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Simulate form submission
-    setTimeout(() => {
+    console.log('Form submission started with data:', formData);
+
+    // Validate required fields
+    if (!formData.name || !formData.email || !formData.phone || !formData.message) {
+      toast({
+        title: "Error",
+        description: "Please fill in all required fields.",
+      });
+      setIsSubmitting(false);
+      return;
+    }
+
+    try {
+      // Add timestamp and format data with correct column names
+      const submission = {
+        name: formData.name.trim(),
+        email: formData.email.trim().toLowerCase(),
+        phone: formData.phone.trim(),
+        address: formData.address.trim(),
+        message: formData.message.trim(),
+        submitted_at: new Date().toISOString(),
+      };
+
+      console.log('Submitting to Supabase:', submission);
+
+      const { error, data } = await supabase
+        .from('government_form')
+        .insert([submission])
+        .select();
+
+      if (error) {
+        console.error('Supabase error:', error);
+        toast({
+          title: "Database Error",
+          description: `Error: ${error.message}`,
+        });
+        throw error;
+      }
+
+      console.log('Submission successful:', data);
+
       toast({
         title: "Message Sent!",
         description:
@@ -46,20 +91,28 @@ const ContactSection = () => {
       });
 
       setSubmitted(true);
-      setIsSubmitting(false);
 
       setTimeout(() => {
         setFormData({
           name: "",
-          company: "",
           email: "",
-          role: "",
+          phone: "",
+          address: "",
           message: "",
         });
         setSubmitted(false);
         if (formRef.current) formRef.current.reset();
       }, 3000);
-    }, 1500);
+
+    } catch (error) {
+      console.error('Full error details:', error);
+      toast({
+        title: "Error",
+        description: "There was a problem sending your message. Please try again.",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -74,33 +127,22 @@ const ContactSection = () => {
         viewport={{ once: true }}
         className="container mx-auto px-5 lg:px-14 relative z-10"
       >
-        <div className="text-center mb-16">
-          <div className="bg-corporate-black text-red-500 w-16 h-16 rounded-[25px] mx-auto mb-4 flex items-center justify-center transform rotate-6">
-            <Send size={32} />
-          </div>
-          <h2 className="text-3xl md:text-5xl text-center font-bold mb-4 text-corporate-black">
-            Partner With Us
-          </h2>
-          <p className="text-corporate-grey max-w-3xl mx-auto text-lg text-center">
-            Whether you're hiring 5 or 500, we'll help you get it right
-          </p>
-        </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5 }}
             viewport={{ once: true }}
-            className="lg:col-span-3"
+            className="flex"
           >
-            <div className="bg-gray-50 backdrop-blur-sm border border-white/30 rounded-3xl overflow-hidden shadow-xl">
+            <div className="bg-gray-50 backdrop-blur-sm border border-white/30 rounded-3xl overflow-hidden shadow-xl w-full">
               <div className="p-8">
                 <h3 className="text-2xl font-bold mb-6 flex items-center gap-3 text-gray-800">
-                  <span className="bg-corporate-black w-10 h-10 rounded-full flex items-center justify-center text-black">
+                  <span className="bg-black w-10 h-10 rounded-full flex items-center justify-center text-white">
                     <Mail size={20} />
                   </span>
-                  Request Talent Now
+                  Contact Us
                 </h3>
 
                 <form
@@ -111,34 +153,35 @@ const ContactSection = () => {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                       <label
-                        htmlFor="name"
+                        htmlFor="fullName"
                         className="block mb-2 font-medium text-gray-700"
                       >
-                        Your Name
+                        Full Name*
                       </label>
                       <Input
-                        id="name"
+                        id="fullName"
                         name="name"
                         value={formData.name}
                         onChange={handleChange}
-                        placeholder="Full Name"
+                        placeholder="John Doe"
                         className="w-full bg-white/50 border-gray-200 text-gray-800 placeholder:text-gray-400"
                         required
                       />
                     </div>
                     <div>
                       <label
-                        htmlFor="company"
+                        htmlFor="email"
                         className="block mb-2 font-medium text-gray-700"
                       >
-                        Company
+                        Email Address*
                       </label>
                       <Input
-                        id="company"
-                        name="company"
-                        value={formData.company}
+                        id="email"
+                        name="email"
+                        type="email"
+                        value={formData.email}
                         onChange={handleChange}
-                        placeholder="Company Name"
+                        placeholder="john.doe@example.com"
                         className="w-full bg-white/50 border-gray-200 text-gray-800 placeholder:text-gray-400"
                         required
                       />
@@ -148,37 +191,36 @@ const ContactSection = () => {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                       <label
-                        htmlFor="email"
+                        htmlFor="phone"
                         className="block mb-2 font-medium text-gray-700"
                       >
-                        Email Address
+                        Phone Number*
                       </label>
                       <Input
-                        id="email"
-                        name="email"
-                        type="email"
-                        value={formData.email}
+                        id="phone"
+                        name="phone"
+                        type="tel"
+                        value={formData.phone}
                         onChange={handleChange}
-                        placeholder="name@company.com"
+                        placeholder="+91 XXXXX XXXXX"
                         className="w-full bg-white/50 border-gray-200 text-gray-800 placeholder:text-gray-400"
                         required
                       />
                     </div>
                     <div>
                       <label
-                        htmlFor="role"
+                        htmlFor="address"
                         className="block mb-2 font-medium text-gray-700"
                       >
-                        Role to Hire
+                        Address
                       </label>
                       <Input
-                        id="role"
-                        name="role"
-                        value={formData.role}
+                        id="address"
+                        name="address"
+                        value={formData.address}
                         onChange={handleChange}
-                        placeholder="Job Title/Position"
+                        placeholder="Address"
                         className="w-full bg-white/50 border-gray-200 text-gray-800 placeholder:text-gray-400"
-                        required
                       />
                     </div>
                   </div>
@@ -188,15 +230,15 @@ const ContactSection = () => {
                       htmlFor="message"
                       className="block mb-2 font-medium text-gray-700"
                     >
-                      Message
+                      Message*
                     </label>
                     <Textarea
                       id="message"
                       name="message"
                       value={formData.message}
                       onChange={handleChange}
-                      placeholder="Tell us about your hiring needs or challenges"
-                      className="w-full min-h-[120px] bg-white/50 border-gray-200 text-gray-800 placeholder:text-gray-400"
+                      placeholder="Please tell us how we can help you..."
+                      className="w-full min-h-[170px] bg-white/50 border-gray-200 text-gray-800 placeholder:text-gray-400"
                       required
                     />
                   </div>
@@ -212,11 +254,11 @@ const ContactSection = () => {
                         >
                           <button
                             type="submit"
-                            className=""
+                            className="flex items-center px-6 shadow-xl shadow-red-400/40 border-2 border-red-300 py-3 bg-gradient-to-br from-red-400 to-red-600 rounded-full text-white hover:bg-red-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                             disabled={isSubmitting}
                           >
                             {isSubmitting ? (
-                              <span className="flex items-center">
+                              <>
                                 <svg
                                   className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
                                   xmlns="http://www.w3.org/2000/svg"
@@ -238,17 +280,17 @@ const ContactSection = () => {
                                   ></path>
                                 </svg>
                                 Sending...
-                              </span>
+                              </>
                             ) : (
-                              <span className="flex items-center px-6 py-3 bg-red-500 rounded-full text-white shadow-lg shadow-red-400 border-2 border-red-300">
-                                Request Talent{" "}
+                              <>
+                                Submit{" "}
                                 <Icon
                                   icon="cil:arrow-right"
                                   height={20}
                                   width={20}
-                                  className="ml-2"
+                                  className="ml-2 animate-pulse"
                                 />
-                              </span>
+                              </>
                             )}
                           </button>
                         </motion.div>
@@ -283,16 +325,16 @@ const ContactSection = () => {
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
             viewport={{ once: true }}
-            className="lg:col-span-2"
+            className="flex"
           >
-            <div className="h-full flex flex-col justify-between gap-6">
-              <div className="bg-gray-50 backdrop-blur-sm border border-white/30 rounded-3xl p-8 shadow-xl">
+            <div className="bg-gray-50 backdrop-blur-sm border border-white/30 rounded-3xl shadow-xl w-full">
+              <div className="p-8 h-full flex flex-col">
                 <h3 className="text-2xl font-bold mb-6 text-gray-800">
                   Get in Touch
                 </h3>
-                <div className="space-y-6">
+                <div className="space-y-6 flex-1">
                   <div className="flex items-start gap-4">
-                    <div className="bg-corporate-black/10 text-corporate-black p-3 rounded-xl">
+                    <div className="bg-black/10 text-black p-3 rounded-xl">
                       <Phone size={24} />
                     </div>
                     <div>
@@ -304,7 +346,7 @@ const ContactSection = () => {
                     </div>
                   </div>
                   <div className="flex items-start gap-4">
-                    <div className="bg-corporate-black/10 text-corporate-black p-3 rounded-xl">
+                    <div className="bg-black/10 text-black p-3 rounded-xl">
                       <Mail size={24} />
                     </div>
                     <div>
@@ -316,7 +358,7 @@ const ContactSection = () => {
                     </div>
                   </div>
                   <div className="flex items-start gap-4">
-                    <div className="bg-corporate-black/10 text-corporate-black p-3 rounded-xl">
+                    <div className="bg-black/10 text-black p-3 rounded-xl">
                       <MapPin size={24} />
                     </div>
                     <div>
@@ -331,6 +373,61 @@ const ContactSection = () => {
                         Bengaluru, Karnataka 560001
                       </p>
                     </div>
+                  </div>
+                </div>
+
+                <div className="mt-8">
+                  <h4 className="text-xl font-bold mb-6 text-gray-800 flex items-center gap-3">
+                    <span className="bg-black w-8 h-8 rounded-full flex items-center justify-center text-white">
+                      <Icon icon="mdi:web" className="text-lg" />
+                    </span>
+                    Connect With Us
+                  </h4>
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                    <a
+                      href="https://facebook.com/rareminds"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex flex-col items-center justify-center group bg-gray-100 p-4 rounded-2xl"
+                    >
+                      <div className="w-12 h-12 flex items-center justify-center">
+                        <FaFacebookF className="text-[#1877F2] w-7 h-7 group-hover:rotate-12 group-hover:scale-125 transition-all duration-300"/>
+                      </div>
+                      <span className="mt-2 text-sm font-medium text-gray-600 group-hover:-translate-y-3 group-hover:bg-blue-600 group-hover:text-white group-hover:rounded-full group-hover:px-4 px-4 py-1 group-hover:py-1 transition-all duration-300">Facebook</span>
+                    </a>
+                    <a
+                      href="https://twitter.com/rareminds"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex flex-col items-center justify-center group bg-gray-100 p-4 rounded-2xl"
+                    >
+                      <div className="w-12 h-12 flex items-center justify-center">
+                        <FaXTwitter className="w-7 h-7 group-hover:rotate-12 group-hover:scale-125 transition-all duration-300"/>
+                      </div>
+                      <span className="mt-2 text-sm font-medium text-gray-600 group-hover:-translate-y-3 group-hover:bg-black group-hover:text-white group-hover:rounded-full group-hover:px-4 group-hover:py-1 transition-all duration-300">Twitter</span>
+                    </a>
+                    <a
+                      href="https://youtube.com/rareminds"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex flex-col items-center justify-center group bg-gray-100 p-4 rounded-2xl"
+                    >
+                      <div className="w-12 h-12 flex items-center justify-center">
+                        <AiFillYoutube className="text-[#FF0000] w-10 h-10 group-hover:rotate-12 group-hover:scale-125 transition-all duration-300"/>
+                      </div>
+                      <span className="mt-2 text-sm font-medium text-gray-600 group-hover:-translate-y-3 group-hover:bg-[#FF0000] group-hover:text-white group-hover:rounded-full group-hover:px-4 group-hover:py-1 transition-all duration-300">YouTube</span>
+                    </a>
+                    <a
+                      href="https://linkedin.com/company/rareminds"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex flex-col items-center justify-center group bg-gray-100 p-4 rounded-2xl"
+                    >
+                      <div className="w-12 h-12 flex items-center justify-center">
+                        <AiFillLinkedin className="text-[#0A66C2] w-10 h-10 group-hover:rotate-12 group-hover:scale-125 transition-all duration-300"/>
+                      </div>
+                      <span className="mt-2 text-sm font-medium text-gray-600 group-hover:-translate-y-3 group-hover:bg-[#0A66C2] group-hover:text-white group-hover:rounded-full group-hover:px-4 group-hover:py-1 transition-all duration-300">LinkedIn</span>
+                    </a>
                   </div>
                 </div>
               </div>

@@ -1,8 +1,8 @@
-
 import { useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Input } from "../../../components/Academy/UI/input";
 import { Textarea } from "../../../components/Academy/UI/textarea";
+import { supabase } from "../../../lib/supabase";
 import {
   Phone,
   Mail,
@@ -34,12 +34,28 @@ const AcademyContactSection = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Simulate form submission
-    setTimeout(() => {
+    try {
+      // Insert data into Supabase
+      const { error } = await supabase
+        .from("academia_form")
+        .insert([
+          {
+            name: formData.name,
+            email: formData.email,
+            phone: formData.phone,
+            course_interest: formData.course,
+            message: formData.message,
+            submitted_at: new Date().toISOString(),
+          },
+        ]);      if (error) {
+        console.error('Supabase error:', error.message, error.details, error.hint);
+        throw error;
+      }
+
       toast({
         title: "Inquiry Submitted!",
         description:
@@ -47,20 +63,34 @@ const AcademyContactSection = () => {
       });
 
       setSubmitted(true);
-      setIsSubmitting(false);
+      setFormData({
+        name: "",
+        phone: "",
+        email: "",
+        course: "",
+        message: "",
+      });
+
+      if (formRef.current) formRef.current.reset();
 
       setTimeout(() => {
-        setFormData({
-          name: "",
-          phone: "",
-          email: "",
-          course: "",
-          message: "",
-        });
         setSubmitted(false);
-        if (formRef.current) formRef.current.reset();
       }, 3000);
-    }, 1500);
+    } catch (error) {      const supabaseError = error as any;
+      console.error("Error submitting form:", {
+        message: supabaseError.message,
+        details: supabaseError.details,
+        hint: supabaseError.hint,
+        error: supabaseError
+      });
+      toast({
+        title: "Error",
+        description: "There was an error submitting your inquiry. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -80,7 +110,7 @@ const AcademyContactSection = () => {
             <Send size={32} />
           </div>
           <h2 className="text-3xl md:text-5xl text-center font-bold mb-4 text-gray-800">
-            Join Our Academy
+            Partner With US
           </h2>
           <p className="text-gray-600 max-w-3xl mx-auto text-lg text-center">
             Take the first step towards your tech career with our specialized training programs
@@ -203,7 +233,7 @@ const AcademyContactSection = () => {
                     />
                   </div>
 
-                  <div className="pt-4">
+                  <div className="pt-4 pb-10">
                     <AnimatePresence mode="wait">
                       {!submitted ? (
                         <motion.div
@@ -214,7 +244,7 @@ const AcademyContactSection = () => {
                         >
                           <button
                             type="submit"
-                            className="bg-red-500 hover:bg-red-600 text-white font-medium py-3 px-6 rounded-xl transition-all flex items-center justify-center"
+                            className="bg-red-500  hover:bg-red-600 text-white font-medium py-3 px-6 rounded-xl transition-all flex items-center justify-center"
                             disabled={isSubmitting}
                           >
                             {isSubmitting ? (
@@ -272,7 +302,11 @@ const AcademyContactSection = () => {
                   </div>
                 </form>
               </div>
+
+
+              
             </div>
+            
           </motion.div>
 
           <motion.div
@@ -285,7 +319,7 @@ const AcademyContactSection = () => {
             <div className="h-full flex flex-col justify-between gap-6">
               <div className="bg-white/80 backdrop-blur-sm border border-white/30 rounded-3xl p-8 shadow-xl">
                 <h3 className="text-2xl font-bold mb-6 text-gray-800">
-                  Academy Information
+                 Get In Touch
                 </h3>
                 <div className="space-y-6">
                   <div className="flex items-start gap-4">
@@ -294,10 +328,10 @@ const AcademyContactSection = () => {
                     </div>
                     <div>
                       <h4 className="font-semibold mb-1 text-gray-800">
-                        Academy Helpline
+                        Helpline
                       </h4>
-                      <p className="text-gray-600">+91 95624 81100</p>
-                      <p className="text-gray-600">+91 82960 61534</p>
+                      <p className="text-gray-600">+91 99023 26951</p>
+                      {/* <p className="text-gray-600">+91 82960 61534</p> */}
                     </div>
                   </div>
                   <div className="flex items-start gap-4">
@@ -308,8 +342,8 @@ const AcademyContactSection = () => {
                       <h4 className="font-semibold mb-1 text-gray-800">
                         Email
                       </h4>
-                      <p className="text-gray-600">academy@rareminds.com</p>
-                      <p className="text-gray-600">training@rareminds.com</p>
+                      <p className="text-gray-600">info@rareminds.in</p>
+                      {/* <p className="text-gray-600">training@rareminds.com</p> */}
                     </div>
                   </div>
                   <div className="flex items-start gap-4">
@@ -318,22 +352,89 @@ const AcademyContactSection = () => {
                     </div>
                     <div>
                       <h4 className="font-semibold mb-1 text-gray-800">
-                        Training Center
+                        Address
                       </h4>
                       <p className="text-gray-600 max-w-[300px]">
-                        231, 2nd stage, 13th Cross Road, Hoysala Nagar,
-                        Indiranagar
+                        Rareminds 231, 13th Cross Rd, 2nd Stage, Indira Nagar II Stage, Hoysala Nagar, Indiranagar,
                       </p>
                       <p className="text-gray-600">
-                        Bengaluru, Karnataka 560001
+                         Bengaluru, Karnataka 560038
                       </p>
                     </div>
                   </div>
                 </div>
               </div>
 
-              <div className="bg-black/50 text-white rounded-3xl p-8 shadow-xl">
-                <h3 className="text-xl font-bold mb-4">Why Join Our Academy?</h3>
+
+               <div className="bg-white/80 backdrop-blur-sm border border-white/30 rounded-3xl px-8 py-7 shadow-xl flex flex-col items-center ">
+                            <h3 className="text-xl font-bold mb-2 text-gray-800 flex items-center gap-2">
+                              <Icon icon="mdi:share-variant" width={22} height={22} className="text-corporate-black" />
+                              Follow Us
+                            </h3>
+                            <motion.div
+                              className="flex items-center gap-4 mt-2"
+                              initial="hidden"
+                              whileInView="visible"
+                              viewport={{ once: true }}
+                              variants={{
+                                hidden: {},
+                                visible: { transition: { staggerChildren: 0.12 } },
+                              }}
+                            >
+                              {[
+                                {
+                                  href: "https://www.linkedin.com/company/rareminds/",
+                                  icon: "mdi:linkedin",
+                                  color: "#0A66C2",
+                                  label: "LinkedIn",
+                                },
+                                {
+                                  href: "https://www.instagram.com/rareminds_eym/",
+                                  icon: "mdi:instagram",
+                                  color: "#E4405F",
+                                  label: "Instagram",
+                                },
+                                {
+                                  href: "https://www.facebook.com/raremindsgroup",
+                                  icon: "mdi:facebook",
+                                  color: "#1877F3",
+                                  label: "Facebook",
+                                },
+                                {
+                                  href: "https://x.com/minds_rare",
+                                  icon: "mdi:twitter",
+                                  color: "#1DA1F2",
+                                  label: "Twitter (X)",
+                                },
+                                {
+                                  href: "https://www.youtube.com/channel/UClkBtwJsScYxFzNoFdlifeA",
+                                  icon: "mdi:youtube",
+                                  color: "#FF0000",
+                                  label: "YouTube",
+                                  size: 40,
+                                },
+                              ].map((item) => (
+                                <motion.a
+                                  key={item.label}
+                                  href={item.href}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  aria-label={item.label}
+                                  className="hover:scale-110 transition-transform"
+                                  variants={{
+                                    hidden: { opacity: 0, y: 24 },
+                                    visible: { opacity: 1, y: 0, transition: { type: 'spring', stiffness: 300, damping: 24 } },
+                                  }}
+                                  whileHover={{ scale: 1.18, rotate: -6 }}
+                                >
+                                  <Icon icon={item.icon} width={item.size || 32} height={item.size || 32} style={{ color: item.color }} />
+                                </motion.a>
+                              ))}
+                            </motion.div>
+                          </div>
+
+              {/* <div className="bg-black opacity-30 text-white rounded-3xl p-8 shadow-xl">
+                <h3 className="text-xl font-bold mb-4">Why Choosen Us?</h3>
                 <ul className="space-y-3">
                   <li className="flex items-start gap-2">
                     <CheckCircle2 size={20} className="mt-1 flex-shrink-0" />
@@ -352,7 +453,7 @@ const AcademyContactSection = () => {
                     <span>Hands-on practical training</span>
                   </li>
                 </ul>
-              </div>
+              </div> */}
             </div>
           </motion.div>
         </div>

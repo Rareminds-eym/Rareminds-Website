@@ -1,5 +1,4 @@
-
-  import { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
   import React, { useRef } from "react";
   import AOS from 'aos';
   import 'aos/dist/aos.css';
@@ -40,14 +39,31 @@
   import DashboardSection from "../../../components/Academy/Teacher/DashboardSection";
   import ContactSection from "../../../components/Academy/Contact/ContactSection"
   import CorporateHeader from "../../../components/Header/AcademyHeader"
+  import FloatingActionMenu from '../../../components/Academy/StickyButton/StickyButton/FloatingAction'
+  import TestimonialViedoCarousel from '../../../components/Academy/Teacher/TestimonialCarouselVideo';
+  import Hero from '../../../components/Academy/Teacher/Herobanner/Hero'
+  import Services from '../School/Cources'
 
   const School = ({ userType = "teacher" }: { userType?: "teacher" | "student" }) => {
-    const [activeTab, setActiveTab] = useState<"teacher" | "student">("teacher");
+  const [activeTab, setActiveTab] = useState<"teacher" | "student">("teacher");
 
       const contactRef = useRef<HTMLDivElement>(null);
+      const logoRef = useRef<HTMLDivElement>(null);
+      const facultyTransformationRef = useRef<HTMLDivElement>(null);
+      
+      
+
     const scrollToContact = () => {
-    contactRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
+      contactRef.current?.scrollIntoView({ behavior: "smooth" });
+    };
+    
+    const scrollToLogo = () => {
+      logoRef.current?.scrollIntoView({ behavior: "smooth" });
+    };
+
+    const scrollToFacultyTransformation = () => {
+      facultyTransformationRef.current?.scrollIntoView({ behavior: "smooth" });
+    };
 
 
     const stats = [
@@ -65,6 +81,9 @@
 
     }, [])
 
+ useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
 
   // useEffect(() => {
@@ -119,6 +138,19 @@ useEffect(() => {
   }
 }, [location]);
 
+
+useEffect(() => {
+  const hash = location.hash;
+  if (hash === '#scrollToFacultyTransformation') {
+    const section = document.getElementById('scrollToFacultyTransformation');
+    if (section) {
+      setTimeout(() => {
+        section.scrollIntoView({ behavior: 'smooth' });
+      }, 100);
+    }
+  }
+}, [location]);
+
     return (
 
 
@@ -126,21 +158,34 @@ useEffect(() => {
         {/* Hero Banner */}
         {/* Hero Banner (90% width) */}
         <CorporateHeader />
-        <div className="w-full h-auto  ">
+        <div className="w-full fixed">
           {/* <div className="h-full flex items-center justify-center"> */}
           {/* <h1 className="text-4xl font-bold text-white"></h1>
         {/* </div> */}
           {/* <VideoCarousel /> */}
    
-          <HeroBanner HeroToContact={scrollToContact} />
+          {/* <HeroBanner HeroToContact={scrollToContact} HeroToLogo={scrollToLogo} />
         
-          <Toaster />
+          <Toaster /> */}
+          <Hero HeroToLogo={scrollToLogo} HeroToContact={scrollToContact} />
         </div>
-        <FAQChatbot />
-        <FDPButton />
-        {/* Logos */}
-        <div className="relative z-0 mt-[700px] rounded-tl-3xl rounded-tr-3xl shadow-2xl shadow-black">
-          <Logos />
+        {/* <FAQChatbot /> */}
+        {/* <FDPButton />        Logos */}
+          <FloatingActionMenu />
+       <div ref={logoRef} className="relative z-0 mt-[750px] " id="logo-section">
+  {/* <div className="w-full h-[200px]">
+    <img src="/academy/school.svg" alt="Wave" className="w-full h-full object-cover" />
+  </div> */}
+  
+  {/* Add white space below image */}
+  {/* <div className="w-full bg-white h-[20px]"></div> You can tweak height */}
+</div>
+
+
+
+   
+        <div ref={logoRef} className="relative z-0  rounded-tl-3xl rounded-tr-3xl shadow-2xl shadow-black 0" id="logo-section">
+          <Logos  />
         </div>
       
         <Problem />
@@ -274,12 +319,15 @@ useEffect(() => {
 
         {/* Testimonials Section */}
        
-   
-     
- <div id="course-cards-section" className="min-h-screen flex items-center justify-center relative z-10 bg-white">
-    <CourseCards coursetocontact={scrollToContact}  />
+   <div id="course-cards-section" className="min-h-screen flex items-center justify-center relative z-10 bg-white">
+    <Services />
 
 </div>
+     
+ {/* <div id="course-cards-section" className="min-h-screen flex items-center justify-center relative z-10 bg-white">
+    <CourseCards coursetocontact={scrollToContact}  />
+
+</div> */}
 
 
       
@@ -299,6 +347,12 @@ useEffect(() => {
           </div>
 
         </div>
+
+ <div className="h-auto flex items-center justify-center relative z-10 bg-white">
+        <TestimonialViedoCarousel />
+
+</div>
+
 
 
 
@@ -322,9 +376,8 @@ useEffect(() => {
 
 
 
-        {/* Faculty Transformation & Calendar */}     
-        <div className="min-h-screen flex items-center justify-center relative z-10 bg-white">
-         <FacultyTransformation  />
+        {/* Faculty Transformation & Calendar */}        <div ref={facultyTransformationRef} className="min-h-screen flex items-center justify-center relative z-10 bg-white" id="scrollToFacultyTransformation">
+         <FacultyTransformation />
          </div>
           <div className="min-h-screen flex items-center justify-center relative z-10 bg-white">
         <Fdpcalender Facultytocontact={scrollToContact} />

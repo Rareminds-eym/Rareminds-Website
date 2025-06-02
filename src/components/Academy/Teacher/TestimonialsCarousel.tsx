@@ -150,58 +150,110 @@ import { Star, StarHalf } from "lucide-react";
 
 const testimonials: TestimonialType[] = [
   {
-    text: "Good",
-    image: "https://randomuser.me/api/portraits/women/1.jpg",
-    name: "Briana Patton",
-    role: "Operations Manager",
+    text: "“The digital pedagogy sessions were super practical. Our teachers now confidently use Tech in daily lessons.” ",
+    image: "/academy/traditionalmethod/RareMinds ISO Logo-01.png",
+    name: "",
+    role: "HOD – Kangeyam School",
     rating: 5,
-    content: ""
+    content: ", Tamil Nadu"
   },
   {
-    text: "Good",
-    image: "https://randomuser.me/api/portraits/men/2.jpg",
-    name: "Bilal Ahmed",
-    role: "IT Manager",
+    text: "“We moved from basic chalk-and-talk to using screens, apps, and smart methods. It’s made teaching smoother and more effective.” ",
+    image: "/academy/traditionalmethod/RareMinds ISO Logo-01.png",
+    name: "",
+    role: " Faculty – Kangeyam School",
     rating: 4.5,
+    content: ", Tamil Nadu",
   },
   {
-    text: "Good",
-    image: "https://randomuser.me/api/portraits/women/3.jpg",
-    name: "Saman Malik",
-    role: "Customer Support Lead",
+    text: "“The interactive methods we learned have completely changed how we teach. Students are way more responsive now.” ",
+    image: "/academy/traditionalmethod/RareMinds ISO Logo-01.png",
+    name: "",
+    role: " HOD – Sunrise Academy",
     rating: 5,
-    content: ""
+    content: ", Bangalore"
   },
   {
-    text: "Good",
-    image: "https://randomuser.me/api/portraits/men/4.jpg",
-    name: "Omar Raza",
-    role: "CEO",
+    text: "“The interactive methods we learned have completely changed how we teach. Students are way more responsive now.”",
+    image: "/academy/traditionalmethod/RareMinds ISO Logo-01.png",
+    name: "",
+    role: "HOD – Sunrise Academy",
     rating: 4,
+    content: ", Bangalore"
   },
   {
-    text: "Good",
-    image: "https://randomuser.me/api/portraits/women/5.jpg",
-    name: "Zainab Hussain",
-    role: "Project Manager",
+    text: "“Earlier, my classes were quiet and dull. Now, students ask questions, join discussions, and even smile more.”",
+    image: "/academy/traditionalmethod/RareMinds ISO Logo-01.png",
+    name: "",
+    role: "Faculty – Sunrise Academy",
     rating: 4.5,
-    content: ""
+    content: ", Bangalore"
   },
   {
-    text: "Good",
-    image: "https://randomuser.me/api/portraits/women/6.jpg",
-    name: "Aliza Khan",
-    role: "Business Analyst",
+    text: "“This workshop was a wake-up call. We needed to move ahead, and this gave us exactly the tools to do that.” ",
+    image: "/academy/traditionalmethod/RareMinds ISO Logo-01.png",
+    name: "",
+    role: " HOD, Greenfield Public School",
     rating: 5,
+      content: ", Delhi"
   },
   {
-    text: "Good",
-    image: "https://randomuser.me/api/portraits/men/7.jpg",
-    name: "Farhan Siddiqui",
-    role: "Marketing Director",
+    text: "“I started using new methods right after the training. The results were almost instant – more focus, more results.” ",
+    image: "/academy/traditionalmethod/RareMinds ISO Logo-01.png",
+    name: "",
+    role: "Faculty – Greenfield Public School",
     rating: 3.5,
-    content: ""
+    content: ", Delhi"
   },
+   {
+    text: "“Tech is finally part of our lesson plans, not just a side idea. This training made the integration feel natural.” ",
+    image: "/academy/traditionalmethod/RareMinds ISO Logo-01.png",
+    name: "",
+    role: "HOD – Westside High",
+    rating: 3.5,
+    content: ", Mumbai"
+  },
+   {
+    text: " “The wellness program helped our teachers get their energy and passion back. It was much needed.”",
+    image: "/academy/traditionalmethod/RareMinds ISO Logo-01.png",
+    name: "",
+    role: " HOD – Valley View Institute",
+    rating: 3.5,
+    content: ", Himachal Pradesh"
+  },
+  {
+    text: " “We’ve gone from hesitant to confident with EdTech. Even simple tools have brought big results in student interest.”",
+    image: "/academy/traditionalmethod/RareMinds ISO Logo-01.png",
+    name: "",
+    role: "Faculty – Westside High",
+    rating: 3.5,
+    content: ", Mumbai"
+  },
+  {
+    text: " “I was feeling exhausted before. This program helped me feel motivated again and brought balance into my work.”",
+    image: "/academy/traditionalmethod/RareMinds ISO Logo-01.png",
+    name: "",
+    role: "Faculty – Valley View Institute",
+    rating: 3.5,
+    content: ", Himachal Pradesh"
+  },
+   {
+    text: "“Our assessments used to vary from class to class. Now we follow one clear method that everyone understands.” ",
+    image: "/academy/traditionalmethod/RareMinds ISO Logo-01.png",
+    name: "",
+    role: " HOD – Coastal Academy",
+    rating: 3.5,
+    content: ", Kerala"
+  },
+   {
+    text: " “The workshop helped us align our grading and feedback system. It’s made evaluation much easier for teachers and students.”",
+    image: "/academy/traditionalmethod/RareMinds ISO Logo-01.png",
+    name: "",
+    role: "Faculty – Coastal Academy",
+    rating: 3.5,
+    content: ", Kerala"
+  },
+  
  
 ];
 
@@ -289,7 +341,7 @@ const Testimonial = () => {
                       height={40}
                       src={image}
                       alt={name}
-                      className="h-10 w-10 rounded-full object-cover"
+                      className="h-20 w-30 rounded-full object-cover"
                     />
                     <div className="flex flex-col">
                       <div className="font-medium tracking-tight leading-5 text-sm">{name}</div>
@@ -300,16 +352,16 @@ const Testimonial = () => {
                   {/* Star rating */}
                   {renderStars(rating)}
                   
-
+  <p className="text-sm md:text-base text-gray-700">{text}</p>
 
                  {/* Render content if it exists */}
                  {content && (
-                    <div className="mt-4 text-sm text-gray-600">
+                    <div className="mt-2 text-sm text-gray-600">
                       {content}
                     </div>
                   )}
 
-               <p className="text-sm md:text-base text-gray-700">{text}</p>
+             
                   
 
                 </div>

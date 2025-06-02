@@ -20,6 +20,7 @@ const ServicesSection = () => {
     {
       icon: TechnicalHiring,
       title: "Technical Hiring",
+      link: "technical-hiring",
       heading: "Build Tech Teams That Deliver",
       subheading:
         "Hire top developers, engineers, and IT experts with precision.",
@@ -28,6 +29,7 @@ const ServicesSection = () => {
     {
       icon: BulkHiring,
       title: "Bulk Hiring",
+      link: "bulk-hiring",
       heading: "Scale Fast Without Compromising Quality",
       subheading: "Volume hiring solutions for fast-paced growth.",
       industries: "Hospitality, Agriculture, Retail, BPO",
@@ -35,6 +37,7 @@ const ServicesSection = () => {
     {
       icon: LeadershipHiring,
       title: "Leadership Hiring",
+      link: "leadership-hiring",
       heading: "Hire Leaders Who Transform",
       subheading: "Executive search for growth-driven organizations.",
       industries: "Pharma, IT, Energy, EdTech",
@@ -42,6 +45,7 @@ const ServicesSection = () => {
     {
       icon: Behavioral,
       title: "Behavioral & Culture Fit Assessments",
+      link: "behavioral-culture-fit-assessments",
       heading: "Hire for Attitude. Train for Skills.",
       subheading: "Make data-driven hiring decisions beyond the resume.",
       industries: "All industries",
@@ -49,6 +53,7 @@ const ServicesSection = () => {
     {
       icon: ProjectBasedHiring,
       title: "Project-Based Hiring",
+      link: "project-based-hiring",
       heading: "Agile Hiring for Agile Projects",
       subheading: "Get skilled experts when and where you need them.",
       industries: "IT, Pharma, EdTech, Manufacturing",
@@ -56,6 +61,7 @@ const ServicesSection = () => {
     {
       icon: RPO,
       title: "RPO Services",
+      link: "rpo-services",
       heading: "Recruitment, Reimagined",
       subheading: "We take charge of your hiring while you focus on growth.",
       industries: "IT, EdTech, Hospitality, Energy",
@@ -63,6 +69,7 @@ const ServicesSection = () => {
     {
       icon: Campus,
       title: "Campus Hiring",
+      link: "campus-hiring",
       heading: "Future-Proof Your Workforce",
       subheading: "Recruit top campus talent from across India.",
       industries: "IT, EdTech, Pharma, AgriTech",
@@ -70,6 +77,7 @@ const ServicesSection = () => {
     {
       icon: psychometrictesting,
       title: "Psychometric Testing",
+      link: "psychometric-testing",
       heading: "Hire Smarter With Science",
       subheading:
         "Evaluate beyond skills with cognitive and personality assessments.",
@@ -78,6 +86,7 @@ const ServicesSection = () => {
     {
       icon: DiversityHiring,
       title: "Diversity Hiring",
+      link: "diversity-hiring",
       heading: "Build Inclusive Teams That Thrive",
       subheading: "We help you meet your DEI goals.",
       industries: "All sectors",
@@ -85,6 +94,7 @@ const ServicesSection = () => {
     {
       icon: TalentMapping,
       title: "Talent Mapping",
+      link: "talent-mapping",
       heading: "See the Talent Before You Need It",
       subheading: "Market intelligence to fuel your future workforce.",
       industries: "Pharma, IT, Manufacturing, Energy",
@@ -92,6 +102,7 @@ const ServicesSection = () => {
     {
       icon: Interview,
       title: "Interview-as-a-Service",
+      link: "interview-as-a-service",
       heading: "Outsource Your Interviews to Experts",
       subheading:
         "Panel-driven, structured, and efficient candidate evaluation.",
@@ -100,6 +111,7 @@ const ServicesSection = () => {
     {
       icon: OnboardingSupport,
       title: "Pre-Onboarding Support",
+      link: "pre-onboarding-support",
       heading: "From Offer to Office – Seamlessly",
       subheading: "Keep candidates engaged until Day 1.",
       industries: "All industries",
@@ -107,7 +119,7 @@ const ServicesSection = () => {
   ];
 
   return (
-    <section id="services" className="section relative bg-white">
+    <section className="section relative bg-white">
       {/* Background elements */}
       <div className="absolute inset-0 bg-white z-0"></div>
       <div className="absolute w-full h-full bg-[url('https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Corporate/Recruitment/Index/Services/bg.webp')] bg-center bg-cover opacity-[0.03]">
@@ -148,7 +160,7 @@ const ServicesSection = () => {
               key={index}
             >
               <div className="relative h-[230px]">
-                <Link to={`/corporate/services/${service.title}`}>
+                <Link to={`/corporate/services/${service.link}`}>
                   <div className="mx-auto w-max relative group">
                     <div className="absolute flex items-center top-1/2 left-1/2 -translate-x-1/2 w-max group-hover:top-0 group-hover:left-0 group-hover:translate-x-0 group-hover:translate-y-0 transition-all duration-300">
                       <div className="h-[50px] w-[50px] group-hover:h-[42px] group-hover:w-[42px] p-2 bg-corporate-yellow rounded-[15px] transition-all duration-300">

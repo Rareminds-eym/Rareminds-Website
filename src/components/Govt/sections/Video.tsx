@@ -1,5 +1,5 @@
 import { generateKeySync } from 'crypto';
-import { useState } from 'react';
+import { useState, useRef, MouseEvent } from 'react';
 import Modal from 'react-modal';
 
 const contentData = [
@@ -45,10 +45,16 @@ Modal.setAppElement('#root');
 const Video = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [selectedVideo, setSelectedVideo] = useState('');
+  const [isDragging, setIsDragging] = useState(false);
+  const [startX, setStartX] = useState(0);
+  const [scrollLeft, setScrollLeft] = useState(0);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   const openModal = (videoUrl: string) => {
-    setSelectedVideo(videoUrl);
-    setModalIsOpen(true);
+    if (!isDragging) {
+      setSelectedVideo(videoUrl);
+      setModalIsOpen(true);
+    }
   };
 
   const closeModal = () => {
@@ -56,32 +62,62 @@ const Video = () => {
     setSelectedVideo('');
   };
 
+  const handleMouseDown = (e: MouseEvent) => {
+    if (!scrollContainerRef.current) return;
+    setIsDragging(true);
+    setStartX(e.pageX - scrollContainerRef.current.offsetLeft);
+    setScrollLeft(scrollContainerRef.current.scrollLeft);
+  };
+
+  const handleMouseMove = (e: MouseEvent) => {
+    if (!isDragging || !scrollContainerRef.current) return;
+    e.preventDefault();
+    const x = e.pageX - scrollContainerRef.current.offsetLeft;
+    const walk = (x - startX) * 2;
+    scrollContainerRef.current.scrollLeft = scrollLeft - walk;
+  };
+
+  const handleMouseUp = () => {
+    setIsDragging(false);
+  };
+
+  const handleMouseLeave = () => {
+    setIsDragging(false);
+  };
+
   return (
-    <div className=" py-12">
-      <div className="relative overflow-hidden">
+    <div className="md:py-12 relative">
+      <div className="relative overflow-hidden" style={{ zIndex: 1 }}>
         {/* Gradient overlays that hide when modal is open */}
         {!modalIsOpen && (
           <>
-            <div className="absolute left-0 top-0 h-full w-24 bg-gradient-to-r from-white to-transparent z-10"></div>
-            <div className="absolute right-0 top-0 h-full w-24 bg-gradient-to-l from-white to-transparent z-10"></div>
+            <div className="absolute left-0 top-0 h-full w-24 bg-gradient-to-r from-white to-transparent"></div>
+            <div className="absolute right-0 top-0 h-full w-24 bg-gradient-to-l from-white to-transparent"></div>
           </>
         )}
         
         {/* Scrolling container */}
-        <div className="overflow-hidden hover:pause">
-          <div className="flex animate-scroll gap-6 py-4 hover:[animation-play-state:paused]">
+        <div 
+          ref={scrollContainerRef}
+          className="overflow-hidden cursor-grab active:cursor-grabbing"
+          onMouseDown={handleMouseDown}
+          onMouseMove={handleMouseMove}
+          onMouseUp={handleMouseUp}
+          onMouseLeave={handleMouseLeave}
+        >
+          <div className={`flex gap-6 md:py-4 ${!isDragging ? 'animate-scroll hover:[animation-play-state:paused]' : ''}`}>
             {/* Double the content for seamless loop */}
             {[...contentData, ...contentData].map((item, index) => (
               <div
                 key={index}
-                className="flex-none w-96 cursor-pointer transform transition-transform hover:scale-105 group "
+                className="flex-none h-60 w-60 md:w-96 cursor-pointer transform transition-transform hover:scale-105 group "
                 onClick={() => openModal(item.video)}
               >
                 <div className="aspect-w-16 aspect-h-9 rounded-lg overflow-hidden shadow-lg relative">
                   <img
                     src={item.image}
                     alt={item.title}
-                    className="w-full h-full object-cover"
+                    className="w-full h-52 md:w-full md:h-full object-cover"
                   />
                   {/* Dark overlay */}
                   <div className="absolute inset-0 bg-black/30 group-hover:bg-black/20 transition-all duration-300"></div>
@@ -115,10 +151,23 @@ const Video = () => {
         className="fixed inset-0 flex items-center justify-center p-4 mx-auto"
         overlayClassName="fixed inset-0 bg-black/90 backdrop-blur-sm"
         style={{
+          overlay: {
+            zIndex: 9999,
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
+          },
           content: {
+            position: 'relative',
             background: 'transparent',
             border: 'none',
-            padding: 0
+            padding: 0,
+            margin: 'auto'
           }
         }}
       >

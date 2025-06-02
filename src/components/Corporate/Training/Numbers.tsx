@@ -92,7 +92,11 @@ const AnimatedNumber: React.FC<{ value: string; color: string }> = ({
 		requestAnimationFrame(animate);
 		// eslint-disable-next-line
 	}, [value, inView]);
-	return <span ref={spanRef} style={{ color }}>{display}</span>;
+	return (
+		<span ref={spanRef} style={{ color }}>
+			{display}
+		</span>
+	);
 };
 
 const Numbers: React.FC = () => {
@@ -155,11 +159,16 @@ const Numbers: React.FC = () => {
 							whileInView={{ opacity: 1, y: 0 }}
 							viewport={{ once: true, amount: 0.2 }}
 							transition={{ duration: 0.5, delay: idx * 0.12 }}
-							className={`${idx == 5 ? "hidden sm:block" : ""}`}
+							className={`relative ${idx == 5 ? "hidden sm:block" : ""} ${
+								stat.isDummy ? "bg-cover bg-center bg-no-repeat" : ""
+							}`}
 							style={{
 								background: stat.isDummy
-									? "#f0f4f8"
+									? undefined
 									: "linear-gradient(135deg, #fff 60%, #f0f4f8 100%)",
+								backgroundImage: stat.isDummy
+									? "url('https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Corporate/Training/Index/data-wall-block-bg.webp')"
+									: undefined,
 								borderRadius: "2rem",
 								boxShadow: stat.isDummy
 									? "0 0 0 1px #e0e7ef"
