@@ -200,3 +200,10 @@
 }
 
 }
+
+
+.rpv-default-layout__toolbar .rpv-toolbar__item[aria-label="Open"],
+.rpv-default-layout__toolbar .rpv-toolbar__item[aria-label="Download"],
+.rpv-default-layout__toolbar .rpv-toolbar__item[aria-label="Print"] {
+    display: none !important;
+}

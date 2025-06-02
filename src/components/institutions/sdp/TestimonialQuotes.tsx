@@ -3,15 +3,15 @@ import { testimonialsData } from '@/utils/testimonialsData';
 import { motion } from 'framer-motion';
 
 const sideImages = [
-  '/institutions/images/Testimonials/Pic1.jpg',
-  '/institutions/images/Testimonials/Pic2.jpg',
-  '/institutions/images/Testimonials/Pic3.jpg',
-  '/institutions/images/Testimonials/Pic5.jpg',
-  '/institutions/images/Testimonials/Pic6.jpg',
-  '/institutions/images/Testimonials/Pic7.jpg',
-  '/institutions/images/Testimonials/Pic8.jpg',
-  '/institutions/images/Testimonials/Pic9.jpg',
-  '/institutions/images/Testimonials/Pic10.jpg',
+  '/institutions/images/Testimonials/sdp/Pic1.jpg',
+  '/institutions/images/Testimonials/sdp/Pic2.jpg',
+  '/institutions/images/Testimonials/sdp/Pic3.jpg',
+  '/institutions/images/Testimonials/sdp/Pic5.jpg',
+  '/institutions/images/Testimonials/sdp/Pic6.jpg',
+  '/institutions/images/Testimonials/sdp/Pic7.jpg',
+  '/institutions/images/Testimonials/sdp/Pic8.jpg',
+  '/institutions/images/Testimonials/sdp/Pic9.jpg',
+  '/institutions/images/Testimonials/sdp/Pic10.jpg',
 ];
 
 const duplicate = <T,>(arr: T[]) => [...arr, ...arr];
