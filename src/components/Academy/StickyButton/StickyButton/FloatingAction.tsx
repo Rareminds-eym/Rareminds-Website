@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Plus, HelpCircle, MessageCircle, Calendar, Download } from 'lucide-react';
 import FAQChatbot from "./FAQChatbot";
@@ -20,10 +20,9 @@ const FloatingActionMenu = () => {
   const [activeIcon, setActiveIcon] = useState<React.ComponentType<any>>(Plus);
 
   const handleDownloadClick = () => {
-    // Create a link element
     const link = document.createElement('a');
-    link.href = ''; // Adjust path as needed
-    link.download = '';
+    link.href = '/path-to-your-pdf/Your-Brochure.pdf'; // ✅ Replace this with your actual path
+    link.download = 'Your-Brochure.pdf'; // ✅ Replace with actual file name
     link.click();
   };
 
@@ -44,116 +43,120 @@ const FloatingActionMenu = () => {
       id: 'faq',
       icon: HelpCircle,
       label: 'FAQ',
-      onClick: () => {}, 
+      onClick: () => {}, // Handled below
     },
     {
       id: 'chat',
       icon: MessageCircle,
       label: 'Live Chat',
-      onClick: () => {}, 
+      onClick: () => {}, // Handled below
     },
-    
-
   ];
 
-  const toggleMenu = () => {
-    setIsOpen(!isOpen);
-  };
+  const toggleMenu = () => setIsOpen(!isOpen);
 
   const handleMenuItemClick = (item: MenuItem) => {
-    if (item.id === 'faq') {
-      setShowFAQChatbot(!showFAQChatbot);
-      setShowChat(false);
-      setShowBookDemo(false);
-      setActiveIcon(showFAQChatbot ? Plus : HelpCircle);
-    } else if (item.id === 'chat') {
-      setShowChat(!showChat);
-      setShowFAQChatbot(false);
-      setShowBookDemo(false);
-      setActiveIcon(showChat ? Plus : MessageCircle);
-    } else if (item.id === 'demo') {
-      setShowBookDemo(!showBookDemo);
-      setShowFAQChatbot(false);
-      setShowChat(false);
-      setActiveIcon(showBookDemo ? Plus : Calendar);
-    } else if (item.id === 'download') {
-      setActiveIcon(Download);
-      setTimeout(() => setActiveIcon(Plus), 1000); // Reset to Plus after 1 second
-      item.onClick();
-    } else {
-      item.onClick();
-      setActiveIcon(Plus);
+    switch (item.id) {
+      case 'faq':
+        setShowFAQChatbot(!showFAQChatbot);
+        setShowChat(false);
+        setShowBookDemo(false);
+        setActiveIcon(showFAQChatbot ? Plus : HelpCircle);
+        break;
+      case 'chat':
+        setShowChat(!showChat);
+        setShowFAQChatbot(false);
+        setShowBookDemo(false);
+        setActiveIcon(showChat ? Plus : MessageCircle);
+        break;
+      case 'demo':
+        setShowBookDemo(!showBookDemo);
+        setShowFAQChatbot(false);
+        setShowChat(false);
+        setActiveIcon(showBookDemo ? Plus : Calendar);
+        break;
+      case 'download':
+        setActiveIcon(Download);
+        setTimeout(() => setActiveIcon(Plus), 1000);
+        item.onClick();
+        break;
+      default:
+        item.onClick();
+        setActiveIcon(Plus);
     }
     setIsOpen(false);
   };
 
-  // Calculate positions for circular layout expanding to the left
   const getItemPosition = (index: number, total: number) => {
     const radius = 80;
-    const startAngle = -10; // Start from top-left
-    const angleStep = 80 / (total - 1); // Spread across 90 degrees
-    const angle = (startAngle + angleStep * index) * (Math.PI / 100);
-    
+    const angle = (index * (80 / (total - 1)) - 10) * (Math.PI / 100);
     return {
-      x: -Math.cos(angle) * radius, // Negative to expand left
-      y: -Math.sin(angle) * radius, // Negative to go upward
+      x: -Math.cos(angle) * radius,
+      y: -Math.sin(angle) * radius,
     };
   };
 
+  useEffect(() => {
+    let timeoutId: NodeJS.Timeout;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (timeoutId) clearTimeout(timeoutId);
+          timeoutId = setTimeout(() => {
+            setIsOpen(entry.isIntersecting);
+          }, 300);
+        });
+      },
+      {
+        threshold: [0.1, 0.5],
+        rootMargin: '50px',
+      }
+    );
+
+    const footer = document.getElementById('footer');
+    if (footer) observer.observe(footer);
+
+    return () => {
+      if (footer) observer.unobserve(footer);
+      if (timeoutId) clearTimeout(timeoutId);
+    };
+  }, []);
+
   return (
     <>
-      <FAQChatbot 
-        isVisible={showFAQChatbot} 
-        onClose={() => setShowFAQChatbot(false)} 
-      />
+      <FAQChatbot isVisible={showFAQChatbot} onClose={() => setShowFAQChatbot(false)} />
       <ChatButton isVisible={showChat} onClose={() => setShowChat(false)} />
       <BookDemo isVisible={showBookDemo} onClose={() => setShowBookDemo(false)} />
-      <div className="fixed bottom-20 right-16 z-50">
-        {/* Menu Items */}
+
+      <div className="fixed bottom-10 right-16 z-50">
         <AnimatePresence>
           {isOpen && (
             <>
-              {/* Background overlay */}
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.2 }}
-                className="fixed inset-0 bg-black/20 backdrop-blur-sm -z-10"
+                className="fixed inset-0 -z-10"
                 onClick={() => setIsOpen(false)}
               />
-              
+
               {menuItems.map((item, index) => {
                 const position = getItemPosition(index, menuItems.length);
                 const IconComponent = item.icon;
-                
+
                 return (
                   <motion.div
                     key={item.id}
-                    initial={{ 
-                      opacity: 0, 
-                      scale: 0,
-                      x: 0,
-                      y: 0,
-                    }}
-                    animate={{ 
-                      opacity: 1, 
-                      scale: 1,
-                      x: position.x,
-                      y: position.y,
-                    }}
-                    exit={{ 
-                      opacity: 0, 
-                      scale: 0,
-                      x: 0,
-                      y: 0,
-                    }}
-                    transition={{ 
+                    initial={{ opacity: 0, scale: 0, x: 0, y: 0 }}
+                    animate={{ opacity: 1, scale: 1, x: position.x, y: position.y }}
+                    exit={{ opacity: 0, scale: 0, x: 0, y: 0 }}
+                    transition={{
                       duration: 0.3,
                       delay: index * 0.05,
                       type: "spring",
                       stiffness: 200,
-                      damping: 20
+                      damping: 20,
                     }}
                     className="absolute bottom-0 right-0"
                   >
@@ -164,15 +167,11 @@ const FloatingActionMenu = () => {
                       className="w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center text-gray-700 hover:bg-gray-50 transition-colors group relative"
                     >
                       <IconComponent size={20} />
-                      
-                      {/* Tooltip */}
                       <motion.div
                         initial={{ opacity: 0, x: 10 }}
                         animate={{ opacity: 1, x: 0 }}
                         className={`absolute bg-gray-800 text-white px-2 py-1 rounded text-sm whitespace-nowrap invisible group-hover:visible transition-all ${
-                          index === menuItems.length - 1 
-                            ? 'bottom-16 right-0 ' 
-                            : 'right-14' 
+                          index === menuItems.length - 1 ? 'bottom-16 right-0' : 'right-14'
                         }`}
                       >
                         {item.label}
@@ -185,22 +184,20 @@ const FloatingActionMenu = () => {
           )}
         </AnimatePresence>
 
-        {/* Main Action Button */}
+        {/* Main FAB Button */}
         <motion.button
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
           onClick={toggleMenu}
-          className={`w-14 h-14 border-2 border-red-200 bg-red-500 rounded-full  flex items-center justify-center text-white hover:from-red-600 hover:to-red-300 transition-all duration-200  ${!isOpen && 'animate-bounce'} shadow-xl shadow-red-400/50`}
+          className={`w-14 h-14 border-2 border-red-200 bg-gradient-to-r from-red-400 to-red-600 rounded-full flex items-center justify-center text-white hover:from-red-600 hover:to-red-300 transition-all duration-200 ${
+            !isOpen && 'animate-bounce'
+          } shadow-xl shadow-red-400/50`}
         >
-          <motion.div
-            animate={{ rotate: isOpen ? 0 : 0 }}
-            transition={{ duration: 0.3, type: "spring", stiffness: 200 }}
-          >
+          <motion.div animate={{ rotate: isOpen ? 0 : 0 }}>
             {React.createElement(activeIcon, { size: 24, className: 'animate-pulse' })}
           </motion.div>
         </motion.button>
 
-        {/* Ripple effect */}
         <AnimatePresence>
           {isOpen && (
             <motion.div

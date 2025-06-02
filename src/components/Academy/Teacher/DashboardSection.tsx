@@ -16,10 +16,10 @@ const InstitutionDashboardSection = () => {
         Complete transparency with real-time tracking and comprehensive reporting
       </p>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div className="grid grid-cols-1  md:grid-cols-2 gap-8">
         {/* Simulation Games */}
         <motion.div
-          className="bg-white rounded-2xl shadow-xl p-6"
+          className="bg-white  rounded-2xl shadow-xl   p-6"
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
@@ -27,10 +27,10 @@ const InstitutionDashboardSection = () => {
           <h3 className="text-lg font-semibold text-[#495E57] mb-4">🎮 Simulation Games</h3>
         
 
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-6 mt-10">
+        <div className="flex flex-col sm:flex-row items-center  justify-center gap-6 mt-10">
   {/* Left Tilted Card */}
 
-    <div className="relative group w-[280px] h-[160px]">
+    <div className="relative group w-[280px] h-[220px]">
   {/* Hover Text Appears Above */}
   <span className="absolute -top-8 left-1/2 -translate-x-1/2 bg-white font-bold text-black text-xs px-3 py-1 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-2 group-hover:-translate-y-2  z-20">
     Track progress in real-time
@@ -54,7 +54,7 @@ const InstitutionDashboardSection = () => {
 
   {/* Center Card */}
 
-    <div className="relative group w-[280px] h-[160px]">
+    <div className="relative group w-[280px] h-[220px]">
   {/* Hover Text Above the Card */}
   <span className="absolute -top-8 left-1/2 -translate-x-1/2 text-black  font-bold text-xs px-3 py-1  opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-2 group-hover:-translate-y-2  z-20">
     Gamified chemical education
@@ -77,7 +77,7 @@ const InstitutionDashboardSection = () => {
 
   {/* Right Tilted Card */}
 
-<div className="relative group w-[280px] h-[160px]">
+<div className="relative group w-[280px] h-[220px]">
   {/* Hover Text Above Card */}
   <span className="absolute -top-6 left-1/2 -translate-x-1/2 text-xs font-bold text-black  px-3 py-1  opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-2 group-hover:-translate-y-2 z-10 ">
     Gamified lab safety protocols
@@ -99,7 +99,7 @@ const InstitutionDashboardSection = () => {
  
 
 
-<div className="relative group w-[280px] h-[160px]">
+<div className="relative group w-[280px] h-[220px]">
   {/* Hover Text Above the Card */}
   <span className="absolute -top-8 left-1/2 -translate-x-1/2 text-black font-bold text-xs px-3 py-1 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-2 group-hover:-translate-y-2 z-10">
     Gamified lab safety protocols
@@ -138,19 +138,12 @@ const InstitutionDashboardSection = () => {
   </h3>
 
   {/* Wrapper to center image container */}
-  <div className="flex justify-center">
-    <div className="flex flex-col md:flex-row gap-4 items-center max-w-4xl w-full">
+  <div className="w-full ">
       <img
-        src="/academy/Dashboardleft.png"
-        alt="Dashboard Preview 1"
-        className="rounded-xl w-full md:w-1/2 object-cover  transition-transform duration-500 ease-in-out hover:scale-110 cursor-pointer"
-      />
-      <img
-        src="/academy/Dashboardright.png"
-        alt="Dashboard Preview 2"
-        className="rounded-xl w-full md:w-1/2 object-cover  transition-transform duration-500 ease-in-out hover:scale-110 cursor-pointer"
-      />
-    </div>
+              src="/academy/Rareprep.png"
+              alt="Rareprep LMS"
+              className="rounded-xl w-full  object-cover"
+            />
   </div>
 </motion.div>
 
@@ -164,11 +157,21 @@ const InstitutionDashboardSection = () => {
         >
           <h3 className="text-lg font-semibold text-[#495E57] mb-4">Learning Management System</h3>
           <div className="flex flex-col md:flex-row items-center gap-6">
-            <img
-              src="/academy/Rareprep.png"
-              alt="Rareprep LMS"
-              className="rounded-xl w-full md:w-1/2 object-cover"
-            />
+          
+            <div className="flex justify-center">
+    <div className="flex flex-col md:flex-row gap-4 items-center max-w-4xl w-full">
+      <img
+        src="/academy/Dashboardleft.png"
+        alt="Dashboard Preview 1"
+        className="rounded-xl w-full md:w-1/2 object-cover  transition-transform duration-500 ease-in-out hover:scale-110 cursor-pointer"
+      />
+      <img
+        src="/academy/Dashboardright.png"
+        alt="Dashboard Preview 2"
+        className="rounded-xl w-full md:w-1/2 object-cover  transition-transform duration-500 ease-in-out hover:scale-110 cursor-pointer"
+      />
+    </div>
+  </div>
             <div className="text-left">
               <h4 className="text-md font-bold mb-2">Rareprep</h4>
               <p className="text-sm text-gray-600">
