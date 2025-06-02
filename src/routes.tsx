@@ -74,11 +74,11 @@ const router = createBrowserRouter([
     errorElement: <ErrorBoundary />,
     children: [
       {
-        path: "/corporate",
+        path: "/corporate/recruitment",
         element: withSuspense(Corporate),
       },
       {
-        path: "/corporate/services/:name",
+        path: "/corporate/recruitment/services/:name",
         element: withSuspense(Service),
       },
       {

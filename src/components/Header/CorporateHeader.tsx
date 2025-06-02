@@ -22,7 +22,7 @@ const CorporateHeader: React.FC = () => {
         {/* Right: Navigation Buttons */}
         <div className="hidden md:flex gap-4">
           <Link
-            to="/corporate"
+            to="/corporate/recruitment"
             className={isRecruitmentPage ? "corporate-btn-1" : "corporate-btn-2"}
           >
             Recruitment

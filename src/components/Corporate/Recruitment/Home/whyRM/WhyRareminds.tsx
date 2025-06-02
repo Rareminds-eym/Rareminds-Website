@@ -128,7 +128,7 @@ const WhyRareminds = () => {
               <ShieldCheck size={32} />
             </div>
             <h2 className="text-3xl md:text-5xl font-bold mb-4 bg-clip-text text-transparent bg-corporate-black">
-              Trusted. Proven. Scalable
+              Trusted. Proven. Scalable.
             </h2>
             <p className="text-corporate-grey max-w-3xl mx-auto">
               We blend human expertise with data-driven insights to deliver
