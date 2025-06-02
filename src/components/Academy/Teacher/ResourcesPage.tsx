@@ -1,55 +1,125 @@
+import { useState } from "react";
 import { Calendar, ChartLine, Download, FileText, Book } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { createClient } from "@supabase/supabase-js";
+
+// Initialize Supabase client (replace with your own keys)
+const supabaseUrl = "https://your-supabase-url.supabase.co";
+const supabaseKey = "your-anon-key";
+const supabase = createClient(supabaseUrl, supabaseKey);
 
 type IconType = "calendar" | "chart-line" | "download" | "file-text" | "book";
 
-interface ResourceCardProps {
+interface Resource {
+  icon: IconType;
   title: string;
   description: string;
-  icon: IconType;
-  downloadLabel: string;
-  className?: string;
+  pdfLink: string;
+  svgIconPath: string; // for your custom SVG icon in /academy/
 }
 
-const ResourceCard = ({
-  title,
-  description,
-  icon,
-  downloadLabel,
-  className,
-}: ResourceCardProps) => {
-  const getIcon = (icon: IconType) => {
-    switch (icon) {
-      case "calendar":
-        return <Calendar className="h-6 w-6" />;
-      case "chart-line":
-        return <ChartLine className="h-6 w-6" />;
-      case "file-text":
-        return <FileText className="h-6 w-6" />;
-      case "book":
-        return <Book className="h-6 w-6" />;
-      default:
-        return <Download className="h-6 w-6" />;
-    }
-  };
+const resources: Resource[] = [
+  {
+    icon: "calendar",
+    title: "5-Day TDP Calendar",
+    description: '"Reimagine Teaching. Redefine Learning."',
+    pdfLink: "/academy/pdfs/5_Day.pdf",
+    svgIconPath: "/academy/5-Day TDP Calendar (Customizable).svg",
+  },
+  {
+    icon: "chart-line",
+    title: "Our Career Counselling Blueprint for Grades 9–12",
+    description: "Your Child’s Future Starts Today: Career Counselling Blueprint for Grades 9–12",
+    pdfLink: "/academia/coming-soon",
+    svgIconPath: "/academy/careerCounsellingBlueprint.svg",
+  },
+  {
+    icon: "file-text",
+    title: "Checklist: Is Your School NEP-Ready?",
+    description: "A Quick Audit for Schools Moving toward 21st-Century Excellence.",
+    pdfLink: "/academy/pdfs/NEP_Ready_School_Checklist.pdf",
+    svgIconPath: "/academy/NEP-Ready School Checklist.svg",
+  },
+];
 
-  return (
-    <div className={cn("p-6 bg-white border border-gray-100 shadow-sm", className)}>
-      <div className="mb-4">{getIcon(icon)}</div>
-      <h3 className="text-lg font-semibold mb-1">{title}</h3>
-      <p className="text-sm text-gray-600 mb-6">{description}</p>
-      <button className="flex items-center gap-2 text-sm font-medium border border-gray-300 rounded px-3 py-1.5 hover:bg-gray-50">
-        <Download className="h-4 w-4" />
-        <span>{downloadLabel}</span>
-      </button>
-    </div>
-  );
+const getIcon = (icon: IconType) => {
+  switch (icon) {
+    case "calendar":
+      return <Calendar className="h-6 w-6" />;
+    case "chart-line":
+      return <ChartLine className="h-6 w-6" />;
+    case "file-text":
+      return <FileText className="h-6 w-6" />;
+    case "book":
+      return <Book className="h-6 w-6" />;
+    default:
+      return <Download className="h-6 w-6" />;
+  }
 };
 
 const ResourcesPage = () => {
+  const [modalOpen, setModalOpen] = useState(false);
+  const [selectedResource, setSelectedResource] = useState<Resource | null>(null);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
+
+  // Open modal and set the clicked resource
+  const handleDownloadClick = (resource: Resource) => {
+    setSelectedResource(resource);
+    setModalOpen(true);
+    setName("");
+    setEmail("");
+    setErrorMsg("");
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setErrorMsg("");
+
+    if (!name.trim() || !email.trim()) {
+      setErrorMsg("Please enter your name and email.");
+      return;
+    }
+
+    // Basic email validation
+    const emailRegex = /\S+@\S+\.\S+/;
+    if (!emailRegex.test(email)) {
+      setErrorMsg("Please enter a valid email address.");
+      return;
+    }
+
+    if (!selectedResource) return;
+
+    setLoading(true);
+
+    // Insert data into Supabase table pdf_downloads
+    const { error } = await supabase.from("pdf_downloads").insert([
+      {
+        name: name.trim(),
+        email: email.trim(),
+        title: selectedResource.title,
+        downloaded_at: new Date().toISOString(),
+      },
+    ]);
+
+    setLoading(false);
+
+    if (error) {
+      setErrorMsg("Failed to save data. Please try again.");
+      return;
+    }
+
+    // Close modal and trigger PDF download
+    setModalOpen(false);
+
+    // Open PDF in a new tab (download)
+    window.open(selectedResource.pdfLink, "_blank", "noopener,noreferrer");
+  };
+
   return (
-   
-    <div className="h-autopx-8 bg-white py-8" data-aos="fade-down-right">
+    <div className="h-auto bg-white py-8" data-aos="fade-down-right">
       <div className="container mx-auto px-4">
         <div className="max-w-4xl mx-auto mb-6">
           <h1 className="text-xl md:text-4xl text-center font-bold mb-2">Downloadable Resources</h1>
@@ -57,170 +127,96 @@ const ResourcesPage = () => {
             Get free resources to help transform your educational approach
           </p>
 
-          {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-          <div className="relative w-[300px] h-[auto]  ">
-  <img src="/images/academy/resourcecard.jpg" alt="Example" className="w-full h-full object-cover rounded-md" />
-  <button className="w-[160px] absolute bottom-2 right-2 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
-    Download PDF
-  </button>
-</div>
-
-
-
-            <ResourceCard
-              title="5-Day PDP Calendar"
-              description="Complete breakdown of our signature faculty development program with daily activities"
-              icon="calendar"
-              downloadLabel="Download PDF"
-            />
-            <ResourceCard
-              title="Career Counselling Blueprint"
-              description="Comprehensive guide to career guidance for a wide range of student needs"
-              icon="chart-line"
-              downloadLabel="Download PDF"
-            />
-          </div> */}
-<div className="flex justify-center md:justify-start">
-
-<div className="grid grid-cols-1  md:grid-cols-3 gap-16 mb-6 mt-16">
-  <div className="relative w-[300px] h-[auto] rounded-md overflow-hidden">
-    <img
-      src="/academy/resourcecard.jpg"
-      alt="Example"
-      className="w-full h-full object-cover"
-    />
-
-
-    <div className="absolute inset-0 flex flex-col justify-center text-black text-left px-6">
-
-  {/* Icon/Image below content */}
-  <img src="/academy/5-Day TDP Calendar (Customizable).svg" alt="" className="w-8 h-8 md:w-12 md:h-12 "  />
-  {/* Heading */}
-  <h2 className="text-[18px] font-semibold mb-2">
-     5-Day TDP Calendar
-
-  </h2>
-
-  {/* Subheading */}
-  <p className="text-[16px] mb-4">
-  "Reimagine Teaching. Redefine Learning."
-
-  </p>
-
-</div>
-    {/* Button */}
-    {/* <button className="w-[160px] absolute bottom-2 right-2  bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded ">
-      Download PDF
-    </button> */}
-    <a
-  href="/academy/pdfs/5_Day.pdf"
-  target="_blank"
-  rel="noopener noreferrer"
-  className="w-[160px] absolute bottom-2 right-2 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded text-center"
->
-  Download PDF
-</a>
-  </div>
-
-  <div className="relative w-[300px] h-[auto] rounded-md overflow-hidden">
-    <img
-      src="/academy/resourcecard.jpg"
-      alt="Example"
-      className="w-full h-full object-cover"
-    />
-    <div className="absolute inset-0 flex flex-col justify-center text-black text-left px-6">
-
-  {/* Icon/Image below content */}
-  <img src="/academy/careerCounsellingBlueprint.svg" alt="" className="w-8 h-8 md:w-12 md:h-12 "  />
-  {/* Heading */}
-  <h2 className="text-[18px] font-semibold mb-2">
-  Our Career Counselling Blueprint for Grades 9–12
-
-  </h2>
-
-  {/* Subheading */}
-  <p className="text-[16px] mb-4">
-  "Your Child’s Future Starts Today: Career Counselling Blueprint for Grades 9–12"
-  </p>
-
-</div>
-    {/* Button */}
-    {/* <button className="w-[160px] absolute bottom-2 right-2  bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded ">
-      Download PDF
-    </button> */}
-
-<a
-  href="/academia/coming-soon" // Update the file path
-  target="_blank"
-  rel="noopener noreferrer"
-  className="w-[160px] absolute bottom-2 right-2 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded text-center"
->
-  Download PDF
-</a>
-  </div>
-
-
-
-
-
-  <div className="relative w-[300px] h-[auto] rounded-md overflow-hidden">
-    <img
-      src="/academy/resourcecard.jpg"
-      alt="Example"
-      className="w-full h-full object-cover"
-    />
-
-    {/* Overlay content */}
-    {/* <div className="absolute inset-0 flex flex-col items-center justify-center text-black text-center px-4 ">
-       <img src="/images/academy/ai.png" alt="" className="w-28 h-6 "/>
-      <div className="flex items-center gap-2 mb-2">
-       
-        <h2 className="text-[24px] font-semibold pl-6 text-left">Career Counselling Blueprint</h2>
-      </div>
-      <p className="text-[16px] text-left pl-6">
-        Comprehensive guide to career guidance for grades 9–12 with assessment tools
-      </p>
-    </div> */}
-    <div className="absolute inset-0 flex flex-col justify-center text-black text-left px-6">
-
-  {/* Icon/Image below content */}
-  <img src="/academy/NEP-Ready School Checklist.svg" alt="" className="w-8 h-8 md:w-12 md:h-12  "  />
-  {/* Heading */}
-  <h2 className="text-[18px] font-semibold mb-2">
-  Checklist: Is Your School NEP-Ready?
-
-  </h2>
-
-  {/* Subheading */}
-  <p className="text-[16px] mb-4">
-  A Quick Audit for Schools Moving toward 21st-Century Excellence.
-
-  </p>
-
-</div>
-    {/* Button */}
-    {/* <button className="w-[160px] absolute bottom-2 right-2  bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded ">
-      Download PDF
-    </button> */}
-
-<a
-  href="/academy/pdfs/NEP_Ready_School_Checklist.pdf" // Update the file path
-  target="_blank"
-  rel="noopener noreferrer"
-  className="w-[160px] absolute bottom-2 right-2 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded text-center"
->
-  Download PDF
-</a>
-  </div>
-
-  
-</div>
-</div>
-
+          <div className="flex justify-center md:justify-start">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-16 mb-6 mt-16">
+              {resources.map((resource) => (
+                <div
+                  key={resource.title}
+                  className="relative w-[300px] h-auto rounded-md overflow-hidden shadow-md"
+                >
+                  <img
+                    src="/academy/resourcecard.jpg"
+                    alt="Resource Background"
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 flex flex-col justify-center text-black text-left px-6 bg-white bg-opacity-70">
+                    <img
+                      src={resource.svgIconPath}
+                      alt={`${resource.title} icon`}
+                      className="w-8 h-8 md:w-12 md:h-12 mb-2"
+                    />
+                    <h2 className="text-[18px] font-semibold mb-2">{resource.title}</h2>
+                    <p className="text-[16px] mb-4">{resource.description}</p>
+                  </div>
+                  <button
+                    onClick={() => handleDownloadClick(resource)}
+                    className="w-[160px] absolute bottom-2 right-2 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded text-center"
+                  >
+                    Download PDF
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
 
-      {/* <div className="border-t border-gray-100 mt-12"></div> */}
+      {/* Modal */}
+      {modalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4">
+          <div className="bg-white rounded-lg shadow-lg max-w-md w-full p-6 relative">
+            <button
+              onClick={() => setModalOpen(false)}
+              className="absolute top-2 right-2 text-gray-600 hover:text-gray-900"
+              aria-label="Close modal"
+            >
+              ✕
+            </button>
+            <h3 className="text-xl font-semibold mb-4">Please enter your details</h3>
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div>
+                <label htmlFor="name" className="block mb-1 font-medium">
+                  Name
+                </label>
+                <input
+                  type="text"
+                  id="name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-red-500"
+                  required
+                />
+              </div>
+              <div>
+                <label htmlFor="email" className="block mb-1 font-medium">
+                  Email
+                </label>
+                <input
+                  type="email"
+                  id="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-red-500"
+                  required
+                />
+              </div>
+
+              {errorMsg && <p className="text-red-600">{errorMsg}</p>}
+
+              <button
+                type="submit"
+                disabled={loading}
+                className={cn(
+                  "w-full bg-red-500 hover:bg-red-600 text-white font-semibold py-2 rounded transition-colors",
+                  loading ? "opacity-50 cursor-not-allowed" : ""
+                )}
+              >
+                {loading ? "Submitting..." : "Submit & Download"}
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

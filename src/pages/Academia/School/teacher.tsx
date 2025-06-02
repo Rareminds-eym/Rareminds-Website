@@ -42,6 +42,7 @@ import { useState, useEffect } from "react";
   import FloatingActionMenu from '../../../components/Academy/StickyButton/StickyButton/FloatingAction'
   import TestimonialViedoCarousel from '../../../components/Academy/Teacher/TestimonialCarouselVideo';
   import Hero from '../../../components/Academy/Teacher/Herobanner/Hero'
+  import Services from '../School/Cources'
 
   const School = ({ userType = "teacher" }: { userType?: "teacher" | "student" }) => {
   const [activeTab, setActiveTab] = useState<"teacher" | "student">("teacher");
@@ -157,7 +158,7 @@ useEffect(() => {
         {/* Hero Banner */}
         {/* Hero Banner (90% width) */}
         <CorporateHeader />
-        <div className="w-full">
+        <div className="w-full fixed">
           {/* <div className="h-full flex items-center justify-center"> */}
           {/* <h1 className="text-4xl font-bold text-white"></h1>
         {/* </div> */}
@@ -171,7 +172,7 @@ useEffect(() => {
         {/* <FAQChatbot /> */}
         {/* <FDPButton />        Logos */}
           <FloatingActionMenu />
-       <div ref={logoRef} className="relative z-0 " id="logo-section">
+       <div ref={logoRef} className="relative z-0 mt-[750px] " id="logo-section">
   {/* <div className="w-full h-[200px]">
     <img src="/academy/school.svg" alt="Wave" className="w-full h-full object-cover" />
   </div> */}
@@ -318,12 +319,15 @@ useEffect(() => {
 
         {/* Testimonials Section */}
        
-   
-     
- <div id="course-cards-section" className="min-h-screen flex items-center justify-center relative z-10 bg-white">
-    <CourseCards coursetocontact={scrollToContact}  />
+   <div id="course-cards-section" className="min-h-screen flex items-center justify-center relative z-10 bg-white">
+    <Services />
 
 </div>
+     
+ {/* <div id="course-cards-section" className="min-h-screen flex items-center justify-center relative z-10 bg-white">
+    <CourseCards coursetocontact={scrollToContact}  />
+
+</div> */}
 
 
       
