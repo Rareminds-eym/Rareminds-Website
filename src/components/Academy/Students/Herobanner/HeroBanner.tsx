@@ -62,7 +62,7 @@ const HeroBanner = ({  HeroToContact,HeroToLogo }: HeaderProps) =>{
 
   return (
     <div className="w-full bg-white fixed">
-      <div className="container mx-auto px-4 py-8">
+      <div className="w-full mx-auto px-4 py-8">
         {/* Main Hero Section */}
         {/* <div className="flex flex-col md:flex-row gap-8 mb-8">
           {/* Left Column - Carousel */}
@@ -120,59 +120,55 @@ const HeroBanner = ({  HeroToContact,HeroToLogo }: HeaderProps) =>{
 
 
 <div className="relative w-full mb-8">
-  {/* Left Column - Full Banner Carousel */}
-  <div className="w-full h-[300px] md:h-[80vh] overflow-hidden">    <ServiceCarousel 
-      services={servicesStudent}
-      activeServiceId={activeServiceId}
-      onServiceChange={setActiveServiceId}
-      transitionDuration={300} // Faster transition for better sync
-      rotationInterval={5000} // Keep same rotation interval
-    />
-  </div>
-
-  {/* Right Column - Content (overlay on md+, stacked below on mobile) */}  <div className="w-full md:w-1/2 p-6  md:pl-12  md:pr-12
-                  md:absolute md:top-0 md:right-0 md:h-full 
-                  flex items-center bg-white/90 md:bg-transparent"
-                  style={{ transition: 'none' }}>
-    <div style={{ transition: 'none' }}>
-      <h1 className="text-xl md:text-3xl lg:text-4xl font-bold mb-4 whitespace-pre-line"
-          style={{ transition: 'none' }}>
-        {activeService.headline}
-      </h1>
-      <p className="text-lg text-gray-700 mb-6">
-        {activeService.subtext}
-      </p>
-  <PopupButton 
-  url="https://calendly.com/karthikeyan-rareminds/30min"
-  rootElement={document.getElementById('root')!}
-  text="Schedule"
-  className="mb-6 px-4 py-2 text-lg rounded-xl shadow-md bg-red-500 hover:bg-red-600"
-/>
-
-
-      {/* Schedule Component */}
-      {showSchedule && (
-        <div className="mb-4">
-          <Schedule />
-        </div>
-      )}
-
-      {/* Action Buttons */}
-      <div className="flex gap-4">
-        <Button 
-          variant="outline" 
-          className="flex-1 py-4 border-2"
-          onClick={handleClick}
-        >
-          <Mail className="mr-2 h-5 w-5" /> Enquiry
-        </Button>
-        <Button 
-          variant="outline" 
-          className="flex-1 py-4 border-2"
-          onClick={() => setShowDownload(true)}
-        >
-          <Download className="mr-2 h-5 w-5" /> Download
-        </Button>
+  <div className="flex flex-col md:flex-row w-full h-screen overflow-hidden bg-white/90">
+    {/* Left: Carousel (1/3) */}
+    <div className="w-full md:w-2/5 h-[220px] md:h-full flex-shrink-0 flex items-center justify-center">
+      <div className="w-full h-full flex items-center justify-center">
+        <ServiceCarousel 
+          services={servicesStudent}
+          activeServiceId={activeServiceId}
+          onServiceChange={setActiveServiceId}
+          transitionDuration={300}
+          rotationInterval={5000}
+        />
+      </div>
+    </div>
+    {/* Right: Text (2/3) */}
+    <div className="w-full md:w-3/5 flex flex-col justify-center p-6 md:pl-12 md:pr-12 h-[220px] md:h-full">
+      <div className="flex flex-col justify-center h-full">
+        <h1 className="text-xl md:text-3xl lg:text-4xl font-bold mb-4 whitespace-pre-line">
+          {activeService.headline}
+        </h1>
+        <p className="text-lg text-gray-700 mb-6">
+          {activeService.subtext}
+        </p>
+        {/* <PopupButton 
+          url="https://calendly.com/karthikeyan-rareminds/30min"
+          rootElement={document.getElementById('root')!}
+          text="Schedule"
+          className="mb-6 px-4 py-2 text-lg rounded-xl shadow-md bg-red-500 hover:bg-red-600"
+        />
+        {showSchedule && (
+          <div className="mb-4">
+            <Schedule />
+          </div>
+        )} */}
+        {/* <div className="flex gap-4">
+          <Button 
+            variant="outline" 
+            className="flex-1 py-4 border-2"
+            onClick={handleClick}
+          >
+            <Mail className="mr-2 h-5 w-5" /> Enquiry
+          </Button>
+          <Button 
+            variant="outline" 
+            className="flex-1 py-4 border-2"
+            onClick={() => setShowDownload(true)}
+          >
+            <Download className="mr-2 h-5 w-5" /> Download
+          </Button>
+        </div> */}
       </div>
     </div>
   </div>
@@ -180,7 +176,7 @@ const HeroBanner = ({  HeroToContact,HeroToLogo }: HeaderProps) =>{
 
 
        {/* Service Navigation */}
-              <div className="flex justify-center py-4 border-t">
+              {/* <div className="flex justify-center py-4 border-t">
                 <div className="flex flex-wrap justify-center md:gap-8 px-4">
                   {servicesStudent.map((service) => (
                     <div
@@ -194,7 +190,7 @@ const HeroBanner = ({  HeroToContact,HeroToLogo }: HeaderProps) =>{
                     </div>
                   ))}
                 </div>
-              </div>
+              </div> */}
             </div>
 
 <div className="hidden lg:block container">
@@ -203,7 +199,7 @@ const HeroBanner = ({  HeroToContact,HeroToLogo }: HeaderProps) =>{
   className="w-max absolute left-[50%] bottom-[20%] cursor-pointer transition-opacity z-10 "
   aria-label="Scroll down"
 >
-  <div className="relative animate-bounce w-[90px] h-[90px] right-[50%]">
+  <div className="relative  w-[90px] h-[90px] right-[10%]">
     <img
       src="https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Corporate/Recruitment/Index/Hero/scroll.png"
       alt="Scroll down"

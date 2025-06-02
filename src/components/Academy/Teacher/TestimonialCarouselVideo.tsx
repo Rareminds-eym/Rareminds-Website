@@ -18,60 +18,63 @@ interface Testimonial {
 }
 
 const testimonials: Testimonial[] = [
+  
   {
     id: 1,
-    name: "KAITY",
-    role: "FASHION DIRECTOR",
-    image: "/lovable-uploads/8724c124-0669-4a26-a889-21ce3da8f8b9.png",
-    videoSrc: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-    content: "Working with this team has been an incredible journey. The creativity and attention to detail is unmatched.",
-    bgColor: "from-red-500 to-orange-500"
+    name: "",
+    role: "",
+    image: "",
+    videoSrc: "",
+    content: "",
+    bgColor: "from-slate-600 to-gray-700"
   },
   {
     id: 2,
-    name: "MIKE",
-    role: "CREATIVE LEAD",
-    image: "https://images.unsplash.com/photo-1649972904349-6e44c42644a7?auto=format&fit=crop&w=400&h=400",
-    videoSrc: "https://www.youtube.com/embed/ScMzIvxBSi4",
-    content: "The innovation and collaborative spirit here pushes boundaries and creates amazing results every day.",
-    bgColor: "from-blue-600 to-purple-600"
+    name: "",
+    role: "",
+    image: "",
+    videoSrc: "",
+    content: "",
+    bgColor: "from-slate-600 to-gray-700"
   },
   {
     id: 3,
-    name: "SAMITE",
-    role: "ART DIRECTOR",
-    image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=400&h=400",
-    videoSrc: "https://www.youtube.com/embed/M7lc1UVf-VE",
-    content: "This environment fosters creativity like nowhere else. Every project is an opportunity to excel.",
-    bgColor: "from-emerald-500 to-teal-500"
+    name: "",
+    role: "",
+    image: "",
+    videoSrc: "",
+    content: "",
+    bgColor: "from-slate-600 to-gray-700"
   },
   {
     id: 4,
-    name: "OAKES",
-    role: "BRAND STRATEGIST",
-    image: "https://images.unsplash.com/photo-1581092795360-fd1ca04f0952?auto=format&fit=crop&w=400&h=400",
-    videoSrc: "https://www.youtube.com/embed/9bZkp7q19f0",
-    content: "The strategic thinking and execution here sets the standard for the entire industry.",
-    bgColor: "from-emerald-500 to-teal-500"
+    name: "",
+    role: "",
+    image: "",
+    videoSrc: "",
+    content: "",
+    bgColor: "from-slate-600 to-gray-700"
   },
   {
     id: 5,
-    name: "LAUREN",
-    role: "DESIGN LEAD",
-    image: "https://images.unsplash.com/photo-1605810230434-7631ac76ec81?auto=format&fit=crop&w=400&h=400",
-    videoSrc: "https://www.youtube.com/embed/kJQP7kiw5Fk",
-    content: "Every day brings new challenges and opportunities to create something extraordinary.",
-    bgColor: "from-amber-500 to-red-500"
+    name: "",
+    role: "",
+    image: "",
+    videoSrc: "",
+    content: "",
+    bgColor: "from-slate-600 to-gray-700"
   },
   {
     id: 6,
-    name: "RYAN",
-    role: "CREATIVE PRODUCER",
-    image: "https://images.unsplash.com/photo-1517022812141-23620dba5c23?auto=format&fit=crop&w=400&h=400",
-    videoSrc: "https://www.youtube.com/embed/fJ9rUzIMcZQ",
-    content: "The collaborative energy and innovative approach makes this the perfect creative environment.",
+    name: "",
+    role: "",
+    image: "",
+    videoSrc: "",
+    content: "",
     bgColor: "from-slate-600 to-gray-700"
   }
+
+
 ];
 
 const TestimonialViedoCarousel = () => {
@@ -110,7 +113,7 @@ const TestimonialViedoCarousel = () => {
 
   return (
     <>
-      <div className="relative w-full h-[600px] overflow-hidden bg-gradient-to-br from-slate-100 to-slate-200 rounded-3xl">
+      <div className="relative w-full h-[600px] overflow-hidden  rounded-3xl">
         <div className="absolute inset-0 flex items-center justify-center">
           {getVisibleTestimonials().map((testimonial, index) => {
             const { position } = testimonial;
@@ -193,13 +196,13 @@ const TestimonialViedoCarousel = () => {
 
         {/* Play/Pause Status */}
         <div className="absolute top-6 right-6">
-          <div className={`px-4 py-2 rounded-full text-sm font-medium ${
+          {/* <div className={`px-4 py-2 rounded-full text-sm font-medium ${
             isPlaying 
               ? "bg-green-500 text-white" 
               : "bg-red-500 text-white"
           }`}>
             {isPlaying ? "Playing" : "Paused"}
-          </div>
+          </div> */}
         </div>
 
         {/* Carousel Play/Pause Button */}
