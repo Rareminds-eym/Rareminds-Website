@@ -2,14 +2,14 @@ import React from "react";
 import { motion } from "framer-motion";
 
 const clientLogos = [
-  { name: "Toyota", src: "/public/Corporate/Images/Logos/logo1.png" },
-  { name: "TNSDC", src: "/public/Corporate/Images/Logos/logo2.png" },
+  { name: "Toyota", src: "/Corporate/Images/Logos/logo1.png" },
+  { name: "TNSDC", src: "/Corporate/Images/Logos/logo2.png" },
   {
     name: "Tripura Skill Dev",
-    src: "/public/Corporate/Images/Logos/logo3.png",
+    src: "/Corporate/Images/Logos/logo3.png",
   },
-  { name: "SMBs", src: "/public/Corporate/Images/Logos/logo4.png" },
-  { name: "Universities", src: "/public/Corporate/Images/Logos/logo5.png" },
+  { name: "SMBs", src: "/Corporate/Images/Logos/logo4.png" },
+  { name: "Universities", src: "/Corporate/Images/Logos/logo5.png" },
 ];
 
 const WorkWith: React.FC = () => {

@@ -4,25 +4,25 @@ import FAQChatbot from '@/components/institutions/sdp/FAQChatbot';
 import LogoCarousel from '@/components/institutions/fdp/LogoCarousel';
 import BenefitsSection from '@/components/institutions/fdp/BenefitsSection';
 import TestimonialsSection from '@/components/institutions/fdp/TestimonialsSection';
-import CalendarSection from '@/components/institutions/fdp/CalendarSection';
 import FDPSolutions from '@/components/institutions/fdp/FDPSolutions';
-import StickyButtons from '@/components/institutions/fdp/StickyButtons';
 import ContactSection from '@/components/institutions/Contact/ContactSection';
+import UpcomingEvents from '@/components/institutions/fdp/UpcomingEvents';
+import FloatingActionButtonfdp from '@/components/institutions/fdp/FloatingActionfdp';
 
 
 export default function FDP() {
   return (
     <div className="pt-20">
       <HeroSection />
-      <FAQChatbot />
+      <FloatingActionButtonfdp />
       <ProgramsSection />
       <LogoCarousel />
       <BenefitsSection />
       <FDPSolutions />
       <TestimonialsSection />
-      <CalendarSection />
+      <UpcomingEvents />
       <ContactSection />
-      <StickyButtons />
+      
     </div>
   );
 }

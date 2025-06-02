@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Plus,
@@ -7,7 +7,7 @@ import {
   Calendar,
   Download,
 } from "lucide-react";
-import FAQChatbot from "../ChatBot/FAQChatbot";
+import FAQChatbot from "./ChatBot/FAQChatbot";
 
 interface MenuItem {
   id: string;
@@ -19,13 +19,34 @@ interface MenuItem {
 const FloatingActionMenu = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenFaq, setIsOpenFaq] = useState(false);
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+
+  // Open menu when user scrolls near the bottom (before footer)
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollY = window.scrollY || window.pageYOffset;
+      const windowHeight = window.innerHeight;
+      const docHeight = document.documentElement.scrollHeight;
+      const footer = document.querySelector("#footer");
+      const footerHeight = footer
+        ? (footer as HTMLElement).offsetHeight + 10
+        : 120; // fallback if no footer
+      if (scrollY + windowHeight >= docHeight - footerHeight) {
+        setIsOpen(true);
+      } else {
+        setIsOpen(false);
+      }
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const menuItems: MenuItem[] = [
     {
-      id: "faq",
-      icon: HelpCircle,
-      label: "FAQ",
-      onClick: () => console.log("FAQ clicked"),
+      id: "download",
+      icon: Download,
+      label: "Download",
+      onClick: () => console.log("Download clicked"),
     },
     {
       id: "chat",
@@ -40,10 +61,10 @@ const FloatingActionMenu = () => {
       onClick: () => console.log("Book a Demo clicked"),
     },
     {
-      id: "download",
-      icon: Download,
-      label: "Download",
-      onClick: () => console.log("Download clicked"),
+      id: "faq",
+      icon: HelpCircle,
+      label: "FAQ",
+      onClick: () => console.log("FAQ clicked"),
     },
   ];
 
@@ -80,14 +101,14 @@ const FloatingActionMenu = () => {
         {isOpen && (
           <>
             {/* Background overlay */}
-            <motion.div
+            {/* <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.2 }}
               className="fixed inset-0 bg-black/20 backdrop-blur-sm -z-10"
               onClick={() => setIsOpen(false)}
-            />
+            /> */}
 
             {menuItems.map((item, index) => {
               const position = getItemPosition(index, menuItems.length);
@@ -128,16 +149,23 @@ const FloatingActionMenu = () => {
                     whileTap={{ scale: 0.9 }}
                     onClick={() => handleMenuItemClick(item)}
                     className="w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center text-gray-700 hover:bg-gray-50 transition-colors group relative"
+                    onMouseEnter={() => setHoveredIndex(index)}
+                    onMouseLeave={() => setHoveredIndex(null)}
                   >
                     <IconComponent size={20} />
                     {/* Tooltip */}
-                    <motion.div
-                      initial={{ opacity: 0, x: 10 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      className="absolute right-14 bg-gray-800 text-white px-2 py-1 rounded text-sm whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity"
-                    >
-                      {item.label}
-                    </motion.div>
+                    <AnimatePresence>
+                      {hoveredIndex === index && (
+                        <motion.div
+                          initial={{ opacity: 0, x: 10 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          exit={{ opacity: 0, x: 10 }}
+                          className="absolute right-14 bg-gray-800 text-white px-2 py-1 rounded text-sm whitespace-nowrap transition-opacity"
+                        >
+                          {item.label}
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
                   </motion.button>
                 </motion.div>
               );
@@ -150,7 +178,9 @@ const FloatingActionMenu = () => {
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
         onClick={toggleMenu}
-        className="w-14 h-14 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full shadow-lg flex items-center justify-center text-white hover:from-blue-600 hover:to-purple-700 transition-all duration-200"
+        className={`w-14 h-14 bg-[#434343] rounded-full shadow-lg flex items-center justify-center text-white hover:from-blue-600 hover:to-purple-700 transition-all duration-200 ${
+          !isOpen && "animate-bounce"
+        }`}
       >
         <motion.div
           animate={{ rotate: isOpen ? 45 : 0 }}
@@ -167,7 +197,7 @@ const FloatingActionMenu = () => {
             animate={{ scale: 4, opacity: 0 }}
             exit={{ scale: 0, opacity: 0 }}
             transition={{ duration: 0.6 }}
-            className="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full -z-10"
+            className="absolute inset-0 bg-[#434343] rounded-full -z-10"
           />
         )}
       </AnimatePresence>
@@ -178,7 +208,7 @@ const FloatingActionMenu = () => {
             className="absolute inset-0 bg-black/20"
             onClick={() => setIsOpenFaq(false)}
           />
-          <div className="relative z-10" onClick={e => e.stopPropagation()}>
+          <div className="relative z-10" onClick={(e) => e.stopPropagation()}>
             <FAQChatbot open={isOpenFaq} onClose={() => setIsOpenFaq(false)} />
           </div>
         </div>
