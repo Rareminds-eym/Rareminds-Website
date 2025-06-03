@@ -2,7 +2,7 @@ import { useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Input } from "./input";
 import { Textarea } from "./textarea";
-import { supabase } from "@/lib/supabaseClient";
+import { supabase } from "../../../lib/supabaseClient";
 
 import {
   Phone,
@@ -15,7 +15,7 @@ import {
   Youtube,
 } from "lucide-react";
 import { Icon } from "@iconify/react";
-import { useToast } from "@/hooks/use-toast";
+import { useToast } from "../../../hooks/use-toast";
 import { AiFillYoutube,AiFillLinkedin } from "react-icons/ai";
 import { FaXTwitter,FaFacebookF } from "react-icons/fa6";
 

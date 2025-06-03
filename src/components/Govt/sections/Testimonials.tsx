@@ -1,5 +1,5 @@
 import React from 'react';
-import { testimonialsdata } from '@/constants/testimonials';
+import { testimonialsdata } from '../../../constants/testimonials';
 import { motion } from 'framer-motion';
 
 const Testimonials: React.FC = () => {
