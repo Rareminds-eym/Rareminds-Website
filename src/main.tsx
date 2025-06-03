@@ -17,9 +17,7 @@ import { store } from './store';
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
     <Provider store={store}>
-    <AuthProvider>
        <RouterProvider router={router} />
-     </AuthProvider>
     </Provider>
   </React.StrictMode>
 );

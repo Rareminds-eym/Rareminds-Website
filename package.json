@@ -23,6 +23,7 @@
     "@radix-ui/react-scroll-area": "^1.2.8",
     "@radix-ui/react-tabs": "^1.1.12",
     "@radix-ui/react-toast": "^1.2.13",
+    "@reduxjs/toolkit": "^2.8.2",
     "@supabase/supabase-js": "^2.49.4",
     "@tsparticles/engine": "^3.0.0",
     "@tsparticles/react": "^3.0.0",
