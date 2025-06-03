@@ -110,6 +110,10 @@ const router = createBrowserRouter([
         path: "/government/contact",
         element: withSuspense(Contact),
       },
+       {
+        path: "/academia/projects/",
+        element: withSuspense(Projectlist),
+      },
     ],
   },
   {

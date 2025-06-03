@@ -2,7 +2,7 @@
 
 import React, { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import faqData from "@/data/faqData";
+import faqData from "../../../data/faqData";
 
 
 interface ChatEntry {
