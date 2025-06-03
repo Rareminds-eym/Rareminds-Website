@@ -19,7 +19,7 @@ const InstitutionDashboardSection = () => {
         </p>
       </motion.div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 px-10">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 px-10">
         {/* Simulation Games (Single Box with Dummy Image & Animation) */}
         <motion.div
           className="bg-white rounded-2xl shadow-xl p-6"
@@ -27,19 +27,50 @@ const InstitutionDashboardSection = () => {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          <h3 className="text-lg font-semibold text-[#495E57] mb-4">🎮 Simulation Games</h3>
-          <motion.div
-            className="rounded-xl overflow-hidden border-4 border-[#589ed7] p-1 bg-zinc-800"
-            animate={{ boxShadow: ["0 0 0px #F4CE14", "0 0 20px #F4CE14", "0 0 0px #F4CE14"] }}
-            transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
-          >
-            <img
-              src="institutions/vectors/SimulationGame.png"
-              alt="Simulation Game Demo"
-              className="rounded-lg w-full object-cover"
-            />
-          </motion.div>
-        </motion.div>
+  <h3 className="text-lg font-semibold text-[#495E57] mb-4">🎮 Simulation Games</h3>
+
+  <motion.div
+    className="rounded-xl border-4 border-[#589ed7] px-1 py-2 bg-zinc-800 grid grid-cols-2 gap-2 md:grid-cols-4"
+    animate={{ boxShadow: ["0 0 0px #F4CE14", "0 0 20px #F4CE14", "0 0 0px #F4CE14"] }}
+    transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
+  >
+    {/* Each Image Card */}
+    {[
+      {
+       
+        link: "sgcev.rareminds.in",
+        image: "/institutions/vectors/SimulationGames/sgcev.png",
+      },
+      {
+        
+        link: "/games/evbattery",
+        image: "/institutions/vectors/SimulationGames/evbms.png",
+      },
+      {
+        
+        link: "/games/foodprocessing",
+        image: "/institutions/vectors/SimulationGames/fapp.png",
+      },
+      {
+        
+        link: "/games/chemical",
+        image: "/institutions/vectors/SimulationGames/csevbm.png",
+      },
+    ].map(({ link, image }, index) => (
+      <a
+        href={link}
+        key={index}
+        className="group hover:scale-125 transition-transform duration-300"
+      >
+        
+          <img src={image}  className="w-full h-64 object-contain" />
+          
+        
+      </a>
+    ))}
+  </motion.div>
+</motion.div>
+
 
         {/* Real Time Dashboards & Analytics */}
         <motion.div

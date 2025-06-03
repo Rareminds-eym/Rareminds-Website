@@ -1,6 +1,6 @@
 
 import { Button } from "../../../components/Academy/UI/button";
-import PageHeader from "../../../components/Academy/Students/courses/PageHeader";
+import PageHeader from "../../../components/Academy/Students/courses-1/PageHeader";
 import { Card, CardContent } from "@/components/ui/card";
 import { ArrowRight, CheckCircle } from "lucide-react";
 

@@ -7,14 +7,14 @@ import TestimonialsSection from '@/components/institutions/fdp/TestimonialsSecti
 import FDPSolutions from '@/components/institutions/fdp/FDPSolutions';
 import ContactSection from '@/components/institutions/Contact/ContactSection';
 import UpcomingEvents from '@/components/institutions/fdp/UpcomingEvents';
-import FloatingActionButton from '@/components/institutions/FloatingAction';
+import FloatingActionButtonfdp from '@/components/institutions/fdp/FloatingActionfdp';
 
 
 export default function FDP() {
   return (
     <div className="pt-20">
       <HeroSection />
-      <FloatingActionButton />
+      <FloatingActionButtonfdp />
       <ProgramsSection />
       <LogoCarousel />
       <BenefitsSection />
