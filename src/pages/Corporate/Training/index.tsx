@@ -11,9 +11,11 @@ import Solution from "@/components/Corporate/Training/Solution";
 import TestimonialQuotes from "@/components/Corporate/Training/TestimonialQuotes";
 import TestimonialVideos from "@/components/Corporate/Training/TestimonialVideos";
 import WorkWith from "@/components/Corporate/Training/WorkWith";
-import React from "react";
+import React, { useEffect } from "react";
+import { useLocation } from "react-router-dom";
 
 const CorporateTraining: React.FC = () => {
+  const location = useLocation();
   const slides = [
     {
       heading: "Your Training ROI Partner",
@@ -31,6 +33,16 @@ const CorporateTraining: React.FC = () => {
       img: "/Corporate/Images/Home/Hero/Time-to-Hire.webp",
     },
   ];
+
+  useEffect(() => {
+    if (location.state && location.state.scrollTo) {
+      const el = document.getElementById(location.state.scrollTo);
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth" });
+      }
+    }
+  }, [location.state]);
+
   return (
     <>
       <section className="bg-[url('/Corporate/Images/Training/hero/header-bg.webp')] bg-cover sticky top-[80px]">
@@ -45,10 +57,10 @@ const CorporateTraining: React.FC = () => {
       <div className="relative bg-white">
         <Solution />
       </div>
-      <div className="relative bg-white">
+      {/* <div className="relative bg-white">
         <CaseStudies />
-      </div>
-      <div className="relative bg-white">
+      </div> */}
+      <div className="relative bg-white" id="services">
         <Services />
       </div>
       <div className="relative bg-white">

@@ -87,8 +87,9 @@ const FooterBar = () => {
 		}, 350);
 	};
 
-	// Determine if current page is corporate
-	const isCorporate = window.location.pathname.startsWith("/corporate");
+	// Determine if current page is corporate or corporate training
+	const isCorporate = window.location.pathname.startsWith("/corporate/recruitment");
+	const isCorporateTraining = window.location.pathname.startsWith("/corporate/training");
 
 	return (
 		<div
@@ -179,7 +180,52 @@ const FooterBar = () => {
 						Our Services
 					</h2>
 					<ul className="space-y-3">
-						{isCorporate ? (
+						{isCorporateTraining ? (
+							<>
+								<li>
+									<Link
+										to="/corporate/training/services/workplace-productivity"
+										className="hover:text-red-400 transition-colors"
+									>
+										Workplace Productivity & Digital Fluency
+									</Link>
+								</li>
+								<li>
+									<Link
+										to="/corporate/training/services/pre-placement"
+										className="hover:text-red-400 transition-colors"
+									>
+										Tech Upskilling & Future Skills
+									</Link>
+								</li>
+								<li>
+									<Link
+										to="/corporate/training/services/bridge-courses"
+										className="hover:text-red-400 transition-colors"
+									>
+										Behavioral & Organizational Culture Programs
+									</Link>
+								</li>
+								<li>
+									<a
+										href="/corporate/training/services"
+										onClick={e => {
+											e.preventDefault();
+											navigate("/corporate/training");
+											setTimeout(() => {
+												const el = document.getElementById("services");
+												if (el) {
+													el.scrollIntoView({ behavior: "smooth" });
+												}
+											}, 350);
+										}}
+										className="hover:text-red-400 transition-colors font-semibold cursor-pointer"
+									>
+										View All
+									</a>
+								</li>
+							</>
+						) : isCorporate ? (
 							<>
 								<li>
 									<Link
@@ -207,7 +253,7 @@ const FooterBar = () => {
 								</li>
 								<li>
 									<a
-										href="/corporate#services"
+										href="/corporate/recruitment#services"
 										onClick={handleViewAll}
 										className="hover:text-red-400 transition-colors font-semibold cursor-pointer"
 									>

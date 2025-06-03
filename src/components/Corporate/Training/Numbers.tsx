@@ -13,7 +13,7 @@ const stats = [
 		value: "13",
 		label: "Languages Delivered",
 		color: "#00bcd4",
-		icon: "mdi:translate",
+		icon: "uil:letter-hindi-a",
 	},
 	{
 		value: "82%",
@@ -32,14 +32,6 @@ const stats = [
 		label: "Org-Level Learning Dashboards Activated",
 		color: "#ff9800",
 		icon: "mdi:view-dashboard",
-	},
-	// Dummy card to fill last column
-	{
-		value: "",
-		label: "",
-		color: "#e0e7ef",
-		icon: "mdi:star-outline",
-		isDummy: true,
 	},
 ];
 
@@ -159,33 +151,18 @@ const Numbers: React.FC = () => {
 							whileInView={{ opacity: 1, y: 0 }}
 							viewport={{ once: true, amount: 0.2 }}
 							transition={{ duration: 0.5, delay: idx * 0.12 }}
-							className={`relative ${idx == 5 ? "hidden sm:block" : ""} ${
-								stat.isDummy ? "bg-cover bg-center bg-no-repeat" : ""
-							}`}
+							className="relative"
 							style={{
-								background: stat.isDummy
-									? undefined
-									: "linear-gradient(135deg, #fff 60%, #f0f4f8 100%)",
-								backgroundImage: stat.isDummy
-									? "url('https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Corporate/Training/Index/data-wall-block-bg.webp')"
-									: undefined,
+								background: "linear-gradient(135deg, #fff 60%, #f0f4f8 100%)",
 								borderRadius: "2rem",
-								boxShadow: stat.isDummy
-									? "0 0 0 1px #e0e7ef"
-									: `0 8px 32px 0 ${stat.color}18, 0 1.5px 0 0 #fff1`,
+								boxShadow: `0 8px 32px 0 ${stat.color}18, 0 1.5px 0 0 #fff1`,
 								minHeight: 200,
-								padding: stat.isDummy
-									? "2.5rem 1.5rem 1.7rem 1.5rem"
-									: "2.5rem 1.5rem 1.7rem 1.5rem",
+								padding: "2.5rem 1.5rem 1.7rem 1.5rem",
 								textAlign: "center",
 								position: "relative",
-								border: stat.isDummy
-									? "1.5px dashed #e0e7ef"
-									: `2px solid ${stat.color}22`,
-								transition: stat.isDummy
-									? undefined
-									: "transform 0.22s cubic-bezier(.4,2,.6,1), box-shadow 0.22s cubic-bezier(.4,2,.6,1)",
-								cursor: stat.isDummy ? "default" : "pointer",
+								border: `2px solid ${stat.color}22`,
+								transition: "transform 0.22s cubic-bezier(.4,2,.6,1), box-shadow 0.22s cubic-bezier(.4,2,.6,1)",
+								cursor: "pointer",
 								overflow: "hidden",
 								opacity: 1,
 								flex: "1 1 280px",
@@ -193,70 +170,57 @@ const Numbers: React.FC = () => {
 								minWidth: "260px",
 								margin: "0 auto",
 							}}
-							onMouseOver={
-								stat.isDummy
-									? undefined
-									: (e) => {
-											e.currentTarget.style.transform =
-												"scale(1.045) rotate(-1deg)";
-											e.currentTarget.style.boxShadow = `0 12px 40px 0 ${stat.color}44, 0 0 0 3px ${stat.color}55 inset`;
-									  }
-							}
-							onMouseOut={
-								stat.isDummy
-									? undefined
-									: (e) => {
-											e.currentTarget.style.transform = "scale(1) rotate(0)";
-											e.currentTarget.style.boxShadow = `0 8px 32px 0 ${stat.color}18, 0 1.5px 0 0 #fff1`;
-									  }
-							}
+							onMouseOver={e => {
+								e.currentTarget.style.transform = "scale(1.045) rotate(-1deg)";
+								e.currentTarget.style.boxShadow = `0 12px 40px 0 ${stat.color}44, 0 0 0 3px ${stat.color}55 inset`;
+							}}
+							onMouseOut={e => {
+								e.currentTarget.style.transform = "scale(1) rotate(0)";
+								e.currentTarget.style.boxShadow = `0 8px 32px 0 ${stat.color}18, 0 1.5px 0 0 #fff1`;
+							}}
 						>
-							{!stat.isDummy && (
-								<>
-									<div
-										style={{
-											display: "flex",
-											alignItems: "center",
-											justifyContent: "center",
-											width: 64,
-											height: 64,
-											margin: "0 auto 1rem auto",
-											borderRadius: "50%",
-											background: `linear-gradient(135deg, ${stat.color}22 60%, #fff 100%)`,
-											boxShadow: `0 2px 12px 0 ${stat.color}22`,
-										}}
-									>
-										<Icon
-											icon={stat.icon}
-											color={stat.color}
-											width={36}
-											height={36}
-										/>
-									</div>
-									<h3
-										style={{
-											fontSize: "2rem",
-											fontWeight: 700,
-											color: stat.color,
-											margin: "0.4rem 0",
-											letterSpacing: "0.01em",
-										}}
-									>
-										<AnimatedNumber value={stat.value} color={stat.color} />
-									</h3>
-									<p
-										style={{
-											fontSize: "1.08rem",
-											color: "#495057",
-											margin: 0,
-											fontWeight: 500,
-											letterSpacing: "0.01em",
-										}}
-									>
-										{stat.label}
-									</p>
-								</>
-							)}
+							<div
+								style={{
+									display: "flex",
+									alignItems: "center",
+									justifyContent: "center",
+									width: 64,
+									height: 64,
+									margin: "0 auto 1rem auto",
+									borderRadius: "50%",
+									background: `linear-gradient(135deg, ${stat.color}22 60%, #fff 100%)`,
+									boxShadow: `0 2px 12px 0 ${stat.color}22`,
+								}}
+							>
+								<Icon
+									icon={stat.icon}
+									color={stat.color}
+									width={36}
+									height={36}
+								/>
+							</div>
+							<h3
+								style={{
+									fontSize: "2rem",
+									fontWeight: 700,
+									color: stat.color,
+									margin: "0.4rem 0",
+									letterSpacing: "0.01em",
+								}}
+							>
+								<AnimatedNumber value={stat.value} color={stat.color} />
+							</h3>
+							<p
+								style={{
+									fontSize: "1.08rem",
+									color: "#495057",
+									margin: 0,
+									fontWeight: 500,
+									letterSpacing: "0.01em",
+								}}
+							>
+								{stat.label}
+							</p>
 						</motion.div>
 					))}
 				</div>
