@@ -47,7 +47,7 @@ export default function Solution() {
 						Upskill. Uplift. Uncomplicate.
 					</h1>
 					<p className="text-sm sm:text-base text-gray-600 mx-auto max-w-lg">
-						Because good training shouldn’t need a post-mortem
+						Empowering your team with the right skills, at the right moment, in the most impactful way.
 					</p>
 				</motion.div>
 

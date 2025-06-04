@@ -19,20 +19,46 @@ export default function Problem() {
             className="w-full lg:w-1/2 text-center lg:text-left"
           >
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-light mb-2 sm:mb-4 text-black">
-              You're Conducting Pieces Of Training.
-            </h2>
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-4 sm:mb-6 text-black">
-              But Are You Creating Transformation?
+              You're Training on Scripts. But Are You Creating Experiences?
             </h2>
             <p className="text-base sm:text-lg text-black mt-2 max-w-2xl mx-auto lg:mx-0">
-              Across 25 sectors. In 13 languages. 30+ countries. With zero
-              excuses. <br />
-              We drive ROI, retention, and real behavioral change.
+              If your training stops at scripts, you’re probably losing customers.
+              Our experience-led methods turn every interaction into a loyalty
+              magnet.
             </p>
+            <div className="mt-6 text-left lg:text-left">
+              <div className="font-bold text-black mb-2">Rareminds Fix:</div>
+              <ul className="list-disc pl-5 space-y-2 text-black">
+                <li>
+                  Immersive, gamified learning that keeps your people engaged and
+                  growing.
+                </li>
+                <li>
+                  Culture-building experiences that create purpose, connection,
+                  and belongingness.
+                </li>
+                <li>
+                  Role-relevant training paths that evolve with your tools, tech,
+                  and business goals.
+                </li>
+                <li>
+                  Interactive virtual labs that keep remote and hybrid teams truly
+                  connected.
+                </li>
+                <li>
+                  Team synergy programs that sharpen trust, communication, and
+                  collaboration amongst your team.
+                </li>
+                <li>
+                  Leadership bootcamps that build emotionally intelligent,
+                  real-world-ready leaders.
+                </li>
+              </ul>
+            </div>
           </motion.div>
 
           {/* RIGHT SIDE - 3 CIRCULAR CARDS */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, x: 50 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
@@ -40,7 +66,7 @@ export default function Problem() {
             className="w-full lg:w-1/2 relative mt-12 lg:mt-0"
           >
             <div className="grid grid-cols-2 gap-6 sm:gap-8 lg:gap-10 max-w-[600px] mx-auto">
-              <motion.div 
+              <motion.div
                 initial={{ scale: 0.8 }}
                 whileInView={{ scale: 1 }}
                 transition={{ delay: 0.2, duration: 0.5 }}
@@ -48,12 +74,16 @@ export default function Problem() {
               >
                 <div className="w-28 h-28 sm:w-36 sm:h-36 md:w-40 md:h-40 lg:w-48 lg:h-48 rounded-full bg-gradient-to-br from-pink-100 to-pink-200 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 hover:from-pink-200 hover:to-pink-300 flex items-center justify-center">
                   <div className="text-center">
-                    <span className="block text-2xl sm:text-3xl font-bold text-gray-800 mb-1">25+</span>
-                    <span className="text-sm sm:text-base font-medium text-gray-600">Sectors</span>
+                    <span className="block text-2xl sm:text-3xl font-bold text-gray-800 mb-1">
+                      25+
+                    </span>
+                    <span className="text-sm sm:text-base font-medium text-gray-600">
+                      Sectors
+                    </span>
                   </div>
                 </div>
               </motion.div>
-              <motion.div 
+              <motion.div
                 initial={{ scale: 0.8 }}
                 whileInView={{ scale: 1 }}
                 transition={{ delay: 0.4, duration: 0.5 }}
@@ -61,12 +91,16 @@ export default function Problem() {
               >
                 <div className="w-28 h-28 sm:w-36 sm:h-36 md:w-40 md:h-40 lg:w-48 lg:h-48 rounded-full bg-gradient-to-br from-pink-100 to-pink-200 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 hover:from-pink-200 hover:to-pink-300 flex items-center justify-center">
                   <div className="text-center">
-                    <span className="block text-2xl sm:text-3xl font-bold text-gray-800 mb-1">13</span>
-                    <span className="text-sm sm:text-base font-medium text-gray-600">Languages</span>
+                    <span className="block text-2xl sm:text-3xl font-bold text-gray-800 mb-1">
+                      13
+                    </span>
+                    <span className="text-sm sm:text-base font-medium text-gray-600">
+                      Languages
+                    </span>
                   </div>
                 </div>
               </motion.div>
-              <motion.div 
+              <motion.div
                 initial={{ scale: 0.8 }}
                 whileInView={{ scale: 1 }}
                 transition={{ delay: 0.6, duration: 0.5 }}
@@ -74,8 +108,12 @@ export default function Problem() {
               >
                 <div className="w-28 h-28 sm:w-36 sm:h-36 md:w-40 md:h-40 lg:w-48 lg:h-48 rounded-full bg-gradient-to-br from-green-100 to-green-200 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 hover:from-green-200 hover:to-green-300 flex items-center justify-center -mt-6 sm:-mt-8 lg:-mt-10">
                   <div className="text-center">
-                    <span className="block text-2xl sm:text-3xl font-bold text-gray-800 mb-1">30+</span>
-                    <span className="text-sm sm:text-base font-medium text-gray-600">Countries</span>
+                    <span className="block text-2xl sm:text-3xl font-bold text-gray-800 mb-1">
+                      30+
+                    </span>
+                    <span className="text-sm sm:text-base font-medium text-gray-600">
+                      Countries
+                    </span>
                   </div>
                 </div>
               </motion.div>
