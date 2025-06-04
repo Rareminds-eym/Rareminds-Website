@@ -25,7 +25,7 @@ const services: ServiceData[] = [
     name: "Schedule Your TDP",
     headline: "Teach the Future, Not the Past",
     subtext: "Train in NEP, Digital Pedagogy & Emotional Intelligence",
-    illustration: "/academy/herobanner/1.png",
+    illustration: "/academy/herobanner/Artboard 11.png",
   },
   {
     id: "development",
