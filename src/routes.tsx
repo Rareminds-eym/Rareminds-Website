@@ -37,10 +37,12 @@ const course = lazy(() => import("./pages/Academia/Student/[course].tsx"));
 const LeadershipPrograms = lazy(
   () => import("./pages/Corporate/Training/service/LeadershipPrograms.tsx")
 );
-const Projectlist = lazy(() => import ("./pages/Academia/projects/projectlist"))
-const Naan = lazy(() => import ("./pages/Academia/projects/[name]"));
-const CaseStudy = lazy(() => import ("./pages/Academia/School/CaseStudy"));
-const Academy_Course = lazy(()=> import ("./pages/Academia/School/CourseDetailed"));
+const Projectlist = lazy(() => import("./pages/Academia/projects/projectlist"));
+const Naan = lazy(() => import("./pages/Academia/projects/[name]"));
+const CaseStudy = lazy(() => import("./pages/Academia/School/CaseStudy"));
+const Academy_Course = lazy(
+  () => import("./pages/Academia/School/CourseDetailed")
+);
 import CourseDetailedPage from "@/components/Academy/Students/CourseDetailedPage";
 
 const withSuspense = (Component: React.LazyExoticComponent<React.FC<{}>>) => (
@@ -116,7 +118,7 @@ const router = createBrowserRouter([
         path: "/government/contact",
         element: withSuspense(Contact),
       },
-       {
+      {
         path: "/academia/projects/",
         element: withSuspense(Projectlist),
       },
@@ -162,28 +164,20 @@ const router = createBrowserRouter([
         path: "/academia/case-study/:id",
         element: withSuspense(CaseStudy),
       },
-      
-       {
+
+      {
         path: "/academia/student/course/:courseId", // Individual course detail
         element: <CourseDetailedPage />,
-        errorElement: <ErrorBoundary />
+        errorElement: <ErrorBoundary />,
       },
       {
-        path: "/academia/student/course/:id",
-        element: <CourseDetailedPage />,
+        path: "/academia/school/Courses/:id",
+        element: (
+          <Suspense fallback={<LoaderComponent />}>
+            <Academy_Course />
+          </Suspense>
+        ),
       },
-       {
-        path: "/academia/student/course/:id",
-        element: <CourseDetailedPage />,
-      },
-     {
-  path: "/academia/school/Courses/:id",
-  element: (
-    <Suspense fallback={<LoaderComponent />}>
-      <Academy_Course />
-    </Suspense>
-  ),
-   }
     ],
   },
   {
