@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { useState } from 'react';
-import { Trophy, TrendingUp, Puzzle, X, EyeIcon, Send } from 'lucide-react';
+import { Trophy, TrendingUp, Puzzle, X, EyeIcon, Send ,Download,Mail } from 'lucide-react';
 // import { supabase } from  '@/lib/supabaseClient';
 import {supabase} from '../../../lib/supabaseClient'
 
@@ -118,31 +118,21 @@ export default function CaseStudies() {
 
 				<div className="grid md:grid-cols-3 gap-10 px-12">
 					{caseStudies.map((study, index) => (
-						<motion.div
+						<div
 							key={index}
-							initial={{ opacity: 0, y: 20 }}
-							whileInView={{ opacity: 1, y: 0 }}
-							viewport={{ once: true }}
-							transition={{ duration: 0.8, delay: index * 0.2 }}
-							className="bg-gradient-to-br from-blue-50 to-indigo-50 p-6 rounded-2xl shadow-md transition-shadow duration-150 cursor-pointer"
-							whileHover={{
-								scale: 1.05,
-								boxShadow: '0 8px 15px rgba(79, 70, 229, 0.3)',
-								backgroundColor: '#e0e7ff',
-								transition: { duration: 0.15, ease: 'easeOut' },
-							}}
+							className="border-2 border-gray-100 bg-gradient-to-br from-white to-black/5 p-6 rounded-2xl shadow-md  duration-150 cursor-pointer hover:shadow-lg hover:bg-red-50 transition-all ease-in-out hover:transition-all hover:scale-105 delay-75 group"
 							onClick={() => {
 								setSelectedPdf({ url: study.pdfUrl, institution: study.institution });
 								setIsFormModalOpen(true);
 							}}
 						>
-							<study.icon className="w-7 h-7 text-blue-600 mb-4" />
+							<study.icon className="w-7 h-7 text-red-500 mb-4 animate-pulse" />
 							<h3 className="text-medium font-bold mb-4">{study.title}</h3>
-							<p className="text-sm font-semibold text-blue-600 mb-2">
-								{study.institution}
+							<p className="text-sm font-semibold text-gray-700 group-hover:text-blue-600  mb-2">
+								{study.institution} <Download className="inline-block ml-1 h-4 w-4 " />
 							</p>
 							<p className="text-gray-600 text-sm">{study.details}</p>
-						</motion.div>
+						</div>
 					))}
 				</div>
 
@@ -158,26 +148,14 @@ export default function CaseStudies() {
 						whileHover={{ scale: 1.05 }}
 						whileTap={{ scale: 0.95 }}
 					>
-						<motion.button
+						<button
 							onClick={() => setIsModalOpen(true)}
 							className="relative bg-[#222B33] text-white px-4 py-4 rounded-full w-68 h-10
                 font-semibold text-sm shadow-xl hover:shadow-2xl transition-all duration-300 flex items-center gap-2"
-							animate={{
-								boxShadow: [
-									'0 0 20px rgba(79, 70, 229, 0.5)',
-									'0 0 40px rgba(79, 70, 229, 0.3)',
-									'0 0 20px rgba(79, 70, 229, 0.5)',
-								],
-							}}
-							transition={{
-								duration: 2,
-								repeat: Infinity,
-								repeatType: 'reverse',
-							}}
 						>
 							<EyeIcon className="inline-block mr-1 h-5 w-5" />
 							<span>See full Results By College Type</span>
-						</motion.button>
+						</button>
 					</motion.div>
 				</motion.div>
 			</div>
@@ -224,9 +202,9 @@ export default function CaseStudies() {
 											setIsFormModalOpen(true);
 											setIsModalOpen(false);
 										}}
-										className="text-blue-600 hover:text-blue-800 font-normal"
+										className="text-blue-600 hover:text-red-600 font-normal flex items-center gap-1 transition-all duration-75"
 									>
-										Download PDF
+										Send PDF <Mail className="inline-block ml-1 h-4 w-4 " />
 									</button>
 								</div>
 							))}
