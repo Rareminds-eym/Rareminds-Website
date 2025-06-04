@@ -160,7 +160,7 @@ const ServicesSection = () => {
               key={index}
             >
               <div className="relative h-[230px]">
-                <Link to={`/corporate/services/${service.link}`}>
+                <Link to={`/corporate/recruitment/services/${service.link}`}>
                   <div className="mx-auto w-max relative group">
                     <div className="absolute flex items-center top-1/2 left-1/2 -translate-x-1/2 w-max group-hover:top-0 group-hover:left-0 group-hover:translate-x-0 group-hover:translate-y-0 transition-all duration-300">
                       <div className="h-[50px] w-[50px] group-hover:h-[42px] group-hover:w-[42px] p-2 bg-corporate-yellow rounded-[15px] transition-all duration-300">

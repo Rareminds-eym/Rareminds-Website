@@ -21,7 +21,7 @@ const Index = () => {
     {
       heading: "Industries and firms",
       img: "1-crop.jpg",
-      path: "/corporate",
+      path: "/corporate/recruitment",
       description:
         "Revolutionizing the corporate world with tailored corporate training solutions and talent development to drive innovation and connect you with top talent.",
     },

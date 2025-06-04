@@ -31,7 +31,7 @@ const RecruitmentServiceSection: React.FC<RecruitmentServiceSectionProps> = ({
             </li>
             <li>/</li>
             <li>
-              <Link to="/corporate#services" className="hover:underline">
+              <Link to="/corporate/recruitment#services" className="hover:underline">
                 Services
               </Link>
             </li>
