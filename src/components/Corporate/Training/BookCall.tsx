@@ -16,7 +16,7 @@ const BookCall: React.FC = () => {
             <CalendarCheck2 className="w-8 h-8" />
           </span>
         </div>
-        <h2 className="text-2xl sm:text-3xl font-bold mb-3 bg-gradient-to-r from-blue-700 to-purple-700 bg-clip-text text-transparent">
+        <h2 className="text-2xl sm:text-3xl font-bold mb-3">
           Book a Discovery Call
         </h2>
         <p className="text-base sm:text-lg text-gray-700 mb-8 font-medium max-w-md mx-auto">
