@@ -2,7 +2,6 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { RouterProvider } from "react-router-dom";
 import router from "./routes";
-import { AuthProvider } from "@/context/AuthContext";
 
 // Import required Swiper styles
 import 'swiper/css';
@@ -18,9 +17,7 @@ import { store } from './store';
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
     <Provider store={store}>
-    <AuthProvider>
        <RouterProvider router={router} />
-     </AuthProvider>
     </Provider>
   </React.StrictMode>
 );
