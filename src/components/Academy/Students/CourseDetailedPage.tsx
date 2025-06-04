@@ -178,7 +178,7 @@ const CourseDetailedPage = () => {
       <AcademyHeader />
       <div className="pt-20">
         {/* Header Banner */}
-        <div className="relative h-[40vh] overflow-hidden">
+        <div className="relative h-[44vh] overflow-hidden">
           <img
             src={course.heroImage}
             alt={course.name}
@@ -188,7 +188,7 @@ const CourseDetailedPage = () => {
           <div className="absolute inset-0 flex items-center">
             <div className="container mx-auto px-6">
               <motion.button
-                onClick={() => navigate(-1)}
+                onClick={() => navigate('/academia/student#course-cards-section')}
                 whileHover={{ x: -5 }}
                 className="text-white text-sm mb-4 flex items-center gap-2"
               >
@@ -207,7 +207,7 @@ const CourseDetailedPage = () => {
 
         {/* Info Section */}
         <div className="container mx-auto px-3 py-12">
-          <div className="grid md:grid-cols-5 gap-x-20 px-4 md:px-20">
+          <div className="grid md:grid-cols-5 gap-x-20 px-4">
             {/* About The Course */}
             <div className="md:col-span-3">
               <motion.h2
@@ -219,14 +219,11 @@ const CourseDetailedPage = () => {
               >
                 {course.targetGrade}
                 <span className="block text-base text-gray-600 mt-2 mb-2">
-                  {course.subtitle2}
-                  <br />
-                   {course.subtexttitle}
-                 
+                  Spoken English & Public Speaking Bootcamps
                 </span>
               </motion.h2>
               <motion.p
-                className="text-gray-700 leading-relaxed text-justify text-medium px-4 mb-6"
+                className="text-gray-700 leading-relaxed text-justify text-medium px-4 mb-6 whitespace-break-spaces"
                 initial={{ opacity: 0, y: 10 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
@@ -234,17 +231,6 @@ const CourseDetailedPage = () => {
               >
                 {course.description}
               </motion.p>
-              <motion.h3
-                className="text-xl font-semibold mb-4 px-4"
-                initial={{ opacity: 0, y: 10 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6 }}
-              >
-                Modules on Real-World Scenarios:
-              </motion.h3>
-              {/* Clarity Meets Strategy block */}
-             
               <div className="space-y-4 px-4">
                 {course.modules.map((module, index) => (
                   <motion.div
@@ -258,7 +244,7 @@ const CourseDetailedPage = () => {
                     <CheckCircle className="w-6 h-6 text-green-500 flex-shrink-0" />
                     <div>
                       <h4 className="font-semibold">{module.title}:</h4>
-                      <p className="text-gray-700">{module.description.join(" ")}</p>
+                      <p className="text-gray-700">{module.description}</p>
                     </div>
                   </motion.div>
                 ))}
@@ -305,17 +291,6 @@ const CourseDetailedPage = () => {
             </div>
           </div>
 
-
-<div className="container mx-auto px-3 py-12">
-   {course.clarityMeetsStrategy && (
-                <div className="mb-6 px-4 py-4 bg-blue-50 rounded-xl shadow">
-                  <h4 className="text-lg font-bold text-blue-900 mb-2">
-                    {course.clarityMeetsStrategy.title}
-                  </h4>
-                  <p className="text-gray-700">{course.clarityMeetsStrategy.content}</p>
-                </div>
-              )}
-</div>
           {/* Optional PDF Section */}
           {course.pdfUrl && (
             <div className="text-center mt-12">

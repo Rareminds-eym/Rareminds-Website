@@ -1,77 +1,63 @@
 export const projects = [
+  
   {
-    id: '1',
-    name: 'Naan Mudhalvan 2025 Upskilling Program (Powered by Rareminds)',
+   id: '1',
+    name: 'Acharya',
     description: '',
-    category: 'Naan Mudhalvan',
-    status: 'Active',
-    year: '2025',
-    location: 'TamilNadu',
-    technologies: ['React', 'Node.js', 'TensorFlow', 'MongoDB'],
-    imageUrl: '/academy/Projects/nanmudhalvan.jpg',
-    timeline: 'Jan 2025 - Present',
-    team: [],
-    goals: []
-  },
-  {
-    id: '2',
-    name: 'KSDC',
-    description: '',
-    category: '',
-    status: 'In Progress',
-    university: 'VTU',
+    category: 'Acharya',
+    status: '',
+    year: '2023',
     location: 'Karnataka',
     technologies: [],
-    imageUrl: '/academy/Projects/ksdc.png',
-    timeline: 'Jan 2025 - Jan 2026',
+    imageUrl: '/academy/Projects/Acharya.png',
+    timeline: 'May 2023',
+    team: [],
+    goals: []
+  },
+   {
+   id: '2',
+    name: 'PES',
+    description: '',
+    category: 'PES',
+    status: 'Active',
+    year: '2025',
+    location: 'Karnataka',
+    technologies: [],
+    imageUrl: '/academy/Projects/pes.png',
+    timeline: 'July 2023',
     team: [],
     goals: []
   },
   {
-    id: '3',
-    name: 'Naan Mudhalvan 2024 Upskilling Program (Powered by Rareminds)',
+   id: '3',
+     name: 'BLDEA',
     description: '',
-    category: 'Naan Mudhalvan',
-    status: 'Completed',
-    year: '2024',
-    location: 'TamilNadu',
-    technologies: ['Vue.js', 'Python', 'D3.js', 'MySQL'],
-    imageUrl: '/academy/Projects/nanmudhalvan.jpg',
-    timeline: 'Jan 2024',
-    team: ['Lisa Thompson', 'James Wilson', 'Maria Garcia'],
-    goals: ['Improve patient outcomes', 'Optimize resource allocation', 'Enhance decision making']
+    category: '',
+    status: '',
+    year: '2023',
+    location: '',
+    technologies: [],
+    imageUrl: '/academy/Projects/BLDEA.png',
+    timeline: 'Nov 2023',
+    team: [],
+    goals: []
   },
   {
     id: '4',
-    name: 'AICTE',
+    name: 'Naan Mudhalvan 2024 Upskilling Program (Powered by Rareminds)',
     description: '',
-    category: 'AICTE',
-    status: 'Completed',
-    year: '2024',
-    location: '',
-    technologies: [],
-    imageUrl: '/academy/Projects/aicte.png',
-    timeline: 'Jan 2024',
-    team: ['Lisa Thompson', 'James Wilson', 'Maria Garcia'],
-    goals: ['Improve patient outcomes', 'Optimize resource allocation', 'Enhance decision making']
-  },
-  {
-    id: '5',
-    name: 'TNSDC',
-    description: '',
-    category: 'TNSDC',
-    status: 'Completed',
+    category: 'Naan Mudhalvan',
+    status: 'Active',
     year: '2024',
     location: 'TamilNadu',
-    technologies: [],
-    imageUrl: '/academy/Projects/tnsdc.png',
+    technologies: ['React', 'Node.js', 'TensorFlow', 'MongoDB'],
+    imageUrl: '/academy/Projects/nanmudhalvan.jpg',
     timeline: 'Jan 2024',
-    team: ['Lisa Thompson', 'James Wilson', 'Maria Garcia'],
-    goals: ['Improve patient outcomes', 'Optimize resource allocation', 'Enhance decision making']
-  }
-,
- {
-    id: '6',
+    team: [],
+    goals: []
+  },
+   {
+    id: '5',
     name: 'Tripura',
     description: '',
     category: 'Tripura',
@@ -85,8 +71,82 @@ export const projects = [
     goals: ['Improve patient outcomes', 'Optimize resource allocation', 'Enhance decision making']
   }
 ,
- {
+  {
+    id: '6',
+    name: 'TNSDC ITI (Spoken English)',
+    description: '',
+    category: 'TNSDC',
+    status: 'Completed',
+    year: '2024',
+    location: 'TamilNadu',
+    technologies: [],
+    imageUrl: '/academy/Projects/tnsdc.png',
+    timeline: 'Feb 2024',
+    team: ['Lisa Thompson', 'James Wilson', 'Maria Garcia'],
+    goals: ['Improve patient outcomes', 'Optimize resource allocation', 'Enhance decision making']
+  }
+,
+{
     id: '7',
+    name: 'TNSDC Schools',
+    description: '',
+    category: 'TNSDC',
+    status: 'Completed',
+    year: '2024',
+    location: 'TamilNadu',
+    technologies: [],
+    imageUrl: '/academy/Projects/tnsdc.png',
+    timeline: 'Apr 2024',
+    team: ['Lisa Thompson', 'James Wilson', 'Maria Garcia'],
+    goals: ['Improve patient outcomes', 'Optimize resource allocation', 'Enhance decision making']
+  }
+,
+  {
+    id: '8',
+    name: 'Naan Mudhalvan 2024 Upskilling Program (Powered by Rareminds)',
+    description: '',
+    category: 'Naan Mudhalvan',
+    status: 'Completed',
+    year: '2024',
+    location: 'TamilNadu',
+    technologies: ['Vue.js', 'Python', 'D3.js', 'MySQL'],
+    imageUrl: '/academy/Projects/nanmudhalvan.jpg',
+    timeline: 'July 2024',
+    team: ['Lisa Thompson', 'James Wilson', 'Maria Garcia'],
+    goals: ['Improve patient outcomes', 'Optimize resource allocation', 'Enhance decision making']
+  },
+  
+  
+  {
+    id: '9',
+    name: 'Naan Mudhalvan 4th sem 2025 Upskilling Program (Powered by Rareminds)',
+    description: '',
+    category: 'Naan Mudhalvan',
+    status: 'Active',
+    year: '2025',
+    location: 'TamilNadu',
+    technologies: ['React', 'Node.js', 'TensorFlow', 'MongoDB'],
+    imageUrl: '/academy/Projects/nanmudhalvan.jpg',
+    timeline: 'Jan 2025',
+    team: [],
+    goals: []
+  },
+   {
+    id: '10',
+    name: 'Naan Mudhalvan 6th sem 2025 Upskilling Program (Powered by Rareminds)',
+    description: '',
+    category: 'Naan Mudhalvan',
+    status: 'Active',
+    year: '2025',
+    location: 'TamilNadu',
+    technologies: ['React', 'Node.js', 'TensorFlow', 'MongoDB'],
+    imageUrl: '/academy/Projects/nanmudhalvan.jpg',
+    timeline: 'Jan 2025',
+    team: [],
+    goals: []
+  },
+ {
+    id: '11',
     name: 'VELS',
     description: '',
     category: 'Vels',
@@ -95,14 +155,17 @@ export const projects = [
     location: 'TamilNadu',
     technologies: [],
     imageUrl: '/academy/Projects/vels.png',
-    timeline: 'Jan 2024',
+    timeline: 'March 2025',
     team: ['Lisa Thompson', 'James Wilson', 'Maria Garcia'],
     goals: ['Improve patient outcomes', 'Optimize resource allocation', 'Enhance decision making']
   }
   ,
-  {
-   id: '8',
-    name: 'Naan Mudhalvan 2025 Upskilling Program 4th & 6th (Powered by Rareminds)',
+
+  
+
+ {
+    id: '12',
+    name: 'Naan Mudhalvan 2025 Upskilling Program (Powered by Rareminds)',
     description: '',
     category: 'Naan Mudhalvan',
     status: 'Active',
@@ -110,23 +173,68 @@ export const projects = [
     location: 'TamilNadu',
     technologies: ['React', 'Node.js', 'TensorFlow', 'MongoDB'],
     imageUrl: '/academy/Projects/nanmudhalvan.jpg',
-    timeline: 'Jan 2025 - Present',
-    team: [],
-    goals: []
-  },
-  {
-   id: '9',
-    name: 'PES',
-    description: '',
-    category: 'PES',
-    status: 'Active',
-    year: '2025',
-    location: 'Karnataka',
-    technologies: [],
-    imageUrl: '/academy/Projects/pes.png',
-    timeline: 'Jan 2025 - Present',
+    timeline: 'jun 2025 - Present',
     team: [],
     goals: []
   },
 
+  {
+    id: '13',
+    name: 'AICTE',
+    description: '',
+    category: 'AICTE',
+    status: 'Completed',
+    year: '2025',
+    location: 'Pan India',
+    technologies: [],
+    imageUrl: '/academy/Projects/aicte.png',
+    timeline: 'Up Comming',
+    team: ['Lisa Thompson', 'James Wilson', 'Maria Garcia'],
+    goals: ['Improve patient outcomes', 'Optimize resource allocation', 'Enhance decision making']
+  },
+  {
+    id: '14',
+    name: 'KSDC',
+    description: '',
+    category: '',
+    status: 'In Progress',
+    university: 'VTU',
+    year: '2025',
+    location: 'Karnataka',
+    technologies: [],
+    imageUrl: '/academy/Projects/ksdc.png',
+    timeline: 'Up Comming',
+    team: [],
+    goals: []
+  },
+
+ {
+    id: '15',
+    name: 'Visvesvaraya Technological University',
+    description: '',
+    category: '',
+    status: 'Active',
+    year: '2025',
+    location: 'Karnataka',
+    technologies: ['React', 'Node.js', 'TensorFlow', 'MongoDB'],
+    imageUrl: '/academy/Projects/vtu.png',
+    timeline: 'Up Comming',
+    team: [],
+    goals: []
+  },
+  
+  {
+   id: '16',
+    name: '',
+    description: '',
+    category: '',
+    status: '',
+    year: '',
+    location: '',
+    technologies: [],
+    imageUrl: '',
+    timeline: '',
+    team: [],
+    goals: []
+  },
 ];
