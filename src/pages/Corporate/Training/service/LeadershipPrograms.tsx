@@ -54,14 +54,6 @@ const LeadershipPrograms = () => {
             <p className="text-xl text-gray-600 mb-8">
               {heroSubtitle}
             </p>
-            <div className="flex flex-wrap gap-4 justify-center items-center">
-              {featureBadges.map((badge, i) => (
-                <div key={i} className={`flex items-center gap-2 px-4 py-2 ${badge.bg} rounded-full`}>
-                  {iconMap[badge.icon as keyof typeof iconMap]}
-                  <span className={badge.color}>{badge.text}</span>
-                </div>
-              ))}
-            </div>
           </motion.div>
         </div>
       </section>
