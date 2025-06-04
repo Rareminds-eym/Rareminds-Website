@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "../UI/button";
 import { 
   GraduationCap, 
@@ -183,6 +184,7 @@ const CourseCards = ({coursetocontact}:coursecardProps) => {
   const [activeFilters, setActiveFilters] = useState<string[]>([]);
   const [hoveredCourse, setHoveredCourse] = useState<number | null>(null);
   const [searchQuery, setSearchQuery] = useState<string>("");
+  const navigate = useNavigate();
 
   const toggleFilter = (value: string) => {
     setActiveFilters(prev => 
@@ -306,7 +308,8 @@ const CourseCards = ({coursetocontact}:coursecardProps) => {
             const isHovered = hoveredCourse === course.id;
             return (
               <div
-                key={course.id}                className={cn(
+                key={course.id}
+                className={cn(
                   "rounded-xl overflow-hidden card-hover relative flex flex-col transition-all duration-500 ease-in-out transform hover:shadow-xl will-change-transform",
                   isHovered ? "shadow-xl scale-[1.02]" : "shadow-sm hover:shadow-lg"
                 )}
@@ -393,6 +396,7 @@ const CourseCards = ({coursetocontact}:coursecardProps) => {
                         getColorClass(course.color, false),
                         "hover:bg-gray-50"
                       )}
+                      onClick={() => navigate(`/academia/teacher/course/${course.id}`)}
                     >
                       View Details
                     </Button>

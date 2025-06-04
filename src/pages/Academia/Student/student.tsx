@@ -41,6 +41,7 @@ import { Button } from '../../../components/Academy/UI/button';
 // import CaseStudyDetail from '../../../components/Academy/Students/CaseStudy/CaseStudyDetail';
 // import FloatingActionMenu from '../../../components/Academy/Floatingbutton'
 import FloatingActionMenu from '../../../components/Academy/StickyButton/StickyButton/FloatingAction'
+import  Courses from '../../../components/Academy/Students/Courses'
 
 
 const Academy = ({ userType = "teacher" }: { userType?: "teacher" | "student" }) => {
@@ -142,10 +143,14 @@ const Academy = ({ userType = "teacher" }: { userType?: "teacher" | "student" })
       
       <Problem />
 
-     {/* <Programs /> */}
+  <div id="course-cards-section" className="min-h-screen flex items-center justify-center relative z-10 bg-white">
+     <Courses />      
+       </div>
+ 
+     {/* <Programs />
           <div id="course-cards-section" className="min-h-screen flex items-center justify-center relative z-10 bg-white">
      <StudentProgramsPage coursetocontact={scrollToContact} />      
-       </div>
+       </div> */}
     
       {/* <div className="w-full h-[65vh]"></div> */}
   <div  className="min-h-screen flex items-center justify-center relative z-10 bg-white">

@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Calendar, CircleChevronDown, Eye } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { GooeyText } from "../../ui/GooeyText";
-import { ParticleButton } from "@/components/ui/particle-button";
+import { ParticleButton } from "../../../components/ui/particle-button";
 import { PopupButton } from "react-calendly";
 
 const heroSlides = [
@@ -143,19 +143,16 @@ export const HeroSection = () => {
 	}, [autoPlay, currentSlide]);
 
 	const scrollToGovOutcome = () => {
-		const el = document.getElementById("feature-section");
+		const el = document.getElementById("scrolltobottom");
 		if (el) {
-			// Smoother scroll on mobile
-			const isMobile = window.innerWidth < 768;
-			el.scrollIntoView({
-				behavior: "smooth",
-				block: isMobile ? "start" : "center"
-			});
+			const yOffset = -290; // Account for any fixed headers
+			const y = el.getBoundingClientRect().top + window.pageYOffset + yOffset;
+			window.scrollTo({ top: y, behavior: 'smooth' });
 		}
 	};
 
 	return (
-		<section className="fixed inset-0  flex items-center overflow-hidden flex-col sm:flex-row">
+		<section className="fixed top-0 w-full h-[980px]  flex items-center overflow-hidden flex-col sm:flex-row">
 			<AnimatePresence initial={false} custom={direction} mode="popLayout">
 				<motion.div
 					key={slideIndex}
@@ -280,18 +277,18 @@ export const HeroSection = () => {
 			</motion.div>
 
 			{/* Scroll Down Icon */}
-			<div className="absolute bottom-2 md:bottom-6 left-10 sm:left-20 md:left-32 flex flex-col items-center z-50 animate-pulse bg-white/90 p-1 sm:p-2 backdrop-blur-sm shadow-md shadow-red-600 ring-2 sm:ring-4 ring-white/50 rounded-full"
+			<div className="absolute bottom-2 md:bottom-6 left-10 sm:left-20 md:left-32 flex flex-col items-center z-50 animate-pulse bg-white/90 p-1 sm:p-2 backdrop-blur-sm shadow-md shadow-red-600 ring-2 sm:ring-4 ring-white/50 rounded-full cursor-pointer"
 				onClick={scrollToGovOutcome}
 			>
 				<img
 					src="https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Corporate/Recruitment/Index/Hero/scroll.png"
 					width="40" style={{ width: '60px' }}
 					alt="Scroll down"
-					className="animate-spin-slow"
+					className="animate-spin-slow cursor-pointer"
 				/>
 				<CircleChevronDown
 					size={35}
-					className="absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 cursor-pointer"
+					className="absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 r"
 					onClick={scrollToGovOutcome}
 				/>
 			</div>

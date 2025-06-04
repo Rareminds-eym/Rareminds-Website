@@ -71,7 +71,6 @@ const FooterBar = () => {
 			setSuccessMessage("Please enter an email address");
 		}
 	};
-
 	// Handler for 'View All' click in corporate services
 	const handleViewAll = (
 		e: React.MouseEvent<HTMLAnchorElement, MouseEvent>

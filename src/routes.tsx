@@ -10,6 +10,7 @@ import CorporateLayout from "./layouts/CorporateLayout";
 import GovernmentLayout from "./layouts/GovernmentLayout";
 import AcademiaLayout from "./layouts/AcademiaLayout";
 import InstitutionsLayout from "./layouts/InstitutionsLayout";
+import Courses from "./components/Academy/Students/Courses.tsx";
 
 // Lazy pages
 const Home = lazy(() => import("./pages/Index"));
@@ -32,13 +33,15 @@ const ServicePage = lazy(
 const CorporateTraining = lazy(() => import("./pages/Corporate/Training"));
 const Contact = lazy(() => import("./pages/Government/Contact/Index"));
 const handleSubscribe = lazy(() => import("./pages/Academia/ComingSoon"));
-const Projectlist = lazy(() => import("./pages/Academia/projects/projectlist"));
-const Naan = lazy(() => import("./pages/Academia/projects/[name]"));
-const CaseStudy = lazy(() => import("./pages/Academia/School/CaseStudy"));
 const course = lazy(() => import("./pages/Academia/Student/[course].tsx"));
 const LeadershipPrograms = lazy(
   () => import("./pages/Corporate/Training/service/LeadershipPrograms.tsx")
 );
+const Projectlist = lazy(() => import ("./pages/Academia/projects/projectlist"))
+const Naan = lazy(() => import ("./pages/Academia/projects/[name]"));
+const CaseStudy = lazy(() => import ("./pages/Academia/School/CaseStudy"));
+const Academy_Course = lazy(()=> import ("./pages/Academia/School/CourseDetailed"));
+import CourseDetailedPage from "@/components/Academy/Students/CourseDetailedPage";
 
 const withSuspense = (Component: React.LazyExoticComponent<React.FC<{}>>) => (
   <Suspense fallback={<LoaderComponent />}>
@@ -113,6 +116,10 @@ const router = createBrowserRouter([
         path: "/government/contact",
         element: withSuspense(Contact),
       },
+       {
+        path: "/academia/projects/",
+        element: withSuspense(Projectlist),
+      },
     ],
   },
   {
@@ -155,10 +162,28 @@ const router = createBrowserRouter([
         path: "/academia/case-study/:id",
         element: withSuspense(CaseStudy),
       },
-      {
-        path: "/academia/student/course/:name",
-        element: withSuspense(course),
+      
+       {
+        path: "/academia/student/course/:courseId", // Individual course detail
+        element: <CourseDetailedPage />,
+        errorElement: <ErrorBoundary />
       },
+      {
+        path: "/academia/student/course/:id",
+        element: <CourseDetailedPage />,
+      },
+       {
+        path: "/academia/student/course/:id",
+        element: <CourseDetailedPage />,
+      },
+     {
+  path: "/academia/school/Courses/:id",
+  element: (
+    <Suspense fallback={<LoaderComponent />}>
+      <Academy_Course />
+    </Suspense>
+  ),
+   }
     ],
   },
   {

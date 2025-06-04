@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Plus, HelpCircle, MessageCircle, Calendar, Download } from 'lucide-react';
 import FAQChatbot from "./FAQChatbot";
@@ -20,9 +20,8 @@ const FloatingActionMenu = () => {
   const [activeIcon, setActiveIcon] = useState<React.ComponentType<any>>(Plus);
 
   const handleDownloadClick = () => {
-    // Create a link element
     const link = document.createElement('a');
-    link.href = '/Govt-Images/pdfs/Government-Brochure.pdf'; // Adjust path as needed
+    link.href = '/Govt-Images/pdfs/Government-Brochure.pdf'; 
     link.download = 'Government-Brochure.pdf';
     link.click();
   };
@@ -78,7 +77,7 @@ const FloatingActionMenu = () => {
       setActiveIcon(showBookDemo ? Plus : Calendar);
     } else if (item.id === 'download') {
       setActiveIcon(Download);
-      setTimeout(() => setActiveIcon(Plus), 1000); // Reset to Plus after 1 second
+      setTimeout(() => setActiveIcon(Plus), 1000); 
       item.onClick();
     } else {
       item.onClick();
@@ -87,18 +86,63 @@ const FloatingActionMenu = () => {
     setIsOpen(false);
   };
 
-  // Calculate positions for circular layout expanding to the left
+
   const getItemPosition = (index: number, total: number) => {
     const radius = 80;
-    const startAngle = -10; // Start from top-left
-    const angleStep = 80 / (total - 1); // Spread across 90 degrees
+    const startAngle = -10; 
+    const angleStep = 80 / (total - 1); 
     const angle = (startAngle + angleStep * index) * (Math.PI / 100);
     
     return {
-      x: -Math.cos(angle) * radius, // Negative to expand left
-      y: -Math.sin(angle) * radius, // Negative to go upward
+      x: -Math.cos(angle) * radius, 
+      y: -Math.sin(angle) * radius, 
     };
   };
+
+  useEffect(() => {
+    let timeoutId: NodeJS.Timeout;
+    
+    // Create an Intersection Observer
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+      
+          if (timeoutId) clearTimeout(timeoutId);
+        
+          if (entry.isIntersecting) {
+            
+            timeoutId = setTimeout(() => {
+              setIsOpen(true);
+            }, 300);
+          } else {
+            timeoutId = setTimeout(() => {
+              setIsOpen(false);
+            }, 300);
+          }
+        });
+      },
+      {
+        threshold: [0.1, 0.5], 
+        rootMargin: '50px', 
+      }
+    );
+
+    // Find the footer element
+    const footer = document.getElementById('footer');
+    if (footer) {
+      observer.observe(footer);
+    }
+
+    // Cleanup observer and timeout on component unmount
+    return () => {
+      if (footer) {
+        observer.unobserve(footer);
+      }
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
+    };
+  }, []);
 
   return (
     <>
@@ -119,7 +163,7 @@ const FloatingActionMenu = () => {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.2 }}
-                className="fixed inset-0 bg-black/20 backdrop-blur-sm -z-10"
+                className="fixed inset-0   -z-10"
                 onClick={() => setIsOpen(false)}
               />
               
@@ -190,7 +234,7 @@ const FloatingActionMenu = () => {
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
           onClick={toggleMenu}
-          className={`w-14 h-14 border-2 border-red-200 bg-gradient-to-r from-red-300 to-red-500 rounded-full  flex items-center justify-center text-white hover:from-red-600 hover:to-red-300 transition-all duration-200  ${!isOpen && 'animate-bounce'} shadow-xl shadow-red-400/50`}
+          className={`w-14 h-14 border-2 border-red-200 bg-gradient-to-r from-red-400 to-red-600 rounded-full  flex items-center justify-center text-white hover:from-red-600 hover:to-red-300 transition-all duration-200  ${!isOpen && 'animate-bounce'} shadow-xl shadow-red-400/50`}
         >
           <motion.div
             animate={{ rotate: isOpen ? 0 : 0 }}
