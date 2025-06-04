@@ -10,21 +10,21 @@ const caseStudies = [
 		title: 'One College, 2 Months, 40% Jump in Placement ',
 		institution: 'VELS University',
 		details: '600 Students | Soft Skills + Resume Bootcamp',
-		pdfUrl: 'institutions/pdfs/Vels.pdf',
+		pdfLink: "https://drive.google.com/file/d/1FexjnvsqLziLlk71F2wU4I7apQWzK5i2/view?usp=drive_link",
 	},
 	{
 		icon: TrendingUp,
 		title: 'Fast Track Success: From Tier-3 to Interview Ready in a Month',
 		institution: 'PES University',
 		details: '350 Students | Food Tech + Hackathon',
-		pdfUrl: 'institutions/pdfs/Pes.pdf',
+		pdfLink: "https://drive.google.com/file/d/1bmJoQdaW5oC0vZcuDs-iieFgOVCudl9q/view?usp=drive_link",
 	},
 	{
 		icon: Puzzle,
 		title: 'From Theory to Job Offers: 45-Hour EV Bootcamp',
 		institution: 'Thiruvalluvar University',
 		details: '420 Students | EV & AI Modules',
-		pdfUrl: 'institutions/pdfs/TVU.pdf',
+		pdfLink: "https://drive.google.com/file/d/113jMQrHdB9aTxtpFUtluf-o-go19l_QC/view?usp=drive_link",
 	},
 ];
 
@@ -70,6 +70,8 @@ export default function CaseStudies() {
 				body: JSON.stringify({
 					email: formData.email,
 					name: formData.name,
+					phone: formData.phone,
+					resourceTitle: selectedPdf.institution,
 					pdfUrl: selectedPdf.url,
 				}),
 			});
@@ -122,7 +124,7 @@ export default function CaseStudies() {
 							key={index}
 							className="border-2 border-gray-100 bg-gradient-to-br from-white to-black/5 p-6 rounded-2xl shadow-md  duration-150 cursor-pointer hover:shadow-lg hover:bg-red-50 transition-all ease-in-out hover:transition-all hover:scale-105 delay-75 group"
 							onClick={() => {
-								setSelectedPdf({ url: study.pdfUrl, institution: study.institution });
+								setSelectedPdf({ url: study.pdfLink, institution: study.institution });
 								setIsFormModalOpen(true);
 							}}
 						>
@@ -198,7 +200,7 @@ export default function CaseStudies() {
 									<button
 										onClick={(e) => {
 											e.stopPropagation();
-											setSelectedPdf({ url: study.pdfUrl, institution: study.institution });
+											setSelectedPdf({ url: study.pdfLink, institution: study.institution });
 											setIsFormModalOpen(true);
 											setIsModalOpen(false);
 										}}
