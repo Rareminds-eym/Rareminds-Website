@@ -7,6 +7,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useCallback } from 'react';
 import AcademyHeader from '../../../components/Header/AcademyHeader'
+import FloatingActionMenu  from '../../../components/Academy/StickyButton/StickyButton/FloatingAction'
 
 interface CaseStudyData {
   id: string;
@@ -239,6 +240,7 @@ const CaseStudy = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       <AcademyHeader />
+      <FloatingActionMenu />
       {/* Banner Section with Image */}
      <div
   className="relative w-full h-[40vh] md:h-[50vh] bg-cover bg-center mt-[80px] flex items-center"

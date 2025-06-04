@@ -41,7 +41,7 @@ import { Button } from '../../../components/Academy/UI/button';
 // import FloatingActionMenu from '../../../components/Academy/Floatingbutton'
 import FloatingActionMenu from '../../../components/Academy/StickyButton/StickyButton/FloatingAction'
 import  Courses from '../../../components/Academy/Students/Courses'
-
+import TestimonialVideoCarousel from "../../../components/Academy/Students/StudentCarouselVideo"
 
 const Academy = ({ userType = "teacher" }: { userType?: "teacher" | "student" }) => {
   const [activeTab, setActiveTab] = useState<"teacher" | "student">("teacher");
@@ -296,6 +296,10 @@ const Academy = ({ userType = "teacher" }: { userType?: "teacher" | "student" })
        {/* <Testimonials /> */}
         <div  className="min-h-screen flex items-center justify-center relative z-10 bg-white">
  <Testimonialss />     
+       </div>
+
+        <div  className="min-h-auto flex items-center justify-center relative z-10 bg-white">
+ <TestimonialVideoCarousel />     
        </div>
 
        {/* <div  className="min-h-screen flex items-center justify-center relative z-10 bg-white">
