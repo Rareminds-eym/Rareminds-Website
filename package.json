@@ -43,6 +43,7 @@
     "framer-motion": "^12.11.4",
     "input-otp": "^1.4.2",
     "lucide-react": "^0.484.0",
+    "nodemailer": "^7.0.3",
     "papaparse": "^5.5.3",
     "react": "^18.2.0",
     "react-calendly": "^4.4.0",
@@ -82,5 +83,10 @@
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.8.3",
     "vite": "^6.3.5"
-  }
+  },
+  "description": "This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.",
+  "main": "index.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
 }
