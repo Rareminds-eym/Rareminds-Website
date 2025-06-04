@@ -242,7 +242,7 @@ export default function Hero() {
         <div className="hidden lg:block container ">
           <div
             onClick={handleScrollDown}
-            className="w-max absolute bottom-[70px] left-12 cursor-pointer transition-opacity z-10"
+            className="w-max absolute bottom-[60px] left-1/2 -translate-x-1/2 cursor-pointer transition-opacity z-10"
             aria-label="Scroll down"
           >
             <img

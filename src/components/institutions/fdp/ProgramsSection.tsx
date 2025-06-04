@@ -3,64 +3,64 @@ import { BookOpen, Monitor, Target, School, FileText, Award, Clock, Sparkles } f
 
 const programs = [
   {
-    name: 'Academic Excellence',
+    name: 'NEP-Ready Teaching',
     focus: 'Transformative Teaching Aligned with NEP',
     duration: '5 Days',
     mode: 'Online/Hybrid',
     icon: BookOpen,
     color: 'from-blue-600 to-indigo-600',
     benefits: ['NEP Integration', 'Policy Application', 'Learner-Centric'],
-    image: '/institutions/images/FDPPrograms/fdprg1.jpg'
+    image: 'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=800'
   },
   {
-    name: 'Capacity Building ',
+    name: 'Pedagogy ',
     focus: 'Modern, Active Learning Strategies',
     duration: '5 Days',
     mode: 'Online/Hybrid',
     icon: Monitor,
     color: 'from-purple-600 to-pink-600',
     benefits: ['Flipped Classroom', 'Experiential Leaning', 'Case-Based'],
-    image: '/institutions/images/FDPPrograms/fdprg2.jpg'
+    image: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=800'
   },
   {
-    name: 'Current Affairs',
+    name: 'Research & Publication Skills',
     focus: 'Enhancing Research Competence',
     duration: '2 Days',
     mode: 'Offline/Online',
     icon: Target,
     color: 'from-green-600 to-teal-600',
     benefits: ['Proposal Writing', 'UGC Compliance', 'Funding Sources'],
-    image: '/institutions/images/FDPPrograms/fdprg3.jpg'
+    image: 'https://images.unsplash.com/photo-1523580494863-6f3031224c94?auto=format&fit=crop&w=800'
   },
   {
-    name: 'Skill Upgradation',
+    name: 'Entrepreneurial Faculty',
     focus: 'Fostering Innovation and Start-Up Culture',
     duration: '1 Week',
     mode: 'Hybrid',
     icon: School,
     color: 'from-amber-600 to-orange-600',
     benefits: ['Innovation Mindset', 'Start-Up Mentoring', 'Incubation Strategies'],
-    image: '/institutions/images/FDPPrograms/fdprg4.jpg'
+    image: 'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=800'
   },
   {
-    name: 'Research & Publication Skills',
+    name: 'Green Campus & Sustainability Education',
     focus: 'Building Sustainable Educational Environments',
     duration: '4 Days',
     mode: 'Online/Offline',
     icon: FileText,
     color: 'from-red-600 to-rose-600',
     benefits: ['ESG Integration', 'Green Practices', 'Sustainabilty Awareness'],
-    image: '/institutions/images/FDPPrograms/fdprg5.jpg'
+    image: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=800'
   },
   {
-    name: 'Entepreneurial Faculty',
+    name: 'Digital Tools Upskilling & Tech-Integrated Teaching',
     focus: 'Leveraging Technology in Education',
     duration: '3 Days',
     mode: 'Online',
     icon: Award,
     color: 'from-violet-600 to-purple-600',
     benefits: ['AI Tools', 'LMS Proficiency', 'Content Creation'],
-    image: '/institutions/images/FDPPrograms/fdprg6.jpg'
+    image: 'https://images.unsplash.com/photo-1523580494863-6f3031224c94?auto=format&fit=crop&w=800'
   }
 ];
 
@@ -100,7 +100,7 @@ export default function ProgramsSection() {
                 alt={program.name}
                 className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-black/30 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
               <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
                 <program.icon className="w-10 h-10 mb-2" />
                 <h3 className="text-lg font-bold mb-2">{program.name}</h3>
