@@ -3,7 +3,7 @@ export const services = [
     id: "leadership-management",
     heroTitle: "Leadership and Management Excellence",
     heroSubtitle:
-      "Transform your leadership potential into exceptional performance",
+      "TransfoDevelop visionary leaders who can think strategically, lead with empathy, and execute with clarity. Whether it's a first-time manager or a CXO, our programs build a strong foundation for people leadership and organizational growth. Perfect for navigating complexity with confidence.",
     featureBadges: [
       {
         icon: "users",
@@ -743,9 +743,9 @@ export const services = [
   },
   {
     id: "communication-collaboration",
-    heroTitle: "Business Communication Mastery",
+    heroTitle: "Communication and Collaboration",
     heroSubtitle:
-      "If your team can’t communicate clearly, your business can’t grow cleanly.",
+      "From high-stakes presentations to everyday emails, these programs empower teams to communicate clearly and collaborate across functions and cultures. They drive confidence, executive presence, and conflict-free teamwork, both online and offline.",
     featureBadges: [
       {
         icon: "message-circle",
@@ -1430,9 +1430,9 @@ export const services = [
   },
   {
     id: "workplace-productivity",
-    heroTitle: "Time Management and Productivity Mastery",
+    heroTitle: "Workplace Productivity and Digital Fluency",
     heroSubtitle:
-      "Deadlines missed, goals delayed, and burnout rising — poor time management is productivity’s silent killer.",
+      "Unlock new levels of efficiency and effectiveness by mastering time, tech, and critical problem-solving. These programs turn everyday professionals into productivity ninjas—blending human intelligence with digital smarts.",
     featureBadges: [
       {
         icon: "clock",
@@ -2081,9 +2081,9 @@ export const services = [
   },
   {
     id: "tech-upskilling",
-    heroTitle: "Digital Transformation and Tech Fluency",
+    heroTitle: "Tech Upskilling and Future Skills",
     heroSubtitle:
-      "If your teams can’t talk to AI, automate, or read data, they’ll soon be replaced by those who can.",
+      "Gear up your teams with cutting-edge skills in AI, data, cloud, and cybersecurity. These modules are built for today’s tech demands—and tomorrow’s disruptions. Ideal for IT teams, digital squads, and tech-curious professionals.",
     featureBadges: [
       {
         icon: "cpu",
@@ -2722,9 +2722,9 @@ export const services = [
   // Add more services here as needed
   {
     id: "behavioral-culture",
-    heroTitle: "Culture, Wellbeing & Future-Ready Workplaces",
+    heroTitle: "Behavioral and Organizational Culture Programs",
     heroSubtitle:
-      "Build a workplace where everyone belongs, thrives, and delivers—no matter where or how they work.",
+      "Shape inclusive, accountable, and resilient workplace cultures with programs that go beyond the surface. We help organizations build psychological safety, promote Diversity, Equity, and Inclusion, and drive ownership at all levels. Culture isn't a buzzword here—it’s a strategy.",
     featureBadges: [
       {
         icon: "users",
@@ -3362,9 +3362,9 @@ export const services = [
   },
   {
     id: "sales-marketing-customer",
-    heroTitle: "B2B Sales Enablement & Customer Growth",
+    heroTitle: "Sales, Marketing and Customer Centricity",
     heroSubtitle:
-      "Stop leaving deals and clients on the table—equip your teams to win, retain, and grow revenue.",
+      "Fuel your frontlines with powerful skills to convert leads, retain clients, and wow customers at every touchpoint. These programs blend performance marketing, sales enablement, and CX storytelling to drive revenue and relationships.",
     featureBadges: [
       {
         icon: "dollar-sign",
@@ -3986,9 +3986,9 @@ export const services = [
   },
   {
     id: "hr-talent-development",
-    heroTitle: "Talent Analytics, Workforce & HR Strategy",
+    heroTitle: "HR and Talent Development",
     heroSubtitle:
-      "Build a future-ready workforce with data-driven HR, agile planning, and high-impact people systems.",
+      "HR teams today are architects of culture, capability, and experience. Our programs help HR professionals elevate from operations to strategy—using data, design, and development to shape the future of work.",
     featureBadges: [
       {
         icon: "bar-chart-2",
@@ -4662,9 +4662,9 @@ export const services = [
   },
   {
     id: "custom-corporate-academies",
-    heroTitle: "Campus to Corporate & Early Career Excellence",
+    heroTitle: "Custom Corporate Academies",
     heroSubtitle:
-      "Bridge the gap from classroom to boardroom—launch your next-gen talent with confidence.",
+      "Design internal academies and learning journeys that reflect your brand, vision, and growth strategy. From early career to leadership tracks, we co-create programs that stick, scale, and show results.",
     featureBadges: [
       {
         icon: "user-plus",
@@ -5240,9 +5240,9 @@ export const services = [
   },
   {
     id: "strategic-addons",
-    heroTitle: "Learning Enablement & Measurement",
+    heroTitle: "Add-Ons for Strategic Advantage",
     heroSubtitle:
-      "Measure, apply, and scale learning for real business impact.",
+      "Enhance every learning program with data-driven assessments, real-world projects, and personalized coaching. These add-ons turn training into transformation, complete with dashboards, certifications, and multilingual delivery.",
     featureBadges: [
       {
         icon: "bar-chart-2",
