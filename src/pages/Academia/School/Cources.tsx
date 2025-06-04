@@ -228,20 +228,43 @@
 //         </motion.div>
 
 //         <form onSubmit={(e) => { e.preventDefault(); }} className="max-w-md mx-auto mb-8">
-//           <div className="relative">
-//             <Input 
-//               type="text"
-//               placeholder="Search for Coursess..." 
-//               value={searchQuery}
-//               onChange={handleSearch}
-//               className="pr-10"
-//             />
-//             <button 
-//               type="submit"
-//               className="absolute inset-y-0 right-0 flex items-center px-3 text-gray-500 hover:text-red-600"
-//             >
-//               <Search className="h-4 w-4" />
-//             </button>
+//           <div className='w-full flex gap-10 flex-col md:flex-row'>
+//             <div className="relative w-full md:w-96"> {/* Responsive width for all browsers */}
+//               <Input 
+//                 type="text"
+//                 placeholder="Search for Coursess..." 
+//                 value={searchQuery}
+//                 onChange={handleSearch}
+//                 className="pr-10 w-full"
+//                 autoComplete="off"
+//                 aria-label="Search for Coursess"
+//                 inputMode="search"
+//               />
+//               <button 
+//                 type="submit"
+//                 className="absolute inset-y-0 right-0 flex items-center px-3 text-gray-500 hover:text-red-600"
+//                 tabIndex={0}
+//                 aria-label="Submit search"
+//                 style={{ background: 'none', border: 'none', cursor: 'pointer' }}
+//               >
+//                 <Search className="h-4 w-8" />
+//               </button>
+//             </div>
+//             <div className="mb-8 text-center w-full md:w-72"> {/* Responsive width for all browsers */}
+//               <select
+//                 onChange={(e) => toggleFilter(e.target.value)}
+//                 className="px-4 py-2 rounded-md border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-red-500 w-full"
+//                 value={activeFilters[0] || ''}
+//                 aria-label="Filter by program"
+//               >
+//                 <option value="">Select a filter</option>
+//                 {filterOptions.map((option) => (
+//                   <option key={option.value} value={option.value}>
+//                     {option.name}
+//                   </option>
+//                 ))}
+//               </select>
+//             </div>
 //           </div>
 //         </form>
 
@@ -384,11 +407,11 @@ export const Coursess = [
     subtitle: '',
     description: 'NEP Implementation for Foundational, Preparatory, Middle & Secondary Stages. Pedagogy: Activity-Based Learning (ABL), Experiential Learning, Gamification and EdTech Integration, Blended Learning Methods, Assessment Design and Bloom’s Taxonomy Mapping. Differentiated Instruction & Inclusive Classrooms & holistic. Remedial & Special Education Support Training. Entrepreneurial teacher (How to mentor startups, incubation programs, IIC involvement). Green Campus & Sustainability Education (ESG, SDGs, climate literacy integration). Digital and Pedagogical Upskilling (Google Suite, Canva for Education, Microsoft Teams, Padlet, Kahoot, Mentimeter).',
     whatitis: 'Comprehensive, NEP-aligned professional development for teachers, covering pedagogy, technology, sustainability, and entrepreneurship.',
-    image: '/institutions/images/Coursess/1.png',
+    image: '/academy/courseBanner/TDP.png',
     color: '#D5D5D5',
     duration: '',
     mode: '',
-    Coursessimg: 'https://images.unsplash.com/photo-1532012197267-da84d127e765?auto=format&fit=crop&w=800',
+    Coursessimg: '/academy/courseBanner/TDP.png',
     focus: 'Comprehensive skill development',
     benefits: [
       'NEP Implementation for all school stages',
@@ -411,16 +434,58 @@ export const Coursess = [
     subtitle: 'Empowering Teachers',
     description: 'English Fluency & Public Speaking for Teachers. Classroom Management without Stress. Parent-Teacher Communication Mastery.',
     whatitis: 'Enhance communication, classroom management, and parent engagement skills for teachers.',
-    image: '/institutions/images/Coursess/2.png',
+    image: '/academy/courseBanner/CommunicationDevelopment.png',
     color: '#D5D5D5',
     duration: '15–20 hours',
     mode: ' Offline / Hybrid',
-    Coursessimg: 'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?auto=format&fit=crop&w=800',
+    Coursessimg: '/academy/courseBanner/CommunicationDevelopment.png',
     focus: 'Teacher communication & soft skills',
     benefits: [
       'English fluency for educators',
       'Effective classroom management',
       'Parent-teacher communication mastery'
+    ],
+    modules: [
+      {
+        id: 1,
+        title: "Spoken English for the Classroom",
+        hours: 9,
+        objectives: "Improve classroom English fluency, pronunciation, and basic command",
+        activities: "Speaking drills, situational dialogues, fluency games",
+        outcomes: "Improved everyday classroom communication and teacher confidence"
+      },
+      {
+        id: 2,
+        title: "Public Speaking & Presentation Skills",
+        hours: 9,
+        objectives: "Build effective delivery, stage presence, and clarity for group settings",
+        activities: "Presentations, voice modulation exercises, peer feedback",
+        outcomes: "Clearer articulation, stronger presence in meetings and events"
+      },
+      {
+        id: 3,
+        title: "Inclusive and Stress-Free Classroom Management",
+        hours: 9,
+        objectives: "Adopt non-punitive strategies to manage diverse student behaviors",
+        activities: "Classroom scenarios, role-play, and behavior mapping tools",
+        outcomes: "Increased control, calmer classrooms, inclusive engagement"
+      },
+      {
+        id: 4,
+        title: "Parent Communication & Feedback Delivery",
+        hours: 9,
+        objectives: "Develop structured and empathetic communication with parents",
+        activities: "Role-play with parent profiles, email templates, video-based practice",
+        outcomes: "Improved handling of parent conversations and feedback clarity"
+      },
+      {
+        id: 5,
+        title: "Personal Confidence & Influence Building",
+        hours: 9,
+        objectives: "Strengthen personal presence, emotional control, and professional demeanor",
+        activities: "Group reflection, assertiveness exercises, self-assessment journals",
+        outcomes: "Higher confidence, better influence in peer and leadership interactions"
+      }
     ]
   },
   {
@@ -430,18 +495,60 @@ export const Coursess = [
     subtitle: 'Wellbeing & Support',
     description: 'Recognizing At-Risk Students. Peer Counseling & First Response Techniques. Faculty as Mentors: Empathy & Active Listening. Creating a Safe Classroom.',
     whatitis: 'Train teachers to support student mental health, provide first response, and create safe, empathetic classrooms.',
-    image: '/institutions/images/Coursess/3.png',
+    image: '/academy/courseBanner/MentalHealthandCounsellingTraining.png',
     color: '#D5D5D5',
     duration: '12–15 hours',
     mode: ' Offline / Online',
-    Coursessimg: 'https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?auto=format&fit=crop&w=800',
+    Coursessimg: '/academy/courseBanner/MentalHealthandCounsellingTraining.png',
     focus: 'Student wellbeing',
     benefits: [
       'Recognize at-risk students',
       'Peer counseling skills',
       'Empathy & active listening',
       'Safe classroom creation'
-    ]
+    ],
+    modules: [
+  {
+    id: 1,
+    title: "Identifying At-Risk Students",
+    hours: 10,
+    objectives: "Recognize early signs of emotional distress using behavioral indicators",
+    activities: "Case studies, red flag checklist, observation templates",
+    outcomes: "Teachers proactively identify students needing emotional support"
+  },
+  {
+    id: 2,
+    title: "Peer Counseling & First Response Skills",
+    hours: 8,
+    objectives: "Apply basic emotional first-aid and facilitate peer counseling systems",
+    activities: "Role-play, response cards, peer network toolkit",
+    outcomes: "Teachers provide safe first response and enable peer support"
+  },
+  {
+    id: 3,
+    title: "Faculty as Mentors: Empathy & Active Listening",
+    hours: 10,
+    objectives: "Practice empathy, active listening, and student-centered communication",
+    activities: "Listening labs, empathy scenarios, reflection journals",
+    outcomes: "Stronger student-teacher trust and meaningful engagement"
+  },
+  {
+    id: 4,
+    title: "Creating a Safe Classroom Environment",
+    hours: 9,
+    objectives: "Design classrooms that reduce anxiety and support emotional wellbeing",
+    activities: "Safe space strategies, class charters, anxiety mapping",
+    outcomes: "Emotionally secure and inclusive classrooms"
+  },
+  {
+    id: 5,
+    title: "Responding and Referring Effectively",
+    hours: 8,
+    objectives: "Follow school-safe procedures for emotional response and referral",
+    activities: "Referral flowcharts, boundary-setting exercises, case simulations",
+    outcomes: "Teachers act confidently without overstepping their role"
+  }
+]
   },
   {
     id: 'domain-specific-certification',
@@ -450,17 +557,59 @@ export const Coursess = [
     subtitle: 'Industry Partnerships',
     description: 'In partnership with industries (AgriTech, EV, EdTech, AI, Biotechnology, etc.).',
     whatitis: 'Certification programs for teachers in collaboration with leading industry partners.',
-    image: '/institutions/images/Coursess/4.png',
+    image: '/academy/courseBanner/DomainSpecificCertificationPrograms.png',
     color: '#D5D5D5',
     duration: '20–30 hours',
     mode: 'Online / Hybrid',
-    Coursessimg: 'https://images.unsplash.com/photo-1516979187457-637abb4f9353?auto=format&fit=crop&w=800',
+    Coursessimg: '/academy/courseBanner/DomainSpecificCertificationPrograms.png',
     focus: 'Industry-relevant upskilling',
     benefits: [
       'Industry-recognized certifications',
       'Exposure to latest trends',
       'Collaboration with sector leaders'
-    ]
+    ],
+    modules: [
+  {
+    id: 1,
+    title: "Exploring Emerging Industries",
+    hours: 8,
+    objectives: "Introduce students to future-focused fields like AI, EV, AgriTech, etc.",
+    activities: "Industry videos, career maps, expert talk snippets",
+    outcomes: "Students gain awareness of modern career options and industries"
+  },
+  {
+    id: 2,
+    title: "Fundamentals of Innovation & Technology",
+    hours: 10,
+    objectives: "Build basic concepts in science, tech, and problem-solving related to key domains",
+    activities: "Interactive simulations, digital toolkits, concept challenges",
+    outcomes: "Students understand foundational principles across chosen sectors"
+  },
+  {
+    id: 3,
+    title: "Hands-On Skill Labs",
+    hours: 12,
+    objectives: "Apply practical skills through experiments, tinkering, and STEM-based activities",
+    activities: "DIY kits, project sheets, guided lab tasks",
+    outcomes: "Students build prototypes, experiment, and apply real-world logic"
+  },
+  {
+    id: 4,
+    title: "Idea to Prototype: Mini Projects",
+    hours: 10,
+    objectives: "Develop original ideas and convert them into tangible solutions",
+    activities: "Design thinking templates, mentorship checkpoints, peer showcases",
+    outcomes: "Students create and present functional or conceptual models"
+  },
+  {
+    id: 5,
+    title: "Presentation & Certification Showcase",
+    hours: 5,
+    objectives: "Communicate learning outcomes and receive certification and feedback",
+    activities: "Pitch sessions, digital portfolios, co-branded certificates",
+    outcomes: "Students gain confidence, presentation skills, and recognition"
+  }
+]
   },
   {
     id: 'leadership-career-growth',
@@ -469,17 +618,59 @@ export const Coursess = [
     subtitle: 'For Academic Leaders',
     description: 'Aspiring Academic Leaders Program (For HODs/Coordinators). School Principal Excellence Program. Continuous Professional Development Frameworks for School Clusters - Workshops.',
     whatitis: 'Leadership and professional growth programs for aspiring and current academic leaders.',
-    image: '/institutions/images/Coursess/2.png',
+    image: '/academy/courseBanner/LeadershipandCareerGrowth.png',
     color: '#D5D5D5',
     duration: '18–25 hours',
     mode: 'Hybrid',
-    Coursessimg: 'https://images.unsplash.com/photo-1497633762265-9d179a990aa6?auto=format&fit=crop&w=800',
+    Coursessimg: '/academy/courseBanner/LeadershipandCareerGrowth.png',
     focus: 'Leadership development',
     benefits: [
       'Leadership training for HODs/Coordinators',
       'Principal excellence programs',
       'Professional development workshops'
-    ]
+    ],
+    modules: [
+  {
+    id: 1,
+    title: "Foundations of School Leadership",
+    hours: 10,
+    objectives: "Understand leadership styles, school transformation levers, and NEP-driven goals",
+    activities: "School leadership case studies, stakeholder mapping, vision setting tools",
+    outcomes: "Leaders articulate school vision and align teams to NEP priorities"
+  },
+  {
+    id: 2,
+    title: "Academic Planning & Teacher Enablement",
+    hours: 10,
+    objectives: "Build instructional leadership by planning academic systems and mentoring teachers",
+    activities: "Cluster planning sheets, CPD frameworks, mentorship role-plays",
+    outcomes: "Leaders improve instructional quality and support teacher growth"
+  },
+  {
+    id: 3,
+    title: "Emotional Intelligence & Conflict Management",
+    hours: 8,
+    objectives: "Strengthen leadership presence, emotional control, and conflict resolution skills",
+    activities: "Reflection tools, empathy scenarios, feedback labs",
+    outcomes: "Leaders foster trust, reduce friction, and guide teams empathetically"
+  },
+  {
+    id: 4,
+    title: "Innovation & Change Management",
+    hours: 10,
+    objectives: "Drive continuous improvement through school innovation and systemic thinking",
+    activities: "Innovation dashboard, change mapping, peer ideation sessions",
+    outcomes: "Leaders lead adaptive change and build a culture of experimentation"
+  },
+  {
+    id: 5,
+    title: "School Development & Presentation",
+    hours: 7,
+    objectives: "Create development plans and communicate school transformation stories",
+    activities: "School growth plan templates, leadership pitch decks",
+    outcomes: "Leaders design structured improvement plans and communicate with clarity"
+  }
+]
   },
   {
     id: 'institutional-value-added',
@@ -488,20 +679,60 @@ export const Coursess = [
     subtitle: 'For Teachers & Management',
     description: 'Teacher Performance Audits. School/College Ranking Preparation (NAAC/NIRF Readiness). Building Teacher-Led Clubs & Innovation Cells. Creating Peer-Learning Teacher Communities.',
     whatitis: 'Value-added services benefiting both teachers and management for institutional growth.',
-    image: '/institutions/images/Coursess/3.png',
+    image: '/academy/courseBanner/InstitutionalValueAddedServices.png',
     color: '#D5D5D5',
     duration: '10–15 hours',
     mode: 'Offline / Hybrid',
-    Coursessimg: 'https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?auto=format&fit=crop&w=800',
+    Coursessimg: '/academy/courseBanner/InstitutionalValueAddedServices.png',
     focus: 'Institutional excellence',
     benefits: [
       'Performance audits',
       'Ranking preparation',
       'Teacher-led clubs',
       'Peer-learning communities',
-
     ],
-    
+    modules: [
+  {
+    id: 1,
+    title: "Teacher Performance Audits & Feedback Systems",
+    hours: 10,
+    objectives: "Establish structured audit frameworks to assess and improve teaching quality",
+    activities: "Audit templates, rubric creation, classroom observation tools",
+    outcomes: "Schools implement fair, data-driven performance reviews across levels"
+  },
+  {
+    id: 2,
+    title: "Accreditation & Ranking Readiness",
+    hours: 8,
+    objectives: "Align school practices with NEP benchmarks and national accreditation goals",
+    activities: "Self-assessment grids, compliance checklists, goal-mapping sheets",
+    outcomes: "Schools improve readiness for NAAC/NIRF-like evaluations"
+  },
+  {
+    id: 3,
+    title: "Teacher-Led Innovation Cells",
+    hours: 9,
+    objectives: "Promote innovation through teacher-led projects and co-curricular clubs",
+    activities: "Idea banks, action research formats, innovation logs",
+    outcomes: "Active teacher ownership in school improvement and student engagement"
+  },
+  {
+    id: 4,
+    title: "Peer-Learning & Mentorship Communities",
+    hours: 10,
+    objectives: "Build sustainable systems for teacher-to-teacher learning and professional growth",
+    activities: "Peer reflection journals, CPD tracker, learning circle formats",
+    outcomes: "Teachers collaborate, share best practices, and mentor one another"
+  },
+  {
+    id: 5,
+    title: "School Development Tracking & Leadership Dashboards",
+    hours: 8,
+    objectives: "Equip school leaders to monitor, evaluate, and present growth data effectively",
+    activities: "Dashboard templates, reporting formats, data visualization tools",
+    outcomes: "Leadership teams make informed decisions and showcase impact clearly"
+  }
+]
   },
 ];
 
@@ -701,27 +932,34 @@ const Courses = () => {
         </motion.div>
 
         <form onSubmit={(e) => { e.preventDefault(); }} className="max-w-md mx-auto mb-8">
-          <div className='w-full flex gap-10'>
-            <div className="relative w-96"> {/* Increased width to 384px (w-96) for a larger search bar */}
+          <div className='w-full flex gap-10 flex-col md:flex-row'>
+            <div className="relative w-full md:w-96"> {/* Responsive width for all browsers */}
               <Input 
                 type="text"
                 placeholder="Search for Coursess..." 
                 value={searchQuery}
                 onChange={handleSearch}
                 className="pr-10 w-full"
+                autoComplete="off"
+                aria-label="Search for Coursess"
+                inputMode="search"
               />
               <button 
                 type="submit"
-                className="absolute inset-y-0 right-0 bottom-8 flex items-center px-3 text-gray-500 hover:text-red-600"
+                className="absolute inset-y-0 right-0 flex items-center px-3 text-gray-500 hover:text-red-600"
+                tabIndex={0}
+                aria-label="Submit search"
+                style={{ background: 'none', border: 'none', cursor: 'pointer' }}
               >
                 <Search className="h-4 w-8" />
               </button>
             </div>
-            <div className="mb-8 text-center w-72"> {/* Match width with input */}
+            <div className="mb-8 text-center w-full md:w-72"> {/* Responsive width for all browsers */}
               <select
                 onChange={(e) => toggleFilter(e.target.value)}
                 className="px-4 py-2 rounded-md border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-red-500 w-full"
                 value={activeFilters[0] || ''}
+                aria-label="Filter by program"
               >
                 <option value="">Select a filter</option>
                 {filterOptions.map((option) => (
@@ -734,11 +972,7 @@ const Courses = () => {
           </div>
         </form>
 
-     
-       
-
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 place-content-center gap-16">
           {filteredCoursess.map((course, index) => {
             // Removed yOffset and style prop for scroll animation
             return (

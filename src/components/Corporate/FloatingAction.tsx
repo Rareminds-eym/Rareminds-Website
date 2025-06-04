@@ -8,6 +8,8 @@ import {
   Download,
 } from "lucide-react";
 import FAQChatbot from "./ChatBot/FAQChatbot";
+import { ChatButton } from "./ChatButton";
+import { BookDemo } from "./BookDemo";
 
 interface MenuItem {
   id: string;
@@ -19,6 +21,8 @@ interface MenuItem {
 const FloatingActionMenu = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenFaq, setIsOpenFaq] = useState(false);
+  const [showChat, setShowChat] = useState(false);
+  const [showBookDemo, setShowBookDemo] = useState(false);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
   // Open menu when user scrolls near the bottom (before footer)
@@ -52,19 +56,19 @@ const FloatingActionMenu = () => {
       id: "chat",
       icon: MessageCircle,
       label: "Chat",
-      onClick: () => console.log("Chat clicked"),
+      onClick: () => {}, // Handled in handleMenuItemClick
     },
     {
       id: "demo",
       icon: Calendar,
       label: "Book a Demo",
-      onClick: () => console.log("Book a Demo clicked"),
+      onClick: () => {}, // Handled in handleMenuItemClick
     },
     {
       id: "faq",
       icon: HelpCircle,
       label: "FAQ",
-      onClick: () => console.log("FAQ clicked"),
+      onClick: () => {}, // Handled in handleMenuItemClick
     },
   ];
 
@@ -73,10 +77,20 @@ const FloatingActionMenu = () => {
   };
 
   const handleMenuItemClick = (item: MenuItem) => {
-    item.onClick();
-    if (item.id == "faq") {
+    if (item.id === "chat") {
+      setShowChat(true);
+      setIsOpenFaq(false);
+      setShowBookDemo(false);
+    } else if (item.id === "faq") {
       setIsOpenFaq(true);
-      setIsOpen(true);
+      setShowChat(false);
+      setShowBookDemo(false);
+    } else if (item.id === "demo") {
+      setShowBookDemo(true);
+      setShowChat(false);
+      setIsOpenFaq(false);
+    } else {
+      item.onClick();
     }
     setIsOpen(false);
   };
@@ -213,6 +227,12 @@ const FloatingActionMenu = () => {
           </div>
         </div>
       )}
+      
+      {/* Chat Button */}
+      <ChatButton isVisible={showChat} onClose={() => setShowChat(false)} />
+      
+      {/* Book Demo */}
+      <BookDemo isVisible={showBookDemo} onClose={() => setShowBookDemo(false)} />
     </div>
   );
 };

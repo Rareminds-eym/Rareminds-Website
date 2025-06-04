@@ -110,7 +110,7 @@ const AcademyContactSection = () => {
             <Send size={32} />
           </div>
           <h2 className="text-3xl md:text-5xl text-center font-bold mb-4 text-gray-800">
-            Partner With US
+            Partner With Us
           </h2>
           <p className="text-gray-600 max-w-3xl mx-auto text-lg text-center">
             Take the first step towards your tech career with our specialized training programs
