@@ -19,7 +19,7 @@ export const ServiceList: React.FC = () => {
       >
         {services.map((service: any, idx: number) => {
           const isActive =
-            location.pathname === `/corporate/services/${service.link}`;
+            location.pathname === `/corporate/recruitment/services/${service.link}`;
           return (
             <motion.li
               key={idx}
@@ -34,7 +34,7 @@ export const ServiceList: React.FC = () => {
               whileHover={{ boxShadow: "0 8px 32px 0 rgba(59,130,246,0.15)" }}
             >
               <Link
-                to={`/corporate/services/${service.link}`}
+                to={`/corporate/recruitment/services/${service.link}`}
                 className={`flex items-center justify-between text-sm w-full text-black bg-[#E5F1FF] hover:text-blue-600 transition-colors px-3 py-2 rounded-lg font-medium text-left ${
                   isActive ? "font-bold text-blue-700" : ""
                 }`}
