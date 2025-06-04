@@ -149,6 +149,7 @@ import { motion } from "framer-motion";
 import { ArrowLeft, CheckCircle } from "lucide-react";
 import { coursesData } from "./Data/coursesData"; // Ensure this path is correct
 import AcademyHeader from "@/components/Header/AcademyHeader";
+import FloatingActionMenu from "../../../components/Academy/StickyButton/StickyButton/FloatingAction"
 
 const CourseDetailedPage = () => {
   const { id, courseId } = useParams<{ id?: string; courseId?: string }>();
@@ -176,6 +177,7 @@ const CourseDetailedPage = () => {
   return (
     <>
       <AcademyHeader />
+      <FloatingActionMenu />
       <div className="pt-20">
         {/* Header Banner */}
         <div className="relative h-[44vh] overflow-hidden">

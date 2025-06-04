@@ -39,19 +39,20 @@ const AcademyContactSection = () => {
     setIsSubmitting(true);
 
     try {
-      // Insert data into Supabase
+      // Insert data into Supabase (table: academia_form, fields: name, email, phone, course_intrest, message)
       const { error } = await supabase
-        .from("academia_form")
+        .from("acdemia_form")
         .insert([
           {
             name: formData.name,
             email: formData.email,
             phone: formData.phone,
-            course_interest: formData.course,
+            course_intrest: formData.course, // corrected field name
             message: formData.message,
             submitted_at: new Date().toISOString(),
           },
-        ]);      if (error) {
+        ]);
+      if (error) {
         console.error('Supabase error:', error.message, error.details, error.hint);
         throw error;
       }
@@ -85,7 +86,7 @@ const AcademyContactSection = () => {
       });
       toast({
         title: "Error",
-        description: "There was an error submitting your inquiry. Please try again.",
+        description: `There was an error submitting your inquiry.\n${supabaseError.message || ''}\n${supabaseError.details || ''}\n${supabaseError.hint || ''}`,
         variant: "destructive",
       });
     } finally {
@@ -244,8 +245,12 @@ const AcademyContactSection = () => {
                         >
                           <button
                             type="submit"
-                            className="bg-red-500  hover:bg-red-600 text-white font-medium py-3 px-6 rounded-xl transition-all flex items-center justify-center"
+                            className="bg-red-500 hover:bg-red-600 text-white font-medium py-3 px-6 rounded-xl transition-all flex items-center justify-center"
                             disabled={isSubmitting}
+                            onClick={() => {
+                              // Extra debug log for troubleshooting
+                              console.log('Submit button clicked', formData);
+                            }}
                           >
                             {isSubmitting ? (
                               <span className="flex items-center">

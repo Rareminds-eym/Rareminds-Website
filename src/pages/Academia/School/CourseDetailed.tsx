@@ -16,6 +16,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '../../../components/Academy/UI/badge';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../../../components/Academy/UI/table';
 import { Clock, BookOpen, TrendingUp } from 'lucide-react';
+import FloatingActionMenu from "../../../components/Academy/StickyButton/StickyButton/FloatingAction"
 
 const iconMap = {
   Award,
@@ -150,77 +151,41 @@ export default function CourseDetailed() {
   } else if (course.id === 'communication-personality') {
     data = communicationPersonalityDevelopmentDetails;
   } else if (course.id === 'Teacher Development Programs (TDP)') {
-    const tdpSubcards = [
-      {
-        title: 'NEP Implementation for Foundational, Preparatory, Middle & Secondary Stages',
-      },
-      {
-        title: 'Pedagogy: Activity-Based Learning (ABL), Experiential Learning, Gamification and EdTech Integration, Blended Learning Methods, Assessment Design and Bloom’s Taxonomy Mapping',
-      },
-      {
-        title: 'Differentiated Instruction and Inclusive Classrooms; Holistic Development; Remedial and Special Education Support Training',
-      },
-      {
-        title: 'Entrepreneurial teacher (Mentoring startups, incubation programs, IIC involvement)\nCultivating Young Innovators: Empowering Teachers to Foster Entrepreneurial Mindsets',
-      },
-      {
-        title: 'Green Campus & Sustainability Education – Schools',
-      },
-      {
-        title: 'Digital & Pedagogical Upskilling',
-      },
-    ];
     return (
       <>
         <AcademyHeader />
         <section className="pb-20">
-     <div className="relative h-[45vh] mb-12 overflow-hidden mt-[80px]">
-  {/* Blurred and black & white background image */}
-  <div
-    className="absolute inset-0 bg-cover bg-center filter grayscale"
-    style={{ backgroundImage: `url(${course.image})` }}
-  ></div>
-
-  {/* Black overlay with 50% opacity */}
-   <div className="absolute inset-0 bg-black opacity-30 backdrop-blur-sm z-0"></div>
-
-  {/* Foreground content */}
-  <div className="relative z-10 container mx-auto px-6 pl-[8%] p-6 flex flex-col justify-center h-full">
-    <button
-      onClick={() => navigate('/academia/school#course-cards-section')}
-      className="text-white mb-7 text-lg flex items-center gap-2 hover:underline"
-    >
-      <ArrowLeft className="w-4 h-4" />
-      Back to Courses
-    </button>
-    <h1 className="text-3xl md:text-4xl font-bold text-white mb-2 drop-shadow-lg">
-      {course.name}
-    </h1>
-    {course.subtitle && (
-      <p className="text-lg text-white/90 drop-shadow">{course.subtitle}</p>
-    )}
-  </div>
-</div>
-
-
-
-         <div className="max-w-6xl mx-auto px-6">
- <div className="w-full flex justify-center">
-  <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-    {tdpSubcards.map((sub, i) => (
-      <Book key={i} depth={10 + i * 2} color="#D5D5D5" variant="default" width={340}>
-        <div className="flex items-center justify-center h-full p-6">
-          <div className="w-64 h-72 flex items-center justify-center text-center">
-            <h3 className="font-semibold text-white text-base">{sub.title}</h3>
+          <div className="relative h-[45vh] mb-12 overflow-hidden mt-[80px]">
+            {/* Blurred and black & white background image */}
+            <div
+              className="absolute inset-0 bg-cover bg-center filter grayscale"
+              style={{ backgroundImage: `url(${course.image})` }}
+            ></div>
+            {/* Black overlay with 50% opacity */}
+            <div className="absolute inset-0 bg-black opacity-30 backdrop-blur-sm z-0"></div>
+            {/* Foreground content */}
+            <div className="relative z-10 container mx-auto px-6 pl-[8%] p-6 flex flex-col justify-center h-full">
+              <button
+                onClick={() => navigate('/academia/school#course-cards-section')}
+                className="text-white mb-7 text-lg flex items-center gap-2 hover:underline"
+              >
+                <ArrowLeft className="w-4 h-4" />
+                Back to Courses
+              </button>
+              <h1 className="text-3xl md:text-4xl font-bold text-white mb-2 drop-shadow-lg">
+                {course.name}
+              </h1>
+              {course.subtitle && (
+                <p className="text-lg text-white/90 drop-shadow">{course.subtitle}</p>
+              )}
+            </div>
           </div>
-        </div>
-      </Book>
-    ))}
-  </div>
-</div>
-
-</div>
-
+          <div className="flex justify-center items-center min-h-[300px]">
+            <div className="text-center">
+              <h2 className="text-3xl font-bold text-gray-800 mb-4">Coming Soon</h2>
+              <p className="text-lg text-gray-600">Detailed information about this program will be available soon.</p>
+            </div>
+          </div>
         </section>
       </>
     );
@@ -230,6 +195,7 @@ export default function CourseDetailed() {
     return (
       <>
       <AcademyHeader />
+      <FloatingActionMenu />
       <section className=" mt-[80px]">
         {/* Hero Banner with Back Button, Title, Subtitle */}
     <div className="relative h-[45vh] flex items-center md:pl-[1%] mb-12 overflow-hidden">
@@ -270,7 +236,7 @@ export default function CourseDetailed() {
                   <p key={i} className={`text-lg text-gray-700 leading-relaxed${i === 0 ? ' mb-8' : ''}`}>{p}</p>
                 ))}
               </div>
- <div className="bg-black/50 rounded-2xl p-8 text-white shadow-2xl">
+ <div className="bg-gray-100 rounded-2xl p-8 text-black shadow-2xl">
                 <h3 className="text-2xl font-bold mb-8 flex items-center">
                   <ArrowRight className="h-6 w-6 mr-3" />
                   How RareMinds Supports Schools
@@ -281,12 +247,12 @@ export default function CourseDetailed() {
                     return (
                       <div key={i} className="flex items-start space-x-4 p-4 bg-white/10 rounded-xl backdrop-blur-sm hover:bg-white/20 transition-colors">
                         {Icon && <Icon className="h-6 w-6 text-black mt-1 flex-shrink-0" />}
-                        <span className="text-white">{item.text}</span>
+                        <span className="text-black">{item.text}</span>
                       </div>
                     );
                   })}
                 </div>
-                <div className="mt-8 p-6 bg-black/50 rounded-xl text-ehite">
+                <div className="mt-8 p-6 bg-black/10 rounded-xl text-ehite">
                   <h4 className="text-xl font-bold mb-2">{data.cta.heading}</h4>
                 </div>
               </div>
@@ -492,8 +458,8 @@ export default function CourseDetailed() {
                 <div className="overflow-x-auto">
                   <Table>
                     <TableHeader>
-                      <TableRow className="bg-gradient-to-r from-blue-50 to-indigo-50">
-                        <TableHead className="font-bold text-gray-900 w-12">#</TableHead>
+                      <TableRow className="bg-gradient-to-r from-blue-50 to-indigo-50  ">
+                        <TableHead className="font-bold text-gray-900 w-12 ">#</TableHead>
                         <TableHead className="font-bold text-gray-900 min-w-[200px]">Module Title</TableHead>
                         <TableHead className="font-bold text-gray-900 text-center w-20">Hours</TableHead>
                         <TableHead className="font-bold text-gray-900 min-w-[250px]">Learning Objectives</TableHead>
