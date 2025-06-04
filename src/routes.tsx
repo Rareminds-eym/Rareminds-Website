@@ -42,6 +42,7 @@ const Academy_Course = lazy(
   () => import("./pages/Academia/School/CourseDetailed")
 );
 import CourseDetailedPage from "@/components/Academy/Students/CourseDetailedPage";
+const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
 
 const withSuspense = (Component: React.LazyExoticComponent<React.FC<{}>>) => (
   <Suspense fallback={<LoaderComponent />}>
@@ -65,6 +66,10 @@ const router = createBrowserRouter([
       {
         path: "/",
         element: withSuspense(Home),
+      },
+      {
+        path: "/privacy-policy",
+        element: withSuspense(PrivacyPolicy),
       },
     ],
   },
