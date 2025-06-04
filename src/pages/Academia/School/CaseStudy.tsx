@@ -41,7 +41,7 @@ const caseStudiesData: Record<string, CaseStudyData> = {
     id: 'st-josephs',
     header: "St. Joseph's School – From Counting Blocks to Coding Bots",
     subheader: "LEGO Education: Transforming Classrooms from KG Math to Grade 9 Robotics",
-    bannerImage: "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?auto=format&fit=crop&q=80",
+    bannerImage: "/academy/Casestudy/StJoseph.png",
     quickSnapshot: {
       location: "St. Joseph's School",
       studentsImpacted: "1200+ students (KG to Grade 9)",
@@ -77,7 +77,7 @@ const caseStudiesData: Record<string, CaseStudyData> = {
     id: 'global-international',
     header: "Global International School – Teacher Transformation Journey",
     subheader: "NEP-Aligned Pedagogy: Empowering Educators for Modern Learning",
-    bannerImage: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&q=80",
+    bannerImage: "/academy/Casestudy/GlobalInternational.png",
     quickSnapshot: {
       location: "Global International School",
       studentsImpacted: "500+ students (via trained teachers)",
@@ -113,7 +113,7 @@ const caseStudiesData: Record<string, CaseStudyData> = {
     id: 'ryan-international',
     header: "Ryan International School – Celebrating Sustainability",
     subheader: "One Day. One Planet. One Purpose.",
-    bannerImage: "", // Add a banner image URL if available
+    bannerImage: "/academy/Casestudy/RyanInternationalSustainability.png", // Add a banner image URL if available
     quickSnapshot: {
       location: "Ryan International School",
       studentsImpacted: "300",
@@ -145,7 +145,7 @@ const caseStudiesData: Record<string, CaseStudyData> = {
     id: 'bldea-schools',
     header: "BLDEA Schools – Deep Dive into Teacher Excellence",
     subheader: "3 Days and 360° Growth in Teaching Competency",
-    bannerImage: "", // Add a banner image URL if available
+    bannerImage: "/academy/Casestudy/BLDEASchoolsDeepDiveintoTeacherExcellence.png", // Add a banner image URL if available
     quickSnapshot: {
       location: "BLDEA Schools, Karnataka",
       teachersTrained: "200+",
@@ -175,7 +175,7 @@ const caseStudiesData: Record<string, CaseStudyData> = {
     id: 'ghss-tamil-nadu',
     header: "GHSS Tamil Nadu – Youth Powered by Agri & Cloud Kitchens",
     subheader: "From Farm to Startup – A New Vision for Rural Youth",
-    bannerImage: "", // Add a banner image URL if available
+    bannerImage: "/academy/Casestudy/GHSSTamilInnovation.png", // Add a banner image URL if available
     quickSnapshot: {
       location: "GHSS, Tamil Nadu",
       studentsImpacted: "250+ (Grades 11 & 12)",
@@ -240,36 +240,34 @@ const CaseStudy = () => {
     <div className="min-h-screen bg-gray-50">
       <AcademyHeader />
       {/* Banner Section with Image */}
-      <div
-        className="relative w-full h-[40vh] md:h-[50vh] bg-cover bg-center mt-[80px] flex items-end"
-        style={{
-          backgroundImage: `linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.8)), url(${caseStudy.bannerImage})`
-        }}
+     <div
+  className="relative w-full h-[40vh] md:h-[50vh] bg-cover bg-center mt-[80px] flex items-center"
+  style={{
+    backgroundImage: `url(${caseStudy.bannerImage})`
+  }}
+>
+  {/* Blurred Background */}
+  <div className="absolute inset-0 bg-black opacity-30 backdrop-blur-sm z-0"></div>
 
-      >
-        <div className='w-full  '>
+  <div className='w-full relative z-10'>
+    <div className="flex flex-col justify-center items-center mx-auto px-4 md:px-[2%] py-12 text-white">
+      <h1 className="text-3xl md:text-5xl text-center font-bold mb-4 max-auto">{caseStudy.header}</h1>
+      <p className="text-xl md:text-2xl opacity-90 max-auto">{caseStudy.subheader}</p>
+    </div>
 
-          <div className='w-auot h-auto flex justify-start px-[2%]'>
-            <Link to="/academia/school#scrollToFacultyTransformation">
-            <button
-          
-              className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-gradient-to-r from-red-500 to-pink-500 text-white text-sm font-semibold shadow-lg hover:shadow-xl hover:opacity-90 transition-all duration-300"
-            >
-              <ArrowLeft className="w-4 h-4" />
-              Back to Case Studies
-            </button>
-            </Link>
-          </div>
+    <div className='w-auto h-auto md:pl-[10%] flex justify-start px-[2%]'>
+      <Link to="/academia/school#scrollToFacultyTransformation">
+        <button
+          className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-gradient-to-r from-red-500 to-pink-500 text-white text-sm font-semibold shadow-lg hover:shadow-xl hover:opacity-90 transition-all duration-300"
+        >
+          <ArrowLeft className="w-4 h-4" />
+          Back to Case Studies
+        </button>
+      </Link>
+    </div>
+  </div>
+</div>
 
-
-          <div className=" flex flex-col justify-center  mx-auto px-4 md:px-[2%] py-12 text-white">
-
-
-            <h1 className="text-3xl md:text-5xl font-bold mb-3 max-auto ">{caseStudy.header}</h1>
-            <p className="text-xl md:text-2xl opacity-90 max-auto ">{caseStudy.subheader}</p>
-          </div>
-        </div>
-      </div>
 
       <div className="container mx-auto px-4 py-12">
         <div className="max-w-5xl mx-auto">
