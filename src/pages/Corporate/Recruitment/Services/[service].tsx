@@ -21,7 +21,12 @@ const Service: React.FC = () => {
   if (loading) return <LoaderComponent />;
   if (error) return <ErrorComponent message={error} />;
   if (!foundService) {
-    return <ComingSoon />;
+    return (
+      <ErrorComponent
+        title="404 - Service Not Found"
+        message="The service you are looking for does not exist or is not available."
+      />
+    );
   }
 
   return (
