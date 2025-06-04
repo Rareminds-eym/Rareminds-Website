@@ -118,7 +118,7 @@ const ResourcesPage = () => {
       }
 
       // Send email
-      const response = await fetch('http://localhost:3001/send-email', {
+      const response = await fetch('https://email-sender-ssmu.onrender.com/send-pdf', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
