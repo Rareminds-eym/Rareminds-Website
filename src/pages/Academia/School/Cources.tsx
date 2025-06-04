@@ -972,7 +972,7 @@ const Courses = () => {
           </div>
         </form>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 place-content-center gap-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 place-content-center gap-16 ">
           {filteredCoursess.map((course, index) => {
             // Removed yOffset and style prop for scroll animation
             return (
@@ -989,10 +989,10 @@ const Courses = () => {
                 >
                   <div className="p-6 grid gap-4 h-[350px]">
                     <div className="flex items-center justify-between mb-2">
-                      <h3 className="font-semibold text-white text-lg leading-tight">
+                      <h3 className="font-semibold text-black text-lg leading-tight">
                         {course.name}
                       </h3>
-                      <course.icon className="w-7 h-7 text-white flex-shrink-0" />
+                      <course.icon className="w-7 h-7 text-black flex-shrink-0" />
                     </div>
                     {/* {course.subtitle && (
                       <p className="text-sm text-white/80 font-medium">
@@ -1000,23 +1000,26 @@ const Courses = () => {
                       </p>
                     )} */}
 
-                    <ul className="text-sm text-white/90 h-[150px] overflow-y-auto leading-relaxed list-disc list-inside space-y-1">
+                   <ul className="text-sm text-black h-[150px] overflow-y-auto leading-relaxed list-disc list-outside pl-5 space-y-1">
   {course.benefits.map((point, index) => (
-    <li key={index}>{point}</li>
+    <li key={index} className="whitespace-normal break-words">
+      {point}
+    </li>
   ))}
 </ul>
+
 
                     {/* <p className="text-sm text-white/90 h-[150px] overflow-y-auto leading-relaxed">
                       {course.description}
                     </p> */}
                     <div className="flex items-center gap-2 mt-2">
-                      <span className="text-sm text-white/70">
+                      <span className="text-sm text-black">
                         {course.duration}  {course.mode}
                       </span>
                     </div>
                     <motion.div
                       whileHover={{ x: 5 }}
-                      className="flex items-center gap-2 text-sm font-medium text-white/90 mt-1"
+                      className="flex items-center gap-2 text-sm font-medium text-black mt-1"
                     >
                       Learn More
                       <ArrowRight className="w-4 h-4" />

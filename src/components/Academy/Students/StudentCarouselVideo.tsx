@@ -5,7 +5,7 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-} from "../../../components/Academy/UI/dialog";
+} from "../UI/dialog";
 
 interface Testimonial {
   id: number;
@@ -23,8 +23,8 @@ const testimonials: Testimonial[] = [
     name: "1",
     role: "",
     image: "",
-    videoSrc: "https://www.youtube.com/embed/Z467zES119Q?si=yVIFWtNdoc836yiT",
-    content: "How Rareminds Enhanced Teacher Knowledge on the Latest Tech",
+    videoSrc: "https://www.youtube.com/embed/zInPOXMjHpQ?si=5PnxTBi1Q--SFCk0",
+    content: "K. Saranraj’s Career Transformation with Rareminds",
     bgColor: "from-red-500 to-red-600"
   },
   {
@@ -32,8 +32,8 @@ const testimonials: Testimonial[] = [
     name: "2",
     role: "",
     image: "",
-    videoSrc: "https://www.youtube.com/embed/Bu0PdP0ymYo?si=pFK1QFW--YD6ySOn",
-    content: "Insights Gained from the Industrial Visit",
+    videoSrc: "https://www.youtube.com/embed/zInPOXMjHpQ?si=5PnxTBi1Q--SFCk0",
+    content: "K. Saranraj’s Career Transformation with Rareminds",
     bgColor: "from-red-500 to-red-600"
   },
   {
@@ -41,8 +41,8 @@ const testimonials: Testimonial[] = [
     name: "3",
     role: "",
     image: "",
-    videoSrc: "https://www.youtube.com/embed/YLvtv6yo00I?si=ZIaBUdTSs8sagcjD",
-    content: "How Rareminds Boosted Creative Thinking and Tech Skills",
+     videoSrc: "https://www.youtube.com/embed/zInPOXMjHpQ?si=5PnxTBi1Q--SFCk0",
+    content: "K. Saranraj’s Career Transformation with Rareminds",
     bgColor: "from-red-500 to-red-600"
   },
   {
@@ -50,8 +50,8 @@ const testimonials: Testimonial[] = [
     name: "4",
     role: "",
     image: "",
-    videoSrc: "https://www.youtube.com/embed/Z467zES119Q?si=yVIFWtNdoc836yiT",
-    content: "How Rareminds Enhanced Teacher Knowledge on the Latest Tech",
+     videoSrc: "https://www.youtube.com/embed/zInPOXMjHpQ?si=5PnxTBi1Q--SFCk0",
+    content: "K. Saranraj’s Career Transformation with Rareminds",
     bgColor: "from-red-500 to-red-600"
   },
   {
@@ -59,8 +59,8 @@ const testimonials: Testimonial[] = [
     name: "5",
     role: "",
     image: "",
-    videoSrc: "https://www.youtube.com/embed/Bu0PdP0ymYo?si=pFK1QFW--YD6ySOn",
-    content: "Insights Gained from the Industrial Visit",
+    videoSrc: "https://www.youtube.com/embed/zInPOXMjHpQ?si=5PnxTBi1Q--SFCk0",
+    content: "K. Saranraj’s Career Transformation with Rareminds",
     bgColor: "from-red-500 to-red-600"
   },
   {
@@ -68,8 +68,8 @@ const testimonials: Testimonial[] = [
     name: "6",
     role: "",
     image: "",
-    videoSrc: "https://www.youtube.com/embed/YLvtv6yo00I?si=ZIaBUdTSs8sagcjD",
-    content: "How Rareminds Boosted Creative Thinking and Tech Skills",
+   videoSrc: "https://www.youtube.com/embed/zInPOXMjHpQ?si=5PnxTBi1Q--SFCk0",
+    content: "K. Saranraj’s Career Transformation with Rareminds",
     bgColor: "from-red-500 to-red-600"
   }
 ];
