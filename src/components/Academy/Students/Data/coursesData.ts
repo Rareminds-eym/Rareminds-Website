@@ -302,34 +302,52 @@ export const coursesData: Course[] = [
     id: "spoken-english-bootcamp",
     name: "Spoken English & Public Speaking Bootcamps",
     shortName: "Spoken English Bootcamp",
-    description: "Speak to Lead. Speak with Confidence. Communicate fluently in English in academic and social settings. Deliver confident speeches, presentations, and interviews. Engage in group discussions, debates, and roleplays. Build vocabulary, articulation, and everyday language skills.",
+    description: "English is more than grammar—it’s your voice to the world. Confidence grows when students learn to speak, not just write. Our bootcamps transform hesitation into fluent, fearless expression.\n\nCommunication is a life skill, not just a classroom requirement. This program helps students become clear, confident, and compelling speakers—whether in the classroom, on stage, or in real life. Our structured bootcamps combine language fluency with presentation skills and interactive speaking practice, helping students overcome fear and express themselves effectively in any situation.",
     targetGrade: "For Grades 6–12: Building Communication Confidence",
-    
+    heroImage: "",
     modules: [
       {
-        title: "Spoken English",
+        title: "Everyday English Fluency",
         description: [
-          "Communicate fluently in English in academic and social settings",
-          "Build vocabulary, articulation, and everyday language skills"
+          "Build comfort with day-to-day conversations using role plays and situational dialogues."
         ],
         image: "/academy/courses/3Eprogram/english.svg"
       },
       {
-        title: "Public Speaking",
+        title: "Stage Confidence Builder",
         description: [
-          "Deliver confident speeches, presentations, and interviews",
-          "Engage in group discussions, debates, and roleplays"
+          "Practice speech delivery, body language, and voice modulation for formal settings."
         ],
+        image: "/academy/courses/3Eprogram/Employability.svg"
+      },
+      {
+        title: "Debate and Group Discussion Lab",
+        description: [
+          "Sharpen critical thinking and articulation through guided group discussions and structured debates."
+        ],
+        image: "/academy/courses/3Eprogram/Employability.svg"
+      },
+      {
+        title: "Expressive Speaking Studio",
+        description: [
+          "Explore storytelling, poetry recitation, and emotion-driven speech formats."
+        ],
+        image: "/academy/courses/3Eprogram/Employability.svg"
+      },
+      {
+        title: "Interview and Presentation Prep",
+        description: ["Learn how to introduce oneself, answer questions, and present ideas clearly and confidently."],
         image: "/academy/courses/3Eprogram/Employability.svg"
       }
     ],
     whyChoose: {
-      title: "Why Join the Bootcamp?",
+      title: "Why is Rareminds’ Program Effective?",
       points: [
-        "Fluency and confidence in real-world English",
-        "Practical public speaking and presentation skills",
-        "Interactive, activity-based learning",
-        "Preparation for academic and career success"
+        "Expert-Designed Curriculum: Built by educators and communication specialists with real classroom experience.",
+        "Bilingual Delivery: English instruction supported with regional languages for better clarity and comfort.",
+        "Tailored for All Tiers: Equally effective in metro schools and tier 2–3 classrooms.",
+        "Confidence-First Approach: Focus on helping students overcome stage fear and speak with clarity.",
+        "Future-Ready Skills: Training aligned with real-world communication needs—not just textbook grammar."
       ],
       image: "/academy/courses/3Eprogram/Employability.svg"
     }
@@ -342,6 +360,7 @@ export const coursesData: Course[] = [
     targetGrade: "For Grades 9–12: Career Blueprint Program",
     subtitle2: "Old methods fall short. We teach what the future demands."    ,
     subtexttitle: "That’s where 3E comes in.",
+    heroImage: "/academy/courseBanner/Counseling Programs.png",
     modules: [
       {
         title: "Stream Selector",
@@ -404,10 +423,7 @@ export const coursesData: Course[] = [
     description: "Don’t Step into the Future Unprepared. Ignite the 3E Program.",
     targetGrade: "For Grades 8–12: Building Confidence, Clarity, and Career Readiness",
     subtitle: "Old methods fall short. We teach what the future demands. That’s where 3E comes in.",
-    clarityMeetsStrategy: {
-      title: "Clarity Meets Strategy",
-      content: "From discovery to direction. We support every step of the journey. Our planning tools help students compare colleges, prepare for exams, track costs, and explore opportunities—step-by-step."
-    },
+    heroImage: "/academy/courseBanner/The 3E Program_ English, Employability, Entrepreneurship.png",
     modules: [
       {
         title: "English",
