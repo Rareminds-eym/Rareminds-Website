@@ -10,7 +10,6 @@ import CorporateLayout from "./layouts/CorporateLayout";
 import GovernmentLayout from "./layouts/GovernmentLayout";
 import AcademiaLayout from "./layouts/AcademiaLayout";
 import InstitutionsLayout from "./layouts/InstitutionsLayout";
-import Courses from "./components/Academy/Students/Courses.tsx";
 
 // Lazy pages
 const Home = lazy(() => import("./pages/Index"));
@@ -33,7 +32,6 @@ const ServicePage = lazy(
 const CorporateTraining = lazy(() => import("./pages/Corporate/Training"));
 const Contact = lazy(() => import("./pages/Government/Contact/Index"));
 const handleSubscribe = lazy(() => import("./pages/Academia/ComingSoon"));
-const course = lazy(() => import("./pages/Academia/Student/[course].tsx"));
 const LeadershipPrograms = lazy(
   () => import("./pages/Corporate/Training/service/LeadershipPrograms.tsx")
 );
