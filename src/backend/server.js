@@ -14,6 +14,11 @@ app.get('/', (req, res) => {
   res.send('Backend is running!');
 });
 
+const FRONTEND_BASE_URL =
+  process.env.NODE_ENV === 'production'
+    ? 'https://raremindswebsite.netlify.app'
+    : 'http://localhost:5173';
+
 app.post('/api/send-pdf', async (req, res) => {
   const { name, email, pdfUrl, institution } = req.body;
   if (!name || !email || !pdfUrl) {
@@ -34,7 +39,7 @@ app.post('/api/send-pdf', async (req, res) => {
       html: `
         <p>Hi ${name},</p>
         <p>Thank you for your interest. Here is your requested case study${institution ? ` for <b>${institution}</b>` : ''}:</p>
-        <p><a href="http://localhost:5173${pdfUrl}" target="_blank" rel="noopener">Download PDF</a></p>
+        <p><a href="${FRONTEND_BASE_URL}${pdfUrl}" target="_blank" rel="noopener">Download PDF</a></p>
         <p>Best regards,<br/>Rareminds Team</p>
       `,
     });
