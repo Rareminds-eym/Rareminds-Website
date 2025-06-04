@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import React, { useRef } from "react";
 import AOS from 'aos';
@@ -117,6 +116,17 @@ const Academy = ({ userType = "teacher" }: { userType?: "teacher" | "student" })
      }
    }, [location]);
    
+   useEffect(() => {
+     const hash = location.hash;
+     if (hash === '#course-cards-section') {
+       const section = document.getElementById('course-cards-section');
+       if (section) {
+         setTimeout(() => {
+           section.scrollIntoView({ behavior: 'smooth' });
+         }, 100);
+       }
+     }
+   }, [location]);
 
   return (
    

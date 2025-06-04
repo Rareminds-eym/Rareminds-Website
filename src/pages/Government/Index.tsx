@@ -1,19 +1,18 @@
-import { HeroSection } from "@/components/Govt/sections/HeroSection";
-import { FeaturesSection } from "@/components/Govt/sections/FeaturesSection";
-import { PartnershipsSection } from "@/components/Govt/sections/PartnershipsSection";
-import { DeploymentSection } from "@/components/Govt/DeploymentSection";
-import { GovernmentOutcomesSection } from "@/components/Govt/sections/GovernmentOutcomesSection";
-import SectorExpertise from "@/components/Govt/sections/SectorExpertise";
-import GovtServiceSection from "@/components/Govt/sections/GovtServiceSection";
-import LogoMarquee from "@/components/Govt/sections/LogoMarquee";
-import Video from "@/components/Govt/sections/Video";
-import DashboardSection from "@/components/Govt/sections/DashboardSection";
+import { HeroSection } from "../../components/Govt/sections/HeroSection";
+import { FeaturesSection } from "../../components/Govt/sections/FeaturesSection";
+import { PartnershipsSection } from "../../components/Govt/sections/PartnershipsSection";
+import { DeploymentSection } from "../../components/Govt/DeploymentSection";
+import { GovernmentOutcomesSection } from "../../components/Govt/sections/GovernmentOutcomesSection";
+import SectorExpertise from "../../components/Govt/sections/SectorExpertise";
+import GovtServiceSection from "../../components/Govt/sections/GovtServiceSection";
+import LogoMarquee from "../../components/Govt/sections/LogoMarquee";
+import Video from "../../components/Govt/sections/Video";
+import DashboardSection from "../../components/Govt/sections/DashboardSection";
 // import CaseStudies from "@/components/Govt/sections/CaseStudies";
-import FloatingActionMenu from "@/components/Govt/StickyButton/FloatingAction";
-import ContactSection from "@/components/Govt/Contact/ContactSection";
-import CaseStudies from "@/components/Govt/CaseStudies/CaseStudies";
+import FloatingActionMenu from "../../components/Govt/StickyButton/FloatingAction";
+import ContactSection from "../../components/Govt/Contact/ContactSection";
 
-
+import CaseStudies from "../../components/Govt/CaseStudies/CaseStudies";
 const Govt = () => {
   return (
     <div className="relative w-full">

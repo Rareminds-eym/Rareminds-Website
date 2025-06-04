@@ -1,10 +1,10 @@
 import React from "react";
-import { Section } from "@/components/ui/section";
-import { icons } from "@/components/Govt/icons";
-import { Card } from "@/components/ui/card";
-import { cn } from "@/lib/utils";
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
-import { useIsMobile } from "@/hooks/use-mobile";
+import { Section } from "../../../components/ui/section";
+import { icons } from "../../../components/Govt/icons";
+import { Card } from "../../../components/ui/card";
+import { cn } from "../../../lib/utils";
+import { ScrollArea, ScrollBar } from "../../../components/ui/scroll-area";
+import { useIsMobile } from "../../../hooks/use-mobile";
 
 const OUTCOME_TABS = [
   {

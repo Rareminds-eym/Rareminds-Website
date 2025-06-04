@@ -172,7 +172,7 @@ const Problem = () => {
           >
            <div className="w-44 h-44 md:w-64 md:h-64 rounded-full bg-pink-100 p-2 shadow-xl transform transition-all duration-300 hover:scale-105 hover:bg-pink-200 flex items-center justify-center">
            <img
-             src="/academy/3.png"
+             src="/academy/2.png"
              alt="icon2"
              className="w-full h-full object-cover rounded-full"
            />
@@ -190,7 +190,7 @@ const Problem = () => {
           >
            <div className="w-44 h-44 md:w-64 md:h-64 rounded-full bg-green-100 p-2 shadow-xl transform transition-all duration-300 hover:scale-105 hover:bg-green-200 flex items-center justify-center">
           <img
-            src="/academy/2.png"
+            src="/academy/3.png"
             alt="icon3"
             className="w-full h-full object-cover rounded-full"
           />
