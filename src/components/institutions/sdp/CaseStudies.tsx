@@ -30,8 +30,9 @@ const caseStudies = [
 // Use correct API base URL for dev/prod
 const API_BASE_URL =
   process.env.NODE_ENV === "production"
-    ? "https://raremindswebsite.netlify.app"
+    ? "/.netlify/functions"
     : "http://localhost:3001";
+
 
 export default function CaseStudies() {
   const [modalStep, setModalStep] = useState<"none" | "form" | "pdfs">("none");
@@ -40,18 +41,23 @@ export default function CaseStudies() {
   const [success, setSuccess] = useState("");
   const [error, setError] = useState("");
 
-  // Send email via backend API
-  const sendEmail = async (name: string, email: string, pdfUrl: string, institution: string) => {
-    const response = await fetch(`${API_BASE_URL}/api/send-pdf`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, email, pdfUrl, institution }),
-    });
-    const data = await response.json();
-    if (!response.ok) {
-      throw new Error(data.error || 'Failed to send email');
-    }
-  };
+  // Use this function in your component:
+const sendEmail = async (
+  name: string,
+  email: string,
+  pdfUrl: string,
+  institution: string
+) => {
+  const response = await fetch(`${API_BASE_URL}/send-pdf`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ name, email, pdfUrl, institution }),
+  });
+  const data = await response.json();
+  if (!response.ok) {
+    throw new Error(data.error || 'Failed to send email');
+  }
+};
 
   // Store in Supabase and send email
   const handlePdfSelect = async (pdfUrl: string, institution: string) => {
