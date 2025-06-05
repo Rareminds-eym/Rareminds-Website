@@ -1,11 +1,11 @@
 import { useState, useEffect, useRef } from "react";
-import { Play, Pause } from "lucide-react";
+import { Play } from "lucide-react";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
-} from "../UI/dialog";
+} from "../../../components/Academy/UI/dialog";
 
 interface Testimonial {
   id: number;
@@ -18,79 +18,112 @@ interface Testimonial {
 }
 
 const testimonials: Testimonial[] = [
-  
-  {
+   {
     id: 1,
-    name: "",
+    name: "1",
     role: "",
     image: "",
-    videoSrc: "",
-    content: "",
-    bgColor: "from-slate-600 to-gray-700"
+    videoSrc: "https://www.youtube.com/embed/Z467zES119Q?si=yVIFWtNdoc836yiT",
+    content: "How Rareminds Enhanced Teacher Knowledge on the Latest Tech",
+    bgColor: "from-red-500 to-red-600"
   },
   {
     id: 2,
-    name: "",
+    name: "2",
     role: "",
     image: "",
-    videoSrc: "",
-    content: "",
-    bgColor: "from-slate-600 to-gray-700"
+    videoSrc: "https://www.youtube.com/embed/Bu0PdP0ymYo?si=pFK1QFW--YD6ySOn",
+    content: "Insights Gained from the Industrial Visit",
+    bgColor: "from-red-500 to-red-600"
   },
   {
     id: 3,
-    name: "",
+    name: "3",
     role: "",
     image: "",
-    videoSrc: "",
-    content: "",
-    bgColor: "from-slate-600 to-gray-700"
+    videoSrc: "https://www.youtube.com/embed/YLvtv6yo00I?si=ZIaBUdTSs8sagcjD",
+    content: "How Rareminds Boosted Creative Thinking and Tech Skills",
+    bgColor: "from-red-500 to-red-600"
   },
   {
     id: 4,
-    name: "",
+    name: "4",
     role: "",
     image: "",
-    videoSrc: "",
-    content: "",
-    bgColor: "from-slate-600 to-gray-700"
+    videoSrc: "https://www.youtube.com/embed/Z467zES119Q?si=yVIFWtNdoc836yiT",
+    content: "How Rareminds Enhanced Teacher Knowledge on the Latest Tech",
+    bgColor: "from-red-500 to-red-600"
   },
   {
     id: 5,
-    name: "",
+    name: "5",
     role: "",
     image: "",
-    videoSrc: "",
-    content: "",
-    bgColor: "from-slate-600 to-gray-700"
+    videoSrc: "https://www.youtube.com/embed/Bu0PdP0ymYo?si=pFK1QFW--YD6ySOn",
+    content: "Insights Gained from the Industrial Visit",
+    bgColor: "from-red-500 to-red-600"
   },
   {
     id: 6,
-    name: "",
+    name: "6",
     role: "",
     image: "",
-    videoSrc: "",
-    content: "",
-    bgColor: "from-slate-600 to-gray-700"
+    videoSrc: "https://www.youtube.com/embed/YLvtv6yo00I?si=ZIaBUdTSs8sagcjD",
+    content: "How Rareminds Boosted Creative Thinking and Tech Skills",
+    bgColor: "from-red-500 to-red-600"
   }
-
-
 ];
 
-const TestimonialViedoCarousel = () => {
+const TestimonialVideoCarousel = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [isPlaying, setIsPlaying] = useState(true);
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
+  const [isVideoPlaying, setIsVideoPlaying] = useState(false);
+  const [videoProgress, setVideoProgress] = useState(0);
+  const iframeRef = useRef<HTMLIFrameElement>(null);
+  const videoTimeoutRef = useRef<NodeJS.Timeout>();
+  const progressIntervalRef = useRef<NodeJS.Timeout>();
 
+  // Auto-play video for 15 seconds when testimonial changes
   useEffect(() => {
-    if (!isPlaying) return;
-    
-    const interval = setInterval(() => {
-      setCurrentIndex((prevIndex) => (prevIndex + 1) % testimonials.length);
-    }, 4000);
+    console.log(`Starting video preview for testimonial ${currentIndex + 1}`);
+    setIsVideoPlaying(true);
+    setVideoProgress(0);
 
-    return () => clearInterval(interval);
-  }, [isPlaying]);
+    // Start progress bar
+    const progressInterval = setInterval(() => {
+      setVideoProgress((prev) => {
+        if (prev >= 100) {
+          clearInterval(progressInterval);
+          return 100;
+        }
+        return prev + (100/150); // 100% in 15 seconds (100/150 = 0.67% every 100ms)
+      });
+    }, 100);
+
+    progressIntervalRef.current = progressInterval;
+
+    // Stop video after 15 seconds and move to next
+    const timeout = setTimeout(() => {
+      console.log(`Video preview finished for testimonial ${currentIndex + 1}`);
+      setIsVideoPlaying(false);
+      setVideoProgress(0);
+      clearInterval(progressInterval);
+      
+      // Move to next testimonial
+      setCurrentIndex((prevIndex) => (prevIndex + 1) % testimonials.length);
+    }, 15000);
+
+    videoTimeoutRef.current = timeout;
+
+    return () => {
+      if (videoTimeoutRef.current) {
+        clearTimeout(videoTimeoutRef.current);
+      }
+      if (progressIntervalRef.current) {
+        clearInterval(progressIntervalRef.current);
+      }
+    };
+  }, [currentIndex]);
 
   const getVisibleTestimonials = () => {
     const visible = [];
@@ -101,24 +134,38 @@ const TestimonialViedoCarousel = () => {
     return visible;
   };
 
-  const handlePlayPause = () => {
-    setIsPlaying(!isPlaying);
-  };
-
   const handleVideoPlay = () => {
     setIsVideoModalOpen(true);
   };
 
+  const handleTestimonialClick = (index: number) => {
+    setCurrentIndex(index);
+    setVideoProgress(0);
+  };
+
   const currentTestimonial = testimonials[currentIndex];
+  const autoplayVideoSrc = `${currentTestimonial.videoSrc}&autoplay=${isVideoPlaying ? 1 : 0}&mute=1&controls=0&modestbranding=1&rel=0`;
 
   return (
     <>
-      <div className="relative w-full h-[600px] overflow-hidden  rounded-3xl">
-        <div className="absolute inset-0 flex items-center justify-center">
+      <div className="relative w-full h-[600px] overflow-hidden rounded-3xl ">
+        {/* 3D Background Pattern */}
+        <div className="absolute inset-0 opacity-20">
+          <div className="absolute inset-0" style={{
+            backgroundImage: `
+              radial-gradient(circle at 25% 25%, rgba(255,255,255,0.1) 0%, transparent 50%),
+              radial-gradient(circle at 75% 75%, rgba(255,255,255,0.1) 0%, transparent 50%)
+            `
+          }} />
+        </div>
+        
+        <div className="absolute inset-0 flex items-center justify-center perspective-1000">
           {getVisibleTestimonials().map((testimonial, index) => {
             const { position } = testimonial;
             const isCenter = position === 0;
             const translateX = position * 120;
+            const translateZ = isCenter ? 0 : -100;
+            const rotateY = position * 15;
             const scale = isCenter ? 1 : 0.8;
             const opacity = Math.abs(position) <= 1 ? 1 : 0.3;
             const zIndex = 10 - Math.abs(position);
@@ -126,49 +173,119 @@ const TestimonialViedoCarousel = () => {
             return (
               <div
                 key={`${testimonial.id}-${currentIndex}`}
-                className="absolute transition-all duration-700 ease-in-out"
+                className="absolute transition-all duration-700 ease-in-out cursor-pointer transform-gpu"
                 style={{
-                  transform: `translateX(${translateX}px) scale(${scale})`,
+                  transform: `translateX(${translateX}px) translateZ(${translateZ}px) rotateY(${rotateY}deg) scale(${scale})`,
                   opacity,
                   zIndex,
+                  transformStyle: 'preserve-3d',
                 }}
+                onClick={() => !isCenter && handleTestimonialClick(testimonials.findIndex(t => t.id === testimonial.id))}
               >
-                <div className="relative">
-                  {/* Background Card */}
-                  <div className={`w-80 h-96 rounded-2xl bg-gradient-to-br ${testimonial.bgColor} p-6 flex flex-col justify-between shadow-2xl`}>
+                <div className="relative transform-gpu">
+                  {/* Background Card with Enhanced 3D Effects */}
+                  <div className={`w-80 h-96 rounded-2xl bg-gradient-to-br ${testimonial.bgColor} p-6 flex flex-col justify-between 
+                    ${isCenter 
+                      ? 'shadow-[0_35px_60px_-15px_rgba(0,0,0,0.6),0_0_40px_rgba(239,68,68,0.3),inset_0_1px_0_rgba(255,255,255,0.2)]' 
+                      : 'shadow-[0_25px_50px_-12px_rgba(0,0,0,0.4),0_0_25px_rgba(239,68,68,0.2)]'
+                    }
+                    backdrop-blur-sm border border-white/10
+                    hover:shadow-[0_45px_80px_-15px_rgba(0,0,0,0.7),0_0_50px_rgba(239,68,68,0.4)]
+                    transition-all duration-500
+                    before:absolute before:inset-0 before:rounded-2xl before:bg-gradient-to-br before:from-white/20 before:to-transparent before:opacity-0 hover:before:opacity-100
+                    before:transition-opacity before:duration-300`}>
+                    
+                    {/* Glossy overlay for 3D effect */}
+                    <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-white/20 via-transparent to-transparent opacity-50" />
+                    
                     {/* Name Label */}
-                    <div className="text-white">
-                      <div className="text-2xl font-bold tracking-wider mb-1">
-                        {testimonial.name}
-                      </div>
-                      <div className="text-sm font-light tracking-wide opacity-90">
+                    <div className="text-white relative z-10">
+                      <div className="text-sm font-light tracking-wide opacity-90 drop-shadow-lg">
                         {testimonial.role}
                       </div>
                     </div>
                     
                     {/* Content */}
-                    <div className="text-white text-center">
-                      <p className="text-lg leading-relaxed font-light">
+                    <div className="text-white text-center relative z-10">
+                      <p className="text-lg leading-relaxed font-light drop-shadow-lg">
                         "{testimonial.content}"
                       </p>
                     </div>
                   </div>
 
-                  {/* Center Image with Play Button */}
+                  {/* Center Video with Auto-play and Enhanced 3D Effects */}
                   {isCenter && (
-                    <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                      <div className="relative w-48 h-48 rounded-full overflow-hidden shadow-2xl border-4 border-white">
-                        <img
-                          src={testimonial.image}
-                          alt={testimonial.name}
-                          className="w-full h-full object-cover"
-                        />
-                        <div className="absolute inset-0 bg-black bg-opacity-20"></div>
+                    <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20">
+                      <div className="relative w-48 h-48 rounded-full overflow-hidden 
+                        shadow-[0_20px_40px_rgba(0,0,0,0.6),0_0_30px_rgba(255,255,255,0.2),inset_0_2px_0_rgba(255,255,255,0.3)]
+                        border-4 border-white/30 backdrop-blur-sm
+                        hover:shadow-[0_25px_50px_rgba(0,0,0,0.8),0_0_40px_rgba(255,255,255,0.3)]
+                        transition-all duration-500 hover:scale-105">
+                        
+                        {/* Inner glow effect */}
+                        <div className="absolute inset-0 rounded-full bg-gradient-to-br from-white/20 to-transparent" />
+                        
+                        {isVideoPlaying ? (
+                          <iframe
+                            ref={iframeRef}
+                            src={autoplayVideoSrc}
+                            className="w-full h-full object-cover scale-150 relative z-10"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            title={`${testimonial.name} video preview`}
+                          />
+                        ) : (
+                          <div className="w-full h-full bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center relative z-10">
+                            <div className="text-white text-center drop-shadow-lg">
+                              <Play className="w-8 h-8 mx-auto mb-2 drop-shadow-lg" fill="currentColor" />
+                              <div className="text-sm">Click to play</div>
+                            </div>
+                          </div>
+                        )}
+                        
+                        {/* Enhanced Progress Ring with 3D effect */}
+                        {isVideoPlaying && (
+                          <div className="absolute inset-0 z-20">
+                            <svg className="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
+                              <circle
+                                cx="50"
+                                cy="50"
+                                r="48"
+                                fill="none"
+                                stroke="rgba(255,255,255,0.2)"
+                                strokeWidth="3"
+                              />
+                              <circle
+                                cx="50"
+                                cy="50"
+                                r="48"
+                                fill="none"
+                                stroke="url(#progressGradient)"
+                                strokeWidth="3"
+                                strokeDasharray={`${2 * Math.PI * 48}`}
+                                strokeDashoffset={`${2 * Math.PI * 48 * (1 - videoProgress / 100)}`}
+                                className="transition-all duration-100 ease-linear drop-shadow-lg"
+                                style={{ filter: 'drop-shadow(0 0 6px rgba(255,255,255,0.8))' }}
+                              />
+                              <defs>
+                                <linearGradient id="progressGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                  <stop offset="0%" stopColor="#ffffff" />
+                                  <stop offset="100%" stopColor="#f3f4f6" />
+                                </linearGradient>
+                              </defs>
+                            </svg>
+                          </div>
+                        )}
+                        
+                        {/* Enhanced Click overlay for full video */}
                         <button
                           onClick={handleVideoPlay}
-                          className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-16 h-16 bg-white bg-opacity-90 rounded-full flex items-center justify-center shadow-lg hover:bg-opacity-100 transition-all duration-300 hover:scale-110"
+                          className="absolute inset-0 bg-black bg-opacity-0 hover:bg-opacity-20 transition-all duration-300 flex items-center justify-center z-30 rounded-full"
                         >
-                          <Play className="w-6 h-6 text-gray-800 ml-1" fill="currentColor" />
+                          <div className="w-12 h-12 bg-white/10 hover:bg-white/90 rounded-full flex items-center justify-center transition-all duration-300 backdrop-blur-sm
+                            shadow-[0_4px_12px_rgba(0,0,0,0.3)] hover:shadow-[0_6px_20px_rgba(0,0,0,0.4)]
+                            border border-white/20 hover:border-white/40">
+                            <Play className="w-4 h-4 text-white hover:text-gray-800 ml-0.5 drop-shadow-sm" fill="currentColor" />
+                          </div>
                         </button>
                       </div>
                     </div>
@@ -179,40 +296,19 @@ const TestimonialViedoCarousel = () => {
           })}
         </div>
 
-        {/* Progress Indicators */}
-        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex space-x-2">
+        {/* Enhanced Progress Indicators with 3D Effects */}
+        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex space-x-3 z-30">
           {testimonials.map((_, index) => (
             <button
               key={index}
-              onClick={() => setCurrentIndex(index)}
-              className={`w-3 h-3 rounded-full transition-all duration-300 ${
+              onClick={() => handleTestimonialClick(index)}
+              className={`w-4 h-4 rounded-full transition-all duration-300 transform hover:scale-110 ${
                 index === currentIndex 
-                  ? "bg-white shadow-lg" 
-                  : "bg-white bg-opacity-40 hover:bg-opacity-60"
-              }`}
+                  ? "bg-white shadow-[0_4px_12px_rgba(255,255,255,0.4),0_0_20px_rgba(255,255,255,0.3)] scale-110" 
+                  : "bg-white/40 hover:bg-white/60 shadow-[0_2px_8px_rgba(255,255,255,0.2)] hover:shadow-[0_4px_12px_rgba(255,255,255,0.3)]"
+              } backdrop-blur-sm border border-white/20`}
             />
           ))}
-        </div>
-
-        {/* Play/Pause Status */}
-        <div className="absolute top-6 right-6">
-          {/* <div className={`px-4 py-2 rounded-full text-sm font-medium ${
-            isPlaying 
-              ? "bg-green-500 text-white" 
-              : "bg-red-500 text-white"
-          }`}>
-            {isPlaying ? "Playing" : "Paused"}
-          </div> */}
-        </div>
-
-        {/* Carousel Play/Pause Button */}
-        <div className="absolute top-6 left-6">
-          <button
-            onClick={handlePlayPause}
-            className="px-4 py-2 bg-white bg-opacity-20 text-white rounded-full hover:bg-opacity-30 transition-all duration-300"
-          >
-            {isPlaying ? "Pause Carousel" : "Play Carousel"}
-          </button>
         </div>
       </div>
 
@@ -220,7 +316,7 @@ const TestimonialViedoCarousel = () => {
       <Dialog open={isVideoModalOpen} onOpenChange={setIsVideoModalOpen}>
         <DialogContent className="max-w-4xl w-full">
           <DialogHeader>
-            <DialogTitle>{currentTestimonial.name} - {currentTestimonial.role}</DialogTitle>
+            <DialogTitle>{currentTestimonial.content}</DialogTitle>
           </DialogHeader>
           <div className="aspect-video w-full">
             <iframe
@@ -237,4 +333,4 @@ const TestimonialViedoCarousel = () => {
   );
 };
 
-export default TestimonialViedoCarousel;
+export default TestimonialVideoCarousel;

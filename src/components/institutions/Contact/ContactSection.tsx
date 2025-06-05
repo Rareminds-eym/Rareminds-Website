@@ -11,9 +11,11 @@ import {
   ArrowRight,
   School,
   Contact,
-   PhoneCall,} from "lucide-react";
+  PhoneCall,
+} from "lucide-react";
 import { Icon } from "@iconify/react";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/lib/supabaseClient"; 
 
 const ContactSection = () => {
   const { toast } = useToast();
@@ -32,54 +34,75 @@ const ContactSection = () => {
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    // Fix for course field (input name should be "course" not "role")
+    setFormData((prev) => ({
+      ...prev,
+      [name === "role" ? "course" : name]: value,
+    }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Simulate form submission
-    setTimeout(() => {
+    // Insert form data into Supabase table "demo_requests"
+    const { error } = await supabase.from("demo_requests").insert([
+      {
+        name: formData.name,
+        university: formData.university,
+        email: formData.email,
+        course: formData.course,
+        message: formData.message,
+      },
+    ]);
+
+    if (error) {
       toast({
-        title: "Message Sent!",
-        description:
-          "Thank you for reaching out. Our team will contact you shortly.",
+        title: "Submission Failed",
+        description: "There was an error submitting your request. Please try again.",
+        variant: "destructive",
       });
-
-      setSubmitted(true);
       setIsSubmitting(false);
+      return;
+    }
 
-      setTimeout(() => {
-        setFormData({
-          name: "",
-          university: "",
-          email: "",
-          course: "",
-          message: "",
-        });
-        setSubmitted(false);
-        if (formRef.current) formRef.current.reset();
-      }, 3000);
-    }, 1500);
+    toast({
+      title: "Message Sent!",
+      description:
+        "Thank you for reaching out. Our team will contact you shortly.",
+    });
+
+    setSubmitted(true);
+    setIsSubmitting(false);
+
+    setTimeout(() => {
+      setFormData({
+        name: "",
+        university: "",
+        email: "",
+        course: "",
+        message: "",
+      });
+      setSubmitted(false);
+      if (formRef.current) formRef.current.reset();
+    }, 3000);
   };
 
   return (
-    <section className="section py-12 relative overflow-hidden bg-gradient-to-br from-blue-50 via-pink-30 to-purple-30 text-gray-800 "
-    >
+    <section className="section py-12 relative overflow-hidden bg-gradient-to-br from-blue-50 via-pink-30 to-purple-30 text-gray-800 ">
       <div className="container mx-auto px-5">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-16 lg:px-14 relative z-10" 
+          className="text-center mb-16 lg:px-14 relative z-10"
         >
           <h1 className="text-xl font-bold mb-4 bg-black bg-clip-text text-transparent">
             Partner With Us
           </h1>
           <p className="text-sm text-gray-600 mx-auto">
-             Results don't Wait , Neither Should You.
+            Results don't Wait , Neither Should You.
           </p>
         </motion.div>
 
@@ -94,10 +117,8 @@ const ContactSection = () => {
             <div className="bg-gray-50 backdrop-blur-sm border border-white/30 rounded-3xl overflow-hidden shadow-xl">
               <div className="p-16">
                 <h3 className="text-lg font-semibold mb-10 flex items-center gap-3 text-gray-800">
-                  
-                    <School size={20} />
-                  
-                      Book A Free University Demo Now. 
+                  <School size={20} />
+                  Book A Free University Demo Now.
                 </h3>
 
                 <form
@@ -135,7 +156,7 @@ const ContactSection = () => {
                         name="university"
                         value={formData.university}
                         onChange={handleChange}
-                        placeholder="Univeristy Name"
+                        placeholder="University Name"
                         className="w-full bg-white/50 border-gray-200 text-gray-800 placeholder:text-gray-400"
                         required
                       />
@@ -169,8 +190,8 @@ const ContactSection = () => {
                         Course Applied for
                       </label>
                       <Input
-                        id="role"
-                        name="role"
+                        id="course"
+                        name="course"
                         value={formData.course}
                         onChange={handleChange}
                         placeholder="Course Name"
@@ -192,7 +213,7 @@ const ContactSection = () => {
                       name="message"
                       value={formData.message}
                       onChange={handleChange}
-                      placeholder="Tell us about your univeristy or course requirements"
+                      placeholder="Tell us about your university or course requirements"
                       className="w-full min-h-[120px] bg-white/50 border-gray-200 text-gray-800 placeholder:text-gray-400"
                       required
                     />
@@ -244,38 +265,36 @@ const ContactSection = () => {
                             )}
                           </button>
 
-                                <motion.a
-                                  whileHover={{ scale: 1.05 }}
-                                  whileTap={{ scale: 0.95 }}
-                                  href="tel:+919902326951"
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  className="flex items-center gap-2 px-4 py-2 bg-white text-blue-900 border border-blue-900 rounded-full font-medium shadow-md hover:bg-blue-50 transition-colors text-xs"
-                                >
-                                  <PhoneCall size={20} />
-                                  Talk to a Strategist
-                                </motion.a>
-                              </motion.div>
-                            ) : (
-                              <motion.div
-                                key="success"
-                                initial={{ opacity: 0, y: 10 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                className="bg-green-100 border border-green-300 rounded-xl p-4 text-center"
-                              >
-                                <CheckCircle2 size={32} 
-                                className="mx-auto mb-2 text-green-600" />
-                                <p className="font-medium text-green-800">
-                                  Message sent successfully!
-                                </p>
-                                <p className="text-sm text-green-700 mt-1">
-                                  Our team will contact you shortly.
-                                </p>
-                              </motion.div>
-                            )}
-                          </AnimatePresence>
-                        </div>
-
+                          <motion.a
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                            href="tel:+919902326951"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center gap-2 px-4 py-2 bg-white text-blue-900 border border-blue-900 rounded-full font-medium shadow-md hover:bg-blue-50 transition-colors text-xs"
+                          >
+                            <PhoneCall size={20} />
+                            Talk to a Strategist
+                          </motion.a>
+                        </motion.div>
+                      ) : (
+                        <motion.div
+                          key="success"
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          className="bg-green-100 border border-green-300 rounded-xl p-4 text-center"
+                        >
+                          <CheckCircle2 size={32} className="mx-auto mb-2 text-green-600" />
+                          <p className="font-medium text-green-800">
+                            Message sent successfully!
+                          </p>
+                          <p className="text-sm text-green-700 mt-1">
+                            Our team will contact you shortly.
+                          </p>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
                 </form>
               </div>
             </div>
@@ -291,10 +310,8 @@ const ContactSection = () => {
             <div className="h-full flex flex-col justify-between gap-6">
               <div className="bg-gray-50 backdrop-blur-sm border border-white/30 rounded-3xl p-8 shadow-xl">
                 <h3 className="text-lg font-semibold mb-9 flex items-center gap-3 text-gray-800">
-                  
-                    <Contact size={20} />
-                  
-                      Get In Touch. 
+                  <Contact size={20} />
+                  Get In Touch.
                 </h3>
                 <div className="space-y-4">
                   <div className="flex items-start gap-4">
@@ -311,7 +328,7 @@ const ContactSection = () => {
                   </div>
                   <div className="flex items-start gap-4">
                     <div className="bg-blue-100 rounded-full p-2">
-                      <Mail size={20} className="text-blue-900"/>
+                      <Mail size={20} className="text-blue-900" />
                     </div>
                     <div>
                       <h4 className="mb-4 text-gray-800 text-sm font-semibold">
@@ -323,7 +340,7 @@ const ContactSection = () => {
                   </div>
                   <div className="flex items-start gap-4">
                     <div className="bg-blue-100 rounded-full p-2">
-                      <MapPin size={20} className="text-blue-900"/>
+                      <MapPin size={20} className="text-blue-900" />
                     </div>
                     <div>
                       <h4 className="font-semibold mb-4 text-gray-800 text-sm">

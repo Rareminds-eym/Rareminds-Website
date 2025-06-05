@@ -80,6 +80,143 @@ const banners = [
   }
 ];
 
+// Mobile version
+function HeroMobile() {
+  const [currentBanner, setCurrentBanner] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentBanner((prev) => (prev + 1) % banners.length);
+    }, 12000);
+    return () => clearInterval(timer);
+  }, []);
+
+  const handleScrollDown = () => {
+    window.scrollTo({
+      top: window.innerHeight,
+      behavior: "smooth",
+    });
+  };
+
+  return (
+    <section className="relative min-h-screen flex flex-col bg-gradient-to-br from-[#A7D8DE] to-[#FCD5CE] text-black overflow-hidden lg:hidden">
+      {/* Top text section */}
+      <div className="w-full px-4 pt-12 pb-6 z-10">
+        <motion.h1
+          className="text-2xl font-bold mb-6 leading-tight"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+        >
+          {banners[currentBanner].title.match(/[^:.]+[:.]?/g)?.map((part, idx) => (
+            <span key={idx} className="block">
+              {part.trim()}
+            </span>
+          ))}
+        </motion.h1>
+        <motion.p
+          className="text-base mb-6"
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 0.2 }}
+        >
+          {banners[currentBanner].subtitle === "Build your future, with expert-led modules in trending domains." ? (
+            <>
+              <span className="block">Build your future, with expert-led modules</span>
+              <span className="block">in trending domains.</span>
+            </>
+          ) : banners[currentBanner].subtitle.match(/[^:.&]+[:.&]?/g)?.map((part, i) => (
+            <span key={i} className="block">
+              {part.trim()}
+            </span>
+          ))}
+        </motion.p>
+        <motion.div
+          className="flex flex-col gap-4 pt-2"
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 0.3 }}
+        >
+          {banners[currentBanner].cta.map((btn, i) =>
+            btn.href ? (
+              <motion.a
+                key={i}
+                href={btn.href}
+                download
+                target={btn.target || "_blank"}
+                rel={btn.rel || "noopener noreferrer"}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className={btn.style + " w-full flex justify-center items-center"}
+              >
+                {btn.icon}
+                {btn.text}
+              </motion.a>
+            ) : (
+              <motion.button
+                key={i}
+                onClick={() => {}}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className={btn.style + " w-full flex justify-center items-center"}
+              >
+                {btn.icon}
+                {btn.text}
+              </motion.button>
+            )
+          )}
+        </motion.div>
+      </div>
+
+      {/* Placeholder for image/video */}
+      <div className="relative w-full flex-1 flex items-center justify-center">
+        <div className="w-full h-64 bg-gray-200 flex items-center justify-center">
+          {/* Replace this with <video> or <img> as needed */}
+          <span className="text-gray-500 text-lg">[Banner Image/Video Placeholder]</span>
+        </div>
+      </div>
+
+      {/* Pagination */}
+      <div className="absolute bottom-20 left-0 right-0 z-20 flex justify-center gap-2">
+        {banners.map((_, index) => (
+          <button
+            key={index}
+            onClick={() => setCurrentBanner(index)}
+            className={`w-2 h-2 rounded-full transition-all duration-300 ${
+              currentBanner === index ? 'bg-[#222B33] w-6' : 'bg-white/50 hover:bg-white/70'
+            }`}
+            aria-label={`Go to slide ${index + 1}`}
+          />
+        ))}
+      </div>
+
+      {/* Scroller */}
+      <div className="absolute bottom-6 left-0 right-0 flex justify-center z-30">
+        <button
+          onClick={handleScrollDown}
+          aria-label="Scroll down"
+          className="flex flex-col items-center"
+        >
+          <img
+            src="/institutions/vectors/scroll.png"
+            width="60"
+            height="60"
+            alt="Scroll down"
+            className="scroll-rotate"
+          />
+          <img
+            src="/institutions/vectors/arrowDown.svg"
+            width="36"
+            height="36"
+            alt="Scroll down"
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+          />
+        </button>
+      </div>
+    </section>
+  );
+}
+
 export default function Hero() {
   const [currentBanner, setCurrentBanner] = useState(0);
   const [isComingSoonOpen, setIsComingSoonOpen] = useState(false);
@@ -100,7 +237,11 @@ export default function Hero() {
 
   return (
     <>
-      <section className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-[#A7D8DE] to-[#FCD5CE] text-white overflow-hidden">
+      {/* Mobile */}
+      <HeroMobile />
+
+      {/* Desktop */}
+      <section className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-[#A7D8DE] to-[#FCD5CE] text-white overflow-hidden hidden lg:flex">
         {banners.map((banner, index) => (
           <motion.div
             key={index}
@@ -177,7 +318,6 @@ export default function Hero() {
 
                 <motion.div
                   className="flex flex-col sm:flex-row gap-8 pt-10 justify-center"
-
                   initial={{ y: 20, opacity: 0 }}
                   animate={{ y: currentBanner === index ? 0 : 20, opacity: currentBanner === index ? 1 : 0 }}
                   transition={{ duration: 0.5, delay: 1 }}
@@ -201,7 +341,6 @@ export default function Hero() {
                       <motion.button
                         key={i}
                         onClick={() => {
-                          console.log("CTA button clicked – opening modal");
                           setIsComingSoonOpen(true);
                         }}
                         whileHover={{ scale: 1.05 }}
@@ -242,7 +381,7 @@ export default function Hero() {
         <div className="hidden lg:block container ">
           <div
             onClick={handleScrollDown}
-            className="w-max absolute bottom-[70px] left-12 cursor-pointer transition-opacity z-10"
+            className="w-max absolute bottom-[60px] left-36 cursor-pointer transition-opacity z-10"
             aria-label="Scroll down"
           >
             <img
@@ -262,7 +401,6 @@ export default function Hero() {
           </div>
         </div>
       </section>
-
       {/* <ComingSoonModal isOpen={isComingSoonOpen} onClose={() => setIsComingSoonOpen(false)} /> */}
     </>
   );

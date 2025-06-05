@@ -7,14 +7,21 @@ import {
   School,
   Building2,
   ArrowRight,
-  Sparkles,
   Download,
   FileSpreadsheet
 } from 'lucide-react';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Modal from 'react-modal';
+import { supabase } from '@/lib/supabaseClient'; 
+
+// Make sure this matches your app's root element
+if (typeof document !== "undefined") {
+  Modal.setAppElement('#root');
+}
 
 export const services  = [
+  // ...existing services array...
   {
     id: 'full-semester',
     icon: GraduationCap,
@@ -37,6 +44,7 @@ Rareminds ensures that students not only gain technical skills but also master c
       'Placement assistance',
     ]
   },
+  // ...rest of the services...
   {
     id: 'pre-placement',
     icon: Briefcase,
@@ -143,7 +151,48 @@ Rareminds ensures that students not only gain technical skills but also master c
     ]
   },
 ];
+// New: Email automation for Course List
+const sendCourseListEmail = async (name: string, email: string) => {
+  const response = await fetch('http://localhost:3001/api/send-pdf', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      name,
+      email,
+      pdfUrl: '/institutions/pdfs/Course_List.pdf',
+      institution: 'Course List Download'
+    }),
+  });
+  const data = await response.json();
+  if (!response.ok) {
+    throw new Error(data.error || 'Failed to send email');
+  }
+};
 
+// Email automation logic (from CaseStudies.tsx)
+const sendEmail = async (
+  name: string,
+  email: string,
+  location: string,
+  university: string
+) => {
+  const response = await fetch('http://localhost:3001/api/send-pdf', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      name,
+      email,
+      location,
+      university,
+      pdfUrl: '/institutions/pdfs/Blueprint.pdf',
+      institution: university
+    }),
+  });
+  const data = await response.json();
+  if (!response.ok) {
+    throw new Error(data.error || 'Failed to send email');
+  }
+};
 
 export default function Services() {
   const containerRef = useRef(null);
@@ -152,6 +201,94 @@ export default function Services() {
     target: containerRef,
     offset: ["start start", "end end"]
   });
+
+  // Modal state
+  const [modalOpen, setModalOpen] = useState(false);
+  const [form, setForm] = useState({
+    name: '',
+    phone: '',
+    email: '',
+    location: '',
+    university: ''
+  });
+  const [sending, setSending] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState('');
+
+  // Modal state for Course List
+  const [courseModalOpen, setCourseModalOpen] = useState(false);
+  const [courseForm, setCourseForm] = useState({ name: '', email: '' });
+  const [courseSending, setCourseSending] = useState(false);
+  const [courseSuccess, setCourseSuccess] = useState(false);
+  const [courseError, setCourseError] = useState('');
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+  const handleCourseChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setCourseForm({ ...courseForm, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSending(true);
+    setError('');
+    try {
+      // Store in Supabase
+      const { error: supabaseError } = await supabase.from('blueprint_requests').insert([
+        {
+          name: form.name,
+          phone: form.phone,
+          email: form.email,
+          location: form.location,
+          university: form.university
+        }
+      ]);
+      if (supabaseError) throw supabaseError;
+
+      // Send email with PDF
+      await sendEmail(form.name, form.email, form.location, form.university);
+
+      setSuccess(true);
+      setTimeout(() => {
+        setModalOpen(false);
+        setSuccess(false);
+        setForm({
+          name: '',
+          phone: '',
+          email: '',
+          location: '',
+          university: ''
+        });
+      }, 2000);
+    } catch (err: any) {
+      setError(err.message || 'Failed to send blueprint. Try again.');
+    }
+    setSending(false);
+  };
+  // New: handle Course List download automation
+  const handleCourseSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setCourseSending(true);
+    setCourseError('');
+    try {
+      // Store in Supabase (optional, if you want to track downloads)
+      await supabase.from('course_list_requests').insert([
+        { name: courseForm.name, email: courseForm.email }
+      ]);
+      // Send email with Course List PDF
+      await sendCourseListEmail(courseForm.name, courseForm.email);
+      setCourseSuccess(true);
+      setTimeout(() => {
+        setCourseModalOpen(false);
+        setCourseSuccess(false);
+        setCourseForm({ name: '', email: '' });
+      }, 2000);
+    } catch (err: any) {
+      setCourseError(err.message || 'Failed to send course list. Try again.');
+    }
+    setCourseSending(false);
+  };
 
   return (
     <section ref={containerRef} className="py-16 relative overflow-hidden">
@@ -197,7 +334,6 @@ export default function Services() {
                   className="relative bg-white/40 backdrop-blur-sm rounded-r-lg shadow-2xl overflow-hidden ml-6 h-full"
                 >
                   <div className="relative h-40 overflow-hidden">
-                    {/* Move the image below the icon */}
                     <img
                       src={service.image}
                       alt={service.name}
@@ -207,7 +343,6 @@ export default function Services() {
                   </div>
 
                   <div className="p-6">
-                    {/* Title section with icon on the right */}
                     <div className="flex items-center justify-between mb-3">
                       <h3 className="text-medium font-bold bg-gradient-to-r from-gray-800 to-gray-900 bg-clip-text text-transparent">
                         {service.name}
@@ -239,69 +374,204 @@ export default function Services() {
           })}
         </div>
 
-        <motion.div
+<motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           className="text-center mt-9 relative"
         >
           <div className="absolute inset-0 blur-3xl bg-gradient-to-r from-blue-400/30 via-purple-400/30 to-pink-400/30 animate-pulse" />
-          
-          <motion.div
-            animate={{
-              textShadow: [
-                "0 0 10px rgba(79, 70, 229, 0.5)",
-                "0 0 20px rgba(79, 70, 229, 0.3)",
-                "0 0 10px rgba(79, 70, 229, 0.5)"
-              ]
-            }}
-            transition={{
-              duration: 2,
-              repeat: Infinity,
-              repeatType: "reverse"
-            }}
-            className="relative"
-          >
-          
-          </motion.div>
-
+          <motion.div className="relative" />
           <motion.div
             className="relative inline-block"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
-            
-            
             <div className="flex flex-col sm:flex-row gap-8 pt-8 justify-center">
-              <motion.a
-                href="/institutions/pdfs/Course_List.pdf"
-                download
-                target="_blank"
-                rel="noopener noreferrer"
+              {/* Course List Download with automation */}
+              <motion.button
+                type="button"
+                onClick={() => setCourseModalOpen(true)}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="button-primary py-2"
+                className="button-primary py-2 flex items-center"
               >
                 <Download className="inline-block mr-2 h-5 w-5" />
                 Download Course List
-              </motion.a>
-
-              <motion.a
-                href="/institutions/pdfs/Blueprint.pdf"
-                download
-                target="_blank"
-                rel="noopener noreferrer"
+              </motion.button>
+              {/* Blueprint Request */}
+              <motion.button
+                type="button"
+                onClick={() => setModalOpen(true)}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="button-secondary py-2"
+                className="button-secondary py-2 flex items-center"
               >
                 <FileSpreadsheet className="inline-block mr-2 h-5 w-5" />
                 Request Blueprint
-              </motion.a>
+              </motion.button>
             </div>
           </motion.div>
         </motion.div>
       </div>
+
+      {/* Modal for Request Blueprint */}
+      <Modal
+        isOpen={modalOpen}
+        onRequestClose={() => {
+          setModalOpen(false);
+          setSuccess(false);
+          setForm({
+            name: '',
+            phone: '',
+            email: '',
+            location: '',
+            university: ''
+          });
+          setError('');
+        }}
+        className="bg-white rounded-lg p-8 max-w-md mx-auto mt-24 shadow-lg relative z-[9999]"
+        overlayClassName="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-[9998]"
+      >
+        <button
+          className="absolute top-2 right-2 text-gray-500"
+          onClick={() => {
+            setModalOpen(false);
+            setSuccess(false);
+            setForm({
+              name: '',
+              phone: '',
+              email: '',
+              location: '',
+              university: ''
+            });
+            setError('');
+          }}
+        >
+          ×
+        </button>
+        <h2 className="text-lg font-bold mb-4">Request Blueprint</h2>
+        {success ? (
+          <div className="text-green-600">
+            Blueprint sent to your email!
+          </div>
+        ) : (
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <input
+              name="name"
+              value={form.name}
+              onChange={handleChange}
+              required
+              placeholder="Your Name"
+              className="w-full border px-3 py-2 rounded"
+            />
+            <input
+              name="phone"
+              value={form.phone}
+              onChange={handleChange}
+              required
+              placeholder="Phone Number"
+              className="w-full border px-3 py-2 rounded"
+            />
+            <input
+              name="email"
+              value={form.email}
+              onChange={handleChange}
+              required
+              type="email"
+              placeholder="Email ID"
+              className="w-full border px-3 py-2 rounded"
+            />
+            <input
+              name="university"
+              value={form.university}
+              onChange={handleChange}
+              required
+              placeholder="University Name"
+              className="w-full border px-3 py-2 rounded"
+            />
+            <input
+              name="location"
+              value={form.location}
+              onChange={handleChange}
+              required
+              placeholder="Location"
+              className="w-full border px-3 py-2 rounded"
+            />
+            {error && (
+              <p className="text-red-500 text-sm text-center">{error}</p>
+            )}
+            <button
+              type="submit"
+              disabled={sending}
+              className="w-full bg-blue-600 text-white py-2 rounded font-semibold"
+            >
+              {sending ? 'Sending...' : 'Request & Send PDF'}
+            </button>
+          </form>
+        )}
+      </Modal>
+
+      {/* Modal for Course List Download */}
+      <Modal
+        isOpen={courseModalOpen}
+        onRequestClose={() => {
+          setCourseModalOpen(false);
+          setCourseSuccess(false);
+          setCourseForm({ name: '', email: '' });
+          setCourseError('');
+        }}
+        className="bg-white rounded-lg p-8 max-w-md mx-auto mt-24 shadow-lg relative z-[9999]"
+        overlayClassName="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-[9998]"
+      >
+        <button
+          className="absolute top-2 right-2 text-gray-500"
+          onClick={() => {
+            setCourseModalOpen(false);
+            setCourseSuccess(false);
+            setCourseForm({ name: '', email: '' });
+            setCourseError('');
+          }}
+        >
+          ×
+        </button>
+        <h2 className="text-lg font-bold mb-4">Download Course List</h2>
+        {courseSuccess ? (
+          <div className="text-green-600">
+            Course List sent to your email!
+          </div>
+        ) : (
+          <form onSubmit={handleCourseSubmit} className="space-y-4">
+            <input
+              name="name"
+              value={courseForm.name}
+              onChange={handleCourseChange}
+              required
+              placeholder="Your Name"
+              className="w-full border px-3 py-2 rounded"
+            />
+            <input
+              name="email"
+              value={courseForm.email}
+              onChange={handleCourseChange}
+              required
+              type="email"
+              placeholder="Email ID"
+              className="w-full border px-3 py-2 rounded"
+            />
+            {courseError && (
+              <p className="text-red-500 text-sm text-center">{courseError}</p>
+            )}
+            <button
+              type="submit"
+              disabled={courseSending}
+              className="w-full bg-blue-600 text-white py-2 rounded font-semibold"
+            >
+              {courseSending ? 'Sending...' : 'Send & Download'}
+            </button>
+          </form>
+        )}
+      </Modal>
     </section>
   );
 }
