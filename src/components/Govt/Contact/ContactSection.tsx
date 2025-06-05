@@ -118,7 +118,7 @@ const ContactSection = () => {
   return (
     <section
       id="contact"
-      className="section py-24 relative overflow-hidden bg-gradient-to-br from-gray-50 to-gray-200 text-gray-800 bg-white"
+      className="section py-4 md:py-8 relative overflow-hidden  text-gray-800 bg-white"
     >
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -136,8 +136,8 @@ const ContactSection = () => {
             viewport={{ once: true }}
             className="flex"
           >
-            <div className="bg-gray-50 backdrop-blur-sm border border-white/30 rounded-3xl overflow-hidden shadow-xl w-full">
-              <div className="p-8">
+            <div className="md:bg-gray-50 backdrop-blur-sm border border-white/30 rounded-3xl overflow-hidden shadow-xl w-full">
+              <div className="p-4 md:p-8">
                 <h3 className="text-2xl font-bold mb-6 flex items-center gap-3 text-gray-800">
                   <span className="bg-black w-10 h-10 rounded-full flex items-center justify-center text-white">
                     <Mail size={20} />
@@ -150,7 +150,7 @@ const ContactSection = () => {
                   onSubmit={handleSubmit}
                   className="space-y-6"
                 >
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 text-sm md:text-base gap-4 md:gap-6">
                     <div>
                       <label
                         htmlFor="fullName"
@@ -188,7 +188,7 @@ const ContactSection = () => {
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="grid grid-cols-1 text-sm md:text-base md:grid-cols-2 gap-3 md:gap-6">
                     <div>
                       <label
                         htmlFor="phone"
@@ -225,7 +225,7 @@ const ContactSection = () => {
                     </div>
                   </div>
 
-                  <div>
+                  <div className="text-sm md:text-base">
                     <label
                       htmlFor="message"
                       className="block mb-2 font-medium text-gray-700"
@@ -327,9 +327,9 @@ const ContactSection = () => {
             viewport={{ once: true }}
             className="flex"
           >
-            <div className="bg-gray-50 backdrop-blur-sm border border-white/30 rounded-3xl shadow-xl w-full">
-              <div className="p-8 h-full flex flex-col">
-                <h3 className="text-2xl font-bold mb-6 text-gray-800">
+            <div className="md:bg-gray-50 backdrop-blur-sm border border-white/30 rounded-3xl shadow-xl w-full">
+              <div className="p-4 md:p-8 h-full flex flex-col">
+                <h3 className="text-xl md:text-2xl font-bold mb-6 text-gray-800">
                   Get in Touch
                 </h3>
                 <div className="space-y-6 flex-1">
@@ -341,8 +341,7 @@ const ContactSection = () => {
                       <h4 className="font-semibold mb-1 text-gray-800">
                         Phone
                       </h4>
-                      <p className="text-gray-600">+91 95624 81100</p>
-                      <p className="text-gray-600">+91 82960 61534</p>
+                      <p className="ttext-sm md:text-base text-gray-600">+91 82960 61534</p>
                     </div>
                   </div>
                   <div className="flex items-start gap-4">
@@ -353,8 +352,8 @@ const ContactSection = () => {
                       <h4 className="font-semibold mb-1 text-gray-800">
                         Email
                       </h4>
-                      <p className="text-gray-600">info@rareminds.com</p>
-                      <p className="text-gray-600">careers@rareminds.com</p>
+                      <p className="text-sm md:text-base text-gray-600">info@rareminds.com</p>
+                      <p className="text-sm md:text-base text-gray-600">careers@rareminds.com</p>
                     </div>
                   </div>
                   <div className="flex items-start gap-4">
@@ -365,7 +364,7 @@ const ContactSection = () => {
                       <h4 className="font-semibold mb-1 text-gray-800">
                         Address
                       </h4>
-                      <p className="text-gray-600 max-w-[300px]">
+                      <p className="text-sm md:text-base text-gray-600 max-w-[300px]">
                         231, 2nd stage, 13th Cross Road, Hoysala Nagar,
                         Indiranagar
                       </p>
@@ -377,56 +376,56 @@ const ContactSection = () => {
                 </div>
 
                 <div className="mt-8">
-                  <h4 className="text-xl font-bold mb-6 text-gray-800 flex items-center gap-3">
+                  <h4 className="text-base md:text-xl font-bold mb-6 text-gray-800 flex items-center gap-3">
                     <span className="bg-black w-8 h-8 rounded-full flex items-center justify-center text-white">
                       <Icon icon="mdi:web" className="text-lg" />
                     </span>
                     Connect With Us
                   </h4>
-                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                  <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">
                     <a
-                      href="https://facebook.com/rareminds"
+                      href="https://www.facebook.com/raremindsgroup"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex flex-col items-center justify-center group bg-gray-100 p-4 rounded-2xl"
+                      className="flex flex-col items-center justify-center group bg-gray-100 p-3 sm:p-4 rounded-2xl"
                     >
-                      <div className="w-12 h-12 flex items-center justify-center">
-                        <FaFacebookF className="text-[#1877F2] w-7 h-7 group-hover:rotate-12 group-hover:scale-125 transition-all duration-300"/>
+                      <div className="w-8 h-8 sm:w-12 sm:h-12 flex items-center justify-center">
+                        <FaFacebookF className="w-5 h-5 sm:w-7 sm:h-7 text-[#1877F2] group-hover:rotate-12 group-hover:scale-125 transition-all duration-300"/>
                       </div>
-                      <span className="mt-2 text-sm font-medium text-gray-600 group-hover:-translate-y-3 group-hover:bg-blue-600 group-hover:text-white group-hover:rounded-full group-hover:px-4 px-4 py-1 group-hover:py-1 transition-all duration-300">Facebook</span>
+                      <span className="mt-1 sm:mt-2 text-xs sm:text-sm font-medium text-gray-600 group-hover:-translate-y-3 group-hover:bg-blue-600 group-hover:text-white group-hover:rounded-full group-hover:px-2 sm:group-hover:px-4 px-2 sm:px-4 py-0.5 sm:py-1 group-hover:py-0.5 sm:group-hover:py-1 transition-all duration-300 whitespace-nowrap">Facebook</span>
                     </a>
                     <a
-                      href="https://twitter.com/rareminds"
+                      href="https://x.com/minds_rare"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex flex-col items-center justify-center group bg-gray-100 p-4 rounded-2xl"
+                      className="flex flex-col items-center justify-center group bg-gray-100 p-3 sm:p-4 rounded-2xl"
                     >
-                      <div className="w-12 h-12 flex items-center justify-center">
-                        <FaXTwitter className="w-7 h-7 group-hover:rotate-12 group-hover:scale-125 transition-all duration-300"/>
+                      <div className="w-8 h-8 sm:w-12 sm:h-12 flex items-center justify-center">
+                        <FaXTwitter className="w-5 h-5 sm:w-7 sm:h-7 group-hover:rotate-12 group-hover:scale-125 transition-all duration-300"/>
                       </div>
-                      <span className="mt-2 text-sm font-medium text-gray-600 group-hover:-translate-y-3 group-hover:bg-black group-hover:text-white group-hover:rounded-full group-hover:px-4 group-hover:py-1 transition-all duration-300">Twitter</span>
+                      <span className="mt-1 sm:mt-2 text-xs sm:text-sm font-medium text-gray-600 group-hover:-translate-y-3 group-hover:bg-black group-hover:text-white group-hover:rounded-full group-hover:px-2 sm:group-hover:px-4 px-2 sm:px-4 py-0.5 sm:py-1 group-hover:py-0.5 sm:group-hover:py-1 transition-all duration-300 whitespace-nowrap">Twitter</span>
                     </a>
                     <a
-                      href="https://youtube.com/rareminds"
+                      href="https://www.youtube.com/channel/UClkBtwJsScYxFzNoFdlifeA"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex flex-col items-center justify-center group bg-gray-100 p-4 rounded-2xl"
+                      className="flex flex-col items-center justify-center group bg-gray-100 p-3 sm:p-4 rounded-2xl"
                     >
-                      <div className="w-12 h-12 flex items-center justify-center">
-                        <AiFillYoutube className="text-[#FF0000] w-10 h-10 group-hover:rotate-12 group-hover:scale-125 transition-all duration-300"/>
+                      <div className="w-8 h-8 sm:w-12 sm:h-12 flex items-center justify-center">
+                        <AiFillYoutube className="w-7 h-7 sm:w-10 sm:h-10 text-[#FF0000] group-hover:rotate-12 group-hover:scale-125 transition-all duration-300"/>
                       </div>
-                      <span className="mt-2 text-sm font-medium text-gray-600 group-hover:-translate-y-3 group-hover:bg-[#FF0000] group-hover:text-white group-hover:rounded-full group-hover:px-4 group-hover:py-1 transition-all duration-300">YouTube</span>
+                      <span className="mt-1 sm:mt-2 text-xs sm:text-sm font-medium text-gray-600 group-hover:-translate-y-3 group-hover:bg-[#FF0000] group-hover:text-white group-hover:rounded-full group-hover:px-2 sm:group-hover:px-4 px-2 sm:px-4 py-0.5 sm:py-1 group-hover:py-0.5 sm:group-hover:py-1 transition-all duration-300 whitespace-nowrap">YouTube</span>
                     </a>
                     <a
                       href="https://linkedin.com/company/rareminds"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex flex-col items-center justify-center group bg-gray-100 p-4 rounded-2xl"
+                      className="flex flex-col items-center justify-center group bg-gray-100 p-3 sm:p-4 rounded-2xl"
                     >
-                      <div className="w-12 h-12 flex items-center justify-center">
-                        <AiFillLinkedin className="text-[#0A66C2] w-10 h-10 group-hover:rotate-12 group-hover:scale-125 transition-all duration-300"/>
+                      <div className="w-8 h-8 sm:w-12 sm:h-12 flex items-center justify-center">
+                        <AiFillLinkedin className="w-7 h-7 sm:w-10 sm:h-10 text-[#0A66C2] group-hover:rotate-12 group-hover:scale-125 transition-all duration-300"/>
                       </div>
-                      <span className="mt-2 text-sm font-medium text-gray-600 group-hover:-translate-y-3 group-hover:bg-[#0A66C2] group-hover:text-white group-hover:rounded-full group-hover:px-4 group-hover:py-1 transition-all duration-300">LinkedIn</span>
+                      <span className="mt-1 sm:mt-2 text-xs sm:text-sm font-medium text-gray-600 group-hover:-translate-y-3 group-hover:bg-[#0A66C2] group-hover:text-white group-hover:rounded-full group-hover:px-2 sm:group-hover:px-4 px-2 sm:px-4 py-0.5 sm:py-1 group-hover:py-0.5 sm:group-hover:py-1 transition-all duration-300 whitespace-nowrap">LinkedIn</span>
                     </a>
                   </div>
                 </div>

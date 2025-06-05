@@ -301,7 +301,7 @@ export const GovernmentOutcomesSection = () => {
           </Card>
         </div>
 
-        <div className="w-full flex flex-col items-center justify-center">
+        <div className="w-full flex flex-col px-3 items-center justify-center">
           <div className="w-full max-w-3xl mx-auto flex flex-col items-center text-center">
             <h3 className=" text-lg md:text-2xl mb-4 font-bold  ">{activeContent.title}</h3>
             <p className="text-gray-700 mb-4 text-sm md:text-lg">{activeContent.description}</p>

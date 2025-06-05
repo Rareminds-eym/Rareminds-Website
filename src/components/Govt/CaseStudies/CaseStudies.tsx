@@ -101,35 +101,35 @@ export default function CaseStudies() {
 	};
 
 	return (
-		<section className="py-16 bg-white">
-			<div className="container mx-auto px-12">
+		<section className="py-4 mb-4 md:mb-0 md:py-8 bg-white">
+			<div className="container mx-auto px-4 md:px-8">
 				<motion.div
 					initial={{ opacity: 0, y: 20 }}
 					whileInView={{ opacity: 1, y: 0 }}
 					viewport={{ once: true }}
 					transition={{ duration: 0.8 }}
-					className="text-center mb-16"
+					className="text-center mb-8 md:mb-16"
 				>
-					<h1 className="text-xl font-bold mb-4 bg-black bg-clip-text text-transparent">
+					<h1 className="text-[18px] md:text-4xl font-bold mb-4 bg-gradient-to-r from-black to-gray-700 bg-clip-text text-transparent">
 						Delivering on Outcomes: Success Stories.
 					</h1>
-					<p className="text-sm text-gray-600 mx-auto">
+					<p className="text-base md:text-xl text-gray-600 mx-auto max-w-2xl">
 						Colleges That Chose Outcomes and achieved them.
 					</p>
 				</motion.div>
 
-				<div className="grid md:grid-cols-3 gap-10 px-12">
+				<div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-10 px-2 md:px-12 max-w-7xl mx-auto">
 					{caseStudies.map((study, index) => (
 						<div
 							key={index}
-							className="border-2 border-gray-100 bg-gradient-to-br from-white to-black/5 p-6 rounded-2xl shadow-md  duration-150 cursor-pointer hover:shadow-lg hover:bg-red-50 transition-all ease-in-out hover:transition-all hover:scale-105 delay-75 group"
+							className="border-2 border-gray-100 bg-gradient-to-br from-white to-black/5 p-3 md:p-6 rounded-2xl shadow-md  duration-150 cursor-pointer hover:shadow-lg hover:bg-red-50 transition-all ease-in-out hover:transition-all hover:scale-105 delay-75 group"
 							onClick={() => {
 								setSelectedPdf({ url: study.pdfLink, institution: study.institution });
 								setIsFormModalOpen(true);
 							}}
 						>
 							<study.icon className="w-7 h-7 text-red-500 mb-4 animate-pulse" />
-							<h3 className="text-medium font-bold mb-4">{study.title}</h3>
+							<h3 className="text-sm  md:text-lg font-bold mb-4">{study.title}</h3>
 							<p className="text-sm font-semibold text-gray-700 group-hover:text-blue-600  mb-2">
 								{study.institution} <Download className="inline-block ml-1 h-4 w-4 " />
 							</p>
@@ -146,7 +146,7 @@ export default function CaseStudies() {
 					className="text-center mt-12"
 				>
 					<motion.div
-						className="relative inline-block mt-10"
+						className="relative inline-block "
 						whileHover={{ scale: 1.05 }}
 						whileTap={{ scale: 0.95 }}
 					>
@@ -192,8 +192,8 @@ export default function CaseStudies() {
 									className="flex justify-between items-center border p-4 rounded-xl"
 								>
 									<div>
-										<p className="font-normal">{study.institution}</p>
-										<p className="text-sm text-gray-500">
+										<p className="font-normal md:text-base text-xs">{study.institution}</p>
+										<p className="text-sm text-gray-500 ">
 											{study.details}
 										</p>
 									</div>
@@ -204,7 +204,7 @@ export default function CaseStudies() {
 											setIsFormModalOpen(true);
 											setIsModalOpen(false);
 										}}
-										className="text-blue-600 hover:text-red-600 font-normal flex items-center gap-1 transition-all duration-75"
+										className="text-blue-600 text-xs md:text-base hover:text-red-600 font-normal flex items-center gap-1 transition-all duration-75"
 									>
 										Send PDF <Mail className="inline-block ml-1 h-4 w-4 " />
 									</button>
@@ -303,7 +303,7 @@ export default function CaseStudies() {
 								<button
 									type="submit"
 									disabled={isLoading}
-									className={`w-full ${isLoading ? 'bg-blue-400' : 'bg-blue-600'} text-white px-4 py-2 rounded-md shadow-sm hover:bg-blue-700 transition-all duration-200 flex items-center justify-center gap-2 disabled:cursor-not-allowed`}
+									className={`w-full ${isLoading ? 'bg-blue-400' : 'bg-blue-600'} text-white px-4 py-2 rounded-md shadow-sm hover:bg-blue-700 transition-all  duration-200 flex items-center justify-center gap-2 disabled:cursor-not-allowed`}
 								>
 									{isLoading ? (
 										<>
@@ -313,7 +313,7 @@ export default function CaseStudies() {
 									) : (
 										<>
 											<Send className="w-4 h-4" />
-											<span>Send PDF</span>
+											<span className=''>Send PDF</span>
 										</>
 									)}
 								</button>
