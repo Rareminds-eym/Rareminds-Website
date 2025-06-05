@@ -24,7 +24,7 @@ const FullScreenCarousel: React.FC<FullScreenCarouselProps> = ({
   className = "",
 }) => {
   const location = useLocation();
-  const isOnCorporatePage = location.pathname === "/corporate";
+  const isOnCorporatePage = location.pathname === "/corporate/recruitment";
   const [activeIndex, setActiveIndex] = useState(0);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const touchStartX = useRef<number | null>(null);

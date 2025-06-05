@@ -1,29 +1,35 @@
 import React, { ReactNode } from "react";
 import FooterBar from "@/components/Footer/FooterBar"; // Optional: remove if not needed
 import Header from "@/components/Header/CorporateHeader"; // Updated to CorporateHeader// import {
-import { motion } from 'framer-motion';
+import { motion } from "framer-motion";
 import {
-  Phone, FileText, Mail, MapPin,
-  Facebook, Twitter, Linkedin, Instagram
-} from 'lucide-react';
+  Phone,
+  FileText,
+  Mail,
+  MapPin,
+  Facebook,
+  Twitter,
+  Linkedin,
+  Instagram,
+} from "lucide-react";
+import { usePageTracking } from "@/hooks/usePageTracking";
 
 interface CorporateLayoutProps {
   children: ReactNode;
 }
 
 const CorporateLayout: React.FC<CorporateLayoutProps> = ({ children }) => {
+  usePageTracking();
   return (
     <div className="flex h-screen flex-col">
       {/* Use CorporateHeader for vertical-specific navigation */}
       {/* <Header /> */}
 
-      <main className="flex-1">
-        {children}
-      </main>
+      <main className="flex-1">{children}</main>
 
       {/* Optional: include FooterBar if needed */}
       <FooterBar />
-{/* 
+      {/* 
  <motion.div
         initial={{ y: 100 }}
         animate={{ y: 0 }}
@@ -52,7 +58,6 @@ const CorporateLayout: React.FC<CorporateLayoutProps> = ({ children }) => {
           </motion.a>
         </div>
       </motion.div> */}
-
     </div>
   );
 };

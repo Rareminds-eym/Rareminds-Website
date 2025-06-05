@@ -1,7 +1,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import CaseStudiesCarousel from "../CaseStudiesCarousel";
-import { caseStudies } from "@/components/Corporate/Recruitment/Home/CaseStudies/caseStudiesData.ts";
+import { caseStudies } from "./caseStudiesData";
 
 const WorkWith: React.FC = () => {
   return (

@@ -292,7 +292,7 @@ const FullScreenCarousel: React.FC<FullScreenCarouselProps> = ({
       <div className="hidden lg:block container">
         <div
           onClick={handleScrollDown}
-          className="w-max absolute bottom-[80px] cursor-pointer transition-opacity z-10 ml-4 md:ml-8 lg:ml-14"
+          className="w-max absolute bottom-[20px] cursor-pointer transition-opacity z-10 ml-4 md:ml-8 lg:ml-14"
           aria-label="Scroll down"
         >
           <img

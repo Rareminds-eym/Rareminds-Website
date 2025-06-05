@@ -1,6 +1,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { Icon } from "@iconify/react";
+import { useNavigate } from "react-router-dom";
 
 interface ApproachSectionProps {
   title?: string;
@@ -15,7 +16,19 @@ const ApproachSection: React.FC<ApproachSectionProps> = ({
 }) => {
   const paragraphs = description ? description.split(/\n\n+/) : [];
   const [openIdx, setOpenIdx] = React.useState<number | null>(null);
+  const navigate = useNavigate();
 
+  const handleClick = () => {
+    navigate("/corporate/recruitment");
+
+    setTimeout(() => {
+      const el = document.getElementById("contact");
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth" });
+      }
+    }, 300);
+  };
+  
   return (
     <section className="relative w-full \ bg-white">
       <div className="absolute w-full h-full bg-[url('https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Corporate/Recruitment/service/approch-bg.webp')] opacity-[0.03]" />
@@ -37,7 +50,7 @@ const ApproachSection: React.FC<ApproachSectionProps> = ({
                 <p key={idx}>{para}</p>
               ))}
             </div>
-            <button className="corporate-btn-2">
+            <button className="corporate-btn-2" onClick={handleClick}>
               Begin the Journey
               <Icon icon="cil:arrow-right" className="ml-2 w-4 h-4" />
             </button>
