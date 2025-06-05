@@ -46,6 +46,7 @@ import TestimonialVideoCarousel from "../../../components/Academy/Students/Stude
 const Academy = ({ userType = "teacher" }: { userType?: "teacher" | "student" }) => {
   const [activeTab, setActiveTab] = useState<"teacher" | "student">("teacher");
   const [selectedCaseStudy, setSelectedCaseStudy] = useState<CaseStudyType>(caseStudies[0]);
+  const [isHeroBlurred, setIsHeroBlurred] = useState(false);
 
       const contactRef = useRef<HTMLDivElement>(null);
        const logoRef = useRef<HTMLDivElement>(null);
@@ -128,6 +129,19 @@ const Academy = ({ userType = "teacher" }: { userType?: "teacher" | "student" })
      }
    }, [location]);
 
+   useEffect(() => {
+  const handleScroll = () => {
+    if (logoRef.current) {
+      const rect = logoRef.current.getBoundingClientRect();
+      // Blur when the logo image enters the viewport (touches the HeroBanner)
+      setIsHeroBlurred(rect.top <= window.innerHeight && rect.top >= 0);
+    }
+  };
+  window.addEventListener('scroll', handleScroll);
+  handleScroll();
+  return () => window.removeEventListener('scroll', handleScroll);
+}, []);
+
   return (
    
         <div className="overflow-hidden">
@@ -139,7 +153,22 @@ const Academy = ({ userType = "teacher" }: { userType?: "teacher" | "student" })
      {/* <h1 className="text-4xl font-bold text-white"></h1> */}
       {/* </div> */}
       {/* <VideoCarousel />/ */}
-      <HeroBanner HeroToContact={scrollToContact} HeroToLogo={scrollToLogo}  />
+      <div className="w-full h-auto relative">
+  <div className="relative">
+    <HeroBanner HeroToContact={scrollToContact} HeroToLogo={scrollToLogo} isBlurred={isHeroBlurred} />
+    {isHeroBlurred && (
+      <div
+        className="absolute bottom-0 left-0 w-full h-full pointer-events-none"
+        style={{
+          background: 'linear-gradient(to top, rgba(255,255,255,0.85) 40%, rgba(255,255,255,0.2) 100%)',
+          backdropFilter: 'blur(18px)',
+          WebkitBackdropFilter: 'blur(18px)',
+          zIndex: 20,
+        }}
+      />
+    )}
+  </div>
+</div>
       <Toaster />
     
     </div>
@@ -147,7 +176,14 @@ const Academy = ({ userType = "teacher" }: { userType?: "teacher" | "student" })
     {/* <FDPButton />  */}
 
     <FloatingActionMenu />
-   <div ref={logoRef} className="relative z-0 mt-[800px] rounded-tl-3xl rounded-tr-3xl shadow-2xl shadow-black" id="logo-section-student">
+     <div ref={logoRef} className="relative z-0 md:mt-[750px] " id="logo-section">
+  <div className="w-full h-[200px]">
+    <img src="/academy/studentlineart.svg" alt="Wave" className="w-full h-full object-cover" />
+  </div> 
+    {/* Add white space below image */}
+  {/* <div className="w-full bg-white h-[20px]"></div> You can tweak height */}
+</div>
+   <div ref={logoRef} className="relative z-0  rounded-tl-3xl rounded-tr-3xl shadow-2xl shadow-black" id="logo-section-student">
           <Logos />
         </div>
       

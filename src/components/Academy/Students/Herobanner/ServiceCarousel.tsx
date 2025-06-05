@@ -37,7 +37,7 @@ const ServiceCarousel: React.FC<ServiceCarouselProps> = ({
   const activeService = services[activeIndex];
 
   return (
-    <div className="relative w-full h-full flex items-center justify-center overflow-hidden rounded-2xl">
+    <div className="relative w-full h-[400px] md:h-full flex items-center justify-center overflow-hidden rounded-2xl">
       {/* Background color overlay */}
       <div 
         className={`absolute inset-0 opacity-20 transition-colors duration-500 ${activeService.color}`} 

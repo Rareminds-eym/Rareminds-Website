@@ -89,6 +89,8 @@ const FooterBar = () => {
 	// Determine if current page is corporate or corporate training
 	const isCorporate = window.location.pathname.startsWith("/corporate/recruitment");
 	const isCorporateTraining = window.location.pathname.startsWith("/corporate/training");
+	const Academia  = window.location.pathname.startsWith("/academia");
+
 
 	return (
 		<div
@@ -271,7 +273,28 @@ const FooterBar = () => {
 									</Link>
 								</li>
 							</>
-						) : window.location.pathname.startsWith("/institutions/fdp") ? (
+						) 
+						: Academia ? (
+							<ul className="space-y-3">
+								<li>
+									<Link
+										to="/academia/school"
+										className="hover:text-red-400 transition-colors"
+									>
+										School
+									</Link>
+								</li>
+								<li>
+									<Link
+										to="/academia/student"
+										className="hover:text-red-400 transition-colors"
+									>
+										Student
+									</Link>
+								</li>
+							</ul>
+						)
+						: window.location.pathname.startsWith("/institutions/fdp") ? (
 							<>
 								<li>
 									<Link
@@ -454,7 +477,9 @@ const FooterBar = () => {
 									</Link>
 								</li>
 							</>
-						)}
+						) 
+						
+						}
 					</ul>
 				</div>
 
