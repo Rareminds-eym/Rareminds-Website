@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Menu, X, ChevronDown } from "lucide-react";
+import { Menu, X, ChevronDown, HomeIcon } from "lucide-react";
 
 const verticalOptions = [
   { label: "SDP", path: "/institutions" },
@@ -50,6 +50,12 @@ const InstitutionsHeader: React.FC = () => {
     }
   };
 
+  // Back to Home handler
+  const handleBackToHome = () => {
+    setIsOpen(false);
+    navigate("/");
+  };
+
   return (
     <header className="fixed top-0 left-0 w-full z-50 bg-white border-b shadow-sm">
       <div className="container mx-auto h-[80px] px-4 py-4 flex justify-between items-center">
@@ -61,21 +67,36 @@ const InstitutionsHeader: React.FC = () => {
         {/* Desktop Dropdown */}
         <div className="hidden md:block relative" ref={dropdownRef}>
           <button
-              onClick={toggleMenu}
-              aria-haspopup="listbox"
-              aria-expanded={isOpen}
-              className="inline-flex items-center gap-2 border border-blue-600 bg-blue-500 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition rounded-xl"
-            >
-              {currentVertical}
-              <ChevronDown size={18} className={`transform transition-transform ${isOpen ? "rotate-180" : ""}`} />
-            </button>
+            onClick={toggleMenu}
+            aria-haspopup="listbox"
+            aria-expanded={isOpen}
+            className="inline-flex items-center gap-2 border border-blue-600 bg-blue-500 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition rounded-xl"
+          >
+            {currentVertical}
+            <ChevronDown size={18} className={`transform transition-transform ${isOpen ? "rotate-180" : ""}`} />
+          </button>
 
           {isOpen && (
             <ul
               role="listbox"
               tabIndex={-1}
-              className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg focus:outline-none z-50"
+              className="absolute right-0 mt-2 w-56 bg-white border border-gray-200 rounded-md shadow-lg focus:outline-none z-50"
             >
+              {/* Back to Home for Desktop */}
+              <li
+                role="option"
+                tabIndex={0}
+                onClick={handleBackToHome}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    handleBackToHome();
+                  }
+                }}
+                className="cursor-pointer px-4 py-2 text-sm font-semibold text-blue-700 hover:bg-blue-50 border-b"
+              >
+                <HomeIcon size={16} className="inline mr-1" />
+                Homepage
+              </li>
               {verticalOptions.map(({ label, path }) => (
                 <li
                   key={label}
@@ -112,6 +133,14 @@ const InstitutionsHeader: React.FC = () => {
       {/* Mobile Dropdown Menu */}
       {isOpen && (
         <div className="md:hidden bg-white border-t px-4 py-3 shadow-lg">
+          {/* Back to Home for Mobile */}
+          <button
+            onClick={handleBackToHome}
+            className="w-full text-left px-4 py-3 mb-2 rounded-md text-sm font-semibold text-blue-700 bg-blue-50 hover:bg-blue-100"
+          >
+            <HomeIcon size={16} className="inline mr-1" />
+             Homepage
+          </button>
           {verticalOptions.map(({ label, path }) => (
             <button
               key={label}
