@@ -89,6 +89,7 @@ const FooterBar = () => {
 	// Determine if current page is corporate or corporate training
 	const isCorporate = window.location.pathname.startsWith("/corporate/recruitment");
 	const isCorporateTraining = window.location.pathname.startsWith("/corporate/training");
+	const isAcademia = window.location.pathname === "/academia" || window.location.pathname === "/academia/school" || window.location.pathname === "/academia/student";
 
 	return (
 		<div
@@ -105,34 +106,47 @@ const FooterBar = () => {
 						Quick Links
 					</h2>
 					<ul className="space-y-3">
-						<li>
-							<Link
-								to="/"
-								className="hover:text-red-400 transition-colors"
-							>
-								Home
-							</Link>
-						</li>
-						<li>
-							<Link
-								to="/about"
-								className="hover:text-red-400 transition-colors"
-							>
-								About
-							</Link>
-						</li>
-						<li>
-							<Link
-								to="/contact-us"
-								className="hover:text-red-400 transition-colors"
-							>
-								Contact
-							</Link>
-						</li>
+						{isAcademia ? (
+							<li>
+								<Link
+									to="/rareminds.in"
+									className="hover:text-red-400 transition-colors"
+								>
+									Home
+								</Link>
+							</li>
+						) : (
+							<>
+								<li>
+									<Link
+										to="/"
+										className="hover:text-red-400 transition-colors"
+									>
+										Home
+									</Link>
+								</li>
+								<li>
+									<Link
+										to="/about"
+										className="hover:text-red-400 transition-colors"
+									>
+										About
+									</Link>
+								</li>
+								<li>
+									<Link
+										to="/contact-us"
+										className="hover:text-red-400 transition-colors"
+									>
+										Contact
+									</Link>
+								</li>
+							</>
+						)}
 					</ul>
 				</div>
 
-				{/* Verticals Section */}
+				{/* Verticals Section (always the same) */}
 				<div>
 					<h2 className="font-bold mb-4 uppercase tracking-wider text-lg">
 						Verticals
@@ -179,7 +193,26 @@ const FooterBar = () => {
 						Our Services
 					</h2>
 					<ul className="space-y-3">
-						{isCorporateTraining ? (
+						{isAcademia ? (
+							<>
+								<li>
+									<Link
+										to="/academia/school"
+										className="hover:text-red-400 transition-colors"
+									>
+										School
+									</Link>
+								</li>
+								<li>
+									<Link
+										to="/academia/student"
+										className="hover:text-red-400 transition-colors"
+									>
+										Student
+									</Link>
+								</li>
+							</>
+						) : isCorporateTraining ? (
 							<>
 								<li>
 									<Link

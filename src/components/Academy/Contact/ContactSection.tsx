@@ -400,7 +400,7 @@ const AcademyContactSection = () => {
                                   label: "Instagram",
                                 },
                                 {
-                                  href: "https://www.facebook.com/raremindsgroup",
+                                  href: "https://www.facebook.com/profile.php?id=61576552526095",
                                   icon: "mdi:facebook",
                                   color: "#1877F3",
                                   label: "Facebook",
