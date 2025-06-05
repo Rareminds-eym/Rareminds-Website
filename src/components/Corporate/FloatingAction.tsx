@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Plus,
@@ -10,6 +10,7 @@ import {
 import FAQChatbot from "./ChatBot/FAQChatbot";
 import { ChatButton } from "./ChatButton";
 import { BookDemo } from "./BookDemo";
+import { useLocation, useNavigate } from "react-router-dom";
 
 interface MenuItem {
   id: string;
@@ -24,6 +25,8 @@ const FloatingActionMenu = () => {
   const [showChat, setShowChat] = useState(false);
   const [showBookDemo, setShowBookDemo] = useState(false);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const location = useLocation();
+  const navigate = useNavigate();
 
   // Open menu when user scrolls near the bottom (before footer)
   useEffect(() => {
@@ -45,12 +48,39 @@ const FloatingActionMenu = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  const handleClick = useCallback(() => {
+    const isOnTrainingPage = location.pathname.startsWith(
+      "/corporate/training"
+    );
+
+    if (isOnTrainingPage) {
+      navigate("/corporate/training");
+
+      setTimeout(() => {
+        const el = document.getElementById("contact");
+        if (el) {
+          el.scrollIntoView({ behavior: "smooth" });
+        }
+      }, 300);
+    } else {
+      // Navigate and scroll after DOM loads
+      navigate("/corporate/recruitment");
+
+      setTimeout(() => {
+        const el = document.getElementById("contact");
+        if (el) {
+          el.scrollIntoView({ behavior: "smooth" });
+        }
+      }, 300); // allow time for route to change and render
+    }
+  }, [location.pathname, navigate]);
+
   const menuItems: MenuItem[] = [
     {
       id: "download",
       icon: Download,
       label: "Download",
-      onClick: () => console.log("Download clicked"),
+      onClick: handleClick,
     },
     {
       id: "chat",
@@ -227,12 +257,15 @@ const FloatingActionMenu = () => {
           </div>
         </div>
       )}
-      
+
       {/* Chat Button */}
       <ChatButton isVisible={showChat} onClose={() => setShowChat(false)} />
-      
+
       {/* Book Demo */}
-      <BookDemo isVisible={showBookDemo} onClose={() => setShowBookDemo(false)} />
+      <BookDemo
+        isVisible={showBookDemo}
+        onClose={() => setShowBookDemo(false)}
+      />
     </div>
   );
 };
