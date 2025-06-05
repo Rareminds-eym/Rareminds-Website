@@ -1,7 +1,10 @@
 import { motion } from "framer-motion";
+import { useState } from "react";
 import { ArrowRight } from "lucide-react";
+import { ComingSoonModal } from "@/components/institutions/Modals/ComingSoonModal"; 
 
 const InstitutionDashboardSection = () => {
+   const [modalOpen, setModalOpen] = useState(false);
   return (
     <section className="w-full bg-[#F5F7F8] py-16 px-4 md:px-20 text-center">
       <motion.div
@@ -56,18 +59,17 @@ const InstitutionDashboardSection = () => {
         link: "/games/chemical",
         image: "/institutions/vectors/SimulationGames/csevbm.png",
       },
-    ].map(({ link, image }, index) => (
-      <a
-        href={link}
+    ].map(({ image }, index) => (
+      <button
+        type="button"
         key={index}
-        className="group hover:scale-125 transition-transform duration-300"
+        onClick={() => setModalOpen(true)}
+        className="group hover:scale-125 transition-transform duration-300 focus:outline-none"
       >
-        
-          <img src={image}  className="w-full h-64 object-contain" />
-          
-        
-      </a>
+        <img src={image} className="w-full h-64 object-contain" />
+      </button>
     ))}
+    <ComingSoonModal isOpen={modalOpen} onClose={() => setModalOpen(false)} />
   </motion.div>
 </motion.div>
 
