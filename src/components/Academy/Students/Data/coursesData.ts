@@ -295,6 +295,7 @@ export interface Course {
     content: string;
   };
   pdfUrl?: string;
+  showLoginLink?: boolean;
 }
 
 export const coursesData: Course[] = [
@@ -414,7 +415,8 @@ export const coursesData: Course[] = [
         "Career Deep Dives: In-depth insights into job roles, required skills, top recruiters, and future growth paths"
       ],
       image: "/academy/courses/3Eprogram/Employability.svg"
-    }
+    },
+    showLoginLink: true
   },
   {
     id: "3e-program-bootcamp",

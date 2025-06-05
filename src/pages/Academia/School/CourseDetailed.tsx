@@ -183,8 +183,8 @@ export default function CourseDetailed() {
           <div className="flex justify-center items-center min-h-[300px]">
             <div className="text-center">
               <h2 className="text-3xl font-bold text-gray-800 mb-4">Coming Soon</h2>
-              <p className="text-lg text-gray-600">Detailed information about this program will be available soon.</p>
-            </div>
+              <p className="text-lg text-gray-600 mb-4">Detailed information about this program will be available soon.</p>
+                          </div>
           </div>
         </section>
       </>
@@ -474,13 +474,6 @@ export default function CourseDetailed() {
                             <div className="w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold text-sm">
                               {module.id}
                             </div>
-                          </TableCell>
-                          <TableCell>
-                            <div className="font-semibold text-gray-900 leading-tight">
-                              {module.title}
-                            </div>
-                          </TableCell>
-                          <TableCell className="text-center">
                             <Badge variant="secondary" className="bg-blue-100 text-blue-800">
                               <Clock className="w-3 h-3 mr-1" />
                               {module.hours}h

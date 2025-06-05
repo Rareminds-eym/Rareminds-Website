@@ -55,8 +55,8 @@ export const TestimonialsColumn = (props: {
                       className="h-10 w-10 rounded-full"
                     />
                     <div className="flex flex-col">
-                      <div className="font-medium tracking-tight leading-5">{name}</div>
-                      <div className="leading-5 opacity-60 tracking-tight">{role}</div>
+                      <div className="font-medium tracking-tight leading-5 pb-3">{name}</div>
+                      <div className="leading-5 opacity-60 tracking-tight whitespace-break-spaces">{role}</div>
                     </div>
                   </div>
                 </div>

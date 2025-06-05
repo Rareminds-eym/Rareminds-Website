@@ -172,14 +172,20 @@ const InstitutionDashboardSection = () => {
       />
     </div>
   </div>
-            <div className="text-left">
-              <h4 className="text-md font-bold mb-2">Rareprep</h4>
+        <div className="text-left">
+              <h4 className="text-md font-bold mb-2">Vidyasethu by Rareminds</h4>
               <p className="text-sm text-gray-600">
-                Streamlined course access, mock interviews, and tracking for student progress.
+                A Learning Management System with streamlined course access and tracking for student progress.
               </p>
-              <button className="mt-4 inline-flex items-center gap-2 text-red-500 font-medium">
-                Explore More <ArrowRight className="w-4 h-4" />
-              </button>
+              <a
+  href="https://learning.rareminds.in/"
+  target="_blank"
+  rel="noopener noreferrer"
+>
+  <button className="mt-4 inline-flex items-center gap-2 text-red-500 font-medium">
+    Explore More <ArrowRight className="w-4 h-4" />
+  </button>
+</a>
             </div>
           </div>
         </motion.div>

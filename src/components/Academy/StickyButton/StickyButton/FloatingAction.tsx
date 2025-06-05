@@ -4,6 +4,7 @@ import { Plus, HelpCircle, MessageCircle, Calendar, Download } from 'lucide-reac
 import FAQChatbot from "./FAQChatbot";
 import { ChatButton } from './ChatButton';
 import { BookDemo } from './BookDemo';
+import { cn } from "@/lib/utils";
 
 interface MenuItem {
   id: string;
@@ -18,12 +19,42 @@ const FloatingActionMenu = () => {
   const [showChat, setShowChat] = useState(false);
   const [showBookDemo, setShowBookDemo] = useState(false);
   const [activeIcon, setActiveIcon] = useState<React.ComponentType<any>>(Plus);
+  // Modal state for download
+  const [modalOpen, setModalOpen] = useState(false);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [errorMsg, setErrorMsg] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [downloadReady, setDownloadReady] = useState(false);
+  // Replace with your actual PDF link
+  const selectedResource = { pdfLink: "/path-to-your-pdf/Your-Brochure.pdf" };
 
   const handleDownloadClick = () => {
-    const link = document.createElement('a');
-    link.href = '/path-to-your-pdf/Your-Brochure.pdf'; // ✅ Replace this with your actual path
-    link.download = 'Your-Brochure.pdf'; // ✅ Replace with actual file name
-    link.click();
+    setModalOpen(true);
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setErrorMsg("");
+    if (!name || !email || !phone) {
+      setErrorMsg("All fields are required.");
+      return;
+    }
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
+      setErrorMsg("Please enter a valid email address.");
+      return;
+    }
+    if (!/^\d{10}$/.test(phone)) {
+      setErrorMsg("Please enter a valid 10-digit phone number.");
+      return;
+    }
+    setLoading(true);
+    // Simulate async (replace with actual API/email logic if needed)
+    setTimeout(() => {
+      setLoading(false);
+      setDownloadReady(true);
+    }, 1200);
   };
 
   const menuItems: MenuItem[] = [
@@ -127,6 +158,90 @@ const FloatingActionMenu = () => {
       <FAQChatbot isVisible={showFAQChatbot} onClose={() => setShowFAQChatbot(false)} />
       <ChatButton isVisible={showChat} onClose={() => setShowChat(false)} />
       <BookDemo isVisible={showBookDemo} onClose={() => setShowBookDemo(false)} />
+
+      {/* Download Brochure Modal */}
+      {modalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4">
+          <div className="bg-white rounded-lg shadow-lg max-w-md w-full p-6 relative">
+            <button
+              onClick={() => { setModalOpen(false); setDownloadReady(false); }}
+              className="absolute top-2 right-2 text-gray-600 hover:text-gray-900"
+              aria-label="Close modal"
+            >
+              ✕
+            </button>
+            <h3 className="text-xl font-semibold mb-4">Please enter your details</h3>
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div>
+                <label htmlFor="name" className="block mb-1 font-medium">
+                  Name
+                </label>
+                <input
+                  type="text"
+                  id="name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-red-500"
+                  required
+                />
+              </div>
+              <div>
+                <label htmlFor="email" className="block mb-1 font-medium">
+                  Email
+                </label>
+                <input
+                  type="email"
+                  id="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-red-500"
+                  required
+                />
+              </div>
+              <div>
+                <label htmlFor="phone" className="block mb-1 font-medium">
+                  Phone Number
+                </label>
+                <input
+                  type="tel"
+                  id="phone"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  placeholder="10-digit phone number"
+                  className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-red-500"
+                  required
+                />
+              </div>
+              {errorMsg && <p className="text-red-600">{errorMsg}</p>}
+              {!downloadReady && (
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className={cn(
+                    "w-full bg-red-500 hover:bg-red-600 text-white font-semibold py-2 rounded transition-colors",
+                    loading ? "opacity-50 cursor-not-allowed" : ""
+                  )}
+                >
+                  {loading ? "Submitting..." : "Submit & Download"}
+                </button>
+              )}
+            </form>
+            {downloadReady && selectedResource && (
+              <div className="mt-4 text-center">
+                {/* <a
+                  href={selectedResource.pdfLink}
+                  download
+                  className="inline-block bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded transition-colors mt-2"
+                  onClick={() => { setModalOpen(false); setDownloadReady(false); }}
+                >
+                  Click here to download your PDF
+                </a> */}
+                <p className="text-green-600 mt-2">A copy has also been sent to your email.</p>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
 
       <div className="fixed bottom-10 right-16 z-50">
         <AnimatePresence>

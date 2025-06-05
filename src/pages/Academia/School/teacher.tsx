@@ -20,7 +20,7 @@ import { useState, useEffect } from "react";
   import FacultyForm from "../../../components/Academy/Teacher/FacultyForm";
   import ResourcesPage from "../../../components/Academy/Teacher/ResourcesPage";
   import ResourceDownloadForm from "../../../components/Academy/Teacher/ResourceDownloadForm";
-  import Testimonials from "../../../components/Academy/Teacher/TestimonialSlider";
+  // import Testimonials from "../../../components/Academy/Teacher/TestimonialSlider";
   // import TestimonialsStudent from "./Students/Testimonials";
   // import VideoCarousel from "./VideoCarousel";
   import VideoCarousel from "../../../components/Academy/Teacher/VideoCarousel";
@@ -33,7 +33,7 @@ import { useState, useEffect } from "react";
   import { Toaster } from '../../../components/Academy/UI/toaster';
   import EducationSection from '../../../components/Academy/Teacher/EducationSection';
   import CourseCards from '../../../components/Academy/Teacher/CourseCards';
-  import Testimonial from '../../../components/Academy/Teacher/TestimonialsCarousel'
+  // import Testimonial from '../../../components/Academy/Teacher/TestimonialsCarousel'
   import FAQChatbot from '../../../components/Academy/FAQChatbot'
   import FDPButton from '../../../components/Academy/Teacher/FDPButton'
   import DashboardSection from "../../../components/Academy/Teacher/DashboardSection";
@@ -43,9 +43,10 @@ import { useState, useEffect } from "react";
   import TestimonialViedoCarousel from '../../../components/Academy/Teacher/TestimonialCarouselVideo';
   import Hero from '../../../components/Academy/Teacher/Herobanner/Hero'
   import Services from '../School/Cources'
-
+  import Testimonials from "../../../components/Academy/Teacher/Testimonials"
   const School = ({ userType = "teacher" }: { userType?: "teacher" | "student" }) => {
   const [activeTab, setActiveTab] = useState<"teacher" | "student">("teacher");
+  const [isHeroBlurred, setIsHeroBlurred] = useState(false);
 
       const contactRef = useRef<HTMLDivElement>(null);
       const logoRef = useRef<HTMLDivElement>(null);
@@ -151,6 +152,22 @@ useEffect(() => {
   }
 }, [location]);
 
+    useEffect(() => {
+      const handleScroll = () => {
+        if (logoRef.current) {
+          const rect = logoRef.current.getBoundingClientRect();
+          // Blur when the bottom of the Hero (not just the top of the logo) overlaps the logo image
+          // Hero is fixed, so its bottom is at window.innerHeight
+          // Blur if the logo's top is less than or equal to Hero's bottom (window.innerHeight)
+          setIsHeroBlurred(rect.top <= window.innerHeight && rect.top >= 0);
+        }
+      };
+      window.addEventListener('scroll', handleScroll);
+      // Initial check
+      handleScroll();
+      return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
+
     return (
 
 
@@ -167,15 +184,30 @@ useEffect(() => {
           {/* <HeroBanner HeroToContact={scrollToContact} HeroToLogo={scrollToLogo} />
         
           <Toaster /> */}
-          <Hero HeroToLogo={scrollToLogo} HeroToContact={scrollToContact} />
+          <div className="w-full fixed z-50">
+  <div className="relative">
+    <Hero HeroToLogo={scrollToLogo} HeroToContact={scrollToContact} isBlurred={isHeroBlurred} />
+    {isHeroBlurred && (
+      <div
+        className="absolute bottom-0 left-0 w-full h-full pointer-events-none"
+        style={{
+          background: 'linear-gradient(to top, rgba(255,255,255,0.85) 40%, rgba(255,255,255,0.2) 100%)',
+          backdropFilter: 'blur(18px)',
+          WebkitBackdropFilter: 'blur(18px)',
+          zIndex: 20,
+        }}
+      />
+    )}
+  </div>
+</div>
         </div>
         {/* <FAQChatbot /> */}
         {/* <FDPButton />        Logos */}
           <FloatingActionMenu />
        <div ref={logoRef} className="relative z-0 mt-[750px] " id="logo-section">
-  {/* <div className="w-full h-[200px]">
+  <div className="w-full h-[200px]">
     <img src="/academy/school.svg" alt="Wave" className="w-full h-full object-cover" />
-  </div> */}
+  </div> 
   
   {/* Add white space below image */}
   {/* <div className="w-full bg-white h-[20px]"></div> You can tweak height */}
@@ -336,8 +368,13 @@ useEffect(() => {
 
 </div>
         {/* <Testimonials /> */}
-         <div className="min-h-screen flex items-center justify-center relative z-10 bg-white">
+         {/* <div className="min-h-screen flex items-center justify-center relative z-10 bg-white">
         <Testimonial />
+
+</div> */}
+
+  <div className="min-h-screen flex items-center justify-center relative z-10 bg-white">
+        <Testimonials />
 
 </div>
      
