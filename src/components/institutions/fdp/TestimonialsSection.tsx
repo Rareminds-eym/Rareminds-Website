@@ -14,15 +14,14 @@ const mappedTestimonials = fdptestimonials.map((t, index) => ({
 const duplicate = (arr: typeof mappedTestimonials) => [...arr, ...arr];
 
 const sideImages = [
-  '/institutions/images/Testimonials/Pic1.jpg',
-  '/institutions/images/Testimonials/Pic2.jpg', 
-  '/institutions/images/Testimonials/Pic3.jpg',
-  '/institutions/images/Testimonials/Pic5.jpg',
-  '/institutions/images/Testimonials/Pic6.jpg',
-  '/institutions/images/Testimonials/Pic7.jpg',
-  '/institutions/images/Testimonials/Pic8.jpg',
+  '/institutions/images/Testimonials/FDP1.jpg',
+  '/institutions/images/Testimonials/FDP2.jpg', 
+  '/institutions/images/Testimonials/FDP3.jpg',
+  '/institutions/images/Testimonials/FDP4.jpg',
+  '/institutions/images/Testimonials/FDP5.jpg',
+  '/institutions/images/Testimonials/FDP6.jpg',
+  '/institutions/images/Testimonials/FDP7.jpg',
   '/institutions/images/Testimonials/Pic9.jpg',
-  '/institutions/images/Testimonials/Pic10.jpg',
 ];
 
 const TestimonialsSection: React.FC = () => {
