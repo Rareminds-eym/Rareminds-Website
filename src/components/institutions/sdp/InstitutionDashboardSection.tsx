@@ -118,13 +118,18 @@ const InstitutionDashboardSection = () => {
 
               {/* Text Section */}
               <div className="flex-1 text-left pl-10">
-                <h4 className="text-md font-bold mb-2">Rareminds Learning Management System</h4>
+                <h4 className="text-md font-bold mb-2">VidyaSethu by Rareminds</h4>
                 <p className="text-sm text-gray-600">
-                  Streamlined course access and tracking for student progress.
+                  A Learning Management System with streamlined course access and tracking for student progress.
                 </p>
-                <button className="mt-4 inline-flex items-center gap-2 text-[#50b1f6] font-medium">
+                <a
+                  href="https://learning.rareminds.in/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-4 inline-flex items-center gap-2 text-[#50b1f6] font-medium"
+                >
                   Explore More <ArrowRight className="w-4 h-4" />
-                </button>
+                </a>
               </div>
             </div>
           </motion.div>

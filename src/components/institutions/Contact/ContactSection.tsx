@@ -89,7 +89,7 @@ const ContactSection = () => {
   };
 
   return (
-    <section className="section py-12 relative overflow-hidden bg-gradient-to-br from-blue-50 via-pink-30 to-purple-30 text-gray-800 ">
+    <section id="contact-section" className="section py-12 relative overflow-hidden bg-gradient-to-br from-blue-50 via-pink-30 to-purple-30 text-gray-800 ">
       <div className="container mx-auto px-5">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
