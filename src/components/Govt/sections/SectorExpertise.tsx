@@ -87,7 +87,7 @@ const SectorCard = ({ title, icon, color, description }: SectorCardProps) => {
 const CTAButton = ({ children, variant, onClick }: CTAButtonProps) => {
   const base = 'px-6 py-3 font-semibold rounded-2xl flex items-center  transition duration-300';
   const styles = variant === 'primary'
-     ? 'border border-gray-300 border-b-4 border-gray-300  hover:bg-gray-100 '
+     ? 'border border-gray-300 text-sm md:text-base border-b-4 border-gray-300  hover:bg-gray-100 '
     : 'bg-red-500 text-white border-b-4 border-red-300 hover:bg-red-600';
 
   return (
@@ -158,19 +158,19 @@ const SectorExpertise = () => {
     }
   ];
   return (
-    <section className="py-10 md:py-20 px-0 ">
+    <section className="py-6 md:py-12 px-0 ">
       <div className="container max-w-7xl mx-auto">
-        <div className="text-center mb-6">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-academy-blue animate-fade-in">
+        <div className="text-center mb-0 md:mb-6">
+          <h2 className="text-[18px] md:text-4xl font-bold mb-2 md:mb-4 text-academy-blue animate-fade-in">
             Cross-Sector Expertise
           </h2>
-          <p className="text-xl md:text-2xl text-gray-700 animate-fade-in">
+          <p className="text-base md:text-xl text-gray-700 animate-fade-in">
             It is not just a training. It is a Transformation.
           </p>
         </div>
 
         <div className=" md:mb-6">
-          <h3 className=" md:text-xl font-semibold mb-8 text-center">Sectors We Cover</h3>
+          <h3 className=" md:text-xl text-sm font-semibold mb-8 text-center">Sectors We Cover</h3>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-6 overflow-hidden pb-6 px-2 md:px-6">
             {sectorData.map((sector, index) => (
               <SectorCard

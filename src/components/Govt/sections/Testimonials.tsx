@@ -19,7 +19,7 @@ const Testimonials: React.FC = () => {
         transition={{ duration: 0.8 }}
         className="text-center mb-8"
       >
-        <h1 className="text-xl font-bold mb-4 bg-black bg-clip-text text-transparent">
+        <h1 className="text-base md:text-xl font-bold mb-4 bg-black bg-clip-text text-transparent">
           Voices of Impact
         </h1>
         <p className="text-sm text-gray-600 mx-auto">
@@ -120,9 +120,9 @@ const TestimonialCard: React.FC<TestimonialCardProps> = ({
         className="w-20 h-20 rounded-full mb-4 object-cover"
       />
     )}
-    <p className="text-gray-700 mb-4">&quot;{message}&quot;</p>
-    <p className="font-semibold">{name}</p>
-    <p className="text-sm text-gray-500">{role}</p>
+    <p className="text-gray-700 mb-2 md:mb-4 text-sm md:text-base">&quot;{message}&quot;</p>
+    <p className="font-semibold text-sm md:text-base ">{name}</p>
+    <p className=" text-gray-500 text-sm md:text-base">{role}</p>
   </div>
 );
 

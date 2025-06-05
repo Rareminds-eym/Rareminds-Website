@@ -110,14 +110,14 @@ const Video = () => {
             {[...contentData, ...contentData].map((item, index) => (
               <div
                 key={index}
-                className="flex-none h-60 w-60 md:w-96 cursor-pointer transform transition-transform hover:scale-105 group "
+                className="flex-none h-48 w-64 sm:h-60 sm:w-80 md:w-96 cursor-pointer transform transition-transform hover:scale-105 group"
                 onClick={() => openModal(item.video)}
               >
                 <div className="aspect-w-16 aspect-h-9 rounded-lg overflow-hidden shadow-lg relative">
                   <img
                     src={item.image}
                     alt={item.title}
-                    className="w-full h-52 md:w-full md:h-full object-cover"
+                    className="w-full h-full object-cover"
                   />
                   {/* Dark overlay */}
                   <div className="absolute inset-0 bg-black/30 group-hover:bg-black/20 transition-all duration-300"></div>

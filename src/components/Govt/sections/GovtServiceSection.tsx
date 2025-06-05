@@ -356,10 +356,10 @@ const BlueprintModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => v
 
 // CTAButton Component
 const CTAButton = ({ children, variant, onClick }: CTAButtonProps) => {
-  const base = 'px-6 py-3 font-semibold rounded-2xl  transition duration-300';
+  const base = 'px-6 py-3  font-semibold rounded-2xl  transition duration-300';
   const styles = variant === 'primary'
-    ? 'border border-gray-300 border-b-4 border-gray-300  hover:bg-gray-100 '
-    : 'bg-red-500 text-white border-b-4 border-red-300 hover:bg-red-600';
+    ? 'border border-gray-300 text-xs md:text-base   border-b-4 border-gray-300  hover:bg-gray-100 '
+    : 'bg-red-500 text-white border-b-4 text-xs md:text-base border-red-300 hover:bg-red-600';
 
   return (
     <button className={`${base} ${styles}`} onClick={onClick}>
@@ -405,33 +405,33 @@ const GovServiceSection: React.FC = () => {
   ];
 
   return (
-    <section className="py-12 sm:py-16 md:py-0 mt-10">
+    <section className="mt-4 md:mt-8">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
         <div className=" mx-auto text-center mb-4 xl:mb-8 2xl:mb-12">
-          <h2 className="text-3xl xl:text-3xl   font-bold text-slate-800 mb-5">
+          <h2 className="text-[18px] lg:text-4xl xl:text-3xl font-semibold  md:font-bold text-slate-800 mb-2 md:mb-4">
             Solutions for State Skill Development Missions, Education Boards & Universities
           </h2>
-          <p className="text-base xl:text-xl   text-slate-600  mx-auto">
+          <p className="text-base md:text-xl   text-slate-600  mx-auto">
             We offer comprehensive solutions tailored for government educational institutions and skill development initiatives.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 xl:gap-4 mb-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 xl:gap-4 mb-5 md:mb-10">
           {services.map((service, index) => (
             
             <Link to={"/academia/projects/"}
               key={index}
-              className="p-4 rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-all duration-300 group animate-fade-in bg-white"
+              className="p-3 md:p-4 rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-all duration-300 group animate-fade-in bg-white"
               style={{ animationDelay: `${index * 0.1}s` }}
             >
-              <div className="flex items-center justify-between mb-4">
-                <div className="w-12 h-12  rounded-xl flex items-center justify-center group-hover:text-black group-hover:border-blue-600 group-hover:bg-blue-100 bg-red-50 border-2 border-red-300 text-red-600 transition-all duration-300">
+              <div className="flex items-center justify-between mb-2 md:mb-4">
+                <div className="w-8 h-8 md:w-12 md:h-12 p-1 md:p-0 rounded-lg md:rounded-xl flex items-center justify-center group-hover:text-black group-hover:border-blue-600 group-hover:bg-blue-100 bg-red-50 border-2 border-red-300 text-red-600 transition-all duration-300">
                   {service.icon}
                 </div>
-                <ArrowUpRight className="text-black/40 group-hover:text-black/90 w-8 h-8 rounded-full p-1.5 bg-black/5 flex items-center justify-center transition-colors" size={25} />
+                <ArrowUpRight className="text-black/40 group-hover:text-black/90 h-6 w-6 md:w-8 md:h-8 rounded-full p-1.5 bg-black/5 flex items-center justify-center transition-colors" size={25} />
               </div>
-              <h3 className="text-base font-semibold text-slate-800 mb-2 ">{service.title}</h3>
-              <p className="text-slate-600 text-sm leading-relaxed">{service.description}</p>
+              <h3 className="text-sm md:text-base font-semibold text-slate-800  md:mb-2 ">{service.title}</h3>
+              <p className="text-slate-600 text-xs md:text-sm leading-relaxed">{service.description}</p>
             </Link>
            
           ))}

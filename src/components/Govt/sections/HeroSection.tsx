@@ -257,7 +257,7 @@ export const HeroSection = () => {
 			<motion.div
 				initial={{ opacity: 0 }}
 				animate={{ opacity: 1 }}
-				className="fixed right-4 sm:right-8 top-1/2 -translate-y-1/2 md:flex flex-col items-center gap-2 sm:gap-4 z-50 bg-black/30 px-2 py-3 sm:py-4 rounded-full hidden"
+				className="fixed md:right-4 sm:right-8 md:top-1/2 bottom-10 md:bottom-auto md:-translate-y-1/2 flex flex-row md:flex-col items-center justify-center w-full md:w-auto gap-2 sm:gap-4 z-50 md:bg-black/30   md:px-2 py-3 sm:py-4 md:rounded-full"
 			>
 				{heroSlides.map((_, index) => (
 					<button
@@ -266,10 +266,11 @@ export const HeroSection = () => {
 							setDirection(index > slideIndex ? 1 : -1);
 							setCurrentSlide(index);
 						}}
-						className={`w-2 sm:w-3 transition-all duration-300 rounded-full ${slideIndex === index
+						className={`w-2 sm:w-3 transition-all duration-300 rounded-full ${
+							slideIndex === index
 								? "bg-white h-4 sm:h-6 shadow-lg shadow-white/30"
 								: "bg-white/50 hover:bg-white/70 h-2 sm:h-3"
-							}`}
+						}`}
 						aria-label={`Go to slide ${index + 1}`}
 					/>
 
