@@ -2,12 +2,14 @@ import React, { ReactNode } from "react";
 import FooterBar from "@/components/Footer/FooterBar"; // Optional: remove if not needed
 import CorporateHeader from "@/components/Header/CorporateHeader"; // Updated to CorporateHeader
 import FloatingActionMenu from "@/components/Corporate/FloatingAction";
+import { usePageTracking } from "@/hooks/usePageTracking";
 
 interface CorporateLayoutProps {
   children: ReactNode;
 }
 
 const CorporateLayout: React.FC<CorporateLayoutProps> = ({ children }) => {
+  usePageTracking();
   return (
     <div className="flex h-screen flex-col">
       {/* Use CorporateHeader for vertical-specific navigation */}
