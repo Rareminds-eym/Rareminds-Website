@@ -5,20 +5,36 @@ import { Play } from 'lucide-react';
 
 const testimonials = [
   {
-    name: 'K. Saranraj',
-    role: 'Periyar Arts & Science College',
+    name: 'Dr. Rajesh Kumar',
+    role: 'Principal, Engineering College',
     quote: 'The transformation in our students\' confidence is remarkable.',
     image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?fit=crop&w=120&h=120',
-    videoThumbnail: "/institutions/vectors/Thumbnail1.jpg",
-    videoSrc: "https://www.youtube.com/watch?v=zInPOXMjHpQ&list=PLAlZD4FN5Oyo5qBMptFnzMYplEqog7MnW",
+    videoThumbnail: "/institutions/vectors/Thumbnail4.jpg",
+    videoSrc: "https://www.youtube.com/watch?v=IPPDAfzoD3I",
   },
   {
-    name: 'C. Sivagami',
-    role: 'Naidu College , Cuddalore',
+    name: 'Prof. Meera Patel',
+    role: 'TPO, Technology Institute',
     quote: 'Placement rates increased by 45% within one semester.',
     image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?fit=crop&w=120&h=120',
-    videoThumbnail: "/institutions/vectors/Thumbnail2.jpg",
-    videoSrc: "https://www.youtube.com/watch?v=w5HmwkOF92E&list=PLAlZD4FN5Oyo5qBMptFnzMYplEqog7MnW&index=3",
+    videoThumbnail: "/institutions/vectors/Thumbnail4.jpg",
+    videoSrc: "https://www.youtube.com/watch?v=LYmob1dwjt8",
+  },
+  {
+    name: 'Priya Singh',
+    role: 'Final Year Student',
+    quote: 'The industry exposure helped me secure my dream job.',
+    image: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?fit=crop&w=120&h=120',
+    videoThumbnail: "/institutions/vectors/Thumbnail4.jpg",
+    videoSrc: "https://www.youtube.com/watch?v=hQjt4CKvxdk",
+  },
+  {
+    name: 'Dr. Rajesh Kumar',
+    role: 'Principal, Engineering College',
+    quote: 'The transformation in our students\' confidence is remarkable.',
+    image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?fit=crop&w=120&h=120',
+    videoThumbnail: "/institutions/vectors/Thumbnail4.jpg",
+    videoSrc: "https://www.youtube.com/watch?v=2BNwt75ExEk",
   },
 ];
 
@@ -56,7 +72,7 @@ export default function Testimonials() {
             Unfiltered Experiences
           </h1>
           <p className="text-sm text-gray-600 w-[406.1] mx-auto">
-            Students Share their Success Stories and Achievements.
+            Faculties Share their Success Stories and Achievements.
           </p>
         </motion.div>
 
@@ -93,29 +109,29 @@ export default function Testimonials() {
             ))}
           </motion.div>
         </div>
+      </div>
 
-        {/* 
-        // Video Modal (commented as per request)
-        {selectedVideo && (
-          <div className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50">
-            <div className="relative w-[80%] max-w-2xl">
-              <button
-                className="absolute top-2 right-2 text-white text-2xl font-bold z-10 bg-black bg-opacity-50 rounded-full px-3 py-1 hover:bg-opacity-80 transition text-center"
-                onClick={() => setSelectedVideo(null)}
-              >
-                &times;
-              </button>
-              <video
-                src={selectedVideo}
-                controls
-                autoPlay
-                className="w-full rounded-xl"
-              />
-            </div>
+      {/* 
+      // Video Modal (commented as per request)
+      {selectedVideo && (
+        <div className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50">
+          <div className="relative w-[80%] max-w-2xl">
+            <button
+              className="absolute top-2 right-2 text-white text-2xl font-bold z-10 bg-black bg-opacity-50 rounded-full px-3 py-1 hover:bg-opacity-80 transition text-center"
+              onClick={() => setSelectedVideo(null)}
+            >
+              &times;
+            </button>
+            <video
+              src={selectedVideo}
+              controls
+              autoPlay
+              className="w-full rounded-xl"
+            />
           </div>
-        )}
-        */}
         </div>
+      )}
+      */}
     </section>
   );
 }
