@@ -5,37 +5,37 @@ import Modal from 'react-modal';
 const contentData = [
   {
     image: '/Govt-Images/Videos/Thumbnails/Faculty_testimonail.png',
-    video: '/Govt-Images/Videos/Testimonials/video1.mp4',
+    video: 'https://youtu.be/LYmob1dwjt8',
     title: 'Education Excellence'
   },
   {
     image: '/Govt-Images/Videos/Thumbnails/Fdp.png',
-    video: '/Govt-Images/Videos/Testimonials/video2.mp4',
+    video: 'https://youtu.be/2BNwt75ExEk',
     title: 'University Campus'
   },
   {
     image: '/Govt-Images/Videos/Thumbnails/Faculty_testimonail.png',
-    video: '/Govt-Images/Videos/Testimonials/video3.mp4',
+    video: 'https://youtu.be/zInPOXMjHpQ',
     title: 'Learning Experience'
   },
   {
     image: '/Govt-Images/Videos/Thumbnails/student.png',
-    video: '/Govt-Images/Videos/Testimonials/video4.mp4',
+    video: 'https://youtu.be/oIeAey8NxmA',
     title: 'Student Life'
   },
   {
     image: '/Govt-Images/Videos/Thumbnails/Faculty_testimonail.png',
-    video: '/Govt-Images/Videos/Testimonials/video5.mp4',
+    video: 'https://youtu.be/w5HmwkOF92E',
     title: 'Modern Classroom'
   },
   {
     image: '/Govt-Images/Videos/Thumbnails/Fdp_highlights.png',
-    video: '/Govt-Images/Videos/Testimonials/video6.mp4',
+    video: 'https://youtu.be/LYmob1dwjt8',
     title: 'Library Resources'
   },
   {
     image: '/Govt-Images/Videos/Thumbnails/Fdp_highlights.png',
-    video: '/Govt-Images/Videos/Testimonials/video7.mp4',
+    video: 'https://youtu.be/Z467zES119Q',
     title: 'Library Resources'
   }
 ];
@@ -52,7 +52,10 @@ const Video = () => {
 
   const openModal = (videoUrl: string) => {
     if (!isDragging) {
-      setSelectedVideo(videoUrl);
+      // Convert YouTube URL to embed format
+      const videoId = videoUrl.split('/').pop();
+      const embedUrl = `https://www.youtube.com/embed/${videoId}`;
+      setSelectedVideo(embedUrl);
       setModalIsOpen(true);
     }
   };
