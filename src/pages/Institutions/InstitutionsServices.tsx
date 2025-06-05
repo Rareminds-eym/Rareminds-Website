@@ -5,10 +5,9 @@ import Hero from "@/components/institutions/inst/Hero";
 
 //import FinalCTA from '@/components/institutions/FinalCTA';
 import FDPButton from "@/components/institutions/sdp/FDPButton";
-import FAQChatbot from '@/components/institutions/sdp/FAQChatbot';
-import StickyButtons from '@/components/institutions/sdp/StickyButtons';
-import CourseCards from '@/components/institutions/sdp/CourseCards';
+import CourseCards from '@/components/institutions/inst/CourseCards';
 import LogoCarousel from '@/components/institutions/sdp/LogoCarousel';
+import FloatingAction from '@/components/institutions/sdp/FloatingAction';
 
 
 const InstitutionsServices: React.FC = () => {
@@ -16,10 +15,9 @@ const InstitutionsServices: React.FC = () => {
     <div className="pt-20">
       <Hero />
       <FDPButton />
-      <FAQChatbot />
       <LogoCarousel />
       <CourseCards />
-      <StickyButtons />
+      <FloatingAction/>
     </div>
   );
 };
