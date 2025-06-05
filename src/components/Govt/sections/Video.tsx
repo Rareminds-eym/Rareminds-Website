@@ -4,37 +4,37 @@ import Modal from 'react-modal';
 
 const contentData = [
   {
-    image: '/Govt-Images/Videos/Thumbnails/Faculty_testimonail.png',
+    image: '/Govt-Images/yt1.png',
     video: 'https://youtu.be/LYmob1dwjt8',
     title: 'Education Excellence'
   },
   {
-    image: '/Govt-Images/Videos/Thumbnails/Fdp.png',
+    image: '/Govt-Images/yt2.png',
     video: 'https://youtu.be/2BNwt75ExEk',
     title: 'University Campus'
   },
   {
-    image: '/Govt-Images/Videos/Thumbnails/Faculty_testimonail.png',
+    image: '/Govt-Images/yt3.png',
     video: 'https://youtu.be/zInPOXMjHpQ',
     title: 'Learning Experience'
   },
   {
-    image: '/Govt-Images/Videos/Thumbnails/student.png',
+    image: '/Govt-Images/yt1.png',
     video: 'https://youtu.be/oIeAey8NxmA',
     title: 'Student Life'
   },
   {
-    image: '/Govt-Images/Videos/Thumbnails/Faculty_testimonail.png',
+    image: '/Govt-Images/yt2.png',
     video: 'https://youtu.be/w5HmwkOF92E',
     title: 'Modern Classroom'
   },
   {
-    image: '/Govt-Images/Videos/Thumbnails/Fdp_highlights.png',
+    image: '/Govt-Images/yt1.png',
     video: 'https://youtu.be/LYmob1dwjt8',
     title: 'Library Resources'
   },
   {
-    image: '/Govt-Images/Videos/Thumbnails/Fdp_highlights.png',
+    image: '/Govt-Images/yt3.png',
     video: 'https://youtu.be/Z467zES119Q',
     title: 'Library Resources'
   }
