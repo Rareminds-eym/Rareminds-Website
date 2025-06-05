@@ -1,12 +1,29 @@
 import React from "react";
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 
 interface ContactSectionProps {
   title?: string;
   description?: string;
 }
 
-const ContactSection: React.FC<ContactSectionProps> = ({ title, description }) => {
+const ContactSection: React.FC<ContactSectionProps> = ({
+  title,
+  description,
+}) => {
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    navigate("/corporate/recruitment");
+
+    setTimeout(() => {
+      const el = document.getElementById("contact");
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth" });
+      }
+    }, 300);
+  };
+
   return (
     <section className="relative w-full py-24 bg-yellow-400 bg-[repeating-linear-gradient(45deg,#facc15_0,#facc15_2px,transparent_2px,transparent_6px)] overflow-hidden">
       {/* Decorative Boxes */}
@@ -35,16 +52,16 @@ const ContactSection: React.FC<ContactSectionProps> = ({ title, description }) =
           {description || ""}
         </motion.p>
 
-        <motion.a
-          href="mailto:info@rareminds.com"
+        <motion.button
           initial={{ opacity: 0, scale: 0.95 }}
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.2 }}
+          onClick={handleClick}
           className="inline-block px-8 py-3 bg-black text-white font-semibold rounded-md shadow-lg hover:shadow-xl transition-all duration-300 text-lg"
         >
           Contact Us
-        </motion.a>
+        </motion.button>
       </div>
     </section>
   );

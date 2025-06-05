@@ -382,7 +382,7 @@ const ContactSection = () => {
                       label: "Instagram",
                     },
                     {
-                      href: "https://www.facebook.com/raremindsgroup",
+                      href: "https://www.facebook.com/people/RaremindsHR/61576026163390/",
                       icon: "mdi:facebook",
                       color: "#1877F3",
                       label: "Facebook",
