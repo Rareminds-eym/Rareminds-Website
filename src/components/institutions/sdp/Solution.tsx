@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { Microscope, Target, Brain, Globe } from 'lucide-react';
+import { useNavigate } from "react-router-dom"; // Add this import
 
 const features = [
   {
@@ -29,6 +30,8 @@ const features = [
 ];
 
 export default function Solution() {
+  const navigate = useNavigate(); // Add this line
+
   return (
     <section className="py-16 relative overflow-hidden bg-gradient-to-br from-blue-50 via-pink-30 to-purple-30">
       <div className="container mx-auto px-12 relative z-10">
@@ -55,7 +58,13 @@ export default function Solution() {
               whileInView={{ opacity: 1, y: 0, rotate: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8, delay: index * 0.2 }}
-              className="relative group mb-4"
+              className="relative group mb-4 cursor-pointer"
+              onClick={() => navigate("/academia/projects")}
+              tabIndex={0}
+              role="button"
+              onKeyDown={e => {
+                if (e.key === "Enter" || e.key === " ") navigate("/academia/projects/projectlist");
+              }}
             >
               <div className={`absolute inset-0 bg-gradient-to-br ${feature.bgColor} rounded-2xl transform group-hover:scale-105 transition-transform duration-300 `}></div>
               <div className="relative bg-white/40 backdrop-blur-sm p-6 rounded-2xl transform hover:translate-y-[-1rem] transition-all duration-300 border border-white/20">

@@ -29,7 +29,7 @@ export const ComingSoonModal: React.FC<ComingSoonModalProps> = ({ isOpen, onClos
             <p className="text-gray-600 mt-2">This feature is currently in development. Stay tuned!</p>
             <button
               onClick={onClose}
-              className="mt-6 px-4 py-2 bg-[#F4CE14] text-black font-medium rounded-full hover:scale-105 transition"
+              className="mt-6 px-4 py-2 bg-[#83cffb] text-black font-medium rounded-full hover:scale-105 transition"
             >
               Okay!
             </button>

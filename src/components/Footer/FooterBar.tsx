@@ -209,6 +209,15 @@ const FooterBar = () => {
 										className="hover:text-red-400 transition-colors"
 									>
 										Student
+					<ul className="flex flex-wrap gap-x-6 gap-y-2 items-center">
+						{window.location.pathname.startsWith("/government") ? (
+							<>
+								<li>
+									<Link
+										to="/academia/projects/"
+										className="hover:text-red-400 transition-colors"
+									>
+										Skilling & Building Capacity
 									</Link>
 								</li>
 							</>
@@ -224,7 +233,7 @@ const FooterBar = () => {
 								</li>
 								<li>
 									<Link
-										to="/corporate/training/services/pre-placement"
+										to="/corporate/training/services/tech-upskilling"
 										className="hover:text-red-400 transition-colors"
 									>
 										Tech Upskilling & Future Skills
@@ -232,16 +241,16 @@ const FooterBar = () => {
 								</li>
 								<li>
 									<Link
-										to="/corporate/training/services/bridge-courses"
+										to="/corporate/training/services/behavioral-culture"
 										className="hover:text-red-400 transition-colors"
 									>
 										Behavioral & Organizational Culture Programs
 									</Link>
 								</li>
 								<li>
-									<a
-										href="/corporate/training/services"
-										onClick={e => {
+									<Link
+										to="/corporate/training"
+										onClick={(e) => {
 											e.preventDefault();
 											navigate("/corporate/training");
 											setTimeout(() => {
@@ -254,14 +263,14 @@ const FooterBar = () => {
 										className="hover:text-red-400 transition-colors font-semibold cursor-pointer"
 									>
 										View All
-									</a>
+									</Link>
 								</li>
 							</>
 						) : isCorporate ? (
 							<>
 								<li>
 									<Link
-										to="/corporate/recruitment/services/interview-as-a-service"
+										to="/corporate/recruitment/services/Interview-as-a-service"
 										className="hover:text-red-400 transition-colors"
 									>
 										Interview-as-a-service
@@ -284,26 +293,198 @@ const FooterBar = () => {
 									</Link>
 								</li>
 								<li>
-									<a
-										href="/corporate/recruitment#services"
+									<Link
+										to="/corporate/recruitment#services"
 										onClick={handleViewAll}
 										className="hover:text-red-400 transition-colors font-semibold cursor-pointer"
 									>
 										View All
-									</a>
+									</Link>
+								</li>
+							</>
+						) : window.location.pathname.startsWith("/institutions/fdp") ? (
+							<>
+								<li>
+									<Link
+										to="/institutions/fdp/skill-development"
+										className="hover:text-red-400 transition-colors"
+									>
+										Skill Dev Programs
+									</Link>
+								</li>
+								<li>
+									<Link
+										to="/institutions/fdp/faculty-development"
+										className="hover:text-red-400 transition-colors"
+									>
+										Faculty Dev Programs (FDPs)
+									</Link>
+								</li>
+								<li>
+									<Link
+										to="/institutions/fdp/leadership"
+										className="hover:text-red-400 transition-colors"
+									>
+										Leadership & Workshops
+									</Link>
+								</li>
+							</>
+						) : window.location.pathname.startsWith("/institutions/services") ? (
+							<>
+								<li>
+									<Link
+										to="/institutions/services/recruitment"
+										className="hover:text-red-400 transition-colors"
+									>
+										Recruitment Placement
+									</Link>
+								</li>
+								<li>
+									<Link
+										to="/institutions/services/curriculum"
+										className="hover:text-red-400 transition-colors"
+									>
+										Curriculum Integration
+									</Link>
+								</li>
+								<li>
+									<Link
+										to="/institutions/services/digital-labs"
+										className="hover:text-red-400 transition-colors"
+									>
+										Digital Labs & LMS
+									</Link>
+								</li>
+								<li>
+									<Link
+										to="/institutions/services/accreditation"
+										className="hover:text-red-400 transition-colors"
+									>
+										Accreditation & Consulting
+									</Link>
+								</li>
+								<li>
+									<Link
+										to="/institutions/services/leadership"
+										className="hover:text-red-400 transition-colors"
+									>
+										Leadership & Workshops
+									</Link>
+								</li>
+							</>
+						) : window.location.pathname.startsWith("/institutions") ? (
+							<>
+								<li>
+									<Link
+										to="/institutions/skill-development"
+										className="hover:text-red-400 transition-colors"
+									>
+										Skill Dev Programs
+									</Link>
+								</li>
+								<li>
+									<Link
+										to="/institutions/campus-corporate"
+										className="hover:text-red-400 transition-colors"
+									>
+										Campus to Corporate
+									</Link>
+								</li>
+								<li>
+									<Link
+										to="/institutions/counseling"
+										className="hover:text-red-400 transition-colors"
+									>
+										Student Counseling
+									</Link>
+								</li>
+								<li>
+									<Link
+										to="/institutions/hackathons"
+										className="hover:text-red-400 transition-colors"
+									>
+										Hackathons & Challenges
+									</Link>
+								</li>
+								<li>
+									<Link
+										to="/institutions/recruitment"
+										className="hover:text-red-400 transition-colors"
+									>
+										Recruitment Placement
+									</Link>
+								</li>
+							</>
+						) : window.location.pathname.startsWith("/faculty") ? (
+							<>
+								<li>
+									<Link
+										to="/faculty/skill-development"
+										className="hover:text-red-400 transition-colors"
+									>
+										Skill Development Programs
+									</Link>
+								</li>
+								<li>
+									<Link
+										to="/faculty/fdp"
+										className="hover:text-red-400 transition-colors"
+									>
+										Faculty Development Programs (FDPs)
+									</Link>
+								</li>
+								<li>
+									<Link
+										to="/faculty/leadership"
+										className="hover:text-red-400 transition-colors"
+									>
+										Leadership & Workshops
+									</Link>
 								</li>
 							</>
 						) : (
-							serviceData?.serviceData?.map((ele: any) => (
-								<li key={ele.ContentSlug}>
+							<>
+								<li>
 									<Link
-										to={`/${ele.ContentSlug}`}
+										to="/skill-development"
 										className="hover:text-red-400 transition-colors"
 									>
-										{ele.Heading1}
+										Skill Development Programs
 									</Link>
 								</li>
-							))
+								<li>
+									<Link
+										to="/campus-corporate"
+									 className="hover:text-red-400 transition-colors"
+									>
+										Campus to Corporate Training
+									</Link>
+								</li>
+								<li>
+									<Link
+										to="/counseling"
+										className="hover:text-red-400 transition-colors"
+									>
+										Student Counseling & Mentorship
+									</Link>
+								</li>
+								<li>
+									<Link
+										to="/hackathons"
+										className="hover:text-red-400 transition-colors"
+									>
+										Hackathons & Challenges
+									</Link>
+								</li>
+								<li>
+									<Link
+										to="/recruitment"
+										className="hover:text-red-400 transition-colors"
+									>
+										Recruitment Placement Support
+									</Link>
+								</li>
+							</>
 						)}
 					</ul>
 				</div>

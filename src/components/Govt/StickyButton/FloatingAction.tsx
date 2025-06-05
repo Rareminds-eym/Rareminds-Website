@@ -152,7 +152,7 @@ const FloatingActionMenu = () => {
       />
       <ChatButton isVisible={showChat} onClose={() => setShowChat(false)} />
       <BookDemo isVisible={showBookDemo} onClose={() => setShowBookDemo(false)} />
-      <div className="fixed bottom-10 right-16 z-50">
+      <div className="fixed bottom-7 right-7 md:bottom-10 md:right-16 z-50">
         {/* Menu Items */}
         <AnimatePresence>
           {isOpen && (

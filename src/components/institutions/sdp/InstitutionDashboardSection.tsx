@@ -1,7 +1,10 @@
 import { motion } from "framer-motion";
+import { useState } from "react";
 import { ArrowRight } from "lucide-react";
+import { ComingSoonModal } from "@/components/institutions/Modals/ComingSoonModal"; 
 
 const InstitutionDashboardSection = () => {
+   const [modalOpen, setModalOpen] = useState(false);
   return (
     <section className="w-full bg-[#F5F7F8] py-16 px-4 md:px-20 text-center">
       <motion.div
@@ -56,18 +59,17 @@ const InstitutionDashboardSection = () => {
         link: "/games/chemical",
         image: "/institutions/vectors/SimulationGames/csevbm.png",
       },
-    ].map(({ link, image }, index) => (
-      <a
-        href={link}
+    ].map(({ image }, index) => (
+      <button
+        type="button"
         key={index}
-        className="group hover:scale-125 transition-transform duration-300"
+        onClick={() => setModalOpen(true)}
+        className="group hover:scale-125 transition-transform duration-300 focus:outline-none"
       >
-        
-          <img src={image}  className="w-full h-64 object-contain" />
-          
-        
-      </a>
+        <img src={image} className="w-full h-64 object-contain" />
+      </button>
     ))}
+    <ComingSoonModal isOpen={modalOpen} onClose={() => setModalOpen(false)} />
   </motion.div>
 </motion.div>
 
@@ -118,13 +120,18 @@ const InstitutionDashboardSection = () => {
 
               {/* Text Section */}
               <div className="flex-1 text-left pl-10">
-                <h4 className="text-md font-bold mb-2">Rareminds Learning Management System</h4>
+                <h4 className="text-md font-bold mb-2">VidyaSethu by Rareminds</h4>
                 <p className="text-sm text-gray-600">
-                  Streamlined course access and tracking for student progress.
+                  A Learning Management System with streamlined course access and tracking for student progress.
                 </p>
-                <button className="mt-4 inline-flex items-center gap-2 text-[#50b1f6] font-medium">
+                <a
+                  href="https://learning.rareminds.in/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-4 inline-flex items-center gap-2 text-[#50b1f6] font-medium"
+                >
                   Explore More <ArrowRight className="w-4 h-4" />
-                </button>
+                </a>
               </div>
             </div>
           </motion.div>
