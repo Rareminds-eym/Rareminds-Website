@@ -380,8 +380,9 @@ function HeroMobile() {
     });
   };
 
+
   return (
-    <section className="relative min-h-screen flex flex-col bg-gradient-to-br from-[#A7D8DE] to-[#FCD5CE] text-black overflow-hidden lg:hidden">
+    <section className="relative min-h-full flex flex-col bg-gradient-to-br from-[#A7D8DE] to-[#FCD5CE] text-black overflow-hidden lg:hidden">
       <HeroModal
         open={modal.open}
         onClose={() => setModal({ open: false, pdfUrl: "", institution: "" })}
@@ -390,8 +391,16 @@ function HeroMobile() {
       />
       <InfoModal open={infoModalOpen} onClose={() => setInfoModalOpen(false)} />
       <ImpactModal open={impactModalOpen} onClose={() => setImpactModalOpen(false)} />
-      {/* Top text section */}
-      <div className="w-full px-4 pt-12 pb-6 z-10">
+
+      {/* Banner image/video placeholder - moved to top */}
+      <div className="relative w-full flex-1 flex items-center justify-center">
+        <div className="w-full h-64 bg-gray-200 flex items-center justify-center">
+          <span className="text-gray-500 text-lg">[Banner Image/Video Placeholder]</span>
+        </div>
+      </div>
+
+      {/* Text section - moved below */}
+      <div className="w-full px-4 pt-6 pb-24 z-10 relative"> {/* Increased bottom padding and made relative */}
         <motion.h1
           className="text-2xl font-bold mb-6 leading-tight"
           initial={{ opacity: 0, y: -20 }}
@@ -427,6 +436,7 @@ function HeroMobile() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.3 }}
         >
+          {/* ...existing CTA buttons... */}
           {banners[currentBanner].cta.map((btn, i) =>
             btn.text === "See What You Can Become →" ? (
               <motion.button
@@ -500,52 +510,46 @@ function HeroMobile() {
             )
           )}
         </motion.div>
-      </div>
-      {/* Placeholder for image/video */}
-      <div className="relative w-full flex-1 flex items-center justify-center">
-        <div className="w-full h-64 bg-gray-200 flex items-center justify-center">
-          <span className="text-gray-500 text-lg">[Banner Image/Video Placeholder]</span>
+        {/* Move pagination and scroller inside the text section */}
+        <div className="absolute left-0 right-0 bottom-16 z-20 flex justify-center gap-2">
+          {banners.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => setCurrentBanner(index)}
+              className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                currentBanner === index ? 'bg-[#222B33] w-6' : 'bg-white/50 hover:bg-white/70'
+              }`}
+              aria-label={`Go to slide ${index + 1}`}
+            />
+          ))}
         </div>
-      </div>
-      {/* Pagination */}
-      <div className="absolute bottom-20 left-0 right-0 z-20 flex justify-center gap-2">
-        {banners.map((_, index) => (
+        <div className="absolute left-0 right-0 bottom-1 flex justify-center z-30">
           <button
-            key={index}
-            onClick={() => setCurrentBanner(index)}
-            className={`w-2 h-2 rounded-full transition-all duration-300 ${
-              currentBanner === index ? 'bg-[#222B33] w-6' : 'bg-white/50 hover:bg-white/70'
-            }`}
-            aria-label={`Go to slide ${index + 1}`}
-          />
-        ))}
-      </div>
-      {/* Scroller */}
-      <div className="absolute bottom-6 left-0 right-0 flex justify-center z-30">
-        <button
-          onClick={handleScrollDown}
-          aria-label="Scroll down"
-          className="flex flex-col items-center"
-        >
-          <img
-            src="/institutions/vectors/scroll.png"
-            width="60"
-            height="60"
-            alt="Scroll down"
-            className="scroll-rotate"
-          />
-          <img
-            src="/institutions/vectors/arrowDown.svg"
-            width="36"
-            height="36"
-            alt="Scroll down"
-            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
-          />
-        </button>
+            onClick={handleScrollDown}
+            aria-label="Scroll down"
+            className="flex flex-col items-center"
+          >
+            <img
+              src="/institutions/vectors/scroll.png"
+              width="60"
+              height="60"
+              alt="Scroll down"
+              className="scroll-rotate"
+            />
+            <img
+              src="/institutions/vectors/arrowDown.svg"
+              width="36"
+              height="36"
+              alt="Scroll down"
+              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+            />
+          </button>
+        </div>
       </div>
     </section>
   );
 }
+
 
 export default function Hero() {
   const [currentBanner, setCurrentBanner] = useState(0);
