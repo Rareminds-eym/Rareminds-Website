@@ -194,7 +194,7 @@ const FooterBar = () => {
 							<>
 								<li>
 									<Link
-										to="/corporate/training/workplace-productivity"
+										to="/corporate/training/services/workplace-productivity"
 										className="hover:text-red-400 transition-colors"
 									>
 										Workplace Productivity & Digital Fluency
@@ -202,7 +202,7 @@ const FooterBar = () => {
 								</li>
 								<li>
 									<Link
-										to="/corporate/training/tech-upskilling"
+										to="/corporate/training/services/tech-upskilling"
 										className="hover:text-red-400 transition-colors"
 									>
 										Tech Upskilling & Future Skills
@@ -210,7 +210,7 @@ const FooterBar = () => {
 								</li>
 								<li>
 									<Link
-										to="/corporate/training/behavioral-programs"
+										to="/corporate/training/services/behavioral-culture"
 										className="hover:text-red-400 transition-colors"
 									>
 										Behavioral & Organizational Culture Programs
@@ -239,7 +239,7 @@ const FooterBar = () => {
 							<>
 								<li>
 									<Link
-										to="/corporate/recruitment/interview-service"
+										to="/corporate/recruitment/services/Interview-as-a-service"
 										className="hover:text-red-400 transition-colors"
 									>
 										Interview-as-a-service
@@ -247,7 +247,7 @@ const FooterBar = () => {
 								</li>
 								<li>
 									<Link
-										to="/corporate/recruitment/diversity-hiring"
+										to="/corporate/recruitment/services/diversity-hiring"
 										className="hover:text-red-400 transition-colors"
 									>
 										Diversity Hiring
@@ -255,7 +255,7 @@ const FooterBar = () => {
 								</li>
 								<li>
 									<Link
-										to="/corporate/recruitment/pre-onboarding"
+										to="/corporate/recruitment/services/pre-onboarding-support"
 										className="hover:text-red-400 transition-colors"
 									>
 										Pre-Onboarding Support
