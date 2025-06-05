@@ -5,20 +5,20 @@ import { useState, useEffect } from 'react';
 
 const banners = [
   {
-    title: " Speak Bold. Lead Smart.",
-    subtitle: "Turn potential into presence. Our expert-led communication and personality development programs build confidence, clarity, and campus-to-career readiness.",
+    title: "  Power in Every Word. Purpose in Every Step.",
+    subtitle: "Speak to be heard. Lead to be followed.",
     video: "https://player.vimeo.com/external/370467553.hd.mp4?...",
     poster: "/institutions/images/Banners/inst/Banner1.jpg",
   },
   {
-    title: "Learn Deep. Work Smart.",
-    subtitle: "Bridge the skill gap with hands-on, industry-certified training in high-demand domains — from food tech to medical coding. Your students, job-ready from day one.",
+    title: "Think Deep. Work Smart.",
+    subtitle: "Equip every student and mentor to lead with resilience, empathy, and purpose.",
     video: "https://player.vimeo.com/external/370467553.hd.mp4?...",
     poster: "/institutions/images/Banners/inst/Banner2.jpg",
   },
   {
     title: " Lead the Change. Own the Future.",
-    subtitle: "Empower students to rise as decision-makers, not just job seekers. Our leadership and career pathways fuel ambition, innovation, and professional mastery.",
+    subtitle: "Transform students into future-ready leaders, not just employees.",
     video: "https://player.vimeo.com/external/370467553.hd.mp4?...",
     poster: "/institutions/images/Banners/inst/Banner3.jpeg",
   }
@@ -79,7 +79,7 @@ export default function Hero() {
               initial={{ opacity: 0, y: 50 }}
               animate={{ opacity: currentBanner === index ? 1 : 0, y: currentBanner === index ? 0 : 50 }}
               transition={{ duration: 1, delay: 0.4 }}
-              className="text-right max-w-2xl ml-auto"
+              className="text-center max-w-2xl ml-auto"
             >
               <motion.h1 
               className="text-3xl md:text-3xl font-bold mb-20 text-black leading-tight"
@@ -101,30 +101,21 @@ export default function Hero() {
                 animate={{ opacity: currentBanner === index ? 1 : 0 }}
                 transition={{ duration: 0.5, delay: 0.8 }}
               >
-                {banner.subtitle === "Turn potential into presence. Our expert-led communication and personality development programs build confidence, clarity, and campus-to-career readiness." ? (
+                {banner.subtitle === "Speak to be heard. Lead to be followed." ? (
                 <>
-                  <span className="block">Turn potential into presence.</span>
-                  <span className="block">Our expert-led communication</span>
-                  <span className="block">and personality development programs</span>
-                  <span className="block">build confidence, clarity,</span>
-                  <span className="block">and campus-to-career readiness.</span>
+                  <span className="block">Speak to be heard.</span>
+                  <span className="block">Lead to be followed.</span>
 
                 </>
-              ) : banner.subtitle === "Bridge the skill gap with hands-on, industry-certified training in high-demand domains — from food tech to medical coding. Your students, job-ready from day one." ? (
+              ) : banner.subtitle === "Equip every student and mentor to lead with resilience, empathy, and purpose." ? (
                 <>
-                  <span className="block">Equip your campus with</span>
-                  <span className="block">emotional intelligence and resilience. </span>
-                  <span className="block">RareMinds trains mentors and students</span>
-                  <span className="block"> in mental wellness, peer counseling and</span>
-                  <span className="block"> compassionate support systems.</span>
+                  <span className="block">Equip every student and mentor to lead</span>
+                  <span className="block">with resilience, empathy, and purpose. </span>
                 </>
-              ) : banner.subtitle === "Empower students to rise as decision-makers, not just job seekers. Our leadership and career pathways fuel ambition, innovation, and professional mastery." ? (
+              ) : banner.subtitle === "Transform students into future-ready leaders, not just employees." ? (
                 <>
-                  <span className="block">Empower students to rise as decision-makers,</span>
-                  <span className="block">not just job seekers.</span>
-                  <span className="block">Our leadership and career pathways</span>
-                  <span className="block">fuel ambition, innovation,</span>
-                  <span className="block">and professional mastery.</span>
+                  <span className="block">Transform students into future-ready leaders,</span>
+                  <span className="block">not just employees.</span>
                 </>
               ) : (
                 banner.subtitle.match(/[^:.&]+[:.&]?/g)?.map((part, i) => (
@@ -176,7 +167,7 @@ export default function Hero() {
               <div className="hidden lg:block container ">
                 <div
                   onClick={handleScrollDown}
-                  className="w-max absolute bottom-[60px] left-1/2 -translate-x-1/2 cursor-pointer transition-opacity z-10"
+                  className="w-max absolute bottom-[60px] left-36 cursor-pointer transition-opacity z-10"
                   aria-label="Scroll down"
                 >
                   <img
