@@ -3,6 +3,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Plus, Calendar, Download, MessageCircleQuestion, MessageCircle } from "lucide-react";
 import FAQChatbot from "@/components/institutions/sdp/FAQChatbot";
 import { ChatButton } from "@/components/institutions/ChatButton";
+import Modal from "react-modal";
+import { supabase } from "@/lib/supabaseClient";
 
 interface MenuItem {
   id: string;
@@ -23,6 +25,55 @@ const FloatingActionMenu = () => {
   const [isHovered, setIsHovered] = useState(false);
   const [isChatOpen, setIsChatOpen] = useState(false);
 
+  // Course List Modal State
+  const [courseModalOpen, setCourseModalOpen] = useState(false);
+  const [courseForm, setCourseForm] = useState({ name: '', email: '' });
+  const [courseSending, setCourseSending] = useState(false);
+  const [courseSuccess, setCourseSuccess] = useState(false);
+  const [courseError, setCourseError] = useState('');
+
+  // Email automation for Course List
+  const sendCourseListEmail = async (name: string, email: string) => {
+    const response = await fetch('http://localhost:3001/api/send-pdf', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name,
+        email,
+        pdfUrl: '/institutions/pdfs/Course_List.pdf',
+        institution: 'Course List Download'
+      }),
+    });
+    const data = await response.json();
+    if (!response.ok) {
+      throw new Error(data.error || 'Failed to send email');
+    }
+  };
+
+  const handleCourseChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setCourseForm({ ...courseForm, [e.target.name]: e.target.value });
+  };
+
+  const handleCourseSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setCourseSending(true);
+    setCourseError('');
+    try {
+      await supabase.from('course_list_requests').insert([
+        { name: courseForm.name, email: courseForm.email }
+      ]);
+      await sendCourseListEmail(courseForm.name, courseForm.email);
+      setCourseSuccess(true);
+      setTimeout(() => {
+        setCourseModalOpen(false);
+        setCourseSuccess(false);
+        setCourseForm({ name: '', email: '' });
+      }, 2000);
+    } catch (err: any) {
+      setCourseError(err.message || 'Failed to send course list. Try again.');
+    }
+    setCourseSending(false);
+  };
 
   useEffect(() => {
     let plusTimeout: NodeJS.Timeout;
@@ -46,27 +97,28 @@ const FloatingActionMenu = () => {
       clearInterval(cycleInterval);
     };
   }, [isOpen]);
+
   useEffect(() => {
     let lastScrollY = window.scrollY;
-  
+
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
       const scrollDown = currentScrollY > lastScrollY;
       const scrollUp = currentScrollY < lastScrollY;
-  
+
       const scrollBottom = currentScrollY + window.innerHeight >= document.body.scrollHeight - 50;
-  
+
       if (scrollDown && scrollBottom && !isOpen) {
         setIsOpen(true);
       }
-  
+
       if (scrollUp && isOpen) {
         setIsOpen(false);
       }
-  
+
       lastScrollY = currentScrollY;
     };
-  
+
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, [isOpen]);
@@ -109,7 +161,7 @@ const FloatingActionMenu = () => {
       icon: Download,
       label: "Download Course List",
       onClick: () => {
-        window.open("institutions/pdfs/Course_List.pdf");
+        setCourseModalOpen(true);
         setIsOpen(false);
       },
     },
@@ -198,7 +250,6 @@ const FloatingActionMenu = () => {
                         item.id === "download" ? "-top-6" : "top-0"
                       } bg-black/60 text-white px-2 py-1 rounded text-sm whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity`}
                     >
-                    
                       {item.label}
                     </div>
                   </motion.button>
@@ -209,26 +260,25 @@ const FloatingActionMenu = () => {
 
         {/* Main FAB */}
         <motion.button
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
-                animate={isOpen ? {} : { y: [0, -27, 0] }}
-                transition={
-                    isOpen
-                    ? {}
-                    : {
-                        repeat: Infinity,
-                        repeatType: "loop",
-                        duration: 1.5,
-                        ease: "easeInOut",
-                        }
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.9 }}
+          animate={isOpen ? {} : { y: [0, -27, 0] }}
+          transition={
+            isOpen
+              ? {}
+              : {
+                  repeat: Infinity,
+                  repeatType: "loop",
+                  duration: 1.5,
+                  ease: "easeInOut",
                 }
-                onClick={toggleMenu}
-                onMouseEnter={() => setIsHovered(true)}
-                onMouseLeave={() => setIsHovered(false)}
-                className="w-14 h-14 bg-gradient-to-tr from-gray-700 to-gray-900 rounded-full shadow-lg flex items-center justify-center text-white hover:opacity-90 transition-all duration-200"
-                aria-label="Toggle menu"
-                >
-
+          }
+          onClick={toggleMenu}
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
+          className="w-14 h-14 bg-gradient-to-tr from-gray-700 to-gray-900 rounded-full shadow-lg flex items-center justify-center text-white hover:opacity-90 transition-all duration-200"
+          aria-label="Toggle menu"
+        >
           <motion.div
             animate={{ rotate: isOpen ? 45 : 0 }}
             transition={{ duration: 0.3, type: "spring", stiffness: 200 }}
@@ -237,6 +287,67 @@ const FloatingActionMenu = () => {
           </motion.div>
         </motion.button>
       </div>
+
+      {/* Modal for Course List Download */}
+      <Modal
+        isOpen={courseModalOpen}
+        onRequestClose={() => {
+          setCourseModalOpen(false);
+          setCourseSuccess(false);
+          setCourseForm({ name: '', email: '' });
+          setCourseError('');
+        }}
+        className="bg-white rounded-lg p-8 max-w-md mx-auto mt-24 shadow-lg relative z-[9999]"
+        overlayClassName="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-[9998]"
+      >
+        <button
+          className="absolute top-2 right-2 text-gray-500"
+          onClick={() => {
+            setCourseModalOpen(false);
+            setCourseSuccess(false);
+            setCourseForm({ name: '', email: '' });
+            setCourseError('');
+          }}
+        >
+          ×
+        </button>
+        <h2 className="text-lg font-bold mb-4">Download Course List</h2>
+        {courseSuccess ? (
+          <div className="text-green-600">
+            Course List sent to your email!
+          </div>
+        ) : (
+          <form onSubmit={handleCourseSubmit} className="space-y-4">
+            <input
+              name="name"
+              value={courseForm.name}
+              onChange={handleCourseChange}
+              required
+              placeholder="Your Name"
+              className="w-full border px-3 py-2 rounded"
+            />
+            <input
+              name="email"
+              value={courseForm.email}
+              onChange={handleCourseChange}
+              required
+              type="email"
+              placeholder="Email ID"
+              className="w-full border px-3 py-2 rounded"
+            />
+            {courseError && (
+              <p className="text-red-500 text-sm text-center">{courseError}</p>
+            )}
+            <button
+              type="submit"
+              disabled={courseSending}
+              className="w-full bg-blue-600 text-white py-2 rounded font-semibold"
+            >
+              {courseSending ? 'Sending...' : 'Send & Download'}
+            </button>
+          </form>
+        )}
+      </Modal>
 
       {/* FAQ Chatbot Panel */}
       <FAQChatbot isOpen={isChatbotOpen} onClose={closeChatbot} />

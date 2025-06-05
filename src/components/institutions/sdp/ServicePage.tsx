@@ -768,8 +768,157 @@ export default function ServicePage() {
       </div>
 
       {/* Info Section */}
-      <div className="container mx-auto px-8 py-12">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row gap-10">
+      <div className="container mx-auto px-4 py-10">
+        {/* MOBILE ORDER */}
+        <div className="flex flex-col gap-8 md:hidden">
+          {/* About The Course */}
+          <div>
+            <motion.h2
+              className="text-xl font-bold mb-4 px-2 pt-2"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+            >
+              About The Course
+            </motion.h2>
+            <motion.p
+              className="text-gray-700 leading-relaxed text-justify text-base px-2"
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+            >
+              {service.whatitis}
+            </motion.p>
+          </div>
+          {/* Contents Table */}
+          <div className="bg-white rounded-2xl shadow p-6 border border-blue-100">
+            <h3 className="font-bold mb-3 text-black text-xl">Contents Table</h3>
+            <div className="max-h-[400px] overflow-y-auto">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr>
+                    <th className="text-left py-2 text-zinc-700 font-semibold">Sl. No</th>
+                    <th className="text-left py-2 text-zinc-700 font-semibold">
+                      {id === 'pre-placement-accelerator' ? 'Module / Course Title' : 'Program Title'}
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {tableData.map((prog, idx) => (
+                    <tr
+                      key={prog.slNo}
+                      className={`cursor-pointer rounded-lg transition ${selectedProgramIndex === idx ? "bg-blue-100 font-semibold" : "hover:bg-blue-50"}`}
+                      onClick={() => setSelectedProgramIndex(idx)}
+                    >
+                      <td className="py-2 pr-2">{prog.slNo}</td>
+                      <td className="py-2">{prog.title}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+          {/* Program Details */}
+          {tableData.length > 0 && tableData[selectedProgramIndex] && (
+            <div>
+              <h3 className="font-bold text-xl pt-2 mb-6 text-black">Program Details</h3>
+              <div className="bg-white rounded-2xl p-8 shadow border border-blue-100">
+                {/* Key Focus Areas */}
+                <div className="mb-6">
+                  <div className="font-semibold text-blue-700 mb-1">Key Focus Areas:</div>
+                  <ul className="list-disc list-inside text-gray-800 pl-2">
+                    {tableData[selectedProgramIndex].keyFocus
+                      .split(',')
+                      .map((item: string, idx: number) => (
+                        <li key={idx}>{item.trim()}</li>
+                      ))}
+                  </ul>
+                </div>
+                {/* Customization by Academic Stream */}
+                <div className="mb-6">
+                  <div className="font-semibold text-blue-700 mb-1">Customization by Academic Stream:</div>
+                  <ul className="list-disc list-inside text-gray-800 pl-2">
+                    {tableData[selectedProgramIndex].customization
+                      .split(/;|\./)
+                      .map((item: string) => item.trim())
+                      .filter(Boolean)
+                      .map((item: string, idx: number) => (
+                        <li key={idx}>{item}</li>
+                      ))}
+                  </ul>
+                </div>
+                {/* Job Roles / Outcomes */}
+                <div>
+                  <div className="font-semibold text-blue-700 mb-1">Job Roles / Outcomes:</div>
+                  <ul className="list-disc list-inside text-gray-800 pl-2">
+                    {tableData[selectedProgramIndex].outcomes
+                      .split(',')
+                      .map((item: string, idx: number) => (
+                        <li key={idx}>{item.trim()}</li>
+                      ))}
+                  </ul>
+                </div>
+              </div>
+            </div>
+          )}
+          {/* Program Benefits */}
+          <div>
+            <h3 className="font-bold text-xl pt-2 mb-6 text-black">Program Benefits</h3>
+            <div className="mt-6 bg-gradient-to-br from-blue-100 to-indigo-100 p-8 rounded-2xl px-8 shadow border border-indigo-100">
+              <motion.ul
+                className="space-y-4"
+                initial="hidden"
+                animate="visible"
+                variants={{
+                  visible: {
+                    transition: {
+                      staggerChildren: 0.15
+                    }
+                  }
+                }}
+              >
+                {service.benefits.map((benefit, index) => (
+                  <motion.li
+                    key={index}
+                    variants={{
+                      hidden: { opacity: 0, x: -20 },
+                      visible: { opacity: 1, x: 0 }
+                    }}
+                    className="flex items-start gap-3"
+                  >
+                    <CheckCircle className="w-6 h-6 text-green-500 flex-shrink-0 mt-1" />
+                    <p className="text-gray-800 text-base">{benefit}</p>
+                  </motion.li>
+                ))}
+              </motion.ul>
+            </div>
+          </div>
+          {/* Explore Other Services */}
+          <div className="bg-white rounded-2xl shadow p-6 border border-blue-100">
+            <h3 className="font-bold mb-4 flex items-center gap-2 text-black text-xl">
+              <BookOpen className="w-5 h-5 text-black" />
+              Explore Other Services
+            </h3>
+            <ul className="space-y-2">
+              {otherServices.map(s => (
+                <li key={s.id}>
+                  <button
+                    onClick={() => navigate(`/service/${s.id}`)}
+                    className="w-full text-left px-3 py-2 rounded-lg hover:bg-blue-50 transition flex items-center gap-2"
+                  >
+                    <span className="block w-2 h-2 rounded-full bg-blue-400" />
+                    <span className="text-sm font-medium text-blue-900">{s.name}</span>
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+
+        {/* DESKTOP ORDER (unchanged, but hidden on mobile) */}
+        <div className="max-w-7xl mx-auto gap-10 hidden md:flex flex-row">
           {/* LEFT: About, Dynamic Details, Benefits */}
           <div className="flex-1 min-w-0 px-2">
             <motion.h2
@@ -790,8 +939,7 @@ export default function ServicePage() {
             >
               {service.whatitis}
             </motion.p>
-
-            {/* Dynamic Program Details Section (Below About Us) */}
+            {/* Program Details */}
             {tableData.length > 0 && tableData[selectedProgramIndex] && (
               <div className="mt-14 px-2">
                 <h3 className="font-bold text-xl pt-2 mb-6 text-black">Program Details</h3>
@@ -834,8 +982,7 @@ export default function ServicePage() {
                 </div>
               </div>
             )}
-
-            {/* Program Benefits Section */}
+            {/* Program Benefits */}
             <div className="mt-14 px-2">
               <h3 className="font-bold text-xl pt-2 mb-6 text-black">Program Benefits</h3>
               <div className="mt-10 bg-gradient-to-br from-blue-100 to-indigo-100 p-8 rounded-2xl px-8 shadow border border-indigo-100">
