@@ -10,7 +10,7 @@ const programs = [
     icon: BookOpen,
     color: 'from-blue-600 to-indigo-600',
     benefits: ['NEP Integration', 'Policy Application', 'Learner-Centric'],
-    image: 'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=800'
+    image: '/institutions/vectors/FDP1.jpg'
   },
   {
     name: 'Pedagogy ',
@@ -20,7 +20,7 @@ const programs = [
     icon: Monitor,
     color: 'from-purple-600 to-pink-600',
     benefits: ['Flipped Classroom', 'Experiential Leaning', 'Case-Based'],
-    image: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=800'
+    image: '/institutions/vectors/FDP2.jpg'
   },
   {
     name: 'Research & Publication Skills',
@@ -30,8 +30,8 @@ const programs = [
     icon: Target,
     color: 'from-green-600 to-teal-600',
     benefits: ['Proposal Writing', 'UGC Compliance', 'Funding Sources'],
-    image: 'https://images.unsplash.com/photo-1523580494863-6f3031224c94?auto=format&fit=crop&w=800'
-  },
+    image: '/institutions/vectors/FDP3.jpg'
+},
   {
     name: 'Entrepreneurial Faculty',
     focus: 'Fostering Innovation and Start-Up Culture',
@@ -40,7 +40,7 @@ const programs = [
     icon: School,
     color: 'from-amber-600 to-orange-600',
     benefits: ['Innovation Mindset', 'Start-Up Mentoring', 'Incubation Strategies'],
-    image: 'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=800'
+    image: '/institutions/vectors/FDP4.jpg'
   },
   {
     name: 'Green Campus & Sustainability Education',
@@ -50,7 +50,7 @@ const programs = [
     icon: FileText,
     color: 'from-red-600 to-rose-600',
     benefits: ['ESG Integration', 'Green Practices', 'Sustainabilty Awareness'],
-    image: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=800'
+    image: '/institutions/vectors/FDP5.jpg'
   },
   {
     name: 'Digital Tools Upskilling & Tech-Integrated Teaching',
@@ -60,7 +60,7 @@ const programs = [
     icon: Award,
     color: 'from-violet-600 to-purple-600',
     benefits: ['AI Tools', 'LMS Proficiency', 'Content Creation'],
-    image: 'https://images.unsplash.com/photo-1523580494863-6f3031224c94?auto=format&fit=crop&w=800'
+    image: '/institutions/vectors/FDP6.jpg'
   }
 ];
 
