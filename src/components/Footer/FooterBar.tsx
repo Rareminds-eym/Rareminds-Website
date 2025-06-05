@@ -174,106 +174,90 @@ const FooterBar = () => {
 				</div>
 
 				{/* Our Services Section */}
-				<div>
-					<h2 className="font-bold mb-4 uppercase tracking-wider text-lg">
-						Our Services
-					</h2>
-					<ul className="space-y-3">
-						{isCorporateTraining ? (
-							<>
-								<li>
-									<Link
-										to="/corporate/training/services/workplace-productivity"
-										className="hover:text-red-400 transition-colors"
-									>
-										Workplace Productivity & Digital Fluency
-									</Link>
-								</li>
-								<li>
-									<Link
-										to="/corporate/training/services/pre-placement"
-										className="hover:text-red-400 transition-colors"
-									>
-										Tech Upskilling & Future Skills
-									</Link>
-								</li>
-								<li>
-									<Link
-										to="/corporate/training/services/bridge-courses"
-										className="hover:text-red-400 transition-colors"
-									>
-										Behavioral & Organizational Culture Programs
-									</Link>
-								</li>
-								<li>
-									<a
-										href="/corporate/training/services"
-										onClick={e => {
-											e.preventDefault();
-											navigate("/corporate/training");
-											setTimeout(() => {
-												const el = document.getElementById("services");
-												if (el) {
-													el.scrollIntoView({ behavior: "smooth" });
-												}
-											}, 350);
-										}}
-										className="hover:text-red-400 transition-colors font-semibold cursor-pointer"
-									>
-										View All
-									</a>
-								</li>
-							</>
-						) : isCorporate ? (
-							<>
-								<li>
-									<Link
-										to="/corporate/recruitment/services/interview-as-a-service"
-										className="hover:text-red-400 transition-colors"
-									>
-										Interview-as-a-service
-									</Link>
-								</li>
-								<li>
-									<Link
-										to="/corporate/recruitment/services/diversity-hiring"
-										className="hover:text-red-400 transition-colors"
-									>
-										Diversity Hiring
-									</Link>
-								</li>
-								<li>
-									<Link
-										to="/corporate/recruitment/services/pre-onboarding-support"
-										className="hover:text-red-400 transition-colors"
-									>
-										Pre-Onboarding Support
-									</Link>
-								</li>
-								<li>
-									<a
-										href="/corporate/recruitment#services"
-										onClick={handleViewAll}
-										className="hover:text-red-400 transition-colors font-semibold cursor-pointer"
-									>
-										View All
-									</a>
-								</li>
-							</>
-						) : (
-							serviceData?.serviceData?.map((ele: any) => (
-								<li key={ele.ContentSlug}>
-									<Link
-										to={`/${ele.ContentSlug}`}
-										className="hover:text-red-400 transition-colors"
-									>
-										{ele.Heading1}
-									</Link>
-								</li>
-							))
-						)}
-					</ul>
-				</div>
+				
+<div>
+    <h2 className="font-bold mb-4 uppercase tracking-wider text-lg">
+        Our Services
+    </h2>
+    <ul className="flex flex-wrap gap-x-6 gap-y-2 items-center">
+        {isCorporateTraining ? (
+            <>
+                <li>Workplace Productivity & Digital Fluency</li>
+                <li>Tech Upskilling & Future Skills</li>
+                <li>Behavioral & Organizational Culture Programs</li>
+                <li>
+                    <a
+                        href="/corporate/training/services"
+                        onClick={e => {
+                            e.preventDefault();
+                            navigate("/corporate/training");
+                            setTimeout(() => {
+                                const el = document.getElementById("services");
+                                if (el) {
+                                    el.scrollIntoView({ behavior: "smooth" });
+                                }
+                            }, 350);
+                        }}
+                        className="hover:text-red-400 transition-colors font-semibold cursor-pointer"
+                    >
+                        View All
+                    </a>
+                </li>
+            </>
+        ) : isCorporate ? (
+            <>
+                <li>Interview-as-a-service</li>
+                <li>Diversity Hiring</li>
+                <li>Pre-Onboarding Support</li>
+                <li>
+                    <a
+                        href="/corporate/recruitment#services"
+                        onClick={handleViewAll}
+                        className="hover:text-red-400 transition-colors font-semibold cursor-pointer"
+                    >
+                        View All
+                    </a>
+                </li>
+            </>
+        ) : window.location.pathname.startsWith("/institutions/fdp") ? (
+            <>
+                <li>Skill Dev Programs</li>
+                <li>Faculty Dev Programs (FDPs)</li>
+                <li>Leadership &  Workshops</li>
+            </>
+        ) : window.location.pathname.startsWith("/institutions/services") ? (
+            <>
+                <li>Recruitment Placement</li>
+                <li>Curriculum Integration </li>
+                <li>Digital Labs & LMS</li>
+                <li>Accreditation & Consulting</li>
+                <li>Leadership & Workshops</li>
+            </>
+        ) : window.location.pathname.startsWith("/institutions") ? (
+            <>
+                <li>Skill Dev Programs</li>
+                <li>Campus to Corporate </li>
+                <li>Student Counseling </li>
+                <li>Hackathons & Challenges</li>
+                <li>Recruitment Placement </li>
+            </>
+        ) : window.location.pathname.startsWith("/faculty") ? (
+            <>
+                <li>Skill Development Programs</li>
+                <li>Faculty Development Programs (FDPs)</li>
+                <li>Leadership & Workshops</li>
+            </>
+        ) : (
+            <>
+                <li>Skill Development Programs</li>
+                <li>Campus to Corporate Training</li>
+                <li>Student Counseling & Mentorship</li>
+                <li>Hackathons & Challenges</li>
+                <li>Recruitment Placement Support</li>
+            </>
+        )}
+    </ul>
+</div>
 
 				{/* Contact us Section */}
 				<div>
