@@ -511,7 +511,7 @@ function HeroMobile() {
           )}
         </motion.div>
         {/* Move pagination and scroller inside the text section */}
-        <div className="absolute left-0 right-0 bottom-16 z-20 flex justify-center gap-2">
+        <div className="absolute left-0 right-0 bottom-20 z-20 flex justify-center gap-2">
           {banners.map((_, index) => (
             <button
               key={index}
