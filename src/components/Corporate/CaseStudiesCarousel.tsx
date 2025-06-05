@@ -32,17 +32,14 @@ const CaseStudiesCarousel = ({ caseStudies }: { caseStudies: CaseStudy[] }) => {
   }, [emblaApi]);
 
   return (
-    <div className="relative" id="case-studies-carousel">
+    <div className="relative text-left" id="case-studies-carousel">
       <div className="overflow-hidden" ref={emblaRef}>
         <div className="flex">
           {caseStudies.map((currentCase, idx) => (
-            <div
-              key={`case-${idx}`}
-              className="flex-[0_0_100%] px-2 md:px-6"
-            >
+            <div key={`case-${idx}`} className="flex-[0_0_100%] px-2 md:px-6">
               <div className="bg-white rounded-3xl overflow-hidden border border-corporate-black/40 w-full max-w-6xl mx-auto">
                 <div className="grid grid-cols-1 lg:grid-cols-3 min-h-[70vh]">
-                  {/* Left Panel - Image & Stats */}
+                  {/* Left Panel */}
                   <div className="bg-gradient-to-br from-corporate-purple to-corporate-purple/60 text-white p-8 flex flex-col justify-between">
                     <div>
                       <motion.div
@@ -50,21 +47,21 @@ const CaseStudiesCarousel = ({ caseStudies }: { caseStudies: CaseStudy[] }) => {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.5 }}
-                        className="mb-8"
+                        className="mb-8 text-left"
                       >
-                        <h3 className="text-2xl font-bold mb-2 flex items-center">
+                        <h3 className="text-2xl font-bold mb-2 flex items-center text-left">
                           <span className="mr-2 bg-white min-w-8 min-h-8 rounded-full flex items-center justify-center text-[#7d64ff]">
                             {idx + 1}
                           </span>
                           {currentCase.title}
                         </h3>
-                        <p className="">{currentCase.subtitle}</p>
+                        <p className="text-left">{currentCase.subtitle}</p>
                       </motion.div>
 
                       <div className="space-y-4">
-                        <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 max-h-40 overflow-y-auto modern-scrollbar">
+                        <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 max-h-40 overflow-y-auto modern-scrollbar text-left">
                           <TrendingUp size={24} className="mb-2" />
-                          <h4 className="font-semibold mb-1">
+                          <h4 className="font-semibold mb-1 text-left">
                             Key Outcomes
                           </h4>
                           <ul className="space-y-2">
@@ -73,17 +70,14 @@ const CaseStudiesCarousel = ({ caseStudies }: { caseStudies: CaseStudy[] }) => {
                                 key={`outcome-${idx}-${i}`}
                                 initial={{ opacity: 0, x: -10 }}
                                 animate={{ opacity: 1, x: 0 }}
-                                transition={{
-                                  duration: 0.3,
-                                  delay: i * 0.1,
-                                }}
-                                className="flex items-start gap-2"
+                                transition={{ duration: 0.3, delay: i * 0.1 }}
+                                className="flex items-start gap-2 text-left"
                               >
                                 <CheckCheck
                                   size={18}
                                   className="mt-1 flex-shrink-0"
                                 />
-                                <span className="text-sm">{outcome}</span>
+                                <span className="text-sm text-left">{outcome}</span>
                               </motion.li>
                             ))}
                           </ul>
@@ -92,36 +86,32 @@ const CaseStudiesCarousel = ({ caseStudies }: { caseStudies: CaseStudy[] }) => {
                     </div>
 
                     <div>
-                      <blockquote className="border-l-4 border-s-[#7d64ff] pl-4 italic mt-5">
+                      <blockquote className="border-l-4 border-s-[#7d64ff] pl-4 italic mt-5 text-left">
                         "{currentCase.testimonial}"
                       </blockquote>
-                      <p className="text-right text-sm mt-2">
+                      <p className="text-left text-sm mt-2">
                         — {currentCase.author}
                       </p>
                     </div>
                   </div>
 
-                  {/* Right Panel - Case Study Details */}
+                  {/* Right Panel */}
                   <div className="col-span-2 p-8">
-                    <div className="grid grid-cols-1 h-full gap-6">
+                    <div className="grid grid-cols-1 h-full gap-6 text-left">
                       <motion.div
                         key={`client-${idx}`}
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.4 }}
-                        className="bg-corporate-black/5 p-6 rounded-xl border border-corporate-primary-light/20 max-h-32 overflow-y-auto modern-scrollbar"
+                        className="bg-corporate-black/5 p-6 rounded-xl border border-corporate-primary-light/20 max-h-32 overflow-y-auto modern-scrollbar text-left"
                       >
-                        <h4 className="text-corporate-black font-bold mb-3 flex items-center gap-2">
+                        <h4 className="text-corporate-black font-bold mb-3 flex items-center gap-2 text-left">
                           <span className="bg-[#7d64ff]/10 p-2 mr-1 rounded-lg">
-                            <Icon
-                              icon="formkit:people"
-                              width="20"
-                              height="20"
-                            />
+                            <Icon icon="formkit:people" width="20" height="20" />
                           </span>
                           Client
                         </h4>
-                        <p className="text-gray-700">
+                        <p className="text-gray-700 text-left">
                           {currentCase.client}
                         </p>
                       </motion.div>
@@ -131,19 +121,15 @@ const CaseStudiesCarousel = ({ caseStudies }: { caseStudies: CaseStudy[] }) => {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.4, delay: 0.1 }}
-                        className="bg-corporate-black/5 p-6 rounded-xl border border-corporate-primary-light/20 max-h-32 overflow-y-auto modern-scrollbar"
+                        className="bg-corporate-black/5 p-6 rounded-xl border border-corporate-primary-light/20 max-h-32 overflow-y-auto modern-scrollbar text-left"
                       >
-                        <h4 className="text-corporate-black font-bold mb-3 flex items-center gap-2">
+                        <h4 className="text-corporate-black font-bold mb-3 flex items-center gap-2 text-left">
                           <span className="bg-[#7d64ff]/10 p-2 mr-1 rounded-lg">
-                            <Icon
-                              icon="ant-design:aim-outlined"
-                              width="20"
-                              height="20"
-                            />
+                            <Icon icon="ant-design:aim-outlined" width="20" height="20" />
                           </span>
                           Challenge
                         </h4>
-                        <p className="text-gray-700">
+                        <p className="text-gray-700 text-left">
                           {currentCase.challenge}
                         </p>
                       </motion.div>
@@ -153,30 +139,26 @@ const CaseStudiesCarousel = ({ caseStudies }: { caseStudies: CaseStudy[] }) => {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.4, delay: 0.2 }}
-                        className="bg-corporate-black/5 p-6 rounded-xl flex flex-col justify-between border border-corporate-primary-light/20 max-h-40 overflow-y-auto modern-scrollbar"
+                        className="bg-corporate-black/5 p-6 rounded-xl flex flex-col justify-between border border-corporate-primary-light/20 max-h-40 overflow-y-auto modern-scrollbar text-left"
                       >
                         <div>
-                          <h4 className="text-corporate-black font-bold mb-3 flex items-center gap-2">
+                          <h4 className="text-corporate-black font-bold mb-3 flex items-center gap-2 text-left">
                             <span className="bg-[#7d64ff]/10 p-2 mr-1 rounded-lg">
-                              <Icon
-                                icon="hugeicons:idea-01"
-                                width="20"
-                                height="20"
-                              />
+                              <Icon icon="hugeicons:idea-01" width="20" height="20" />
                             </span>
                             Rareminds Solution
                           </h4>
-                          <ul className="space-y-3 mt-5">
+                          <ul className="space-y-3 mt-5 text-left">
                             {currentCase.solution.map((step, i) => (
                               <li
                                 key={`solution-${idx}-${i}`}
-                                className="flex items-start gap-3"
+                                className="flex items-start gap-3 text-left"
                               >
                                 <CheckCircle
                                   className="text-corporate-black mt-1 flex-shrink-0"
                                   size={18}
                                 />
-                                <span className="text-gray-700">
+                                <span className="text-gray-700 text-left">
                                   {step}
                                 </span>
                               </li>
@@ -192,7 +174,9 @@ const CaseStudiesCarousel = ({ caseStudies }: { caseStudies: CaseStudy[] }) => {
           ))}
         </div>
       </div>
-      <div className="flex justify-center gap-4 mt-8">
+
+      {/* Navigation Buttons */}
+      <div className="flex justify-center gap-4 mt-8 text-left">
         <motion.button
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
