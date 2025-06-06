@@ -37,7 +37,11 @@ const socialIcons = [
 	},
 ];
 
-const FooterBar = () => {
+interface FooterBarProps {
+	hideServices?: boolean;
+}
+
+const FooterBar: React.FC<FooterBarProps> = ({ hideServices }) => {
 	const [serviceData, setServiceData] = useState<any>({});
 	const [subscriberEmail, setSubscriberEmail] = useState<string | null>(null);
 	const [successMessage, setSuccessMessage] = useState<string | null>(null);
@@ -99,7 +103,7 @@ const FooterBar = () => {
 		>
 			<div className="absolute w-full h-full bg-black/90"></div>
 			<div
-				className="relative lg:px-14 grid lg:grid-cols-5 grid-cols-1 gap-4 container mx-auto py-12"
+				className={`relative lg:px-14 grid container mx-auto py-12 gap-4 ${hideServices ? 'lg:grid-cols-4 grid-cols-1' : 'lg:grid-cols-5 grid-cols-1'}`}
 			>
 				{/* Links Section */}
 				<div>
@@ -176,6 +180,7 @@ const FooterBar = () => {
 				</div>
 
 				{/* Our Services Section */}
+				{!hideServices && (
 				<div>
 					<h2 className="font-bold mb-4 uppercase tracking-wider text-lg">
 						Our Services
@@ -293,8 +298,7 @@ const FooterBar = () => {
 									</Link>
 								</li>
 							</ul>
-						)
-						: window.location.pathname.startsWith("/institutions/fdp") ? (
+						) : window.location.pathname.startsWith("/institutions/fdp") ? (
 							<>
 								<li>
 									<Link
@@ -482,6 +486,7 @@ const FooterBar = () => {
 						}
 					</ul>
 				</div>
+				)}
 
 				{/* Contact us Section */}
 				<div>

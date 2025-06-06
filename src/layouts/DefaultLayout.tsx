@@ -15,7 +15,7 @@ const DefaultLayout: React.FC<DefaultLayoutProps> = ({ children }) => {
     <div className="flex h-screen flex-col">
       <Header navbarOpen={navbarOpen} setNavbarOpen={setNavbarOpen} />
       <main className="App w-full flex-1 ">{children}</main>
-      <FooterBar />
+      <FooterBar hideServices={true} />
     </div>
   );
 };
