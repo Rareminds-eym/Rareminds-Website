@@ -15,6 +15,7 @@ const banners = [
     subtitle: "Don't just pass exams.Get job-ready with our industry-aligned programs.",
     video: "https://player.vimeo.com/external/370467553.hd.mp4?...",
     poster: "/institutions/images/Banners/sdp/Banner1.jpg",
+    mobilePoster: "/institutions/images/Banners/sdp/Banner1_mobile.jpg",
     alt: "Students celebrating graduation with skills",
     cta: [
       {
@@ -38,6 +39,7 @@ const banners = [
     subtitle: "Real world training, placement assistance & certifications that matter.",
     video: "https://player.vimeo.com/external/370467553.hd.mp4?...",
     poster: "/institutions/images/Banners/sdp/Banner2.jpg",
+    mobilePoster: "/institutions/images/Banners/sdp/Banner2_mobile.jpg",
     alt: "Career bridge from campus to workplace",
     cta: [
       {
@@ -52,6 +54,7 @@ const banners = [
     subtitle: "Build your future, with expert-led modules in trending domains.",
     video: "https://player.vimeo.com/external/370467553.hd.mp4?...",
     poster: "/institutions/images/Banners/sdp/Banner3.jpeg",
+    mobilePoster: "/institutions/images/Banners/sdp/Banner3_mobile.jpg",
     alt: "Student planning for a long-term career",
     cta: [
       {
@@ -69,6 +72,7 @@ const banners = [
     subtitle: "Upskill in 45 hours. Land internships, projects, and job offers.",
     video: "https://player.vimeo.com/external/370467553.hd.mp4?...",
     poster: "/institutions/images/Banners/sdp/Banner4.jpg",
+    mobilePoster: "/institutions/images/Banners/sdp/Banner4_mobile.jpg",
     alt: "Student upskilling for internships and jobs",
     cta: [
       {
@@ -83,6 +87,7 @@ const banners = [
     subtitle: "Personal branding, communication skills & placement prep – we’ve got you.",
     video: "https://player.vimeo.com/external/370467553.hd.mp4?...",
     poster: "/institutions/images/Banners/sdp/Banner5.jpg",
+    mobilePoster: "/institutions/images/Banners/sdp/Banner5_mobile.jpg",
     alt: "Student building a personal brand",
     cta: [
       {
@@ -392,51 +397,58 @@ function HeroMobile() {
       <InfoModal open={infoModalOpen} onClose={() => setInfoModalOpen(false)} />
       <ImpactModal open={impactModalOpen} onClose={() => setImpactModalOpen(false)} />
 
-      {/* Banner image/video placeholder - moved to top */}
+      {/* Banner image with text overlay at the top */}
       <div className="relative w-full flex-1 flex items-center justify-center">
-        <div className="w-full h-64 bg-gray-200 flex items-center justify-center">
-          <span className="text-gray-500 text-lg">[Banner Image/Video Placeholder]</span>
+        <img
+          src={banners[currentBanner].mobilePoster}
+          alt={banners[currentBanner].alt}
+          className="w-full h-96 object-cover rounded-lg shadow-md transition-all duration-700"
+          style={{ background: "#e5e7eb" }}
+        />
+        {/* Text overlay */}
+        <div className="absolute top-0 left-0 w-full px-4 pt-6 z-20">
+          <motion.h1
+            className="text-xl font-bold mb-3 leading-tight text-black drop-shadow-lg"
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+          >
+            {banners[currentBanner].title.match(/[^:.]+[:.]?/g)?.map((part, idx) => (
+              <span key={idx} className="block">
+                {part.trim()}
+              </span>
+            ))}
+          </motion.h1>
+          <motion.p
+            className="text-xs mb-2 text-black drop-shadow"
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.2 }}
+          >
+            {banners[currentBanner].subtitle === "Build your future, with expert-led modules in trending domains." ? (
+              <>
+                <span className="block">Build your future, with expert-led modules</span>
+                <span className="block">in trending domains.</span>
+              </>
+            ) : banners[currentBanner].subtitle.match(/[^:.&]+[:.&]?/g)?.map((part, i) => (
+              <span key={i} className="block">
+                {part.trim()}
+              </span>
+            ))}
+          </motion.p>
         </div>
+        {/* Optional: Overlay for better text contrast */}
+        <div className="absolute inset-0 bg-black/20 rounded-lg pointer-events-none" />
       </div>
 
-      {/* Text section - moved below */}
-      <div className="w-full px-4 pt-6 pb-24 z-10 relative"> {/* Increased bottom padding and made relative */}
-        <motion.h1
-          className="text-2xl font-bold mb-6 leading-tight"
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-        >
-          {banners[currentBanner].title.match(/[^:.]+[:.]?/g)?.map((part, idx) => (
-            <span key={idx} className="block">
-              {part.trim()}
-            </span>
-          ))}
-        </motion.h1>
-        <motion.p
-          className="text-base mb-6"
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.2 }}
-        >
-          {banners[currentBanner].subtitle === "Build your future, with expert-led modules in trending domains." ? (
-            <>
-              <span className="block">Build your future, with expert-led modules</span>
-              <span className="block">in trending domains.</span>
-            </>
-          ) : banners[currentBanner].subtitle.match(/[^:.&]+[:.&]?/g)?.map((part, i) => (
-            <span key={i} className="block">
-              {part.trim()}
-            </span>
-          ))}
-        </motion.p>
+      {/* CTA buttons and pagination below image */}
+      <div className="w-full px-4 pb-24 z-10 relative pt-6">
         <motion.div
-          className="flex flex-col gap-4 pt-2"
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.3 }}
         >
-          {/* ...existing CTA buttons... */}
+          <div className="flex flex-col gap-4">
           {banners[currentBanner].cta.map((btn, i) =>
             btn.text === "See What You Can Become →" ? (
               <motion.button
@@ -509,9 +521,10 @@ function HeroMobile() {
               </motion.button>
             )
           )}
+          </div>
         </motion.div>
-        {/* Move pagination and scroller inside the text section */}
-        <div className="absolute left-0 right-0 bottom-20 z-20 flex justify-center gap-2">
+        {/* Pagination */}
+        <div className="absolute left-0 right-0 bottom-18 z-20 flex justify-center gap-2 pt-4">
           {banners.map((_, index) => (
             <button
               key={index}
@@ -523,7 +536,8 @@ function HeroMobile() {
             />
           ))}
         </div>
-        <div className="absolute left-0 right-0 bottom-1 flex justify-center z-30">
+        {/* Scroll down button */}
+        <div className="absolute left-0 right-0 bottom-1 flex justify-center z-30 ">
           <button
             onClick={handleScrollDown}
             aria-label="Scroll down"
@@ -663,7 +677,7 @@ export default function Hero() {
                 </motion.p>
 
                 <motion.div
-                  className="flex flex-col sm:flex-row gap-8 pt-10 justify-center"
+                  className="flex flex-col sm:flex-row gap-8 pt-4 justify-center"
                   initial={{ y: 20, opacity: 0 }}
                   animate={{ y: currentBanner === index ? 0 : 20, opacity: currentBanner === index ? 1 : 0 }}
                   transition={{ duration: 0.5, delay: 1 }}

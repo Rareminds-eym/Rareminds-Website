@@ -13,10 +13,10 @@ function ProblemMobile() {
           transition={{ duration: 0.8 }}
           className="w-full text-left mb-8"
         >
-          <h2 className="text-3xl font-light mb-4 text-black">
+          <h2 className="text-2xl font-light mb-4 text-black">
             You're Producing Graduates.
           </h2>
-          <h2 className="text-3xl font-bold mb-4 text-black">
+          <h2 className="text-2xl font-bold mb-4 text-black">
             But Are You Producing Professionals?
           </h2>
           <p className="text-md text-black mt-2">
@@ -25,8 +25,8 @@ function ProblemMobile() {
         </motion.div>
       </div>
       {/* Images section with horizontal gradient background */}
-      <div className="w-full py-16 relative" style={{ background: 'linear-gradient(90deg, #2C3E50 0%, #000000 100%)' }}>
-        <div className="relative w-full h-[320px] max-w-[350px] mx-auto">
+      <div className="w-full py-8 relative" style={{ background: 'linear-gradient(90deg, #2C3E50 0%, #000000 100%)' }}>
+        <div className="relative w-full h-[280px] max-w-[350px] mx-auto">
           {/* Top Left */}
           <motion.div
             initial={{ opacity: 0, x: -20, y: -20 }}
@@ -57,10 +57,10 @@ function ProblemMobile() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8, delay: 0.4 }}
-            className="absolute bottom-0 left-1/3 -translate-x-1/2"
+            className="absolute -bottom-2 left-1/3 -translate-x-1/2"
           >
             <div className="w-32 h-32 rounded-full bg-green-100 p-2 shadow-xl hover:scale-105 hover:bg-green-200 flex flex-col items-center justify-center text-center transition-all duration-300">
-              <img src="/institutions/vectors/solution.png" alt="icon3" className="w-24 h-20 mb-1 object-cover rounded-full" />
+              <img src="/institutions/vectors/solution.png" alt="icon3" className="w-24 h-20  object-cover rounded-full" />
             </div>
           </motion.div>
         </div>
@@ -78,7 +78,7 @@ function ProblemDesktop() {
         <div className="w-full h-full [background:linear-gradient(-71deg,_#2C3E50,_#000000)] clip-diagonal-right" />
       </div>
 
-      <div className="container mx-auto px-0 relative z-10 flex flex-col lg:flex-row items-center justify-between">
+      <div className="container mx-auto pl-12 pr-16 relative z-10 flex flex-col lg:flex-row items-center justify-between">
         {/* LEFT TEXT SIDE */}
         <motion.div
           initial={{ opacity: 0, x: -50 }}
