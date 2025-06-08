@@ -9,33 +9,35 @@ const verticalOptions = [
 ];
 
 const InstitutionsHeader: React.FC = () => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isDesktopDropdownOpen, setIsDesktopDropdownOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const navigate = useNavigate();
   const [currentVertical, setCurrentVertical] = useState("SDP");
 
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  const toggleMenu = () => setIsOpen(!isOpen);
-
-  // Close dropdown on outside click
+  // Desktop dropdown outside click
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
         dropdownRef.current &&
         !dropdownRef.current.contains(event.target as Node)
       ) {
-        setIsOpen(false);
+        setIsDesktopDropdownOpen(false);
       }
     };
-    if (isOpen) {
+    if (isDesktopDropdownOpen) {
       document.addEventListener("mousedown", handleClickOutside);
     }
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [isOpen]);
+  }, [isDesktopDropdownOpen]);
 
   const handleSelect = (label: string) => {
+    setIsDesktopDropdownOpen(false);
+    setIsMobileMenuOpen(false);
+
     const selectedOption = verticalOptions.find(
       (option) => option.label === label
     );
@@ -43,7 +45,6 @@ const InstitutionsHeader: React.FC = () => {
     if (selectedOption && selectedOption.path) {
       setCurrentVertical(label);
       navigate(selectedOption.path);
-      setIsOpen(false);
     } else {
       alert("FDP page is coming soon!");
       setCurrentVertical("Institutions");
@@ -52,7 +53,8 @@ const InstitutionsHeader: React.FC = () => {
 
   // Back to Home handler
   const handleBackToHome = () => {
-    setIsOpen(false);
+    setIsDesktopDropdownOpen(false);
+    setIsMobileMenuOpen(false);
     navigate("/");
   };
 
@@ -67,16 +69,16 @@ const InstitutionsHeader: React.FC = () => {
         {/* Desktop Dropdown */}
         <div className="hidden md:block relative" ref={dropdownRef}>
           <button
-            onClick={toggleMenu}
+            onClick={() => setIsDesktopDropdownOpen((prev) => !prev)}
             aria-haspopup="listbox"
-            aria-expanded={isOpen}
+            aria-expanded={isDesktopDropdownOpen}
             className="inline-flex items-center gap-2 border border-blue-600 bg-blue-500 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition rounded-xl"
           >
             {currentVertical}
-            <ChevronDown size={18} className={`transform transition-transform ${isOpen ? "rotate-180" : ""}`} />
+            <ChevronDown size={18} className={`transform transition-transform ${isDesktopDropdownOpen ? "rotate-180" : ""}`} />
           </button>
 
-          {isOpen && (
+          {isDesktopDropdownOpen && (
             <ul
               role="listbox"
               tabIndex={-1}
@@ -122,16 +124,16 @@ const InstitutionsHeader: React.FC = () => {
 
         {/* Mobile Menu Button */}
         <button
-          onClick={toggleMenu}
+          onClick={() => setIsMobileMenuOpen((prev) => !prev)}
           className="md:hidden text-gray-700 p-2 rounded hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
-          aria-label={isOpen ? "Close menu" : "Open menu"}
+          aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
         >
-          {isOpen ? <X size={24} /> : <Menu size={24} />}
+          {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
       </div>
 
       {/* Mobile Dropdown Menu */}
-      {isOpen && (
+      {isMobileMenuOpen && (
         <div className="md:hidden bg-white border-t px-4 py-3 shadow-lg">
           {/* Back to Home for Mobile */}
           <button
@@ -139,12 +141,21 @@ const InstitutionsHeader: React.FC = () => {
             className="w-full text-left px-4 py-3 mb-2 rounded-md text-sm font-semibold text-blue-700 bg-blue-50 hover:bg-blue-100"
           >
             <HomeIcon size={16} className="inline mr-1" />
-             Homepage
+            Homepage
           </button>
           {verticalOptions.map(({ label, path }) => (
             <button
               key={label}
-              onClick={() => handleSelect(label)}
+              onClick={() => {
+                if (path) {
+                  setCurrentVertical(label);
+                  setIsMobileMenuOpen(false);
+                  navigate(path);
+                } else {
+                  setIsMobileMenuOpen(false);
+                  alert("FDP page is coming soon!");
+                }
+              }}
               disabled={!path}
               className={`w-full text-left px-4 py-3 mb-1 rounded-md text-sm font-medium ${
                 currentVertical === label
