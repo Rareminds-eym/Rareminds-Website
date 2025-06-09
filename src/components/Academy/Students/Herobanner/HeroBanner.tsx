@@ -222,14 +222,14 @@ const HeroBanner = ({  HeroToContact,HeroToLogo, isBlurred }: HeaderProps) =>{
         </Dialog> */}
 
         {/* Download Form Dialog */}
-        <Dialog open={showDownload} onOpenChange={setShowDownload}>
+        {/* <Dialog open={showDownload} onOpenChange={setShowDownload}>
           <DialogContent className="sm:max-w-[500px]">
             <DownloadForm 
               onClose ={() => setShowDownload(false)} 
               activeService={activeService}
             />
           </DialogContent>
-        </Dialog>
+        </Dialog> */}
       </div>
     </section>
   );

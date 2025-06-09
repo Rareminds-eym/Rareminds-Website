@@ -220,9 +220,11 @@ const CourseDetailedPage = () => {
                 transition={{ duration: 0.5 }}
               >
                 {course.targetGrade}
-                <span className="block text-base text-gray-600 mt-2 mb-2">
-                  Spoken English & Public Speaking Bootcamps
-                </span>
+                {course.id === 'spoken-english-bootcamp' && (
+                  <span className="block text-base text-gray-600 mt-2 mb-2">
+                    {course.name}
+                  </span>
+                )}
               </motion.h2>
               <motion.p
                 className="text-gray-700 leading-relaxed text-justify text-medium px-4 mb-6 whitespace-break-spaces"

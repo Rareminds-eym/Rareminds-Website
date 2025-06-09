@@ -40,6 +40,7 @@ const AcademyContactSection = () => {
 
     try {
       // Insert data into Supabase (table: academia_form, fields: name, email, phone, course_intrest, message)
+      const submittedAt = new Date().toISOString();
       const { error } = await supabase
         .from("acdemia_form")
         .insert([
@@ -49,12 +50,42 @@ const AcademyContactSection = () => {
             phone: formData.phone,
             course_intrest: formData.course, // corrected field name
             message: formData.message,
-            submitted_at: new Date().toISOString(),
+            submitted_at: submittedAt,
           },
         ]);
       if (error) {
         console.error('Supabase error:', error.message, error.details, error.hint);
         throw error;
+      }
+
+      // Fetch the just-inserted record (by email and submitted_at)
+      const { data: records, error: fetchError } = await supabase
+        .from("acdemia_form")
+        .select("*")
+        .eq("email", formData.email)
+        .eq("submitted_at", submittedAt)
+        .limit(1);
+      if (fetchError) {
+        console.error('Supabase fetch error:', fetchError.message, fetchError.details, fetchError.hint);
+        throw fetchError;
+      }
+      const record = records && records.length > 0 ? records[0] : null;
+      if (record) {
+        // Send the record to CEO via Netlify function
+        try {
+          await fetch("/.netlify/functions/send-pdf", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              to: "ceo@rareminds.in", // replace with actual CEO email
+              subject: `New Academy Inquiry from ${record.name}`,
+              message: `A new inquiry has been submitted.\n\nName: ${record.name}\nEmail: ${record.email}\nPhone: ${record.phone}\nCourse Interest: ${record.course_intrest}\nMessage: ${record.message}\nSubmitted At: ${record.submitted_at}`,
+              isCeoNotification: true
+            })
+          });
+        } catch (emailError) {
+          console.error("Error sending CEO notification email:", emailError);
+        }
       }
 
       toast({
@@ -77,7 +108,8 @@ const AcademyContactSection = () => {
       setTimeout(() => {
         setSubmitted(false);
       }, 3000);
-    } catch (error) {      const supabaseError = error as any;
+    } catch (error) {
+      const supabaseError = error as any;
       console.error("Error submitting form:", {
         message: supabaseError.message,
         details: supabaseError.details,
@@ -407,8 +439,8 @@ const AcademyContactSection = () => {
                                 },
                                 {
                                   href: "https://x.com/minds_rare",
-                                  icon: "mdi:twitter",
-                                  color: "#1DA1F2",
+                                  icon: "fa6-brands:x-twitter",
+                                  color: "",
                                   label: "Twitter (X)",
                                 },
                                 {

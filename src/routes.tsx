@@ -44,6 +44,7 @@ const Academy_Course = lazy(
 import CourseDetailedPage from "@/components/Academy/Students/CourseDetailedPage";
 const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
 const Terms = lazy(() => import("./pages/Terms"));
+const TDPPage = lazy(() => import("./pages/Academia/School/TDPPage"));
 
 const withSuspense = (Component: React.LazyExoticComponent<React.FC<{}>>) => (
   <Suspense fallback={<LoaderComponent />}>
@@ -185,6 +186,10 @@ const router = createBrowserRouter([
             <Academy_Course />
           </Suspense>
         ),
+      },
+      {
+        path: "/academia/school/tdp",
+        element: withSuspense(TDPPage),
       },
     ],
   },
