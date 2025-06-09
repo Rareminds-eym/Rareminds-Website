@@ -123,18 +123,33 @@ const AcademyHeader: React.FC = () => {
         <div className="hidden md:flex items-center gap-4">
           {showButtons && (
             <>
-              <Link
+              {/* <Link
                 to="/academia"
                 className="px-5 py-2 rounded-md bg-gray-200 text-gray-800 hover:bg-gray-300 transition-colors"
               >
                 Academia
+              </Link> */}
+                 <Link
+                to="/academia/school"
+                className={`px-5 py-2 rounded-md transition-colors ${
+                  isSchoolPage
+                    ? "bg-blue-600 text-white"
+                    : "bg-gray-200 text-gray-800 hover:bg-blue-100"
+                }`}
+              >
+                School
               </Link>
               <Link
-                to={buttonLink}
-                className="px-5 py-2 rounded-md bg-blue-600 text-white hover:bg-blue-700 transition-colors"
+                to="/academia/student"
+                className={`px-5 py-2 rounded-md transition-colors ${
+                  isStudentPage
+                    ? "bg-blue-600 text-white"
+                    : "bg-gray-200 text-gray-800 hover:bg-blue-100"
+                }`}
               >
-                {buttonText}
+                Student
               </Link>
+           
             </>
           )}
           {/* Menu Button */}
@@ -157,20 +172,36 @@ const AcademyHeader: React.FC = () => {
         <div className="md:hidden bg-white border-t px-4 py-4 space-y-2">
           {showButtons && (
             <>
-              <Link
+              {/* <Link
                 to="/academia"
                 className="block w-full text-center bg-gray-200 text-gray-800 px-6 py-2 rounded-md hover:bg-gray-300 transition"
                 onClick={() => setIsOpen(false)}
               >
                 Academia
-              </Link>
-              <Link
-                to={buttonLink}
-                className="block w-full text-center bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition"
+              </Link> */}
+               <Link
+                to="/academia/school"
+                className={`block w-full text-center px-6 py-2 rounded-md transition ${
+                  isSchoolPage
+                    ? "bg-blue-600 text-white"
+                    : "bg-gray-200 text-gray-800 hover:bg-blue-100"
+                }`}
                 onClick={() => setIsOpen(false)}
               >
-                {buttonText}
+                School
               </Link>
+              <Link
+                to="/academia/student"
+                className={`block w-full text-center px-6 py-2 rounded-md transition ${
+                  isStudentPage
+                    ? "bg-blue-600 text-white"
+                    : "bg-gray-200 text-gray-800 hover:bg-blue-100"
+                }`}
+                onClick={() => setIsOpen(false)}
+              >
+                Student
+              </Link>
+             
             </>
           )}
           {/* New Menu Button for Mobile */}
@@ -201,7 +232,7 @@ const AcademyHeader: React.FC = () => {
             Projects
           </Link>
 
-                    <Link
+          <Link
             to="/academia/coming-soon"
             className="text-xl text-gray-800 md:text-4xl py-2 hover:text-red-600 mb-4"
             onClick={() => setIsMenuOpen(false)}

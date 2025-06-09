@@ -32,8 +32,8 @@ const testimonials: Testimonial[] = [
     name: "2",
     role: "",
     image: "",
-    videoSrc: "https://www.youtube.com/embed/zInPOXMjHpQ?si=5PnxTBi1Q--SFCk0",
-    content: "K. Saranraj’s Career Transformation with Rareminds",
+    videoSrc: "https://www.youtube.com/embed/w5HmwkOF92E?si=ybP3IQVNBrs-QCHk",
+    content: "How Rareminds Shaped My Career | Student's Inspiring Testimonial",
     bgColor: "from-red-500 to-red-600"
   },
   {
@@ -50,8 +50,8 @@ const testimonials: Testimonial[] = [
     name: "4",
     role: "",
     image: "",
-     videoSrc: "https://www.youtube.com/embed/zInPOXMjHpQ?si=5PnxTBi1Q--SFCk0",
-    content: "K. Saranraj’s Career Transformation with Rareminds",
+   videoSrc: "https://www.youtube.com/embed/w5HmwkOF92E?si=ybP3IQVNBrs-QCHk",
+    content: "How Rareminds Shaped My Career | Student's Inspiring Testimonial",
     bgColor: "from-red-500 to-red-600"
   },
   {
@@ -68,8 +68,8 @@ const testimonials: Testimonial[] = [
     name: "6",
     role: "",
     image: "",
-   videoSrc: "https://www.youtube.com/embed/zInPOXMjHpQ?si=5PnxTBi1Q--SFCk0",
-    content: "K. Saranraj’s Career Transformation with Rareminds",
+   videoSrc: "https://www.youtube.com/embed/w5HmwkOF92E?si=ybP3IQVNBrs-QCHk",
+    content: "How Rareminds Shaped My Career | Student's Inspiring Testimonial",
     bgColor: "from-red-500 to-red-600"
   }
 ];

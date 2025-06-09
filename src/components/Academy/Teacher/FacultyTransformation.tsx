@@ -399,7 +399,7 @@ const facultySections = [
       },
       solution: {
         title: "Intervention",
-        description: "7-day program on organic farming, supply chain, cloud kitchen models, and project-based entrepreneurship."
+        description: "7-day program on Agribusiness & Cloud Kitchens, and project-based entrepreneurship."
       },
       outcome: {
         title: "Impact",
@@ -430,58 +430,60 @@ function SchoolCard({
   className?: string;
 }) {
   return (
-   <div
+ <div
   className={cn(
-    "rounded-lg border border-gray-300 bg-white shadow-sm p-6 flex flex-col justify-between gap-6 min-h-[320px] h-[400px] w-[300px]", // Fixed height and width
-    className
+    "rounded-lg border border-gray-300 bg-white shadow-sm p-4 sm:p-6 flex flex-col justify-between gap-4 h-[420px] w-full max-w-[300px]",
+    
   )}
 >
-  <div >
-    <div className="flex items-center gap-2 mb-3">
+  <div className="flex flex-col gap-4 overflow-hidden">
+    <div className="flex items-center gap-2">
       <MapPin size={16} className="text-grey-500" />
-      <h3 className="font-semibold text-xl text-[#222]">
+      <h3 className="font-semibold text-lg sm:text-xl text-[#222] break-words">
         {schoolName}
       </h3>
     </div>
 
-    <div className="flex flex-col gap-5">
+    <div className="flex flex-col gap-4 flex-grow">
       <div className="flex items-start gap-3">
         <AlertCircle size={18} className="text-gray-600 mt-[2px]" />
-        <div>
-          <div className="font-medium text-xl text-gray-600">{problem.title}</div>
-          <div className="text-sm text-[#222]">{problem.description}</div>
+        <div className="overflow-hidden">
+          <div className="font-medium text-base sm:text-xl text-gray-600">{problem.title}</div>
+          <div className="text-sm text-[#222] break-words line-clamp-3">{problem.description}</div>
         </div>
       </div>
 
       <div className="flex items-start gap-3">
         <BookOpen size={17} className="text-gray-600 mt-[2px]" />
-        <div>
-          <div className="font-medium text-xl text-gray-600">{solution.title}</div>
-          <div className="text-sm text-[#222]">{solution.description}</div>
+        <div className="overflow-hidden">
+          <div className="font-medium text-base sm:text-xl text-gray-600">{solution.title}</div>
+          <div className="text-sm text-[#222] break-words line-clamp-3">{solution.description}</div>
         </div>
       </div>
 
       <div className="flex items-start gap-3">
         <Sparkles size={18} className="text-gray-600 mt-[2px]" />
-        <div>
-          <div className="font-medium text-xl text-gray-600">{outcome.title}</div>
-          <div className="text-sm text-[#222]">{outcome.description}</div>
+        <div className="overflow-hidden">
+          <div className="font-medium text-base sm:text-xl text-gray-600">{outcome.title}</div>
+          <div className="text-sm text-[#222] break-words line-clamp-3">{outcome.description}</div>
         </div>
       </div>
     </div>
   </div>
 
   {link && (
-    <div className="flex justify-center mt-auto">
+    <div className="flex justify-center mt-auto w-full">
       <Link
         to={link}
-        className="text-sm font-semibold text-red-600 hover:underline"
+        className="text-sm font-semibold text-red-600 hover:underline text-center break-words"
       >
         Read More →
       </Link>
     </div>
   )}
 </div>
+
+
 
   );
 }

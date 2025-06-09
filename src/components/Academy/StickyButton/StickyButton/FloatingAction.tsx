@@ -5,12 +5,19 @@ import FAQChatbot from "./FAQChatbot";
 import { ChatButton } from './ChatButton';
 import { BookDemo } from './BookDemo';
 import { cn } from "@/lib/utils";
+import { supabase } from '@/lib/supabaseClient';
 
 interface MenuItem {
   id: string;
   icon: React.ComponentType<any>;
   label: string;
   onClick: () => void;
+}
+
+// Resource type for download modal
+interface Resource {
+  title: string;
+  pdfLink: string;
 }
 
 const FloatingActionMenu = () => {
@@ -27,34 +34,15 @@ const FloatingActionMenu = () => {
   const [errorMsg, setErrorMsg] = useState("");
   const [loading, setLoading] = useState(false);
   const [downloadReady, setDownloadReady] = useState(false);
-  // Replace with your actual PDF link
-  const selectedResource = { pdfLink: "/path-to-your-pdf/Your-Brochure.pdf" };
+  const [selectedResource, setSelectedResource] = useState<Resource | null>(null);
 
-  const handleDownloadClick = () => {
+  const handleDownloadClick = (resource: Resource) => {
+    setSelectedResource(resource);
     setModalOpen(true);
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+    setName("");
+    setEmail("");
+    setPhone("");
     setErrorMsg("");
-    if (!name || !email || !phone) {
-      setErrorMsg("All fields are required.");
-      return;
-    }
-    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
-      setErrorMsg("Please enter a valid email address.");
-      return;
-    }
-    if (!/^\d{10}$/.test(phone)) {
-      setErrorMsg("Please enter a valid 10-digit phone number.");
-      return;
-    }
-    setLoading(true);
-    // Simulate async (replace with actual API/email logic if needed)
-    setTimeout(() => {
-      setLoading(false);
-      setDownloadReady(true);
-    }, 1200);
   };
 
   const menuItems: MenuItem[] = [
@@ -62,7 +50,7 @@ const FloatingActionMenu = () => {
       id: 'download',
       icon: Download,
       label: 'Download Brochure',
-      onClick: handleDownloadClick,
+      onClick: () => handleDownloadClick({ title: 'Brochure', pdfLink: 'https://drive.google.com/file/d/18Q-Rd1ZTrXEjgLhW0EqTQO8K1xoC9aJ9/view?usp=drive_link' }),
     },
     {
       id: 'demo',
@@ -153,18 +141,90 @@ const FloatingActionMenu = () => {
     };
   }, []);
 
+  // --- Add handleSubmit for modal form ---
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setErrorMsg("");
+
+    if (!name.trim() || !email.trim() || !phone.trim()) {
+      setErrorMsg("Please fill in all fields.");
+      return;
+    }
+
+    // Basic email validation
+    const emailRegex = /\S+@\S+\.\S+/;
+    if (!emailRegex.test(email)) {
+      setErrorMsg("Please enter a valid email address.");
+      return;
+    }
+
+    // Basic phone validation
+    const phoneRegex = /^\d{10}$/;
+    if (!phoneRegex.test(phone.replace(/\D/g, ''))) {
+      setErrorMsg("Please enter a valid 10-digit phone number.");
+      return;
+    }
+
+    if (!selectedResource) return;
+
+    setLoading(true);
+
+    try {
+      // Insert data into Supabase table demo_pdf
+      const { error } = await supabase.from("demo_pdf").insert([
+        {
+          name: name.trim(),
+          email: email.trim(),
+          phone: phone.trim(),
+          created_at: new Date().toISOString(),
+        },
+      ]);
+
+      if (error) {
+        setLoading(false);
+        setErrorMsg("Failed to save data. Please try again.");
+        return;
+      }
+
+      // Send email
+      const response = await fetch('https://email-sender-ssmu.onrender.com/send-pdf', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: name.trim(),
+          email: email.trim(),
+          phone: phone.trim(),
+          resourceTitle: selectedResource.title,
+          pdfUrl: selectedResource.pdfLink
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to send email');
+      }
+
+      setLoading(false);
+      setModalOpen(false);
+    } catch (err) {
+      setLoading(false);
+      setErrorMsg("An error occurred. Please try again.");
+    }
+  };
+
   return (
     <>
       <FAQChatbot isVisible={showFAQChatbot} onClose={() => setShowFAQChatbot(false)} />
       <ChatButton isVisible={showChat} onClose={() => setShowChat(false)} />
       <BookDemo isVisible={showBookDemo} onClose={() => setShowBookDemo(false)} />
 
-      {/* Download Brochure Modal */}
+      {/* Modal */}
       {modalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4">
           <div className="bg-white rounded-lg shadow-lg max-w-md w-full p-6 relative">
             <button
-              onClick={() => { setModalOpen(false); setDownloadReady(false); }}
+              onClick={() => setModalOpen(false)}
               className="absolute top-2 right-2 text-gray-600 hover:text-gray-900"
               aria-label="Close modal"
             >
@@ -212,33 +272,20 @@ const FloatingActionMenu = () => {
                   required
                 />
               </div>
+
               {errorMsg && <p className="text-red-600">{errorMsg}</p>}
-              {!downloadReady && (
-                <button
-                  type="submit"
-                  disabled={loading}
-                  className={cn(
-                    "w-full bg-red-500 hover:bg-red-600 text-white font-semibold py-2 rounded transition-colors",
-                    loading ? "opacity-50 cursor-not-allowed" : ""
-                  )}
-                >
-                  {loading ? "Submitting..." : "Submit & Download"}
-                </button>
-              )}
+
+              <button
+                type="submit"
+                disabled={loading}
+                className={cn(
+                  "w-full bg-red-500 hover:bg-red-600 text-white font-semibold py-2 rounded transition-colors",
+                  loading ? "opacity-50 cursor-not-allowed" : ""
+                )}
+              >
+                {loading ? "Submitting..." : "Submit & Download"}
+              </button>
             </form>
-            {downloadReady && selectedResource && (
-              <div className="mt-4 text-center">
-                {/* <a
-                  href={selectedResource.pdfLink}
-                  download
-                  className="inline-block bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded transition-colors mt-2"
-                  onClick={() => { setModalOpen(false); setDownloadReady(false); }}
-                >
-                  Click here to download your PDF
-                </a> */}
-                <p className="text-green-600 mt-2">A copy has also been sent to your email.</p>
-              </div>
-            )}
           </div>
         </div>
       )}

@@ -142,7 +142,7 @@ function ProblemDesktop() {
       </div>
 
       {/* Custom clip-path for diagonal background */}
-      <style jsx>{`
+      <style>{`
         .clip-diagonal-right {
           clip-path: polygon(30% 0%, 100% 0%, 100% 100%, 100% 100%);
         }

@@ -65,7 +65,7 @@ useEffect(() => {
         </div> */}
 
         {/* Old Method Section */}
-        <div className="max-w-7xl mx-auto mb-20 md:mb-0 pl-10">
+        <div className="max-w-7xl mx-auto mb-10 md:mb-0 md:pl-10">
 
         <div className="h-[80%] bg-white justify-center">
           <h2 className=" text-2xl md:text-5xl font-bold text-black text-center pt-8">
@@ -155,7 +155,7 @@ useEffect(() => {
           
   <img
     src="/academy/RareMinds ISO Logo-01.png"
-    alt="Logo"
+    alt="Rareminds icon showing a brain inside a glowing light bulb, symbolizing innovation and transformative learning"
     className="h-[10%] w-[10%] animate-glow rounded-full "
   />
   <p className="text-lg md:text-xl font-semibold text-gray-800">
@@ -167,7 +167,7 @@ useEffect(() => {
 
 
         {/* New Method Section */}
-        <div className="max-w-7xl mx-auto bg-white pb-16 pt-8 md:pt-0 px-4 sm:px-6 lg:px-8 rounded-2xl">
+        <div className="max-w-7xl mx-auto bg-white pb-0 md:pb-16 pt-8 md:pt-0 px-4 sm:px-6 lg:px-8 rounded-2xl">
           <div className="grid grid-cols-1 gap-12 items-center lg:grid-cols-2">
             {/* <div className="order-1 overflow-hidden rounded-xl shadow-2xl">
               <video
