@@ -32,18 +32,43 @@ const ContactSection = () => {
     setIsSubmitting(true);
 
     try {
-      const { error } = await supabase.from("recruitment_forms").insert([
-        {
-          name: formData.name,
-          company: formData.company,
-          email: formData.email,
-          role: formData.role,
-          message: formData.message,
-          submitted_at: new Date().toISOString(),
-        },
-      ]);
+      // First, insert into Supabase
+      const submission = {
+        name: formData.name,
+        company: formData.company,
+        email: formData.email,
+        role: formData.role,
+        message: formData.message,
+        submitted_at: new Date().toISOString(),
+      };
 
-      if (error) throw error;
+      const { error: dbError, data } = await supabase
+        .from("recruitment_forms")
+        .insert([submission])
+        .select()
+        .single();
+
+      if (dbError) {
+        console.error("Supabase database error:", {
+          message: dbError.message,
+          details: dbError.details,
+          hint: dbError.hint,
+        });
+        throw dbError;
+      }
+
+      // Then, trigger the email function
+      const { error: functionError } = await supabase.functions.invoke(
+        "send-recruitment-email",
+        {
+          body: { record: data },
+        }
+      );
+
+      if (functionError) {
+        console.error("Supabase function error:", functionError);
+        throw functionError;
+      }
 
       toast({
         title: "Message Sent!",
@@ -66,11 +91,18 @@ const ContactSection = () => {
         setSubmitted(false);
       }, 3000);
     } catch (error) {
-      console.error("Error submitting form:", error);
+      const supabaseError = error as any;
+      console.error("Error submitting form:", {
+        message: supabaseError.message,
+        details: supabaseError.details,
+        hint: supabaseError.hint,
+        error: supabaseError,
+      });
       toast({
         title: "Error",
-        description:
-          "There was an error submitting your message. Please try again.",
+        description: `There was an error submitting your message.\n${
+          supabaseError.message || ""
+        }\n${supabaseError.details || ""}\n${supabaseError.hint || ""}`,
         variant: "destructive",
       });
     } finally {
