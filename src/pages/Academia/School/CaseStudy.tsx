@@ -179,8 +179,8 @@ const caseStudiesData: Record<string, CaseStudyData> = {
     bannerImage: "/academy/Casestudy/GHSSTamilInnovation.png", // Add a banner image URL if available
     quickSnapshot: {
       location: "GHSS, Tamil Nadu",
-      studentsImpacted: "250+ (Grades 11 & 12)",
-      duration: "7 Days",
+      studentsImpacted: "3057+ (Grades 12)",
+      duration: "7 Days and 45 hours in total",
       trainers: "6 Industry Experts",
       theme: "Agribusiness & Cloud Kitchens"
     },
@@ -193,7 +193,7 @@ const caseStudiesData: Record<string, CaseStudyData> = {
       "Career Maps and Idea Pitching Sessions: Guided students to connect aspirations with actionable next steps."
     ],
     outcomes: [
-      "10+ teams of students pitched agri-startup ideas - Students demonstrated initiative, collaboration, and creative problem-solving.",
+      "150+ teams of 1974 students pitched agri-startup ideas - Students demonstrated initiative, collaboration, and creative problem-solving.",
       "Students linked learning to local livelihood opportunities - Reinforced relevance and encouraged community-rooted innovation.",
       "Teachers requested more project-based modules - Validated the program’s classroom utility and impact."
     ],

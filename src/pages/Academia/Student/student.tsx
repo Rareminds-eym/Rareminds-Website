@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import React, { useRef } from "react";
 import AOS from 'aos';
 import 'aos/dist/aos.css';
+import { Helmet } from "react-helmet";
 import MainLayout from "../../../components/Academy/MainLayout";
 import MethodCard from "../../../components/Academy/Teacher/MethodCard";
 import MethodCardR from "../../../components/Academy/Students/MethodCard";
@@ -47,6 +48,7 @@ const Academy = ({ userType = "teacher" }: { userType?: "teacher" | "student" })
   const [activeTab, setActiveTab] = useState<"teacher" | "student">("teacher");
   const [selectedCaseStudy, setSelectedCaseStudy] = useState<CaseStudyType>(caseStudies[0]);
   const [isHeroBlurred, setIsHeroBlurred] = useState(false);
+  const [blurPercent, setBlurPercent] = useState(0);
 
       const contactRef = useRef<HTMLDivElement>(null);
        const logoRef = useRef<HTMLDivElement>(null);
@@ -133,8 +135,20 @@ const Academy = ({ userType = "teacher" }: { userType?: "teacher" | "student" })
   const handleScroll = () => {
     if (logoRef.current) {
       const rect = logoRef.current.getBoundingClientRect();
-      // Blur when the logo image enters the viewport (touches the HeroBanner)
       setIsHeroBlurred(rect.top <= window.innerHeight && rect.top >= 0);
+      // Calculate blur percent based on how much of logoRef is covered by the HeroBanner
+      const heroBottom = window.innerHeight;
+      const logoTop = rect.top;
+      const logoHeight = rect.height;
+      if (logoTop > heroBottom) {
+        setBlurPercent(0);
+      } else if (logoTop + logoHeight < heroBottom) {
+        setBlurPercent(100);
+      } else {
+        const covered = Math.max(0, heroBottom - logoTop);
+        const percent = Math.min(100, Math.max(0, (covered / logoHeight) * 100));
+        setBlurPercent(percent);
+      }
     }
   };
   window.addEventListener('scroll', handleScroll);
@@ -143,6 +157,13 @@ const Academy = ({ userType = "teacher" }: { userType?: "teacher" | "student" })
 }, []);
 
   return (
+    <> 
+    <Helmet>
+    <meta
+      name="description"
+      content="Build real-world skills from school. Rareminds offers NEP-aligned student programs in communication, digital fluency, and career readiness for kindergarten to Grade 12."
+    />
+  </Helmet>
    
         <div className="overflow-hidden">
       {/* Hero Banner */}
@@ -160,10 +181,11 @@ const Academy = ({ userType = "teacher" }: { userType?: "teacher" | "student" })
       <div
         className="absolute bottom-0 left-0 w-full h-full pointer-events-none"
         style={{
-          background: 'linear-gradient(to top, rgba(255,255,255,0.85) 40%, rgba(255,255,255,0.2) 100%)',
-          backdropFilter: 'blur(18px)',
-          WebkitBackdropFilter: 'blur(18px)',
+          background: `none`,
+          backdropFilter: `blur(${(18 * blurPercent) / 100}px)` ,
+          WebkitBackdropFilter: `blur(${(18 * blurPercent) / 100}px)` ,
           zIndex: 20,
+          transition: 'backdrop-filter 0.2s',
         }}
       />
     )}
@@ -455,7 +477,7 @@ const Academy = ({ userType = "teacher" }: { userType?: "teacher" | "student" })
        </div>
   
       </div>
-  
+  </>
   );
 };
 

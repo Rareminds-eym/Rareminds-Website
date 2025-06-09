@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
   import AOS from 'aos';
   import 'aos/dist/aos.css';
   import { Link, useLocation } from 'react-router-dom';
+  import { Helmet } from "react-helmet";
   import MainLayout from "../../../components/Academy/MainLayout";
   import MethodCard from "../../../components/Academy/Teacher/MethodCard";
   import MethodCardR from "../../../components/Academy/Students/MethodCard";
@@ -47,6 +48,7 @@ import { useState, useEffect } from "react";
   const School = ({ userType = "teacher" }: { userType?: "teacher" | "student" }) => {
   const [activeTab, setActiveTab] = useState<"teacher" | "student">("teacher");
   const [isHeroBlurred, setIsHeroBlurred] = useState(false);
+  const [blurPercent, setBlurPercent] = useState(0);
 
       const contactRef = useRef<HTMLDivElement>(null);
       const logoRef = useRef<HTMLDivElement>(null);
@@ -156,10 +158,22 @@ useEffect(() => {
       const handleScroll = () => {
         if (logoRef.current) {
           const rect = logoRef.current.getBoundingClientRect();
-          // Blur when the bottom of the Hero (not just the top of the logo) overlaps the logo image
-          // Hero is fixed, so its bottom is at window.innerHeight
-          // Blur if the logo's top is less than or equal to Hero's bottom (window.innerHeight)
           setIsHeroBlurred(rect.top <= window.innerHeight && rect.top >= 0);
+          // Calculate blur percent based on how much of logoRef is covered by the Hero
+          const heroBottom = window.innerHeight;
+          const logoTop = rect.top;
+          const logoHeight = rect.height;
+          // If logo is below hero, no blur
+          if (logoTop > heroBottom) {
+            setBlurPercent(0);
+          } else if (logoTop + logoHeight < heroBottom) {
+            setBlurPercent(100);
+          } else {
+            // Calculate how much of logo is covered by hero
+            const covered = Math.max(0, heroBottom - logoTop);
+            const percent = Math.min(100, Math.max(0, (covered / logoHeight) * 100));
+            setBlurPercent(percent);
+          }
         }
       };
       window.addEventListener('scroll', handleScroll);
@@ -169,6 +183,14 @@ useEffect(() => {
     }, []);
 
     return (
+
+      <>
+  <Helmet>
+    <meta
+      name="description"
+      content="Bilingual, NEP 2020-aligned school programs that strengthen communication, digital skills, and career paths designed for practical, classroom-ready impact."
+    />
+  </Helmet>
 
 
       <div className="overflow-hidden">
@@ -191,10 +213,11 @@ useEffect(() => {
       <div
         className="absolute bottom-0 left-0 w-full h-full pointer-events-none"
         style={{
-          background: 'linear-gradient(to top, rgba(255,255,255,0.85) 40%, rgba(255,255,255,0.2) 100%)',
-          backdropFilter: 'blur(18px)',
-          WebkitBackdropFilter: 'blur(18px)',
+          background: `linear-gradient(to top, rgba(255,255,255,${0.85 * (blurPercent / 100)}) 40%, rgba(255,255,255,${0.2 * (blurPercent / 100)}) 100%)`,
+          backdropFilter: `blur(${(18 * blurPercent) / 100}px)` ,
+          WebkitBackdropFilter: `blur(${(18 * blurPercent) / 100}px)` ,
           zIndex: 20,
+          transition: 'background 0.2s, backdrop-filter 0.2s',
         }}
       />
     )}
@@ -459,6 +482,8 @@ useEffect(() => {
         <ContactSection />
       </div>
       </div>
+ 
+</>
 
     );
   };

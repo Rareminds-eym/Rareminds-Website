@@ -173,40 +173,40 @@ export interface CourseModule {
 //       },
 //       {
 //         title: "Public Speaking",
-//         description: [
-//           "Deliver confident speeches, presentations, and interviews",
-//           "Engage in group discussions, debates, and roleplays"
-//         ],
-//         image: "/academy/courses/3Eprogram/Employability.svg"
-//       }
-//     ],
-//     whyChoose: {
-//       title: "Why Join the Bootcamp?",
-//       points: [
-//         "Fluency and confidence in real-world English",
-//         "Practical public speaking and presentation skills",
-//         "Interactive, activity-based learning",
-//         "Preparation for academic and career success"
-//       ],
-//       image: "/academy/courses/3Eprogram/Employability.svg"
-//     }
-//   },
-//   {
-//     id: "career-counselling-psychometric",
-//     name: "Career Counselling with Psychometric Assessments",
-//     shortName: "Career Counselling",
-//     description: "Guessing Your Career is Risky. Planning It Isn't. Self-discovery through psychometric testing. Exploring careers in AI, EVs, AgriTech, Humanities, and more. SMART goal-setting and academic planning. Roadmap creation with quarterly mentoring.",
-//     targetGrade: "For Grades 9–12: Career Blueprint Program",
-//     modules: [
-//       {
-//         title: "Psychometric Assessment",
-//         description: [
-//           "Self-discovery through psychometric testing",
-//           "SMART goal-setting and academic planning"
-//         ],
-//         image: "/academy/courses/3Eprogram/english.svg"
-//       },
-//       {
+// //         description: [
+// //           "Deliver confident speeches, presentations, and interviews",
+// //           "Engage in group discussions, debates, and roleplays"
+// //         ],
+// //         image: "/academy/courses/3Eprogram/Employability.svg"
+// //       }
+// //     ],
+// //     whyChoose: {
+// //       title: "Why Join the Bootcamp?",
+// //       points: [
+// //         "Fluency and confidence in real-world English",
+// //         "Practical public speaking and presentation skills",
+// //         "Interactive, activity-based learning",
+// //         "Preparation for academic and career success"
+// //       ],
+// //       image: "/academy/courses/3Eprogram/Employability.svg"
+// //     }
+// //   },
+// //   {
+// //     id: "career-counselling-psychometric",
+// //     name: "Career Counselling with Psychometric Assessments",
+// //     shortName: "Career Counselling",
+// //     description: "Guessing Your Career is Risky. Planning It Isn't. Self-discovery through psychometric testing. Exploring careers in AI, EVs, AgriTech, Humanities, and more. SMART goal-setting and academic planning. Roadmap creation with quarterly mentoring.",
+// //     targetGrade: "For Grades 9–12: Career Blueprint Program",
+// //     modules: [
+// //       {
+// //         title: "Psychometric Assessment",
+// //         description: [
+// //           "Self-discovery through psychometric testing",
+// //           "SMART goal-setting and academic planning"
+// //         ],
+// //         image: "/academy/courses/3Eprogram/english.svg"
+// //       },
+// //       {
 // //         title: "Career Exploration",
 // //         description: [
 // //           "Exploring careers in AI, EVs, AgriTech, Humanities, and more",
@@ -296,6 +296,7 @@ export interface Course {
   };
   pdfUrl?: string;
   showLoginLink?: boolean;
+  showTitleSpan?: boolean;
 }
 
 export const coursesData: Course[] = [
@@ -305,7 +306,8 @@ export const coursesData: Course[] = [
     shortName: "Spoken English Bootcamp",
     description: "English is more than grammar—it’s your voice to the world. Confidence grows when students learn to speak, not just write. Our bootcamps transform hesitation into fluent, fearless expression.\n\nCommunication is a life skill, not just a classroom requirement. This program helps students become clear, confident, and compelling speakers—whether in the classroom, on stage, or in real life. Our structured bootcamps combine language fluency with presentation skills and interactive speaking practice, helping students overcome fear and express themselves effectively in any situation.",
     targetGrade: "For Grades 6–12: Building Communication Confidence",
-    heroImage: "",
+    heroImage: "/academy/courseBanner/SpokenEnglish&PublicSpeakingBootcamps.png",
+    showTitleSpan: true,
     modules: [
       {
         title: "Everyday English Fluency",

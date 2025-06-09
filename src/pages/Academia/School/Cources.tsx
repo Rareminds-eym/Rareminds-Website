@@ -616,11 +616,11 @@ export const Coursess = [
     icon: Building2,
     name: 'Leadership and Career Growth',
     subtitle: 'For Academic Leaders',
-    description: 'Aspiring Academic Leaders Program (For HODs/Coordinators). School Principal Excellence Program. Continuous Professional Development Frameworks for School Clusters - Workshops.',
+    description: 'Investing in Rare Minds leadership development programs will equip your school leaders with the skills and knowledge to drive positive change and create a thriving learning environment for your students.',
     whatitis: 'Leadership and professional growth programs for aspiring and current academic leaders.',
     image: '/academy/courseBanner/LeadershipandCareerGrowth.png',
     color: '#D5D5D5',
-    duration: '18–25 hours',
+    duration: '45 hours',
     mode: 'Hybrid',
     Coursessimg: '/academy/courseBanner/LeadershipandCareerGrowth.png',
     focus: 'Leadership development',
@@ -673,67 +673,77 @@ export const Coursess = [
 ]
   },
   {
-    id: 'institutional-value-added',
-    icon: BookOpen,
-    name: 'Institutional Value-Added Services',
-    subtitle: 'For Teachers & Management',
-    description: 'Teacher Performance Audits. School/College Ranking Preparation (NAAC/NIRF Readiness). Building Teacher-Led Clubs & Innovation Cells. Creating Peer-Learning Teacher Communities.',
-    whatitis: 'Value-added services benefiting both teachers and management for institutional growth.',
-    image: '/academy/courseBanner/InstitutionalValueAddedServices.png',
-    color: '#D5D5D5',
-    duration: '10–15 hours',
-    mode: 'Offline / Hybrid',
-    Coursessimg: '/academy/courseBanner/InstitutionalValueAddedServices.png',
-    focus: 'Institutional excellence',
-    benefits: [
-      'Performance audits',
-      'Ranking preparation',
-      'Teacher-led clubs',
-      'Peer-learning communities',
-    ],
-    modules: [
-  {
-    id: 1,
-    title: "Teacher Performance Audits & Feedback Systems",
-    hours: 10,
-    objectives: "Establish structured audit frameworks to assess and improve teaching quality",
-    activities: "Audit templates, rubric creation, classroom observation tools",
-    outcomes: "Schools implement fair, data-driven performance reviews across levels"
-  },
-  {
-    id: 2,
-    title: "Accreditation & Ranking Readiness",
-    hours: 8,
-    objectives: "Align school practices with NEP benchmarks and national accreditation goals",
-    activities: "Self-assessment grids, compliance checklists, goal-mapping sheets",
-    outcomes: "Schools improve readiness for NAAC/NIRF-like evaluations"
-  },
-  {
-    id: 3,
-    title: "Teacher-Led Innovation Cells",
-    hours: 9,
-    objectives: "Promote innovation through teacher-led projects and co-curricular clubs",
-    activities: "Idea banks, action research formats, innovation logs",
-    outcomes: "Active teacher ownership in school improvement and student engagement"
-  },
-  {
-    id: 4,
-    title: "Peer-Learning & Mentorship Communities",
-    hours: 10,
-    objectives: "Build sustainable systems for teacher-to-teacher learning and professional growth",
-    activities: "Peer reflection journals, CPD tracker, learning circle formats",
-    outcomes: "Teachers collaborate, share best practices, and mentor one another"
-  },
-  {
-    id: 5,
-    title: "School Development Tracking & Leadership Dashboards",
-    hours: 8,
-    objectives: "Equip school leaders to monitor, evaluate, and present growth data effectively",
-    activities: "Dashboard templates, reporting formats, data visualization tools",
-    outcomes: "Leadership teams make informed decisions and showcase impact clearly"
-  }
-]
-  },
+  id: 'institutional-value-added',
+  icon: BookOpen,
+  name: 'Institutional Value-Added Services',
+  subtitle: 'For Teachers & Management',
+  description: 'Improve Systems. Inspire Teachers. Build Future-Ready Schools.\n\nWith Rareminds’ institutional value-added services, your school cultivates a high-performing, inclusive, and collaborative culture that supports both teacher excellence and student success.',
+  whatitis: 'Value-added services benefiting both teachers and management for institutional growth.',
+  image: '/academy/courseBanner/InstitutionalValueAddedServices.png',
+  color: '#D5D5D5',
+  duration: '10–15 hours',
+  mode: 'Offline / Hybrid',
+  Coursessimg: '/academy/courseBanner/InstitutionalValueAddedServices.png',
+  focus: 'Institutional excellence',
+  benefits: [
+    'Performance audits',
+    'Ranking preparation',
+    'Teacher-led clubs',
+    'Peer-learning communities',
+    'On-demand counselling',
+    'Leadership dashboards'
+  ],
+  modules: [
+    {
+      id: 1,
+      title: "On-Demand Counsellor Services",
+      hours: 6,
+      objectives: "Provide DEI-aligned counselling support for academic, emotional, and career needs",
+      activities: "In-school/online counsellors, referral protocols, wellbeing reports",
+      outcomes: "Students receive timely support; schools foster inclusion and emotional safety"
+    },
+    {
+      id: 2,
+      title: "External Teacher Performance Audits & Feedback Systems",
+      hours: 9,
+      objectives: "Use external audit tools to assess and improve instructional quality",
+      activities: "Rubric-based evaluations, classroom observation tools, assessor reports",
+      outcomes: "Leadership gains actionable insights for professional development"
+    },
+    {
+      id: 3,
+      title: "Accreditation & Ranking Readiness",
+      hours: 7,
+      objectives: "Align school practices with NEP benchmarks and quality standards",
+      activities: "Self-assessment grids, compliance trackers, improvement maps",
+      outcomes: "Schools improve readiness for NAAC/NIRF-style evaluations"
+    },
+    {
+      id: 4,
+      title: "Teacher-Led Innovation Cells",
+      hours: 8,
+      objectives: "Foster innovation through teacher-driven projects and initiatives",
+      activities: "Innovation formats, action research tools, idea banks",
+      outcomes: "Teachers actively contribute to school improvement and engagement"
+    },
+    {
+      id: 5,
+      title: "Peer-Learning & Mentorship Communities",
+      hours: 8,
+      objectives: "Build sustainable peer-led systems for reflection and growth",
+      activities: "CPD journals, peer learning formats, mentorship logs",
+      outcomes: "Teachers share practices, improve morale, and build a growth culture"
+    },
+    {
+      id: 6,
+      title: "School Development Tracking & Leadership Dashboards",
+      hours: 7,
+      objectives: "Equip leadership with tools to monitor, evaluate, and present growth",
+      activities: "Dashboard templates, impact reports, data visualization formats",
+      outcomes: "Informed, strategic decision-making with measurable outcomes"
+    }
+  ]
+}
 ];
 
 export const domainSpecificCertificationDetails = {
@@ -815,16 +825,18 @@ export const communicationPersonalityDevelopmentDetails = {
 
 export const institutionalValueAddedDetails = {
   title: "What makes Rareminds’ Institutional Value-Added Services different?",
+  subtitle: "Many schools seek to improve teacher performance, foster innovation, and align with NEP goals—but often lack structured, scalable systems that support continuous growth and measurable outcomes.",
   intro: [
-    "Rareminds’ value-added services are designed to help schools and management teams achieve excellence in teaching, learning, and institutional growth. We go beyond compliance and audits, focusing on building a culture of innovation, collaboration, and continuous improvement.",
-    "Our services include teacher performance audits, NAAC/NIRF ranking preparation, building teacher-led clubs and innovation cells, and creating peer-learning teacher communities."
+        "Our services are designed to benefit both educators and school leadership by strengthening teaching quality, improving school readiness for national benchmarks, and fostering a collaborative, future-ready school culture. These services are modular, easy to implement, and aligned with school improvement frameworks across academic, operational, and psychosocial dimensions."
   ],
-  whyItMatters: [
-    "Drives measurable improvement in teaching quality and student outcomes",
-    "Prepares schools for national and international accreditations",
-    "Fosters a culture of innovation and collaboration among teachers",
-    "Strengthens the school’s reputation and stakeholder trust"
-  ],
+whyItMatters: [
+  "Provide access to professional, DEI-aligned counsellor support for student wellbeing and career guidance",
+  "Establish accountability through structured, external teacher performance audits",
+  "Boost preparedness for NEP-aligned quality benchmarks and accreditation",
+  "Empower teachers to lead innovation through clubs and action research projects",
+  "Build sustainable systems for peer learning, mentoring, and knowledge exchange",
+  "Equip school leaders with tools to monitor, track, and showcase growth"
+],
   highlights: [
     { icon: 'Award', text: 'Teacher Performance Audits & Feedback' },
     { icon: 'FileText', text: 'NAAC/NIRF Ranking Preparation' },
@@ -840,21 +852,25 @@ export const institutionalValueAddedDetails = {
 
 export const leadershipCareerGrowthDetails = {
   title: "What makes Rareminds’ Leadership and Career Growth Programs different?",
+  subtitle: "Many schools recognize the critical role of strong leadership (HODs/Coordinators, Principals) in driving school improvement and successfully implementing NEP, but often lack structured development programs for these key personnel.",
   intro: [
-    "Rareminds’ leadership programs are designed for aspiring and current academic leaders, including HODs, coordinators, and principals. Our programs focus on practical leadership skills, strategic thinking, and continuous professional development.",
-    "We offer workshops, mentoring, and frameworks that empower leaders to drive school improvement, foster teacher growth, and create a positive school culture."
-  ],
-  whyItMatters: [
-    "Develops visionary and effective school leaders",
-    "Supports succession planning and leadership pipelines",
-    "Promotes a culture of continuous professional growth",
-    "Enhances school performance and staff satisfaction"
-  ],
-  highlights: [
-    { icon: 'Award', text: 'Leadership Training for HODs/Coordinators' },
-    { icon: 'Target', text: 'Principal Excellence Programs' },
-    { icon: 'Lightbulb', text: 'Professional Development Workshops' }
-  ],
+    "Our programs help leaders build inclusive cultures, enhance academic planning, support teacher growth, and integrate NEP 2020 reforms meaningfully. Through immersive learning and community engagement, school leaders gain tools to lead with clarity and connection.",
+     ],
+ whyItMatters: [
+  "Drive school-wide transformation through strong, empathetic leadership",
+  "Improve faculty engagement, classroom quality, and student outcomes",
+  "Build a future-focused school culture with collaborative planning and innovation",
+  "Create CPD systems to ensure teacher growth across school clusters"
+],
+
+highlights: [
+  { icon: 'CalendarCheck', text: '2–3 Day Leadership Retreats tailored for school environments' },
+  { icon: 'Briefcase', text: 'Real-world school leadership case studies and stakeholder mapping tools' },
+  { icon: 'Users', text: 'CPD workshops for teacher cluster leaders' },
+  { icon: 'Heart', text: 'Emotional intelligence, mentorship, and team-building skill modules' },
+  { icon: 'BarChart2', text: 'Post-program access to leadership dashboards and development planning templates' }
+],
+
   cta: {
     heading: 'Lead with Vision. Grow with Rareminds.',
     text: "Empower your school’s leaders to inspire, innovate, and achieve lasting success.",
@@ -978,8 +994,14 @@ const Courses = () => {
             return (
               <motion.div
                 key={course.id}
-                className="cursor-pointer"
-                onClick={() => navigate(`/academia/school/Courses/${course.id}`)}
+                className="cursor-pointer flex justify-center"
+                onClick={() => {
+                  if (course.id === 'Teacher Development Programs (TDP)') {
+                    navigate('/academia/school/tdp');
+                  } else {
+                    navigate(`/academia/school/Courses/${course.id}`);
+                  }
+                }}
               >
                 <Book 
                   depth={10 + (index % 3) * 2} 

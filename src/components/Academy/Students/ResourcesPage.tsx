@@ -1,6 +1,7 @@
 import { Download } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
+import { supabase } from "@/lib/supabaseClient"; // Adjust the import path as necessary
 
 const ResourcesPage = () => {
   // Modal and form state
@@ -13,62 +14,113 @@ const ResourcesPage = () => {
   const [downloadReady, setDownloadReady] = useState(false);
   const [selectedResource, setSelectedResource] = useState<{ title: string; pdfLink: string } | null>(null);
 
-  // Dummy resource links for demonstration
-  const resourceLinks = [
-    {
+  
+  interface Resource {
+  title: string;
+  pdfLink: string;
+
+}
+
+const resources: Resource[] = [
+   {
       title: "Career Counselling Blueprint (Grades 9–12)",
-      pdfLink: "/academy/pdfs/Career_Counselling_Blueprint.pdf",
+      pdfLink: "https://drive.google.com/file/d/1HZR62_uyBC4kceBO3KV2KYYOzjwM1mfk/view?usp=drive_link",
     },
     {
       title: "Confidence & Goal Tracker PDF",
-      pdfLink: "/academy/pdfs/Confidence,Goal,Skill&8–12.pdf",
+      pdfLink: "https://drive.google.com/file/d/1TAhzScrKxOQ11hksIxakSkykL1-g3dc5/view?usp=drive_link",
     },
     {
       title: "Spoken English Daily Practice Sheet",
-      pdfLink: "/academy/pdfs/30-DaySpokenEnglishPracticeSheet.pdf",
+      pdfLink: "https://drive.google.com/file/d/1HhCH2W9OSzP1iBCHPc9VUqRG9PwBi9mn/view?usp=drive_link",
     },
     {
       title: "EEE Course Overview with Job Pathways",
-      pdfLink: "/academy/pdfs/EEECourseOverviewwithJobPathways.pdf",
+      pdfLink: "https://drive.google.com/file/d/12cQbhz1JSF-k1-vBEa02zWILkX4ulPWx/view?usp=drive_link",
     },
-  ];
+];
 
-  // Open modal with selected resource
-  const handleDownloadClick = (resourceIdx: number) => {
-    setSelectedResource(resourceLinks[resourceIdx]);
-    setModalOpen(true);
-    setName("");
-    setEmail("");
-    setPhone("");
-    setErrorMsg("");
-    setDownloadReady(false);
-  };
 
-  // Form submit handler (replace with your Supabase/email logic if needed)
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setErrorMsg("");
-    if (!name.trim() || !email.trim() || !phone.trim()) {
-      setErrorMsg("Please fill in all fields.");
-      return;
-    }
-    const emailRegex = /\S+@\S+\.\S+/;
-    if (!emailRegex.test(email)) {
-      setErrorMsg("Please enter a valid email address.");
-      return;
-    }
-    const phoneRegex = /^\d{10}$/;
-    if (!phoneRegex.test(phone.replace(/\D/g, ''))) {
-      setErrorMsg("Please enter a valid 10-digit phone number.");
-      return;
-    }
-    setLoading(true);
-    // Simulate async (replace with real logic)
-    setTimeout(() => {
-      setLoading(false);
-      setDownloadReady(true);
-    }, 1200);
-  };
+  // Open modal and set the clicked resource
+    const handleDownloadClick = (resource: Resource) => {
+      setSelectedResource(resource);
+      setModalOpen(true);
+      setName("");
+      setEmail("");
+      setPhone("");
+      setErrorMsg("");
+    };
+  
+    const handleSubmit = async (e: React.FormEvent) => {
+      e.preventDefault();
+      setErrorMsg("");
+  
+      if (!name.trim() || !email.trim() || !phone.trim()) {
+        setErrorMsg("Please fill in all fields.");
+        return;
+      }
+  
+      // Basic email validation
+      const emailRegex = /\S+@\S+\.\S+/;
+      if (!emailRegex.test(email)) {
+        setErrorMsg("Please enter a valid email address.");
+        return;
+      }
+  
+      // Basic phone validation
+      const phoneRegex = /^\d{10}$/;
+      if (!phoneRegex.test(phone.replace(/\D/g, ''))) {
+        setErrorMsg("Please enter a valid 10-digit phone number.");
+        return;
+      }
+  
+      if (!selectedResource) return;
+  
+      setLoading(true);
+  
+      try {
+        // Insert data into Supabase table demo_pdf
+        const { error } = await supabase.from("demo_pdf").insert([
+          {
+            name: name.trim(),
+            email: email.trim(),
+            phone: phone.trim(),
+            created_at: new Date().toISOString(),
+          },
+        ]);
+  
+        if (error) {
+          setLoading(false);
+          setErrorMsg("Failed to save data. Please try again.");
+          return;
+        }
+  
+        // Send email
+        const response = await fetch('https://email-sender-ssmu.onrender.com/send-pdf', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            name: name.trim(),
+            email: email.trim(),
+            phone: phone.trim(),
+            resourceTitle: selectedResource.title,
+            pdfUrl: selectedResource.pdfLink
+          }),
+        });
+  
+        if (!response.ok) {
+          throw new Error('Failed to send email');
+        }
+  
+        setLoading(false);
+        setModalOpen(false);
+      } catch (err) {
+        setLoading(false);
+        setErrorMsg("An error occurred. Please try again.");
+      }
+    };
 
   return (
     <div className="h-autopx-8 bg-white py-8 mt-8" data-aos="fade-down-right ">
@@ -118,7 +170,7 @@ const ResourcesPage = () => {
     <div className="absolute inset-0 flex flex-col justify-center text-black text-left px-6">
 
   {/* Icon/Image below content */}
-  <img src="/academy/careerCounsellingBlueprint.svg" alt="" className="w-16 h-16 "  />
+  <img src="/academy/careerCounsellingBlueprint.svg" alt=" Two people discussing across a table, representing student career counseling guidance for Grades 9 to 12" className="w-16 h-16 "  />
   {/* Heading */}
   <h2 className="text-[18px] font-semibold mb-2">
   Career Counselling Blueprint (Grades 9–12)
@@ -136,7 +188,7 @@ const ResourcesPage = () => {
     {/* Button */}
     <a
   href="#"
-  onClick={e => { e.preventDefault(); handleDownloadClick(0); }}
+  onClick={e => { e.preventDefault(); handleDownloadClick(resources[0]); }}
   className="w-[160px] absolute bottom-2 right-2 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded text-center"
 >
   Download PDF
@@ -152,7 +204,7 @@ const ResourcesPage = () => {
     <div className="absolute inset-0 flex flex-col justify-center text-black text-left px-6">
 
   {/* Icon/Image below content */}
-  <img src="/academy/Confidence & Goal Tracker PDF.svg" alt="" className="w-8 h-8 md:w-16 md:h-16 "  />
+  <img src="/academy/Confidence & Goal Tracker PDF.svg" alt="A confident person with stars, symbolizing personal development through confidence-building and goal tracking" className="w-8 h-8 md:w-16 md:h-16 "  />
   {/* Heading */}
   <h2 className="text-[18px] font-semibold mb-2">
   Confidence & Goal Tracker PDF
@@ -168,7 +220,7 @@ const ResourcesPage = () => {
     {/* Button */}
     <a
   href="#"
-  onClick={e => { e.preventDefault(); handleDownloadClick(1); }}
+  onClick={e => { e.preventDefault(); handleDownloadClick(resources[1]); }}
   className="w-[160px] absolute bottom-2 right-2 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded text-center"
 >
   Download PDF
@@ -200,7 +252,8 @@ const ResourcesPage = () => {
     <div className="absolute inset-0 flex flex-col justify-center text-black text-left px-6">
 
   {/* Icon/Image below content */}
-  <img src="/academy/spoken english dally Practice Sheet .svg" alt="" className="w-8 h-8 md:w-16 md:h-16 "  />
+  <img src="/academy/spoken english dally Practice Sheet .svg" alt="A notebook labeled A–Z, representing daily English speaking practice tools for students
+" className="w-8 h-8 md:w-16 md:h-16 "  />
   {/* Heading */}
   <h2 className="text-[18px] font-semibold mb-2">
   Spoken English Daily Practice Sheet
@@ -218,7 +271,7 @@ const ResourcesPage = () => {
     {/* Button */}
     <a
   href="#"
-  onClick={e => { e.preventDefault(); handleDownloadClick(2); }}
+  onClick={e => { e.preventDefault(); handleDownloadClick(resources[2]); }}
   className="w-[160px] absolute bottom-2 right-2 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded text-center"
 >
   Download PDF
@@ -247,7 +300,7 @@ const ResourcesPage = () => {
     <div className="absolute inset-0 flex flex-col justify-center text-black text-left px-6">
 
   {/* Icon/Image below content */}
-  <img src="/academy/EEE Course Overview with Job Pathways.svg" alt="" className="w-8 h-8 md:w-16 md:h-16  "  />
+  <img src="/academy/EEE Course Overview with Job Pathways.svg" alt="A briefcase and magnifying glass, illustrating an overview of the EEE course and related career opportunities" className="w-8 h-8 md:w-16 md:h-16  "  />
   {/* Heading */}
   <h2 className="text-[18px] font-semibold mb-2">
   EEE Course Overview with Job Pathways
@@ -265,7 +318,7 @@ const ResourcesPage = () => {
     {/* Button */}
     <a
   href="#"
-  onClick={e => { e.preventDefault(); handleDownloadClick(3); }}
+  onClick={e => { e.preventDefault(); handleDownloadClick(resources[3]); }}
   className="w-[160px] absolute bottom-2 right-2 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded text-center"
 >
   Download PDF

@@ -13,6 +13,7 @@ interface TdpCard {
   title: string;
   description: string;
   image: string;
+  alt: string;
   pdfLink: string;
   features: string[];
 }
@@ -27,7 +28,8 @@ const tdpPrograms: TdpCard[] = [
     title: "3-Day Intensive TDP",
     description: "Quick-impact, high-energy program focused on essential teaching techniques for the digital classroom",
     image: "/academy/3-Day Intensive TDP.svg",
-    pdfLink: "/academy/pdfs/3_Day.pdf",
+    alt: " Icon of a smart classroom interface with three students, symbolizing digital learning and virtual instruction",
+    pdfLink: "https://drive.google.com/file/d/113jMQrHdB9aTxtpFUtluf-o-go19l_QC/view?usp=drive_link",
     features: [
       "Digital Tools Workshop",
       "Student Engagement Tactics",
@@ -38,7 +40,8 @@ const tdpPrograms: TdpCard[] = [
     title: "5-Day NEP Mastery TDP",
     description: "Comprehensive program covering NEP principles, implementation strategies and pedagogical transformation",
     image: "/academy/5-Day TDP Calendar (Customizable).svg",
-    pdfLink: "/academy/pdfs/5_Day.pdf",
+    alt: " Calendar icon displaying the number 5, representing scheduling, program duration, or structured learning timelines",
+    pdfLink: "https://drive.google.com/file/d/1bmJoQdaW5oC0vZcuDs-iieFgOVCudl9q/view?usp=drive_link",
     features: [
       "NEP Framework Deep-Dive",
       "Skill-Based Teaching",
@@ -50,7 +53,8 @@ const tdpPrograms: TdpCard[] = [
     title: "Weekend Program for School Leaders",
     description: "Reimagining Education with Transformational Leadership",
     image: "/academy/Weekend Program -Reimagining Education with Transformational Leadership.svg",
-    pdfLink: "/academy/pdfs/Weekend_Program.pdf",
+    alt: " Icon of an empowered individual with raised arms, symbolizing student confidence, achievement, or career readiness",
+    pdfLink: "https://drive.google.com/file/d/1FexjnvsqLziLlk71F2wU4I7apQWzK5i2/view?usp=drive_link",
     features: [
       "NEP Framework and Objectives",
       "Technology Integration to accelerate future-forward learning.",
@@ -168,7 +172,7 @@ const Fdpcalender = ({ Facultytocontact }: FdpcalenderProps) => {
               className="border rounded-lg p-6 flex flex-col h-full hover:scale-105 transition-transform duration-200"
             >
               <div className="flex justify-center mb-6">
-                <img src={program.image} alt={program.title} className="w-[100px] h-[100px]" />
+                <img src={program.image} alt={program.title } className="w-[100px] h-[100px]" />
               </div>
 
               <h2 className="text-xl font-bold text-center mb-2">{program.title}</h2>

@@ -141,7 +141,7 @@ const InstitutionDashboardSection = () => {
   <div className="w-full ">
       <img
               src="/academy/Rareprep.png"
-              alt="Rareprep LMS"
+              alt="Students interacting with a digital dashboard system on large screens, representing data access and database integration through the Rareminds Hub"
               className="rounded-xl w-full  object-cover"
             />
   </div>
@@ -162,12 +162,12 @@ const InstitutionDashboardSection = () => {
     <div className="flex flex-col md:flex-row gap-4 items-center max-w-4xl w-full">
       <img
         src="/academy/Dashboardleft.png"
-        alt="Dashboard Preview 1"
+        alt="Two laptop screens displaying dashboards from Rareminds’ Learning Management System, showing student analytics and course management tools"
         className="rounded-xl w-full md:w-1/2 object-cover  transition-transform duration-500 ease-in-out hover:scale-110 cursor-pointer"
       />
       <img
         src="/academy/Dashboardright.png"
-        alt="Dashboard Preview 2"
+        alt="Two laptop screens displaying dashboards from Rareminds’ Learning Management System, showing student analytics and course management tools"
         className="rounded-xl w-full md:w-1/2 object-cover  transition-transform duration-500 ease-in-out hover:scale-110 cursor-pointer"
       />
     </div>
