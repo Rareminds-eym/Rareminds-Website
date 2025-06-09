@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { Icon } from "@iconify/react";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/lib/supabaseClient";
 
 const ContactSection = () => {
   const { toast } = useToast();
@@ -33,12 +34,49 @@ const ContactSection = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Simulate form submission
-    setTimeout(() => {
+    try {
+      // Insert into Supabase training_forms table
+      const submission = {
+        name: formData.name,
+        company: formData.company,
+        email: formData.email,
+        role: formData.role,
+        message: formData.message,
+        submitted_at: new Date().toISOString(),
+      };
+
+      const { error: dbError, data } = await supabase
+        .from("training_forms")
+        .insert([submission])
+        .select()
+        .single();
+
+      if (dbError) {
+        console.error("Supabase database error:", {
+          message: dbError.message,
+          details: dbError.details,
+          hint: dbError.hint,
+        });
+        throw dbError;
+      }
+
+      // Optionally, trigger an email function here if needed
+      const { error: functionError } = await supabase.functions.invoke(
+        "send-training-email",
+        {
+          body: { record: data },
+        }
+      );
+
+      if (functionError) {
+        console.error("Supabase function error:", functionError);
+        throw functionError;
+      }
+
       toast({
         title: "Message Sent!",
         description:
@@ -46,20 +84,37 @@ const ContactSection = () => {
       });
 
       setSubmitted(true);
-      setIsSubmitting(false);
+      setFormData({
+        name: "",
+        company: "",
+        email: "",
+        role: "",
+        message: "",
+      });
+
+      if (formRef.current) formRef.current.reset();
 
       setTimeout(() => {
-        setFormData({
-          name: "",
-          company: "",
-          email: "",
-          role: "",
-          message: "",
-        });
         setSubmitted(false);
-        if (formRef.current) formRef.current.reset();
       }, 3000);
-    }, 1500);
+    } catch (error) {
+      const supabaseError = error as any;
+      console.error("Error submitting form:", {
+        message: supabaseError.message,
+        details: supabaseError.details,
+        hint: supabaseError.hint,
+        error: supabaseError,
+      });
+      toast({
+        title: "Error",
+        description: `There was an error submitting your message.\n${
+          supabaseError.message || ""
+        }\n${supabaseError.details || ""}\n${supabaseError.hint || ""}`,
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
