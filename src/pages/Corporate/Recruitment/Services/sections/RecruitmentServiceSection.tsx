@@ -37,7 +37,7 @@ const RecruitmentServiceSection: React.FC<RecruitmentServiceSectionProps> = ({
         >
           <ol className="flex gap-2 flex-wrap text-[#727272] text-sm">
             <li>
-              <Link to="/corporate" className="hover:underline">
+              <Link to="/corporate/recruitment" className="hover:underline">
                 Home
               </Link>
             </li>
