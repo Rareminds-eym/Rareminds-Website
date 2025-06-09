@@ -33,7 +33,7 @@ const CorporateTraining = lazy(() => import("./pages/Corporate/Training"));
 const Contact = lazy(() => import("./pages/Government/Contact/Index"));
 const handleSubscribe = lazy(() => import("./pages/Academia/ComingSoon"));
 const LeadershipPrograms = lazy(
-  () => import("./pages/Corporate/Training/service/LeadershipPrograms.tsx")
+  () => import("./pages/Corporate/Training/service/index.tsx")
 );
 const Projectlist = lazy(() => import("./pages/Academia/projects/projectlist"));
 const Naan = lazy(() => import("./pages/Academia/projects/[name]"));

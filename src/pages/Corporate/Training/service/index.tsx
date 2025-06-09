@@ -1,21 +1,11 @@
-import React, { useCallback, useState } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
-import {
-  ArrowRight,
-  ChevronRight,
-  Users,
-  Brain,
-  Target,
-  Award,
-} from "lucide-react";
+import { ArrowRight, ChevronRight, Award } from "lucide-react";
 import { useParams, useNavigate } from "react-router-dom";
-import { services } from "./leadershipProgramsData";
-
-const iconMap = {
-  users: <Users className="w-5 h-5 text-blue-600" />,
-  brain: <Brain className="w-5 h-5 text-purple-600" />,
-  target: <Target className="w-5 h-5 text-indigo-600" />,
-};
+import { services } from "./serviceData";
+import ErrorComponent from "@/components/ErrorComponent";
+import { useEffect } from "react";
+import { useLocation } from "react-router-dom";
 
 const LeadershipPrograms = () => {
   const { id } = useParams();
@@ -23,11 +13,23 @@ const LeadershipPrograms = () => {
   const service = services.find((s) => s.id === id);
 
   if (!service) {
-    return <div>Service not found {id}</div>;
+    return (
+      <ErrorComponent
+        title="404 - Service Not Found"
+        message="The service you are looking for does not exist or is not available."
+      />
+    );
   }
 
   const { heroTitle, heroSubtitle, featureBadges, programs } = service;
   const [activeProgram, setActiveProgram] = useState(programs[0].id);
+
+  const location = useLocation();
+
+  useEffect(() => {
+    setActiveProgram(programs[0].id);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [location]);
 
   const handleBack = () => {
     navigate("/corporate/training", { state: { scrollTo: "services" } });
@@ -246,7 +248,10 @@ const LeadershipPrograms = () => {
                           <p className="text-lg opacity-90 mb-8">
                             {program.cta.description}
                           </p>
-                          <button className="inline-flex items-center gap-2 px-8 py-4 bg-white text-blue-600 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1" onClick={handleClick}>
+                          <button
+                            className="inline-flex items-center gap-2 px-8 py-4 bg-white text-blue-600 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1"
+                            onClick={handleClick}
+                          >
                             Connect with Us
                             <ArrowRight className="w-5 h-5" />
                           </button>
