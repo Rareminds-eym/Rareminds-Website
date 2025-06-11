@@ -108,7 +108,7 @@ function scrollToSection(id: string) {
 }
 
 function sendEmail(name: string, email: string, pdfUrl: string, institution: string) {
-  return fetch(`${API_BASE_URL}/send-pdf`, {
+  return fetch(`${API_BASE_URL}/api/send-pdf`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ name, email, pdfUrl, institution }),
@@ -402,7 +402,7 @@ function HeroMobile() {
         <img
           src={banners[currentBanner].mobilePoster}
           alt={banners[currentBanner].alt}
-          className="w-full h-96 object-cover rounded-lg shadow-md transition-all duration-700"
+          className="w-[556px] h-[320px] object-cover rounded-lg shadow-md transition-all duration-700"
           style={{ background: "#e5e7eb" }}
         />
         {/* Text overlay */}
@@ -420,7 +420,7 @@ function HeroMobile() {
             ))}
           </motion.h1>
           <motion.p
-            className="text-xs mb-2 text-black drop-shadow"
+            className="text-medium mb-2 text-black drop-shadow"
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.2 }}
