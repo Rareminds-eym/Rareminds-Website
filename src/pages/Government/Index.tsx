@@ -13,9 +13,20 @@ import FloatingActionMenu from "../../components/Govt/StickyButton/FloatingActio
 import ContactSection from "../../components/Govt/Contact/ContactSection";
 
 import CaseStudies from "../../components/Govt/CaseStudies/CaseStudies";
+import Seo from "@/components/Govt/Seo/Seo";
+import { HelmetProvider } from 'react-helmet-async';
+
 const Govt = () => {
+  const seoData = {
+    title: "Government",
+    description: "Innovative digital solutions for government agencies to improve public services and operational efficiency. Explore our case studies and partnerships.",
+    keywords: "government technology, public sector solutions, digital government, e-governance",
+    canonicalUrl: "https://rareminds.in/government"
+  };
   return (
+    <HelmetProvider>
     <div className="relative w-full">
+      <Seo {...seoData} />
       <HeroSection />
       {/* <div className="relative"> */}
         {/* Scrollable content that appears on top of hero */}
@@ -49,7 +60,7 @@ const Govt = () => {
             <FloatingActionMenu/>
           </div>
         </div>
-      // </div>
+     </HelmetProvider>
   
   );
 };

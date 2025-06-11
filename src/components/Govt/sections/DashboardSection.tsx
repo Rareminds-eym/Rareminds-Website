@@ -45,8 +45,8 @@ const DashboardSection = () => {
         >
           <h3 className="text-base md:text-lg font-semibold text-[#495E57] mb-4">📊 Real Time Dashboards & Analytics</h3>
           <div className="grid grid-cols-1 gap-2 md:gap-4">
-            <img src="/Govt-Images/dashboard1.png" alt="Performance Dashboard" className="rounded-xl w-full h-40 md:h-60 object-contain" />
-            <img src="/Govt-Images/dashboard2.png" alt="Analytics Dashboard" className="rounded-xl mb-2 w-full h-40 md:h-60 object-contain" />
+            <img src="https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Government/Home/Dashboard/dashboard1.webp" alt="Performance Dashboard" className="rounded-xl w-full h-40 md:h-60 object-contain" />
+            <img src="https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Government/Home/Dashboard/dashboard2.webp" alt="Analytics Dashboard" className="rounded-xl mb-2 w-full h-40 md:h-60 object-contain" />
             {/* <div className="bg-gray-100 rounded-xl md:rounded-3xl p-2 md:p-4 flex flex-col items-center  md:h-72">
               <img src="/Govt-Images/dashboard1.png" alt="Performance Dashboard" className="rounded-xl w-full h-40 md:h-60 object-contain" />
             </div>
@@ -67,14 +67,14 @@ const DashboardSection = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-center">
             <div className="col-span-1">
               <img
-                src="/Govt-Images/dashboard3.png"
+                src="https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Government/Home/Dashboard/dashboard3.webp"
                 alt="Rareprep LMS"
                 className="rounded-xl w-full h-40 md:h-60 object-contain bg-gray-50"
               />
             </div>
             <div className="col-span-1">
               <img
-                src="/Govt-Images/dashboard4.png"
+                src="https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Government/Home/Dashboard/dashboard4.webp"
                 alt="Rareprep LMS"
                 className="rounded-xl w-full h-40 md:h-60 object-contain bg-gray-50"
               />

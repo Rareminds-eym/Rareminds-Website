@@ -4,37 +4,37 @@ import Modal from 'react-modal';
 
 const contentData = [
   {
-    image: '/Govt-Images/ytbanner1.png',
+    image: 'https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Government/Home/Yt_Banner/ytbanner1.webp',
     video: 'https://youtu.be/LYmob1dwjt8',
     title: 'Education Excellence'
   },
   {
-    image: '/Govt-Images/ytbanner2.png',
+    image: 'https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Government/Home/Yt_Banner/ytbanner2.webp',
     video: 'https://youtu.be/2BNwt75ExEk',
     title: 'University Campus'
   },
   {
-    image: '/Govt-Images/ytbanner3.png',
+    image: 'https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Government/Home/Yt_Banner/ytbanner3.webp',
     video: 'https://youtu.be/zInPOXMjHpQ',
     title: 'Learning Experience'
   },
   {
-    image: '/Govt-Images/ytbanner1.png',
+    image: 'https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Government/Home/Yt_Banner/ytbanner1.webp',
     video: 'https://youtu.be/oIeAey8NxmA',
     title: 'Student Life'
   },
   {
-    image: '/Govt-Images/ytbanner3.png',
+    image: 'https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Government/Home/Yt_Banner/ytbanner3.webp',
     video: 'https://youtu.be/w5HmwkOF92E',
     title: 'Modern Classroom'
   },
   {
-    image: '/Govt-Images/ytbanner2.png',
+    image: 'https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Government/Home/Yt_Banner/ytbanner2.webp',
     video: 'https://youtu.be/LYmob1dwjt8',
     title: 'Library Resources'
   },
   {
-    image: '/Govt-Images/ytbanner1.png',
+    image: 'https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Government/Home/Yt_Banner/ytbanner1.webp',
     video: 'https://youtu.be/Z467zES119Q',
     title: 'Library Resources'
   }

@@ -43,8 +43,6 @@ const ContactSection = () => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    console.log('Form submission started with data:', formData);
-
     // Validate required fields
     if (!formData.name || !formData.email || !formData.phone || !formData.message) {
       toast({
@@ -66,7 +64,6 @@ const ContactSection = () => {
         submitted_at: new Date().toISOString(),
       };
 
-      console.log('Submitting to Supabase:', submission);
 
       const { error, data } = await supabase
         .from('government_form')
@@ -82,7 +79,25 @@ const ContactSection = () => {
         throw error;
       }
 
-      console.log('Submission successful:', data);
+      const emailResponse = await fetch(
+      'https://itvhjkgfafikpqmuunlh.supabase.co/functions/v1/Government_email_function',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
+        },
+        body: JSON.stringify({
+          record: submission // Your function expects a 'record' property
+        }),
+      }
+    );
+
+    if (!emailResponse.ok) {
+      const errorData = await emailResponse.json();
+      console.error('Email function error:', errorData);
+      // Optional: Log this error to your error tracking system
+    }
 
       toast({
         title: "Message Sent!",
