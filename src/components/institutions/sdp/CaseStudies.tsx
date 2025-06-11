@@ -48,7 +48,7 @@ const sendEmail = async (
   pdfUrl: string,
   institution: string
 ) => {
-  const response = await fetch(`${API_BASE_URL}/send-pdf`, {
+  const response = await fetch(`${API_BASE_URL}/api/send-pdf`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ name, email, pdfUrl, institution }),
