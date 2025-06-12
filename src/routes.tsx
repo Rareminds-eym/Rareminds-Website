@@ -20,7 +20,7 @@ const Corporate = lazy(() => import("./pages/Corporate/Recruitment/Index"));
 const Government = lazy(() => import("./pages/Government/Index"));
 const Academia = lazy(() => import("./pages/Academia/Index"));
 const Student = lazy(() => import("./pages/Academia/Student/student"));
-const School = lazy(() => import("./pages/Academia/School/teacher"));
+const School = lazy(() => import("./pages/Academia/Teacher/teacher.tsx"));
 const Institutions = lazy(() => import("./pages/Institutions/Index"));
 const InstitutionsServices = lazy(
   () => import("./pages/Institutions/InstitutionsServices")
@@ -37,14 +37,14 @@ const LeadershipPrograms = lazy(
 );
 const Projectlist = lazy(() => import("./pages/Academia/projects/projectlist"));
 const Naan = lazy(() => import("./pages/Academia/projects/[name]"));
-const CaseStudy = lazy(() => import("./pages/Academia/School/CaseStudy"));
+const CaseStudy = lazy(() => import("./pages/Academia/Teacher/CaseStudy.tsx"));
 const Academy_Course = lazy(
-  () => import("./pages/Academia/School/CourseDetailed")
+  () => import("./pages/Academia/Teacher/CourseDetailed.tsx")
 );
 import CourseDetailedPage from "@/components/Academy/Students/CourseDetailedPage";
 const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
 const Terms = lazy(() => import("./pages/Terms"));
-const TDPPage = lazy(() => import("./pages/Academia/School/TDPPage"));
+const TDPPage = lazy(() => import("./pages/Academia/Teacher/TDPPage.tsx"));
 
 const withSuspense = (Component: React.LazyExoticComponent<React.FC<{}>>) => (
   <Suspense fallback={<LoaderComponent />}>
@@ -128,7 +128,7 @@ const router = createBrowserRouter([
         element: withSuspense(Contact),
       },
       {
-        path: "/academia/projects/",
+        path: "/school/projects/",
         element: withSuspense(Projectlist),
       },
     ],
@@ -145,42 +145,46 @@ const router = createBrowserRouter([
     errorElement: <ErrorBoundary />,
     children: [
       {
-        path: "/academia",
+        path: "/school",
         element: withSuspense(Academia),
       },
       {
-        path: "/academia/student",
+        path: "/school/student",
         element: withSuspense(Student),
       },
       {
-        path: "/academia/school",
+        path: "/school/teacher",
         element: withSuspense(School),
       },
       {
-        path: "/academia/coming-soon",
+        path: "/school/teacher",
+        element: withSuspense(School),
+      },
+      {
+        path: "/school/coming-soon",
         element: withSuspense(handleSubscribe),
       },
 
       {
-        path: "/academia/projects/",
+        path: "/school/projects/",
         element: withSuspense(Projectlist),
       },
       {
-        path: "/academia/projects/:name",
+        path: "/school/projects/:name",
         element: withSuspense(Naan),
       },
       {
-        path: "/academia/case-study/:id",
+        path: "/school/case-study/:id",
         element: withSuspense(CaseStudy),
       },
 
       {
-        path: "/academia/student/course/:courseId", // Individual course detail
+        path: "/school/student/course/:courseId", // Individual course detail
         element: <CourseDetailedPage />,
         errorElement: <ErrorBoundary />,
       },
       {
-        path: "/academia/school/Courses/:id",
+        path: "/school/teacher/Courses/:id",
         element: (
           <Suspense fallback={<LoaderComponent />}>
             <Academy_Course />
@@ -188,7 +192,7 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "/academia/school/tdp",
+        path: "/school/teacher/tdp",
         element: withSuspense(TDPPage),
       },
     ],

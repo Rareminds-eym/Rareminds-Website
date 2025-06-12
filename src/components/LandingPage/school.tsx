@@ -20,7 +20,7 @@ const School: React.FC<ChildProps> = ({
   content,
 }) => {
   const schoolRef = useRef<HTMLDivElement | null>(null);
-  const part: UserType = "academia";
+  const part: UserType = "school";
   return (
     <>
       <div

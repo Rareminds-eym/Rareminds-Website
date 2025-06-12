@@ -128,7 +128,7 @@ export const ProjectCard = ({ project, onClick }: ProjectCardProps) => {
 
         {/* Button at Bottom */}
         <div className="mt-auto">
-          <Link to={`/academia/projects/${project.name}`}>
+          <Link to={`/school/projects/${project.name}`}>
             <button className="w-full bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center justify-center hover:bg-blue-700 transition-colors">
               View Details
               <ArrowRight className="ml-2 w-4 h-4" />

@@ -43,8 +43,11 @@ import { useState, useEffect } from "react";
   import FloatingActionMenu from '../../../components/Academy/StickyButton/StickyButton/FloatingAction'
   import TestimonialViedoCarousel from '../../../components/Academy/Teacher/TestimonialCarouselVideo';
   import Hero from '../../../components/Academy/Teacher/Herobanner/Hero'
-  import Services from '../School/Cources'
+  import Services from './Cources'
   import Testimonials from "../../../components/Academy/Teacher/Testimonials"
+import Viedo_cube from "../../../components/Academy/Teacher/Showcase_videos/viedo_Cube"
+
+
   const School = ({ userType = "teacher" }: { userType?: "teacher" | "student" }) => {
   const [activeTab, setActiveTab] = useState<"teacher" | "student">("teacher");
   const [isHeroBlurred, setIsHeroBlurred] = useState(false);
@@ -227,9 +230,9 @@ useEffect(() => {
         {/* <FAQChatbot /> */}
         {/* <FDPButton />        Logos */}
           <FloatingActionMenu />
-       <div ref={logoRef} className="relative z-0 mt-[750px] " id="logo-section">
-  <div className="w-full h-[200px]">
-    <img src="/academy/school.svg" alt="Wave" className="w-full h-full object-cover" />
+       <div className="relative z-0 mt-[750px] " >
+  <div ref={logoRef}  className="w-full h-[200px] "> 
+    <img src="/academy/school.svg" alt="Wave" className="w-full h-full object-cover" id="logo-section" />
   </div> 
   
   {/* Add white space below image */}
@@ -239,7 +242,7 @@ useEffect(() => {
 
 
    
-        <div ref={logoRef} className="relative z-0  rounded-tl-3xl rounded-tr-3xl shadow-2xl shadow-black 0" id="logo-section">
+        <div  className="relative z-0  rounded-tl-3xl rounded-tr-3xl shadow-2xl shadow-black 0" >
           <Logos  />
         </div>
       
@@ -415,7 +418,6 @@ useEffect(() => {
 
 
 
-
  <div className="min-h-screen flex items-center justify-center relative z-10 bg-white">
        <EducationSection scrollToContact={scrollToContact} />
 
@@ -434,9 +436,13 @@ useEffect(() => {
 
 
 
+     {/* <div  className="min-h-auto w-full flex items-center justify-center relative z-10 bg-white">
+     <Viedo_cube />     
+       </div> */}
 
 
-        {/* Faculty Transformation & Calendar */}        <div ref={facultyTransformationRef} className="min-h-screen flex items-center justify-center relative z-10 bg-white" id="scrollToFacultyTransformation">
+        {/* Faculty Transformation & Calendar */}     
+          <div ref={facultyTransformationRef} className="min-h-screen flex items-center justify-center relative z-10 bg-white" id="scrollToFacultyTransformation">
          <FacultyTransformation />
          </div>
           <div className="min-h-screen flex items-center justify-center relative z-10 bg-white">

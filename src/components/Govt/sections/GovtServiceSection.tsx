@@ -419,7 +419,7 @@ const GovServiceSection: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 xl:gap-4 mb-5 md:mb-10">
           {services.map((service, index) => (
             
-            <Link to={"/academia/projects/"}
+            <Link to={"/school/projects/"}
               key={index}
               className="p-3 md:p-4 rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-all duration-300 group animate-fade-in bg-white"
               style={{ animationDelay: `${index * 0.1}s` }}

@@ -44,6 +44,7 @@ import FloatingActionMenu from '../../../components/Academy/StickyButton/StickyB
 import  Courses from '../../../components/Academy/Students/Courses'
 import TestimonialVideoCarousel from "../../../components/Academy/Students/StudentCarouselVideo"
 
+
 const Academy = ({ userType = "teacher" }: { userType?: "teacher" | "student" }) => {
   const [activeTab, setActiveTab] = useState<"teacher" | "student">("teacher");
   const [selectedCaseStudy, setSelectedCaseStudy] = useState<CaseStudyType>(caseStudies[0]);
@@ -221,7 +222,7 @@ const Academy = ({ userType = "teacher" }: { userType?: "teacher" | "student" })
        </div> */}
     
       {/* <div className="w-full h-[65vh]"></div> */}
-  <div  className="min-h-screen flex items-center justify-center relative z-10 bg-white">
+  <div  className="min-h-screen flex items-center justify-center relative  bg-white">
   <DashboardSection />     
        </div>
     
@@ -352,13 +353,15 @@ const Academy = ({ userType = "teacher" }: { userType?: "teacher" | "student" })
 
       {/* Testimonials Section */}
        {/* <Testimonials /> */}
-        <div  className="min-h-screen flex items-center justify-center relative z-10 bg-white">
+        <div  className="min-h-screen flex items-center justify-center relative  bg-white">
  <Testimonialss />     
        </div>
 
-        <div  className="min-h-auto flex items-center justify-center relative z-10 bg-white">
+        <div  className="min-h-auto flex items-center justify-center relative  bg-white">
  <TestimonialVideoCarousel />     
        </div>
+
+
 
        {/* <div  className="min-h-screen flex items-center justify-center relative z-10 bg-white">
   <CaseStudy />   
@@ -466,13 +469,13 @@ const Academy = ({ userType = "teacher" }: { userType?: "teacher" | "student" })
 
       {/* Resources Page */}
     
-       <div  className="min-h-screen flex items-center justify-center relative z-10 bg-white">
+       <div  className="min-h-screen flex items-center justify-center relative  bg-white">
   <ResourcesPage />  
        </div>
       {/* <ResourceDownloadForm /> */}
        
 
-       <div ref={contactRef} id="contact-section">
+       <div ref={contactRef}  id="contact-section">
      <ContactSection />
        </div>
   

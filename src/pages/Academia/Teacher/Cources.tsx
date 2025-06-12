@@ -291,7 +291,7 @@
 //                 key={Courses.id}
 //                 style={{ y: yOffset }}
 //                 className="relative group h-[360px] cursor-pointer max-w-xs mx-auto"
-//                 onClick={() => navigate(`/academia/school/Courses/${Courses.id}`)}
+//                 onClick={() => navigate(`/school/teacher/Courses/${Courses.id}`)}
 //               >
 //                 <div className={`absolute left-0 top-0 bottom-0 w-6 bg-[#020202] rounded-l-lg transform -skew-y-12`} />
                 
@@ -967,7 +967,7 @@ const Courses = () => {
                 aria-label="Submit search"
                 style={{ background: 'none', border: 'none', cursor: 'pointer' }}
               >
-                <Search className="h-4 w-8" />
+                <Search className="h-4 w-8 md:-mt-8" />
               </button>
             </div>
             <div className="mb-8 text-center w-full md:w-72"> {/* Responsive width for all browsers */}
@@ -997,9 +997,9 @@ const Courses = () => {
                 className="cursor-pointer flex justify-center"
                 onClick={() => {
                   if (course.id === 'Teacher Development Programs (TDP)') {
-                    navigate('/academia/school/tdp');
+                    navigate('/school/teacher/tdp');
                   } else {
-                    navigate(`/academia/school/Courses/${course.id}`);
+                    navigate(`/school/teacher/Courses/${course.id}`);
                   }
                 }}
               >
