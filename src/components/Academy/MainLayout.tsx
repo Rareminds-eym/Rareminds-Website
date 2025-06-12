@@ -199,10 +199,10 @@
           >
            <div className="flex flex-col items-center justify-center  h-full absolute -top-[10%] right-[55%]">
 
-           <div className="w-48 h-48 md:w-96 md:h-96 rounded-full flex cursor-pointer items-center justify-center overflow-hidden group" onClick={() => navigate("/academia/school")}>
+           <div className="w-48 h-48 md:w-96 md:h-96 rounded-full flex cursor-pointer items-center justify-center overflow-hidden group" onClick={() => navigate("/school/teacher")}>
   <img
-    src="/academy/school.png"
-    alt="Technology"
+    src="/academy/teacher.svg"
+    alt="Teacher"
     className="w-full h-full object-cover transition-transform duration-300 ease-in-out group-hover:scale-110"
   />
 </div>
@@ -220,7 +220,7 @@
           >
             <div className="flex flex-col items-center justify-center  h-full absolute  -top-[10%] left-[55%]">
 
-            <div className="w-48 h-48 md:w-96 md:h-96 rounded-full cursor-pointer flex items-center justify-center overflow-hidden group" onClick={() => navigate("/academia/student")}>
+            <div className="w-48 h-48 md:w-96 md:h-96 rounded-full cursor-pointer flex items-center justify-center overflow-hidden group" onClick={() => navigate("/school/student")}>
   <img
     src="/academy/student.png"
     alt="Technology"

@@ -50,13 +50,13 @@ const HeroBanner = ({  HeroToContact,HeroToLogo, isBlurred }: HeaderProps) =>{
       }
     };
   
-      const isSchoolPage = location.pathname === '/academia/school';
+      const isSchoolPage = location.pathname === '/school/teacher';
   
       const handleClick = useCallback(() => {
         if (isSchoolPage) {
           scrollToSection();
         } else {
-          navigate('/academia/school#contact-section');
+          navigate('/school/teacher#contact-section');
         }
       }, [isSchoolPage, navigate]);
   

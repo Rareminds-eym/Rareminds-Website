@@ -158,7 +158,7 @@ function Naan() {
         <div className="text-center">
           <h1 className="text-4xl font-bold mb-4">Project Not Found</h1>
           <p className="mb-4">The requested project {name} does not exist.</p>
-          <Link to="/academia/projects" className="text-blue-600 hover:text-blue-800">
+          <Link to="/school/projects" className="text-blue-600 hover:text-blue-800">
             View All Projects
           </Link>
         </div>

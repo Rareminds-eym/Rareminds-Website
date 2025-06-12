@@ -348,10 +348,10 @@ const Academia = ({ userType = "teacher" }: { userType?: "teacher" | "student" }
   
 <div className="w-full hidden md:flex h-[330px] bg-white flex-row mt-12 relative ">
       <div
-        onClick={() => navigate("/academia/school")}
+        onClick={() => navigate("/school/teacher")}
         className={`w-full flex justify-end items-center h-full cursor-pointer transition-all duration-300`}
       >
- <h1 className="text-xl md:text-4xl font-playfair ">Schools</h1>
+ <h1 className="text-xl md:text-4xl font-playfair ">Teachers</h1>
               <img
           src="/images/academy/board.png"
           alt="Teacher"
@@ -360,7 +360,7 @@ const Academia = ({ userType = "teacher" }: { userType?: "teacher" | "student" }
       </div>
 
       <div
-        onClick={() => navigate("/academia/student")}
+        onClick={() => navigate("/school/student")}
         className={`w-full flex justify-start items-center h-full cursor-pointer transition-all duration-300`}
       >
        
