@@ -120,11 +120,11 @@ const communicationPersonalityModules = [
 
 
   const otherCourses = [
-  { name: 'Communication and Personality Development', route: '/academia/school/Courses/communication-personality' },
-  { name: 'Mental Health and Counseling Training', route: '/academia/school/Courses/mental-health-counseling' },
-  { name: 'Domain-Specific Certification Programs', route: '/academia/school/Courses/domain-specific-certification' },
-  { name: 'Leadership and Career Growth', route: '/academia/school/Courses/leadership-career-growth' },
-  { name: 'Institutional Value-Added Services', route: '/academia/school/Courses/institutional-value-added' },
+  { name: 'Communication and Personality Development', route: '/school/teacher/Courses/communication-personality' },
+  { name: 'Mental Health and Counseling Training', route: '/school/teacher/Courses/mental-health-counseling' },
+  { name: 'Domain-Specific Certification Programs', route: '/school/teacher/Courses/domain-specific-certification' },
+  { name: 'Leadership and Career Growth', route: '/school/teacher/Courses/leadership-career-growth' },
+  { name: 'Institutional Value-Added Services', route: '/school/teacher/Courses/institutional-value-added' },
 ];
 
 
@@ -182,7 +182,7 @@ export default function CourseDetailed() {
             {/* Foreground content */}
             <div className="relative z-10 container mx-auto px-6 pl-[8%] p-6 flex flex-col justify-center h-full">
               <button
-                onClick={() => navigate('/academia/school#course-cards-section')}
+                onClick={() => navigate('/school/teacher#course-cards-section')}
                 className="text-white mb-7 text-lg flex items-center gap-2 hover:underline"
               >
                 <ArrowLeft className="w-4 h-4" />
@@ -224,7 +224,7 @@ export default function CourseDetailed() {
   {/* Content on top */}
   <div className="relative z-10 container mx-auto px-6 flex flex-col justify-center h-full">
     <button
-      onClick={() => navigate('/academia/school#course-cards-section')}
+      onClick={() => navigate('/school/teacher#course-cards-section')}
       className="text-black mb-7 text-lg flex items-center gap-2 hover:underline"
     >
       <ArrowLeft className="w-4 h-4" />
@@ -466,7 +466,7 @@ export default function CourseDetailed() {
             <div className="absolute inset-0 bg-cover bg-center opacity-60" style={{ backgroundImage: `url(${course.image})` }} />
             <div className="relative z-10 container mx-auto px-6 flex flex-col justify-center h-full">
               <button
-                onClick={() => navigate('/academia/school#course-cards-section')}
+                onClick={() => navigate('/school/teacher#course-cards-section')}
                 className="text-black mb-7 text-lg flex items-center gap-2 hover:underline"
               >
                 <ArrowLeft className="w-4 h-4" />

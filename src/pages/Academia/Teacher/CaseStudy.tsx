@@ -258,7 +258,7 @@ const CaseStudy = () => {
     </div>
 
     <div className='w-auto h-auto md:pl-[10%] flex justify-start px-[2%]'>
-      <Link to="/academia/school#scrollToFacultyTransformation">
+      <Link to="/school/teacher#scrollToFacultyTransformation">
         <button
           className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-gradient-to-r from-red-500 to-pink-500 text-white text-sm font-semibold shadow-lg hover:shadow-xl hover:opacity-90 transition-all duration-300"
         >

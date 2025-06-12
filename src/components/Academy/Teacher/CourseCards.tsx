@@ -396,7 +396,7 @@ const CourseCards = ({coursetocontact}:coursecardProps) => {
                         getColorClass(course.color, false),
                         "hover:bg-gray-50"
                       )}
-                      onClick={() => navigate(`/academia/teacher/course/${course.id}`)}
+                      onClick={() => navigate(`/school/teacher/course/${course.id}`)}
                     >
                       View Details
                     </Button>

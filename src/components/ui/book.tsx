@@ -100,7 +100,7 @@ export function Book(props: BookProps) {
         {
           '--book-color': color,
           '--text-color': textColor,
-          '--book-depth': (depth || 4) + 'cqw',
+          '--book-depth': (depth || 4) + 'px', // changed from 'cqw' to 'px' for cross-browser compatibility
           '--book-width': (width || 196) + 'px',
         } as React.CSSProperties
       }

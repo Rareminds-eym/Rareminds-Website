@@ -3,6 +3,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { Facebook, Instagram, Youtube, Linkedin } from "lucide-react";
 import { Icon } from "@iconify/react";
 import { motion } from "framer-motion";
+import { supabase } from "@/lib/supabaseClient";
 
 const socialIcons = [
 	{
@@ -62,13 +63,26 @@ const FooterBar: React.FC<FooterBarProps> = ({ hideServices }) => {
 		setServiceData(mockServiceData);
 	}, [userType]);
 
-	const submitSubscription = () => {
+	const submitSubscription = async () => {
 		if (subscriberEmail) {
 			if (!/(.+)@(.+){2,}\.(.+){2,}/.test(subscriberEmail)) {
 				setSuccessMessage("Enter a valid email address");
 			} else {
-				setSuccessMessage("Thank you for subscribing");
-				// if (subscribeInput.current) subscribeInput.current.value = "";
+				try {
+					// Insert email and submitted_at into Supabase table 'footer_email'
+					const { error } = await supabase
+						.from("footer_email")
+						.insert([
+							{ email: subscriberEmail, submitted_at: new Date().toISOString() }
+						]);
+					if (error) {
+						setSuccessMessage("Error subscribing. Please try again.");
+					} else {
+						setSuccessMessage("Thank you for subscribing");
+					}
+				} catch (err) {
+					setSuccessMessage("Error subscribing. Please try again.");
+				}
 				setTimeout(() => setSuccessMessage(null), 2000);
 			}
 		} else {
@@ -93,7 +107,7 @@ const FooterBar: React.FC<FooterBarProps> = ({ hideServices }) => {
 	// Determine if current page is corporate or corporate training
 	const isCorporate = window.location.pathname.startsWith("/corporate/recruitment");
 	const isCorporateTraining = window.location.pathname.startsWith("/corporate/training");
-	const Academia  = window.location.pathname.startsWith("/academia");
+	const Academia  = window.location.pathname.startsWith("/school");
 
 
 	return (
@@ -170,7 +184,7 @@ const FooterBar: React.FC<FooterBarProps> = ({ hideServices }) => {
 						</li>
 						<li>
 							<Link
-								to="/academia"
+								to="/school"
 								className="hover:text-red-400 transition-colors"
 							>
 								Academia
@@ -190,7 +204,7 @@ const FooterBar: React.FC<FooterBarProps> = ({ hideServices }) => {
 							<>
 								<li>
 									<Link
-										to="/academia/projects/"
+										to="/school/projects/"
 										className="hover:text-red-400 transition-colors"
 									>
 										Skilling & Building Capacity
@@ -283,7 +297,7 @@ const FooterBar: React.FC<FooterBarProps> = ({ hideServices }) => {
 							<ul className="space-y-3">
 								<li>
 									<Link
-										to="/academia/school"
+										to="/school/teacher"
 										className="hover:text-red-400 transition-colors"
 									>
 										School
@@ -291,7 +305,7 @@ const FooterBar: React.FC<FooterBarProps> = ({ hideServices }) => {
 								</li>
 								<li>
 									<Link
-										to="/academia/student"
+										to="/school/student"
 										className="hover:text-red-400 transition-colors"
 									>
 										Student
@@ -354,7 +368,7 @@ const FooterBar: React.FC<FooterBarProps> = ({ hideServices }) => {
 								<li>
 									<Link
 										to="/institutions/services/accreditation"
-										className="hover:text-red-400 transition-colors"
+									 className="hover:text-red-400 transition-colors"
 									>
 										Accreditation & Consulting
 									</Link>

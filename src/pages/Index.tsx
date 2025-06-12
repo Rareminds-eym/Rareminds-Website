@@ -26,9 +26,9 @@ const Index = () => {
         "Revolutionizing the corporate world with tailored corporate training solutions and talent development to drive innovation and connect you with top talent.",
     },
     {
-      heading: "Academia",
+      heading: "School",
       img: "5-crop.png",
-      path: "/academia",
+      path: "/school",
       description:
         "Transforming education through innovative learning solutions and advanced curriculum design, fostering impactful educational institution partnerships.",
     },

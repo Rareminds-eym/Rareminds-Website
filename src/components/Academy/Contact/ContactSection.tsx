@@ -13,8 +13,10 @@ import {
 } from "lucide-react";
 import { Icon } from "@iconify/react";
 import { useToast } from "@/hooks/use-toast";
+import { useLocation } from "react-router-dom";
 
 const AcademyContactSection = () => {
+  const location = useLocation();
   const { toast } = useToast();
   const [formData, setFormData] = useState({
     name: "",
@@ -23,6 +25,10 @@ const AcademyContactSection = () => {
     course: "",
     message: "",
   });
+
+
+
+  
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
@@ -41,51 +47,40 @@ const AcademyContactSection = () => {
     try {
       // Insert data into Supabase (table: academia_form, fields: name, email, phone, course_intrest, message)
       const submittedAt = new Date().toISOString();
+      const submission = {
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+        course_intrest: formData.course, // corrected field name
+        message: formData.message,
+        submitted_at: submittedAt,
+      };
       const { error } = await supabase
         .from("acdemia_form")
-        .insert([
-          {
-            name: formData.name,
-            email: formData.email,
-            phone: formData.phone,
-            course_intrest: formData.course, // corrected field name
-            message: formData.message,
-            submitted_at: submittedAt,
-          },
-        ]);
+        .insert([submission]);
       if (error) {
         console.error('Supabase error:', error.message, error.details, error.hint);
         throw error;
       }
 
-      // Fetch the just-inserted record (by email and submitted_at)
-      const { data: records, error: fetchError } = await supabase
-        .from("acdemia_form")
-        .select("*")
-        .eq("email", formData.email)
-        .eq("submitted_at", submittedAt)
-        .limit(1);
-      if (fetchError) {
-        console.error('Supabase fetch error:', fetchError.message, fetchError.details, fetchError.hint);
-        throw fetchError;
-      }
-      const record = records && records.length > 0 ? records[0] : null;
-      if (record) {
-        // Send the record to CEO via Netlify function
-        try {
-          await fetch("/.netlify/functions/send-pdf", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              to: "ceo@rareminds.in", // replace with actual CEO email
-              subject: `New Academy Inquiry from ${record.name}`,
-              message: `A new inquiry has been submitted.\n\nName: ${record.name}\nEmail: ${record.email}\nPhone: ${record.phone}\nCourse Interest: ${record.course_intrest}\nMessage: ${record.message}\nSubmitted At: ${record.submitted_at}`,
-              isCeoNotification: true
-            })
-          });
-        } catch (emailError) {
-          console.error("Error sending CEO notification email:", emailError);
+      // Call Supabase Edge Function for email notification
+      const emailResponse = await fetch(
+        'https://itvhjkgfafikpqmuunlh.supabase.co/functions/v1/super-handler',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
+          },
+          body: JSON.stringify({
+            record: submission // Your function expects a 'record' property
+          }),
         }
+      );
+      if (!emailResponse.ok) {
+        const errorData = await emailResponse.json();
+        console.error('Email function error:', errorData);
+        // Optional: Log this error to your error tracking system
       }
 
       toast({
@@ -126,6 +121,59 @@ const AcademyContactSection = () => {
     }
   };
 
+  // Social links based on path
+  const isSchool = location.pathname.includes("/school/teacher");
+  const isStudent = location.pathname.includes("/school/student");
+  const socialLinks = [
+    {
+      href: "https://www.linkedin.com/company/rareminds/",
+      icon: "mdi:linkedin",
+      color: "#0A66C2",
+      label: "LinkedIn",
+    },
+    isSchool && {
+      href: "https://www.instagram.com/rareminds.educators?igsh=MXRhcGZrMXN4Zzg2Zg==",
+      icon: "mdi:instagram",
+      color: "#E4405F",
+      label: "Instagram",
+    },
+    isStudent && {
+      href: "https://www.instagram.com/istudent_rareminds/?hl=en",
+      icon: "mdi:instagram",
+      color: "#E4405F",
+      label: "Instagram",
+    },
+    isSchool && {
+      href: "https://www.facebook.com/profile.php?id=61576617233176",
+      icon: "mdi:facebook",
+      color: "#1877F3",
+      label: "Facebook",
+    },
+    isStudent && {
+      href: "https://www.facebook.com/profile.php?id=61576552526095",
+      icon: "mdi:facebook",
+      color: "#1877F3",
+      label: "Facebook",
+    },
+    {
+      href: "https://x.com/minds_rare",
+      icon: "fa6-brands:x-twitter",
+      color: "",
+      label: "Twitter (X)",
+    },
+    {
+      href: "https://www.youtube.com/channel/UClkBtwJsScYxFzNoFdlifeA",
+      icon: "mdi:youtube",
+      color: "#FF0000",
+      label: "YouTube",
+      size: 40,
+    },
+  ].filter(Boolean);
+
+
+
+  
+
   return (
     <section
       id="academy-contact"
@@ -136,7 +184,7 @@ const AcademyContactSection = () => {
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
         viewport={{ once: true }}
-        className="container mx-auto px-5 lg:px-14 relative z-10"
+        className="container mx-auto px-5 lg:px-14 relative "
       >
         <div className="text-center mb-16">
           <div className="bg-red-600 text-white w-16 h-16 rounded-[25px] mx-auto mb-4 flex items-center justify-center transform rotate-6">
@@ -379,7 +427,7 @@ const AcademyContactSection = () => {
                       <h4 className="font-semibold mb-1 text-gray-800">
                         Email
                       </h4>
-                      <p className="text-gray-600">info@rareminds.in</p>
+                      <p className="text-gray-600">marketing@rareminds.in</p>
                       {/* <p className="text-gray-600">training@rareminds.com</p> */}
                     </div>
                   </div>
@@ -418,41 +466,9 @@ const AcademyContactSection = () => {
                                 visible: { transition: { staggerChildren: 0.12 } },
                               }}
                             >
-                              {[
-                                {
-                                  href: "https://www.linkedin.com/company/rareminds/",
-                                  icon: "mdi:linkedin",
-                                  color: "#0A66C2",
-                                  label: "LinkedIn",
-                                },
-                                {
-                                  href: "https://www.instagram.com/rareminds_eym/",
-                                  icon: "mdi:instagram",
-                                  color: "#E4405F",
-                                  label: "Instagram",
-                                },
-                                {
-                                  href: "https://www.facebook.com/profile.php?id=61576552526095",
-                                  icon: "mdi:facebook",
-                                  color: "#1877F3",
-                                  label: "Facebook",
-                                },
-                                {
-                                  href: "https://x.com/minds_rare",
-                                  icon: "fa6-brands:x-twitter",
-                                  color: "",
-                                  label: "Twitter (X)",
-                                },
-                                {
-                                  href: "https://www.youtube.com/channel/UClkBtwJsScYxFzNoFdlifeA",
-                                  icon: "mdi:youtube",
-                                  color: "#FF0000",
-                                  label: "YouTube",
-                                  size: 40,
-                                },
-                              ].map((item) => (
+                              {socialLinks.map((item) => (
                                 <motion.a
-                                  key={item.label}
+                                  key={item.label + item.href}
                                   href={item.href}
                                   target="_blank"
                                   rel="noopener noreferrer"
