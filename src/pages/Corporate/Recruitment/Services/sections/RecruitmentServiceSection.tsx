@@ -44,7 +44,7 @@ const RecruitmentServiceSection: React.FC<RecruitmentServiceSectionProps> = ({
             <li>/</li>
             <li>
               <Link
-                to="/corporate/services"
+                to="/corporate/recruitment/services"
                 className="hover:underline"
               >
                 Services
