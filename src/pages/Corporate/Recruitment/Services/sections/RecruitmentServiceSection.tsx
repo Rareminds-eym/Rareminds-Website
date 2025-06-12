@@ -25,7 +25,7 @@ const RecruitmentServiceSection: React.FC<RecruitmentServiceSectionProps> = ({
       if (el) {
         el.scrollIntoView({ behavior: "smooth" });
       }
-    }, 300);
+    }, 500);
   };
   return (
     <section className="w-full corporate-full-screen-h flex flex-col relative overflow-hidden">
@@ -44,7 +44,7 @@ const RecruitmentServiceSection: React.FC<RecruitmentServiceSectionProps> = ({
             <li>/</li>
             <li>
               <Link
-                to="/corporate/recruitment#services"
+                to="/corporate/services"
                 className="hover:underline"
               >
                 Services

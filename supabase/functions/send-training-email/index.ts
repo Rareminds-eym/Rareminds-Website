@@ -49,7 +49,7 @@ serve(async (req) => {
 
   const payload = {
     from: "Rareminds <no-reply@rareminds.in>",
-    to: ["gokul@rareminds.in"],
+    to: ["marketing@rareminds.in"],
     subject: "New Training Enquiry Submitted",
     html,
   };

@@ -2,58 +2,7 @@ import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Home, BookOpen, Newspaper, Phone } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-
-const Path = (props: any) => (
-  <motion.path
-    fill="transparent"
-    strokeWidth="2"
-    stroke="currentColor"
-    strokeLinecap="round"
-    {...props}
-  />
-);
-
-const MenuButton = ({
-  isOpen,
-  toggle,
-}: {
-  isOpen: boolean;
-  toggle: () => void;
-}) => (
-  <motion.button
-    onClick={toggle}
-    className="relative z-50 w-10 h-10 flex items-center justify-center rounded-full bg-gray-50 hover:bg-gray-100 transition-colors"
-    whileTap={{ scale: 0.95 }}
-  >
-    <svg width="20" height="20" viewBox="0 0 23 18">
-      <Path
-        variants={{
-          closed: { d: "M 2 2.5 L 20 2.5" },
-          open: { d: "M 3 16.5 L 17 2.5" },
-        }}
-        animate={isOpen ? "open" : "closed"}
-        transition={{ duration: 0.3 }}
-      />
-      <Path
-        d="M 2 9.423 L 20 9.423"
-        variants={{
-          closed: { opacity: 1 },
-          open: { opacity: 0 },
-        }}
-        animate={isOpen ? "open" : "closed"}
-        transition={{ duration: 0.3 }}
-      />
-      <Path
-        variants={{
-          closed: { d: "M 2 16.346 L 20 16.346" },
-          open: { d: "M 3 2.5 L 17 16.346" },
-        }}
-        animate={isOpen ? "open" : "closed"}
-        transition={{ duration: 0.3 }}
-      />
-    </svg>
-  </motion.button>
-);
+import { Icon } from "@iconify/react";
 
 const CorporateHeader: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -85,6 +34,37 @@ const CorporateHeader: React.FC = () => {
       },
     },
   };
+
+  const MenuButton = ({
+    isOpen,
+    toggle,
+  }: {
+    isOpen: boolean;
+    toggle: () => void;
+  }) => (
+    <motion.button
+      onClick={toggle}
+      className="relative z-50 w-10 h-10 flex items-center justify-center rounded-full bg-gray-50 hover:bg-gray-100 transition-colors"
+      whileTap={{ scale: 0.95 }}
+    >
+      <motion.span
+        initial={false}
+        animate={{ opacity: isOpen ? 0 : 1, rotate: isOpen ? 90 : 0 }}
+        transition={{ duration: 0.2 }}
+        className="absolute"
+      >
+        <Icon icon="mdi:menu" width={24} height={24} />
+      </motion.span>
+      <motion.span
+        initial={false}
+        animate={{ opacity: isOpen ? 1 : 0, rotate: isOpen ? 0 : -90 }}
+        transition={{ duration: 0.2 }}
+        className="absolute"
+      >
+        <Icon icon="mdi:close" width={24} height={24} />
+      </motion.span>
+    </motion.button>
+  );
 
   return (
     <header className="fixed top-0 left-0 w-full z-50 bg-white/90 backdrop-blur-md border-b">
@@ -156,6 +136,7 @@ const CorporateHeader: React.FC = () => {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: index * 0.1 }}
+                    className="hover:bg-gray-50 rounded-xl"
                   >
                     <Link
                       to={menuItem.path}
