@@ -17,6 +17,10 @@ const Service = lazy(
   () => import("./pages/Corporate/Recruitment/Services/[service]")
 );
 const Corporate = lazy(() => import("./pages/Corporate/Recruitment/Index"));
+const ContactForm = lazy(() => import("./pages/Corporate/Recruitment/ContactPage/ContactForm"));
+const Blogs = lazy(() => import("./pages/Corporate/Recruitment/Blogs/Index"));
+const BlogPost = lazy(() => import("./pages/Corporate/Recruitment/Blogs/[slug]"));
+const ServicesPage = lazy(() => import("./pages/Corporate/Recruitment/Services/Index.tsx"));
 const Government = lazy(() => import("./pages/Government/Index"));
 const Academia = lazy(() => import("./pages/Academia/Index"));
 const Student = lazy(() => import("./pages/Academia/Student/student"));
@@ -105,6 +109,22 @@ const router = createBrowserRouter([
       {
         path: "/corporate/training/services/:id",
         element: withSuspense(LeadershipPrograms),
+      },
+      {
+        path: "/corporate/recruitment/contact",
+        element: withSuspense(ContactForm),
+      },
+      {
+        path: "/corporate/recruitment/blogs",
+        element: withSuspense(Blogs),
+      },
+      {
+        path: "/corporate/recruitment/blogs/:slug",
+        element: withSuspense(BlogPost),
+      },
+      {
+        path: "/corporate/recruitment/services",
+        element: withSuspense(ServicesPage),
       },
     ],
   },
