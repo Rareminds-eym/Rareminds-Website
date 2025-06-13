@@ -92,5 +92,5 @@ app.post('/api/send-contact-email', async (req, res) => {
   }
 });
 
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 6069;
 app.listen(PORT, '0.0.0.0', () => console.log(`Server running on port ${PORT}`));
