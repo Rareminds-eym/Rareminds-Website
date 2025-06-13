@@ -1,6 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { RouterProvider } from "react-router-dom";
+import { HelmetProvider } from "react-helmet-async";
 import router from "./routes";
 
 // Import required Swiper styles
@@ -17,10 +18,12 @@ import { AuthProvider } from "./context/AuthContext";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
-    <Provider store={store}>
-      <AuthProvider>    
-          <RouterProvider router={router} />
-      </AuthProvider>
-    </Provider>
+    <HelmetProvider>
+      <Provider store={store}>
+        <AuthProvider>    
+            <RouterProvider router={router} />
+        </AuthProvider>
+      </Provider>
+    </HelmetProvider>
   </React.StrictMode>
 );

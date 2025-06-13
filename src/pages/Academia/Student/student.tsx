@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import React, { useRef } from "react";
 import AOS from 'aos';
 import 'aos/dist/aos.css';
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";
 import MainLayout from "../../../components/Academy/MainLayout";
 import MethodCard from "../../../components/Academy/Teacher/MethodCard";
 import MethodCardR from "../../../components/Academy/Students/MethodCard";
