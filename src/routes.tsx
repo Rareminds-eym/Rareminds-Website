@@ -11,6 +11,10 @@ import GovernmentLayout from "./layouts/GovernmentLayout";
 import AcademiaLayout from "./layouts/AcademiaLayout";
 import InstitutionsLayout from "./layouts/InstitutionsLayout";
 
+// Direct imports for direct use in routes
+import BlogDetail from "./components/Academy/Blogs/BlogDetail";
+import BlogDetailGov from "./components/Govt/Blogs/BlogDetail.tsx";
+import CourseDetailedPage from "@/components/Academy/Students/CourseDetailedPage";
 // Lazy pages
 const Home = lazy(() => import("./pages/Index"));
 const Service = lazy(
@@ -23,6 +27,7 @@ const BlogPost = lazy(() => import("./pages/Corporate/Recruitment/Blogs/[slug]")
 const ServicesPage = lazy(() => import("./pages/Corporate/Recruitment/Services/Index.tsx"));
 const Government = lazy(() => import("./pages/Government/Index"));
 const Academia = lazy(() => import("./pages/Academia/Index"));
+const AcademiaBlogs = lazy(() => import("./pages/Academia/Blogs/index"));
 const Student = lazy(() => import("./pages/Academia/Student/student"));
 const School = lazy(() => import("./pages/Academia/Teacher/teacher.tsx"));
 const Institutions = lazy(() => import("./pages/Institutions/Index"));
@@ -45,7 +50,7 @@ const CaseStudy = lazy(() => import("./pages/Academia/Teacher/CaseStudy.tsx"));
 const Academy_Course = lazy(
   () => import("./pages/Academia/Teacher/CourseDetailed.tsx")
 );
-import CourseDetailedPage from "@/components/Academy/Students/CourseDetailedPage";
+
 const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
 const Terms = lazy(() => import("./pages/Terms"));
 const TDPPage = lazy(() => import("./pages/Academia/Teacher/TDPPage.tsx"));
@@ -159,6 +164,17 @@ const router = createBrowserRouter([
         path: "/school/projects/",
         element: withSuspense(Projectlist),
       },
+      {
+        path: "/government/blogs",
+        element: withSuspense(lazy(() => import("./pages/Government/Blogs/index"))),
+      },
+      {
+        path: "/government/blogs/:slug",
+        element: <Suspense fallback={<LoaderComponent />}>
+          <BlogDetailGov />
+        </Suspense>,
+      },
+      
     ],
   },
   {
@@ -185,14 +201,33 @@ const router = createBrowserRouter([
         element: withSuspense(School),
       },
       {
-        path: "/school/teacher",
-        element: withSuspense(School),
+        path: "/school/blogs", 
+        element: withSuspense(AcademiaBlogs),
+      },
+      {
+        path: "/school/student/blogs", 
+        element: withSuspense(AcademiaBlogs),
+      },
+      {
+        path: "/school/teacher/blogs", 
+        element: withSuspense(AcademiaBlogs),
+      },
+      {
+        path: "/school/student/blogs/:slug", 
+        element: <Suspense fallback={<LoaderComponent />}>
+          <BlogDetail />
+        </Suspense>,
+      },
+      {
+        path: "/school/teacher/blogs/:slug", 
+        element: <Suspense fallback={<LoaderComponent />}>
+          <BlogDetail />
+        </Suspense>,
       },
       {
         path: "/school/coming-soon",
         element: withSuspense(handleSubscribe),
       },
-
       {
         path: "/school/projects/",
         element: withSuspense(Projectlist),
@@ -205,7 +240,6 @@ const router = createBrowserRouter([
         path: "/school/case-study/:id",
         element: withSuspense(CaseStudy),
       },
-
       {
         path: "/school/student/course/:courseId", // Individual course detail
         element: <CourseDetailedPage />,

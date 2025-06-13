@@ -96,20 +96,19 @@ export function Book(props: BookProps) {
   return (
     <div
       className={cn('w-fit [perspective:900px] inline-block group')}
-      style={{
-        '--book-color': color || '#f50537',
-        '--text-color': textColor || '#000',
-        '--book-depth': (depth || 4) + 'px',
-        '--book-width': (width || 196) + 'px',
-        minWidth: width ? width + 'px' : '196px',
-        minHeight: '240px', // Ensures visibility
-        backgroundColor: color || '#f50537', // Fallback for browsers not supporting custom props
-      } as React.CSSProperties}
+      style={
+        {
+          '--book-color': color,
+          '--text-color': textColor,
+          '--book-depth': (depth || 4) + 'px', // changed from 'cqw' to 'px' for cross-browser compatibility
+          '--book-width': (width || 196) + 'px',
+        } as React.CSSProperties
+      }
     >
-      <div className="border-l-4 border-l-black/50 contain-inline-size aspect-[49/60] w-fit rotate-0 relative [transform-style:preserve-3d] min-w-[calc(var(--book-width,196px))] min-h-[240px] transition-transform duration-500 ease-out group-hover:[transform:rotateY(-20deg)_scale(1.066)translateX(-8px)] bg-[var(--book-color,#f50537)]">
+      <div className="border-l-4 border-l-black/50 contain-inline-size aspect-[49/60] w-fit rotate-0 relative [transform-style:preserve-3d] min-w-[calc(var(--book-width))] transition-transform duration-500 ease-out group-hover:[transform:rotateY(-20deg)_scale(1.066)translateX(-8px)]">
         <Stack
           align="stretch"
-          className="rounded-l border border-border rounded-r shadow-book bg-gray-50 w-full h-full absolute overflow-hidden min-h-[240px] z-10"
+          className="rounded-l border border-border rounded-r shadow-book bg-gray-50   size-full absolute overflow-hidden"
         >
           {variant !== 'simple' && (
             <Stack
@@ -117,39 +116,39 @@ export function Book(props: BookProps) {
               grow
               direction="row"
               className={cn(
-                'min-w-[calc(var(--book-width,196px))] bg-[var(--book-color,#f50537)] relative overflow-hidden z-20',
+                'min-w-[calc(var(--book-width))] bg-[var(--book-color)] relative overflow-hidden',
               )}
             >
-              <div className="absolute inset-y-0 mix-blend-overlay opacity-100 min-w-[8.2%] bg-book-bind-bg min-h-[240px] z-30" />
+              <div className="absolute inset-y-0 mix-blend-overlay opacity-100 min-w-[8.2%] bg-book-bind-bg" />
               {illustration && (
-                <div className="object-cover z-30">{illustration}</div>
+                <div className="object-cover">{illustration}</div>
               )}
             </Stack>
           )}
-          <Stack grow={variant === 'simple'} direction="row" className="h-fit min-h-[240px] z-20">
-            <div className="mix-blend-overlay opacity-100 min-w-[8.2%] bg-book-bind-bg h-full min-h-[240px] z-30" />
-            <div className="contain-inline-size w-full min-h-[240px] z-40 relative">{children}</div>
+          <Stack grow={variant === 'simple'} direction="row" className="h-fit">
+            <div className="mix-blend-overlay opacity-100 min-w-[8.2%] bg-book-bind-bg h-full" />
+            <div className="contain-inline-size w-full">{children}</div>
           </Stack>
           {texture && (
             <div
               aria-hidden={true}
-              className="absolute bg-ali bg-no-repeat bg-cover inset-0 mix-blend-hard-light opacity-60 min-h-[240px] z-0"
+              className="absolute bg-ali bg-no-repeat bg-cover inset-0 mix-blend-hard-light opacity-60"
             />
           )}
         </Stack>
         <div
           aria-hidden={true}
-          className="absolute bg-book-pages w-[calc(var(--book-depth,4px)-2px)] h-[calc(100%-2*6px)] top-[3px] min-h-[240px] z-0"
+          className="absolute bg-book-pages w-[calc(var(--book-depth)-2px)] h-[calc(100%-2*6px)] top-[3px]"
           style={{
             transform:
-              'translateX(calc(var(--book-width,196px) - var(--book-depth,4px) / 2 - 3px)) rotateY(90deg) translateX(calc(var(--book-depth,4px) / 2))',
+              'translateX(calc(var(--book-width) - var(--book-depth) / 2 - 3px)) rotateY(90deg) translateX(calc(var(--book-depth) / 2))',
           }}
         />
         <div
           aria-hidden={true}
-          className="rounded-l-md rounded-r bg-[var(--book-color,#f50537)] book-bg absolute left-0 w-full h-full min-h-[240px] z-0"
+          className="rounded-l-md rounded-r bg-[var(--book-color)] book-bg absolute left-0 w-full h-full"
           style={{
-            transform: 'translateZ(calc(-1 * var(--book-depth,4px)))',
+            transform: 'translateZ(calc(-1 * var(--book-depth)))',
           }}
         />
       </div>
