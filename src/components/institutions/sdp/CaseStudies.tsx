@@ -30,8 +30,8 @@ const caseStudies = [
 // Use correct API base URL for dev/prod
 const API_BASE_URL =
   process.env.NODE_ENV === "production"
-    ? "/.netlify/functions"
-    : "http://localhost:3001";
+    ? "https://rareminds.in/"
+    : "http://localhost:6069";
 
 
 export default function CaseStudies() {

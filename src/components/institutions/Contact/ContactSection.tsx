@@ -58,7 +58,7 @@ const ContactSection = () => {
 
       // Send email to backend
   try {
-    await fetch("http://localhost:3001/api/send-contact-email", {
+    await fetch("https://rareminds.in/api/send-contact-email", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(formData),
