@@ -1,4 +1,5 @@
 import React from "react";
+import { Helmet } from "react-helmet";
 import FullScreenCarousel from "../../../components/Corporate/Recruitment/Home/Carousel/FullScreenCarousel";
 import WhyRareminds from "@/components/Corporate/Recruitment/Home/whyRM/WhyRareminds";
 import ServicesSection from "@/components/Corporate/Recruitment/Home/services/ServicesSection";
@@ -51,6 +52,13 @@ const Corporate: React.FC = () => {
 
   return (
     <>
+      <Helmet>
+        <meta name="title" content="Top Recruitment Services in India / Top Hiring Agency/ Rareminds" />
+        <meta
+          name="description"
+          content="Rareminds delivers fast, scalable, and data-driven recruitment solutions across India and globally—20+ industries, 500K+ hires, and 250+ clients worldwide."
+        />
+      </Helmet>
       <section className="bg-[url('https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Corporate/Recruitment/Index/Hero/header-bg.webp')] sticky top-[80px] w-full overflow-hidden">
         <FullScreenCarousel slides={slides} />
       </section>

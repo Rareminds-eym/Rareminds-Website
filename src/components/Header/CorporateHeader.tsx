@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Home, BookOpen, Newspaper, Phone } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -43,6 +43,7 @@ const CorporateHeader: React.FC = () => {
     toggle: () => void;
   }) => (
     <motion.button
+      id="corporate-menu-btn"
       onClick={toggle}
       className="relative z-50 w-10 h-10 flex items-center justify-center rounded-full bg-gray-50 hover:bg-gray-100 transition-colors"
       whileTap={{ scale: 0.95 }}
@@ -65,6 +66,26 @@ const CorporateHeader: React.FC = () => {
       </motion.span>
     </motion.button>
   );
+
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleClickOutside = (event: MouseEvent) => {
+      const dropdown = document.getElementById("corporate-dropdown-menu");
+      const menuBtn = document.getElementById("corporate-menu-btn");
+      if (
+        dropdown &&
+        !dropdown.contains(event.target as Node) &&
+        menuBtn &&
+        !menuBtn.contains(event.target as Node)
+      ) {
+        setIsOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isOpen]);
 
   return (
     <header className="fixed top-0 left-0 w-full z-50 bg-white/90 backdrop-blur-md border-b">
@@ -109,6 +130,7 @@ const CorporateHeader: React.FC = () => {
         {isOpen && (
           <motion.div
             key="dropdown"
+            id="corporate-dropdown-menu"
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}

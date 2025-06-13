@@ -119,7 +119,7 @@ const FullScreenCarousel: React.FC<FullScreenCarouselProps> = ({
 
   return (
     <div
-      className={`corporate-full-screen-h w-full ${className} relative overflow-auto`}
+      className={`corporate-full-screen-h w-full ${className} relative overflow-hidden`}
     >
       <div className="h-full w-full overflow-auto">
         <div
