@@ -9,15 +9,6 @@ import { Link } from "react-router-dom";
 const Courses = () => {
   const isMobile = useIsMobile();
   const [showAllPrograms, setShowAllPrograms] = useState(false);
-  // Modal state and form fields
-  const [modalOpen, setModalOpen] = useState(false);
-  const [selectedProgram, setSelectedProgram] = useState<any>(null);
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [errorMsg, setErrorMsg] = useState("");
-
   // Transform coursesData to match your design structure
   const transformedPrograms = coursesData.map((course) => ({
     title: course.name,
@@ -42,41 +33,12 @@ const Courses = () => {
     ? transformedPrograms
     : transformedPrograms.slice(0, 3);
 
-  // Handle form submit
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setErrorMsg("");
-    if (!name || !email || !phone) {
-      setErrorMsg("All fields are required.");
-      return;
-    }
-    setLoading(true);
-    try {
-      // Simulate API call or validation here if needed
-      // Download PDF
-      if (selectedProgram && selectedProgram.pdfUrl && selectedProgram.pdfUrl !== "#") {
-        const link = document.createElement("a");
-        link.href = selectedProgram.pdfUrl;
-        link.download = `${selectedProgram.title}.pdf`;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-      }
-      setModalOpen(false);
-      setName("");
-      setEmail("");
-      setPhone("");
-    } catch (err) {
-      setErrorMsg("Something went wrong. Please try again.");
-    } finally {
-      setLoading(false);
-    }
-  };
+ 
 
   return (
     <>
       <AcademyHeader />
-      <div className="min-h-screen bg-gray-50 pt-20 isolate"> {/* Added isolate */}
+      <div className="min-h-screen bg-gray-50 pt-20">
         {/* Heading Section */}
         <header className="pt-10 sm:pt-12 md:pt-16 pb-6 md:pb-8 px-4 text-center">
           <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-bold mb-4 md:mb-6 leading-tight">
@@ -105,15 +67,12 @@ const Courses = () => {
                   courseId={program.courseId}
                 />
                 <div className="mt-4 flex justify-center">
-                  <button
+                       <Link 
+                    to={program.readMoreUrl}
                     className="bg-red-500 hover:bg-red-600 text-white gap-2 text-sm md:text-base w-full md:w-auto px-4 py-2 rounded flex items-center justify-center"
-                    onClick={() => {
-                      setSelectedProgram(program);
-                      setModalOpen(true);
-                    }}
                   >
                     {program.buttonText} {program.buttonIcon}
-                  </button>
+                  </Link>
                 </div>
               </div>
             ))}
@@ -130,71 +89,6 @@ const Courses = () => {
             </div>
           )}
         </main>
-        {/* Modal */}
-        {modalOpen && (
-          <div className="fixed top-0 left-0 w-screen h-screen z-50 flex items-center justify-center bg-black bg-opacity-50 p-4">
-            <div className="bg-white rounded-lg shadow-lg max-w-md w-full p-6 relative z-[100000]">
-              <button
-                onClick={() => setModalOpen(false)}
-                className="absolute top-2 right-2 text-gray-600 hover:text-gray-900"
-                aria-label="Close modal"
-              >
-                ✕
-              </button>
-              <h3 className="text-xl font-semibold mb-4">Please enter your details</h3>
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <div>
-                  <label htmlFor="name" className="block mb-1 font-medium">
-                    Name
-                  </label>
-                  <input
-                    type="text"
-                    id="name"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-red-500"
-                    required
-                  />
-                </div>
-                <div>
-                  <label htmlFor="email" className="block mb-1 font-medium">
-                    Email
-                  </label>
-                  <input
-                    type="email"
-                    id="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-red-500"
-                    required
-                  />
-                </div>
-                <div>
-                  <label htmlFor="phone" className="block mb-1 font-medium">
-                    Phone Number
-                  </label>
-                  <input
-                    type="tel"
-                    id="phone"
-                    value={phone}
-                    onChange={(e) => setPhone(e.target.value)}
-                    placeholder="10-digit phone number"
-                    className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-red-500"
-                    required
-                  />
-                </div>
-                {errorMsg && <p className="text-red-600">{errorMsg}</p>}
-                <button
-                  type="submit"
-                  disabled={loading}
-                  className={`w-full bg-red-500 hover:bg-red-600 text-white font-semibold py-2 rounded transition-colors ${loading ? "opacity-50 cursor-not-allowed" : ""}`}
-                >
-                  {loading ? "Submitting..." : "Submit & Download"}
-                </button>
-              </form>
-            </div>
-          </div>
-        )}
       </div>
     </>
   );
