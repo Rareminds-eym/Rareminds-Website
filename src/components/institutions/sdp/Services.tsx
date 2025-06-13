@@ -153,7 +153,7 @@ Rareminds ensures that students not only gain technical skills but also master c
 ];
 // New: Email automation for Course List
 const sendCourseListEmail = async (name: string, email: string) => {
-  const response = await fetch('http://localhost:3001/api/send-pdf', {
+  const response = await fetch('https://rareminds.in/api/send-pdf', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
@@ -176,7 +176,7 @@ const sendEmail = async (
   location: string,
   university: string
 ) => {
-  const response = await fetch('http://localhost:3001/api/send-pdf', {
+  const response = await fetch('http://localhost:6069/api/send-pdf', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
