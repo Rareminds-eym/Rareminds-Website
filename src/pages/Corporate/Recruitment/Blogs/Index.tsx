@@ -89,7 +89,7 @@ const BlogsPage = () => {
             className="max-w-3xl mx-auto text-center"
           >
             <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">
-              RareMinds Insights
+              Rareminds Insights
             </h1>
             <p className="text-xl md:text-2xl text-blue-100 leading-relaxed">
               Explore expert insights on recruitment, talent management, and HR technology
