@@ -175,13 +175,13 @@ const Academy = ({ userType = "teacher" }: { userType?: "teacher" | "student" })
     {/* <FDPButton />  */}    <FloatingActionMenu />
     
 
-<div  className="min-h-auto flex items-center justify-center relative z-10 mt-[750px]">
-     <div ref={logoRef} className="relative z-0  " id="logo-section">
-  <div className="w-full h-[200px]">
-    <img src="/academy/studentlineart.svg" alt="Wave" className="w-full h-full object-cover" />
-  </div> 
+<div className="min-h-auto flex items-center justify-center relative z-10 mt-[100vh]">
+     <div ref={logoRef} className="relative z-0 w-full" id="logo-section">
+        <div className="w-full h-[200px]">
+          <img src="/academy/studentlineart.svg" alt="Wave" className="w-full h-full object-cover" />
+        </div> 
+     </div>
 </div>
-       </div>
 
    {/* <div className="relative z-0  rounded-tl-3xl rounded-tr-3xl shadow-2xl shadow-black" id="logo-section-student">
         
@@ -191,9 +191,9 @@ const Academy = ({ userType = "teacher" }: { userType?: "teacher" | "student" })
       <Logos /> 
        </div>
 
-       <div id="course-cards-section" className="min-h-screen flex items-center justify-center relative z-10 bg-white">
+      
      <Problem />   
-       </div>
+      
      
 
   <div id="course-cards-section" className="min-h-screen flex items-center justify-center relative z-10 bg-white">
