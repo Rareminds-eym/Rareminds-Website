@@ -1,6 +1,6 @@
 import React from 'react';
 import { Battery, Sprout, Dna,Folders, Heart, Eye, ShoppingBag, Brain, MonitorSmartphone, Briefcase } from 'lucide-react';
-import CorporateTraining from '@/pages/Corporate/Training';
+import CorporateTraining from '@/pages/Corporate/Training/Home';
 
 
 // Util to combine class names

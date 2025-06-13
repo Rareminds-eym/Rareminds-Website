@@ -33,11 +33,11 @@ const FDP = lazy(() => import("./pages/Institutions/Fdp"));
 const ServicePage = lazy(
   () => import("./components/institutions/sdp/ServicePage")
 );
-const CorporateTraining = lazy(() => import("./pages/Corporate/Training"));
+const CorporateTraining = lazy(() => import("./pages/Corporate/Training/Home/index.tsx"));
 const Contact = lazy(() => import("./pages/Government/Contact/Index"));
 const handleSubscribe = lazy(() => import("./pages/Academia/ComingSoon"));
 const LeadershipPrograms = lazy(
-  () => import("./pages/Corporate/Training/service/index.tsx")
+  () => import("./pages/Corporate/Training/Home/service/index.tsx")
 );
 const Projectlist = lazy(() => import("./pages/Academia/projects/projectlist"));
 const Naan = lazy(() => import("./pages/Academia/projects/[name]"));
@@ -117,6 +117,10 @@ const router = createBrowserRouter([
       {
         path: "/corporate/recruitment/contact",
         element: withSuspense(ContactForm),
+      },
+      {
+        path: "/corporate/training/blogs",
+        element: withSuspense(Blogs),
       },
       {
         path: "/corporate/recruitment/blogs",

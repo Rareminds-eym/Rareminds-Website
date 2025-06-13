@@ -1,5 +1,5 @@
 import React from "react";
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";
 import FullScreenCarousel from "../../../components/Corporate/Recruitment/Home/Carousel/FullScreenCarousel";
 import WhyRareminds from "@/components/Corporate/Recruitment/Home/whyRM/WhyRareminds";
 import ServicesSection from "@/components/Corporate/Recruitment/Home/services/ServicesSection";
