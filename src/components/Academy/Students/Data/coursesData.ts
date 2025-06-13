@@ -172,41 +172,41 @@ export interface CourseModule {
 //         image: "/academy/courses/3Eprogram/english.svg"
 //       },
 //       {
-//         title: "Public Speaking",
-//         description: [
-//           "Deliver confident speeches, presentations, and interviews",
-//           "Engage in group discussions, debates, and roleplays"
-//         ],
-//         image: "/academy/courses/3Eprogram/Employability.svg"
-//       }
-//     ],
-//     whyChoose: {
-//       title: "Why Join the Bootcamp?",
-//       points: [
-//         "Fluency and confidence in real-world English",
-//         "Practical public speaking and presentation skills",
-//         "Interactive, activity-based learning",
-//         "Preparation for academic and career success"
-//       ],
-//       image: "/academy/courses/3Eprogram/Employability.svg"
-//     }
-//   },
-//   {
-//     id: "career-counselling-psychometric",
-//     name: "Career Counselling with Psychometric Assessments",
-//     shortName: "Career Counselling",
-//     description: "Guessing Your Career is Risky. Planning It Isn't. Self-discovery through psychometric testing. Exploring careers in AI, EVs, AgriTech, Humanities, and more. SMART goal-setting and academic planning. Roadmap creation with quarterly mentoring.",
-//     targetGrade: "For Grades 9–12: Career Blueprint Program",
-//     modules: [
-//       {
-//         title: "Psychometric Assessment",
-//         description: [
-//           "Self-discovery through psychometric testing",
-//           "SMART goal-setting and academic planning"
-//         ],
-//         image: "/academy/courses/3Eprogram/english.svg"
-//       },
-//       {
+// //         title: "Public Speaking",
+// //         description: [
+// //           "Deliver confident speeches, presentations, and interviews",
+// //           "Engage in group discussions, debates, and roleplays"
+// //         ],
+// //         image: "/academy/courses/3Eprogram/Employability.svg"
+// //       }
+// //     ],
+// //     whyChoose: {
+// //       title: "Why Join the Bootcamp?",
+// //       points: [
+// //         "Fluency and confidence in real-world English",
+// //         "Practical public speaking and presentation skills",
+// //         "Interactive, activity-based learning",
+// //         "Preparation for academic and career success"
+// //       ],
+// //       image: "/academy/courses/3Eprogram/Employability.svg"
+// //     }
+// //   },
+// //   {
+// //     id: "career-counselling-psychometric",
+// //     name: "Career Counselling with Psychometric Assessments",
+// //     shortName: "Career Counselling",
+// //     description: "Guessing Your Career is Risky. Planning It Isn't. Self-discovery through psychometric testing. Exploring careers in AI, EVs, AgriTech, Humanities, and more. SMART goal-setting and academic planning. Roadmap creation with quarterly mentoring.",
+// //     targetGrade: "For Grades 9–12: Career Blueprint Program",
+// //     modules: [
+// //       {
+// //         title: "Psychometric Assessment",
+// //         description: [
+// //           "Self-discovery through psychometric testing",
+// //           "SMART goal-setting and academic planning"
+// //         ],
+// //         image: "/academy/courses/3Eprogram/english.svg"
+// //       },
+// //       {
 // //         title: "Career Exploration",
 // //         description: [
 // //           "Exploring careers in AI, EVs, AgriTech, Humanities, and more",
@@ -296,6 +296,7 @@ export interface Course {
   };
   pdfUrl?: string;
   showLoginLink?: boolean;
+  showTitleSpan?: boolean;
 }
 
 export const coursesData: Course[] = [
@@ -305,41 +306,42 @@ export const coursesData: Course[] = [
     shortName: "Spoken English Bootcamp",
     description: "English is more than grammar—it’s your voice to the world. Confidence grows when students learn to speak, not just write. Our bootcamps transform hesitation into fluent, fearless expression.\n\nCommunication is a life skill, not just a classroom requirement. This program helps students become clear, confident, and compelling speakers—whether in the classroom, on stage, or in real life. Our structured bootcamps combine language fluency with presentation skills and interactive speaking practice, helping students overcome fear and express themselves effectively in any situation.",
     targetGrade: "For Grades 6–12: Building Communication Confidence",
-    heroImage: "",
+    heroImage: "/academy/courseBanner/SpokenEnglish&PublicSpeakingBootcamps.png",
+    showTitleSpan: true,
     modules: [
-      {
-        title: "Everyday English Fluency",
-        description: [
-          "Build comfort with day-to-day conversations using role plays and situational dialogues."
-        ],
-        image: "/academy/courses/3Eprogram/english.svg"
-      },
-      {
-        title: "Stage Confidence Builder",
-        description: [
-          "Practice speech delivery, body language, and voice modulation for formal settings."
-        ],
-        image: "/academy/courses/3Eprogram/Employability.svg"
-      },
-      {
-        title: "Debate and Group Discussion Lab",
-        description: [
-          "Sharpen critical thinking and articulation through guided group discussions and structured debates."
-        ],
-        image: "/academy/courses/3Eprogram/Employability.svg"
-      },
-      {
-        title: "Expressive Speaking Studio",
-        description: [
-          "Explore storytelling, poetry recitation, and emotion-driven speech formats."
-        ],
-        image: "/academy/courses/3Eprogram/Employability.svg"
-      },
-      {
-        title: "Interview and Presentation Prep",
-        description: ["Learn how to introduce oneself, answer questions, and present ideas clearly and confidently."],
-        image: "/academy/courses/3Eprogram/Employability.svg"
-      }
+      // {
+      //   title: "Everyday English Fluency",
+      //   description: [
+      //     "Build comfort with day-to-day conversations using role plays and situational dialogues."
+      //   ],
+      //   image: "/academy/courses/3Eprogram/english.svg"
+      // },
+      // {
+      //   title: "Stage Confidence Builder",
+      //   description: [
+      //     "Practice speech delivery, body language, and voice modulation for formal settings."
+      //   ],
+      //   image: "/academy/courses/3Eprogram/Employability.svg"
+      // },
+      // {
+      //   title: "Debate and Group Discussion Lab",
+      //   description: [
+      //     "Sharpen critical thinking and articulation through guided group discussions and structured debates."
+      //   ],
+      //   image: "/academy/courses/3Eprogram/Employability.svg"
+      // },
+      // {
+      //   title: "Expressive Speaking Studio",
+      //   description: [
+      //     "Explore storytelling, poetry recitation, and emotion-driven speech formats."
+      //   ],
+      //   image: "/academy/courses/3Eprogram/Employability.svg"
+      // },
+      // {
+      //   title: "Interview and Presentation Prep",
+      //   description: ["Learn how to introduce oneself, answer questions, and present ideas clearly and confidently."],
+      //   image: "/academy/courses/3Eprogram/Employability.svg"
+      // }
     ],
     whyChoose: {
       title: "Why is Rareminds’ Program Effective?",
@@ -363,56 +365,22 @@ export const coursesData: Course[] = [
     subtexttitle: "That’s where 3E comes in.",
     heroImage: "/academy/courseBanner/Counseling Programs.png",
     modules: [
-      {
-        title: "Stream Selector",
-        description: [
-          "Find the academic stream that aligns with their aptitude and interests"
-        ],
-        image: "/academy/courses/3Eprogram/english.svg"
-      },
-      {
-        title: "Learning Style Profiler",
-        description: [
-          "Identify how each student learns best—visual, auditory, or hands-on"
-        ],
-        image: "/academy/courses/3Eprogram/Employability.svg"
-      },
-      {
-        title: "Personality Mapping",
-        description: [
-          "Understand traits that influence teamwork, leadership, and career fit"
-        ],
-        image: "/academy/courses/3Eprogram/Entrepreneurship.svg"
-      },
-      {
-        title: "Ideal Career Finder",
-        description: [
-          "Discover careers that match both mindset and skillset"
-        ],
-        image: "/academy/courses/3Eprogram/Employability.svg"
-      },
-      {
-        title: "Multiple Intelligence Test",
-        description: [
-          "Explore abilities beyond academics such as creativity, logic, and more"
-        ],
-        image: "/academy/courses/3Eprogram/english.svg"
-      }
+      
     ],
     clarityMeetsStrategy: {
-      title: "Clarity Meets Strategy",
-      content: "From discovery to direction. We support every step of the journey. Our planning tools help students compare colleges, prepare for exams, track costs, and explore opportunities—step-by-step."
+      title: "",
+      content: ""
     },
     whyChoose: {
       title: "Resources include:",
       points: [
-        "Top Colleges Database: Search trusted, ranked institutions by course, location, and outcomes",
-        "College Compare: Compare colleges side-by-side on key factors",
-        "Course Fee Calculator: Estimate tuition and living expenses based on city and college tier",
-        "Career Trends Explorer: See which careers are rising and evolving",
-        "Entrance Exam Tracker: Stay on top of test dates for CUET, SAT, IELTS, and more",
-        "Scholarship Finder: Find scholarships by course, location, or eligibility",
-        "Career Deep Dives: In-depth insights into job roles, required skills, top recruiters, and future growth paths"
+        "Stream Selector : Find the academic stream that aligns with their aptitude and interests",
+        "Learning Style Profiler : Identify how each student learns best—visual, auditory, or hands-on",
+        "Personality Mapping : Understand traits that influence teamwork, leadership, and career fit",
+        "Ideal Career Finder : Discover careers that match both mindset and skillset",
+        "Multiple Intelligence Test : Explore abilities beyond academics such as creativity, logic, and more",
+        "Clarity Meets Strategy : From discovery to direction. We support every step of the journey. Our planning tools help students compare colleges, prepare for exams, track costs, and explore opportunities—step-by-step.",
+       
       ],
       image: "/academy/courses/3Eprogram/Employability.svg"
     },
@@ -459,6 +427,151 @@ export const coursesData: Course[] = [
         "Strengthens career guidance and boosts parent trust"
       ],
       image: "/academy/courses/3Eprogram/Employability.svg"
-    }
+    },
+   
+  }
+];
+
+// New detailed module structure for Spoken English Bootcamp
+export const spokenEnglishBootcampDetailedModules = [
+  {
+    id: 1,
+    title: "Everyday English Fluency",
+    hours: 10,
+    objectives: "Help students speak confidently in day-to-day school and social situations",
+    activities: "Role plays, real-life dialogues, vocabulary games",
+    outcomes: "Students gain fluency in everyday conversations with peers and teachers"
+  },
+  {
+    id: 2,
+    title: "Stage Confidence Builder",
+    hours: 9,
+    objectives: "Equip students to speak clearly and confidently in formal settings",
+    activities: "Speech delivery drills, body language practice, short stage presentations",
+    outcomes: "Students develop stage presence and reduce fear of public speaking"
+  },
+  {
+    id: 3,
+    title: "Debate & Group Discussion Lab",
+    hours: 9,
+    objectives: "Train students to organize thoughts and express opinions respectfully in groups",
+    activities: "Moderated discussions, debate rounds, structured formats",
+    outcomes: "Students engage in collaborative speaking with critical thinking and respect"
+  },
+  {
+    id: 4,
+    title: "Expressive Speaking Studio",
+    hours: 8,
+    objectives: "Encourage students to use emotion and storytelling in spoken formats",
+    activities: "Storytelling sessions, poetry recitation, expressive speech exercises",
+    outcomes: "Students improve expressive power, tone control, and creative speaking"
+  },
+  {
+    id: 5,
+    title: "Interview & Presentation Prep",
+    hours: 9,
+    objectives: "Prepare students for self-introduction, Q&A, and idea presentation tasks",
+    activities: "Mock interviews, classroom pitch practice, visual aid use",
+    outcomes: "Students confidently introduce themselves and deliver structured presentations"
+  }
+];
+
+// New detailed module structure for 3E Program Employability Skills
+export const threeEProgramEmployabilityModules = [
+  {
+    id: 1,
+    title: "Introduction to Employability Skills",
+    hours: 2,
+    objectives: "Understand the value of employability skills and explore skill/job platforms",
+    activities: "Portal exploration, skill-mapping worksheet",
+    outcomes: "Students navigate job portals and identify skill-industry links"
+  },
+  {
+    id: 2,
+    title: "Constitutional Values – Citizenship",
+    hours: 2,
+    objectives: "Recognize civic duties, personal values, and sustainability practices",
+    activities: "Group discussions, case-based scenarios",
+    outcomes: "Students demonstrate responsible citizenship and environmental awareness"
+  },
+  {
+    id: 3,
+    title: "Becoming a Professional in the 21st Century",
+    hours: 4,
+    objectives: "Identify key 21st-century workplace skills and lifelong learning mindsets",
+    activities: "Self-assessment tools, future-readiness quiz",
+    outcomes: "Students outline personal learning goals and workplace behaviors"
+  },
+  {
+    id: 4,
+    title: "Basic English Skills",
+    hours: 6,
+    objectives: "Improve grammar, reading, and spoken English for workplace interaction",
+    activities: "Role-play, reading aloud, written tasks",
+    outcomes: "Students communicate using basic English in formal/informal settings"
+  },
+  {
+    id: 5,
+    title: "Career Development & Goal Setting",
+    hours: 3,
+    objectives: "Set short- and long-term career goals with a plan",
+    activities: "Goal-mapping chart, vision board",
+    outcomes: "Students build a career roadmap with defined steps"
+  },
+  {
+    id: 6,
+    title: "Communication Skills",
+    hours: 5,
+    objectives: "Develop verbal, nonverbal, and team communication etiquette",
+    activities: "Listening tasks, team role-plays",
+    outcomes: "Students apply effective communication in teamwork and writing"
+  },
+  {
+    id: 7,
+    title: "Diversity & Inclusion",
+    hours: 3,
+    objectives: "Respect workplace diversity and understand inclusion and safety laws",
+    activities: "Scenario cards, discussion on POSH Act",
+    outcomes: "Students respond appropriately to diversity and gender situations"
+  },
+  {
+    id: 8,
+    title: "Financial and Legal Literacy",
+    hours: 4,
+    objectives: "Manage personal finance and understand salary components and legal rights",
+    activities: "Budgeting exercise, digital safety demo",
+    outcomes: "Students create a simple budget and understand financial choices"
+  },
+  {
+    id: 9,
+    title: "Essential Digital Skills",
+    hours: 5,
+    objectives: "Use digital devices, apps, and tools securely and responsibly",
+    activities: "Email tasks, spreadsheet exercises, cybersecurity quiz",
+    outcomes: "Students create basic docs and navigate digital platforms safely"
+  },
+  {
+    id: 10,
+    title: "Entrepreneurship",
+    hours: 4,
+    objectives: "Learn how to plan a business and explore funding options",
+    activities: "Business model canvas, elevator pitch",
+    outcomes: "Students design a basic business idea and explore marketing/funding"
+  },
+  {
+    id: 11,
+    title: "Customer Service",
+    hours: 3,
+    objectives: "Respond to customer needs and gather feedback effectively",
+    activities: "Role-plays, hygiene checklist, feedback forms",
+    outcomes: "Students practice service behavior and communication"
+  },
+  {
+    id: 12,
+    title: "Getting Ready for Apprenticeship & Jobs",
+    hours: 4,
+    objectives: "Build a CV, prepare for interviews, and apply for jobs/apprenticeships",
+    activities: "Mock interviews, job portal demos",
+    outcomes: "Students complete job applications and participate in interview practice"
   }
 ];

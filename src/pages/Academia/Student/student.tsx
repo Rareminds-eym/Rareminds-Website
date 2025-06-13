@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import React, { useRef } from "react";
 import AOS from 'aos';
 import 'aos/dist/aos.css';
+import { Helmet } from "react-helmet";
 import MainLayout from "../../../components/Academy/MainLayout";
 import MethodCard from "../../../components/Academy/Teacher/MethodCard";
 import MethodCardR from "../../../components/Academy/Students/MethodCard";
@@ -42,11 +43,12 @@ import { Button } from '../../../components/Academy/UI/button';
 import FloatingActionMenu from '../../../components/Academy/StickyButton/StickyButton/FloatingAction'
 import  Courses from '../../../components/Academy/Students/Courses'
 import TestimonialVideoCarousel from "../../../components/Academy/Students/StudentCarouselVideo"
+import Hero from "../../../components/Academy/Students/Herobanner/Hero"
 
 const Academy = ({ userType = "teacher" }: { userType?: "teacher" | "student" }) => {
   const [activeTab, setActiveTab] = useState<"teacher" | "student">("teacher");
   const [selectedCaseStudy, setSelectedCaseStudy] = useState<CaseStudyType>(caseStudies[0]);
-  const [isHeroBlurred, setIsHeroBlurred] = useState(false);
+  const [blurPercent, setBlurPercent] = useState(0);
 
       const contactRef = useRef<HTMLDivElement>(null);
        const logoRef = useRef<HTMLDivElement>(null);
@@ -127,67 +129,72 @@ const Academy = ({ userType = "teacher" }: { userType?: "teacher" | "student" })
          }, 100);
        }
      }
-   }, [location]);
-
-   useEffect(() => {
-  const handleScroll = () => {
-    if (logoRef.current) {
-      const rect = logoRef.current.getBoundingClientRect();
-      // Blur when the logo image enters the viewport (touches the HeroBanner)
-      setIsHeroBlurred(rect.top <= window.innerHeight && rect.top >= 0);
-    }
-  };
-  window.addEventListener('scroll', handleScroll);
-  handleScroll();
-  return () => window.removeEventListener('scroll', handleScroll);
-}, []);
+   }, [location]);   useEffect(() => {
+    const handleScroll = () => {
+      const heroHeight = window.innerHeight;
+      const logoSection = document.getElementById('logo-section');
+      let blurProgress = 0;
+      if (logoSection) {
+        const rect = logoSection.getBoundingClientRect();
+        // Start blur when logo-section top hits bottom of viewport, finish at 25% viewport height
+        const start = heroHeight;
+        const end = heroHeight * 0.25;
+        const progress = (start - rect.top) / (start - end);
+        blurProgress = Math.min(Math.max(progress, 0), 1);
+      }
+      setBlurPercent(blurProgress * 100);
+    };
+    window.addEventListener('scroll', handleScroll);
+    handleScroll();
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   return (
+    <> 
+    <Helmet>
+    <meta
+      name="description"
+      content="Build real-world skills from school. Rareminds offers NEP-aligned student programs in communication, digital fluency, and career readiness for kindergarten to Grade 12."
+    />
+  </Helmet>
    
         <div className="overflow-hidden">
       {/* Hero Banner */}
        {/* Hero Banner (90% width) */}
-       <CorporateHeader />
-     <div className="w-full h-auto  ">
-    {/* <div className="h-full flex items-center justify-center"> */}
-     {/* <h1 className="text-4xl font-bold text-white"></h1> */}
-      {/* </div> */}
-      {/* <VideoCarousel />/ */}
-      <div className="w-full h-auto relative">
-  <div className="relative">
-    <HeroBanner HeroToContact={scrollToContact} HeroToLogo={scrollToLogo} isBlurred={isHeroBlurred} />
-    {isHeroBlurred && (
-      <div
-        className="absolute bottom-0 left-0 w-full h-full pointer-events-none"
-        style={{
-          background: 'linear-gradient(to top, rgba(255,255,255,0.85) 40%, rgba(255,255,255,0.2) 100%)',
-          backdropFilter: 'blur(18px)',
-          WebkitBackdropFilter: 'blur(18px)',
-          zIndex: 20,
-        }}
-      />
-    )}
-  </div>
-</div>
+       <CorporateHeader />     <div className="w-full h-auto">
+      {/* Hero section with smooth scroll blur effect */}
+      <div className="w-full relative">
+        <div className="relative">
+          <Hero HeroToLogo={scrollToLogo} HeroToContact={scrollToContact} blurAmount={(12 * blurPercent) / 100} />
+        </div>
+      </div>
+     
       <Toaster />
-    
     </div>
     {/* <FAQChatbot />   */}
-    {/* <FDPButton />  */}
+    {/* <FDPButton />  */}    <FloatingActionMenu />
+    
 
-    <FloatingActionMenu />
-     <div ref={logoRef} className="relative z-0 md:mt-[750px] " id="logo-section">
+<div  className="min-h-auto flex items-center justify-center relative z-10 mt-[750px]">
+     <div ref={logoRef} className="relative z-0  " id="logo-section">
   <div className="w-full h-[200px]">
     <img src="/academy/studentlineart.svg" alt="Wave" className="w-full h-full object-cover" />
   </div> 
-    {/* Add white space below image */}
-  {/* <div className="w-full bg-white h-[20px]"></div> You can tweak height */}
 </div>
-   <div ref={logoRef} className="relative z-0  rounded-tl-3xl rounded-tr-3xl shadow-2xl shadow-black" id="logo-section-student">
-          <Logos />
-        </div>
+       </div>
+
+   {/* <div className="relative z-0  rounded-tl-3xl rounded-tr-3xl shadow-2xl shadow-black" id="logo-section-student">
+        
+        </div> */}
       
-      <Problem />
+  <div id="course-cards-section" className="min-h-auto flex items-center justify-center relative z-10 bg-white">
+      <Logos /> 
+       </div>
+
+       <div id="course-cards-section" className="min-h-screen flex items-center justify-center relative z-10 bg-white">
+     <Problem />   
+       </div>
+     
 
   <div id="course-cards-section" className="min-h-screen flex items-center justify-center relative z-10 bg-white">
      <Courses />      
@@ -338,6 +345,8 @@ const Academy = ({ userType = "teacher" }: { userType?: "teacher" | "student" })
  <TestimonialVideoCarousel />     
        </div>
 
+
+
        {/* <div  className="min-h-screen flex items-center justify-center relative z-10 bg-white">
   <CaseStudy />   
        </div> */}
@@ -455,7 +464,7 @@ const Academy = ({ userType = "teacher" }: { userType?: "teacher" | "student" })
        </div>
   
       </div>
-  
+  </>
   );
 };
 

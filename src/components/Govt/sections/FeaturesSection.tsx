@@ -25,7 +25,7 @@ export const FeaturesSection = () => {
       <div className="hidden md:flex justify-center items-center w-full px-4 mt-9">
         <div className="w-full max-w-6xl">
           <img
-            src="/Govt-Images/Main_layout.svg"
+            src="https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Government/Home/Hero_Section/Main_layout.webp"
             alt="Main Layout"
             className="w-full h-auto object-contain"
           />
@@ -36,7 +36,7 @@ export const FeaturesSection = () => {
       <div className="flex items-center justify-center md:hidden w-full">
         <div className="w-80 flex items-center justify-center">
           <img
-            src="/Govt-Images/Mobile.svg"
+            src="https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Government/Home/Hero_Section/Mobile.webp"
             alt="Mobile Features"
             className=""
           />

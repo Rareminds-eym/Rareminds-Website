@@ -1,6 +1,6 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowLeft, CheckCircle, ArrowRight, Star, Award, Lightbulb, Users2, FileText, Target } from 'lucide-react';
+import { ArrowLeft, CheckCircle, ArrowRight, Star, Award, Lightbulb, Users2, FileText, Target, CalendarCheck, Briefcase, Users, Heart, BarChart2 } from 'lucide-react';
 import {
   Coursess,
   institutionalValueAddedDetails,
@@ -24,6 +24,11 @@ const iconMap = {
   Lightbulb,
   Users2,
   FileText,
+  CalendarCheck,
+  Briefcase,
+  Users,
+  Heart,
+  BarChart2,
 };
 
 const modules = [
@@ -113,6 +118,17 @@ const communicationPersonalityModules = [
   }
 ];
 
+
+  const otherCourses = [
+  { name: 'Communication and Personality Development', route: '/school/teacher/Courses/communication-personality' },
+  { name: 'Mental Health and Counseling Training', route: '/school/teacher/Courses/mental-health-counseling' },
+  { name: 'Domain-Specific Certification Programs', route: '/school/teacher/Courses/domain-specific-certification' },
+  { name: 'Leadership and Career Growth', route: '/school/teacher/Courses/leadership-career-growth' },
+  { name: 'Institutional Value-Added Services', route: '/school/teacher/Courses/institutional-value-added' },
+];
+
+
+
 export default function CourseDetailed() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -166,7 +182,7 @@ export default function CourseDetailed() {
             {/* Foreground content */}
             <div className="relative z-10 container mx-auto px-6 pl-[8%] p-6 flex flex-col justify-center h-full">
               <button
-                onClick={() => navigate('/academia/school#course-cards-section')}
+                onClick={() => navigate('/school/teacher#course-cards-section')}
                 className="text-white mb-7 text-lg flex items-center gap-2 hover:underline"
               >
                 <ArrowLeft className="w-4 h-4" />
@@ -208,7 +224,7 @@ export default function CourseDetailed() {
   {/* Content on top */}
   <div className="relative z-10 container mx-auto px-6 flex flex-col justify-center h-full">
     <button
-      onClick={() => navigate('/academia/school#course-cards-section')}
+      onClick={() => navigate('/school/teacher#course-cards-section')}
       className="text-black mb-7 text-lg flex items-center gap-2 hover:underline"
     >
       <ArrowLeft className="w-4 h-4" />
@@ -225,10 +241,14 @@ export default function CourseDetailed() {
 
 
         <div className="max-w-7xl mx-auto px-6">
-          <div className="grid lg:grid-cols-2 gap-16 items-start">
+          <div className="grid lg:grid-cols-2 gap-8 items-start">
             {/* Left Side - Problem & Solution */}
             <div className="space-y-8">
               <div>
+               
+                  <p className="text-xl   text-gray-900 mb-6">
+                  {data.subtitle}
+                </p>
                 <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
                   {data.title}
                 </h2>
@@ -259,25 +279,39 @@ export default function CourseDetailed() {
             
             </div>
 
-            {/* Right Side - Services Highlights float  */}
-            <div className="md:sticky md:top-32 float ">
-  <div className="bg-blue-50 rounded-xl p-8">
-                <h3 className="text-2xl font-bold text-gray-900 mb-6 flex items-center">
-                  <Star className="h-6 w-6 text-blue-600 mr-3" />
-                  Why It Matters
-                </h3>
-                <ul className="space-y-4">
-                  {data.whyItMatters.map((item, i) => (
-                    <li key={i} className="flex items-start">
-                      <CheckCircle className="h-5 w-5 text-green-600 mt-1 mr-3 flex-shrink-0" />
-                      <span className="text-gray-700">{item}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div> 
 
-             
-            </div>
+                  
+<aside className="w-auto mb-8 md:mb-0">
+  <div className="md:sticky md:top-8 space-y-8 ">
+    <div className="bg-white rounded-lg shadow p-6">
+      <h2 className="text-xl font-bold mb-4">Other Courses</h2>
+      <ul className="space-y-2">
+        {otherCourses.map(course => (
+          <li key={course.name}>
+            <button className="text-red-700 hover:underline text-left font-semibold" onClick={() => navigate(course.route)}>{course.name}</button>
+          </li>
+        ))}
+      </ul>
+    </div>
+    <div className="w-full bg-blue-50 rounded-xl p-8">
+      <h3 className="text-2xl font-bold text-gray-900 mb-6 flex items-center">
+        <Star className="h-6 w-6 text-blue-600 mr-3" />
+        Why It Matters
+      </h3>
+      <ul className="space-y-4">
+        {data.whyItMatters.map((item, i) => (
+          <li key={i} className="flex items-start">
+            <CheckCircle className="h-5 w-5 text-green-600 mt-1 mr-3 flex-shrink-0" />
+            <span className="text-gray-700">{item}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
+</aside>
+
+
+  
           </div>
           {/* Bottom CTA Section */}
           {/* <div className="mt-20 text-center bg-gray-50 rounded-2xl p-12">
@@ -432,7 +466,7 @@ export default function CourseDetailed() {
             <div className="absolute inset-0 bg-cover bg-center opacity-60" style={{ backgroundImage: `url(${course.image})` }} />
             <div className="relative z-10 container mx-auto px-6 flex flex-col justify-center h-full">
               <button
-                onClick={() => navigate('/academia/school#course-cards-section')}
+                onClick={() => navigate('/school/teacher#course-cards-section')}
                 className="text-black mb-7 text-lg flex items-center gap-2 hover:underline"
               >
                 <ArrowLeft className="w-4 h-4" />

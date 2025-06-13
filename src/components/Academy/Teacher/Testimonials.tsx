@@ -111,13 +111,13 @@ const Testimonials = () => {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
           viewport={{ once: true }}
-          className="flex flex-col items-center justify-center max-w-[540px] mx-auto"
+          className="flex flex-col items-center justify-center max-w-full mx-auto"
         >
           <div className="flex justify-center">
             <div className="border py-1 px-4 rounded-lg">Testimonials</div>
           </div>
 
-          <h2 className=" text-center  md:text-3xl lg:text-4xl xl:text-5xl font-bold tracking-tighter mt-5">From Skepticism to Success - What Educators Say</h2>
+          <h2 className=" text-center  md:text-3xl lg:text-4xl xl:text-4xl font-bold tracking-tighter mt-5">From Skepticism to Success - What Educators Say</h2>
 
           <p className="text-center mt-5 opacity-75">
             Real Voices. Real Results.

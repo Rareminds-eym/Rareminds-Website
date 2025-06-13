@@ -29,7 +29,7 @@ const StudentProgramsPage = ({coursetocontact}:coursecardProps) => {
       hasPdf: true,
       pdfUrl: "/spoken-english-brochure.pdf",
       // readMoreUrl: "/academia/student/course/Spoken-English"
-        readMoreUrl: "/academia/coming-soon"
+        readMoreUrl: "/school/coming-soon"
     },
 
     {
@@ -46,7 +46,7 @@ const StudentProgramsPage = ({coursetocontact}:coursecardProps) => {
       buttonIcon: <Download className="h-4 w-4" />,
       hasPdf: true,
       pdfUrl: "/career-blueprint.pdf",
-      readMoreUrl: "/academia/student/course/career-counselling"
+      readMoreUrl: "/school/student/course/career-counselling"
     },
     {
       title: "The 3E Program: English, Employability, Entrepreneurship",
@@ -61,7 +61,7 @@ const StudentProgramsPage = ({coursetocontact}:coursecardProps) => {
       buttonText: "View EEE Program Curriculum",
       buttonIcon: <FileText className="h-4 w-4" />,
       hasPdf: false,
-      readMoreUrl: "/academia/coming-soon"
+      readMoreUrl: "/school/coming-soon"
     }
   ];
 

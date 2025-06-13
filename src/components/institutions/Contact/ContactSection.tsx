@@ -56,6 +56,17 @@ const ContactSection = () => {
       },
     ]);
 
+      // Send email to backend
+  try {
+    await fetch("https://rareminds.in/api/send-contact-email", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(formData),
+    });
+  } catch (err) {
+    // Optionally handle error (e.g., show a toast)
+  }
+
     if (error) {
       toast({
         title: "Submission Failed",

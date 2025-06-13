@@ -1,5 +1,6 @@
 import React from 'react';
 import { Battery, Sprout, Dna,Folders, Heart, Eye, ShoppingBag, Brain, MonitorSmartphone, Briefcase } from 'lucide-react';
+import CorporateTraining from '@/pages/Corporate/Training';
 
 
 // Util to combine class names
@@ -12,6 +13,7 @@ interface SectorCardProps {
   color: string;
   className?: string;
   description?: string;
+  path?: { CorporateTraining: React.FC }; 
 }
 
 interface Program {
@@ -29,7 +31,7 @@ interface CTAButtonProps {
 }
 
 
-const SectorCard = ({ title, icon, color, description }: SectorCardProps) => {
+const SectorCard = ({ title, icon, color, description, path }: SectorCardProps) => {
   return (
     <div className="relative group h-36 md:h-64 [perspective:1000px]">
       <div className="relative w-full h-full transition-transform  duration-700 [transform-style:preserve-3d] group-hover:[transform:rotateX(-180deg)]">
@@ -52,7 +54,12 @@ const SectorCard = ({ title, icon, color, description }: SectorCardProps) => {
           style={{ backfaceVisibility: 'hidden' }}
         >
           <p className="text-sm text-gray-700 hidden md:block">{description}</p>
-          <button className='mt-4 bg-gradient-to-b shadow-xl md:shadow-md from-red-300 to-red-400 border-2 border-red-200 px-6 py-3 rounded-full text-sm'>Learn More</button>
+          <button 
+            className='mt-4 bg-gradient-to-b shadow-xl md:shadow-md from-red-300 to-red-400 border-2 border-red-200 px-6 py-3 rounded-full text-sm' 
+            onClick={() => { if (path) window.location.href = '/corporate/training'; }}
+          >
+            Learn More
+          </button>
         </div>
 
       </div>
@@ -60,29 +67,6 @@ const SectorCard = ({ title, icon, color, description }: SectorCardProps) => {
   );
 };
 
-
-
-
-// // ProgramList Component
-// const ProgramList = ({ programs }: ProgramListProps) => {
-//   return (
-//     <div className="max-w-2xl mx-auto">
-//       <h2 className="text-2xl font-bold mb-6 text-center">Sample Programs</h2>
-//       <ul className="space-y-3">
-//         {programs.map((program, index) => (
-//           <li
-//             key={index}
-//             className="flex items-start gap-3 p-3 bg-white rounded-lg shadow-sm animate-slide-in"
-//             style={{ animationDelay: `${index * 0.1}s` }}
-//           >
-//             <CheckCircle className="h-5 w-5 text-red-600 mt-0.5 flex-shrink-0 " />
-//             <span>{program.title}</span>
-//           </li>
-//         ))}
-//       </ul>
-//     </div>
-//   );
-// };
 
 const CTAButton = ({ children, variant, onClick }: CTAButtonProps) => {
   const base = 'px-6 py-3 font-semibold rounded-2xl flex items-center  transition duration-300';
@@ -99,13 +83,6 @@ const CTAButton = ({ children, variant, onClick }: CTAButtonProps) => {
 
 // Main Component: SectorExpertise
 const SectorExpertise = () => {
-  const samplePrograms = [
-    { title: "AI for Arts & Science Students" },
-    { title: "EV Battery Management" },
-    { title: "Organic Farming & Food Preservation" },
-    { title: "Growth Hacking & Digital Marketing" },
-    { title: `Career Counselling Blueprint ${4*4} (Grades 9–12)` }
-  ];
 
   const sectorData = [
     {
@@ -152,9 +129,11 @@ const SectorExpertise = () => {
     },
     {
       title: "Corporate Training",
-      icon: <Briefcase className="h-8 w-8 text-white" />,
+      icon: <Briefcase className="h-8 o
+      w-8 text-white" />,
       color: "bg-academy-blue",
-      description: "Corporate Training programs tailored for businesses looking to upskill their workforce in emerging technologies and soft skills."
+      description: "Corporate Training programs tailored for businesses looking to upskill their workforce in emerging technologies and soft skills.",
+      path:{CorporateTraining}
     }
   ];
   return (
@@ -179,6 +158,7 @@ const SectorExpertise = () => {
                 icon={sector.icon}
                 color={sector.color}
                 description={sector.description}
+                path={sector.path}
               />
             ))}
           </div>

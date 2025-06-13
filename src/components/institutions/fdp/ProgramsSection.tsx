@@ -1,16 +1,18 @@
 import { motion } from 'framer-motion';
 import { BookOpen, Monitor, Target, School, FileText, Award, Clock, Sparkles } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const programs = [
   {
-    name: 'NEP-Ready Teaching',
+    name: 'Faculty Development Program',
     focus: 'Transformative Teaching Aligned with NEP',
     duration: '5 Days',
     mode: 'Online/Hybrid',
     icon: BookOpen,
     color: 'from-blue-600 to-indigo-600',
     benefits: ['NEP Integration', 'Policy Application', 'Learner-Centric'],
-    image: '/institutions/vectors/FDP1.jpg'
+    image: '/institutions/vectors/FDP1.jpg',
+    link: '/programs/fdp'
   },
   {
     name: 'Pedagogy ',
@@ -20,7 +22,8 @@ const programs = [
     icon: Monitor,
     color: 'from-purple-600 to-pink-600',
     benefits: ['Flipped Classroom', 'Experiential Leaning', 'Case-Based'],
-    image: '/institutions/vectors/FDP2.jpg'
+    image: '/institutions/vectors/FDP2.jpg',
+    link: '/programs/pedagogy'
   },
   {
     name: 'Research & Publication Skills',
@@ -30,7 +33,8 @@ const programs = [
     icon: Target,
     color: 'from-green-600 to-teal-600',
     benefits: ['Proposal Writing', 'UGC Compliance', 'Funding Sources'],
-    image: '/institutions/vectors/FDP3.jpg'
+    image: '/institutions/vectors/FDP3.jpg',
+    link: '/programs/research-publication-skills'
 },
   {
     name: 'Entrepreneurial Faculty',
@@ -40,7 +44,8 @@ const programs = [
     icon: School,
     color: 'from-amber-600 to-orange-600',
     benefits: ['Innovation Mindset', 'Start-Up Mentoring', 'Incubation Strategies'],
-    image: '/institutions/vectors/FDP4.jpg'
+    image: '/institutions/vectors/FDP4.jpg',
+    link: '/programs/entrepreneurial-faculty'
   },
   {
     name: 'Green Campus & Sustainability Education',
@@ -50,7 +55,8 @@ const programs = [
     icon: FileText,
     color: 'from-red-600 to-rose-600',
     benefits: ['ESG Integration', 'Green Practices', 'Sustainabilty Awareness'],
-    image: '/institutions/vectors/FDP5.jpg'
+    image: '/institutions/vectors/FDP5.jpg',
+    link: '/programs/green-campus-sustainability-education'
   },
   {
     name: 'Digital Tools Upskilling & Tech-Integrated Teaching',
@@ -60,9 +66,22 @@ const programs = [
     icon: Award,
     color: 'from-violet-600 to-purple-600',
     benefits: ['AI Tools', 'LMS Proficiency', 'Content Creation'],
-    image: '/institutions/vectors/FDP6.jpg'
+    image: '/institutions/vectors/FDP6.jpg',
+    link: '/programs/digital-tools-upskilling-tech-integrated-teaching'
   }
 ];
+
+// Simple button component for "Learn More"
+function ProgramLearnMoreButton({ link }: { link: string }) {
+  return (
+    <Link
+      to={link}
+      className="mt-auto inline-block bg-white text-indigo-700 font-semibold px-4 py-2 rounded-lg shadow hover:bg-indigo-50 transition-colors text-center"
+    >
+      Learn More
+    </Link>
+  );
+}
 
 export default function ProgramsSection() {
   return (
@@ -131,9 +150,7 @@ export default function ProgramsSection() {
                   </div>
                 ))}
               </div>
-              <button className="mt-auto w-full bg-white/20 hover:bg-white/30 backdrop-blur-sm py-2 rounded-lg transition-colors">
-                Learn More
-              </button>
+              <ProgramLearnMoreButton link={program.link} />
             </div>
           </div>
         </div>

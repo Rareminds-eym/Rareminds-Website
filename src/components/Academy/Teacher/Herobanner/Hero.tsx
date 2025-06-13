@@ -80,7 +80,7 @@ const Hero = ({ HeroToLogo }: HeroCarouselProps) => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const isSchoolPage = location.pathname === '/academia/school';
+  const isSchoolPage = location.pathname === '/school/teacher';
 
   const handleClick = useCallback(() => {
     if (isSchoolPage) {
@@ -89,7 +89,7 @@ const Hero = ({ HeroToLogo }: HeroCarouselProps) => {
         section.scrollIntoView({ behavior: 'smooth' });
       }
     } else {
-      navigate('/academia/school#contact-section');
+      navigate('/school/teacher#contact-section');
     }
   }, [isSchoolPage, navigate]);
 

@@ -50,13 +50,13 @@ const HeroBanner = ({  HeroToContact,HeroToLogo, isBlurred }: HeaderProps) =>{
       }
     };
   
-      const isSchoolPage = location.pathname === '/academia/school';
+      const isSchoolPage = location.pathname === '/school/teacher';
   
       const handleClick = useCallback(() => {
         if (isSchoolPage) {
           scrollToSection();
         } else {
-          navigate('/academia/school#contact-section');
+          navigate('/school/teacher#contact-section');
         }
       }, [isSchoolPage, navigate]);
   
@@ -222,14 +222,14 @@ const HeroBanner = ({  HeroToContact,HeroToLogo, isBlurred }: HeaderProps) =>{
         </Dialog> */}
 
         {/* Download Form Dialog */}
-        <Dialog open={showDownload} onOpenChange={setShowDownload}>
+        {/* <Dialog open={showDownload} onOpenChange={setShowDownload}>
           <DialogContent className="sm:max-w-[500px]">
             <DownloadForm 
               onClose ={() => setShowDownload(false)} 
               activeService={activeService}
             />
           </DialogContent>
-        </Dialog>
+        </Dialog> */}
       </div>
     </section>
   );

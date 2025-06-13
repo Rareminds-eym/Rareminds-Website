@@ -24,7 +24,7 @@ const Courses = () => {
     buttonIcon: <FileText className="h-4 w-4" />,
     hasPdf: true,
     pdfUrl: "#",
-    readMoreUrl: `/academia/student/course/${course.id}`,
+    readMoreUrl: `/school/student/course/${course.id}`,
     courseId: course.id,
     showLoginLink: course.showLoginLink || false,
   }));
