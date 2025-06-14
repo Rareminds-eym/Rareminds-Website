@@ -49,7 +49,7 @@ const BlogCard = ({ post }: BlogCardProps) => {
   }
 
   return (
-    <article className="blog-card group">
+    <article className="blog-card group shadow-lg border rounded-2xl">
       <div className="relative overflow-hidden">        <img
           src={post.featured_image || '/default-blog-image.jpg'}
           alt={post.title}
