@@ -88,7 +88,7 @@ const SearchAndFilter = ({
         </div>
 
         {/* Category Filter */}
-        <Select value={selectedCategory || "all"} onValueChange={handleCategoryChange}>
+        {/* <Select value={selectedCategory || "all"} onValueChange={handleCategoryChange}>
           <SelectTrigger className="w-full lg:w-48 bg-white/80 border-sage-200">
             <div className="flex items-center gap-2">
               <Filter className="w-4 h-4" />
@@ -103,7 +103,7 @@ const SearchAndFilter = ({
               </SelectItem>
             ))}
           </SelectContent>
-        </Select>
+        </Select> */}
 
         {/* Subcategory Filter */}
         {selectedCategoryData && (

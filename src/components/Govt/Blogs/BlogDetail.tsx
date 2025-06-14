@@ -310,17 +310,17 @@ const BlogDetailGov = () => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.8 }}
-        className="relative"
+        className="relative "
       >
-        <div className="relative h-[50vh] lg:h-[60vh] overflow-hidden">          <img
+        <div className="relative h-[50vh] lg:h-[60vh] overflow-hidden ">          <img
             src={post.featured_image || '/default-blog-image.jpg'}
             alt={post.title}
             className="w-full h-full object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex justify-center items-center "></div>
           
-          <div className="absolute inset-x-0 bottom-0 p-8 lg:p-12">
-            <div className="max-w-4xl mx-auto">
+          <div className="absolute inset-x-0 bottom-[25%]  p-8 lg:p-12 ">
+            <div className="max-w-6xl mx-auto">
               <motion.div
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -332,10 +332,10 @@ const BlogDetailGov = () => {
                 <h1 className="text-3xl sm:text-4xl lg:text-6xl font-bold text-white mb-6 leading-tight">
                   {post.title}
                 </h1>                <div className="flex flex-wrap items-center gap-6 text-white/90">
-                  <div className="flex items-center gap-2">
+                  {/* <div className="flex items-center gap-2">
                     <User className="w-4 h-4" />
-                    {/* <span className="font-medium">{post.author_name || 'Anonymous'}</span> */}
-                  </div>
+                    <span className="font-medium">{post.author_name || 'Anonymous'}</span>
+                  </div> */}
                   <div className="flex items-center gap-2">
                     <Calendar className="w-4 h-4" />
                     <span>{new Date(post.publish_date).toLocaleDateString('en-US', { 
@@ -344,10 +344,11 @@ const BlogDetailGov = () => {
                       day: 'numeric' 
                     })}</span>
                   </div>
-                  <div className="flex items-center gap-2">
+                  {/* <div className="flex items-center gap-2">
                     <Clock className="w-4 h-4" />
                     <span>{post.read_time || 5} min read</span>
-                  </div>                  <div className="flex items-center gap-2">
+                  </div>                 */}
+                    <div className="flex items-center gap-2">
                     {/* <Eye className="w-4 h-4" /> */}
                     {/* <span>2.4k views</span> */}
                   </div>

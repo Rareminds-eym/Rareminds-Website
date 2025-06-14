@@ -18,9 +18,9 @@ import { HelmetProvider } from 'react-helmet-async';
 
 const Govt = () => {
   const seoData = {
-    title: "Government",
-    description: "Innovative digital solutions for government agencies to improve public services and operational efficiency. Explore our case studies and partnerships.",
-    keywords: "government technology, public sector solutions, digital government, e-governance",
+    title: "Government Skilling & LMS Solutions | Rareminds India",
+    description: "Partner with Rareminds for NEP-ready training, LMS, dashboards & skilling at scale. Trusted by 500K+ students & 10+ state governments. Go live in 48 hrs.",
+    keywords: "government skilling solutions, LMS for government training, government LMS India, skill development India",
     canonicalUrl: "https://rareminds.in/government"
   };
   return (
