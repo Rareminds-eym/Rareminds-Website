@@ -12,19 +12,29 @@ import AcademiaLayout from "./layouts/AcademiaLayout";
 import InstitutionsLayout from "./layouts/InstitutionsLayout";
 
 // Direct imports for direct use in routes
-import BlogDetail from "./components/Academy/Blogs/BlogDetail";
+import BlogDetailAcademia from "./components/Academy/Blogs/BlogDetail";
+import BlogDetail from "./pages/Blogs/BlogDetail.tsx";
 import BlogDetailGov from "./components/Govt/Blogs/BlogDetail.tsx";
 import CourseDetailedPage from "@/components/Academy/Students/CourseDetailedPage";
 // Lazy pages
 const Home = lazy(() => import("./pages/Index"));
+const Blogs = lazy(() => import("./pages/Blogs/index"));
 const Service = lazy(
   () => import("./pages/Corporate/Recruitment/Services/[service]")
 );
 const Corporate = lazy(() => import("./pages/Corporate/Recruitment/Index"));
-const ContactForm = lazy(() => import("./pages/Corporate/ContactPage/ContactForm.tsx"));
-const Blogs = lazy(() => import("./pages/Corporate/Recruitment/Blogs/Index"));
-const BlogPost = lazy(() => import("./pages/Corporate/Recruitment/Blogs/[slug]"));
-const ServicesPage = lazy(() => import("./pages/Corporate/Recruitment/Services/Index.tsx"));
+const ContactForm = lazy(
+  () => import("./pages/Corporate/ContactPage/ContactForm.tsx")
+);
+const Corporate_Blogs = lazy(
+  () => import("./pages/Corporate/Recruitment/Blogs/Index")
+);
+const BlogPost = lazy(
+  () => import("./pages/Corporate/Recruitment/Blogs/[slug]")
+);
+const ServicesPage = lazy(
+  () => import("./pages/Corporate/Recruitment/Services/Index.tsx")
+);
 const Government = lazy(() => import("./pages/Government/Index"));
 const Academia = lazy(() => import("./pages/Academia/Index"));
 const AcademiaBlogs = lazy(() => import("./pages/Academia/Blogs/index"));
@@ -38,7 +48,9 @@ const FDP = lazy(() => import("./pages/Institutions/Fdp"));
 const ServicePage = lazy(
   () => import("./components/institutions/sdp/ServicePage")
 );
-const CorporateTraining = lazy(() => import("./pages/Corporate/Training/Home/index.tsx"));
+const CorporateTraining = lazy(
+  () => import("./pages/Corporate/Training/Home/index.tsx")
+);
 const Contact = lazy(() => import("./pages/Government/Contact/Index"));
 const handleSubscribe = lazy(() => import("./pages/Academia/ComingSoon"));
 const LeadershipPrograms = lazy(
@@ -54,7 +66,9 @@ const Academy_Course = lazy(
 const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
 const Terms = lazy(() => import("./pages/Terms"));
 const TDPPage = lazy(() => import("./pages/Academia/Teacher/TDPPage.tsx"));
-const CorporateTrainingServicesIndex = lazy(() => import("./pages/Corporate/Training/Services/Index.tsx"));
+const CorporateTrainingServicesIndex = lazy(
+  () => import("./pages/Corporate/Training/Services/Index.tsx")
+);
 
 const withSuspense = (Component: React.LazyExoticComponent<React.FC<{}>>) => (
   <Suspense fallback={<LoaderComponent />}>
@@ -86,6 +100,18 @@ const router = createBrowserRouter([
       {
         path: "/terms",
         element: withSuspense(Terms),
+      },
+      {
+        path: "/blogs",
+        element: withSuspense(Blogs),
+      },
+      {
+        path: "/blogs/:slug",
+        element: (
+          <Suspense fallback={<LoaderComponent />}>
+            <BlogDetail />
+          </Suspense>
+        ),
       },
     ],
   },
@@ -126,11 +152,11 @@ const router = createBrowserRouter([
       },
       {
         path: "/corporate/training/blogs",
-        element: withSuspense(Blogs),
+        element: withSuspense(Corporate_Blogs),
       },
       {
         path: "/corporate/recruitment/blogs",
-        element: withSuspense(Blogs),
+        element: withSuspense(Corporate_Blogs),
       },
       {
         path: "/corporate/recruitment/blogs/:slug",
@@ -171,15 +197,18 @@ const router = createBrowserRouter([
       },
       {
         path: "/government/blogs",
-        element: withSuspense(lazy(() => import("./pages/Government/Blogs/index"))),
+        element: withSuspense(
+          lazy(() => import("./pages/Government/Blogs/index"))
+        ),
       },
       {
         path: "/government/blogs/:slug",
-        element: <Suspense fallback={<LoaderComponent />}>
-          <BlogDetailGov />
-        </Suspense>,
+        element: (
+          <Suspense fallback={<LoaderComponent />}>
+            <BlogDetailGov />
+          </Suspense>
+        ),
       },
-      
     ],
   },
   {
@@ -206,28 +235,32 @@ const router = createBrowserRouter([
         element: withSuspense(School),
       },
       {
-        path: "/school/blogs", 
+        path: "/school/blogs",
         element: withSuspense(AcademiaBlogs),
       },
       {
-        path: "/school/student/blogs", 
+        path: "/school/student/blogs",
         element: withSuspense(AcademiaBlogs),
       },
       {
-        path: "/school/teacher/blogs", 
+        path: "/school/teacher/blogs",
         element: withSuspense(AcademiaBlogs),
       },
       {
-        path: "/school/student/blogs/:slug", 
-        element: <Suspense fallback={<LoaderComponent />}>
-          <BlogDetail />
-        </Suspense>,
+        path: "/school/student/blogs/:slug",
+        element: (
+          <Suspense fallback={<LoaderComponent />}>
+            <BlogDetailAcademia />
+          </Suspense>
+        ),
       },
       {
-        path: "/school/teacher/blogs/:slug", 
-        element: <Suspense fallback={<LoaderComponent />}>
-          <BlogDetail />
-        </Suspense>,
+        path: "/school/teacher/blogs/:slug",
+        element: (
+          <Suspense fallback={<LoaderComponent />}>
+            <BlogDetailAcademia />
+          </Suspense>
+        ),
       },
       {
         path: "/school/coming-soon",
