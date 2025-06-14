@@ -4,10 +4,8 @@ import { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabaseClient';
 import ContactSection from '@/components/institutions/Contact/ContactSection';
 
-const API_BASE_URL =
-  process.env.NODE_ENV === "production"
-    ? "https://rareminds.in/"
-    : "http://localhost:6069";
+const API_BASE_URL = "https://rareminds.in";
+    
 
 const banners = [
   {

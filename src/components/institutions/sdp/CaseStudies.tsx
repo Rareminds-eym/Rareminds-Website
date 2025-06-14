@@ -28,10 +28,7 @@ const caseStudies = [
 ];
 
 // Use correct API base URL for dev/prod
-const API_BASE_URL =
-  process.env.NODE_ENV === "production"
-    ? "https://rareminds.in/"
-    : "http://localhost:6069";
+const API_BASE_URL ="https://rareminds.in";
 
 
 export default function CaseStudies() {
