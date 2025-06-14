@@ -21,7 +21,7 @@ const LeadershipPrograms = () => {
     );
   }
 
-  const { heroTitle, heroSubtitle, featureBadges, programs } = service;
+  const { heroTitle, heroSubtitle, programs } = service;
   const [activeProgram, setActiveProgram] = useState(programs[0].id);
 
   const location = useLocation();
@@ -49,16 +49,16 @@ const LeadershipPrograms = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/50">
       {/* Enhanced Hero Section with Overlay */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-indigo-900 via-blue-800 to-slate-900 text-white">
+      <section className="relative overflow-hidden bg-gradient-to-br from-indigo-900 via-blue-900 to-slate-900 text-white">
         {/* Animated Background Elements */}
         <div className="absolute inset-0">
-          <div className="absolute top-20 left-10 w-72 h-72 bg-blue-400/10 rounded-full blur-3xl animate-pulse"></div>
-          <div className="absolute bottom-20 right-10 w-96 h-96 bg-purple-400/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
-          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-indigo-400/5 rounded-full blur-3xl animate-pulse delay-500"></div>
+          <div className="absolute top-20 left-10 w-72 h-72 bg-blue-500/10 rounded-full blur-3xl animate-pulse"></div>
+          <div className="absolute bottom-20 right-10 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-indigo-500/5 rounded-full blur-3xl animate-pulse delay-500"></div>
         </div>
 
         {/* Back Button */}
-        <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 pt-8">
+        <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 pt-10"> {/* Increased pt-6 to pt-10 */}
           <motion.button
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
@@ -72,40 +72,18 @@ const LeadershipPrograms = () => {
         </div>
 
         {/* Hero Content */}
-        <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 pb-20 pt-8">
+        <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 pb-20 pt-10"> {/* Increased pb-12 pt-6 to pb-20 pt-10 */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            className="max-w-5xl mx-auto text-center"
+            className="max-w-4xl mx-auto text-center" /* Increased max width */
           >
-            {/* Feature Badges */}
-            {featureBadges && featureBadges.length > 0 && (
-              <div className="flex flex-wrap justify-center gap-3 mb-8">
-                {featureBadges.map((badge, index) => (
-                  <motion.span
-                    key={index}
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 0.5, delay: index * 0.1 }}
-                    className="px-4 py-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full text-sm font-medium text-blue-100 flex items-center gap-2"
-                  >
-                    {typeof badge === 'object' && badge.icon && (
-                      <span className="text-xs">{badge.icon}</span>
-                    )}
-                    <span>
-                      {typeof badge === 'string' ? badge : (badge as any)?.text || 'Feature'}
-                    </span>
-                  </motion.span>
-                ))}
-              </div>
-            )}
-
             <motion.h1 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 leading-tight"
+              className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-6 leading-tight" /* Increased font and margin */
             >
               <span className="bg-gradient-to-r from-white via-blue-100 to-purple-100 bg-clip-text text-transparent">
                 {heroTitle}
@@ -116,7 +94,7 @@ const LeadershipPrograms = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.4 }}
-              className="text-xl lg:text-2xl text-blue-100/90 mb-12 max-w-4xl mx-auto leading-relaxed"
+              className="text-lg lg:text-2xl text-blue-100/90 mb-10 max-w-3xl mx-auto leading-relaxed" /* Increased font and margin */
             >
               {heroSubtitle}
             </motion.p>
@@ -126,19 +104,19 @@ const LeadershipPrograms = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.6 }}
-              className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto"
+              className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-3xl mx-auto" /* Increased gap and max width */
             >
               <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20">
                 <div className="text-3xl font-bold text-white mb-2">{programs.length}</div>
-                <div className="text-blue-200">Training Programs</div>
+                <div className="text-blue-200 text-base">Training Programs</div>
               </div>
               <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20">
                 <div className="text-3xl font-bold text-white mb-2">500+</div>
-                <div className="text-blue-200">Companies Trained</div>
+                <div className="text-blue-200 text-base">Companies Trained</div>
               </div>
               <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20">
                 <div className="text-3xl font-bold text-white mb-2">50K+</div>
-                <div className="text-blue-200">Professionals Certified</div>
+                <div className="text-blue-200 text-base">Professionals Certified</div>
               </div>
             </motion.div>
           </motion.div>
@@ -248,8 +226,8 @@ const LeadershipPrograms = () => {
                       className="space-y-8"
                     >
                       {/* Enhanced Program Overview */}
-                      <div className="bg-white/80 backdrop-blur-lg rounded-3xl shadow-2xl border border-gray-200/50 overflow-hidden">
-                        <div className="bg-gradient-to-r from-indigo-500 to-purple-500 p-8 text-white">
+                      <div className="bg-white/80 backdrop-blur-lg rounded-3xl shadow-2xl border border-gray-200/50 overflow-hidden mb-8">
+                        <div className="bg-gradient-to-r from-indigo-600 to-purple-600 p-8 text-white">
                           <div className="flex items-start justify-between">
                             <div className="flex-1">
                               <div className="flex items-center gap-3 mb-4">
@@ -260,12 +238,22 @@ const LeadershipPrograms = () => {
                                   Featured Program
                                 </span>
                               </div>
-                              <h2 className="text-3xl lg:text-4xl font-bold mb-4 leading-tight">
+                              <motion.h2 
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.5, delay: 0.2 }}
+                                className="text-3xl lg:text-4xl font-bold mb-4 leading-tight"
+                              >
                                 {program.title}
-                              </h2>
-                              <p className="text-xl text-white/90 leading-relaxed">
+                              </motion.h2>
+                              <motion.p 
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.5, delay: 0.3 }}
+                                className="text-xl text-white/90 leading-relaxed"
+                              >
                                 {program.overview}
-                              </p>
+                              </motion.p>
                             </div>
                           </div>
                         </div>
@@ -330,11 +318,11 @@ const LeadershipPrograms = () => {
                       </div>
 
                       {/* Enhanced Course Modules */}
-                      <div className="bg-white/80 backdrop-blur-lg rounded-3xl shadow-2xl border border-gray-200/50 overflow-hidden">
+                      <div className="bg-white/90 backdrop-blur-lg rounded-3xl shadow-xl border border-gray-200/50 overflow-hidden">
                         <div className="bg-gradient-to-r from-slate-800 to-slate-900 p-8">
                           <h3 className="text-2xl lg:text-3xl font-bold text-white flex items-center gap-3">
-                            <div className="w-8 h-8 bg-white/20 backdrop-blur-sm rounded-lg flex items-center justify-center">
-                              <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <div className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center">
+                              <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
                               </svg>
                             </div>
@@ -342,7 +330,8 @@ const LeadershipPrograms = () => {
                           </h3>
                           <p className="text-slate-300 mt-2">Comprehensive curriculum designed for maximum impact</p>
                         </div>
-                        <div className="p-8">
+
+                        <div className="p-6">
                           <div className="overflow-x-auto">
                             <table className="w-full border-collapse">
                               <thead>
@@ -414,7 +403,7 @@ const LeadershipPrograms = () => {
                           initial={{ opacity: 0, y: 20 }}
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ duration: 0.5 }}
-                          className="bg-gradient-to-br from-emerald-50 via-blue-50 to-purple-50 rounded-3xl p-8 border border-emerald-200/50 relative overflow-hidden"
+                          className="bg-gradient-to-br from-emerald-50 via-blue-50 to-purple-50 rounded-3xl p-8 border border-emerald-200/50 relative overflow-hidden mt-8"
                         >
                           {/* Background Pattern */}
                           <div className="absolute inset-0 opacity-5">
@@ -426,14 +415,16 @@ const LeadershipPrograms = () => {
                             <div className="flex items-center gap-4 mb-6">
                               <div className="w-12 h-12 bg-gradient-to-r from-emerald-500 to-blue-500 rounded-2xl flex items-center justify-center">
                                 <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                                 </svg>
                               </div>
                               <h3 className="font-bold text-2xl bg-gradient-to-r from-emerald-700 to-blue-700 bg-clip-text text-transparent">
                                 Why Choose This Program?
                               </h3>
                             </div>
-                            <p className="text-lg text-gray-700 leading-relaxed">{program.whyChoose}</p>
+                            <p className="text-lg text-gray-700 leading-relaxed">
+                              {program.whyChoose}
+                            </p>
                           </div>
                         </motion.div>
                       )}
@@ -443,7 +434,7 @@ const LeadershipPrograms = () => {
                         initial={{ opacity: 0, y: 30 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.6 }}
-                        className="relative bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 rounded-3xl shadow-2xl overflow-hidden"
+                        className="relative bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 rounded-3xl shadow-2xl overflow-hidden mt-8"
                       >
                         {/* Background Pattern */}
                         <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>

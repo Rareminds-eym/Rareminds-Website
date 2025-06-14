@@ -37,7 +37,7 @@ const CorporateTraining = lazy(() => import("./pages/Corporate/Training/Home/ind
 const Contact = lazy(() => import("./pages/Government/Contact/Index"));
 const handleSubscribe = lazy(() => import("./pages/Academia/ComingSoon"));
 const LeadershipPrograms = lazy(
-  () => import("./pages/Corporate/Training/Home/service/index.tsx")
+  () => import("./pages/Corporate/Training/Services/[slug].tsx")
 );
 const Projectlist = lazy(() => import("./pages/Academia/projects/projectlist"));
 const Naan = lazy(() => import("./pages/Academia/projects/[name]"));
@@ -49,6 +49,7 @@ import CourseDetailedPage from "@/components/Academy/Students/CourseDetailedPage
 const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
 const Terms = lazy(() => import("./pages/Terms"));
 const TDPPage = lazy(() => import("./pages/Academia/Teacher/TDPPage.tsx"));
+const CorporateTrainingServicesIndex = lazy(() => import("./pages/Corporate/Training/Services/Index.tsx"));
 
 const withSuspense = (Component: React.LazyExoticComponent<React.FC<{}>>) => (
   <Suspense fallback={<LoaderComponent />}>
@@ -133,6 +134,10 @@ const router = createBrowserRouter([
       {
         path: "/corporate/recruitment/services",
         element: withSuspense(ServicesPage),
+      },
+      {
+        path: "/corporate/training/services",
+        element: withSuspense(CorporateTrainingServicesIndex),
       },
     ],
   },
