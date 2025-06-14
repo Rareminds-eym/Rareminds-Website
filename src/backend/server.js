@@ -5,7 +5,6 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const app = express();
-app.use(cors());
 app.use(express.json());
 
 console.log('Starting backend server...');
@@ -19,17 +18,21 @@ const FRONTEND_BASE_URL =
     ? 'https://rareminds.in'
     : 'http://localhost:5173';
 
-// Allow only your frontend domain in production
+// Allow production, www, and localhost:5173 for dev/testing
 const corsOptions = {
-  origin: process.env.NODE_ENV === 'production'
-    ? 'https://rareminds.in'
-    : 'http://localhost:5173',
+  origin: [
+    'https://rareminds.in',
+    'https://www.rareminds.in',
+    'http://localhost:5173'
+  ],
+  methods: ['GET', 'POST', 'OPTIONS'],
   credentials: true,
 };
 app.use(cors(corsOptions));
 
 // Existing PDF email endpoint
 app.post('/api/send-pdf', async (req, res) => {
+  console.log('BODY:', req.body);
   const { name, email, pdfUrl, institution } = req.body;
   if (!name || !email || !pdfUrl) {
     return res.status(400).json({ error: 'Missing required fields' });
@@ -92,5 +95,5 @@ app.post('/api/send-contact-email', async (req, res) => {
   }
 });
 
-const PORT = process.env.PORT || 6069;
+const PORT = process.env.PORT || 3001;
 app.listen(PORT, '0.0.0.0', () => console.log(`Server running on port ${PORT}`));

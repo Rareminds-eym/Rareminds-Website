@@ -225,13 +225,12 @@ useEffect(() => {
       />
     )}
   </div>
-</div>
-        </div>
+</div>        </div>
         {/* <FAQChatbot /> */}
         {/* <FDPButton />        Logos */}
           <FloatingActionMenu />
-       <div className="relative z-0 mt-[750px] " >
-  <div ref={logoRef}  className="w-full h-[200px] "> 
+       <div className="relative z-0 mt-[100vh]" >
+  <div ref={logoRef}  className="w-full h-[200px]"> 
     <img src="/academy/school.svg" alt="Wave" className="w-full h-full object-cover" id="logo-section" />
   </div> 
   

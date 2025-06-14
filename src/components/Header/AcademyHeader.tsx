@@ -148,10 +148,8 @@ const AcademyHeader: React.FC = () => {
             onClick={() => setIsMenuOpen(false)}
           >
             Projects
-          </Link>
-
-          <Link
-            to="/school/coming-soon"
+          </Link>          <Link
+            to={isStudentPage ? "/school/student/blogs" : isTeacherPage ? "/school/teacher/blogs" : "/school/blogs"}
             className="text-xl text-gray-800 md:text-4xl py-2 hover:text-red-600 mb-4"
             onClick={() => setIsMenuOpen(false)}
           >
