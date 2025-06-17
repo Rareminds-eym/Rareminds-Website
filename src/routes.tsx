@@ -70,6 +70,16 @@ const CorporateTrainingServicesIndex = lazy(
   () => import("./pages/Corporate/Training/Services/Index.tsx")
 );
 
+import CourseDetailedPage from "@/components/Academy/Students/CourseDetailedPage";
+const BlogListing = lazy(() => import("./components/institutions/Blogs/BlogListing"));
+const BlogDetail = lazy(() => import("./components/institutions/Blogs/BlogDetail"));
+import CommunicationPersonalityDevelopment from "./components/institutions/inst/CommunicationPersonalityDevelopment";
+import MentalHealthCounselingFDP from "./components/institutions/inst/MentalHealthCounselingFDP";
+import DomainSpecificPrograms from "./components/institutions/inst/DomainSpecificPrograms";
+import LeadershipCareerGrowth from "./components/institutions/inst/LeadershipCareerGrowth";
+import InstitutionalValueAdded from "./components/institutions/inst/InstitutionalValueAdded";
+
+
 const withSuspense = (Component: React.LazyExoticComponent<React.FC<{}>>) => (
   <Suspense fallback={<LoaderComponent />}>
     {" "}
@@ -327,6 +337,51 @@ const router = createBrowserRouter([
       {
         path: "/institutions/fdp",
         element: withSuspense(FDP),
+      },
+      {
+        path: "/institutions/communication-personality-development",
+        element: <CommunicationPersonalityDevelopment />,
+      },
+      {
+        path: "/institutions/mental-health-counseling-fdp",
+        element: <MentalHealthCounselingFDP />,
+      },
+      {
+        path: "/institutions/domain-specific-programs",
+        element: <DomainSpecificPrograms />,
+      },
+      {
+        path: "/institutions/leadership-career-growth",
+        element: <LeadershipCareerGrowth />,
+      },
+      {
+        path: "/institutions/institutional-value-added-services",
+        element: <InstitutionalValueAdded />,
+      },
+      // Blog routes
+      {
+        path: "/institutions/blogs",
+        element: withSuspense(BlogListing),
+      },
+      {
+        path: "/institutions/blogs/:slug",
+        element: withSuspense(BlogDetail),
+      },
+      {
+        path: "/institutions/sdp/blogs",
+        element: withSuspense(BlogListing),
+      },
+      {
+        path: "/institutions/sdp/blogs/:slug",
+        element: withSuspense(BlogDetail),
+      },
+      {
+        path: "/institutions/fdp/blogs",
+        element: withSuspense(BlogListing),
+      },
+      {
+        path: "/institutions/fdp/blogs/:slug",
+        element: withSuspense(BlogDetail),
       },
     ],
   },
