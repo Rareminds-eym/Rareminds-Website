@@ -4,42 +4,46 @@ import React, { useEffect, useRef, useState } from "react";
 const logos = [
   {
     label: "UNIVERSITY OF MADRAS",
-    imgSrc: "/Govt-Images/Logos/logo1.png",
+    imgSrc: "https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Government/Home/Logos/logo2.webp",
   },
   {
     label: "ALAGAPPA UNIVERSITY",
-    imgSrc: "/Govt-Images/Logos/logo2.png",
+    imgSrc: "https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Government/Home/Logos/logo1.webp",
   },
   {
     label: "ANNAMALAI UNIVERSITY",
-    imgSrc: "/Govt-Images/Logos/logo3.png",
+    imgSrc: "https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Government/Home/Logos/logo2.webp",
+  },
+  {
+    label: "THIRUVALLUR UNIVERSITY",
+    imgSrc: "https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Government/Home/Logos/logo9.webp",
   },
   {
     label: "BHARATHIAR UNIVERSITY",
-    imgSrc: "/Govt-Images/Logos/logo4.png",
+    imgSrc: "https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Government/Home/Logos/logo3.webp",
   },
   {
     label: "BHARATHIDASAN UNIVERSITY",
-    imgSrc: "/Govt-Images/Logos/logo5.png",
+    imgSrc: "https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Government/Home/Logos/logo4.webp",
   }, {
     label: "UNIVERSITY OF MADRAS",
-    imgSrc: "/Govt-Images/Logos/logo6.png",
+    imgSrc: "https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Government/Home/Logos/logo10.webp",
   },
   {
     label: "MADURAI KAMARAJ UNIVERSITY",
-    imgSrc: "/Govt-Images/Logos/logo7.png",
+    imgSrc: "https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Government/Home/Logos/logo5.webp",
   },
   {
     label: "MANONMANIAM SUNDARANAR UNIVERSITY",
-    imgSrc: "/Govt-Images/Logos/logo8.png",
+    imgSrc: "https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Government/Home/Logos/logo10.webp",
   },
   {
     label: "MOTHER TERESA UNIVERSITY",
-    imgSrc: "/Govt-Images/Logos/logo9.png",
+    imgSrc: "https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Government/Home/Logos/logo7.webp",
   },
   {
     label: "PERIYAR UNIVERSITY",
-    imgSrc: "/Govt-Images/Logos/logo10.png",
+    imgSrc: "https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Government/Home/Logos/logo8.webp",
   },
 ];
 

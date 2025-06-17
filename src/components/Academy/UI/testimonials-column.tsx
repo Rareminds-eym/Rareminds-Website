@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { Star } from "lucide-react";
 
 export type Testimonial = {
-  text: string;
+  // text: string;
   image: string;
   name: string;
   role: string;
@@ -34,7 +34,7 @@ export const TestimonialsColumn = (props: {
             <React.Fragment key={index}>
               {props.testimonials.map(({ text, image, name, role, rating }, i) => (
                 <div className="p-10 rounded-3xl border shadow-lg shadow-primary/10 max-w-xs w-full" key={i}>
-                  <div className="flex mb-3">
+                  <div className="flex mb-3 ">
                     {Array.from({ length: 5 }).map((_, index) => (
                       <Star
                         key={index}
@@ -55,8 +55,8 @@ export const TestimonialsColumn = (props: {
                       className="h-10 w-10 rounded-full"
                     />
                     <div className="flex flex-col">
-                      <div className="font-medium tracking-tight leading-5">{name}</div>
-                      <div className="leading-5 opacity-60 tracking-tight">{role}</div>
+                      <div className="font-medium tracking-tight leading-5 pb-3">{name}</div>
+                      <div className="leading-5 opacity-60 tracking-tight whitespace-break-spaces">{role}</div>
                     </div>
                   </div>
                 </div>

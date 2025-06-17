@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { Icon } from "@iconify/react";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/lib/supabaseClient";
 
 const ContactSection = () => {
   const { toast } = useToast();
@@ -33,12 +34,49 @@ const ContactSection = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Simulate form submission
-    setTimeout(() => {
+    try {
+      // Insert into Supabase training_forms table
+      const submission = {
+        name: formData.name,
+        company: formData.company,
+        email: formData.email,
+        role: formData.role,
+        message: formData.message,
+        submitted_at: new Date().toISOString(),
+      };
+
+      const { error: dbError, data } = await supabase
+        .from("training_forms")
+        .insert([submission])
+        .select()
+        .single();
+
+      if (dbError) {
+        console.error("Supabase database error:", {
+          message: dbError.message,
+          details: dbError.details,
+          hint: dbError.hint,
+        });
+        throw dbError;
+      }
+
+      // Optionally, trigger an email function here if needed
+      const { error: functionError } = await supabase.functions.invoke(
+        "send-training-email",
+        {
+          body: { record: data },
+        }
+      );
+
+      if (functionError) {
+        console.error("Supabase function error:", functionError);
+        throw functionError;
+      }
+
       toast({
         title: "Message Sent!",
         description:
@@ -46,20 +84,37 @@ const ContactSection = () => {
       });
 
       setSubmitted(true);
-      setIsSubmitting(false);
+      setFormData({
+        name: "",
+        company: "",
+        email: "",
+        role: "",
+        message: "",
+      });
+
+      if (formRef.current) formRef.current.reset();
 
       setTimeout(() => {
-        setFormData({
-          name: "",
-          company: "",
-          email: "",
-          role: "",
-          message: "",
-        });
         setSubmitted(false);
-        if (formRef.current) formRef.current.reset();
       }, 3000);
-    }, 1500);
+    } catch (error) {
+      const supabaseError = error as any;
+      console.error("Error submitting form:", {
+        message: supabaseError.message,
+        details: supabaseError.details,
+        hint: supabaseError.hint,
+        error: supabaseError,
+      });
+      toast({
+        title: "Error",
+        description: `There was an error submitting your message.\n${
+          supabaseError.message || ""
+        }\n${supabaseError.details || ""}\n${supabaseError.hint || ""}`,
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -333,6 +388,90 @@ const ContactSection = () => {
                     </div>
                   </div>
                 </div>
+              </div>
+              <div className="bg-white/80 backdrop-blur-sm border border-white/30 rounded-3xl px-8 py-7 shadow-xl">
+                <h3 className="text-xl font-bold mb-2 text-gray-800 flex items-center gap-2">
+                  <Icon
+                    icon="mdi:share-variant"
+                    width={22}
+                    height={22}
+                    className="text-corporate-black"
+                  />
+                  Follow Us
+                </h3>
+                <motion.div
+                  className="flex items-center gap-4 mt-2"
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true }}
+                  variants={{
+                    hidden: {},
+                    visible: { transition: { staggerChildren: 0.12 } },
+                  }}
+                >
+                  {[
+                    {
+                      href: "https://www.linkedin.com/company/rareminds/",
+                      icon: "mdi:linkedin",
+                      color: "#0A66C2",
+                      label: "LinkedIn",
+                    },
+                    {
+                      href: "https://www.instagram.com/rareminds_eym/",
+                      icon: "mdi:instagram",
+                      color: "#E4405F",
+                      label: "Instagram",
+                    },
+                    {
+                      href: "https://www.facebook.com/people/RaremindsHR/61576026163390/",
+                      icon: "mdi:facebook",
+                      color: "#1877F3",
+                      label: "Facebook",
+                    },
+                    {
+                      href: "https://x.com/minds_rare",
+                      icon: "ri:twitter-x-fill",
+                      color: "#1A1A1A",
+                      label: "X (Twitter)",
+                    },
+                    {
+                      href: "https://www.youtube.com/channel/UClkBtwJsScYxFzNoFdlifeA",
+                      icon: "mdi:youtube",
+                      color: "#FF0000",
+                      label: "YouTube",
+                      size: 40,
+                    },
+                  ].map((item) => (
+                    <motion.a
+                      key={item.label}
+                      href={item.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={item.label}
+                      className="hover:scale-110 transition-transform"
+                      variants={{
+                        hidden: { opacity: 0, y: 24 },
+                        visible: {
+                          opacity: 1,
+                          y: 0,
+                          transition: {
+                            type: "spring",
+                            stiffness: 300,
+                            damping: 24,
+                          },
+                        },
+                      }}
+                      whileHover={{ scale: 1.18, rotate: -6 }}
+                    >
+                      <Icon
+                        icon={item.icon}
+                        width={item.size || 32}
+                        height={item.size || 32}
+                        style={{ color: item.color }}
+                      />
+                    </motion.a>
+                  ))}
+                </motion.div>
               </div>
             </div>
           </motion.div>

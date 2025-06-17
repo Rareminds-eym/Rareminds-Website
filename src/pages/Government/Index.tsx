@@ -13,9 +13,20 @@ import FloatingActionMenu from "../../components/Govt/StickyButton/FloatingActio
 import ContactSection from "../../components/Govt/Contact/ContactSection";
 
 import CaseStudies from "../../components/Govt/CaseStudies/CaseStudies";
+import Seo from "@/components/Govt/Seo/Seo";
+import { HelmetProvider } from 'react-helmet-async';
+
 const Govt = () => {
+  const seoData = {
+    title: "Government Skilling & LMS Solutions | Rareminds India",
+    description: "Partner with Rareminds for NEP-ready training, LMS, dashboards & skilling at scale. Trusted by 500K+ students & 10+ state governments. Go live in 48 hrs.",
+    keywords: "government skilling solutions, LMS for government training, government LMS India, skill development India",
+    canonicalUrl: "https://rareminds.in/government"
+  };
   return (
+    <HelmetProvider>
     <div className="relative w-full">
+      <Seo {...seoData} />
       <HeroSection />
       {/* <div className="relative"> */}
         {/* Scrollable content that appears on top of hero */}
@@ -49,7 +60,7 @@ const Govt = () => {
             <FloatingActionMenu/>
           </div>
         </div>
-      // </div>
+     </HelmetProvider>
   
   );
 };

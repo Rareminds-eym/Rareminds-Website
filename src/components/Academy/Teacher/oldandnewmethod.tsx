@@ -65,7 +65,7 @@ useEffect(() => {
         </div> */}
 
         {/* Old Method Section */}
-        <div className="max-w-7xl mx-auto mb-20 md:mb-0 pl-10">
+        <div className="max-w-7xl mx-auto mb-10 md:mb-0 md:pl-10">
 
         <div className="h-[80%] bg-white justify-center">
           <h2 className=" text-2xl md:text-5xl font-bold text-black text-center pt-8">
@@ -82,21 +82,30 @@ useEffect(() => {
               <div className="text-lg text-gray-600 mb-8 leading-relaxed">
                 <div className="space-y-3">
                   <h3 className="font-semibold text-xl text-red-600"></h3>
-                  <ul className="list-disc pl-5 space-y-2">
-                    <li className="animate-fade-in" style={{ animationDelay: "0s" }}>
-                      <span className='font-bold'> One-way lecture delivery</span> silences student engagement.
-                    </li>
-                    <li className="animate-fade-in" style={{ animationDelay: "0.1s" }}>
-                    <span className='font-bold'> Rote learning and memorization </span> block creativity and critical thinking.
-                    </li>
-                    <li className="animate-fade-in" style={{ animationDelay: "0.2s" }}>
-                    <span className='font-bold'> Minimal technology integration  </span>limits digital readiness.
-                    </li>
-                    <li className="animate-fade-in" style={{ animationDelay: "0.3s" }}>
-                    <span className='font-bold'>  Static curriculum for years </span> disconnects learning from <br /> real-world needs.
-                   
-                    </li>
-                  </ul>
+                 <ul className="list-disc pl-5 space-y-2">
+  <li className="animate-fade-in" style={{ animationDelay: "0s" }}>
+    <span className="font-bold">One-way lecture delivery</span> silences student engagement.
+  </li>
+  <li className="animate-fade-in" style={{ animationDelay: "0.1s" }}>
+    <span className="font-bold">Minimal technology integration</span> limits digital readiness.
+  </li>
+  <li className="animate-fade-in" style={{ animationDelay: "0.2s" }}>
+    <span className="font-bold">Over reliance on rote learning</span> restricts creativity and critical thinking.
+  </li>
+  <li className="animate-fade-in" style={{ animationDelay: "0.3s" }}>
+    <span className="font-bold">Static curriculum</span> disconnects learning from real-world needs.
+  </li>
+  <li className="animate-fade-in" style={{ animationDelay: "0.4s" }}>
+    <span className="font-bold">Limited equity in teaching</span> hinders how students learn differently.
+  </li>
+  <li className="animate-fade-in" style={{ animationDelay: "0.5s" }}>
+    <span className="font-bold">Exclusion of diversity</span> limits recognition of varied interests.
+  </li>
+  <li className="animate-fade-in" style={{ animationDelay: "0.6s" }}>
+    <span className="font-bold">Lack of inclusion</span> overlooks individual learning paths.
+  </li>
+</ul>
+
                 </div>
               </div>
               <div className="flex items-center">
@@ -142,16 +151,23 @@ useEffect(() => {
           </div>
         </div>
 
-        <div className="w-full h-auto  flex items-center justify-center">
+        <div className="w-full h-auto  flex items-center justify-end pr-[10%] space-x-4 p-6">
+          
   <img
     src="/academy/RareMinds ISO Logo-01.png"
-    alt="Logo"
-    className="h-[10%] w-[10%] animate-glow rounded-full"
+    alt="Rareminds icon showing a brain inside a glowing light bulb, symbolizing innovation and transformative learning"
+    className="h-[10%] w-[10%] animate-glow rounded-full "
   />
+  <p className="text-lg md:text-xl font-semibold text-gray-800">
+    <span className="block">Right method. Right moment. Right learner.</span>
+    <span className="block">Rareminds shows you how.</span>
+  </p>
 </div>
 
+
+
         {/* New Method Section */}
-        <div className="max-w-7xl mx-auto bg-white pb-16 pt-8 md:pt-0 px-4 sm:px-6 lg:px-8 rounded-2xl">
+        <div className="max-w-7xl mx-auto bg-white pb-0 md:pb-16 pt-8 md:pt-0 px-4 sm:px-6 lg:px-8 rounded-2xl">
           <div className="grid grid-cols-1 gap-12 items-center lg:grid-cols-2">
             {/* <div className="order-1 overflow-hidden rounded-xl shadow-2xl">
               <video
@@ -188,22 +204,30 @@ useEffect(() => {
               <div className="text-lg text-gray-600 mb-8 leading-relaxed">
                 <div className="space-y-3 ">
                   <h3 className="font-semibold text-xl text-red-600"></h3>
-                  <ul className="list-disc pl-5 space-y-2">
-                    <li className="animate-fade-in" style={{ animationDelay: "0s" }}>
-                    <span className='font-bold'> Interactive & collaborative learning  </span>    sparks engagement and teamwork.
-                    </li>
-                    <li className="animate-fade-in" style={{ animationDelay: "0.1s" }}>
-                    <span className='font-bold'>AI-enhanced teaching tools  </span>    advance learning with real-time support.
+                 <ul className="list-disc pl-5 space-y-2">
+  <li className="animate-fade-in" style={{ animationDelay: "0s" }}>
+    <span className="font-bold">Interactive instruction</span> sparks participation and collaboration.
+  </li>
+  <li className="animate-fade-in" style={{ animationDelay: "0.1s" }}>
+    <span className="font-bold">Tech-integrated pedagogy</span> enables real-time support.
+  </li>
+  <li className="animate-fade-in" style={{ animationDelay: "0.2s" }}>
+    <span className="font-bold">Rote learning</span> aids foundational recall, while open-ended teaching fuels curiosity and agency.
+  </li>
+  <li className="animate-fade-in" style={{ animationDelay: "0.3s" }}>
+    <span className="font-bold">Adaptive design</span> ensures they are able to accommodate future changes.
+  </li>
+  <li className="animate-fade-in" style={{ animationDelay: "0.4s" }}>
+    <span className="font-bold">Equity-focused methods</span> support diverse learning styles and learners.
+  </li>
+  <li className="animate-fade-in" style={{ animationDelay: "0.5s" }}>
+    <span className="font-bold">Diverse content</span> reflects varied learner interests and strengths.
+  </li>
+  <li className="animate-fade-in" style={{ animationDelay: "0.6s" }}>
+    <span className="font-bold">Inclusive frameworks</span> enable personalized, student-led learning.
+  </li>
+</ul>
 
-                    </li>
-                    <li className="animate-fade-in" style={{ animationDelay: "0.2s" }}>
-                    <span className='font-bold'> Student-driven exploration  </span>  fosters curiosity and independence.
-
-                    </li>
-                    <li className="animate-fade-in" style={{ animationDelay: "0.3s" }}>
-                    <span className='font-bold'> Adaptive learning pathways </span>  nurture progress in line with individual growth.
-                    </li>
-                  </ul>
                 </div>
               </div>
               <div className="flex items-center">

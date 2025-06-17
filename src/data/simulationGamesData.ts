@@ -7,22 +7,22 @@ interface SimulationGame {
 export const simulationGames: SimulationGame[] = [
   {
     title: "EV Battery Fault Diagnostic System",
-    imageSrc: "/Govt-Images/Ev.svg",
+    imageSrc: "https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Government/Home/Dashboard/Ev.webp",
     imageAlt: "EV Battery Fault Diagnostic System"
   },
   {
     title: "Sustainable Green Chemistry XP",
-    imageSrc: "/Govt-Images/Chemistry.svg",
+    imageSrc: "https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Government/Home/Dashboard/Chemistry.webp",
     imageAlt: "Sustainable Green Chemistry XP"
   },
   {
     title: "Chemical Safety EVBMS",
-    imageSrc: "/Govt-Images/Chemical.svg",
+    imageSrc: "https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Government/Home/Dashboard/Chemical.webp",
     imageAlt: "Chemical Safety EVBMS"
   },
   {
     title: "Food Safety Management",
     imageSrc: "/Govt-Images/Food.svg",
-    imageAlt: "Food Safety Management"
+    imageAlt: "https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Government/Home/Dashboard/Food.webp"
   }
 ];

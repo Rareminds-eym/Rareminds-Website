@@ -90,7 +90,7 @@ const TrustedInstitutions: React.FC<{ className?: string }> = ({ className }) =>
     <section className={` pt-3 px-4 bg-white relative ${className || ""}`}>
   
       <div className="container mx-auto " >
-        <h2 className="text-center text-[18px] md:text-4xl font-semibold mb-10 text-gray-800">
+        <h2 className="text-center text-2xl md:text-4xl font-semibold mb-10 text-gray-800">
           Trusted by Leading Institutions
         </h2>
         {/* Carousel wrapper */}
@@ -107,7 +107,7 @@ const TrustedInstitutions: React.FC<{ className?: string }> = ({ className }) =>
             maskImage: "linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%)",
           }}
         >
-          <div className="flex items-center gap-8 md:gap-20 py-6" style={{ minWidth: "180%" }}>
+          <div className="flex items-center gap-2 md:gap-20 py-6" style={{ minWidth: "180%" }}>
             {repeatedLogos.map((logo, i) => (
               <div
                 key={i}

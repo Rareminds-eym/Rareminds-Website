@@ -3,6 +3,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { Facebook, Instagram, Youtube, Linkedin } from "lucide-react";
 import { Icon } from "@iconify/react";
 import { motion } from "framer-motion";
+import { supabase } from "@/lib/supabaseClient";
 
 const socialIcons = [
 	{
@@ -37,7 +38,11 @@ const socialIcons = [
 	},
 ];
 
-const FooterBar = () => {
+interface FooterBarProps {
+	hideServices?: boolean;
+}
+
+const FooterBar: React.FC<FooterBarProps> = ({ hideServices }) => {
 	const [serviceData, setServiceData] = useState<any>({});
 	const [subscriberEmail, setSubscriberEmail] = useState<string | null>(null);
 	const [successMessage, setSuccessMessage] = useState<string | null>(null);
@@ -58,13 +63,26 @@ const FooterBar = () => {
 		setServiceData(mockServiceData);
 	}, [userType]);
 
-	const submitSubscription = () => {
+	const submitSubscription = async () => {
 		if (subscriberEmail) {
 			if (!/(.+)@(.+){2,}\.(.+){2,}/.test(subscriberEmail)) {
 				setSuccessMessage("Enter a valid email address");
 			} else {
-				setSuccessMessage("Thank you for subscribing");
-				// if (subscribeInput.current) subscribeInput.current.value = "";
+				try {
+					// Insert email and submitted_at into Supabase table 'footer_email'
+					const { error } = await supabase
+						.from("footer_email")
+						.insert([
+							{ email: subscriberEmail, submitted_at: new Date().toISOString() }
+						]);
+					if (error) {
+						setSuccessMessage("Error subscribing. Please try again.");
+					} else {
+						setSuccessMessage("Thank you for subscribing");
+					}
+				} catch (err) {
+					setSuccessMessage("Error subscribing. Please try again.");
+				}
 				setTimeout(() => setSuccessMessage(null), 2000);
 			}
 		} else {
@@ -89,6 +107,8 @@ const FooterBar = () => {
 	// Determine if current page is corporate or corporate training
 	const isCorporate = window.location.pathname.startsWith("/corporate/recruitment");
 	const isCorporateTraining = window.location.pathname.startsWith("/corporate/training");
+	const Academia  = window.location.pathname.startsWith("/school");
+
 
 	return (
 		<div
@@ -97,7 +117,7 @@ const FooterBar = () => {
 		>
 			<div className="absolute w-full h-full bg-black/90"></div>
 			<div
-				className="relative lg:px-14 grid lg:grid-cols-5 grid-cols-1 gap-4 container mx-auto py-12"
+				className={`relative lg:px-14 grid container mx-auto py-12 gap-4 ${hideServices ? 'lg:grid-cols-4 grid-cols-1' : 'lg:grid-cols-5 grid-cols-1'}`}
 			>
 				{/* Links Section */}
 				<div>
@@ -164,7 +184,7 @@ const FooterBar = () => {
 						</li>
 						<li>
 							<Link
-								to="/academia"
+								to="/school"
 								className="hover:text-red-400 transition-colors"
 							>
 								Academia
@@ -174,90 +194,313 @@ const FooterBar = () => {
 				</div>
 
 				{/* Our Services Section */}
-				
-<div>
-    <h2 className="font-bold mb-4 uppercase tracking-wider text-lg">
-        Our Services
-    </h2>
-    <ul className="flex flex-wrap gap-x-6 gap-y-2 items-center">
-        {isCorporateTraining ? (
-            <>
-                <li>Workplace Productivity & Digital Fluency</li>
-                <li>Tech Upskilling & Future Skills</li>
-                <li>Behavioral & Organizational Culture Programs</li>
-                <li>
-                    <a
-                        href="/corporate/training/services"
-                        onClick={e => {
-                            e.preventDefault();
-                            navigate("/corporate/training");
-                            setTimeout(() => {
-                                const el = document.getElementById("services");
-                                if (el) {
-                                    el.scrollIntoView({ behavior: "smooth" });
-                                }
-                            }, 350);
-                        }}
-                        className="hover:text-red-400 transition-colors font-semibold cursor-pointer"
-                    >
-                        View All
-                    </a>
-                </li>
-            </>
-        ) : isCorporate ? (
-            <>
-                <li>Interview-as-a-service</li>
-                <li>Diversity Hiring</li>
-                <li>Pre-Onboarding Support</li>
-                <li>
-                    <a
-                        href="/corporate/recruitment#services"
-                        onClick={handleViewAll}
-                        className="hover:text-red-400 transition-colors font-semibold cursor-pointer"
-                    >
-                        View All
-                    </a>
-                </li>
-            </>
-        ) : window.location.pathname.startsWith("/institutions/fdp") ? (
-            <>
-                <li>Skill Dev Programs</li>
-                <li>Faculty Dev Programs (FDPs)</li>
-                <li>Leadership &  Workshops</li>
-            </>
-        ) : window.location.pathname.startsWith("/institutions/services") ? (
-            <>
-                <li>Recruitment Placement</li>
-                <li>Curriculum Integration </li>
-                <li>Digital Labs & LMS</li>
-                <li>Accreditation & Consulting</li>
-                <li>Leadership & Workshops</li>
-            </>
-        ) : window.location.pathname.startsWith("/institutions") ? (
-            <>
-                <li>Skill Dev Programs</li>
-                <li>Campus to Corporate </li>
-                <li>Student Counseling </li>
-                <li>Hackathons & Challenges</li>
-                <li>Recruitment Placement </li>
-            </>
-        ) : window.location.pathname.startsWith("/faculty") ? (
-            <>
-                <li>Skill Development Programs</li>
-                <li>Faculty Development Programs (FDPs)</li>
-                <li>Leadership & Workshops</li>
-            </>
-        ) : (
-            <>
-                <li>Skill Development Programs</li>
-                <li>Campus to Corporate Training</li>
-                <li>Student Counseling & Mentorship</li>
-                <li>Hackathons & Challenges</li>
-                <li>Recruitment Placement Support</li>
-            </>
-        )}
-    </ul>
-</div>
+				{!hideServices && (
+				<div>
+					<h2 className="font-bold mb-4 uppercase tracking-wider text-lg">
+						Our Services
+					</h2>
+					<ul className="flex flex-wrap gap-x-6 gap-y-2 items-center">
+						{window.location.pathname.startsWith("/government") ? (
+							<>
+								<li>
+									<Link
+										to="/school/projects/"
+										className="hover:text-red-400 transition-colors"
+									>
+										Skilling & Building Capacity
+									</Link>
+								</li>
+							</>
+						) : isCorporateTraining ? (
+							<>
+								<li>
+									<Link
+										to="/corporate/training/services/workplace-productivity"
+										className="hover:text-red-400 transition-colors"
+									>
+										Workplace Productivity & Digital Fluency
+									</Link>
+								</li>
+								<li>
+									<Link
+										to="/corporate/training/services/tech-upskilling"
+										className="hover:text-red-400 transition-colors"
+									>
+										Tech Upskilling & Future Skills
+									</Link>
+								</li>
+								<li>
+									<Link
+										to="/corporate/training/services/behavioral-culture"
+										className="hover:text-red-400 transition-colors"
+									>
+										Behavioral & Organizational Culture Programs
+									</Link>
+								</li>
+								<li>
+									<Link
+										to="/corporate/training"
+										onClick={(e) => {
+											e.preventDefault();
+											navigate("/corporate/training");
+											setTimeout(() => {
+												const el = document.getElementById("services");
+												if (el) {
+													el.scrollIntoView({ behavior: "smooth" });
+												}
+											}, 350);
+										}}
+										className="hover:text-red-400 transition-colors font-semibold cursor-pointer"
+									>
+										View All
+									</Link>
+								</li>
+							</>
+						) : isCorporate ? (
+							<>
+								<li>
+									<Link
+										to="/corporate/recruitment/services/Interview-as-a-service"
+										className="hover:text-red-400 transition-colors"
+									>
+										Interview-as-a-service
+									</Link>
+								</li>
+								<li>
+									<Link
+										to="/corporate/recruitment/services/diversity-hiring"
+										className="hover:text-red-400 transition-colors"
+									>
+										Diversity Hiring
+									</Link>
+								</li>
+								<li>
+									<Link
+										to="/corporate/recruitment/services/pre-onboarding-support"
+										className="hover:text-red-400 transition-colors"
+									>
+										Pre-Onboarding Support
+									</Link>
+								</li>
+								<li>
+									<Link
+										to="/corporate/recruitment#services"
+										onClick={handleViewAll}
+										className="hover:text-red-400 transition-colors font-semibold cursor-pointer"
+									>
+										View All
+									</Link>
+								</li>
+							</>
+						) 
+						: Academia ? (
+							<ul className="space-y-3">
+								<li>
+									<Link
+										to="/school/teacher"
+										className="hover:text-red-400 transition-colors"
+									>
+										School
+									</Link>
+								</li>
+								<li>
+									<Link
+										to="/school/student"
+										className="hover:text-red-400 transition-colors"
+									>
+										Student
+									</Link>
+								</li>
+							</ul>
+						) : window.location.pathname.startsWith("/institutions/fdp") ? (
+							<>
+								<li>
+									<Link
+										to="/institutions/fdp/skill-development"
+										className="hover:text-red-400 transition-colors"
+									>
+										Skill Dev Programs
+									</Link>
+								</li>
+								<li>
+									<Link
+										to="/institutions/fdp/faculty-development"
+										className="hover:text-red-400 transition-colors"
+									>
+										Faculty Dev Programs (FDPs)
+									</Link>
+								</li>
+								<li>
+									<Link
+										to="/institutions/fdp/leadership"
+										className="hover:text-red-400 transition-colors"
+									>
+										Leadership & Workshops
+									</Link>
+								</li>
+							</>
+						) : window.location.pathname.startsWith("/institutions/services") ? (
+							<>
+								<li>
+									<Link
+										to="/institutions/services/recruitment"
+										className="hover:text-red-400 transition-colors"
+									>
+										Recruitment Placement
+									</Link>
+								</li>
+								<li>
+									<Link
+										to="/institutions/services/curriculum"
+										className="hover:text-red-400 transition-colors"
+									>
+										Curriculum Integration
+									</Link>
+								</li>
+								<li>
+									<Link
+										to="/institutions/services/digital-labs"
+										className="hover:text-red-400 transition-colors"
+									>
+										Digital Labs & LMS
+									</Link>
+								</li>
+								<li>
+									<Link
+										to="/institutions/services/accreditation"
+									 className="hover:text-red-400 transition-colors"
+									>
+										Accreditation & Consulting
+									</Link>
+								</li>
+								<li>
+									<Link
+										to="/institutions/services/leadership"
+										className="hover:text-red-400 transition-colors"
+									>
+										Leadership & Workshops
+									</Link>
+								</li>
+							</>
+						) : window.location.pathname.startsWith("/institutions") ? (
+							<>
+								<li>
+									<Link
+										to="/institutions/skill-development"
+										className="hover:text-red-400 transition-colors"
+									>
+										Skill Dev Programs
+									</Link>
+								</li>
+								<li>
+									<Link
+										to="/institutions/campus-corporate"
+										className="hover:text-red-400 transition-colors"
+									>
+										Campus to Corporate
+									</Link>
+								</li>
+								<li>
+									<Link
+										to="/institutions/counseling"
+										className="hover:text-red-400 transition-colors"
+									>
+										Student Counseling
+									</Link>
+								</li>
+								<li>
+									<Link
+										to="/institutions/hackathons"
+										className="hover:text-red-400 transition-colors"
+									>
+										Hackathons & Challenges
+									</Link>
+								</li>
+								<li>
+									<Link
+										to="/institutions/recruitment"
+										className="hover:text-red-400 transition-colors"
+									>
+										Recruitment Placement
+									</Link>
+								</li>
+							</>
+						) : window.location.pathname.startsWith("/faculty") ? (
+							<>
+								<li>
+									<Link
+										to="/faculty/skill-development"
+										className="hover:text-red-400 transition-colors"
+									>
+										Skill Development Programs
+									</Link>
+								</li>
+								<li>
+									<Link
+										to="/faculty/fdp"
+										className="hover:text-red-400 transition-colors"
+									>
+										Faculty Development Programs (FDPs)
+									</Link>
+								</li>
+								<li>
+									<Link
+										to="/faculty/leadership"
+										className="hover:text-red-400 transition-colors"
+									>
+										Leadership & Workshops
+									</Link>
+								</li>
+							</>
+						) : (
+							<>
+								<li>
+									<Link
+										to="/skill-development"
+										className="hover:text-red-400 transition-colors"
+									>
+										Skill Development Programs
+									</Link>
+								</li>
+								<li>
+									<Link
+										to="/campus-corporate"
+									 className="hover:text-red-400 transition-colors"
+									>
+										Campus to Corporate Training
+									</Link>
+								</li>
+								<li>
+									<Link
+										to="/counseling"
+										className="hover:text-red-400 transition-colors"
+									>
+										Student Counseling & Mentorship
+									</Link>
+								</li>
+								<li>
+									<Link
+										to="/hackathons"
+										className="hover:text-red-400 transition-colors"
+									>
+										Hackathons & Challenges
+									</Link>
+								</li>
+								<li>
+									<Link
+										to="/recruitment"
+										className="hover:text-red-400 transition-colors"
+									>
+										Recruitment Placement Support
+									</Link>
+								</li>
+							</>
+						) 
+						
+						}
+					</ul>
+				</div>
+				)}
 
 				{/* Contact us Section */}
 				<div>

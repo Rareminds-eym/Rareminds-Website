@@ -1,9 +1,9 @@
 import React from 'react';
 
-const categories = ['All', 'Naan Mudhalvan', 'KSDC'];
+const categories = ['All', 'Naan Mudhalvan', 'KSDC' , 'AICTE','VTU', 'Vels', 'Acharya' , 'PES', 'BLDEA' ,'Tripura', 'TNSDC',  ];
 // const statuses = ['All', 'Active', 'Completed', 'In Progress'];
 const year = ['All', '2024', '2025'];
-const locations = ['All', 'TamilNadu', 'Karnataka'];
+const locations = ['All', 'TamilNadu', 'Karnataka' , 'Tripura'];
 
 interface FiltersProps {
   onFilterChange: (type: string, value: string) => void;

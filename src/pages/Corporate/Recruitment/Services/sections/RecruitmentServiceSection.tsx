@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Icon } from "@iconify/react";
 import { motion } from "framer-motion";
 
@@ -15,6 +15,18 @@ interface RecruitmentServiceSectionProps {
 const RecruitmentServiceSection: React.FC<RecruitmentServiceSectionProps> = ({
   foundService,
 }) => {
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    navigate("/corporate/recruitment");
+
+    setTimeout(() => {
+      const el = document.getElementById("contact");
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth" });
+      }
+    }, 500);
+  };
   return (
     <section className="w-full corporate-full-screen-h flex flex-col relative overflow-hidden">
       <div className="absolute inset-0 bg-[url('https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Corporate/Recruitment/service/service-bg.webp')] bg-cover bg-center opacity-[0.35] z-0" />
@@ -25,13 +37,16 @@ const RecruitmentServiceSection: React.FC<RecruitmentServiceSectionProps> = ({
         >
           <ol className="flex gap-2 flex-wrap text-[#727272] text-sm">
             <li>
-              <Link to="/corporate" className="hover:underline">
+              <Link to="/corporate/recruitment" className="hover:underline">
                 Home
               </Link>
             </li>
             <li>/</li>
             <li>
-              <Link to="/corporate/recruitment#services" className="hover:underline">
+              <Link
+                to="/corporate/recruitment/services"
+                className="hover:underline"
+              >
                 Services
               </Link>
             </li>
@@ -71,6 +86,7 @@ const RecruitmentServiceSection: React.FC<RecruitmentServiceSectionProps> = ({
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
               transition={{ duration: 0.7, delay: 0.4 }}
+              onClick={handleClick}
               className="corporate-btn-1 flex items-center gap-2"
             >
               {foundService.title_cta}

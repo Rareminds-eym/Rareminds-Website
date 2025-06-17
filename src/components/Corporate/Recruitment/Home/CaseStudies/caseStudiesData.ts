@@ -18,7 +18,7 @@ export const caseStudies: CaseStudy[] = [
       "Prince Singh – Country Manager, Angola – Joined 5th Aug 2024",
       "Mohsin Qureshi – Country Manager, Senegal – Joined 7th May 2024",
       "Jay Bhattacharya – Country Manager, Kazakhstan – Joined 11th Nov 2024",
-      "Simone Xella de Oliva – Country Lead, Brazil – Joining 23rd May 2025",
+      "Simone Xella de Oliva – Country Lead, Brazil – Joined 23rd May 2025",
       "Prakash Om Jaiswal – Country Manager, Cameroon – Joining 16th June 2025",
       "Expansion enabled across 5 strategic international markets",
       "Strengthened BSV’s leadership footprint across Africa, Central Asia, and South America",

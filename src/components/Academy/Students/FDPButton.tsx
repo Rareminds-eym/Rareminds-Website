@@ -8,7 +8,7 @@ import { useCallback } from 'react';
 export default function FDPButton() {
   const location = useLocation();
   const navigate = useNavigate();
-  const isSchoolPage = location.pathname === '/academia/student';
+  const isSchoolPage = location.pathname === '/school/student';
 
   const buttonText = 'Student Development';
   const subText = 'Click to explore programs';
@@ -24,7 +24,7 @@ export default function FDPButton() {
     if (isSchoolPage) {
       scrollToSection();
     } else {
-      navigate('/academia/school#course-cards-section');
+      navigate('/school/teacher#course-cards-section');
     }
   }, [isSchoolPage, navigate]);
 

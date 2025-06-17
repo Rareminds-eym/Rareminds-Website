@@ -44,10 +44,10 @@ export default function Solution() {
 					className="text-center mb-8 sm:mb-10 lg:mb-14"
 				>
 					<h1 className="text-2xl sm:text-3xl font-bold mb-3 sm:mb-4 bg-black bg-clip-text text-transparent">
-						Upskill. Uplift. Uncomplicate.
+						Tools that empower. Techniques that stick.
 					</h1>
 					<p className="text-sm sm:text-base text-gray-600 mx-auto max-w-lg">
-						Because good training shouldn’t need a post-mortem
+						Empowering your team with the right skills, at the right moment, in the most impactful way.
 					</p>
 				</motion.div>
 
