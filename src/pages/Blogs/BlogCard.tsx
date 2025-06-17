@@ -27,57 +27,56 @@ interface BlogCardProps {
 }
 
 const BlogCard = ({ post }: BlogCardProps) => {
-  // const location = useLocation();
-
-  // Determine if we're in the teacher or student section
-  // const isTeacherSection = location.pathname.includes("/school/teacher");
-
-  // Set the link based on the current section
-
   return (
     <Link
-      to={`/blogs/${post.slug}`}
+      to={
+      window.location.pathname.startsWith("/corporate/recruitment/")
+        ? `/corporate/recruitment/blogs/${post.slug}`
+        : window.location.pathname.startsWith("/corporate/training/")
+        ? `/corporate/training/blogs/${post.slug}`
+        : `/blogs/${post.slug}`
+      }
       className="block group focus:outline-none w-full h-full"
     >
       <article className="blog-card shadow-lg border rounded-2xl overflow-hidden bg-white/90 hover:shadow-2xl transition-shadow duration-300 cursor-pointer h-full flex flex-col">
-        <div className="relative overflow-hidden flex-shrink-0">
-          <img
-            src={post.featured_image || "/default-blog-image.jpg"}
-            alt={post.title}
-            className="w-full h-40 object-cover transition-transform duration-300 group-hover:scale-110 group-hover:brightness-90"
-          />
-          <div className="absolute top-4 left-4">
-            <span className="category-badge flex flex-wrap gap-1">
-              {Array.isArray(post.tags) && post.tags.length > 0
-                ? post.tags.map((tag, idx) => (
-                    <span
-                      key={idx}
-                      className="bg-red-500/80 text-white px-2 py-1 rounded-3xl mr-1 mb-1 text-xs font-semibold shadow"
-                    >
-                      {tag}
-                    </span>
-                  ))
-                : null}
+      <div className="relative overflow-hidden flex-shrink-0">
+        <img
+        src={post.featured_image || "/default-blog-image.jpg"}
+        alt={post.title}
+        className="w-full h-40 object-cover transition-transform duration-300 group-hover:scale-110 group-hover:brightness-90"
+        />
+        <div className="absolute top-4 left-4">
+        <span className="category-badge flex flex-wrap gap-1">
+          {Array.isArray(post.tags) && post.tags.length > 0
+          ? post.tags.map((tag, idx) => (
+            <span
+              key={idx}
+              className="bg-red-500/80 text-white px-2 py-1 rounded-3xl mr-1 mb-1 text-xs font-semibold shadow"
+            >
+              {tag}
             </span>
-          </div>
+            ))
+          : null}
+        </span>
         </div>
-        <div className="p-6 flex-1 flex flex-col">
-          <h3 className="font-playfair text-xl font-bold text-gray-900 mb-3 group-hover:text-red-600 transition-colors duration-200 line-clamp-2 flex-shrink-0">
-            {post.title}
-          </h3>
-          <p className="text-gray-600 mb-4 line-clamp-3 leading-relaxed flex-1">
-            {post.excerpt}
-          </p>
-          <div className="flex items-center justify-between text-xs text-gray-500 flex-shrink-0 mt-auto">
-            <div className="flex items-center gap-4">
-              {/* Optionally add author or read time here */}
-            </div>
-            <div className="flex items-center gap-1">
-              <Calendar className="w-4 h-4" />
-              <span>{new Date(post.publish_date).toLocaleDateString()}</span>
-            </div>
-          </div>
+      </div>
+      <div className="p-6 flex-1 flex flex-col">
+        <h3 className="font-playfair text-xl font-bold text-gray-900 mb-3 group-hover:text-red-600 transition-colors duration-200 line-clamp-2 flex-shrink-0">
+        {post.title}
+        </h3>
+        <p className="text-gray-600 mb-4 line-clamp-3 leading-relaxed flex-1">
+        {post.excerpt}
+        </p>
+        <div className="flex items-center justify-between text-xs text-gray-500 flex-shrink-0 mt-auto">
+        <div className="flex items-center gap-4">
+          {/* Optionally add author or read time here */}
         </div>
+        <div className="flex items-center gap-1">
+          <Calendar className="w-4 h-4" />
+          <span>{new Date(post.publish_date).toLocaleDateString()}</span>
+        </div>
+        </div>
+      </div>
       </article>
     </Link>
   );

@@ -13,7 +13,6 @@ import InstitutionsLayout from "./layouts/InstitutionsLayout";
 
 // Direct imports for direct use in routes
 import BlogDetailAcademia from "./components/Academy/Blogs/BlogDetail";
-import BlogDetail from "./pages/Blogs/BlogDetail.tsx";
 import BlogDetailGov from "./components/Govt/Blogs/BlogDetail.tsx";
 import CourseDetailedPage from "@/components/Academy/Students/CourseDetailedPage";
 // Lazy pages
@@ -26,12 +25,7 @@ const Corporate = lazy(() => import("./pages/Corporate/Recruitment/Index"));
 const ContactForm = lazy(
   () => import("./pages/Corporate/ContactPage/ContactForm.tsx")
 );
-const Corporate_Blogs = lazy(
-  () => import("./pages/Corporate/Recruitment/Blogs/Index")
-);
-const BlogPost = lazy(
-  () => import("./pages/Corporate/Recruitment/Blogs/[slug]")
-);
+const BlogDetail = lazy(() => import("./pages/Blogs/BlogDetail.tsx"));
 const ServicesPage = lazy(
   () => import("./pages/Corporate/Recruitment/Services/Index.tsx")
 );
@@ -107,11 +101,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/blogs/:slug",
-        element: (
-          <Suspense fallback={<LoaderComponent />}>
-            <BlogDetail />
-          </Suspense>
-        ),
+        element: withSuspense(BlogDetail),
       },
     ],
   },
@@ -152,15 +142,19 @@ const router = createBrowserRouter([
       },
       {
         path: "/corporate/training/blogs",
-        element: withSuspense(Corporate_Blogs),
+        element: withSuspense(Blogs),
+      },
+      {
+        path: "/corporate/training/blogs/:slug",
+        element: withSuspense(BlogDetail),
       },
       {
         path: "/corporate/recruitment/blogs",
-        element: withSuspense(Corporate_Blogs),
+        element: withSuspense(Blogs),
       },
       {
         path: "/corporate/recruitment/blogs/:slug",
-        element: withSuspense(BlogPost),
+        element: withSuspense(BlogDetail),
       },
       {
         path: "/corporate/recruitment/services",
