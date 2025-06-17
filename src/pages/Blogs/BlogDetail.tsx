@@ -581,14 +581,23 @@ const RelatedPostsSection = memo<RelatedPostsSectionProps>(({
               ))}
             </div>
             <div className="text-center mt-12">
-              <Link to="/blogs" className="inline-block">
-                <Button 
+                <Link
+                  to={
+                  location.pathname.startsWith("/corporate/recruitment/blogs")
+                    ? "/corporate/recruitment/blogs"
+                    : location.pathname.startsWith("/corporate/training/blogs")
+                    ? "/corporate/training/blogs"
+                    : "/blogs"
+                  }
+                  className="inline-block"
+                >
+                  <Button 
                   variant="outline" 
                   className="border-red-200 text-red-600 hover:bg-red-50 px-8 py-3 font-semibold"
-                >
+                  >
                   View All Articles
-                </Button>
-              </Link>
+                  </Button>
+                </Link>
             </div>
           </motion.div>
         </div>

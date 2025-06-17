@@ -73,6 +73,9 @@ const Blogs: React.FC = () => {
    * Determines subcategory based on URL path
    */
   const getSubcategoryFromPath = useCallback((pathname: string): string => {
+    if (pathname.startsWith("/corporate")) {
+      return "__CORPORATE__";
+    }
     if (pathname.includes(URL_FILTERS.STUDENT)) {
       return SUBCATEGORIES.STUDENTS;
     }
@@ -149,7 +152,8 @@ const Blogs: React.FC = () => {
    */
   const filteredPosts = useMemo(() => {
     const enforceSubcategory = getSubcategoryFromPath(location.pathname);
-    
+    const isCorporate = enforceSubcategory === "__CORPORATE__";
+
     return blogPosts.filter((post: BlogPost) => {
       // Optimized search with case-insensitive matching
       const searchLower = searchQuery.toLowerCase();
@@ -159,19 +163,21 @@ const Blogs: React.FC = () => {
         post.content,
         ...(post.tags || [])
       ].some(field => field?.toLowerCase().includes(searchLower));
-      
+
       // Category matching
-      const matchesCategory = selectedCategory === "all" || 
-        post.category.toLowerCase() === selectedCategory.toLowerCase();
-      
+      const matchesCategory = isCorporate
+        ? post.category.toLowerCase() === "corporate"
+        : selectedCategory === "all" || post.category.toLowerCase() === selectedCategory.toLowerCase();
+
       // Subcategory matching with URL enforcement
-      const effectiveSubcategory = enforceSubcategory !== SUBCATEGORIES.ALL 
-        ? enforceSubcategory 
-        : selectedSubcategory;
-        
+      const effectiveSubcategory = isCorporate
+        ? SUBCATEGORIES.ALL
+        : enforceSubcategory !== SUBCATEGORIES.ALL 
+          ? enforceSubcategory 
+          : selectedSubcategory;
       const matchesSubcategory = effectiveSubcategory === SUBCATEGORIES.ALL || 
         post.subcategory === effectiveSubcategory;
-      
+
       return matchesSearch && matchesCategory && matchesSubcategory;
     });
   }, [searchQuery, selectedCategory, selectedSubcategory, blogPosts, location.pathname, getSubcategoryFromPath]);
@@ -266,11 +272,16 @@ const Blogs: React.FC = () => {
           <div className="mb-8">
             <p className="text-muted-foreground">
               Showing {paginationData.totalResults} of {subcategoryStats.total} articles
-              {selectedSubcategory !== SUBCATEGORIES.ALL && (
+              {selectedSubcategory !== SUBCATEGORIES.ALL && selectedSubcategory !== "__CORPORATE__" && (
                 <span className="ml-2">
                   in <span className="font-semibold text-foreground">
                     {selectedSubcategory.charAt(0).toUpperCase() + selectedSubcategory.slice(1)}
                   </span>
+                </span>
+              )}
+              {selectedSubcategory === "__CORPORATE__" && (
+                <span className="ml-2">
+                  in <span className="font-semibold text-foreground">Corporate</span>
                 </span>
               )}
               {searchQuery && (
