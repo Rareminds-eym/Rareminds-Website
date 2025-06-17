@@ -46,7 +46,8 @@ import { useState, useEffect } from "react";
   import Services from './Cources'
   import Testimonials from "../../../components/Academy/Teacher/Testimonials"
 import Viedo_cube from "../../../components/Academy/Teacher/Showcase_videos/viedo_Cube"
-
+import YouTubeFeed from '../../../components/Academy/Teacher/youtubelive'
+import CurrentBlogs from '../../../components/Academy/Teacher/Current_blogs'
 
   const School = ({ userType = "teacher" }: { userType?: "teacher" | "student" }) => {
   const [activeTab, setActiveTab] = useState<"teacher" | "student">("teacher");
@@ -416,6 +417,9 @@ useEffect(() => {
 </div>
 
 
+<div  className="min-h-auto flex items-center justify-center relative z-10 bg-white">
+ <YouTubeFeed />     
+       </div>
 
  <div className="min-h-screen flex items-center justify-center relative z-10 bg-white">
        <EducationSection scrollToContact={scrollToContact} />
@@ -435,9 +439,9 @@ useEffect(() => {
 
 
 
-     {/* <div  className="min-h-auto w-full flex items-center justify-center relative z-10 bg-white">
+    {/* <div  className="min-h-auto w-full flex items-center justify-center relative z-10 bg-white">
      <Viedo_cube />     
-       </div> */}
+       </div>  */}
 
 
         {/* Faculty Transformation & Calendar */}     
@@ -482,6 +486,10 @@ useEffect(() => {
         <DownloadForm />
 
         </div> */}
+          <div  className="h-auto flex items-center justify-center relative z-10 bg-white">
+  <CurrentBlogs />  
+       </div>
+       
 
    <div ref={contactRef} id="contact-section">
         <ContactSection />

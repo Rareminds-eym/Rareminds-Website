@@ -1,3 +1,66 @@
+// Import statements should be at the top of the file
+import { 
+  Clock, 
+  Target, 
+  BookOpen, 
+  TrendingUp,
+  Compass,
+  Brain,
+  Users,
+  Lightbulb,
+  Building2,  
+  GitCompare,
+  Calculator,
+  Award,
+  Search
+} from "lucide-react";
+
+// Type definitions for better TypeScript support
+export interface DetailedModule {
+  id: number;
+  title: string;
+  hours: number;
+  objectives: string;
+  activities: string;
+  outcomes: string;
+}
+
+export interface CourseModule {
+  title: string;
+  description: string[];
+  image: string;
+}
+
+export interface CareerCounselingService {
+  id: number;
+  name: string;
+  icon: any; // Using 'any' for Lucide icons
+  features: string;
+  outcomes: string;
+  category: string;
+}
+
+export interface Course {
+  id: string;
+  name: string;
+  shortName: string;
+  description: string;
+  targetGrade: string;
+  modules: CourseModule[];
+  heroImage?: string;
+  subtitle?: string;
+  subtitle2?: string;
+  subtexttitle?: string;
+  heading?: string;
+  whyChoose: {
+    title: string;
+    points: string[];
+    image: string;
+  };
+  pdfUrl?: string;
+  showLoginLink?: boolean;
+}
+
 // // export interface CourseModule {
 // //   title: string;
 // //   description: string[];
@@ -236,21 +299,22 @@ export interface CourseModule {
 // //       {
 // //         title: "English",
 // //         description: [
-// //           "Build language skills that help you speak up, stand out, and move forward from everyday conversations to professional emails."
+// //           "Basic English + writing & comprehension"
 // //         ],
 // //         image: "/academy/courses/3Eprogram/english.svg"
 // //       },
 // //       {
 // //         title: "Employability",
 // //         description: [
-// //           "Master 21st-century workplace skills from digital tools and career planning to team communication, job readiness, and financial literacy."
+// //           "Resume building, interviews, and digital job portals"
 // //         ],
 // //         image: "/academy/courses/3Eprogram/Employability.svg"
 // //       },
 // //       {
 // //         title: "Entrepreneurship",
 // //         description: [
-// //           "Learn how to identify opportunities, build business plans, and pitch ideas to create your own path, even before college."
+// //           "Entrepreneurship basics: business planning, marketing, and funding",
+// //           "Financial literacy, digital skills, customer service"
 // //         ],
 // //         image: "/academy/courses/3Eprogram/Entrepreneurship.svg"
 // //       }
@@ -278,6 +342,7 @@ export interface Course {
   id: string;
   name: string;
   shortName: string;
+  heading?: string;
   description: string;
   targetGrade: string;
   subtitle2?: string;
@@ -356,11 +421,10 @@ export const coursesData: Course[] = [
     }
   },
   {
-    id: "career-counselling-psychometric",
-    name: "The Career Toolkit",
-    shortName: "Career Counselling",
-    description: "Help students discover their own calling, not just follow the crowd. Designed for Grades 9–12 students ready to plan their future with purpose. The right choice begins with the right information. Our toolkit guides students through a process of self-discovery and planning. From identifying their ideal stream and learning style to comparing colleges, tracking exams, and finding scholarships, we equip students—and their families—with everything needed to make smart, informed, and confident career decisions.",
-    targetGrade: "For Grades 9–12: Career Blueprint Program",
+    id: "career-counselling-psychometric",  
+      name: "The Career Toolkit",    shortName: "Career Counselling",    heading: "Rareminds Career Toolkit – Service Overview (For Grades 9–12)",
+    description: "",
+    targetGrade: "",
     subtitle2: "Old methods fall short. We teach what the future demands."    ,
     subtexttitle: "That’s where 3E comes in.",
     heroImage: "/academy/courseBanner/Counseling Programs.png",
@@ -370,17 +434,15 @@ export const coursesData: Course[] = [
     clarityMeetsStrategy: {
       title: "",
       content: ""
-    },
-    whyChoose: {
-      title: "Resources include:",
+    },    whyChoose: {
+      title: "Smart Career Discovery",
       points: [
-        "Stream Selector : Find the academic stream that aligns with their aptitude and interests",
-        "Learning Style Profiler : Identify how each student learns best—visual, auditory, or hands-on",
-        "Personality Mapping : Understand traits that influence teamwork, leadership, and career fit",
-        "Ideal Career Finder : Discover careers that match both mindset and skillset",
-        "Multiple Intelligence Test : Explore abilities beyond academics such as creativity, logic, and more",
-        "Clarity Meets Strategy : From discovery to direction. We support every step of the journey. Our planning tools help students compare colleges, prepare for exams, track costs, and explore opportunities—step-by-step.",
-       
+        "Help students discover who they are before deciding where they're going.",
+        "Turn confusion into clear choices",
+        "Align strengths with real opportunities",
+        "Build confidence to decide",
+        "Involve families in the journey",
+        "Back every step with data",
       ],
       image: "/academy/courses/3Eprogram/Employability.svg"
     },
@@ -432,23 +494,23 @@ export const coursesData: Course[] = [
   }
 ];
 
-// New detailed module structure for Spoken English Bootcamp
-export const spokenEnglishBootcampDetailedModules = [
+// Detailed Module Definitions
+export const spokenEnglishBootcampDetailedModules: DetailedModule[] = [
   {
     id: 1,
-    title: "Everyday English Fluency",
+    title: "Fluent Communication Core",
     hours: 10,
-    objectives: "Help students speak confidently in day-to-day school and social situations",
-    activities: "Role plays, real-life dialogues, vocabulary games",
-    outcomes: "Students gain fluency in everyday conversations with peers and teachers"
+    objectives: "Develop confidence in everyday English conversation",
+    activities: "Paired practice sessions, speech drills, daily language tasks",
+    outcomes: "Students communicate daily needs/ideas with reduced hesitation"
   },
   {
     id: 2,
-    title: "Stage Confidence Builder",
+    title: "Public Speaking Fundamentals",
     hours: 9,
-    objectives: "Equip students to speak clearly and confidently in formal settings",
-    activities: "Speech delivery drills, body language practice, short stage presentations",
-    outcomes: "Students develop stage presence and reduce fear of public speaking"
+    objectives: "Master basic speech delivery with clarity and confidence",
+    activities: "Short speeches, impromptu talks, vocal practice",
+    outcomes: "Students deliver 3-minute speeches with proper posture and voice"
   },
   {
     id: 3,
@@ -477,7 +539,7 @@ export const spokenEnglishBootcampDetailedModules = [
 ];
 
 // New detailed module structure for 3E Program Employability Skills
-export const threeEProgramEmployabilityModules = [
+export const threeEProgramEmployabilityModules: DetailedModule[] = [
   {
     id: 1,
     title: "Introduction to Employability Skills",
@@ -573,5 +635,105 @@ export const threeEProgramEmployabilityModules = [
     objectives: "Build a CV, prepare for interviews, and apply for jobs/apprenticeships",
     activities: "Mock interviews, job portal demos",
     outcomes: "Students complete job applications and participate in interview practice"
+  }
+];
+
+// Career counselling psychometric services data
+export const careerCounselingServices: CareerCounselingService[] = [
+  {
+    id: 1,
+    name: "Stream Selector",
+    icon: Compass,
+    features: "Matches students with suitable academic streams based on aptitude and interest",
+    outcomes: "Reduces confusion and helps students make confident academic choices",
+    category: "Discovery"
+  },
+  {
+    id: 2,
+    name: "Learning Style Profiler",
+    icon: Brain,
+    features: "Identifies if a student learns best visually, auditorily, or kinesthetically",
+    outcomes: "Enables smarter study strategies and course alignment",
+    category: "Discovery"
+  },
+  {
+    id: 3,
+    name: "Personality Mapping",
+    icon: Users,
+    features: "Maps traits like leadership, introversion, teamwork, etc.",
+    outcomes: "Helps match personal style to career environments",
+    category: "Discovery"
+  },
+  {
+    id: 4,
+    name: "Ideal Career Finder",
+    icon: Target,
+    features: "Suggests suitable careers based on interest, personality, and skill",
+    outcomes: "Personalizes career exploration beyond generic options",
+    category: "Discovery"
+  },
+  {
+    id: 5,
+    name: "Multiple Intelligence Test",
+    icon: Lightbulb,
+    features: "Identifies strengths beyond academics (logic, art, music, body, etc.)",
+    outcomes: "Builds self-awareness and validates non-traditional talents",
+    category: "Discovery"
+  },
+  {
+    id: 6,
+    name: "Top Colleges Database",
+    icon: Building2,
+    features: "Access a ranked database of colleges by stream, location, and outcomes",
+    outcomes: "Saves time and enables smart, criteria-based decision-making",
+    category: "Planning"
+  },
+  {
+    id: 7,
+    name: "College Compare",
+    icon: GitCompare,
+    features: "Compare multiple colleges on costs, rankings, location, etc.",
+    outcomes: "Empowers students to evaluate options side-by-side",
+    category: "Planning"
+  },
+  {
+    id: 8,
+    name: "Course Fee Calculator",
+    icon: Calculator,
+    features: "Estimate tuition and living expenses by city or college type",
+    outcomes: "Supports financial planning with transparency",
+    category: "Planning"
+  },
+  {
+    id: 9,
+    name: "Career Trends Explorer",
+    icon: TrendingUp,
+    features: "Explore in-demand jobs, skills, and future industry outlooks",
+    outcomes: "Aligns student choices with evolving career landscapes",
+    category: "Research"
+  },
+  {
+    id: 10,
+    name: "Entrance Exam Tracker",
+    icon: BookOpen,
+    features: "Track key exams like CUET, SAT, IELTS, etc.",
+    outcomes: "Keeps students and parents organized and informed",
+    category: "Planning"
+  },
+  {
+    id: 11,
+    name: "Scholarship Finder",
+    icon: Award,
+    features: "Filter scholarships based on course, location, merit, or need",
+    outcomes: "Increases access to funding and reduces financial stress",
+    category: "Research"
+  },
+  {
+    id: 12,
+    name: "Career Deep Dives",
+    icon: Search,
+    features: "Detailed profiles of roles, recruiters, skills, and salary trends",
+    outcomes: "Equips students with real-world knowledge to make informed career decisions",
+    category: "Research"
   }
 ];
