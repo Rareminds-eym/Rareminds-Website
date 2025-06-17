@@ -1,0 +1,30 @@
+/* Renamed for CSS module compatibility */
+.blogContent h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    color: red;
+}
+
+.blogContent a {
+    color: #0070f3;
+    text-decoration: none;
+}
+
+.blogContent p {
+    font-size: 1rem;
+    line-height: 1.5;
+    margin-bottom: 1rem;
+}
+.blogContent h1 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    color: #333;
+}
+
+.blogContent img {
+    max-width: 100%;
+    height: auto;
+}
+.blogContent strong{
+    font-weight: bold;
+}
