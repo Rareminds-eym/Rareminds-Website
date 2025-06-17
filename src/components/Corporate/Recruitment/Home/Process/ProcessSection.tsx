@@ -37,6 +37,7 @@ const ProcessSection = () => {
             src="https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Corporate/Recruitment/Index/Process/bg-mobile.webp"
             className="object-center w-full h-[852px]"
             width={400}
+            alt="A vibrant yellow background with the icons of a bulb, scratches and lines suitable for designing other elements."
           />
           <div className="absolute top-1/2 left-1/2 -translate-x-[50%] -translate-y-[50%]">
             <ProcessSVGMob className="scale-[0.8] xl:scale-110" />
@@ -49,6 +50,7 @@ const ProcessSection = () => {
           src="https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Corporate/Recruitment/Index/Process/process-bg.webp"
           className="w-full h-[720px] object-cover"
           height={626}
+          alt="A vibrant yellow background with the icons of a bulb, scratches and lines suitable for designing other elements."
         />
         <div className="absolute top-1/2 left-1/2 -translate-x-[50%] -translate-y-[50%] max-h-[626px] -mt-5">
           <ProcessSVG className="scale-[0.8] xl:scale-110" />
