@@ -1,17 +1,8 @@
-import { useParams, Link, useLocation } from "react-router-dom";
-import { useState, useEffect, useCallback, useMemo, memo } from "react";
+import { useParams, useLocation } from "react-router-dom";
+import { useState, useEffect, useCallback } from "react";
 import { supabase } from "@/lib/supabaseClient";
-import { Button } from "@/components/ui/button";
-import BlogCard from "./BlogCard";
-import { 
-  Calendar, 
-  Clock, 
-  ArrowLeft, 
-  Share2, 
-  AlertTriangle
-} from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
-import { motion, AnimatePresence } from "framer-motion";
+import { Calendar, Clock, ArrowLeft } from "lucide-react";
+import { motion } from "framer-motion";
 import styles from "./styles.module.css";
 
 // Enhanced type definitions
@@ -50,12 +41,37 @@ interface BlogError {
   code?: string;
 }
 
+// Route configuration
+const ROUTE_CONFIG = {
+  STUDENT_BLOGS: '/school/student/blogs',
+  TEACHER_BLOGS: '/school/teacher/blogs',
+  SUBCATEGORIES: {
+    STUDENTS: 'Students',
+    TEACHERS: 'Teachers'
+  }
+} as const;
+
+// Custom hooks for better separation of concerns
+const useSubcategoryFromPath = () => {
+  const location = useLocation();
+  
+  return useMemo(() => {
+    if (location.pathname.includes(ROUTE_CONFIG.STUDENT_BLOGS)) {
+      return ROUTE_CONFIG.SUBCATEGORIES.STUDENTS;
+    } else if (location.pathname.includes(ROUTE_CONFIG.TEACHER_BLOGS)) {
+      return ROUTE_CONFIG.SUBCATEGORIES.TEACHERS;
+    }
+    return null;
+  }, [location.pathname]);
+};
+
 // Enhanced data fetching hook with proper error handling
 const useBlogPost = (slug: string | undefined) => {
   const [post, setPost] = useState<BlogPost | null>(null);
   const [loadingState, setLoadingState] = useState<LoadingState>(LoadingState.IDLE);
   const [error, setError] = useState<BlogError | null>(null);
   const { toast } = useToast();
+  const subcategory = useSubcategoryFromPath();
 
   const fetchBlogPost = useCallback(async () => {
     if (!slug) {
@@ -73,6 +89,10 @@ const useBlogPost = (slug: string | undefined) => {
         .from('blog_posts')
         .select('*')
         .eq('slug', slug);
+
+      if (subcategory) {
+        query = query.eq('subcategory', subcategory);
+      }
 
       const { data: blogData, error: blogError } = await query.single();
 
@@ -111,7 +131,7 @@ const useBlogPost = (slug: string | undefined) => {
         variant: "destructive",
       });
     }
-  }, [slug, toast]);
+  }, [slug, subcategory, toast]);
 
   useEffect(() => {
     fetchBlogPost();
@@ -132,6 +152,7 @@ const useBlogPost = (slug: string | undefined) => {
 const useRelatedPosts = (post: BlogPost | null) => {
   const [relatedPosts, setRelatedPosts] = useState<BlogPost[]>([]);
   const [loading, setLoading] = useState(false);
+  const subcategory = useSubcategoryFromPath();
 
   const fetchRelatedPosts = useCallback(async () => {
     if (!post?.category || !post?.id) return;
@@ -144,8 +165,15 @@ const useRelatedPosts = (post: BlogPost | null) => {
         .select('*')
         .neq('id', post.id)
         .limit(3);
-      
-      relatedQuery = relatedQuery.eq('category', post.category);
+
+      if (subcategory) {
+        relatedQuery = relatedQuery
+          .eq('subcategory', subcategory)
+          .eq('category', post.category);
+      } else {
+        relatedQuery = relatedQuery
+          .or(`category.eq.${post.category},subcategory.eq.${post.subcategory}`);
+      }
 
       const { data: relatedData, error: relatedError } = await relatedQuery
         .order('created_at', { ascending: false });
@@ -158,7 +186,7 @@ const useRelatedPosts = (post: BlogPost | null) => {
     } finally {
       setLoading(false);
     }
-  }, [post?.category, post?.id]);
+  }, [post?.category, post?.id, post?.subcategory, subcategory]);
 
   useEffect(() => {
     fetchRelatedPosts();
@@ -192,6 +220,37 @@ const formatShortDate = (dateString: string): string => {
   }
 };
 
+// Enhanced share functionality
+const useSharePost = (post: BlogPost | null) => {
+  const currentUrl = useMemo(() => window.location.href, []);
+
+  const sharePost = useCallback(async () => {
+    if (!post) return;
+
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: post.title,
+          text: post.excerpt,
+          url: currentUrl,
+        });
+      } catch (error) {
+        console.error('Error sharing:', error);
+      }
+    } else {
+      // Fallback to clipboard
+      try {
+        await navigator.clipboard.writeText(currentUrl);
+        // You could show a toast here
+      } catch (error) {
+        console.error('Error copying to clipboard:', error);
+      }
+    }
+  }, [post, currentUrl]);
+
+  return { sharePost, currentUrl };
+};
+
 // Enhanced component with proper error boundaries
 const BlogDetail = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -200,12 +259,28 @@ const BlogDetail = () => {
   // Use custom hooks
   const { post, isLoading, isError, error } = useBlogPost(slug);
   const { relatedPosts, loading: relatedLoading } = useRelatedPosts(post);
+  const { sharePost, currentUrl } = useSharePost(post);
+  
+  // Comment form state (if needed in future)
+  const [commentName, setCommentName] = useState("");
+  const [commentEmail, setCommentEmail] = useState("");
+  const [commentText, setCommentText] = useState("");
 
   // Determine navigation path
   const backToPath = useMemo(() => {
-    // Default to /blogs if no context
-    return "/blogs";
+    return location.pathname.includes(ROUTE_CONFIG.TEACHER_BLOGS)
+      ? ROUTE_CONFIG.TEACHER_BLOGS
+      : ROUTE_CONFIG.STUDENT_BLOGS;
   }, [location.pathname]);
+
+  // Handle comment submission (placeholder for future implementation)
+  const handleCommentSubmit = useCallback((e: React.FormEvent) => {
+    e.preventDefault();
+    // Implementation would go here
+    setCommentName("");
+    setCommentEmail("");
+    setCommentText("");
+  }, []);
 
   // Early returns for different states
   if (isLoading) {
@@ -224,7 +299,7 @@ const BlogDetail = () => {
       className="min-h-screen bg-white"
     >
       {/* Back Button Header */}
-      <div className="w-full sticky top-0 z-[40] bg-white border-b border-gray-100">
+      <div className="w-full bg-white/95 sticky top-0 z-30 border-b border-gray-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <button
             onClick={() => window.history.back()}
@@ -525,6 +600,7 @@ interface RelatedPostsSectionProps {
 const RelatedPostsSection = memo<RelatedPostsSectionProps>(({ 
   relatedPosts, 
   loading, 
+  backToPath 
 }) => {
   if (loading) {
     return (
@@ -581,23 +657,14 @@ const RelatedPostsSection = memo<RelatedPostsSectionProps>(({
               ))}
             </div>
             <div className="text-center mt-12">
-                <Link
-                  to={
-                  location.pathname.startsWith("/corporate/recruitment/blogs")
-                    ? "/corporate/recruitment/blogs"
-                    : location.pathname.startsWith("/corporate/training/blogs")
-                    ? "/corporate/training/blogs"
-                    : "/blogs"
-                  }
-                  className="inline-block"
-                >
-                  <Button 
+              <Link to="/blogs" className="inline-block">
+                <Button 
                   variant="outline" 
                   className="border-red-200 text-red-600 hover:bg-red-50 px-8 py-3 font-semibold"
-                  >
+                >
                   View All Articles
-                  </Button>
-                </Link>
+                </Button>
+              </Link>
             </div>
           </motion.div>
         </div>
