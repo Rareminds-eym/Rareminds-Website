@@ -15,6 +15,7 @@ import InstitutionsLayout from "./layouts/InstitutionsLayout";
 import BlogDetailAcademia from "./components/Academy/Blogs/BlogDetail";
 import BlogDetailGov from "./components/Govt/Blogs/BlogDetail.tsx";
 import CourseDetailedPage from "@/components/Academy/Students/CourseDetailedPage";
+
 // Lazy pages
 const Home = lazy(() => import("./pages/Index"));
 const Blogs = lazy(() => import("./pages/Blogs/index"));
@@ -64,9 +65,8 @@ const CorporateTrainingServicesIndex = lazy(
   () => import("./pages/Corporate/Training/Services/Index.tsx")
 );
 
-import CourseDetailedPage from "@/components/Academy/Students/CourseDetailedPage";
 const BlogListing = lazy(() => import("./components/institutions/Blogs/BlogListing"));
-const BlogDetail = lazy(() => import("./components/institutions/Blogs/BlogDetail"));
+const InstitutionsBlogDetail = lazy(() => import("./components/institutions/Blogs/BlogDetail"));
 import CommunicationPersonalityDevelopment from "./components/institutions/inst/CommunicationPersonalityDevelopment";
 import MentalHealthCounselingFDP from "./components/institutions/inst/MentalHealthCounselingFDP";
 import DomainSpecificPrograms from "./components/institutions/inst/DomainSpecificPrograms";
@@ -359,7 +359,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/institutions/blogs/:slug",
-        element: withSuspense(BlogDetail),
+        element: withSuspense(InstitutionsBlogDetail),
       },
       {
         path: "/institutions/sdp/blogs",
@@ -367,7 +367,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/institutions/sdp/blogs/:slug",
-        element: withSuspense(BlogDetail),
+        element: withSuspense(InstitutionsBlogDetail),
       },
       {
         path: "/institutions/fdp/blogs",
@@ -375,7 +375,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/institutions/fdp/blogs/:slug",
-        element: withSuspense(BlogDetail),
+        element: withSuspense(InstitutionsBlogDetail),
       },
     ],
   },
