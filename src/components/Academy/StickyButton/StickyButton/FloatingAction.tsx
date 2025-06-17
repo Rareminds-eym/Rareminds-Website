@@ -4,6 +4,8 @@ import { Plus, HelpCircle, MessageCircle, Calendar, Download } from 'lucide-reac
 import FAQChatbot from "./FAQChatbot";
 import { ChatButton } from './ChatButton';
 import { BookDemo } from './BookDemo';
+import { cn } from "@/lib/utils";
+import { supabase } from '@/lib/supabaseClient';
 
 interface MenuItem {
   id: string;
@@ -12,18 +14,35 @@ interface MenuItem {
   onClick: () => void;
 }
 
+// Resource type for download modal
+interface Resource {
+  title: string;
+  pdfLink: string;
+}
+
 const FloatingActionMenu = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [showFAQChatbot, setShowFAQChatbot] = useState(false);
   const [showChat, setShowChat] = useState(false);
   const [showBookDemo, setShowBookDemo] = useState(false);
   const [activeIcon, setActiveIcon] = useState<React.ComponentType<any>>(Plus);
+  // Modal state for download
+  const [modalOpen, setModalOpen] = useState(false);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [errorMsg, setErrorMsg] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [downloadReady, setDownloadReady] = useState(false);
+  const [selectedResource, setSelectedResource] = useState<Resource | null>(null);
 
-  const handleDownloadClick = () => {
-    const link = document.createElement('a');
-    link.href = '/path-to-your-pdf/Your-Brochure.pdf'; // ✅ Replace this with your actual path
-    link.download = 'Your-Brochure.pdf'; // ✅ Replace with actual file name
-    link.click();
+  const handleDownloadClick = (resource: Resource) => {
+    setSelectedResource(resource);
+    setModalOpen(true);
+    setName("");
+    setEmail("");
+    setPhone("");
+    setErrorMsg("");
   };
 
   const menuItems: MenuItem[] = [
@@ -31,7 +50,7 @@ const FloatingActionMenu = () => {
       id: 'download',
       icon: Download,
       label: 'Download Brochure',
-      onClick: handleDownloadClick,
+      onClick: () => handleDownloadClick({ title: 'Brochure', pdfLink: 'https://drive.google.com/file/d/18Q-Rd1ZTrXEjgLhW0EqTQO8K1xoC9aJ9/view?usp=drive_link' }),
     },
     {
       id: 'demo',
@@ -122,11 +141,154 @@ const FloatingActionMenu = () => {
     };
   }, []);
 
+  // --- Add handleSubmit for modal form ---
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setErrorMsg("");
+
+    if (!name.trim() || !email.trim() || !phone.trim()) {
+      setErrorMsg("Please fill in all fields.");
+      return;
+    }
+
+    // Basic email validation
+    const emailRegex = /\S+@\S+\.\S+/;
+    if (!emailRegex.test(email)) {
+      setErrorMsg("Please enter a valid email address.");
+      return;
+    }
+
+    // Basic phone validation
+    const phoneRegex = /^\d{10}$/;
+    if (!phoneRegex.test(phone.replace(/\D/g, ''))) {
+      setErrorMsg("Please enter a valid 10-digit phone number.");
+      return;
+    }
+
+    if (!selectedResource) return;
+
+    setLoading(true);
+
+    try {
+      // Insert data into Supabase table demo_pdf
+      const { error } = await supabase.from("demo_pdf").insert([
+        {
+          name: name.trim(),
+          email: email.trim(),
+          phone: phone.trim(),
+          created_at: new Date().toISOString(),
+        },
+      ]);
+
+      if (error) {
+        setLoading(false);
+        setErrorMsg("Failed to save data. Please try again.");
+        return;
+      }
+
+      // Send email
+      const response = await fetch('https://email-sender-ssmu.onrender.com/send-pdf', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: name.trim(),
+          email: email.trim(),
+          phone: phone.trim(),
+          resourceTitle: selectedResource.title,
+          pdfUrl: selectedResource.pdfLink
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to send email');
+      }
+
+      setLoading(false);
+      setModalOpen(false);
+    } catch (err) {
+      setLoading(false);
+      setErrorMsg("An error occurred. Please try again.");
+    }
+  };
+
   return (
     <>
       <FAQChatbot isVisible={showFAQChatbot} onClose={() => setShowFAQChatbot(false)} />
       <ChatButton isVisible={showChat} onClose={() => setShowChat(false)} />
       <BookDemo isVisible={showBookDemo} onClose={() => setShowBookDemo(false)} />
+
+      {/* Modal */}
+      {modalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4">
+          <div className="bg-white rounded-lg shadow-lg max-w-md w-full p-6 relative">
+            <button
+              onClick={() => setModalOpen(false)}
+              className="absolute top-2 right-2 text-gray-600 hover:text-gray-900"
+              aria-label="Close modal"
+            >
+              ✕
+            </button>
+            <h3 className="text-xl font-semibold mb-4">Please enter your details</h3>
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div>
+                <label htmlFor="name" className="block mb-1 font-medium">
+                  Name
+                </label>
+                <input
+                  type="text"
+                  id="name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-red-500"
+                  required
+                />
+              </div>
+              <div>
+                <label htmlFor="email" className="block mb-1 font-medium">
+                  Email
+                </label>
+                <input
+                  type="email"
+                  id="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-red-500"
+                  required
+                />
+              </div>
+              <div>
+                <label htmlFor="phone" className="block mb-1 font-medium">
+                  Phone Number
+                </label>
+                <input
+                  type="tel"
+                  id="phone"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  placeholder="10-digit phone number"
+                  className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-red-500"
+                  required
+                />
+              </div>
+
+              {errorMsg && <p className="text-red-600">{errorMsg}</p>}
+
+              <button
+                type="submit"
+                disabled={loading}
+                className={cn(
+                  "w-full bg-red-500 hover:bg-red-600 text-white font-semibold py-2 rounded transition-colors",
+                  loading ? "opacity-50 cursor-not-allowed" : ""
+                )}
+              >
+                {loading ? "Submitting..." : "Submit & Download"}
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
 
       <div className="fixed bottom-10 right-16 z-50">
         <AnimatePresence>

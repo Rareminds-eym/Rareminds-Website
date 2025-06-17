@@ -4,38 +4,38 @@ import Modal from 'react-modal';
 
 const contentData = [
   {
-    image: '/Govt-Images/Videos/Thumbnails/Faculty_testimonail.png',
-    video: '/Govt-Images/Videos/Testimonials/video1.mp4',
+    image: 'https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Government/Home/Yt_Banner/ytbanner1.webp',
+    video: 'https://youtu.be/LYmob1dwjt8',
     title: 'Education Excellence'
   },
   {
-    image: '/Govt-Images/Videos/Thumbnails/Fdp.png',
-    video: '/Govt-Images/Videos/Testimonials/video2.mp4',
+    image: 'https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Government/Home/Yt_Banner/ytbanner2.webp',
+    video: 'https://youtu.be/2BNwt75ExEk',
     title: 'University Campus'
   },
   {
-    image: '/Govt-Images/Videos/Thumbnails/Faculty_testimonail.png',
-    video: '/Govt-Images/Videos/Testimonials/video3.mp4',
+    image: 'https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Government/Home/Yt_Banner/ytbanner3.webp',
+    video: 'https://youtu.be/zInPOXMjHpQ',
     title: 'Learning Experience'
   },
   {
-    image: '/Govt-Images/Videos/Thumbnails/student.png',
-    video: '/Govt-Images/Videos/Testimonials/video4.mp4',
+    image: 'https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Government/Home/Yt_Banner/ytbanner1.webp',
+    video: 'https://youtu.be/oIeAey8NxmA',
     title: 'Student Life'
   },
   {
-    image: '/Govt-Images/Videos/Thumbnails/Faculty_testimonail.png',
-    video: '/Govt-Images/Videos/Testimonials/video5.mp4',
+    image: 'https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Government/Home/Yt_Banner/ytbanner3.webp',
+    video: 'https://youtu.be/w5HmwkOF92E',
     title: 'Modern Classroom'
   },
   {
-    image: '/Govt-Images/Videos/Thumbnails/Fdp_highlights.png',
-    video: '/Govt-Images/Videos/Testimonials/video6.mp4',
+    image: 'https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Government/Home/Yt_Banner/ytbanner2.webp',
+    video: 'https://youtu.be/LYmob1dwjt8',
     title: 'Library Resources'
   },
   {
-    image: '/Govt-Images/Videos/Thumbnails/Fdp_highlights.png',
-    video: '/Govt-Images/Videos/Testimonials/video7.mp4',
+    image: 'https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Government/Home/Yt_Banner/ytbanner1.webp',
+    video: 'https://youtu.be/Z467zES119Q',
     title: 'Library Resources'
   }
 ];
@@ -52,7 +52,10 @@ const Video = () => {
 
   const openModal = (videoUrl: string) => {
     if (!isDragging) {
-      setSelectedVideo(videoUrl);
+      // Convert YouTube URL to embed format
+      const videoId = videoUrl.split('/').pop();
+      const embedUrl = `https://www.youtube.com/embed/${videoId}`;
+      setSelectedVideo(embedUrl);
       setModalIsOpen(true);
     }
   };
@@ -110,14 +113,14 @@ const Video = () => {
             {[...contentData, ...contentData].map((item, index) => (
               <div
                 key={index}
-                className="flex-none h-60 w-60 md:w-96 cursor-pointer transform transition-transform hover:scale-105 group "
+                className="flex-none h-48 w-64 sm:h-60 sm:w-80 md:w-96 cursor-pointer transform transition-transform hover:scale-105 group"
                 onClick={() => openModal(item.video)}
               >
                 <div className="aspect-w-16 aspect-h-9 rounded-lg overflow-hidden shadow-lg relative">
                   <img
                     src={item.image}
                     alt={item.title}
-                    className="w-full h-52 md:w-full md:h-full object-cover"
+                    className="w-full h-full object-cover"
                   />
                   {/* Dark overlay */}
                   <div className="absolute inset-0 bg-black/30 group-hover:bg-black/20 transition-all duration-300"></div>

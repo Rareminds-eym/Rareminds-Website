@@ -1,12 +1,9 @@
 import { useState } from "react";
 import { Calendar, ChartLine, Download, FileText, Book } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { createClient } from "@supabase/supabase-js";
+import { supabase } from "@/lib/supabaseClient"; // Adjust the import path as necessary
 
-// Initialize Supabase client (replace with your own keys)
-const supabaseUrl = "https://your-supabase-url.supabase.co";
-const supabaseKey = "your-anon-key";
-const supabase = createClient(supabaseUrl, supabaseKey);
+
 
 type IconType = "calendar" | "chart-line" | "download" | "file-text" | "book";
 
@@ -23,21 +20,21 @@ const resources: Resource[] = [
     icon: "calendar",
     title: "5-Day TDP Calendar",
     description: '"Reimagine Teaching. Redefine Learning."',
-    pdfLink: "/academy/pdfs/5_Day.pdf",
+    pdfLink: "https://drive.google.com/file/d/1bmJoQdaW5oC0vZcuDs-iieFgOVCudl9q/view?usp=drive_link",
     svgIconPath: "/academy/5-Day TDP Calendar (Customizable).svg",
   },
   {
     icon: "chart-line",
     title: "Our Career Counselling Blueprint for Grades 9–12",
     description: "Your Child’s Future Starts Today: Career Counselling Blueprint for Grades 9–12",
-    pdfLink: "/academia/coming-soon",
+    pdfLink: "https://drive.google.com/file/d/1HZR62_uyBC4kceBO3KV2KYYOzjwM1mfk/view?usp=drive_link",
     svgIconPath: "/academy/careerCounsellingBlueprint.svg",
   },
   {
     icon: "file-text",
     title: "Checklist: Is Your School NEP-Ready?",
     description: "A Quick Audit for Schools Moving toward 21st-Century Excellence.",
-    pdfLink: "/academy/pdfs/NEP_Ready_School_Checklist.pdf",
+    pdfLink: "https://drive.google.com/file/d/1kK27P0N26CiREpZK9tRirJaJCyKv4Mh-/view?usp=drive_link",
     svgIconPath: "/academy/NEP-Ready School Checklist.svg",
   },
 ];
@@ -62,6 +59,7 @@ const ResourcesPage = () => {
   const [selectedResource, setSelectedResource] = useState<Resource | null>(null);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
 
@@ -71,6 +69,7 @@ const ResourcesPage = () => {
     setModalOpen(true);
     setName("");
     setEmail("");
+    setPhone("");
     setErrorMsg("");
   };
 
@@ -78,8 +77,8 @@ const ResourcesPage = () => {
     e.preventDefault();
     setErrorMsg("");
 
-    if (!name.trim() || !email.trim()) {
-      setErrorMsg("Please enter your name and email.");
+    if (!name.trim() || !email.trim() || !phone.trim()) {
+      setErrorMsg("Please fill in all fields.");
       return;
     }
 
@@ -90,32 +89,59 @@ const ResourcesPage = () => {
       return;
     }
 
+    // Basic phone validation
+    const phoneRegex = /^\d{10}$/;
+    if (!phoneRegex.test(phone.replace(/\D/g, ''))) {
+      setErrorMsg("Please enter a valid 10-digit phone number.");
+      return;
+    }
+
     if (!selectedResource) return;
 
     setLoading(true);
 
-    // Insert data into Supabase table pdf_downloads
-    const { error } = await supabase.from("pdf_downloads").insert([
-      {
-        name: name.trim(),
-        email: email.trim(),
-        title: selectedResource.title,
-        downloaded_at: new Date().toISOString(),
-      },
-    ]);
+    try {
+      // Insert data into Supabase table demo_pdf
+      const { error } = await supabase.from("demo_pdf").insert([
+        {
+          name: name.trim(),
+          email: email.trim(),
+          phone: phone.trim(),
+          created_at: new Date().toISOString(),
+        },
+      ]);
 
-    setLoading(false);
+      if (error) {
+        setLoading(false);
+        setErrorMsg("Failed to save data. Please try again.");
+        return;
+      }
 
-    if (error) {
-      setErrorMsg("Failed to save data. Please try again.");
-      return;
+      // Send email
+      const response = await fetch('https://email-sender-ssmu.onrender.com/send-pdf', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: name.trim(),
+          email: email.trim(),
+          phone: phone.trim(),
+          resourceTitle: selectedResource.title,
+          pdfUrl: selectedResource.pdfLink
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to send email');
+      }
+
+      setLoading(false);
+      setModalOpen(false);
+    } catch (err) {
+      setLoading(false);
+      setErrorMsg("An error occurred. Please try again.");
     }
-
-    // Close modal and trigger PDF download
-    setModalOpen(false);
-
-    // Open PDF in a new tab (download)
-    window.open(selectedResource.pdfLink, "_blank", "noopener,noreferrer");
   };
 
   return (
@@ -196,6 +222,20 @@ const ResourcesPage = () => {
                   id="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
+                  className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-red-500"
+                  required
+                />
+              </div>
+              <div>
+                <label htmlFor="phone" className="block mb-1 font-medium">
+                  Phone Number
+                </label>
+                <input
+                  type="tel"
+                  id="phone"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  placeholder="10-digit phone number"
                   className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-red-500"
                   required
                 />

@@ -119,7 +119,7 @@ const FullScreenCarousel: React.FC<FullScreenCarouselProps> = ({
 
   return (
     <div
-      className={`corporate-full-screen-h w-full ${className} relative overflow-auto`}
+      className={`corporate-full-screen-h w-full ${className} relative overflow-hidden`}
     >
       <div className="h-full w-full overflow-auto">
         <div
@@ -292,7 +292,7 @@ const FullScreenCarousel: React.FC<FullScreenCarouselProps> = ({
       <div className="hidden lg:block container">
         <div
           onClick={handleScrollDown}
-          className="w-max absolute bottom-[80px] cursor-pointer transition-opacity z-10 ml-4 md:ml-8 lg:ml-14"
+          className="w-max absolute bottom-[20px] cursor-pointer transition-opacity z-10 ml-4 md:ml-8 lg:ml-14"
           aria-label="Scroll down"
         >
           <img

@@ -33,20 +33,12 @@ const InstitutionDashboardSection = () => {
               🎮 Simulation Games
             </h3>
             <motion.div
-              className="rounded-xl overflow-hidden border-4 border-[#589ed7] p-1 bg-zinc-800 mb-2"
-              animate={{
-                boxShadow: [
-                  "0 0 0px #F4CE14",
-                  "0 0 20px #F4CE14",
-                  "0 0 0px #F4CE14",
-                ],
-              }}
-              transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
+              className="rounded-xl mb-2"
             >
               <img
-                src="institutions/vectors/SimulationGame.png"
+                src="https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Corporate/Recruitment/Index/Dashboard/games.webp"
                 alt="Simulation Game Demo"
-                className="rounded-lg w-full object-cover aspect-video"
+                className="rounded-lg w-full"
               />
             </motion.div>
           </motion.div>
@@ -62,20 +54,12 @@ const InstitutionDashboardSection = () => {
               📊 Real Time Dashboards & Analytics
             </h3>
             <motion.div
-              className="rounded-xl overflow-hidden border-4 border-[#589ed7] p-1 bg-zinc-800 mb-2"
-              animate={{
-                boxShadow: [
-                  "0 0 0px #F4CE14",
-                  "0 0 20px #F4CE14",
-                  "0 0 0px #F4CE14",
-                ],
-              }}
-              transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
+              className="rounded-xl mb-2"
             >
               <img
-                src="institutions/vectors/Dashboard.png"
+                src="https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Corporate/Recruitment/Index/Dashboard/dashboard-preview-3.webp"
                 alt="Analytics Dashboard Demo"
-                className="rounded-lg w-full object-cover aspect-video"
+                className="rounded-lg w-full"
               />
             </motion.div>
           </motion.div>
@@ -90,20 +74,12 @@ const InstitutionDashboardSection = () => {
         >
           {/* Image Section */}
           <motion.div
-            className="flex-1 rounded-xl overflow-hidden border-4 border-[#589ed7] p-1 bg-zinc-800 max-w-full"
-            animate={{
-              boxShadow: [
-                "0 0 0px #F4CE14",
-                "0 0 20px #F4CE14",
-                "0 0 0px #F4CE14",
-              ],
-            }}
-            transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
+            className="flex-1 rounded-xl h-max max-w-full"
           >
             <img
-              src="institutions/vectors/LMS.jpg"
+              src="https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Corporate/Recruitment/Index/Dashboard/dashboard-preview-2.webp"
               alt="Rareprep LMS"
-              className="rounded-lg w-full h-full object-cover aspect-video sm:aspect-[3/2]"
+              className="rounded-lg w-full h-full"
             />
           </motion.div>
 

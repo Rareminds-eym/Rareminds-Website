@@ -13,8 +13,10 @@ import {
 } from "lucide-react";
 import { Icon } from "@iconify/react";
 import { useToast } from "@/hooks/use-toast";
+import { useLocation } from "react-router-dom";
 
 const AcademyContactSection = () => {
+  const location = useLocation();
   const { toast } = useToast();
   const [formData, setFormData] = useState({
     name: "",
@@ -23,6 +25,10 @@ const AcademyContactSection = () => {
     course: "",
     message: "",
   });
+
+
+
+  
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
@@ -39,21 +45,42 @@ const AcademyContactSection = () => {
     setIsSubmitting(true);
 
     try {
-      // Insert data into Supabase
+      // Insert data into Supabase (table: academia_form, fields: name, email, phone, course_intrest, message)
+      const submittedAt = new Date().toISOString();
+      const submission = {
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+        course_intrest: formData.course, // corrected field name
+        message: formData.message,
+        submitted_at: submittedAt,
+      };
       const { error } = await supabase
-        .from("academia_form")
-        .insert([
-          {
-            name: formData.name,
-            email: formData.email,
-            phone: formData.phone,
-            course_interest: formData.course,
-            message: formData.message,
-            submitted_at: new Date().toISOString(),
-          },
-        ]);      if (error) {
+        .from("acdemia_form")
+        .insert([submission]);
+      if (error) {
         console.error('Supabase error:', error.message, error.details, error.hint);
         throw error;
+      }
+
+      // Call Supabase Edge Function for email notification
+      const emailResponse = await fetch(
+        'https://itvhjkgfafikpqmuunlh.supabase.co/functions/v1/super-handler',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
+          },
+          body: JSON.stringify({
+            record: submission // Your function expects a 'record' property
+          }),
+        }
+      );
+      if (!emailResponse.ok) {
+        const errorData = await emailResponse.json();
+        console.error('Email function error:', errorData);
+        // Optional: Log this error to your error tracking system
       }
 
       toast({
@@ -76,7 +103,8 @@ const AcademyContactSection = () => {
       setTimeout(() => {
         setSubmitted(false);
       }, 3000);
-    } catch (error) {      const supabaseError = error as any;
+    } catch (error) {
+      const supabaseError = error as any;
       console.error("Error submitting form:", {
         message: supabaseError.message,
         details: supabaseError.details,
@@ -85,13 +113,66 @@ const AcademyContactSection = () => {
       });
       toast({
         title: "Error",
-        description: "There was an error submitting your inquiry. Please try again.",
+        description: `There was an error submitting your inquiry.\n${supabaseError.message || ''}\n${supabaseError.details || ''}\n${supabaseError.hint || ''}`,
         variant: "destructive",
       });
     } finally {
       setIsSubmitting(false);
     }
   };
+
+  // Social links based on path
+  const isSchool = location.pathname.includes("/school/teacher");
+  const isStudent = location.pathname.includes("/school/student");
+  const socialLinks = [
+    {
+      href: "https://www.linkedin.com/company/rareminds/",
+      icon: "mdi:linkedin",
+      color: "#0A66C2",
+      label: "LinkedIn",
+    },
+    isSchool && {
+      href: "https://www.instagram.com/rareminds.educators?igsh=MXRhcGZrMXN4Zzg2Zg==",
+      icon: "mdi:instagram",
+      color: "#E4405F",
+      label: "Instagram",
+    },
+    isStudent && {
+      href: "https://www.instagram.com/istudent_rareminds/?hl=en",
+      icon: "mdi:instagram",
+      color: "#E4405F",
+      label: "Instagram",
+    },
+    isSchool && {
+      href: "https://www.facebook.com/profile.php?id=61576617233176",
+      icon: "mdi:facebook",
+      color: "#1877F3",
+      label: "Facebook",
+    },
+    isStudent && {
+      href: "https://www.facebook.com/profile.php?id=61576552526095",
+      icon: "mdi:facebook",
+      color: "#1877F3",
+      label: "Facebook",
+    },
+    {
+      href: "https://x.com/minds_rare",
+      icon: "fa6-brands:x-twitter",
+      color: "",
+      label: "Twitter (X)",
+    },
+    {
+      href: "https://www.youtube.com/channel/UClkBtwJsScYxFzNoFdlifeA",
+      icon: "mdi:youtube",
+      color: "#FF0000",
+      label: "YouTube",
+      size: 40,
+    },
+  ].filter(Boolean);
+
+
+
+  
 
   return (
     <section
@@ -103,7 +184,7 @@ const AcademyContactSection = () => {
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
         viewport={{ once: true }}
-        className="container mx-auto px-5 lg:px-14 relative z-10"
+        className="container mx-auto px-5 lg:px-14 relative "
       >
         <div className="text-center mb-16">
           <div className="bg-red-600 text-white w-16 h-16 rounded-[25px] mx-auto mb-4 flex items-center justify-center transform rotate-6">
@@ -244,8 +325,12 @@ const AcademyContactSection = () => {
                         >
                           <button
                             type="submit"
-                            className="bg-red-500  hover:bg-red-600 text-white font-medium py-3 px-6 rounded-xl transition-all flex items-center justify-center"
+                            className="bg-red-500 hover:bg-red-600 text-white font-medium py-3 px-6 rounded-xl transition-all flex items-center justify-center"
                             disabled={isSubmitting}
+                            onClick={() => {
+                              // Extra debug log for troubleshooting
+                              console.log('Submit button clicked', formData);
+                            }}
                           >
                             {isSubmitting ? (
                               <span className="flex items-center">
@@ -342,7 +427,7 @@ const AcademyContactSection = () => {
                       <h4 className="font-semibold mb-1 text-gray-800">
                         Email
                       </h4>
-                      <p className="text-gray-600">info@rareminds.in</p>
+                      <p className="text-gray-600">marketing@rareminds.in</p>
                       {/* <p className="text-gray-600">training@rareminds.com</p> */}
                     </div>
                   </div>
@@ -381,41 +466,9 @@ const AcademyContactSection = () => {
                                 visible: { transition: { staggerChildren: 0.12 } },
                               }}
                             >
-                              {[
-                                {
-                                  href: "https://www.linkedin.com/company/rareminds/",
-                                  icon: "mdi:linkedin",
-                                  color: "#0A66C2",
-                                  label: "LinkedIn",
-                                },
-                                {
-                                  href: "https://www.instagram.com/rareminds_eym/",
-                                  icon: "mdi:instagram",
-                                  color: "#E4405F",
-                                  label: "Instagram",
-                                },
-                                {
-                                  href: "https://www.facebook.com/raremindsgroup",
-                                  icon: "mdi:facebook",
-                                  color: "#1877F3",
-                                  label: "Facebook",
-                                },
-                                {
-                                  href: "https://x.com/minds_rare",
-                                  icon: "mdi:twitter",
-                                  color: "#1DA1F2",
-                                  label: "Twitter (X)",
-                                },
-                                {
-                                  href: "https://www.youtube.com/channel/UClkBtwJsScYxFzNoFdlifeA",
-                                  icon: "mdi:youtube",
-                                  color: "#FF0000",
-                                  label: "YouTube",
-                                  size: 40,
-                                },
-                              ].map((item) => (
+                              {socialLinks.map((item) => (
                                 <motion.a
-                                  key={item.label}
+                                  key={item.label + item.href}
                                   href={item.href}
                                   target="_blank"
                                   rel="noopener noreferrer"

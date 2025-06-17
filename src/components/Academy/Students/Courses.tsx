@@ -24,8 +24,9 @@ const Courses = () => {
     buttonIcon: <FileText className="h-4 w-4" />,
     hasPdf: true,
     pdfUrl: "#",
-    readMoreUrl: `/academia/student/course/${course.id}`,
-    courseId: course.id
+    readMoreUrl: `/school/student/course/${course.id}`,
+    courseId: course.id,
+    showLoginLink: course.showLoginLink || false,
   }));
 
   const displayedPrograms = showAllPrograms
@@ -62,6 +63,8 @@ const Courses = () => {
                   pdfUrl={program.pdfUrl}
                   isMobile={isMobile}
                   readMoreUrl={program.readMoreUrl}
+                  showLoginLink={program.showLoginLink}
+                  courseId={program.courseId}
                 />
                 <div className="mt-4 flex justify-center">
                        <Link 
@@ -101,6 +104,8 @@ interface ProgramCardProps {
   pdfUrl?: string;
   isMobile?: boolean;
   readMoreUrl?: string;
+  showLoginLink?: boolean;
+  courseId?: string;
 }
 
 const ProgramCard = ({ 
@@ -111,7 +116,9 @@ const ProgramCard = ({
   hasPdf = false,
   pdfUrl = "#",
   isMobile = false,
-  readMoreUrl = "#"
+  readMoreUrl = "#",
+  showLoginLink = false,
+  courseId = ""
 }: ProgramCardProps) => {
   const [isFlipped, setIsFlipped] = useState(false);
 
@@ -178,16 +185,8 @@ const ProgramCard = ({
           <p className="text-center mb-6 px-2 sm:px-4 text-sm md:text-base">
             Learn more about our {title.toLowerCase()} program and how it can help you achieve your goals.
           </p>
-          
           {hasPdf && (
             <>
-              {/* <Link 
-                to={readMoreUrl} 
-                onClick={(e) => e.stopPropagation()} 
-                className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded text-sm font-semibold text-center transition-colors block mb-4"
-              >
-                View Course Details
-              </Link> */}
               <Link 
                 to={readMoreUrl} 
                 onClick={(e) => e.stopPropagation()} 
@@ -195,6 +194,17 @@ const ProgramCard = ({
               >
                 Read More
               </Link>
+              {/* Login link for career-counselling-psychometric */}
+              {showLoginLink && courseId === "career-counselling-psychometric" && (
+                <a
+                  href="https://career.rareminds.in/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block mt-2 text-blue-600 hover:underline text-sm text-center"
+                >
+                 Login here
+                </a>
+              )}
             </>
           )}
           {!hasPdf && (
@@ -209,6 +219,17 @@ const ProgramCard = ({
               >
                 Read More
               </Link>
+              {/* Login link for career-counselling-psychometric */}
+              {showLoginLink && courseId === "career-counselling-psychometric" && (
+                <a
+                  href="https://learning.rareminds.in/login"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block mt-2 text-blue-600 hover:underline text-sm text-center"
+                >
+                  Already enrolled? Login here
+                </a>
+              )}
             </>
           )}
         </div>

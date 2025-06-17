@@ -135,9 +135,18 @@ const animations = {
   },
 };
 
-const ServiceCard = ({ service, index }: { service: Service; index: number }) => {
+const ServiceCard = ({
+  service,
+  index,
+}: {
+  service: Service;
+  index: number;
+}) => {
   return (
-    <Link to={`/corporate/training/services/${service.id}`} className="block h-full no-underline">
+    <Link
+      to={`/corporate/training/services/${service.id}`}
+      className="block h-full no-underline"
+    >
       <motion.div
         key={index}
         initial={animations.card.initial}
@@ -233,8 +242,8 @@ export default function Services() {
             transition={{ duration: 0.5, delay: 0.3 }}
             className="text-base sm:text-lg text-gray-600 mx-auto max-w-2xl"
           >
-            Drive digital transformation with our cutting-edge learning
-            solutions
+            Our training services are crafted to tackle diverse workforce
+            challenges and deliver measurable business impact.
           </motion.p>
         </motion.div>
 
@@ -257,9 +266,12 @@ export default function Services() {
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             onClick={() => {
-              const contactSection = document.getElementById('contact');
+              const contactSection = document.getElementById("contact");
               if (contactSection) {
-                contactSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                contactSection.scrollIntoView({
+                  behavior: "smooth",
+                  block: "start",
+                });
               }
             }}
             type="button"

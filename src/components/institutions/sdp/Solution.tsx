@@ -59,11 +59,11 @@ export default function Solution() {
               viewport={{ once: true }}
               transition={{ duration: 0.8, delay: index * 0.2 }}
               className="relative group mb-4 cursor-pointer"
-              onClick={() => navigate("/academia/projects")}
+              onClick={() => navigate("/school/projects")}
               tabIndex={0}
               role="button"
               onKeyDown={e => {
-                if (e.key === "Enter" || e.key === " ") navigate("/academia/projects/projectlist");
+                if (e.key === "Enter" || e.key === " ") navigate("/school/projects/projectlist");
               }}
             >
               <div className={`absolute inset-0 bg-gradient-to-br ${feature.bgColor} rounded-2xl transform group-hover:scale-105 transition-transform duration-300 `}></div>

@@ -100,15 +100,15 @@ export function Book(props: BookProps) {
         {
           '--book-color': color,
           '--text-color': textColor,
-          '--book-depth': (depth || 4) + 'cqw',
+          '--book-depth': (depth || 4) + 'px', // changed from 'cqw' to 'px' for cross-browser compatibility
           '--book-width': (width || 196) + 'px',
         } as React.CSSProperties
       }
     >
-      <div className="contain-inline-size aspect-[49/60] w-fit rotate-0 relative [transform-style:preserve-3d] min-w-[calc(var(--book-width))] transition-transform duration-500 ease-out group-hover:[transform:rotateY(-20deg)_scale(1.066)translateX(-8px)]">
+      <div className="border-l-4 border-l-black/50 contain-inline-size aspect-[49/60] w-fit rotate-0 relative [transform-style:preserve-3d] min-w-[calc(var(--book-width))] transition-transform duration-500 ease-out group-hover:[transform:rotateY(-20deg)_scale(1.066)translateX(-8px)]">
         <Stack
           align="stretch"
-          className="rounded-l border border-border rounded-r shadow-book bg-stone-100 dark:bg-stone-800 bg-[var(--book-color)] size-full absolute overflow-hidden"
+          className="rounded-l border border-border rounded-r shadow-book bg-gray-50   size-full absolute overflow-hidden"
         >
           {variant !== 'simple' && (
             <Stack

@@ -1,8 +1,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import CaseStudiesCarousel from "../CaseStudiesCarousel";
-import { caseStudies } from "@/components/Corporate/Recruitment/Home/CaseStudies/caseStudiesData.ts";
-
+import { caseStudies } from "./caseStudiesData";
 
 const WorkWith: React.FC = () => {
   return (
@@ -16,7 +15,7 @@ const WorkWith: React.FC = () => {
           transition={{ duration: 0.5, ease: "easeOut" }}
           className="text-2xl sm:text-3xl font-bold mb-3 sm:mb-4 bg-gradient-to-r from-gray-800 to-gray-900 bg-clip-text text-transparent"
         >
-          Who We Work With
+          Beyond Boundaries. One Partner. Infinite Impact.
         </motion.h2>
         <motion.p
           initial={{ opacity: 0, y: 16 }}
@@ -25,10 +24,9 @@ const WorkWith: React.FC = () => {
           transition={{ duration: 0.5, delay: 0.08, ease: "easeOut" }}
           className="text-base sm:text-lg text-gray-600 mb-8 font-medium max-w-2xl mx-auto"
         >
-          Corporate to Campus to Shop Floor.{" "}
-          <span className="text-sky-600 font-semibold">
-            We Speak Everyone’s Language.
-          </span>
+          From startups to multinationals, we deliver scalable training that
+          fuels growth, sharpens agility, and builds purposeful, precise
+          leaders.
         </motion.p>
         <motion.div
           initial="hidden"
@@ -90,7 +88,7 @@ const WorkWith: React.FC = () => {
             className="flex flex-wrap justify-center items-center gap-6"
           ></motion.div>
           <div>
-            <CaseStudiesCarousel caseStudies={caseStudies}/>
+            <CaseStudiesCarousel caseStudies={caseStudies} />
           </div>
         </div>
       </div>
