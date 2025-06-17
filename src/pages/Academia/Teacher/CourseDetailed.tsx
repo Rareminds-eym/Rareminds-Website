@@ -18,6 +18,31 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '.
 import { Clock, BookOpen, TrendingUp } from 'lucide-react';
 import FloatingActionMenu from "../../../components/Academy/StickyButton/StickyButton/FloatingAction"
 
+// Define the type for assists in standOut section
+interface AssistItem {
+  title: string;
+  description: string;
+}
+
+// Define course details type to match our data structure
+interface CourseDetailsType {
+  title: string;
+  subtitle?: string;
+  intro: string[];
+  whyItMatters: string[];
+  highlights: { icon: string; text: string; }[];
+  standOut?: {
+    title: string;
+    description: string;
+    assists?: AssistItem[];
+  };
+  cta: { 
+    heading: string; 
+    text: string; 
+    button: string; 
+  };
+}
+
 const iconMap = {
   Award,
   Target,
@@ -31,48 +56,7 @@ const iconMap = {
   BarChart2,
 };
 
-const modules = [
-  {
-    id: 1,
-    title: "Spoken English for the Classroom",
-    hours: 9,
-    objectives: "Improve classroom English fluency, pronunciation, and basic command",
-    activities: "Speaking drills, situational dialogues, fluency games",
-    outcomes: "Improved everyday classroom communication and teacher confidence"
-  },
-  {
-    id: 2,
-    title: "Public Speaking & Presentation Skills",
-    hours: 9,
-    objectives: "Build effective delivery, stage presence, and clarity for group settings",
-    activities: "Presentations, voice modulation exercises, peer feedback",
-    outcomes: "Clearer articulation, stronger presence in meetings and events"
-  },
-  {
-    id: 3,
-    title: "Inclusive and Stress-Free Classroom Management",
-    hours: 9,
-    objectives: "Adopt non-punitive strategies to manage diverse student behaviors",
-    activities: "Classroom scenarios, role-play, and behavior mapping tools",
-    outcomes: "Increased control, calmer classrooms, inclusive engagement"
-  },
-  {
-    id: 4,
-    title: "Parent Communication & Feedback Delivery",
-    hours: 9,
-    objectives: "Develop structured and empathetic communication with parents",
-    activities: "Role-play with parent profiles, email templates, video-based practice",
-    outcomes: "Improved handling of parent conversations and feedback clarity"
-  },
-  {
-    id: 5,
-    title: "Personal Confidence & Influence Building",
-    hours: 9,
-    objectives: "Strengthen personal presence, emotional control, and professional demeanor",
-    activities: "Group reflection, assertiveness exercises, self-assessment journals",
-    outcomes: "Higher confidence, better influence in peer and leadership interactions"
-  }
-];
+// Modules data moved to communicationPersonalityModules below
 
 // Table data for communication-personality
 const communicationPersonalityModules = [
@@ -153,20 +137,19 @@ export default function CourseDetailed() {
       </div>
     );
   }
-
   // Render detailed pages for all data-driven courses
-  let data = null;
+  let data: CourseDetailsType | null = null;
   if (course.id === 'institutional-value-added') {
-    data = institutionalValueAddedDetails;
+    data = institutionalValueAddedDetails as CourseDetailsType;
   } else if (course.id === 'leadership-career-growth') {
-    data = leadershipCareerGrowthDetails;
+    data = leadershipCareerGrowthDetails as CourseDetailsType;
   } else if (course.id === 'domain-specific-certification') {
-    data = domainSpecificCertificationDetails;
+    data = domainSpecificCertificationDetails as CourseDetailsType;
   } else if (course.id === 'mental-health-counseling') {
-    data = mentalHealthCounselingDetails;
+    data = mentalHealthCounselingDetails as CourseDetailsType;
   } else if (course.id === 'communication-personality') {
-    data = communicationPersonalityDevelopmentDetails;
-  } else if (course.id === 'Teacher Development Programs (TDP)') {
+    data = communicationPersonalityDevelopmentDetails as CourseDetailsType;
+  }else if (course.id === 'Teacher Development Programs (TDP)') {
     return (
       <>
         <AcademyHeader />
@@ -254,8 +237,37 @@ export default function CourseDetailed() {
                 </h2>
                 {data.intro.map((p, i) => (
                   <p key={i} className={`text-lg text-gray-700 leading-relaxed${i === 0 ? ' mb-8' : ''}`}>{p}</p>
-                ))}
-              </div>
+                ))}              </div>
+              
+              {/* Stand Out Section */}
+              {data.standOut && (
+                <div className="mb-8">
+                  <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
+                    {data.standOut.title}
+                  </h2>
+                  <p className="text-lg text-gray-700 leading-relaxed mb-6">
+                    {data.standOut.description}
+                  </p>
+                  
+                  <h3 className="text-xl font-semibold text-gray-900 mb-4">
+                    How Rareminds Assists:
+                  </h3>
+                  
+                  <div className="space-y-6">
+                    {data.standOut.assists && data.standOut.assists.map((item, i) => (
+                      <div key={i} className="flex flex-col">
+                        <h4 className="text-lg font-semibold text-gray-800 mb-1">
+                          {item.title}
+                        </h4>
+                        <p className="text-base text-gray-700">
+                          {item.description}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
  <div className="bg-gray-100 rounded-2xl p-8 text-black shadow-2xl">
                 <h3 className="text-2xl font-bold mb-8 flex items-center">
                   <ArrowRight className="h-6 w-6 mr-3" />

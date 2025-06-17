@@ -27,13 +27,12 @@ import { RotatingCube } from "./RotatingCube";
           <div className=" space-y-8 animate-fade-in">
             <div className="space-y-4 text-center">
               <h1 className="text-xl md:text-4xl font-bold mb-10">
-                MAKE GAMES WITH
+                Voices from Our Partner Schools
                 
               </h1>
               
               <p className="text-xl md:text-2xl ">
-                Over 250,000 users monthly create games in Construct 3. 
-                Cutting-edge technology that runs right inside your browser like magic.
+              Real stories of transformation, growth, and the difference Rareminds makes
               </p>
             </div>
             
