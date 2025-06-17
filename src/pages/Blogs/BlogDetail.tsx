@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { motion, AnimatePresence } from "framer-motion";
+import { Helmet } from "react-helmet-async";
 import styles from "./styles.module.css";
 
 // Enhanced type definitions
@@ -23,7 +24,9 @@ interface BlogPost {
   readonly featured_image: string | null;
   readonly category: string;
   readonly subcategory: string | null;
+  readonly meta_description: string;
   readonly slug: string;
+  readonly meta_title: string;
   readonly author_name: string | null;
   readonly author_bio: string | null;
   readonly author_avatar: string | null;
@@ -217,49 +220,55 @@ const BlogDetail = () => {
   }
 
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      className="min-h-screen bg-white"
-    >
-      {/* Back Button Header */}
-      <div className="w-full sticky top-0 z-[40] bg-white border-b border-gray-100">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <button
-            onClick={() => window.history.back()}
-            className="inline-flex items-center gap-2 text-gray-600 hover:text-red-500 transition-colors group font-medium"
-            aria-label="Back to previous page"
-          >
-            <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
-            Back
-          </button>
-        </div>
-      </div>
-      {/* Hero Section */}
-      <BlogHeroSection post={post} />
-
-      {/* Main Content */}
-      <main className="py-16 lg:py-24">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
-            
-            {/* Article Content */}
-            <BlogContentSection post={post} />
-
-            {/* Sidebar */}
-            <BlogSidebar post={post} />
+    <>
+      <Helmet>
+        <title>{post.meta_title}</title>
+        <meta name="description" content={post.meta_description} />
+      </Helmet>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        className="min-h-screen bg-white"
+      >
+        {/* Back Button Header */}
+        <div className="w-full sticky top-0 z-[40] bg-white border-b border-gray-100">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+            <button
+              onClick={() => window.history.back()}
+              className="inline-flex items-center gap-2 text-gray-600 hover:text-red-500 transition-colors group font-medium"
+              aria-label="Back to previous page"
+            >
+              <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
+              Back
+            </button>
           </div>
         </div>
-      </main>
+        {/* Hero Section */}
+        <BlogHeroSection post={post} />
 
-      {/* Related Posts */}
-      <RelatedPostsSection 
-        relatedPosts={relatedPosts} 
-        loading={relatedLoading}
-        backToPath={backToPath}
-      />
-    </motion.div>
+        {/* Main Content */}
+        <main className="py-16 lg:py-24">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
+              
+              {/* Article Content */}
+              <BlogContentSection post={post} />
+
+              {/* Sidebar */}
+              <BlogSidebar post={post} />
+            </div>
+          </div>
+        </main>
+
+        {/* Related Posts */}
+        <RelatedPostsSection 
+          relatedPosts={relatedPosts} 
+          loading={relatedLoading}
+          backToPath={backToPath}
+        />
+      </motion.div>
+    </>
   );
 };
 

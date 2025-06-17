@@ -1,4 +1,3 @@
-import ComingSoon from "@/pages/ComingSoon";
 import React from "react";
 import { useParams } from "react-router-dom";
 import { useRecruitmentService } from "@/hooks/useRecruitmentService";
@@ -10,6 +9,7 @@ import ApproachSection from "./sections/ApproachSection";
 import ContactSection from "./sections/ContactSection";
 import ModelsSection from "./sections/ModelsSection";
 import LoaderComponent from "@/components/LoaderComponent";
+import { Helmet } from "react-helmet-async";
 
 const Service: React.FC = () => {
   const { name } = useParams<{ name: string }>();
@@ -31,6 +31,16 @@ const Service: React.FC = () => {
 
   return (
     <>
+      <Helmet>
+        <title>{foundService?.meta_title || "Service"}</title>
+        <meta
+          name="description"
+          content={
+            foundService?.meta_desc ||
+            "Service details and information."
+          }
+        />
+      </Helmet>
       <RecruitmentServiceSection foundService={foundService} />
       <TechTeamSection
         title={foundService.heading_1}

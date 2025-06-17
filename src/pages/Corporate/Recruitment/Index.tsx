@@ -58,10 +58,7 @@ const Corporate: React.FC = () => {
   return (
     <>
       <Helmet>
-        <meta
-          name="title"
-          content="Top Recruitment Services in India / Top Hiring Agency/ Rareminds"
-        />
+        <title>Top Recruitment Services in India | Top Hiring Agency | Rareminds</title>
         <meta
           name="description"
           content="Rareminds delivers fast, scalable, and data-driven recruitment solutions across India and globally—20+ industries, 500K+ hires, and 250+ clients worldwide."
