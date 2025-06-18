@@ -748,6 +748,7 @@ export const Coursess = [
 
 export const domainSpecificCertificationDetails = {
   title: "What makes Rareminds Domain-Specific Certification Programs different?",
+   subtitle: "Schools play a crucial role in inspiring students towards future careers in emerging fields (AgriTech, EV, EdTech, AI, Biotechnology). However, many lack the resources to provide meaningful exposure and skill development in these areas.",
   intro: [
     "Schools play a crucial role in inspiring students towards future careers in emerging fields (AgriTech, EV, EdTech, AI, Biotechnology). However, many lack the resources to provide meaningful exposure and skill development in these areas.",
     "These age-appropriate certification programs combine fun, practical activities and real-world insights to introduce students to exciting career paths. Through hands-on experiments, interactive lessons, and project work, schools create an environment that nurtures curiosity and innovation."
@@ -776,10 +777,34 @@ export const domainSpecificCertificationDetails = {
 
 export const mentalHealthCounselingDetails = {
   title: "What makes Rareminds' Mental Health and Counselling Training different?",
+  // subtitle: "Mental Health Counseling for Teachers",
+  
   intro: [
     "Mental health issues among students are increasing, yet the majority of classrooms lack the capacity to react. Teachers are usually the first adults to observe signs of distress, but they do not have the training to help or refer students. This creates lost intervention opportunities, intensified emotional problems, and unnecessary classroom disruption.",
     "Rareminds' Teachers' Mental Health and Counseling Training is intended to create emotional sensitivity, communication awareness, and first-responding skills for school teachers. Our training helps teachers become more than academic facilitators, yet emotionally sensitive care-takers of students' welfare."
   ],
+  standOut: {
+    title: "What Makes Rareminds' Program Stand Out?",
+    description: "Our training is hands-on, scenario-based, and designed specifically for schools. Teachers are taught to recognize, respond, and refer with confidence — without overstepping professional boundaries or jeopardizing their own safety.",
+    assists: [
+      {
+        title: "Identifying At-Risk Students",
+        description: "Train teachers to identify warning signs of mental or emotional distress through easy-to-use observation tools and behavior indicators."
+      },
+      {
+        title: "Peer Counseling & First Response Skills",
+        description: "Introduce educators to fundamental counseling skills and response protocols so that they can provide emotional first-aid and facilitate student peer-counselor systems."
+      },
+      {
+        title: "Faculty as Mentors: Empathy & Active Listening",
+        description: "Enhance teachers' skill at reaching students through active listening, non-judgmental feedback, and reflective questioning."
+      },
+      {
+        title: "Creating a Safe Classroom",
+        description: "Assist educators in creating inclusive, emotionally safe classrooms reducing anxiety, encouraging openness, and fostering increased student trust."
+      }
+    ]
+  },
   whyItMatters: [
     "Establishes communication and trust between teachers and students",
     "Decreases classroom interruptions due to unaddressed emotional concerns",
@@ -800,11 +825,31 @@ export const mentalHealthCounselingDetails = {
 };
 
 export const communicationPersonalityDevelopmentDetails = {
-  title: "What makes Rareminds’ Communication and Personality Development Program different?",
+  title: "Communication and Personality Development",
+  // subtitle: "Communication and Personality Development for Teachers",
+  
   intro: [
     "In today’s dynamic learning environments, academic expertise alone is not enough. The role of a teacher now demands fluency in communication, confidence in handling diverse classrooms, and the ability to engage effectively with parents.",
     "Rareminds’ 21st-century teacher training modules are designed to empower educators with the practical skills and behavioral strategies needed to lead classrooms with clarity, calm, and collaboration."
   ],
+  standOut: {
+    title: "What Makes Rareminds' Program Different?",
+    description: "We equip educators with real-world tools to improve fluency, reduce stress, and foster better stakeholder relationships. Our hands-on workshops and classroom simulations ensure that teachers leave with skills they can implement from the very first day.",
+    assists: [
+      {
+        title: "English Fluency & Public Speaking for Teachers",
+        description: "Empowers educators to communicate confidently and fluently in English across classrooms, assemblies, parent interactions, and staff meetings. We cover pronunciation, presentation techniques, and situational speaking, building competence and presence."
+      },
+      {
+        title: "Classroom Management without Stress",
+        description: "Introduces stress-free, positive behavior management strategies. Teachers learn how to manage disruptions, build rapport with students, set boundaries, and maintain a calm and authoritative presence without resorting to punitive methods. The training also focuses on understanding newer student profiles and adapting to varied learning styles, enabling more inclusive and responsive classroom environments."
+      },
+      {
+        title: "Parent-Teacher Communication Mastery",
+        description: "Strengthens teachers' ability to build productive parent relationships. Modules include handling difficult conversations, setting communication protocols, giving constructive feedback, and maintaining mutual trust."
+      }
+    ]
+  },
   whyItMatters: [
     "Enhances overall teacher confidence and classroom performance",
     "Improves student engagement, discipline, and academic outcomes",

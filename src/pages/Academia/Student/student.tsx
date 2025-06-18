@@ -44,6 +44,8 @@ import FloatingActionMenu from '../../../components/Academy/StickyButton/StickyB
 import  Courses from '../../../components/Academy/Students/Courses'
 import TestimonialVideoCarousel from "../../../components/Academy/Students/StudentCarouselVideo"
 import Hero from "../../../components/Academy/Students/Herobanner/Hero"
+import YouTubeFeed from '../../../components/Academy/Students/youtubelive'
+import CurrentBlogs from '../../../components/Academy/Students/Current_blogs'
 
 const Academy = ({ userType = "teacher" }: { userType?: "teacher" | "student" }) => {
   const [activeTab, setActiveTab] = useState<"teacher" | "student">("teacher");
@@ -62,10 +64,10 @@ const Academy = ({ userType = "teacher" }: { userType?: "teacher" | "student" })
   
 
   const stats = [
-    { icon: Book, value: "20,000+", label: "Faculty Trained" },
+    { icon: Book, value: "20,000+", label: "Teachers Trained" },
     { icon: Users, value: "100+", label: "Schools Onboarded" },
     { icon: Calendar, value: "250+", label: "Pilots Deployed" },
-    { icon: Circle, value: "92%", label: "Faculty Satisfaction Rate" },
+    { icon: Circle, value: "92%", label: "Teachers Satisfaction Rate" },
   ];
 
    useEffect (() =>{
@@ -345,6 +347,9 @@ const Academy = ({ userType = "teacher" }: { userType?: "teacher" | "student" })
  <TestimonialVideoCarousel />     
        </div>
 
+<div  className="min-h-auto flex items-center justify-center relative z-10 bg-white">
+ <YouTubeFeed />     
+       </div>
 
 
        {/* <div  className="min-h-screen flex items-center justify-center relative z-10 bg-white">
@@ -453,10 +458,14 @@ const Academy = ({ userType = "teacher" }: { userType?: "teacher" | "student" })
 
       {/* Resources Page */}
     
+
        <div  className="min-h-screen flex items-center justify-center relative z-10 bg-white">
   <ResourcesPage />  
        </div>
       {/* <ResourceDownloadForm /> */}
+      <div  className="h-auto flex items-center justify-center relative z-10 bg-white">
+  <CurrentBlogs />  
+       </div>
        
 
        <div ref={contactRef} id="contact-section">
