@@ -37,7 +37,7 @@ const InstitutionDashboardSection = () => {
             >
               <img
                 src="https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Corporate/Recruitment/Index/Dashboard/games.webp"
-                alt="Simulation Game Demo"
+                alt="Illustration of games showcasing a battery, a fridge, an animated battery, and a lab beaker."
                 className="rounded-lg w-full"
               />
             </motion.div>
@@ -58,7 +58,7 @@ const InstitutionDashboardSection = () => {
             >
               <img
                 src="https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Corporate/Recruitment/Index/Dashboard/dashboard-preview-3.webp"
-                alt="Analytics Dashboard Demo"
+                alt="Image of a dashboard showing data and an image of recruitment steps and stages of recruitment services using AI."
                 className="rounded-lg w-full"
               />
             </motion.div>
@@ -78,7 +78,7 @@ const InstitutionDashboardSection = () => {
           >
             <img
               src="https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Corporate/Recruitment/Index/Dashboard/dashboard-preview-2.webp"
-              alt="Rareprep LMS"
+              alt="Image of a Smart Learning Management Dashboard showing bar graphs, figures, charts, attendance, and time spent."
               className="rounded-lg w-full h-full"
             />
           </motion.div>

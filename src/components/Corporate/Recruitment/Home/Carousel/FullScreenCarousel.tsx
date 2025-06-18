@@ -12,6 +12,7 @@ interface CarouselSlide {
   heading: string;
   subheading: string;
   img: string;
+  alt?: string;
 }
 
 interface FullScreenCarouselProps {
@@ -196,7 +197,7 @@ const FullScreenCarousel: React.FC<FullScreenCarouselProps> = ({
                     <motion.img
                       key={slides[activeIndex].img}
                       src={slides[activeIndex].img}
-                      alt={slides[activeIndex].heading}
+                      alt={slides[activeIndex].alt}
                       height={400}
                       width={400}
                       className="w-[300px] h-[300px] lg:w-[400px] lg:h-[400px] max-w-xl mx-auto lg:max-w-none object-cover rounded-lg absolute"
