@@ -45,7 +45,7 @@ import  Courses from '../../../components/Academy/Students/Courses'
 import TestimonialVideoCarousel from "../../../components/Academy/Students/StudentCarouselVideo"
 import Hero from "../../../components/Academy/Students/Herobanner/Hero"
 import YouTubeFeed from '../../../components/Academy/Students/youtubelive'
-import CurrentBlogs from '../../../components/Academy/Students/current_blogs'
+import CurrentBlogs from '../../../components/Academy/Students/Current_blogs'
 
 const Academy = ({ userType = "teacher" }: { userType?: "teacher" | "student" }) => {
   const [activeTab, setActiveTab] = useState<"teacher" | "student">("teacher");
