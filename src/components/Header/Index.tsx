@@ -1,5 +1,4 @@
 import React, { useState, Dispatch, SetStateAction } from 'react';
-import { Menu } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Menu, Briefcase } from 'lucide-react';
 
