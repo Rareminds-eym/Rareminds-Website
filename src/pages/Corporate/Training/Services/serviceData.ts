@@ -1,9 +1,13 @@
 export const services = [
   {
     id: "leadership-management",
+    meta_title:
+      "Leadership & Management Excellence | Rareminds Corporate Training",
+    meta_desc:
+      "Transform managers into impactful leaders with focused programs on strategy, emotional intelligence, agility, and performance. Tailored for first-time managers to CXOs.",
     heroTitle: "Leadership and Management Excellence",
     heroSubtitle:
-      "TransfoDevelop visionary leaders who can think strategically, lead with empathy, and execute with clarity. Whether it's a first-time manager or a CXO, our programs build a strong foundation for people leadership and organizational growth. Perfect for navigating complexity with confidence.",
+      "Develop visionary leaders who can think strategically, lead with empathy, and execute with clarity. Whether it's a first-time manager or a CXO, our programs build a strong foundation for people leadership and organizational growth. Perfect for navigating complexity with confidence.",
     featureBadges: [
       {
         icon: "users",
@@ -25,7 +29,6 @@ export const services = [
       },
     ],
     programs: [
-      // First-Time Manager to People Leader
       {
         id: "first-time-manager",
         title: "First-Time Manager to People Leader",
@@ -122,7 +125,6 @@ export const services = [
           description: `Don't leave your future leaders to figure it out alone. Equip your team with the tools, mindset, and confidence to lead people, not just processes. Book this program today and start building leadership from day one. Connect with us to customize the First-Time Manager to People Leader Program for your team.`,
         },
       },
-      // Strategic Thinking and Decision Making
       {
         id: "strategic-thinking",
         title: "Strategic Thinking and Decision Making",
@@ -743,6 +745,10 @@ export const services = [
   },
   {
     id: "communication-collaboration",
+    meta_title:
+      "Communication & Collaboration Training | Rareminds Corporate Programs",
+    meta_description:
+      "Enhance team impact with training in business communication, executive presence, cross-cultural collaboration, and virtual etiquette. Build clarity, confidence, and influence across all levels.",
     heroTitle: "Communication and Collaboration",
     heroSubtitle:
       "From high-stakes presentations to everyday emails, these programs empower teams to communicate clearly and collaborate across functions and cultures. They drive confidence, executive presence, and conflict-free teamwork, both online and offline.",
@@ -1430,6 +1436,10 @@ export const services = [
   },
   {
     id: "workplace-productivity",
+    meta_title:
+      "Workplace Productivity & Digital Fluency Training | Rareminds Programs",
+    meta_description:
+      "Boost efficiency with training in time management, digital tools, AI productivity, and problem-solving. Equip professionals to work smarter, faster, and more effectively in the digital workplace.",
     heroTitle: "Workplace Productivity and Digital Fluency",
     heroSubtitle:
       "Unlock new levels of efficiency and effectiveness by mastering time, tech, and critical problem-solving. These programs turn everyday professionals into productivity ninjas—blending human intelligence with digital smarts.",
@@ -2081,6 +2091,10 @@ export const services = [
   },
   {
     id: "tech-upskilling",
+    meta_title:
+      "Tech Upskilling & Future Skills Training | AI, Data, Cloud & Cybersecurity",
+    meta_description:
+      "Prepare teams for the future with hands-on training in AI, data analytics, cloud, and cybersecurity. Upskill IT and digital teams to stay ahead in a rapidly evolving tech landscape.",
     heroTitle: "Tech Upskilling and Future Skills",
     heroSubtitle:
       "Gear up your teams with cutting-edge skills in AI, data, cloud, and cybersecurity. These modules are built for today’s tech demands—and tomorrow’s disruptions. Ideal for IT teams, digital squads, and tech-curious professionals.",
@@ -2722,6 +2736,10 @@ export const services = [
   // Add more services here as needed
   {
     id: "behavioral-culture",
+    meta_title:
+      "Organizational Culture & Behavioral Training | Build Inclusive, Resilient Workplaces",
+    meta_description:
+      "Drive lasting cultural change with training in DEI, psychological safety, accountability, and resilience. Build ethical, inclusive, and high-trust teams across hybrid and remote settings.",
     heroTitle: "Behavioral and Organizational Culture Programs",
     heroSubtitle:
       "Shape inclusive, accountable, and resilient workplace cultures with programs that go beyond the surface. We help organizations build psychological safety, promote Diversity, Equity, and Inclusion, and drive ownership at all levels. Culture isn't a buzzword here—it’s a strategy.",
@@ -3362,6 +3380,10 @@ export const services = [
   },
   {
     id: "sales-marketing-customer",
+    meta_title:
+      "Sales, Marketing & Customer Experience Training | Drive Growth & Retention",
+    meta_description:
+      "Empower teams with skills in B2B sales, performance marketing, CX storytelling, and CRM tools. Boost conversions, deepen client relationships, and elevate customer-centric growth.",
     heroTitle: "Sales, Marketing and Customer Centricity",
     heroSubtitle:
       "Fuel your frontlines with powerful skills to convert leads, retain clients, and wow customers at every touchpoint. These programs blend performance marketing, sales enablement, and CX storytelling to drive revenue and relationships.",
@@ -3986,6 +4008,10 @@ export const services = [
   },
   {
     id: "hr-talent-development",
+    meta_title:
+      "HR & Talent Development Training | Strategic Capability Building for HR Teams",
+    meta_description:
+      "Equip HR teams to lead with impact through programs in talent analytics, performance systems, L&D, and employee experience. Shift from operational HR to strategic workforce transformation.",
     heroTitle: "HR and Talent Development",
     heroSubtitle:
       "HR teams today are architects of culture, capability, and experience. Our programs help HR professionals elevate from operations to strategy—using data, design, and development to shape the future of work.",
@@ -4662,6 +4688,10 @@ export const services = [
   },
   {
     id: "custom-corporate-academies",
+    meta_title:
+      "Custom Corporate Academies | Scalable Learning Journeys Aligned to Business Goals",
+    meta_description:
+      "Build branded learning academies tailored to your culture and strategy, from early talent to leadership. Co-create scalable programs like Campus to Corporate, ToT, and Women in Leadership.",
     heroTitle: "Custom Corporate Academies",
     heroSubtitle:
       "Design internal academies and learning journeys that reflect your brand, vision, and growth strategy. From early career to leadership tracks, we co-create programs that stick, scale, and show results.",
@@ -5240,6 +5270,10 @@ export const services = [
   },
   {
     id: "strategic-addons",
+    meta_title:
+      "Learning Add-Ons for Strategic Impact | Assessments, Coaching & Certifications",
+    meta_description:
+      "Maximize training ROI with add-ons like assessments, executive coaching, real-world projects, and multilingual delivery. Drive measurable impact with dashboards and certifications.",
     heroTitle: "Add-Ons for Strategic Advantage",
     heroSubtitle:
       "Enhance every learning program with data-driven assessments, real-world projects, and personalized coaching. These add-ons turn training into transformation, complete with dashboards, certifications, and multilingual delivery.",
