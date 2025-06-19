@@ -126,8 +126,8 @@ const resources: Resource[] = [
     <div className="h-autopx-8 bg-white py-8 mt-8" data-aos="fade-down-right ">
       <div className="container mx-auto px-4">
         <div className="max-w-4xl mx-auto mb-6">
-          <h1 className="text-3xl text-center font-bold mb-2">Free Student Resource Pack – Instant Downloads
-          </h1>
+          <h2 className="text-3xl text-center font-bold mb-2">Free Student Resource Pack – Instant Downloads
+          </h2>
           <p className="text-gray-600 mb-8 text-center">
           What Students, Parents & Schools Get:
 

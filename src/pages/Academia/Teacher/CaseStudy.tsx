@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
+import { Helmet } from "react-helmet-async";
 import { MapPin, Users, Clock, BookOpen, Target, CheckCircle, ArrowLeft } from 'lucide-react';
 import { Button } from '../../../components/Academy/UI/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -236,9 +237,16 @@ const CaseStudy = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
-
   return (
     <div className="min-h-screen bg-gray-50">
+      <Helmet>
+        <title>School Impact Case Studies | NEP Transformation Success | Rareminds</title>
+        <meta
+          name="description"
+          content="See how Rareminds transforms schools with STEM, NEP training, climate action, and entrepreneurship — with real-world student & teacher outcomes."
+        />
+      </Helmet>
+      
       <AcademyHeader />
       <FloatingActionMenu />
       {/* Banner Section with Image */}
