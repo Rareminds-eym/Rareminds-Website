@@ -2,13 +2,12 @@ import { useParams, Link, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabaseClient";
 import { Button } from "@/components/ui/button";
-import { Input } from "../UI/input";
-import { Textarea } from "../UI/textarea";
 import BlogCard from "./BlogCard";
-import { Calendar, Clock, User, ArrowLeft, CheckCircle, Share2, Eye, MessageCircle } from "lucide-react";
+import { Calendar, ArrowLeft, Share2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { motion } from "framer-motion";
 import AcademyHeader from "@/components/Header/AcademyHeader";
+import FloatingActionMenu from "@/components/Academy/StickyButton/StickyButton/FloatingAction";
 import styles from "./styles.module.css"; // Assuming you have a CSS module for styles
 
 // Supabase blog post interface
@@ -21,9 +20,10 @@ interface BlogPost {
   category: string;
   subcategory: string | null;
   slug: string;
-  author_name: string | null;
-  author_bio: string | null;
+  author_name: string | null;  author_bio: string | null;
   author_avatar: string | null;
+  author_title?: string | null;
+  author_articles_count?: number | null;
   read_time: number | null;
   tags: string[] | null;
   key_points: string[] | null;
@@ -35,13 +35,10 @@ interface BlogPost {
 const BlogDetail = () => {
   const { slug } = useParams();
   const location = useLocation();
-  const { toast } = useToast();
-  const [post, setPost] = useState<BlogPost | null>(null);
+  const { toast } = useToast();  const [post, setPost] = useState<BlogPost | null>(null);
   const [relatedPosts, setRelatedPosts] = useState<BlogPost[]>([]);
+  const [latestPosts, setLatestPosts] = useState<BlogPost[]>([]);
   const [loading, setLoading] = useState(true);
-  const [commentName, setCommentName] = useState("");
-  const [commentEmail, setCommentEmail] = useState("");
-  const [commentText, setCommentText] = useState("");
   
   // Determine which subcategory to fetch based on URL path
   const getSubcategoryFromPath = () => {
@@ -115,12 +112,43 @@ const BlogDetail = () => {
           
           // Execute the query
           const { data: relatedData, error: relatedError } = await relatedQuery
-            .order('created_at', { ascending: false });
-
-          if (!relatedError && relatedData) {
+            .order('created_at', { ascending: false });          if (!relatedError && relatedData) {
             setRelatedPosts(relatedData);
           }
         }
+
+        // Fetch latest posts (most recent posts regardless of category)
+        const fetchLatestPosts = async () => {
+          try {
+            // Get subcategory from URL path for filtering
+            const subcategory = getSubcategoryFromPath();
+            
+            // Start building the query for latest posts
+            let latestQuery = supabase
+              .from('blog_posts')
+              .select('*')
+              .neq('id', blogData.id)
+              .limit(3);
+            
+            // Filter by subcategory if applicable
+            if (subcategory) {
+              latestQuery = latestQuery.eq('subcategory', subcategory);
+            }
+            
+            // Execute the query - order by created_at for latest posts
+            const { data: latestData, error: latestError } = await latestQuery
+              .order('created_at', { ascending: false });
+
+            if (!latestError && latestData) {
+              setLatestPosts(latestData);
+            }
+          } catch (error) {
+            console.error('Error fetching latest posts:', error);
+          }
+        };
+
+        // Fetch latest posts
+        fetchLatestPosts();
 
       } catch (error) {
         console.error('Error:', error);
@@ -161,106 +189,9 @@ const BlogDetail = () => {
             Return to Blog
           </Link>        </div>
       </div>
-    );
-  }
+    );  }
 
   const currentUrl = window.location.href;
-
-  const handleCommentSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    // Simulate comment submission
-    toast({
-      title: "Comment submitted!",
-      description: "Thank you for your feedback. We'll review your comment shortly.",
-    });
-    
-    // Clear form
-    setCommentName("");
-    setCommentEmail("");
-    setCommentText("");
-  };
-
-  const renderContent = (content: string) => {
-    const lines = content.trim().split('\n');
-    
-    return lines.map((line, index) => {
-      const trimmedLine = line.trim();
-      
-      if (!trimmedLine) {
-        return <br key={index} />;
-      }
-      
-      // Headers
-      if (trimmedLine.startsWith('# ')) {
-        return (
-          <h1 key={index} className="font-playfair text-4xl font-bold text-foreground mb-6 mt-8">
-            {trimmedLine.substring(2)}
-          </h1>
-        );
-      }
-      
-      if (trimmedLine.startsWith('## ')) {
-        return (
-          <h2 key={index} className="font-playfair text-3xl font-semibold text-foreground mb-4 mt-8">
-            {trimmedLine.substring(3)}
-          </h2>
-        );
-      }
-      
-      if (trimmedLine.startsWith('### ')) {
-        return (
-          <h3 key={index} className="font-playfair text-2xl font-semibold text-foreground mb-4 mt-6">
-            {trimmedLine.substring(4)}
-          </h3>
-        );
-      }
-      
-      // Blockquotes
-      if (trimmedLine.startsWith('> ')) {
-        return (
-          <blockquote key={index} className="border-l-4 border-primary pl-6 py-2 my-6 italic text-lg text-muted-foreground bg-sage-50/50 rounded-r-lg">
-            {trimmedLine.substring(2)}
-          </blockquote>
-        );
-      }
-      
-      // Bold subheadings
-      if (trimmedLine.startsWith('**') && trimmedLine.endsWith('**')) {
-        return (
-          <h4 key={index} className="font-semibold text-lg text-foreground mb-3 mt-4">
-            {trimmedLine.slice(2, -2)}
-          </h4>
-        );
-      }
-      
-      // Bullet points
-      if (trimmedLine.startsWith('• ') || trimmedLine.startsWith('- ')) {
-        return (
-          <li key={index} className="text-muted-foreground mb-2 ml-4">
-            {trimmedLine.substring(2)}
-          </li>
-        );
-      }
-      
-      // Numbered lists
-      if (/^\d+\./.test(trimmedLine)) {
-        const text = trimmedLine.replace(/^\d+\.\s*/, '');
-        return (
-          <li key={index} className="text-muted-foreground mb-2 ml-4 list-decimal">
-            {text}
-          </li>
-        );
-      }
-      
-      // Regular paragraphs
-      return (
-        <p key={index} className="text-muted-foreground mb-4 leading-relaxed">
-          {trimmedLine}
-        </p>
-      );
-    });
-  };
   return (
 
     <>
@@ -319,20 +250,24 @@ const BlogDetail = () => {
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent z-10"></div>
           {/* Centered content starts here */}
-          <div className="relative z-20 w-full flex justify-center items-center h-full">
-            <div className=" w-full max-w-6xl mx-auto text-start ">
-              <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3, duration: 0.6 }}
-              >
-                <span className="inline-block px-4 py-2 bg-red-500 text-white rounded-full text-sm font-semibold mb-6 shadow-lg">
-                  {post.category}
-                </span>
-                <h1 className="text-3xl sm:text-4xl lg:text-6xl font-bold text-white mb-6 leading-tight">
-                  {post.title}
-                </h1>
-                <div className="flex flex-wrap items-center justify-start gap-6 text-white/90">
+   
+        </div>
+      </motion.section>       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="relative z-20 w-full pt-4">
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
+                <div className="lg:col-span-8">
+                  <motion.div
+                    initial={{ opacity: 0, y: 30 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.3, duration: 0.6 }}
+                  >
+                    <span className="inline-block px-4 py-2 bg-black text-white rounded-full text-sm font-semibold mb-6 shadow-lg">
+                      {post.category}
+                    </span>
+                    <h1 className="text-3xl sm:text-4xl lg:text-6xl font-bold text-black mb-6 leading-tight">
+                      {post.title}
+                    </h1>
+                <div className="flex flex-wrap items-center justify-start gap-6 text-black/90">
                   <div className="flex items-center gap-2">
                     {/* <User className="w-4 h-4" /> */}
                     {/* <span className="font-medium">{post.author_name || 'Anonymous'}</span> */}
@@ -352,13 +287,12 @@ const BlogDetail = () => {
                   <div className="flex items-center gap-2">
                     {/* <Eye className="w-4 h-4" /> */}
                     {/* <span>2.4k views</span> */}
-                  </div>
+                  </div>                </div>
+                  </motion.div>
                 </div>
-              </motion.div>
+              </div>
             </div>
-          </div>
         </div>
-      </motion.section>
 
       {/* Main Content */}
       <main className="py-16 lg:py-24">
@@ -430,14 +364,16 @@ const BlogDetail = () => {
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.5, duration: 0.6 }}
               className="lg:col-span-4"
-            >
-              {/* Article Stats */}
+            >              {/* Article Stats */}
               <div className="sticky top-24 space-y-8">
-                <div className="p-6 bg-white rounded-2xl border border-gray-100 shadow-sm">
-                  <h4 className="font-bold text-gray-900 mb-4">Article Stats</h4>
-                  <div className="space-y-3">                    <div className="flex items-center justify-between">
-                      <span className="text-gray-600">Published</span>
-                      <span className="font-medium text-gray-900">
+                <div className="p-6 bg-gradient-to-br from-red-50 via-white to-red-50/50 rounded-2xl border border-red-100 shadow-lg backdrop-blur-sm">
+                  <h4 className="font-bold text-gray-900 mb-4 flex items-center gap-2">
+                    {/* <div className="w-2 h-2 bg-red-500 rounded-full"></div> */}
+                    Article Stats
+                  </h4>
+                  <div className="space-y-3">                    <div className="flex items-center justify-between p-3 bg-white/60 rounded-lg border border-red-50">
+                      <span className="text-gray-600 font-medium">Published</span>
+                      <span className="font-semibold text-gray-900">
                         {new Date(post.publish_date).toLocaleDateString('en-US', { 
                           month: 'short', 
                           day: 'numeric', 
@@ -445,9 +381,9 @@ const BlogDetail = () => {
                         })}
                       </span>
                     </div>
-                    <div className="flex items-center justify-between">
-                      <span className="text-gray-600">Read time</span>
-                      <span className="font-medium text-gray-900">{post.read_time || 5} min</span>
+                    <div className="flex items-center justify-between p-3 bg-white/60 rounded-lg border border-red-50">
+                      <span className="text-gray-600 font-medium">Read time</span>
+                      <span className="font-semibold text-gray-900">{post.read_time || 5} min</span>
                     </div>
                     {/* <div className="flex items-center justify-between">
                       <span className="text-gray-600">Views</span>
@@ -456,14 +392,49 @@ const BlogDetail = () => {
                   </div>
                 </div>
 
+                {/* Published Author */}
+                <div className="p-6 bg-gradient-to-br from-gray-900 via-gray-800 to-black rounded-2xl border border-gray-700 shadow-lg text-white">
+                  <h4 className="font-bold text-white mb-4 flex items-center gap-2">
+                    {/* <div className="w-2 h-2 bg-red-500 rounded-full"></div> */}
+                    Published Author
+                  </h4>
+                  <div className="flex items-center gap-4">
+                    <img
+                      src={post.author_avatar || '/RMLogo.webp'}
+                      alt={post.author_name || 'Author'}
+                      className="w-16 h-16 rounded-full object-cover border-3 border-red-500 shadow-lg"
+                    />
+                    <div className="flex-1">
+                      <h5 className="font-semibold text-white text-lg mb-1">
+                        {post.author_name || 'Anonymous Author'}
+                      </h5>
+                      <p className="text-red-300 text-sm mb-2 font-medium">
+                        {post.author_title || 'Content Writer'}
+                      </p>
+                      <p className="text-gray-300 text-xs leading-relaxed">
+                        {post.author_bio || 'Passionate about sharing knowledge and insights through engaging content.'}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="mt-4 pt-4 border-t border-gray-600">
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="text-gray-300">Articles published</span>
+                      <span className="font-semibold text-red-400">{post.author_articles_count || '12+'}</span>
+                    </div>
+                  </div>
+                </div>
+
                 {/* Tags */}
-                <div className="p-6 bg-white rounded-2xl border border-gray-100 shadow-sm">
-                  <h4 className="font-bold text-gray-900 mb-4">Tags</h4>
+                <div className="p-6 bg-gradient-to-br from-red-500 via-red-600 to-red-700 rounded-2xl border border-red-400 shadow-lg text-white">
+                  <h4 className="font-bold text-white mb-4 flex items-center gap-2">
+                    {/* <div className="w-2 h-2 bg-white rounded-full"></div> */}
+                    Tags
+                  </h4>
                   <div className="flex flex-wrap gap-2">
                     {post.tags?.map((tag: string, index: number) => (
                       <span
                         key={index}
-                        className="px-3 py-1 bg-red-50 text-red-600 rounded-full text-sm font-medium border border-red-100"
+                        className="px-3 py-2 bg-white/20 hover:bg-white/30 text-white rounded-full text-sm font-medium border border-white/30 backdrop-blur-sm transition-all duration-200 cursor-pointer hover:scale-105"
                       >
                         {tag}
                       </span>
@@ -472,7 +443,7 @@ const BlogDetail = () => {
                 </div>
 
                 {/* Mobile Share */}
-                <div className="lg:hidden p-6 bg-white rounded-2xl border border-gray-100 shadow-sm">
+                {/* <div className="lg:hidden p-6 bg-white rounded-2xl border border-gray-100 shadow-sm">
                   <h4 className="font-bold text-gray-900 mb-4">Share this article</h4>
                   <div className="flex gap-3">
                     <Button size="sm" className="flex-1 bg-red-500 hover:bg-red-600">
@@ -485,7 +456,8 @@ const BlogDetail = () => {
                       Twitter
                     </Button>
                   </div>
-                </div>              </div>
+                </div>            */}
+                   </div>
             </motion.aside>
           </div>
         </div>
@@ -574,64 +546,73 @@ const BlogDetail = () => {
                 <p className="text-gray-600 max-w-2xl mx-auto">
                   Discover more insights and expert perspectives on similar topics
                 </p>
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {relatedPosts.map((relatedPost, index) => (
-                  <motion.div
-                    key={relatedPost.id}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.9 + index * 0.1, duration: 0.6 }}
-                  >
-                    <BlogCard post={relatedPost} />
-                  </motion.div>
-                ))}
+              </div>              <div className="flex justify-center">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 items-stretch max-w-5xl">
+                  {relatedPosts.slice(0, 3).map((relatedPost, index) => (
+                    <motion.div
+                      key={relatedPost.id}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.9 + index * 0.1, duration: 0.6 }}
+                      className="h-full flex"
+                    >
+                      <div className="w-full h-full">
+                        <BlogCard post={relatedPost} />
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
               </div>
             </motion.div>
           </div>
         </section>
+      )}      {/* Latest Articles */}
+      {latestPosts.length > 0 && (
+        <section className="py-16 bg-gray-50">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 1, duration: 0.6 }}
+            >
+              <div className="text-center mb-12">
+                <h3 className="text-3xl font-bold text-gray-900 mb-4">
+                  Latest Articles
+                </h3>
+                <p className="text-gray-600 max-w-2xl mx-auto">
+                  Stay up to date with our newest insights and educational content
+                </p>
+              </div>            <div className="flex justify-center">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 items-stretch max-w-5xl">
+                  {latestPosts.slice(0, 3).map((latestPost: BlogPost, index: number) => (
+                    <motion.div
+                      key={latestPost.id}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 1.1 + index * 0.1, duration: 0.6 }}
+                      className="h-full flex"
+                    >
+                      <div className="w-full h-full">
+                        <BlogCard post={latestPost} />
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
+              <div className="text-center mt-12">
+                <Link to={location.pathname.includes("/school/teacher/blogs") ? "/school/teacher/blogs" : "/school/student/blogs"}>
+                  <Button 
+                    variant="outline" 
+                    className="border-red-200 text-red-600 hover:bg-red-50 px-8 py-3 font-semibold"
+                  >
+                    View All Articles
+                  </Button>
+                </Link>
+              </div>
+            </motion.div>
+          </div>        </section>
       )}
-
-      {/* Latest Articles */}
-      <section className="py-16 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1, duration: 0.6 }}
-          >
-            <div className="text-center mb-12">
-              <h3 className="text-3xl font-bold text-gray-900 mb-4">
-                Latest Articles
-              </h3>
-              <p className="text-gray-600 max-w-2xl mx-auto">
-                Stay up to date with our newest insights on sustainability, ESG frameworks, and environmental management
-              </p>
-            </div>            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {relatedPosts.map((currentPost: BlogPost, index: number) => (
-                <motion.div
-                  key={currentPost.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 1.1 + index * 0.1, duration: 0.6 }}
-                >
-                  <BlogCard post={currentPost} />
-                </motion.div>
-              ))}
-            </div>
-            <div className="text-center mt-12">
-              <Link to="/school/student/blogs">
-                <Button 
-                  variant="outline" 
-                  className="border-red-200 text-red-600 hover:bg-red-50 px-8 py-3 font-semibold"
-                >
-                  View All Articles
-                </Button>
-              </Link>
-            </div>
-          </motion.div>
-        </div>
-      </section>
+      <FloatingActionMenu />
     </div>
     </>
   );
