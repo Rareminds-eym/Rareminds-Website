@@ -140,20 +140,7 @@ const Logos = () => {
   return (
     <div className=" bg-white">
       <main className="w-full pt-12 pb-12">
-        {/* Hero Section */}
-        {/* <div className="py-16 md:py-24 bg-gradient-to-b from-gray-50 to-white">
-          <div className="container mx-auto text-center px-4">
-            <h1 className="text-4xl md:text-5xl font-bold mb-6">Your Education Platform</h1>
-            <p className="text-xl text-gray-600 mb-10 max-w-2xl mx-auto">
-              Empowering students and educators with innovative learning solutions
-            </p>
-            <button className="bg-primary text-white px-6 py-3 rounded-md font-medium hover:bg-primary/90 transition-colors">
-              Get Started
-            </button>
-          </div>
-        </div> */}
-        
-        {/* The trust banner section is now included here directly */}
+       
         <TrustedInstitutions />
         
 

@@ -394,8 +394,9 @@ import {
   ArrowRight,
   Search
 } from 'lucide-react';
-import { useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useRef, useState, useEffect } from 'react';
+import { useNavigate, useParams, useLocation } from 'react-router-dom';
+import { Helmet } from "react-helmet-async";
 import { Input } from "../../../components/Academy/UI/input";
 import { Book } from "@/components/ui/book";
 
@@ -923,9 +924,93 @@ highlights: [
   }
 };
 
+// Meta content configuration for different pages/services
+const metaContent = {
+  default: {
+    title: "Bilingual NEP 2020-Aligned School Programs | Rareminds School Services",
+    description: "Bilingual, NEP 2020-aligned school programs that strengthen communication, digital skills, and career paths designed for practical, classroom-ready impact."
+  },
+  'Teacher Development Programs (TDP)': {
+    title: "Teacher Development Programs | NEP Training for Educators | Rareminds",
+    description: "Empower educators with NEP-aligned programs in ranking readiness, innovation cells, and peer-learning teacher communities."
+  },
+  'communication-personality': {
+    title: "Communication & Personality Development for Teachers | Rareminds",
+    description: "Enhance teacher communication skills, classroom management, and parent engagement with stress-free, practical training programs."
+  },
+  'mental-health-counseling': {
+    title: "Mental Health & Counseling Training for Teachers | Rareminds",
+    description: "Train teachers to recognize at-risk students, provide first response support, and create safe, empathetic classroom environments."
+  },
+  'domain-specific-certification': {
+    title: "Industry Certification Programs for Teachers | AgriTech, AI, EV | Rareminds",
+    description: "Industry-partnered certification programs in AgriTech, EV, EdTech, AI, and Biotechnology for future-ready teacher training."
+  },
+  'leadership-career-growth': {
+    title: "School Leadership & Career Growth Programs | Principal Training | Rareminds",
+    description: "Leadership development programs for academic leaders, HODs, and principals to drive positive change and institutional excellence."
+  },
+  'institutional-value-added': {
+    title: "Institutional Value-Added Services | School Excellence Programs | Rareminds",
+    description: "Comprehensive school improvement services including performance audits, ranking preparation, and teacher-led innovation programs."
+  }
+};
+
 const Courses = () => {
   const containerRef = useRef(null);
   const navigate = useNavigate();
+  const location = useLocation();
+  const params = useParams();  // Determine current meta content based on URL or selected service
+  const getCurrentMetaContent = () => {
+    const path = location.pathname.toLowerCase();
+    const searchParams = new URLSearchParams(location.search);
+    const courseParam = searchParams.get('course');
+    const hash = location.hash.toLowerCase();
+    
+    // Check URL path for specific course routes
+    if (path.includes('/tdp') || path.endsWith('tdp')) {
+      return metaContent['Teacher Development Programs (TDP)'];
+    }
+    
+    // Check for course ID in URL path (e.g., /school/teacher/Courses/communication-personality)
+    if (path.includes('/courses/communication-personality') || path.includes('communication') || path.includes('personality')) {
+      return metaContent['communication-personality'];
+    }
+    if (path.includes('/courses/mental-health-counseling') || path.includes('mental-health') || path.includes('counseling')) {
+      return metaContent['mental-health-counseling'];
+    }
+    if (path.includes('/courses/domain-specific-certification') || path.includes('domain-specific') || path.includes('certification')) {
+      return metaContent['domain-specific-certification'];
+    }
+    if (path.includes('/courses/leadership-career-growth') || path.includes('leadership') || path.includes('career-growth')) {
+      return metaContent['leadership-career-growth'];
+    }
+    if (path.includes('/courses/institutional-value-added') || path.includes('institutional') || path.includes('value-added')) {
+      return metaContent['institutional-value-added'];
+    }
+    
+    // Check URL parameters for course selection
+    if (courseParam && courseParam in metaContent) {
+      return metaContent[courseParam as keyof typeof metaContent];
+    }
+    
+    // Check route parameters for course ID
+    if (params.id && params.id in metaContent) {
+      return metaContent[params.id as keyof typeof metaContent];
+    }
+    
+    // Check hash for course selection (e.g., #communication-personality)
+    if (hash) {
+      const hashCourse = hash.replace('#', '');
+      if (hashCourse in metaContent) {
+        return metaContent[hashCourse as keyof typeof metaContent];
+      }
+    }
+    
+    return metaContent.default;
+  };
+
+  const currentMeta = getCurrentMetaContent();
   // Removed useScroll and useTransform logic for scroll-based animation
 
   const [searchQuery, setSearchQuery] = useState<string>("");
@@ -969,9 +1054,17 @@ const Courses = () => {
     { name: "leadership-career-growth", value: "leadership-career-growth", category: "program" },
     { name: "institutional-value-added", value: "institutional-value-added", category: "program" },
   ];
-
   return (
-    <section ref={containerRef} className="py-8 relative overflow-hidden">
+    <>
+      <Helmet>
+        <title>{currentMeta.title}</title>
+        <meta
+          name="description"
+          content={currentMeta.description}
+        />
+      </Helmet>
+      
+      <section ref={containerRef} className="py-8 relative overflow-hidden">
       <div className="max-full mx-auto px-6 relative z-10">
         <div className="text-center max-w-3xl mx-auto mb-16">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
@@ -1127,9 +1220,9 @@ const Courses = () => {
             whileTap={{ scale: 0.95 }}
           >
           </motion.div>
-        </motion.div>
-      </div>
+        </motion.div>      </div>
     </section>
+    </>
   );
 }
 

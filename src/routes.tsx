@@ -65,6 +65,10 @@ const CorporateTrainingServicesIndex = lazy(
   () => import("./pages/Corporate/Training/Services/Index.tsx")
 );
 
+// New Projects components
+const NewProjects = lazy(() => import("./components/Projects/project.tsx"));
+const NewProjectDetail = lazy(() => import("./components/Projects/ProjectDetailNew.tsx"));
+
 const BlogListing = lazy(() => import("./components/institutions/Blogs/BlogListing"));
 const InstitutionsBlogDetail = lazy(() => import("./components/institutions/Blogs/BlogDetail"));
 import CommunicationPersonalityDevelopment from "./components/institutions/inst/CommunicationPersonalityDevelopment";
@@ -294,10 +298,17 @@ const router = createBrowserRouter([
             <Academy_Course />
           </Suspense>
         ),
-      },
-      {
+      },      {
         path: "/school/teacher/tdp",
         element: withSuspense(TDPPage),
+      },      // New Projects routes
+      {
+        path: "/school/new-projects",
+        element: withSuspense(NewProjects),
+      },
+      {
+        path: "/school/new-projects/:projectId",
+        element: withSuspense(NewProjectDetail),
       },
     ],
   },

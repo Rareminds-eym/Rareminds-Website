@@ -156,7 +156,7 @@ useEffect(() => {
   <img
     src="/academy/RareMinds ISO Logo-01.png"
     alt="Rareminds icon showing a brain inside a glowing light bulb, symbolizing innovation and transformative learning"
-    className="h-[10%] w-[10%] animate-glow rounded-full "
+    className="h-[10%] w-[10%]  rounded-full "
   />
   <p className="text-lg md:text-xl font-semibold text-gray-800">
     <span className="block">Right method. Right moment. Right learner.</span>

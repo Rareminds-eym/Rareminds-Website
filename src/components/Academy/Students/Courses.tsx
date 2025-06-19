@@ -41,9 +41,9 @@ const Courses = () => {
       <div className="min-h-screen bg-gray-50 pt-20">
         {/* Heading Section */}
         <header className="pt-10 sm:pt-12 md:pt-16 pb-6 md:pb-8 px-4 text-center">
-          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-bold mb-4 md:mb-6 leading-tight">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-bold mb-4 md:mb-6 leading-tight">
             Welcome to India's Most Trusted Student Skill Training Platform
-          </h1>
+          </h2>
           <p className="text-sm sm:text-md md:text-lg max-w-4xl mx-auto text-gray-700 px-2">
             Empowering students with the 4Cs of Education: Communication, Collaboration, Critical Thinking, and Creativity,
             while aligning with NEP 2020, 21st-century job market needs, and career clarity.
