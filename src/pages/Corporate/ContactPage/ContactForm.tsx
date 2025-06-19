@@ -159,7 +159,7 @@ const ContactForm: React.FC = () => {
             {/* Letter header with decorative line */}
             <div className="text-center mb-6 pb-4 border-b border-gray-200/50">
               <div className="w-16 h-0.5 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full mx-auto mb-3"></div>
-              <h2 className="text-lg font-serif text-gray-800 italic">A Personal Note</h2>
+              <h2 className="text-lg text-gray-800 italic">A Personal Note</h2>
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-6">
@@ -168,7 +168,7 @@ const ContactForm: React.FC = () => {
                 initial={{ opacity: 0, x: -15 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.5, delay: 0.4 }}
-                className="text-lg font-medium text-gray-800 font-serif border-l-3 border-blue-500 pl-4 bg-blue-50/30 py-3 rounded-r-lg"
+                className="text-lg font-medium text-gray-800 border-l-3 border-blue-500 pl-4 bg-blue-50/30 py-3 rounded-r-lg"
               >
                 Dear Rareminds Team,
               </motion.div>
@@ -178,63 +178,65 @@ const ContactForm: React.FC = () => {
                 initial={{ opacity: 0, y: 15 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.5 }}
-                className="prose max-w-none text-base leading-relaxed space-y-6 font-serif"
+                className="prose max-w-none text-base leading-relaxed space-y-6"
               >
-                <div className="flex flex-wrap items-baseline gap-2 text-gray-700 leading-relaxed">
-                  <span>I am</span>
-                  <input
-                    type="text"
-                    name="fullName"
-                    value={formData.fullName}
-                    onChange={handleChange}
-                    className="border-0 border-b-2 border-dotted border-blue-300 focus:border-blue-600 bg-transparent px-2 py-1 outline-none font-medium text-blue-900 placeholder-blue-400/60 transition-all duration-300 hover:bg-blue-50/50 focus:bg-blue-50/50 rounded-t-md min-w-[160px]"
-                    required
-                    placeholder="your name"
-                  />
-                  <span>, working as a</span>
-                  <input
-                    type="text"
-                    name="jobTitle"
-                    value={formData.jobTitle}
-                    onChange={handleChange}
-                    className="border-0 border-b-2 border-dotted border-blue-300 focus:border-blue-600 bg-transparent px-2 py-1 outline-none font-medium text-blue-900 placeholder-blue-400/60 transition-all duration-300 hover:bg-blue-50/50 focus:bg-blue-50/50 rounded-t-md min-w-[160px]"
-                    required
-                    placeholder="your role"
-                  />
-                  <span>at</span>
-                  <input
-                    type="text"
-                    name="company"
-                    value={formData.company}
-                    onChange={handleChange}
-                    className="border-0 border-b-2 border-dotted border-blue-300 focus:border-blue-600 bg-transparent px-2 py-1 outline-none font-medium text-blue-900 placeholder-blue-400/60 transition-all duration-300 hover:bg-blue-50/50 focus:bg-blue-50/50 rounded-t-md min-w-[160px]"
-                    required
-                    placeholder="your company"
-                  />
-                  <span>.</span>
-                </div>
+                <div className="space-y-4">
+                  <div className="flex flex-wrap items-center gap-x-2 gap-y-3 text-gray-700 leading-relaxed">
+                    <span>I am</span>
+                    <input
+                      type="text"
+                      name="fullName"
+                      value={formData.fullName}
+                      onChange={handleChange}
+                      className="border-0 border-b-2 border-dotted border-blue-300 focus:border-blue-600 bg-transparent px-2 py-1 outline-none font-medium text-blue-900 placeholder-blue-400/60 transition-all duration-300 hover:bg-blue-50/50 focus:bg-blue-50/50 rounded-t-md min-w-[220px] max-w-[260px] flex-shrink-0"
+                      required
+                      placeholder="your name"
+                    />
+                    <span>, working as a</span>
+                    <input
+                      type="text"
+                      name="jobTitle"
+                      value={formData.jobTitle}
+                      onChange={handleChange}
+                      className="border-0 border-b-2 border-dotted border-blue-300 focus:border-blue-600 bg-transparent px-2 py-1 outline-none font-medium text-blue-900 placeholder-blue-400/60 transition-all duration-300 hover:bg-blue-50/50 focus:bg-blue-50/50 rounded-t-md min-w-[220px] max-w-[260px] flex-shrink-0"
+                      required
+                      placeholder="your role"
+                    />
+                    <span>at</span>
+                    <input
+                      type="text"
+                      name="company"
+                      value={formData.company}
+                      onChange={handleChange}
+                      className="border-0 border-b-2 border-dotted border-blue-300 focus:border-blue-600 bg-transparent px-2 py-1 outline-none font-medium text-blue-900 placeholder-blue-400/60 transition-all duration-300 hover:bg-blue-50/50 focus:bg-blue-50/50 rounded-t-md min-w-[220px] max-w-[260px] flex-shrink-0"
+                      required
+                      placeholder="your company"
+                    />
+                    <span>.</span>
+                  </div>
 
-                <div className="flex flex-wrap items-baseline gap-2 text-gray-700 leading-relaxed">
-                  <span>Reach me at</span>
-                  <input
-                    type="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    className="border-0 border-b-2 border-dotted border-blue-300 focus:border-blue-600 bg-transparent px-2 py-1 outline-none font-medium text-blue-900 placeholder-blue-400/60 transition-all duration-300 hover:bg-blue-50/50 focus:bg-blue-50/50 rounded-t-md min-w-[160px]"
-                    required
-                    placeholder="your.email@domain.com"
-                  />
-                  <span>, or at</span>
-                  <input
-                    type="tel"
-                    name="phone"
-                    value={formData.phone}
-                    onChange={handleChange}
-                    className="border-0 border-b-2 border-dotted border-blue-300 focus:border-blue-600 bg-transparent px-2 py-1 outline-none font-medium text-blue-900 placeholder-blue-400/60 transition-all duration-300 hover:bg-blue-50/50 focus:bg-blue-50/50 rounded-t-md min-w-[160px]"
-                    placeholder="phone (optional)"
-                  />
-                  <span>.</span>
+                  <div className="flex flex-wrap items-center gap-x-2 gap-y-3 text-gray-700 leading-relaxed">
+                    <span>Reach me at</span>
+                    <input
+                      type="email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleChange}
+                      className="border-0 border-b-2 border-dotted border-blue-300 focus:border-blue-600 bg-transparent px-2 py-1 outline-none font-medium text-blue-900 placeholder-blue-400/60 transition-all duration-300 hover:bg-blue-50/50 focus:bg-blue-50/50 rounded-t-md min-w-[200px] flex-shrink-0"
+                      required
+                      placeholder="your.email@domain.com"
+                    />
+                    <span>, or at</span>
+                    <input
+                      type="tel"
+                      name="phone"
+                      value={formData.phone}
+                      onChange={handleChange}
+                      className="border-0 border-b-2 border-dotted border-blue-300 focus:border-blue-600 bg-transparent px-2 py-1 outline-none font-medium text-blue-900 placeholder-blue-400/60 transition-all duration-300 hover:bg-blue-50/50 focus:bg-blue-50/50 rounded-t-md min-w-[140px] flex-shrink-0"
+                      placeholder="phone (optional)"
+                    />
+                    <span>.</span>
+                  </div>
                 </div>
 
                 {/* Message section with elegant styling */}
@@ -245,7 +247,7 @@ const ContactForm: React.FC = () => {
                       name="message"
                       value={formData.message}
                       onChange={handleChange}
-                      className="w-full min-h-[100px] border-2 border-gray-200 rounded-xl p-4 outline-none focus:border-blue-500 resize-none transition-all duration-300 bg-gradient-to-br from-gray-50/50 to-blue-50/30 font-serif leading-relaxed shadow-inner"
+                      className="w-full min-h-[100px] border-2 border-gray-200 rounded-xl p-4 outline-none focus:border-blue-500 resize-none transition-all duration-300 bg-gradient-to-br from-gray-50/50 to-blue-50/30 leading-relaxed shadow-inner"
                       required
                       placeholder="I'd like to discuss..."
                     />
@@ -308,7 +310,7 @@ const ContactForm: React.FC = () => {
                   <div className="flex justify-between items-end mt-4">
                     <div>
                       <p className="mb-1">Best regards,</p>
-                      <p className="font-semibold text-lg text-blue-900 font-serif">
+                      <p className="font-semibold text-lg text-blue-900">
                         {formData.fullName || "Your Name"}
                       </p>
                     </div>
