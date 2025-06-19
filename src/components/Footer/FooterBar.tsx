@@ -520,10 +520,10 @@ const FooterBar: React.FC<FooterBarProps> = ({ hideServices }) => {
 						<li>
 							<span className="font-semibold">Email:</span>
 							<a
-								href="mailto:info@rareminds.com"
+								href="mailto:info@rareminds.in"
 								className="ml-2 text-sm hover:text-red-400 transition-colors inline-block"
 							>
-								info@rareminds.com
+								info@rareminds.in
 							</a>
 						</li>
 						<li>

@@ -428,7 +428,7 @@ const AcademyContactSection = () => {
                         Email
                       </h4>
                       <p className="text-gray-600">marketing@rareminds.in</p>
-                      {/* <p className="text-gray-600">training@rareminds.com</p> */}
+                      {/* <p className="text-gray-600">training@rareminds.in</p> */}
                     </div>
                   </div>
                   <div className="flex items-start gap-4">

@@ -118,7 +118,7 @@ const Contact: React.FC = () => {
           <div className="bg-white rounded-lg shadow-md p-6">
             <h2 className="text-xl font-semibold mb-4">Contact Information</h2>
             <p className="text-gray-600">
-              Email: info@rareminds.com<br />
+              Email: info@rareminds.in<br />
               Phone: +91 123 456 7890<br />
               Hours: Mon-Fri 9:00 AM - 6:00 PM
             </p>
