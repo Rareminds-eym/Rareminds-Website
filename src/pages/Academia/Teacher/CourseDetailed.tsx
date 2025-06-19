@@ -1,5 +1,6 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { Helmet } from "react-helmet-async";
 import { ArrowLeft, CheckCircle, ArrowRight, Star, Award, Lightbulb, Users2, FileText, Target, CalendarCheck, Briefcase, Users, Heart, BarChart2 } from 'lucide-react';
 import {
   Coursess,
@@ -111,12 +112,48 @@ const communicationPersonalityModules = [
   { name: 'Institutional Value-Added Services', route: '/school/teacher/Courses/institutional-value-added' },
 ];
 
+/// ✅ Updated Meta Content Configuration
+const metaContent = {
+  'Teacher Development Programs (TDP)': {
+    title: "Teacher Development Programs | NEP Training for Educators | Rareminds",
+    description: "Empower educators with NEP-aligned programs in ranking readiness, innovation cells, and peer-learning teacher communities."
+  },
+  'communication-personality': {
+    title: "Communication & Personality Development for Teachers | Rareminds",
+    description: "Boost classroom delivery with training in educator fluency, management strategies, and effective parent-teacher communication."
+  },
+  'mental-health-counseling': {
+    title: "Mental Health & Counseling Training for Teachers | Rareminds",
+    description: "Equip teachers with tools to support at-risk students through empathy, peer counseling, and safe learning environments."
+  },
+  'domain-specific-certification': {
+    title: "Domain-Specific Certification for Teachers | Industry-Aligned Training | Rareminds",
+    description: "Offer cutting-edge, industry-certified training with sector exposure and hands-on collaboration in high-demand domains."
+  },
+  'leadership-career-growth': {
+    title: "Leadership & Career Growth for Academic Leaders | Rareminds",
+    description: "Advance academic leadership through training for HODs and principals, with a focus on excellence and professional growth."
+  },
+  'institutional-value-added': {
+    title: "Institutional Value-Added Services | School System Strengthening | Rareminds",
+    description: "Strengthen school systems with structured audits, ranking support, and teacher-led club development for continuous improvement."
+  },
+  default: {
+    title: "Bilingual NEP 2020-Aligned School Programs | Rareminds School Services",
+    description: "Bilingual, NEP 2020-aligned school programs that strengthen communication, digital skills, and career paths designed for practical, classroom-ready impact."
+  }
+};
 
 
 export default function CourseDetailed() {
   const { id } = useParams();
   const navigate = useNavigate();
   const course = Coursess.find((s) => s.id === id);
+
+  // Get meta content for current course
+  const currentMeta = course && course.id in metaContent 
+    ? metaContent[course.id as keyof typeof metaContent]
+    : metaContent.default;
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -126,7 +163,7 @@ export default function CourseDetailed() {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-2xl font-bold mb-4">Course not found</h1>
+          <h2 className="text-2xl font-bold mb-4">Course not found</h2>
           <button
             onClick={() => navigate(-1)}
             className="text-blue-600 hover:text-blue-800"
@@ -148,10 +185,17 @@ export default function CourseDetailed() {
   } else if (course.id === 'mental-health-counseling') {
     data = mentalHealthCounselingDetails as CourseDetailsType;
   } else if (course.id === 'communication-personality') {
-    data = communicationPersonalityDevelopmentDetails as CourseDetailsType;
-  }else if (course.id === 'Teacher Development Programs (TDP)') {
+    data = communicationPersonalityDevelopmentDetails as CourseDetailsType;  }else if (course.id === 'Teacher Development Programs (TDP)') {
     return (
       <>
+        <Helmet>
+          <title>{currentMeta.title}</title>
+          <meta
+            name="description"
+            content={currentMeta.description}
+          />
+        </Helmet>
+        
         <AcademyHeader />
         <section className="pb-20">
           <div className="relative h-[45vh] mb-12 overflow-hidden mt-[80px]">
@@ -189,10 +233,17 @@ export default function CourseDetailed() {
       </>
     );
   }
-
   if (data) {
     return (
       <>
+      <Helmet>
+        <title>{currentMeta.title}</title>
+        <meta
+          name="description"
+          content={currentMeta.description}
+        />
+      </Helmet>
+      
       <AcademyHeader />
       <FloatingActionMenu />
       <section className=" mt-[80px]">
@@ -348,9 +399,9 @@ export default function CourseDetailed() {
           <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full mb-6">
             <BookOpen className="w-8 h-8 text-white" />
           </div>
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
             {course.name}
-          </h1>
+          </h2>
           <p className="text-xl text-gray-600 mb-6 max-w-3xl mx-auto">
             {course.description}
           </p>
@@ -582,19 +633,27 @@ export default function CourseDetailed() {
       </>
     );
   }
-
   // For all other courses, show a placeholder or empty detailed page
   return (
-    <div className="min-h-screen flex items-center justify-center">
+    <>
+      <Helmet>
+        <title>{currentMeta.title}</title>
+        <meta
+          name="description"
+          content={currentMeta.description}
+        />
+      </Helmet>
+      
+      <div className="min-h-screen flex items-center justify-center">
       <div className="text-center">
-        <h1 className="text-2xl font-bold mb-4">Course details coming soon</h1>
+        <h2 className="text-2xl font-bold mb-4">Course details coming soon</h2>
         <button
           onClick={() => navigate(-1)}
           className="text-blue-600 hover:text-blue-800"
         >
-          Go back
-        </button>
+          Go back        </button>
       </div>
     </div>
+    </>
   );
 }

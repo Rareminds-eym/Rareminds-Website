@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { ArrowLeft } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { Helmet } from "react-helmet-async";
 import AcademyHeader from '@/components/Header/AcademyHeader';
 
 const tdpSections = [
@@ -417,9 +418,16 @@ export default function TDPPage() {
 	const [selectedSection, setSelectedSection] = useState('academic-excellence');
 	const section = tdpSections.find(s => s.key === selectedSection);
 	const navigate = useNavigate();
-
 	return (
 		<>
+			<Helmet>
+				<title>Teacher Development Programs | NEP Training for Educators | Rareminds</title>
+				<meta
+					name="description"
+					content="Empower educators with NEP-aligned programs in ranking readiness, innovation cells, and peer-learning teacher communities."
+				/>
+			</Helmet>
+			
 			<AcademyHeader />
 			<div className="relative h-[45vh] mb-12 overflow-hidden mt-[80px]">
 				{/* Blurred and black & white background image */}
@@ -452,7 +460,7 @@ export default function TDPPage() {
 
 				{/* Main Content */}
 				<main className="flex-1 bg-white rounded-lg shadow p-8">
-					{/* <h1 className="text-3xl font-bold  text-center mb-12">Teacher Development Program (TDP)</h1> */}
+					
 					<h2 className="text-xl  mb-4 text-Red-700 md:text-3xl font-bold  md:mb-12">Empowering Educators. Transforming Schools.</h2>
 					<p className="mb-6 text-gray-700">In today’s evolving educational landscape, the role of the teacher has expanded beyond instruction. Teachers are now leaders, facilitators, mentors, and change agents. The Teacher Development Program (TDP) is designed to meet this transformation head-on—equipping educators with the knowledge, skills, and mindsets needed to thrive in modern classrooms and learning ecosystems.</p>
 					<p className="mb-6 text-gray-700">TDP is built on four foundational pillars:</p>
