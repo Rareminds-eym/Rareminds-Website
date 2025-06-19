@@ -9,6 +9,7 @@ import { Calendar, Clock, User, ArrowLeft, CheckCircle, Share2, Eye, MessageCirc
 import { useToast } from "@/hooks/use-toast";
 import { motion } from "framer-motion";
 import GovernmentHeader from "@/components/Header/GovernmentHeader";
+import FloatingActionMenu from "@/components/Govt/StickyButton/FloatingAction";
 import styles from "./styles.module.css"; // Assuming you have a CSS module for styles
 
 // Supabase blog post interface
@@ -265,7 +266,7 @@ const BlogDetailGov = () => {
 
     <>
       <GovernmentHeader  />
-    <div className="min-h-screen bg-white mt-[80px]">
+    <div className="min-h-screen bg-white ">
       {/* Floating Share Bar */}
       <div className="fixed top-1/2 left-6 z-50 hidden xl:flex flex-col items-center -translate-y-1/2">
         {/* <FloatingShareBar title={post.title} url={currentUrl} /> */}
@@ -316,26 +317,31 @@ const BlogDetailGov = () => {
             src={post.featured_image || '/default-blog-image.jpg'}
             alt={post.title}
             className="w-full h-full object-cover"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex justify-center items-center "></div>
-          
-          <div className="absolute inset-x-0 bottom-[25%]  p-8 lg:p-12 ">
-            <div className="max-w-6xl mx-auto">
-              <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3, duration: 0.6 }}
-              >
-                <span className="inline-block px-4 py-2 bg-red-500 text-white rounded-full text-sm font-semibold mb-6 shadow-lg">
-                  {post.category}
-                </span>
-                <h1 className="text-3xl sm:text-4xl lg:text-6xl font-bold text-white mb-6 leading-tight">
-                  {post.title}
-                </h1>                <div className="flex flex-wrap items-center gap-6 text-white/90">
-                  {/* <div className="flex items-center gap-2">
-                    <User className="w-4 h-4" />
-                    <span className="font-medium">{post.author_name || 'Anonymous'}</span>
-                  </div> */}
+          />          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent z-10"></div>
+          {/* Centered content starts here */}
+   
+        </div>
+      </motion.section>
+       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="relative z-20 w-full pt-4">
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
+                <div className="lg:col-span-8">
+                  <motion.div
+                    initial={{ opacity: 0, y: 30 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.3, duration: 0.6 }}
+                  >
+                    <span className="inline-block px-4 py-2 bg-black text-white rounded-full text-sm font-semibold mb-6 shadow-lg">
+                      {post.category}
+                    </span>
+                    <h1 className="text-3xl sm:text-4xl lg:text-6xl font-bold text-black mb-6 leading-tight">
+                      {post.title}
+                    </h1>
+                <div className="flex flex-wrap items-center justify-start gap-6 text-black/90">
+                  <div className="flex items-center gap-2">
+                    {/* <User className="w-4 h-4" /> */}
+                    {/* <span className="font-medium">{post.author_name || 'Anonymous'}</span> */}
+                  </div>
                   <div className="flex items-center gap-2">
                     <Calendar className="w-4 h-4" />
                     <span>{new Date(post.publish_date).toLocaleDateString('en-US', { 
@@ -344,20 +350,20 @@ const BlogDetailGov = () => {
                       day: 'numeric' 
                     })}</span>
                   </div>
-                  {/* <div className="flex items-center gap-2">
-                    <Clock className="w-4 h-4" />
-                    <span>{post.read_time || 5} min read</span>
-                  </div>                 */}
-                    <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2">
+                    {/* <Clock className="w-4 h-4" /> */}
+                    {/* <span>{post.read_time || 5} min read</span> */}
+                  </div>
+                  <div className="flex items-center gap-2">
                     {/* <Eye className="w-4 h-4" /> */}
                     {/* <span>2.4k views</span> */}
                   </div>
                 </div>
-              </motion.div>
+                  </motion.div>
+                </div>
+              </div>
             </div>
-          </div>
         </div>
-      </motion.section>
 
       {/* Main Content */}
       <main className="py-16 lg:py-24">
@@ -431,47 +437,152 @@ const BlogDetailGov = () => {
               className="lg:col-span-4"
             >
               {/* Article Stats */}
-              <div className="sticky top-24 space-y-8">
-                <div className="p-6 bg-white rounded-2xl border border-gray-100 shadow-sm">
-                  <h4 className="font-bold text-gray-900 mb-4">Article Stats</h4>
-                  <div className="space-y-3">                    <div className="flex items-center justify-between">
-                      <span className="text-gray-600">Published</span>
-                      <span className="font-medium text-gray-900">
+              <div className="sticky top-24 space-y-8">                <motion.div 
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.6, duration: 0.6 }}
+                  className="relative p-6 bg-gradient-to-br from-blue-50 via-white to-indigo-50 rounded-3xl border-2 border-blue-100/50 shadow-xl backdrop-blur-sm overflow-hidden group hover:shadow-2xl transition-all duration-300"
+                >
+                  {/* Animated background pattern */}
+                  <div className="absolute inset-0 opacity-5">
+                    <div className="absolute top-4 right-4 w-20 h-20 bg-blue-500 rounded-full blur-3xl"></div>
+                    <div className="absolute bottom-4 left-4 w-16 h-16 bg-indigo-400 rounded-full blur-2xl"></div>
+                  </div>
+                  
+                  <h4 className="font-bold text-gray-900 mb-6 flex items-center gap-3 text-lg">
+                    {/* <div className="flex items-center justify-center w-8 h-8 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full shadow-lg">
+                      <div className="w-3 h-3 bg-white rounded-full animate-pulse"></div>
+                    </div> */}
+                    Article Stats
+                  </h4>
+                  <div className="space-y-4">
+                    <motion.div 
+                      whileHover={{ scale: 1.02 }}
+                      className="flex items-center justify-between p-4 bg-white/80 rounded-xl border border-blue-100 shadow-sm backdrop-blur-sm hover:bg-white/90 transition-all duration-200"
+                    >
+                      <span className="text-gray-700 font-medium flex items-center gap-2">
+                        <div className="w-2 h-2 bg-blue-400 rounded-full"></div>
+                        Published
+                      </span>
+                      <span className="font-bold text-gray-900 px-3 py-1 bg-blue-50 rounded-lg">
                         {new Date(post.publish_date).toLocaleDateString('en-US', { 
                           month: 'short', 
                           day: 'numeric', 
                           year: 'numeric' 
                         })}
                       </span>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <span className="text-gray-600">Read time</span>
-                      <span className="font-medium text-gray-900">{post.read_time || 5} min</span>
-                    </div>
-                    {/* <div className="flex items-center justify-between">
-                      <span className="text-gray-600">Views</span>
-                      <span className="font-medium text-gray-900">2.4k</span>
-                    </div> */}
-                  </div>
-                </div>
-
-                {/* Tags */}
-                <div className="p-6 bg-white rounded-2xl border border-gray-100 shadow-sm">
-                  <h4 className="font-bold text-gray-900 mb-4">Tags</h4>
-                  <div className="flex flex-wrap gap-2">
-                    {post.tags?.map((tag: string, index: number) => (
-                      <span
-                        key={index}
-                        className="px-3 py-1 bg-red-50 text-red-600 rounded-full text-sm font-medium border border-red-100"
-                      >
-                        {tag}
+                    </motion.div>
+                    <motion.div 
+                      whileHover={{ scale: 1.02 }}
+                      className="flex items-center justify-between p-4 bg-white/80 rounded-xl border border-blue-100 shadow-sm backdrop-blur-sm hover:bg-white/90 transition-all duration-200"
+                    >
+                      <span className="text-gray-700 font-medium flex items-center gap-2">
+                        <div className="w-2 h-2 bg-indigo-400 rounded-full"></div>
+                        Read time
                       </span>
-                    ))}
+                      <span className="font-bold text-gray-900 px-3 py-1 bg-indigo-50 rounded-lg">{post.read_time || 5} min</span>
+                    </motion.div>
                   </div>
-                </div>
+                </motion.div>                {/* Published Author */}
+                <motion.div 
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.7, duration: 0.6 }}
+                  className="relative p-6 bg-gradient-to-br from-gray-900 via-slate-800 to-gray-900 rounded-3xl border-2 border-gray-600/50 shadow-2xl text-white overflow-hidden group hover:shadow-blue-500/20 hover:shadow-2xl transition-all duration-500"
+                >
+                  {/* Animated background elements */}
+                  <div className="absolute inset-0 opacity-20">
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-blue-500 to-transparent rounded-full blur-2xl"></div>
+                    <div className="absolute bottom-0 left-0 w-24 h-24 bg-gradient-to-tr from-indigo-600 to-transparent rounded-full blur-xl"></div>
+                  </div>
+                  
+                  {/* Floating particles effect */}
+                  <div className="absolute inset-0 opacity-30">
+                    <div className="absolute top-8 right-8 w-1 h-1 bg-blue-400 rounded-full animate-ping"></div>
+                    <div className="absolute top-16 right-16 w-1 h-1 bg-white rounded-full animate-pulse"></div>
+                    <div className="absolute bottom-12 left-12 w-1 h-1 bg-indigo-300 rounded-full animate-bounce"></div>
+                  </div>
+
+                  <h4 className="font-bold text-white mb-6 flex items-center gap-3 text-lg relative z-10">
+                    {/* <div className="flex items-center justify-center w-8 h-8 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full shadow-lg border border-blue-400">
+                      <div className="w-3 h-3 bg-white rounded-full"></div>
+                    </div> */}
+                    Published Author
+                  </h4>
+                    <div className="flex items-center gap-4 relative z-10">
+                    <div className="relative">
+                      <img
+                        src={post.author_avatar || '/RMLogo.webp'}
+                        alt={post.author_name || 'Author'}
+                        className="w-16 h-16 object-cover  shadow-md"
+                      />
+                      {/* <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-gray-900"></div> */}
+                    </div>
+                    <div className="flex-1">
+                      <h5 className="font-semibold text-white text-lg mb-1">
+                        {post.author_name || 'Government Expert'}
+                      </h5>
+                      <p className="text-blue-300 text-sm mb-2">
+                        Content Writer
+                      </p>
+                      <p className="text-gray-300 text-sm">
+                        {post.author_bio || 'Expert insights on government policies and innovations.'}
+                      </p>
+                    </div>
+                  </div>
+                  
+                  <div className="mt-6 pt-4 border-t border-gray-600/50 relative z-10">
+                    <div className="flex items-center justify-between p-3 bg-white/10 rounded-xl backdrop-blur-sm border border-white/20">
+                      <span className="text-gray-300 font-medium">Articles published</span>
+                      <span className="font-bold text-blue-400 text-lg bg-blue-500/20 px-3 py-1 rounded-lg">12+</span>
+                    </div>
+                  </div>
+                </motion.div>                {/* Tags */}
+                <motion.div 
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.8, duration: 0.6 }}
+                  className="relative p-6 bg-gradient-to-br from-blue-600 via-indigo-600 to-blue-700 rounded-3xl border-2 border-blue-400/50 shadow-2xl text-white overflow-hidden group hover:shadow-blue-500/30 hover:shadow-2xl transition-all duration-500"
+                >
+                  {/* Dynamic background pattern */}
+                  <div className="absolute inset-0 opacity-20">
+                    <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-transparent via-white/10 to-transparent"></div>
+                    <div className="absolute top-4 right-4 w-20 h-20 bg-white/10 rounded-full blur-xl"></div>
+                    <div className="absolute bottom-4 left-4 w-16 h-16 bg-indigo-300/20 rounded-full blur-lg"></div>
+                  </div>
+
+                  {/* Animated border glow */}
+                  <div className="absolute inset-0 rounded-3xl bg-gradient-to-r from-blue-400 via-indigo-500 to-blue-600 opacity-50 blur-sm group-hover:opacity-70 transition-opacity duration-500"></div>
+                  <div className="absolute inset-0.5 rounded-3xl bg-gradient-to-br from-blue-600 via-indigo-600 to-blue-700"></div>
+
+                  <div className="relative z-10">
+                    <h4 className="font-bold text-white mb-6 flex items-center gap-3 text-lg">
+                      {/* <div className="flex items-center justify-center w-8 h-8 bg-white/20 rounded-full shadow-lg border border-white/30 backdrop-blur-sm">
+                        <div className="w-3 h-3 bg-white rounded-full animate-pulse"></div>
+                      </div> */}
+                      Tags
+                    </h4>
+                    <div className="flex flex-wrap gap-3">
+                      {post.tags?.map((tag: string, index: number) => (
+                        <motion.span
+                          key={index}
+                          initial={{ opacity: 0, scale: 0.8 }}
+                          animate={{ opacity: 1, scale: 1 }}
+                          transition={{ delay: 0.9 + index * 0.1, duration: 0.3 }}
+                          whileHover={{ scale: 1.1, y: -2 }}
+                          whileTap={{ scale: 0.95 }}
+                          className="relative px-4 py-2 bg-white/20 hover:bg-white/30 text-white rounded-full text-sm font-semibold border border-white/40 backdrop-blur-md transition-all duration-300 cursor-pointer shadow-lg hover:shadow-xl group/tag"
+                        >
+                          <span className="relative z-10">{tag}</span>
+                          <div className="absolute inset-0 bg-white/10 rounded-full opacity-0 group-hover/tag:opacity-100 transition-opacity duration-300"></div>
+                        </motion.span>
+                      ))}
+                    </div>
+                  </div>
+                </motion.div>
 
                 {/* Mobile Share */}
-                <div className="lg:hidden p-6 bg-white rounded-2xl border border-gray-100 shadow-sm">
+                {/* <div className="lg:hidden p-6 bg-white rounded-2xl border border-gray-100 shadow-sm">
                   <h4 className="font-bold text-gray-900 mb-4">Share this article</h4>
                   <div className="flex gap-3">
                     <Button size="sm" className="flex-1 bg-red-500 hover:bg-red-600">
@@ -484,7 +595,8 @@ const BlogDetailGov = () => {
                       Twitter
                     </Button>
                   </div>
-                </div>              </div>
+                </div>           */}
+                    </div>
             </motion.aside>
           </div>
         </div>
@@ -573,18 +685,20 @@ const BlogDetailGov = () => {
                 <p className="text-gray-600 max-w-2xl mx-auto">
                   Discover more insights and expert perspectives on similar topics
                 </p>
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {relatedPosts.map((relatedPost, index) => (
-                  <motion.div
-                    key={relatedPost.id}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.9 + index * 0.1, duration: 0.6 }}
-                  >
-                    <BlogCard post={relatedPost} />
-                  </motion.div>
-                ))}
+              </div>              <div className="flex justify-center">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 items-stretch max-w-5xl">
+                  {relatedPosts.slice(0, 3).map((relatedPost, index) => (
+                    <motion.div
+                      key={relatedPost.id}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.9 + index * 0.1, duration: 0.6 }}
+                      className="h-full"
+                    >
+                      <BlogCard post={relatedPost} />
+                    </motion.div>
+                  ))}
+                </div>
               </div>
             </motion.div>
           </div>
@@ -606,20 +720,22 @@ const BlogDetailGov = () => {
               <p className="text-gray-600 max-w-2xl mx-auto">
                 Stay up to date with our newest insights on sustainability, ESG frameworks, and environmental management
               </p>
-            </div>            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {relatedPosts.map((currentPost: BlogPost, index: number) => (
-                <motion.div
-                  key={currentPost.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 1.1 + index * 0.1, duration: 0.6 }}
-                >
-                  <BlogCard post={currentPost} />
-                </motion.div>
-              ))}
-            </div>
-            <div className="text-center mt-12">
-              <Link to="/school/student/blogs">
+            </div>            <div className="flex justify-center">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 items-stretch max-w-5xl">
+                {relatedPosts.slice(0, 3).map((currentPost: BlogPost, index: number) => (
+                  <motion.div
+                    key={currentPost.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 1.1 + index * 0.1, duration: 0.6 }}
+                    className="h-full"
+                  >
+                    <BlogCard post={currentPost} />
+                  </motion.div>
+                ))}
+              </div>
+            </div>            <div className="text-center mt-12">
+              <Link to="/government/blogs">
                 <Button 
                   variant="outline" 
                   className="border-red-200 text-red-600 hover:bg-red-50 px-8 py-3 font-semibold"

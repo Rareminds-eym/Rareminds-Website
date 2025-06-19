@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { Calendar, Clock, User } from "lucide-react";
+import { Calendar } from "lucide-react";
 
 // Supabase blog post interface
 interface BlogPost {
@@ -36,11 +36,10 @@ const BlogCard = ({ post }: BlogCardProps) => {
   const blogDetailLink = isTeacherSection 
     ? `/school/teacher/blogs/${post.slug}` 
     : `/school/student/blogs/${post.slug}`;
-
   return (
-    <Link to={blogDetailLink} className="block group focus:outline-none">
-      <article className="blog-card shadow-lg border  rounded-2xl overflow-hidden bg-white/90 hover:shadow-2xl transition-shadow duration-300 cursor-pointer">
-        <div className="relative overflow-hidden">
+    <Link to={blogDetailLink} className="block group focus:outline-none h-full">
+      <article className="blog-card shadow-lg border rounded-2xl overflow-hidden bg-white/90 hover:shadow-2xl transition-shadow duration-300 cursor-pointer h-full flex flex-col">
+        <div className="relative overflow-hidden flex-shrink-0">
           <img
             src={post.featured_image || '/default-blog-image.jpg'}
             alt={post.title}
@@ -58,14 +57,14 @@ const BlogCard = ({ post }: BlogCardProps) => {
             </span>
           </div>
         </div>
-        <div className="p-6">
+        <div className="p-6 flex-grow flex flex-col">
           <h3 className="font-playfair text-xl font-bold text-gray-900 mb-3 group-hover:text-red-600 transition-colors duration-200 line-clamp-2">
             {post.title}
           </h3>
-          <p className="text-gray-600 mb-4 line-clamp-3 leading-relaxed">
+          <p className="text-gray-600 mb-4 line-clamp-3 leading-relaxed flex-grow">
             {post.excerpt}
           </p>
-          <div className="flex items-center justify-between text-xs text-gray-500">
+          <div className="flex items-center justify-between text-xs text-gray-500 mt-auto">
             <div className="flex items-center gap-4">
               {/* Optionally add author or read time here */}
             </div>

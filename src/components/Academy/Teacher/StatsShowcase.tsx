@@ -8,10 +8,10 @@ interface Stat {
 }
 
 const statsData: Stat[] = [
-  { icon: "/academy/FacultyTrained.png", value: "20000+", label: "Faculty Trained" },
+  { icon: "/academy/FacultyTrained.png", value: "20000+", label: "Teachers Trained" },
   { icon: "/academy/100+ Schools Onboarded.svg", value: "100+", label: "Schools Onboarded" },
   { icon: "/academy/250+ FDPs Delivered.svg", value: "250+", label: "Pilots Deployed" },
-  { icon: "/academy/rocket.png", value: "92%", label: "Faculty Satisfaction Rate" },
+  { icon: "/academy/rocket.png", value: "92%", label: "Teachers Satisfaction Rate" },
 ];
 
 const StatsShowcase = () => {
