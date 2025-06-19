@@ -11,6 +11,7 @@ import TestimonialVideos from "@/components/Corporate/Training/TestimonialVideos
 import WorkWith from "@/components/Corporate/Training/WorkWith";
 import React, { useEffect } from "react";
 import { useLocation } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 
 const CorporateTraining: React.FC = () => {
   const location = useLocation();
@@ -18,27 +19,32 @@ const CorporateTraining: React.FC = () => {
     {
       heading: "Your Training ROI Partner",
       subheading: "We're not just trainers. We're business enablers.",
-      img: "/Corporate/Images/Training/hero/roi.webp",
+      img: "https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Corporate/Training/Index/hero/roi.webp",
+      alt: "Multitasking business professional balancing on a ball while managing data analysis, target goals, translation, and digital marketing tools",
     },
     {
       heading: "Across 25 Sectors. 30 Countries. In 13 Languages.",
       subheading: "We are driving impact at every scale and every corner of the world.",
-      img: "/Corporate/Images/Training/hero/across.webp",
+      img: "https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Corporate/Training/Index/hero/across.webp",
+      alt: "Modern transportation hub with airplane, metro train, control tower, and colorful urban buildings representing smart city infrastructure",
     },
     {
       heading: "Seeking measurable results?",
       subheading: "We reduced post-training dropouts by 74% because results matter.",
-      img: "/Corporate/Images/Training/hero/seeking-measurable.webp",
+      img: "https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Corporate/Training/Index/hero/seeking-measurable.webp",
+      alt: "A man pointing one finger towards a graph showcasing a downward arrow.",
     },
     {
       heading: "Train. Transform. Elevate. Dominate.",
       subheading: "Rareminds builds bold leaders and unstoppable teams. Ready to own tomorrow?",
-      img: "/Corporate/Images/Training/hero/Train-Transform.webp",
+      img: "https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Corporate/Training/Index/hero/Train-Transform.webp",
+      alt: "Vibrant image of men and women in different positions on a staircase with icons of growth and modern tools, holding a laptop and a man holding a file in his hands, and a woman running.",
     },
     {
       heading: "Your Team’s Potential Is Waiting. Are You?",
       subheading: "Rareminds sharpens your team’s skills to fuel growth and help your business outpace the competition.",
-      img: "/Corporate/Images/Training/hero/your-team.webp",
+      img: "https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Corporate/Training/Index/hero/your-team.webp",
+      alt: "Vibrant image of urban buildings, women and men smiling and climbing the stairs of success with an upward arrow, holding laptops in their hands and a brain at the end.",
     },
   ];
 
@@ -53,6 +59,10 @@ const CorporateTraining: React.FC = () => {
 
   return (
     <>
+      <Helmet>
+        <title>Experience-Driven Corporate Training | Rareminds Learning Solutions</title>
+        <meta name="description" content="Boost employee engagement with Rareminds' immersive, gamified, and role-based corporate training solutions that drive performance, retention, and growth." />
+      </Helmet>
       <section className="bg-[url('/Corporate/Images/Training/hero/header-bg.png')] bg-cover sticky top-[80px]">
         <FullScreenCarousel slides={slides} />
       </section>

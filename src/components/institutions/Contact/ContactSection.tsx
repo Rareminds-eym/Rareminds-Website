@@ -345,8 +345,8 @@ const ContactSection = () => {
                       <h4 className="mb-4 text-gray-800 text-sm font-semibold">
                         Email
                       </h4>
-                      <p className="text-gray-600 text-sm font-medium">info@rareminds.com</p>
-                      <p className="text-gray-600 text-sm font-medium">careers@rareminds.com</p>
+                      <p className="text-gray-600 text-sm font-medium">info@rareminds.in</p>
+                      <p className="text-gray-600 text-sm font-medium">careers@rareminds.in</p>
                     </div>
                   </div>
                   <div className="flex items-start gap-4">

@@ -19,6 +19,7 @@ const Corporate: React.FC = () => {
       subheading:
         "Smart, scalable recruitment solutions trusted by 250+ corporates",
       img: "https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Corporate/Recruitment/Index/Hero/BuildHigh.webp",
+      alt: "A split image showcasing a single person working on one side vs a group of professionals working together, full of energy.",
     },
     {
       heading:
@@ -26,6 +27,7 @@ const Corporate: React.FC = () => {
       subheading:
         "Technical hiring, leadership search, and everything in between — done right",
       img: "https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Corporate/Recruitment/Index/Hero/OnePartner.webp",
+      alt: "A group of professionals sitting in a boardroom and discussing projects while other people stand outside the room looking at them.",
     },
     {
       heading:
@@ -33,6 +35,7 @@ const Corporate: React.FC = () => {
       subheading:
         "Rareminds delivers role-fit talent with speed, accuracy, and accountability",
       img: "https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Corporate/Recruitment/Index/Hero/Time-to-Hire.webp",
+      alt: "Vibrant image of men running in a race and a clock running fast in the background.",
     },
     {
       heading:
@@ -40,6 +43,7 @@ const Corporate: React.FC = () => {
       subheading:
         "From CXOs to coders — precision hiring that drives business outcomes",
       img: "https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Corporate/Recruitment/Index/Hero/ToughestRole.webp",
+      alt: "A well-dressed man wearing a Rareminds bulb image as a tie, breaking through the walls, showcasing energy and power.",
     },
     {
       heading:
@@ -47,13 +51,14 @@ const Corporate: React.FC = () => {
       subheading:
         "Partner with the recruitment team built for performance and outcomes",
       img: "https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Corporate/Recruitment/Index/Hero/CriticalRoles.webp",
+      alt: "A man with multiple hands showcasing multitasking as a cup of tea holding books, a notepad, coffee and modern AI tools in each hand.",
     },
   ];
 
   return (
     <>
       <Helmet>
-        <meta name="title" content="Top Recruitment Services in India / Top Hiring Agency/ Rareminds" />
+        <title>Top Recruitment Services in India | Top Hiring Agency | Rareminds</title>
         <meta
           name="description"
           content="Rareminds delivers fast, scalable, and data-driven recruitment solutions across India and globally—20+ industries, 500K+ hires, and 250+ clients worldwide."
@@ -85,12 +90,11 @@ const Corporate: React.FC = () => {
         <TeamSection />
       </div>
       <div id="dashboard" className="bg-white relative">
-        <Dashboard/>
+        <Dashboard />
       </div>
       <div id="contact">
         <ContactSection />
       </div>
-
     </>
   );
 };

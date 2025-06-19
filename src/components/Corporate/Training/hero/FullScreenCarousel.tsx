@@ -10,6 +10,7 @@ interface CarouselSlide {
   heading: string;
   subheading: string;
   img: string;
+  alt: string;
 }
 
 interface FullScreenCarouselProps {
@@ -238,35 +239,36 @@ const FullScreenCarousel: React.FC<FullScreenCarouselProps> = ({
                 </div>
                 {/* Right side - Image */}
                 <div className="w-full lg:w-[40%] mt-4 lg:mt-0 flex items-center justify-center relative min-h-[300px]">
-                  <AnimatePresence mode="wait" initial={false}>
+                    <AnimatePresence mode="wait" initial={false}>
                     <motion.img
                       key={slides[activeIndex].img}
                       src={slides[activeIndex].img}
-                      alt={slides[activeIndex].heading}
+                      alt={slides[activeIndex].alt}
                       height={400}
                       width={400}
+                      loading="lazy"
                       className="w-[300px] lg:w-[400px] max-w-xl mx-auto lg:max-w-none rounded-lg absolute"
                       initial={{
-                        opacity: 0,
-                        scale: 0.85,
-                        rotate: 8,
-                        filter: "blur(6px)",
+                      opacity: 0,
+                      scale: 0.85,
+                      rotate: 8,
+                      filter: "blur(6px)",
                       }}
                       animate={{
-                        opacity: 1,
-                        scale: 1,
-                        rotate: 0,
-                        filter: "blur(0px)",
+                      opacity: 1,
+                      scale: 1,
+                      rotate: 0,
+                      filter: "blur(0px)",
                       }}
                       exit={{
-                        opacity: 0,
-                        scale: 0.85,
-                        rotate: -8,
-                        filter: "blur(6px)",
+                      opacity: 0,
+                      scale: 0.85,
+                      rotate: -8,
+                      filter: "blur(6px)",
                       }}
                       transition={{ duration: 0.7, ease: [0.4, 0, 0.2, 1] }}
                     />
-                  </AnimatePresence>
+                    </AnimatePresence>
                 </div>
               </div>
             </motion.div>

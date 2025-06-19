@@ -58,6 +58,7 @@ const WhyRareminds = () => {
       width: "w-[13%]",
       heading: "Role Closure Rate",
       description: "92% of roles closed within the first shortlist round",
+      alt: "An apple-red colour image showcasing the icon of a boy in it.",
     },
     {
       src: "https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Corporate/Recruitment/Index/whyRM/offer.webp",
@@ -66,6 +67,7 @@ const WhyRareminds = () => {
       width: "w-[11%]",
       heading: "Offer Acceptance Rate",
       description: "98% candidate offer acceptance rate",
+      alt: "A blue colour image of an icon showing two people shaking hands.",
     },
     {
       src: "https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Corporate/Recruitment/Index/whyRM/csat.webp",
@@ -75,6 +77,7 @@ const WhyRareminds = () => {
       heading: "CSAT Score",
       description:
         "Rated 4.8/5 by corporate clients for quality and communication",
+      alt: "A yellow coloured-image of an icon showcasing a middleman.",
     },
     {
       src: "https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Corporate/Recruitment/Index/whyRM/indian.webp",
@@ -83,6 +86,7 @@ const WhyRareminds = () => {
       width: "w-[8%]",
       heading: "20+ states",
       description: "Pan-India reach with regional hiring in",
+      alt: "A pink coloured image showcasing the map of India with a pin at the centre.",
     },
     {
       src: "https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Corporate/Recruitment/Index/whyRM/brands.webp",
@@ -91,6 +95,7 @@ const WhyRareminds = () => {
       width: "w-[9%]",
       heading: "20+ brands",
       description: "C-Suite hires in the past year",
+      alt: "A yellow coloured-image showcasing an icon with the word “brand” in it.",
     },
     {
       src: "https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Corporate/Recruitment/Index/whyRM/roles.webp",
@@ -99,6 +104,7 @@ const WhyRareminds = () => {
       width: "w-[11%]",
       heading: "150+ Roles",
       description: "Job Families Successfully Placed",
+      alt: "A blue colour image showcasing a circular icon and a man icon in it.",
     },
     {
       src: "https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Corporate/Recruitment/Index/whyRM/countries.webp",
@@ -107,6 +113,7 @@ const WhyRareminds = () => {
       width: "w-[13%]",
       heading: "10 Countries",
       description: "Domestic hiring @ International Locations",
+      alt: "A red colour image showing the icon of a globe in it.",
     },
   ];
 
@@ -221,7 +228,7 @@ const WhyRareminds = () => {
               <div className="relative">
                 <img
                   src={block.src}
-                  alt={`block-${index}`}
+                  alt={block.alt}
                   onMouseEnter={() => setHoveredIndex(index)}
                   onMouseLeave={() => setHoveredIndex(null)}
                   className="hover:cursor-pointer"

@@ -58,7 +58,7 @@ const Dashboard: React.FC = () => {
           <div className="w-full md:w-1/2 px-4 md:px-0">
             <img
               src="https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Corporate/Recruitment/Index/Dashboard/dashboard-preview-3.webp"
-              alt="Real Time Dashboard"
+              alt="Image of Dashboard showing data and image of recruitment steps and stages of recruitment services using AI."
               className="rounded-lg w-full drop-shadow-lg"
             />
           </div>
@@ -86,7 +86,7 @@ const Dashboard: React.FC = () => {
           <div className="w-full md:w-1/2 px-4 md:px-0">
             <img
               src="https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Corporate/Recruitment/Index/Dashboard/dashboard-preview-2.webp"
-              alt="Learning Management System Dashboard"
+              alt="Image of a Smart Learning Management Dashboard showing bar graphs, figures, charts, attendance and time spent."
               className="rounded-lg w-full drop-shadow-lg"
             />
           </div>
