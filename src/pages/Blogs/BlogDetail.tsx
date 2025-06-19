@@ -8,7 +8,10 @@ import {
   Clock, 
   ArrowLeft, 
   Share2, 
-  AlertTriangle
+  AlertTriangle,
+  Linkedin,
+  Twitter,
+  Github
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { motion, AnimatePresence } from "framer-motion";
@@ -30,6 +33,9 @@ interface BlogPost {
   readonly author_name: string | null;
   readonly author_bio: string | null;
   readonly author_avatar: string | null;
+  readonly author_linkedin: string | null;
+  readonly author_twitter: string | null;
+  readonly author_github: string | null;
   readonly read_time: number | null;
   readonly tags: string[] | null;
   readonly key_points: string[] | null;
@@ -244,11 +250,22 @@ const BlogDetail = () => {
             </button>
           </div>
         </div>
-        {/* Hero Section */}
-        <BlogHeroSection post={post} />
+        {/* Hero Section (image only) */}
+        <BlogHeroSection post={post} hideTitle />
+        {/* Blog Title and Category below image */}
+        <div className="w-full bg-white">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-4">
+            <span className="inline-block px-4 py-2 bg-blue-500 text-white rounded-full text-sm font-semibold mb-4 shadow-lg">
+              {post.category}
+            </span>
+            <h1 className="text-2xl sm:text-3xl lg:text-5xl font-bold text-gray-900 mb-6 !leading-tight">
+              {post.title}
+            </h1>
+          </div>
+        </div>
 
         {/* Main Content */}
-        <main className="py-16 lg:py-24">
+        <main className="pb-16 lg:pb-24">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
               
@@ -298,9 +315,9 @@ const ErrorComponent = memo<ErrorComponentProps>(({ error, backToPath }) => (
     <div className="text-center max-w-md mx-auto">
       <div className="mb-6">
         <AlertTriangle className="w-16 h-16 text-red-500 mx-auto mb-4" />
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">
+        <h2 className="text-3xl font-bold text-gray-900 mb-2">
           {error?.type === 'NOT_FOUND' ? 'Post Not Found' : 'Something Went Wrong'}
-        </h1>
+        </h2>
         <p className="text-gray-600 mb-6">
           {error?.message || 'We couldn\'t load this blog post. Please try again later.'}
         </p>
@@ -377,52 +394,54 @@ interface BlogHeroSectionProps {
   post: BlogPost;
 }
 
-const BlogHeroSection = memo<BlogHeroSectionProps>(({ post }) => (
+const BlogHeroSection = memo<BlogHeroSectionProps & { hideTitle?: boolean }>(({ post, hideTitle }) => (
   <motion.section 
     initial={{ opacity: 0 }}
     animate={{ opacity: 1 }}
     transition={{ duration: 0.8 }}
     className="relative"
   >
-    <div className="relative h-[50vh] lg:h-[60vh] overflow-hidden flex items-center justify-center">
+    <div className="relative h-[40vh] sm:h-[45vh] md:h-[50vh] lg:h-[60vh] xl:h-[65vh] overflow-hidden flex items-center justify-center">
       <img
         src={post.featured_image || '/default-blog-image.jpg'}
         alt={post.title}
         className="w-full h-full object-cover absolute inset-0 z-0"
         loading="eager"
       />
-      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent z-10"></div>
-      
-      <div className="relative z-20 w-full flex justify-center items-center h-full">
-        <div className="w-full max-w-6xl mx-auto text-start px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3, duration: 0.6 }}
-          >
-            <span className="inline-block px-4 py-2 bg-red-500 text-white rounded-full text-sm font-semibold mb-6 shadow-lg">
-              {post.category}
-            </span>
-            <h1 className="text-3xl sm:text-4xl lg:text-6xl font-bold text-white mb-6 leading-tight">
-              {post.title}
-            </h1>
-            <div className="flex flex-wrap items-center justify-start gap-6 text-white/90">
-              <div className="flex items-center gap-2">
-                <Calendar className="w-4 h-4" />
-                <time dateTime={post.publish_date}>
-                  {formatDate(post.publish_date)}
-                </time>
-              </div>
-              {post.read_time && (
-                <div className="flex items-center gap-2">
-                  <Clock className="w-4 h-4" />
-                  <span>{post.read_time} min read</span>
+      {/* Only show title/category if not hidden */}
+      {!hideTitle && (
+        <div className="relative z-20 w-full flex justify-center items-center h-full">
+          <div className="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 md:py-10 lg:py-12">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3, duration: 0.6 }}
+              className="max-w-4xl"
+            >
+              <span className="inline-block px-3 sm:px-4 py-1.5 sm:py-2 bg-red-500 text-white rounded-full text-xs sm:text-sm font-semibold mb-4 sm:mb-6 shadow-lg">
+                {post.category}
+              </span>
+              <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold text-white mb-4 sm:mb-6 leading-tight sm:leading-snug md:leading-normal">
+                {post.title}
+              </h1>
+              <div className="flex flex-wrap items-center justify-start gap-4 sm:gap-6 text-white/90 text-sm sm:text-base">
+                <div className="flex items-center gap-1.5 sm:gap-2">
+                  <Calendar className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                  <time dateTime={post.publish_date} className="font-medium">
+                    {formatDate(post.publish_date)}
+                  </time>
                 </div>
-              )}
-            </div>
-          </motion.div>
+                {post.read_time && (
+                  <div className="flex items-center gap-1.5 sm:gap-2">
+                    <Clock className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                    <span className="font-medium">{post.read_time} min read</span>
+                  </div>
+                )}
+              </div>
+            </motion.div>
+          </div>
         </div>
-      </div>
+      )}
     </div>
   </motion.section>
 ));
@@ -464,6 +483,103 @@ const BlogSidebar = memo<BlogSidebarProps>(({ post }) => (
     className="lg:col-span-4"
   >
     <div className="sticky top-24 space-y-8">
+      {/* Author Info */}
+      {(post.author_name || post.author_bio) && (
+        <div className="relative overflow-hidden bg-white rounded-2xl border border-gray-100 shadow-sm">
+          {/* Background Pattern */}
+          <div className="absolute inset-0 bg-gradient-to-br from-red-50 to-transparent opacity-50" 
+            style={{ 
+              backgroundImage: `radial-gradient(circle at 2px 2px, rgba(239, 68, 68, 0.1) 1px, transparent 0)`,
+              backgroundSize: '24px 24px' 
+            }}>
+          </div>
+          
+          <div className="relative p-8">
+            <div className="flex flex-col items-center text-center">
+              {/* Avatar with decorative elements */}
+              <div className="relative mb-6">
+                <div className="absolute inset-0 bg-gradient-to-br from-red-500 to-red-600 rounded-2xl blur-2xl opacity-10 transform -rotate-6"></div>
+                <div className="relative">
+                  <div className="w-28 h-28 rounded-2xl overflow-hidden ring-4 ring-white shadow-xl transform transition-transform duration-300 hover:scale-105">
+                    <img 
+                      src={post.author_avatar || "https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/general/RMLogo.webp"}
+                      alt={post.author_name || 'Author'} 
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  {/* Decorative dots */}
+                  <div className="absolute -top-4 -right-4 w-8 h-8 bg-red-500/10 rounded-full"></div>
+                  <div className="absolute -bottom-4 -left-4 w-6 h-6 bg-red-500/10 rounded-full"></div>
+                </div>
+              </div>
+
+              <div className="space-y-4 relative">
+                {/* Title with decorative line */}
+                <div className="flex items-center justify-center gap-3 mb-6">
+                  <span className="h-px w-8 bg-red-200"></span>
+                  <h4 className="font-bold text-gray-900 uppercase tracking-wider text-sm">About the Author</h4>
+                  <span className="h-px w-8 bg-red-200"></span>
+                </div>
+
+                {post.author_name && (
+                  <h5 className="text-2xl font-bold text-gray-900 mb-2">{post.author_name}</h5>
+                )}
+                {post.author_bio && (
+                  <p className="text-gray-600 leading-relaxed max-w-sm mx-auto text-sm">{post.author_bio}</p>
+                )}
+
+                {/* Social links with enhanced styling */}
+                {(post.author_linkedin || post.author_twitter || post.author_github) && (
+                  <div className="pt-6 mt-6 border-t border-gray-100/50">
+                    <div className="flex items-center justify-center gap-6">
+                      {post.author_linkedin && (
+                        <motion.a 
+                          href={post.author_linkedin}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="group relative"
+                          aria-label={`${post.author_name}'s LinkedIn profile`}
+                          whileHover={{ y: -2 }}
+                        >
+                          <div className="absolute inset-0 bg-red-100 rounded-lg blur-md opacity-0 group-hover:opacity-70 transition-opacity"></div>
+                          <Linkedin className="w-5 h-5 text-gray-600 group-hover:text-red-500 transition-colors relative z-10" />
+                        </motion.a>
+                      )}
+                      {post.author_twitter && (
+                        <motion.a 
+                          href={post.author_twitter}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="group relative"
+                          aria-label={`${post.author_name}'s Twitter profile`}
+                          whileHover={{ y: -2 }}
+                        >
+                          <div className="absolute inset-0 bg-red-100 rounded-lg blur-md opacity-0 group-hover:opacity-70 transition-opacity"></div>
+                          <Twitter className="w-5 h-5 text-gray-600 group-hover:text-red-500 transition-colors relative z-10" />
+                        </motion.a>
+                      )}
+                      {post.author_github && (
+                        <motion.a 
+                          href={post.author_github}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="group relative"
+                          aria-label={`${post.author_name}'s GitHub profile`}
+                          whileHover={{ y: -2 }}
+                        >
+                          <div className="absolute inset-0 bg-red-100 rounded-lg blur-md opacity-0 group-hover:opacity-70 transition-opacity"></div>
+                          <Github className="w-5 h-5 text-gray-600 group-hover:text-red-500 transition-colors relative z-10" />
+                        </motion.a>
+                      )}
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+      
       {/* Article Stats */}
       <div className="p-6 bg-white rounded-2xl border border-gray-100 shadow-sm">
         <h4 className="font-bold text-gray-900 mb-4">Article Stats</h4>
@@ -494,7 +610,7 @@ const BlogSidebar = memo<BlogSidebarProps>(({ post }) => (
             {post.tags.map((tag: string, index: number) => (
               <span
                 key={`${tag}-${index}`}
-                className="px-3 py-1 bg-red-50 text-red-600 rounded-full text-sm font-medium border border-red-100"
+                className="px-3 py-1 bg-blue-50 text-blue-600 rounded-full text-sm font-medium border border-blue-100"
               >
                 {tag}
               </span>
