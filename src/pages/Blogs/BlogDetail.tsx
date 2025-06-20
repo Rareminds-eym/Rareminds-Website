@@ -462,7 +462,8 @@ const BlogContentSection = memo<BlogContentSectionProps>(({ post }) => (
   >
     {/* Article Content */}
     <div
-      className={`${styles.blogContent} prose prose-lg max-w-none prose-headings:text-gray-900 prose-headings:font-bold prose-p:text-gray-700 prose-p:leading-relaxed prose-a:text-red-500 prose-a:no-underline hover:prose-a:underline prose-strong:text-gray-900 prose-blockquote:border-red-500 prose-blockquote:bg-red-50 prose-blockquote:text-gray-800`}
+      className={`${styles.blogContent} prose prose-lg max-w-none prose-headings:text-gray-900 prose-headings:font-bold prose-p:text-gray-700 prose-p:leading-relaxed prose-a:text-red-500 prose-a:no-underline hover:prose-a:underline prose-strong:text-gray-900 prose-blockquote:border-red-500 prose-blockquote:bg-red-50 prose-blockquote:text-gray-800 w-full break-words`}
+      style={{ wordBreak: "break-word", overflowWrap: "break-word" }}
       dangerouslySetInnerHTML={{ __html: post.content }}
     />
   </motion.article>
@@ -618,22 +619,6 @@ const BlogSidebar = memo<BlogSidebarProps>(({ post }) => (
           </div>
         </div>
       )}
-
-      {/* Mobile Share */}
-      <div className="lg:hidden p-6 bg-white rounded-2xl border border-gray-100 shadow-sm">
-        <h4 className="font-bold text-gray-900 mb-4">Share this article</h4>
-        <div className="flex gap-3">
-          <Button size="sm" className="flex-1 bg-red-500 hover:bg-red-600">
-            LinkedIn
-          </Button>
-          <Button size="sm" variant="outline" className="flex-1 border-red-200 text-red-600 hover:bg-red-50">
-            WhatsApp
-          </Button>
-          <Button size="sm" variant="outline" className="flex-1 border-red-200 text-red-600 hover:bg-red-50">
-            Twitter
-          </Button>
-        </div>
-      </div>
     </div>
   </motion.aside>
 ));
