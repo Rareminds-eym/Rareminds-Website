@@ -72,7 +72,7 @@ const Index = () => {
               partHover={partHover}
               activePart={activePart}
               setActivePart={setActivePart}
-              content={content[0]}
+              content={content[2]}
             />
             <Corporate
               onAction={redirectToPage}
@@ -95,7 +95,7 @@ const Index = () => {
               overlayActive={togglePartHover}
               partHover={partHover}
               setActivePart={setActivePart}
-              content={content[2]}
+              content={content[0]}
               activePart={activePart}
             />
             <Counselling

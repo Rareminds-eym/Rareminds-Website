@@ -20,7 +20,7 @@ const School: React.FC<ChildProps> = ({
   content,
 }) => {
   const schoolRef = useRef<HTMLDivElement | null>(null);
-  const part: UserType = "school";
+  const part: UserType = "government";
   return (
     <>
       <div
@@ -43,12 +43,12 @@ const School: React.FC<ChildProps> = ({
           overlayActive(false);
           setActivePart("none");
         }}
-      >
+            >
         <img
-          src='/LandingPage/Brain/5-crop.png'
+          src='/LandingPage/Brain/2-crop.webp'
           alt="School"
           className="clipped-image"
-          style={{ objectPosition: "left" }}
+          style={{ objectPosition: "25%" }}
         />
         <div
           className={`absolute w-full h-full -translate-y-[100%] transition-all duration-300 ${partHover ? "" : ""} hover:!bg-transparent`}

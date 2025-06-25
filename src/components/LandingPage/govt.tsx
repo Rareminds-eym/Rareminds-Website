@@ -21,7 +21,7 @@ const Govt: React.FC<ChildProps> = ({
   content,
 }) => {
   const govtRef = useRef<HTMLDivElement | null>(null);
-  const part: UserType = "government";
+  const part: UserType = "school";
   return (
     <>
       <div
@@ -44,7 +44,7 @@ const Govt: React.FC<ChildProps> = ({
           setActivePart?.("none");
         }}
       >
-        <img src='/LandingPage/Brain/2-crop.jpg' className="clipped-image" />
+        <img src='/LandingPage/Brain/5-crop.webp' className="clipped-image" />
         <div className="absolute w-full h-full -translate-y-[100%] transition-all duration-300 hover:!bg-transparent"></div>
         <svg width="0" height="0">
           <clipPath id="govt" clipPathUnits="userSpaceOnUse">
