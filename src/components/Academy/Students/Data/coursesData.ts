@@ -295,26 +295,27 @@ export interface CourseModule {
 // //     shortName: "3E Program Bootcamp",
 // //     description: "Don’t Step into the Future Unprepared. Ignite the 3E Program.",
 // //     targetGrade: "For Grades 8–12: Building Confidence, Clarity, and Career Readiness",
+// //     subtitle: "Old methods fall short. We teach what the future demands. That’s where 3E comes in.",
+// //     heroImage: "/academy/courseBanner/The 3E Program_ English, Employability, Entrepreneurship.png",
 // //     modules: [
 // //       {
 // //         title: "English",
 // //         description: [
-// //           "Basic English + writing & comprehension"
+// //           "Build language skills that help you speak up, stand out, and move forward from everyday conversations to professional emails."
 // //         ],
 // //         image: "/academy/courses/3Eprogram/english.svg"
 // //       },
 // //       {
 // //         title: "Employability",
 // //         description: [
-// //           "Resume building, interviews, and digital job portals"
+// //           "Master 21st-century workplace skills from digital tools and career planning to team communication, job readiness, and financial literacy."
 // //         ],
 // //         image: "/academy/courses/3Eprogram/Employability.svg"
 // //       },
 // //       {
 // //         title: "Entrepreneurship",
 // //         description: [
-// //           "Entrepreneurship basics: business planning, marketing, and funding",
-// //           "Financial literacy, digital skills, customer service"
+// //           "Learn how to identify opportunities, build business plans, and pitch ideas to create your own path, even before college."
 // //         ],
 // //         image: "/academy/courses/3Eprogram/Entrepreneurship.svg"
 // //       }
@@ -362,6 +363,7 @@ export interface Course {
   pdfUrl?: string;
   showLoginLink?: boolean;
   showTitleSpan?: boolean;
+  programHighlights?: string[];
 }
 
 export const coursesData: Course[] = [
@@ -491,10 +493,334 @@ export const coursesData: Course[] = [
       image: "/academy/courses/3Eprogram/Employability.svg"
     },
    
+  },
+   {
+    id: "Food Processing and Preservation",
+    name: "Food Processing and Preservation",
+    shortName: "From Farm to Future — Master the Skills of Food Processing",
+   description: `Master the science of preserving food and extending its value—from field to shelf. A significant portion of agricultural produce in India is wasted due to lack of knowledge in preservation, poor infrastructure, and limited access to food processing skills. Students—even in agriculture-linked regions—rarely learn the practical science of how to prevent spoilage or build small-scale food businesses from surplus or seasonal crops.\n\nRareminds introduces students to the fundamentals of food processing and preservation through a 40-hour practical course. Covering techniques like dehydration, fermentation, freezing, canning, and quality control, this course builds hands-on skills that students can apply in real-world scenarios. It also connects preservation techniques to entrepreneurship, food safety, and rural employment opportunities.`,
+    programHighlights: [
+"Agri-Food Basics: Learn why processing matters in a world of growing demand",
+  "Preservation Techniques: Thermal, cold, dehydration, fermentation, and new-age methods",
+  "Food Safety & Hygiene: Build habits aligned with national and global food standards",
+  "Business & Careers: Explore opportunities to grow your own agri-enterprise or join the food industry"
+],
+   targetGrade: "For Grades 11–12: Skills for Sustainability, Safety, and Self-Reliance",
+    subtitle: "Old methods fall short. We teach what the future demands. That’s where 3E comes in.",
+    heroImage: "/academy/courseBanner/The 3E Program_ English, Employability, Entrepreneurship.png",
+    modules: [
+      
+    ],
+    whyChoose: {
+      title: "Why Schools Are Introducing It Now:",
+      points: [
+        "Aligned with NEP 2020 vocational education goals",
+  "Promotes skill-based, experiential learning",
+  "Supports sustainability, local entrepreneurship, and food security",
+  "Builds student portfolios and confidence for real-world application",
+  "No dependency on school kitchen; portable kits and low-cost materials used"
+      ],
+      image: "/academy/courses/3Eprogram/Employability.svg"
+    },
+   
+  },
+   {
+    id: "Cloud Kitchen Operations",
+    name: "Cloud Kitchen Operations",
+    shortName: "From Home to Hustle — Build a Business Without a Dining Room",
+    // description: "From Home to Hustle — Build a Business Without a Dining Room",
+    description: `Launch food businesses without dining spaces—just smart kitchens and smarter strategies.\n\n Traditional food businesses require large investments in infrastructure, staff, and storefronts. Many aspiring entrepreneurs, especially youth in semi-urban or residential areas, struggle to break into the food industry due to high costs, lack of guidance, and limited access to digital operations know-how. Despite growing demand for delivery, students are not exposed to the backend skills required to manage food businesses built for the app economy.\n\nRareminds offers a hands-on, future-ready course that teaches students how to build, run, and scale a cloud kitchen from home or a small space. With modules on cost-saving operations, compliance, digital order systems, menu planning, and marketing, this program equips students to launch delivery-first food ventures using real-world tools and entrepreneurial thinking.`,
+    programHighlights: [
+ "Kitchen & Workflow Design: Learn to plan compact, efficient spaces that meet food safety standards",
+  "Operations & Budgeting: Build a lean, cost-effective business model",
+  "Digital Tools: Use tech platforms to manage orders and customers",
+  "Entrepreneurship: Create and pitch your own delivery-first brand"
+],
+    targetGrade: "For Grades 11–12: Skills to Run a Digital-First Food Venture",
+    subtitle: "Old methods fall short. We teach what the future demands. That’s where 3E comes in.",
+    heroImage: "/academy/courseBanner/",
+    modules: [
+      
+    ],
+    whyChoose: {
+      title: "Why Schools Are Introducing It Now",
+      points: [
+        "Aligned with NEP 2020’s focus on entrepreneurship and digital skills",
+  "Prepares students for self-employment in the booming food delivery sector",
+  "Focuses on real-world budgeting, compliance, and operational planning",
+  "Enhances digital literacy, financial acumen, and teamwork",
+  "Hands-on training in digital food entrepreneurship"
+],
+      image: "/academy/courses/3Eprogram/"
+    },
+    
+  },
+   {
+    id: "Vocational Training Course on Agri-Rural Entrepreneurship",
+    name: "Vocational Training Course on Agri-Rural Entrepreneurship",
+    shortName: "Vocational Training Course on Agri-Rural Entrepreneurship",
+    // description: "Growing Ideas, Sustaining Futures — Entrepreneurial Skills for the Rural Economy",
+    description: `Transform agricultural insight into sustainable rural businesses that create impact. Rural students often grow up close to agriculture but aren’t taught how to see it through the lens of innovation, business, or sustainability. Traditional education doesn't connect farming with entrepreneurship, nor does it equip learners with the tools to turn rural challenges into business opportunities. This disconnect keeps rural youth from creating value-added enterprises in their own communities.\n\nRareminds bridges this gap by training students to build rural enterprises rooted in agriculture, sustainability, and local ecosystems. With modules on agri-business models, market trends, supply chains, risk management, and environmental impact, students learn to build business plans, think strategically, and lead locally. The program ends in a hands-on capstone project that brings their learning to life.`,
+    programHighlights: [
+      "Agribusiness Foundations: Learn how agriculture connects to markets, pricing, and value chains",
+      "Market Insights: Analyze supply-demand trends, cost structures, and consumer patterns",
+      "Strategic Planning: Develop actionable business plans and sustainability models",
+      "Green Thinking: Evaluate environmental impacts and propose solutions for rural enterprise",
+      "Supply Chain & Logistics: Understand how rural products reach urban and export markets",
+      "Capstone Experience: Apply all modules in a final group project or business pitch"
+    ],
+    targetGrade: "For Grades 11–12: Building Agri-Business and Sustainability Mindsets",
+    subtitle: "Old methods fall short. We teach what the future demands. That’s where 3E comes in.",
+    heroImage: "/academy/courseBanner/",
+    modules: [
+      
+    ],
+    whyChoose: {
+      title: "Why Schools Are Choosing It Now",
+      points: [
+        "Aligned with NEP 2020’s vocational education goals",
+  "Builds entrepreneurial confidence in rural and semi-urban learners",
+  "Develops real-world decision-making and strategy planning skills",
+  "Promotes sustainability and environmentally responsible thinking",
+  "Hands-on training in digital food entrepreneurship",
+  "Culminates in a hands-on capstone project"
+      ],
+      image: "/academy/courses/3Eprogram/"
+    },
+    
   }
 ];
 
 // Detailed Module Definitions
+export const Food_Processing_and_Preservation: DetailedModule[] = [
+  {
+    id: 1,
+    title: "Introduction to Agri-Food Processing",
+    hours: 4,
+    objectives: "Understand what agri-food processing is and its role in the food supply chain",
+    activities: "Concept map, history timeline, group discussion",
+    outcomes: "Students explain processing types and their impact on food systems"
+  },
+  {
+    id: 2,
+    title: "Methods of Food Preservation",
+    hours: 10,
+    objectives: "Explore traditional and modern preservation techniques",
+    activities: "Interactive demos, comparison worksheets, videos",
+    outcomes: "Students identify and differentiate preservation techniques"
+  },
+  {
+    id: 3,
+    title: "Practical Sessions on Food Preservation",
+    hours: 10,
+    objectives: "Gain hands-on experience with food preservation methods",
+    activities: "Canning, fermentation, dehydration, freezing",
+    outcomes: "Students complete basic preservation tasks with safety protocols"
+  },
+  {
+    id: 4,
+    title: "Food Safety and Hygiene",
+    hours: 6,
+    objectives: "Learn food safety principles and hygiene best practices",
+    activities: "HACCP case study, hygiene audit checklist, role-plays",
+    outcomes: "Students apply hygiene rules and understand food safety certification"
+  },
+  {
+    id: 5,
+    title: "Quality Control and Packaging",
+    hours: 4,
+    objectives: "Understand quality testing and packaging methods",
+    activities: "Sample analysis, label design task, packaging demo",
+    outcomes: "Students perform basic quality checks and label food products"
+  },
+  {
+    id: 6,
+    title: "Business and Career Opportunities",
+    hours: 6,
+    objectives: "Discover entrepreneurship opportunities in food processing",
+    activities: "Business model canvas, product pitch, career path exploration",
+    outcomes: "Students build a mini-business plan and identify career options"
+  }
+];
+
+
+// Detailed modules for Cloud Kitchen Operations (for use in tables and detailed views)
+export const Cloud_Kitchen_Operations: DetailedModule[] = [
+  {
+    id: 1,
+    title: "Introduction to Cloud Kitchens",
+    hours: 3,
+    objectives: "Understand the cloud kitchen model and its relevance in today’s food industry",
+    activities: "Case examples, group discussion",
+    outcomes: "Students define cloud kitchen features and benefits"
+  },
+  {
+    id: 2,
+    title: "Setting Up a Kitchen Space",
+    hours: 4,
+    objectives: "Learn layout design, equipment selection, and safety essentials",
+    activities: "Space planning exercise, checklist activity",
+    outcomes: "Students sketch a compliant kitchen layout"
+  },
+  {
+    id: 3,
+    title: "Compliance & Legal Essentials",
+    hours: 3,
+    objectives: "Identify key permits, zoning rules, and food safety regulations",
+    activities: "License mock-up, compliance quiz",
+    outcomes: "Students list required approvals and steps"
+  },
+  {
+    id: 4,
+    title: "Budgeting and Cost Management",
+    hours: 5,
+    objectives: "Develop a realistic setup budget with cost-saving strategies",
+    activities: "Budget breakdown activity, fixed vs variable cost sort",
+    outcomes: "Students prepare a startup cost sheet"
+  },
+  {
+    id: 5,
+    title: "Equipment, Inventory & Suppliers",
+    hours: 4,
+    objectives: "Understand sourcing, stocking, and maintenance essentials",
+    activities: "Inventory log demo, supplier negotiation role-play",
+    outcomes: "Students create a basic inventory plan and vendor list"
+  },
+  {
+    id: 6,
+    title: "Technology in Cloud Kitchens",
+    hours: 5,
+    objectives: "Use digital tools like POS, KDS, and ordering platforms",
+    activities: "Software simulation, order tracker exercise",
+    outcomes: "Students manage a mock order system using tech tools"
+  },
+  {
+    id: 7,
+    title: "Staffing & Roles",
+    hours: 2,
+    objectives: "Identify key roles and build team responsibility matrices",
+    activities: "Role-mapping, SOP worksheet",
+    outcomes: "Students assign staff duties and outline onboarding steps"
+  },
+  {
+    id: 8,
+    title: "Menu Planning & Pricing Strategies",
+    hours: 4,
+    objectives: "Create a delivery-friendly menu and pricing plan",
+    activities: "Menu workshop, pricing game",
+    outcomes: "Students build a 5-item menu with pricing rationale"
+  },
+  {
+    id: 9,
+    title: "Marketing & Branding for Delivery",
+    hours: 3,
+    objectives: "Promote a food brand online and locally on a budget",
+    activities: "Social media calendar, flyer draft",
+    outcomes: "Students present a basic marketing strategy"
+  },
+  {
+    id: 10,
+    title: "Real-World Application & Simulation",
+    hours: 3,
+    objectives: "Connect all elements through role-play and scenario-based planning",
+    activities: "Mock cloud kitchen setup, feedback loop",
+    outcomes: "Students simulate a one-day kitchen operation"
+  },
+  {
+    id: 11,
+    title: "Capstone Activity: Business Pitch",
+    hours: 4,
+    objectives: "Present a full cloud kitchen business plan to peers or mentors",
+    activities: "Pitch deck, visual branding, summary budget",
+    outcomes: "Students pitch their own startup concept and reflect on learnings"
+  }
+];
+
+
+export const Agri_Rural_Entrepreneurship: DetailedModule[] = [
+  {
+    id: 1,
+    title: "Introduction to Agribusiness & Rural Enterprises",
+    hours: 3,
+    objectives: "Define agribusiness and rural entrepreneurship, understand their role in the economy",
+    activities: "Quiz, concept map",
+    outcomes: "Students articulate differences between agribusiness and rural enterprises"
+  },
+  {
+    id: 2,
+    title: "Agriculture & Business Interplay",
+    hours: 3,
+    objectives: "Explore connections between agriculture and business value chains",
+    activities: "Model mapping, business role-play",
+    outcomes: "Students identify agri-business models and their structures"
+  },
+  {
+    id: 3,
+    title: "Economics & Market Trends",
+    hours: 4,
+    objectives: "Analyze market trends, pricing, and supply-demand dynamics",
+    activities: "Market trend tracker, economic indicator case studies",
+    outcomes: "Students interpret agri-market behavior"
+  },
+  {
+    id: 4,
+    title: "Environmental & Social Impact",
+    hours: 3,
+    objectives: "Evaluate the impact of enterprises on environment and community",
+    activities: "Impact mapping, reflection exercise",
+    outcomes: "Students propose environmentally conscious practices"
+  },
+  {
+    id: 5,
+    title: "Sustainable Agricultural Practices",
+    hours: 4,
+    objectives: "Learn eco-friendly farming and agri-entrepreneurship approaches",
+    activities: "Crop rotation chart, water use audit",
+    outcomes: "Students identify sustainable strategies for rural settings"
+  },
+  {
+    id: 6,
+    title: "Resource & Risk Management",
+    hours: 4,
+    objectives: "Manage market risk and plan resource allocation in rural businesses",
+    activities: "Case scenarios, decision-matrix planning",
+    outcomes: "Students prepare resource/risk strategy sheets"
+  },
+  {
+    id: 7,
+    title: "Business Strategy & Planning",
+    hours: 4,
+    objectives: "Create a rural enterprise plan with clear objectives and tactics",
+    activities: "SWOT analysis, business plan template",
+    outcomes: "Students design an actionable rural business plan"
+  },
+  {
+    id: 8,
+    title: "Supply Chain & Logistics",
+    hours: 4,
+    objectives: "Understand and optimize rural product distribution",
+    activities: "Farm-to-market flowchart, transport planning simulation",
+    outcomes: "Students visualize a rural supply chain strategy"
+  },
+  {
+    id: 9,
+    title: "Tools for Decision Making",
+    hours: 3,
+    objectives: "Use tools like cost-benefit analysis and investment scenarios",
+    activities: "Role-plays, strategic thinking exercises",
+    outcomes: "Students support choices with financial and market reasoning"
+  },
+  {
+    id: 10,
+    title: "Green Business & Eco-Enterprise Design",
+    hours: 3,
+    objectives: "Build environmental considerations into business models and consolidate course learning",
+    activities: "Case study breakdown, eco-entrepreneur brainstorm, capstone pitch",
+    outcomes: "Students propose an environmentally responsible rural business model"
+  }
+];
+
+
 export const spokenEnglishBootcampDetailedModules: DetailedModule[] = [
   {
     id: 1,
@@ -737,3 +1063,14 @@ export const careerCounselingServices: CareerCounselingService[] = [
     category: "Research"
   }
 ];
+
+// Utility function to get detailed modules for a course
+export function getDetailedModulesByCourseId(courseId: string): DetailedModule[] {
+  if (courseId === 'spoken-english-bootcamp') return spokenEnglishBootcampDetailedModules;
+  if (courseId === '3e-program-bootcamp') return threeEProgramEmployabilityModules;
+  if (courseId === 'Vocational Training Course on Agri-Rural Entrepreneurship') return Agri_Rural_Entrepreneurship;
+  if (courseId === 'Cloud Kitchen Operations') return Cloud_Kitchen_Operations;
+  if (courseId === 'Food Processing and Preservation') return Food_Processing_and_Preservation;
+  return [];
+}
+

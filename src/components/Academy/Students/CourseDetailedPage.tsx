@@ -1,4 +1,3 @@
-
 import { useParams, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Helmet } from "react-helmet-async";
@@ -7,7 +6,10 @@ import {
   coursesData, 
   spokenEnglishBootcampDetailedModules, 
   threeEProgramEmployabilityModules,
-  careerCounselingServices 
+  careerCounselingServices,
+  Food_Processing_and_Preservation,
+  Cloud_Kitchen_Operations,
+  Agri_Rural_Entrepreneurship
 } from "./Data/coursesData"; // All data is now imported from here
 import AcademyHeader from "@/components/Header/AcademyHeader";
 import FloatingActionMenu from "../../../components/Academy/StickyButton/StickyButton/FloatingAction"
@@ -205,6 +207,48 @@ const CourseDetailedPage = () => {
                     </div>
                   </motion.div>
                 ))}
+                {/* Show Program Highlights for Agri-Rural Entrepreneurship if present */}
+                {course.id === "Vocational Training Course on Agri-Rural Entrepreneurship" && course.programHighlights && course.programHighlights.length > 0 && (
+                  <div className="mt-8">
+                    <h4 className="font-semibold text-black mb-2 text-2xl">Program Highlights:</h4>
+                    <div className="space-y-2">
+                      {course.programHighlights.map((highlight, idx) => (
+                        <div key={idx} className="flex items-start gap-3 p-1">
+                          <CheckCircle className="w-6 h-6 text-green-500 flex-shrink-0 mt-1" />
+                          <span className="text-gray-700">{highlight}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                {/* Show Program Highlights for Cloud Kitchen Operations if present */}
+                {course.id === "Cloud Kitchen Operations" && course.programHighlights && course.programHighlights.length > 0 && (
+                  <div className="mt-8">
+                    <h4 className="font-semibold text-black mb-2 text-2xl">Modules include kitchen setup, compliance, costing, software tools, customer service, and live business simulations.</h4>
+                    <div className="space-y-2">
+                      {course.programHighlights.map((highlight, idx) => (
+                        <div key={idx} className="flex items-start gap-3 p-1">
+                          <CheckCircle className="w-6 h-6 text-green-500 flex-shrink-0 mt-1" />
+                          <span className="text-gray-700">{highlight}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                {/* Show Program Highlights for Food Processing and Preservation if present */}
+                {course.id === "Food Processing and Preservation" && course.programHighlights && course.programHighlights.length > 0 && (
+                  <div className="mt-8">
+                    <h4 className="font-semibold text-black mb-2 text-2xl">Modules include hands-on training in preservation methods, quality control, hygiene, and entrepreneurship.</h4>
+                    <div className="space-y-2">
+                      {course.programHighlights.map((highlight, idx) => (
+                        <div key={idx} className="flex items-start gap-3 p-1">
+                          <CheckCircle className="w-6 h-6 text-green-500 flex-shrink-0 mt-1" />
+                          <span className="text-gray-700">{highlight}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
 
@@ -301,8 +345,10 @@ const CourseDetailedPage = () => {
         ) : (
           <Card className="mb-12 border-0 shadow-xl bg-white/90 backdrop-blur-sm">
             <CardHeader>
-              <CardTitle className="text-2xl font-bold text-center text-gray-900">
-                Module Plan Overview
+              <CardTitle className="text-2xl font-bold text-center md:p-6 text-gray-900">
+                {course.id === 'Cloud Kitchen Operations'
+                  ? 'Cloud Kitchen Operations – Module Plan'
+                  : 'Module Plan Overview'}
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -320,15 +366,20 @@ const CourseDetailedPage = () => {
                   </TableHeader>
                   <TableBody>                    {(() => {
                       // Use DetailedModule arrays for special courses, otherwise use course.modules
-                      const modules = course.id === 'spoken-english-bootcamp'
+                      const modules: any[] = course.id === 'spoken-english-bootcamp'
                         ? spokenEnglishBootcampDetailedModules
                         : course.id === '3e-program-bootcamp'
                           ? threeEProgramEmployabilityModules
+                          : course.id === 'Vocational Training Course on Agri-Rural Entrepreneurship'
+                            ? Agri_Rural_Entrepreneurship
+                          : course.id === 'Cloud Kitchen Operations'
+                            ? Cloud_Kitchen_Operations
+                          : course.id === 'Food Processing and Preservation'
+                            ? Food_Processing_and_Preservation
                           : [];
-                      
                       // Return the appropriate mapping based on the module type
                       if (modules.length > 0) {
-                        return modules.map((module) => (
+                        return modules.map((module: any) => (
                           <TableRow key={module.id} className="hover:bg-blue-50/50 transition-colors">
                             <TableCell className="text-center">
                               <div className="w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold text-sm">
