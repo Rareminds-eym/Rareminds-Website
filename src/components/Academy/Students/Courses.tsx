@@ -79,12 +79,15 @@ const Courses = () => {
           </div>
           
           {transformedPrograms.length > 3 && (
-            <div className="mt-8 md:mt-12 text-center">
+            <div className="mt-8 md:mt-12 flex justify-center">
               <Button 
-                className="bg-red-500 hover:bg-red-600 text-white gap-2"
+                className="bg-red-500 hover:bg-red-600 text-white gap-2 flex items-center justify-center"
                 onClick={() => setShowAllPrograms(!showAllPrograms)}
               >
-                {showAllPrograms ? "View Less Programs" : "View All Programs"} <ArrowDown className="h-4 w-4" />
+                <span className="flex items-center gap-2">
+                  {showAllPrograms ? "View Less Programs" : "View All Programs"}
+                  <ArrowDown className="h-4 w-4" />
+                </span>
               </Button>
             </div>
           )}
