@@ -46,6 +46,9 @@ const BlogListing = () => {
       subcategory = "Students";
     } else if (location.pathname.includes("/school/teacher/blogs")) {
       subcategory = "Teachers";
+    } else if (location.pathname.includes("/school/blogs")) {
+      // For the /school/blogs path, show both Students and Teachers blogs
+      subcategory = "all";
     }
     
     setSelectedSubcategory(subcategory);
@@ -93,13 +96,17 @@ const BlogListing = () => {
   // We've replaced this with the URL-based filtering in the useEffect at the beginning
 
   const filteredPosts = useMemo(() => {
-    // Determine if we need to enforce a specific subcategory based on the URL path
+    // Determine if we need to enforce a specific subcategory or subcategories based on the URL path
     let enforceSubcategory: string | null = null;
+    let showOnlySchoolBlogs = false;
     
     if (location.pathname.includes("/school/student/blogs")) {
       enforceSubcategory = "Students";
     } else if (location.pathname.includes("/school/teacher/blogs")) {
       enforceSubcategory = "Teachers";
+    } else if (location.pathname.includes("/school/blogs")) {
+      // For /school/blogs we want to show both student and teacher related blogs
+      showOnlySchoolBlogs = true;
     }
     
     return blogPosts.filter((post: BlogPost) => {
@@ -111,10 +118,19 @@ const BlogListing = () => {
       const matchesCategory = selectedCategory === "all" || 
         post.category.toLowerCase() === selectedCategory;
       
-      // Use enforced subcategory if we're on a specific path
-      const matchesSubcategory = enforceSubcategory 
-        ? post.subcategory === enforceSubcategory
-        : selectedSubcategory === "all" || post.subcategory === selectedSubcategory;
+      // Handle subcategory filtering based on path
+      let matchesSubcategory = false;
+      
+      if (enforceSubcategory) {
+        // For specific paths like /school/student/blogs or /school/teacher/blogs
+        matchesSubcategory = post.subcategory === enforceSubcategory;
+      } else if (showOnlySchoolBlogs) {
+        // For /school/blogs path, show only student and teacher related blogs
+        matchesSubcategory = post.subcategory === "Students" || post.subcategory === "Teachers";
+      } else {
+        // Normal subcategory filtering based on user selection
+        matchesSubcategory = selectedSubcategory === "all" || post.subcategory === selectedSubcategory;
+      }
       
       return matchesSearch && matchesCategory && matchesSubcategory;
     });
@@ -132,9 +148,18 @@ const BlogListing = () => {
   const currentPosts = sortedPosts.slice(startIndex, startIndex + postsPerPage);
 
   // Count of all posts in the selected subcategory (from all blogPosts)
-  const subcategoryTotal = selectedSubcategory === "all"
-    ? blogPosts.length
-    : blogPosts.filter(post => post.subcategory === selectedSubcategory).length;
+  const subcategoryTotal = (() => {
+    // For /school/blogs, count both Students and Teachers subcategories
+    if (location.pathname.includes("/school/blogs") && selectedSubcategory === "all") {
+      return blogPosts.filter(post => 
+        post.subcategory === "Students" || post.subcategory === "Teachers"
+      ).length;
+    }
+    // Otherwise, use the original logic
+    return selectedSubcategory === "all"
+      ? blogPosts.length
+      : blogPosts.filter(post => post.subcategory === selectedSubcategory).length;
+  })();
 
   const handleSearch = (query: string) => {
     setSearchQuery(query);
@@ -191,6 +216,11 @@ const BlogListing = () => {
               {selectedSubcategory !== "all" && (
                 <span className="ml-2">
                   in <span className="font-semibold text-foreground">{selectedSubcategory.charAt(0).toUpperCase() + selectedSubcategory.slice(1)}</span>
+                </span>
+              )}
+              {location.pathname.includes("/school/blogs") && selectedSubcategory === "all" && (
+                <span className="ml-2">
+                  in <span className="font-semibold text-foreground">School (Students & Teachers)</span>
                 </span>
               )}
               {searchQuery && (

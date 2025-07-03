@@ -334,7 +334,7 @@ const BlogDetailGov = () => {
                     <span className="inline-block px-4 py-2 bg-black text-white rounded-full text-sm font-semibold mb-6 shadow-lg">
                       {post.category}
                     </span>
-                    <h1 className="text-3xl sm:text-4xl lg:text-6xl font-bold text-black mb-6 leading-tight">
+                    <h1 className="text-2xl sm:text-3xl lg:text-5xl font-bold text-gray-900 mb-6 !leading-tight">
                       {post.title}
                     </h1>
                 <div className="flex flex-wrap items-center justify-start gap-6 text-black/90">

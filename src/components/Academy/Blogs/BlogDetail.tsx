@@ -255,16 +255,16 @@ const BlogDetail = () => {
       </motion.section>       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="relative z-20 w-full pt-4">
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
-                <div className="lg:col-span-8">
+                <div className="lg:col-span-12 flex flex-col items-start justify-center">
                   <motion.div
-                    initial={{ opacity: 0, y: 30 }}
+                    initial={{ opacity: 0, y: 30 }} 
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.3, duration: 0.6 }}
                   >
                     <span className="inline-block px-4 py-2 bg-black text-white rounded-full text-sm font-semibold mb-6 shadow-lg">
                       {post.category}
                     </span>
-                    <h1 className="text-3xl sm:text-4xl lg:text-6xl font-bold text-black mb-6 leading-tight">
+                    <h1 className="text-2xl sm:text-3xl lg:text-5xl font-bold text-gray-900 mb-6 !leading-tight">
                       {post.title}
                     </h1>
                 <div className="flex flex-wrap items-center justify-start gap-6 text-black/90">
