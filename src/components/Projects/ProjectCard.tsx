@@ -33,7 +33,7 @@ const ProjectCard = ({ project }: ProjectCardProps) => {
       day: 'numeric'
     });
   };  // Create the project URL - use slug if available, otherwise fall back to ID
-  const projectUrl = `/school/new-projects/${project.slug || project.id}`;
+  const projectUrl = `/school/projects/${project.slug || project.id}`;
 
   return (
     <Card className="group hover:shadow-xl transition-all duration-300 hover:-translate-y-2 overflow-hidden h-full">

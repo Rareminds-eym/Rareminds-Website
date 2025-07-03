@@ -57,31 +57,35 @@ const CurrentBlogs = () => {
 
     fetchStudentBlogs();
   }, []);
-  // If loading, error, or no blogs, return null (don't render anything)
-  if (loading || error || blogPosts.length === 0) {
-    return null;
-  }  return (
+  return (
     <section className="py-12 bg-white relative z-10" style={{ backdropFilter: 'none', WebkitBackdropFilter: 'none' }}>
-      <div className="container mx-auto px-4 relative z-10">
-         <h2 className="font-playfair text-3xl md:text-4xl font-bold text-center mb-16 px-4 md:px-8 py-4">
-            Current <span className="">Student</span> Blogs
+      <div className="container mx-auto px-4 relative">
+         <h2 className="font-playfair text-3xl md:text-4xl font-bold text-center mb-16 px-4 md:px-8 py-4 relative z-20">
+            Current <span className="text-red-600">Student</span> Blogs
           </h2> 
-        <div className="absolute inset-0 bg-white opacity-100 z-5"></div>
+        
         <div className="relative z-10">
-                  
-          <div className="flex flex-wrap justify-center gap-8">
-            {blogPosts.map((post) => (
-              <div 
-                key={post.id} 
-                className={`w-full ${blogPosts.length === 1 ? 'md:w-2/3 lg:w-1/3' : 'md:w-[calc(50%-1rem)] lg:w-[calc(33.333%-1.33rem)]'}`}
-                style={{
-                  maxWidth: blogPosts.length === 1 ? '500px' : undefined
-                }}
-              >
-                <BlogCard post={post} />
-              </div>
-            ))}
-          </div>
+          {loading ? (
+            <div className="text-center py-10">Loading blogs...</div>
+          ) : error ? (
+            <div className="text-center py-10 text-red-500">{error}</div>
+          ) : blogPosts.length === 0 ? (
+            <div className="text-center py-10">No student blogs available at this time.</div>
+          ) : (
+            <div className="flex flex-wrap justify-center gap-8">
+              {blogPosts.map((post) => (
+                <div 
+                  key={post.id} 
+                  className={`w-full ${blogPosts.length === 1 ? 'md:w-2/3 lg:w-1/3' : 'md:w-[calc(50%-1rem)] lg:w-[calc(33.333%-1.33rem)]'}`}
+                  style={{
+                    maxWidth: blogPosts.length === 1 ? '500px' : undefined
+                  }}
+                >
+                  <BlogCard post={post} />
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </section>
