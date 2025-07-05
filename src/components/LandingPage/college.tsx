@@ -30,7 +30,7 @@ const College: React.FC<ChildProps> = ({
             "grayscale-0 blur-none scale-[1.1] cursor-pointer z-[1]",
           activePart !== part && partHover && "grayscale blur-sm"
         )}
-        onClick={() => onAction("institutions")}
+        onClick={() => onAction("universities")}
         onMouseEnter={() => {
           overlayActive(true);
           setActivePart(part);

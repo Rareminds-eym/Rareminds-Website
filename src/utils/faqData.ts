@@ -85,7 +85,7 @@ const faqData: FAQCategory[] = [
       {
         question: "How can one apply for Naan Mudhalvan programs?",
         answer:
-          "Applications can be submitted through the official Naan Mudhalvan portal or via affiliated institutions.",
+          "Applications can be submitted through the official Naan Mudhalvan portal or via affiliated universities.",
       },
       {
         question: "Are there any costs involved for students in funded programs?",
@@ -108,9 +108,9 @@ const faqData: FAQCategory[] = [
           "Funding is primarily available for courses aligned with government initiatives like Naan Mudhalvan.",
       },
       {
-        question: "Can institutions partner with RareMinds for funded programs?",
+        question: "Can universities partner with RareMinds for funded programs?",
         answer:
-          "Yes, educational institutions can collaborate with RareMinds to offer funded programs to their students.",
+          "Yes, educational universities can collaborate with RareMinds to offer funded programs to their students.",
       },
       {
         question: "How does government funding impact program quality?",
@@ -135,7 +135,7 @@ const faqData: FAQCategory[] = [
       {
         question: "Can courses be customized for specific college streams?",
         answer:
-          "Absolutely. RareMinds collaborates with institutions to tailor courses that align with specific academic disciplines and industry needs.",
+          "Absolutely. RareMinds collaborates with universities to tailor courses that align with specific academic disciplines and industry needs.",
       },
       {
         question: "Are there courses focused on emerging technologies?",
@@ -158,9 +158,9 @@ const faqData: FAQCategory[] = [
           "Courses are delivered through online platforms, in-person sessions, and hybrid models. Trainers are bilingual and content can be made available in the participant’s native language on request.",
       },
       {
-        question: "Can institutions request new course development?",
+        question: "Can universities request new course development?",
         answer:
-          "Yes. All our courses are customizable. RareMinds collaborates with institutions to co-develop new courses based on specific goals.",
+          "Yes. All our courses are customizable. RareMinds collaborates with universities to co-develop new courses based on specific goals.",
       },
       {
         question: "Are there courses aimed at entrepreneurship?",
@@ -180,7 +180,7 @@ const faqData: FAQCategory[] = [
       {
         question: "Can RareMinds align training sessions with our academic calendar?",
         answer:
-          "Yes, RareMinds works closely with institutions to schedule sessions that complement academic timetables.",
+          "Yes, RareMinds works closely with universities to schedule sessions that complement academic timetables.",
       },
       {
         question: "Are sessions available during semester breaks?",

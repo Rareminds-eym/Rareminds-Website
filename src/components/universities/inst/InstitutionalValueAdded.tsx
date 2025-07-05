@@ -3,58 +3,58 @@ import { BookOpen, CheckCircle, ArrowLeft } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 import React from "react";
 
-const bannerImg = "https://images.unsplash.com/photo-1503676382389-4809596d5290?auto=format&fit=crop&w=1200&q=80"; // Leadership & Career Growth
+const bannerImg = "https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=1200&q=80"; // Institutional Value-Added Services
 
 const whyItMatters = [
-  "Strengthen leadership at every level to align with NEP 2020 and NAAC/NBA",
-  "Boost faculty morale, teaching quality, and research culture through empowered leadership",
-  "Enhance placement outcomes via industry networking and student readiness",
-  "Ensure sustainable professional development with institutionalized frameworks"
+  "Ensure transparent and developmental teacher performance evaluations",
+  "Enhance NAAC and NIRF ranking preparedness with structured support",
+  "Encourage faculty-led innovation through clubs and research cells",
+  "Foster a peer-driven, growth-oriented teaching culture"
 ];
 
-const howWeDeliver = [
-  "3-Day Leadership Retreats with scenario-based planning and reflective labs",
-  "Skill-building in governance, mentoring, and accreditation-aligned leadership",
-  "Placement Officer Modules focused on ecosystem building, networking, and student-industry interface",
-  "Custom frameworks for Continuous Professional Development (CPD) across departments",
-  "Ready-to-use toolkits for academic audits, stakeholder engagement, and goal setting"
+const howWeSupport = [
+  "Customizable Teacher Performance Audits aligned with institutional goals",
+  "Expert-led NAAC/NIRF readiness workshops and ranking strategy sessions",
+  "Support in launching Teacher-Led Innovation Cells and Knowledge Clubs",
+  "Facilitation of Peer-Learning Communities across departments",
+  "Dashboards, rubrics, and tracking tools for institutional planning and review"
 ];
 
 const modules = [
   {
-    title: "Foundations of Academic Leadership",
+    title: "Faculty Performance Audits & Feedback Systems",
     hours: 10,
-    objectives: "Understand leadership frameworks, institutional transformation strategies, and NEP-aligned goals",
-    activities: "Leadership case studies in higher education, stakeholder mapping, and vision-setting tools",
-    outcomes: "Faculty articulate academic vision and align teams with strategic institutional priorities"
+    objectives: "Develop structured systems to evaluate teaching effectiveness and promote faculty growth",
+    activities: "Audit rubrics, classroom observation tools, and feedback mechanisms",
+    outcomes: "Universities implement transparent, evidence-based faculty review processes"
   },
   {
-    title: "Curriculum Planning & Faculty Development",
-    hours: 10,
-    objectives: "Build instructional leadership through academic planning, faculty mentoring, and quality assurance",
-    activities: "Program planning templates, FDP frameworks, peer mentoring role-plays",
-    outcomes: "Academic leaders design effective programs and support faculty growth and innovation"
-  },
-  {
-    title: "Emotional Intelligence & Conflict Resolution",
+    title: "Accreditation & Ranking Readiness (NAAC/NIRF)",
     hours: 8,
-    objectives: "Strengthen emotional resilience, team management, and conflict-handling skills in academic settings",
-    activities: "Reflection journals, empathy case labs, and feedback simulations",
-    outcomes: "Faculty leaders foster collaboration, reduce friction, and manage diverse teams constructively"
+    objectives: "Align academic and administrative practices with national quality benchmarks and frameworks",
+    activities: "Self-evaluation grids, compliance audit checklists, and strategic planning sheets",
+    outcomes: "Improved preparedness for NAAC, NIRF, and global ranking assessments"
   },
   {
-    title: "Innovation & Change Leadership",
+    title: "Faculty-Led Innovation & Research Cells",
+    hours: 9,
+    objectives: "Foster an innovation culture through interdisciplinary faculty projects and campus initiatives",
+    activities: "Innovation proposal formats, research impact trackers, and project logs",
+    outcomes: "Increased faculty participation in institutional innovation and student engagement"
+  },
+  {
+    title: "Peer-Learning & Academic Mentorship Networks",
     hours: 10,
-    objectives: "Drive institutional improvement through academic innovation and change management practices",
-    activities: "Innovation tracking dashboards, change readiness maps, and ideation sessions",
-    outcomes: "Leaders initiate adaptive reforms and build a culture of continuous improvement"
+    objectives: "Create collaborative communities for continuous professional development and peer mentoring",
+    activities: "Learning circle models, CPD journals, and co-teaching reflections",
+    outcomes: "Enhanced academic collaboration, leadership in pedagogy, and mentorship"
   },
   {
-    title: "Institutional Growth Planning & Leadership Communication",
-    hours: 7,
-    objectives: "Create strategic development plans and effectively communicate institutional progress",
-    activities: "University growth plan templates, leadership pitch decks, and impact storytelling tools",
-    outcomes: "Leaders confidently design and present data-driven improvement strategies"
+    title: "University Growth Dashboards & Strategic Monitoring",
+    hours: 8,
+    objectives: "Enable leadership teams to track academic, research, and institutional growth through data",
+    activities: "KPI dashboards, data visualization tools, performance reports",
+    outcomes: "Data-informed decision-making and evidence-backed institutional reporting"
   }
 ];
 
@@ -64,46 +64,46 @@ const serviceCards = [
     id: "01",
     title: "Faculty Development Programs",
     image: "/institutions/vectors/insticons/1.png",
-    link: "/institutions/fdp",
+    link: "/universities/fdp",
   },
   {
     id: "02",
     title: "Communication & Personality Development",
     image: "/institutions/vectors/insticons/2.png",
-    link: "/institutions/communication-personality-development",
-    banner: "/institutions/images/services/communication-banner.jpg",
+    link: "/universities/communication-personality-development",
+    banner: "/institutions/images/services/communication-banner.jpg", // Add a relevant banner image
   },
   {
     id: "03",
     title: "Mental Health & Counselling Training",
     image: "/institutions/vectors/insticons/3.png",
-    link: "/institutions/mental-health-counseling-fdp",
-    banner: "/institutions/images/services/mental-health-banner.jpg",
+    link: "/universities/mental-health-counseling-fdp",
+    banner: "/institutions/images/services/mental-health-banner.jpg", // Add a relevant banner image
   },
   {
     id: "04",
     title: "Domain Specific Classification Programs",
     image: "/institutions/vectors/insticons/4.png",
-    link: "/institutions/domain-specific-programs",
-    banner: "/institutions/images/services/domain-specific-banner.jpg",
+    link: "/universities/domain-specific-programs",
+    banner: "/institutions/images/services/domain-specific-banner.jpg", // Add a relevant banner image
   },
   {
     id: "05",
     title: "Leadership & Career Growth",
     image: "/institutions/vectors/insticons/5.png",
-    link: "/institutions/leadership-career-growth",
-    banner: "/institutions/images/services/leadership-banner.jpg",
+    link: "/universities/leadership-career-growth",
+    banner: "/institutions/images/services/leadership-banner.jpg", // Add a relevant banner image
   },
   {
     id: "06",
-    title: "Institutional ed Services",
+    title: "Institutional Value-added Services",
     image: "/institutions/vectors/insticons/6.png",
-    link: "/institutions/institutional-value-added-services",
-    banner: "/institutions/images/services/value-added-banner.jpg",
+    link: "/universities/institutional-value-added-services",
+    banner: "/institutions/images/services/value-added-banner.jpg", // Add a relevant banner image
   },
 ];
 
-const LeadershipCareerGrowth = () => {
+const InstitutionalValueAdded = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [selectedModule, setSelectedModule] = React.useState(0);
@@ -119,14 +119,14 @@ const LeadershipCareerGrowth = () => {
       <div className="relative h-[38vh] overflow-hidden shadow">
         <img
           src={bannerImg}
-          alt="Leadership & Career Growth – Universities"
+          alt="Institutional Value-Added Services – Universities"
           className="w-full h-full object-cover object-center"
         />
         <div className="absolute inset-0 bg-gradient-to-r from-black/70 to-transparent" />
         <div className="absolute inset-0 flex items-center">
           <div className="container mx-auto px-6">
             <motion.button
-              onClick={() => navigate("/institutions/services#coursecards")}
+              onClick={() => navigate("/universities/services#coursecards")}
               whileHover={{ x: -5 }}
               className="text-white text-base mb-4 flex items-center gap-2 font-medium"
             >
@@ -134,10 +134,10 @@ const LeadershipCareerGrowth = () => {
               Back to Services
             </motion.button>
             <h1 className="pt-3 text-3xl md:text-3xl font-bold text-white mb-2 drop-shadow">
-              Leadership & Career Growth – Universities
+              Institutional Value-Added Services – Universities
             </h1>
             <p className="pt-3 text-lg text-white/90">
-              Equipping university faculty and academic leaders with strategic, instructional, and emotional competencies for institutional transformation and personal growth.
+              Designed to enhance institutional quality, faculty innovation, and academic governance in higher education.
             </p>
           </div>
         </div>
@@ -156,7 +156,7 @@ const LeadershipCareerGrowth = () => {
               viewport={{ once: true }}
               transition={{ duration: 0.5 }}
             >
-              Leadership & Career Growth – Universities
+              Institutional Value-Added Services – Universities
             </motion.h2>
             <motion.p
               className="text-gray-700 leading-relaxed text-justify text-base px-2"
@@ -165,12 +165,12 @@ const LeadershipCareerGrowth = () => {
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
             >
-              Many universities face the challenge of developing effective academic leaders (HODs/Deans) and equipping their placement officers with the skills needed to drive institutional growth and enhance student career success in alignment with NEP goals.
+              As universities strive for academic excellence and improved rankings, many lack integrated systems that support faculty performance, innovation, and collaborative growth.
             </motion.p>
           </div>
           {/* Module Table (now after intro) */}
           <div className="bg-white rounded-2xl shadow p-6 border border-blue-100">
-            <h3 className="font-bold mb-3 text-black text-xl">Leadership and Career Growth – Module Plan (Total: 45 Hours)</h3>
+            <h3 className="font-bold mb-3 text-black text-xl">Institutional Value-Added Services – 5-Module Plan (Total: 45 Hours)</h3>
             <div className="max-h-[400px] overflow-y-auto">
               <table className="w-full text-sm">
                 <thead>
@@ -214,9 +214,9 @@ const LeadershipCareerGrowth = () => {
               </div>
             </div>
           )}
-          <motion.h2 className="text-xl font-bold mt-6 mb-2 px-2">What makes Rareminds Leadership & Career Growth Program different for Universities?</motion.h2>
+          <motion.h2 className="text-xl font-bold mt-6 mb-2 px-2">What makes Rareminds’ Institutional Value-Add Services different for Higher Education?</motion.h2>
           <motion.p className="text-gray-700 leading-relaxed text-justify text-base px-2">
-            From the Aspiring Academic Leaders Program to strategic networking modules for Placement Officers, we develop leadership agility, strategic planning skills, and cross-functional collaboration. Participants gain practical tools to mentor faculty, align with accreditation standards, and build industry partnerships for student success.
+            Our modular, scalable offerings help institutions build measurable teaching effectiveness, drive innovation from within, and enhance their readiness for NAAC/NIRF accreditation. These services are designed to embed quality, accountability, and collaboration into the core of your academic culture.
           </motion.p>
           <motion.h2 className="text-xl font-bold mt-6 mb-2 px-2">Why It Matters</motion.h2>
           <div className="mt-6 bg-gradient-to-br from-blue-100 to-indigo-100 p-8 rounded-2xl px-8 shadow border border-indigo-100">
@@ -247,22 +247,22 @@ const LeadershipCareerGrowth = () => {
               ))}
             </motion.ul>
           </div>
-          <motion.h2 className="text-xl font-bold mt-6 mb-2 px-2">How RareMinds Delivers Impact</motion.h2>
+          <motion.h2 className="text-xl font-bold mt-6 mb-2 px-2">How RareMinds Supports Universities</motion.h2>
           <ul className="list-disc pl-6 mb-4 text-gray-700">
-            {howWeDeliver.map((item, idx) => (
+            {howWeSupport.map((item, idx) => (
               <li key={idx}>{item}</li>
             ))}
           </ul>
           <p className="mb-6 text-gray-700 mt-6">
-            Lead with Purpose. Scale with Strategy.<br />
-            By investing in Rare Minds' leadership and career growth programs, your university can cultivate a strong leadership team and enhance its career services, ultimately benefiting both faculty and students.<br />
+            Empower Educators. Strengthen Systems. Advance Excellence.<br />
+            With RareMinds, transform your university into a dynamic, future-ready institution where quality education, collaborative leadership, and grassroots innovation thrive every day.<br />
             
           </p>
         </div>
 
         {/* DESKTOP ORDER */}
         <div className="max-w-7xl mx-auto gap-10 hidden md:flex flex-row">
-          {/* LEFT: About, Details, Why It Matters, How We Deliver */}
+          {/* LEFT: About, Details, Why It Matters, How We Support */}
           <div className="flex-1 min-w-0 px-2">
             <motion.h2
               className="text-xl md:text:2xl font-bold mb-6 px-2 pt-2"
@@ -271,7 +271,7 @@ const LeadershipCareerGrowth = () => {
               viewport={{ once: true }}
               transition={{ duration: 0.5 }}
             >
-              Leadership & Career Growth – Universities
+              Institutional Value-Added Services – Universities
             </motion.h2>
             <motion.p
               className="text-gray-700 leading-relaxed text-justify text-base md:text-lg px-2"
@@ -280,7 +280,7 @@ const LeadershipCareerGrowth = () => {
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
             >
-              Many universities face the challenge of developing effective academic leaders (HODs/Deans) and equipping their placement officers with the skills needed to drive institutional growth and enhance student career success in alignment with NEP goals.
+              As universities strive for academic excellence and improved rankings, many lack integrated systems that support faculty performance, innovation, and collaborative growth.
             </motion.p>
             {/* Show Module Details immediately after intro */}
             {modules[selectedModule] && (
@@ -302,9 +302,9 @@ const LeadershipCareerGrowth = () => {
                 </div>
               </div>
             )}
-            <motion.h2 className="text-xl font-bold mt-6 mb-2 px-2">What makes Rareminds Leadership & Career Growth Program different for Universities?</motion.h2>
+            <motion.h2 className="text-xl font-bold mt-6 mb-2 px-2">What makes Rareminds’ Institutional Value-Add Services different for Higher Education?</motion.h2>
             <motion.p className="text-gray-700 leading-relaxed text-justify text-base md:text-lg px-2">
-              From the Aspiring Academic Leaders Program to strategic networking modules for Placement Officers, we develop leadership agility, strategic planning skills, and cross-functional collaboration. Participants gain practical tools to mentor faculty, align with accreditation standards, and build industry partnerships for student success.
+              Our modular, scalable offerings help institutions build measurable teaching effectiveness, drive innovation from within, and enhance their readiness for NAAC/NIRF accreditation. These services are designed to embed quality, accountability, and collaboration into the core of your academic culture.
             </motion.p>
             <motion.h2 className="text-xl font-bold mt-6 mb-2 px-2">Why It Matters</motion.h2>
             <div className="mt-6 bg-gradient-to-br from-blue-100 to-indigo-100 p-8 rounded-2xl px-8 shadow border border-indigo-100">
@@ -335,16 +335,16 @@ const LeadershipCareerGrowth = () => {
                 ))}
               </motion.ul>
             </div>
-            <motion.h2 className="text-xl font-bold mt-6 mb-2 px-2">How RareMinds Delivers Impact</motion.h2>
+            <motion.h2 className="text-xl font-bold mt-6 mb-2 px-2">How RareMinds Supports Universities</motion.h2>
             <ul className="list-disc pl-6 mb-4 text-gray-700">
-              {howWeDeliver.map((item, idx) => (
+              {howWeSupport.map((item, idx) => (
                 <li key={idx}>{item}</li>
               ))}
             </ul>
             <p className="mb-6 text-gray-700 mt-6">
-              Lead with Purpose. Scale with Strategy.<br />
-              By investing in Rare Minds' leadership and career growth programs, your university can cultivate a strong leadership team and enhance its career services, ultimately benefiting both faculty and students.<br />
-              <span className="font-semibold">👉 [Have questions or ready to collaborate? Contact us today!]</span>
+              Empower Educators. Strengthen Systems. Advance Excellence.<br />
+              With RareMinds, transform your university into a dynamic, future-ready institution where quality education, collaborative leadership, and grassroots innovation thrive every day.<br />
+              
             </p>
           </div>
           {/* RIGHT: Bookmark & Module Table */}
@@ -355,15 +355,15 @@ const LeadershipCareerGrowth = () => {
                 <BookOpen className="w-5 h-5 text-black" />
                 Explore Other Services
               </h3>
-              <ul className="space-y-2">
+              <ul className="space-y-3">
                 {filteredServiceCards.map((card) => (
                   <li key={card.id}>
                     <button
                       onClick={() => navigate(card.link)}
-                      className="w-full text-left px-3 py-2 rounded-lg hover:bg-blue-50 transition flex items-center gap-2"
+                      className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-blue-50 transition`}
                     >
-                      <img src={card.image} alt={card.title} className="w-6 h-6 rounded" />
-                      <span className="text-sm font-medium text-blue-900">{card.title}</span>
+                      <img src={card.image} alt={card.title} className="w-8 h-8 rounded-full bg-blue-100 object-contain" />
+                      <span className="text-sm font-medium text-blue-900 text-left">{card.title}</span>
                     </button>
                   </li>
                 ))}
@@ -371,7 +371,7 @@ const LeadershipCareerGrowth = () => {
             </div>
             {/* Module Table Section */}
             <div className="bg-white rounded-2xl shadow p-6 border border-blue-100">
-              <h3 className="font-bold mb-3 text-black text-xl">Leadership and Career Growth – Module Plan (Total: 45 Hours)</h3>
+              <h3 className="font-bold mb-3 text-black text-xl">Institutional Value-Added Services – 5-Module Plan (Total: 45 Hours)</h3>
               <div className="max-h-[720px] overflow-y-auto">
                 <table className="w-full text-sm">
                   <thead>
@@ -402,4 +402,4 @@ const LeadershipCareerGrowth = () => {
   );
 };
 
-export default LeadershipCareerGrowth;
+export default InstitutionalValueAdded;
