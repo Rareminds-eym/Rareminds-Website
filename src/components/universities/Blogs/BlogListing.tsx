@@ -3,7 +3,7 @@ import { supabase } from "@/lib/supabaseClient";
 import BlogCard from "./BlogCard";
 import SearchAndFilter from "./SearchAndFilter";
 import Pagination from "./Pagination";
-import AcademyHeader from "@/components/Header/InstitutionsHeader";
+import AcademyHeader from "@/components/Header/UniversitiesHeader";
 import { useToast } from "@/hooks/use-toast";
 import { useLocation } from "react-router-dom";
 

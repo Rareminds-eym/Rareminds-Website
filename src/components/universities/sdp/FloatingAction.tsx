@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Plus, Calendar, Download, MessageCircleQuestion, MessageCircle } from "lucide-react";
-import FAQChatbot from "@/components/institutions/sdp/FAQChatbot";
-import { ChatButton } from "@/components/institutions/ChatButton";
+import FAQChatbot from "@/components/universities/sdp/FAQChatbot";
+import { ChatButton } from "@/components/universities/ChatButton";
 import Modal from "react-modal";
 import { supabase } from "@/lib/supabaseClient";
 

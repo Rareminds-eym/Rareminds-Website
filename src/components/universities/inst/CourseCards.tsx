@@ -37,7 +37,7 @@ const courses = [
 	{
 		id: "04",
 		title: "Domain Specific Classification Programs",
-		image: "/institutions/vectors/insticons/4.png",
+		image: "//vectors/insticons/4.png",
 		subCards: [
 			{ label: "Domain", icon: <Globe size={20} /> },
 			{ label: "Classification", icon: <Briefcase size={20} /> },
@@ -286,17 +286,17 @@ const CourseCards = () => {
 								<motion.a
 									href={
 										course.id === "01"
-											? "/institutions/fdp"
+											? "/universities/fdp"
 											: course.id === "02"
-											? "/institutions/communication-personality-development"
+											? "/universities/communication-personality-development"
 											: course.id === "03"
-											? "/institutions/mental-health-counseling-fdp"
+											? "/universities/mental-health-counseling-fdp"
 											: course.id === "04"
-											? "/institutions/domain-specific-programs"
+											? "/universities/domain-specific-programs"
 											: course.id === "05"
-											? "/institutions/leadership-career-growth"
+											? "/universities/leadership-career-growth"
 											: course.id === "06"
-											? "/institutions/institutional-value-added-services"
+											? "/universities/institutional-value-added-services"
 											: "#"
 									}
 									className="absolute bottom-8 left-[-80px] w-[160px] bg-white shadow-md rounded-xl p-2 flex items-center gap-3 transition-transform duration-300 text-blue-600 hover:text-blue-800"

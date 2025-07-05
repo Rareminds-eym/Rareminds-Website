@@ -1,24 +1,24 @@
-// src/pages/Institutions.tsx
+// src/pages/Universities.tsx
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import React from 'react';
-import Hero from "@/components/institutions/sdp/Hero";
-import LogoCarousel from "@/components/institutions/sdp/LogoCarousel";
-import Problem from "@/components/institutions/sdp/Problem";
-import TestimonialQuotes from '@/components/institutions/sdp/TestimonialQuotes';
-import Solution from "@/components/institutions/sdp/Solution";
-import CaseStudies from "@/components/institutions/sdp/CaseStudies";
-import Services from "@/components/institutions/sdp/Services";
-import InstitutionDashboardSection from '@/components/institutions/sdp/InstitutionDashboardSection';
-import TestimonialVideos from "@/components/institutions/sdp/TestimonialVideos";
-//import FinalCTA from '@/components/institutions/FinalCTA';
-import FDPButton from "@/components/institutions/sdp/FDPButton";
-import FloatingActionMenu from '@/components/institutions/sdp/FloatingAction';
-import ContactSection from '@/components/institutions/Contact/ContactSection';
+import Hero from "@/components/universities/sdp/Hero";
+import LogoCarousel from "@/components/universities/sdp/LogoCarousel";
+import Problem from "@/components/universities/sdp/Problem";
+import TestimonialQuotes from '@/components/universities/sdp/TestimonialQuotes';
+import Solution from "@/components/universities/sdp/Solution";
+import CaseStudies from "@/components/universities/sdp/CaseStudies";
+import Services from "@/components/universities/sdp/Services";
+import InstitutionDashboardSection from '@/components/universities/sdp/InstitutionDashboardSection';
+import TestimonialVideos from "@/components/universities/sdp/TestimonialVideos";
+//import FinalCTA from '@/components/universities/FinalCTA';
+import FDPButton from "@/components/universities/sdp/FDPButton";
+import FloatingActionMenu from '@/components/universities/sdp/FloatingAction';
+import ContactSection from '@/components/universities/Contact/ContactSection';
 
 
 
-const Institutions: React.FC = () => {
+const Universities: React.FC = () => {
    const location = useLocation();
 
   useEffect(() => {
@@ -59,4 +59,4 @@ const Institutions: React.FC = () => {
   );
 };
 
-export default Institutions;
+export default Universities;
