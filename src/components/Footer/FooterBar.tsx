@@ -168,7 +168,7 @@ const FooterBar: React.FC<FooterBarProps> = ({ hideServices }) => {
 						</li>
 						<li>
 							<Link
-								to="/institutions"
+								to="/universities"
 								className="hover:text-red-400 transition-colors"
 							>
 								Institutions
@@ -312,11 +312,11 @@ const FooterBar: React.FC<FooterBarProps> = ({ hideServices }) => {
 									</Link>
 								</li>
 							</ul>
-						) : window.location.pathname.startsWith("/institutions/fdp") ? (
+						) : window.location.pathname.startsWith("/universities/fdp") ? (
 							<>
 								<li>
 									<Link
-										to="/institutions/fdp/skill-development"
+										to="/universities/fdp/skill-development"
 										className="hover:text-red-400 transition-colors"
 									>
 										Skill Dev Programs
@@ -324,7 +324,7 @@ const FooterBar: React.FC<FooterBarProps> = ({ hideServices }) => {
 								</li>
 								<li>
 									<Link
-										to="/institutions/fdp/faculty-development"
+										to="/universities/fdp/faculty-development"
 										className="hover:text-red-400 transition-colors"
 									>
 										Faculty Dev Programs (FDPs)
@@ -332,18 +332,18 @@ const FooterBar: React.FC<FooterBarProps> = ({ hideServices }) => {
 								</li>
 								<li>
 									<Link
-										to="/institutions/fdp/leadership"
+										to="/universities/fdp/leadership"
 										className="hover:text-red-400 transition-colors"
 									>
 										Leadership & Workshops
 									</Link>
 								</li>
 							</>
-						) : window.location.pathname.startsWith("/institutions/services") ? (
+						) : window.location.pathname.startsWith("/universities/services") ? (
 							<>
 								<li>
 									<Link
-										to="/institutions/services/recruitment"
+										to="/universities/services/recruitment"
 										className="hover:text-red-400 transition-colors"
 									>
 										Recruitment Placement
@@ -351,7 +351,7 @@ const FooterBar: React.FC<FooterBarProps> = ({ hideServices }) => {
 								</li>
 								<li>
 									<Link
-										to="/institutions/services/curriculum"
+										to="/universities/services/curriculum"
 										className="hover:text-red-400 transition-colors"
 									>
 										Curriculum Integration
@@ -359,7 +359,7 @@ const FooterBar: React.FC<FooterBarProps> = ({ hideServices }) => {
 								</li>
 								<li>
 									<Link
-										to="/institutions/services/digital-labs"
+										to="/universities/services/digital-labs"
 										className="hover:text-red-400 transition-colors"
 									>
 										Digital Labs & LMS
@@ -367,7 +367,7 @@ const FooterBar: React.FC<FooterBarProps> = ({ hideServices }) => {
 								</li>
 								<li>
 									<Link
-										to="/institutions/services/accreditation"
+										to="/universities/services/accreditation"
 									 className="hover:text-red-400 transition-colors"
 									>
 										Accreditation & Consulting
@@ -375,18 +375,18 @@ const FooterBar: React.FC<FooterBarProps> = ({ hideServices }) => {
 								</li>
 								<li>
 									<Link
-										to="/institutions/services/leadership"
+										to="/universities/services/leadership"
 										className="hover:text-red-400 transition-colors"
 									>
 										Leadership & Workshops
 									</Link>
 								</li>
 							</>
-						) : window.location.pathname.startsWith("/institutions") ? (
+						) : window.location.pathname.startsWith("/universities") ? (
 							<>
 								<li>
 									<Link
-										to="/institutions/skill-development"
+										to="/universities/skill-development"
 										className="hover:text-red-400 transition-colors"
 									>
 										Skill Dev Programs
@@ -394,7 +394,7 @@ const FooterBar: React.FC<FooterBarProps> = ({ hideServices }) => {
 								</li>
 								<li>
 									<Link
-										to="/institutions/campus-corporate"
+										to="/universities/campus-corporate"
 										className="hover:text-red-400 transition-colors"
 									>
 										Campus to Corporate
@@ -402,7 +402,7 @@ const FooterBar: React.FC<FooterBarProps> = ({ hideServices }) => {
 								</li>
 								<li>
 									<Link
-										to="/institutions/counseling"
+										to="/universities/counseling"
 										className="hover:text-red-400 transition-colors"
 									>
 										Student Counseling
@@ -410,7 +410,7 @@ const FooterBar: React.FC<FooterBarProps> = ({ hideServices }) => {
 								</li>
 								<li>
 									<Link
-										to="/institutions/hackathons"
+										to="/universities/hackathons"
 										className="hover:text-red-400 transition-colors"
 									>
 										Hackathons & Challenges
@@ -418,7 +418,7 @@ const FooterBar: React.FC<FooterBarProps> = ({ hideServices }) => {
 								</li>
 								<li>
 									<Link
-										to="/institutions/recruitment"
+										to="/universities/recruitment"
 										className="hover:text-red-400 transition-colors"
 									>
 										Recruitment Placement

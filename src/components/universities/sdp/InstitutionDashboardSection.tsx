@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { useState } from "react";
 import { ArrowRight } from "lucide-react";
-import { ComingSoonModal } from "@/components/institutions/Modals/ComingSoonModal"; 
+import { ComingSoonModal } from "@/components/universities/Modals/ComingSoonModal"; 
 
 const InstitutionDashboardSection = () => {
    const [modalOpen, setModalOpen] = useState(false);

@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Plus, Calendar, Download, MessageCircleQuestion,MessageCircle, X } from "lucide-react";
-import FAQChatbot from "@/components/institutions/sdp/FAQChatbot";
+import FAQChatbot from "@/components/universities/sdp/FAQChatbot";
 import { supabase } from "@/lib/supabaseClient";
-import { ChatButton } from "@/components/institutions/ChatButton";
+import { ChatButton } from "@/components/universities/ChatButton";
 
 interface MenuItem {
   id: string;

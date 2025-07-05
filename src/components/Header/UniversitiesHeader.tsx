@@ -4,15 +4,15 @@ import { Menu, X, HomeIcon, BookOpen, Briefcase, Users, School, GraduationCap, A
 import { motion } from "framer-motion";
 
 const verticalOptions = [
-  { label: "SDP", path: "/institutions", icon: <School size={22} /> },
-  { label: "Institutions", path: "/institutions/services", icon: <Users size={22} /> },
-  { label: "FDP", path: "/institutions/fdp", icon: <GraduationCap size={22} /> },
+  { label: "SDP", path: "/universities", icon: <School size={22} /> },
+  { label: "Universities", path: "/universities/services", icon: <Users size={22} /> },
+  { label: "FDP", path: "/universities/fdp", icon: <GraduationCap size={22} /> },
 ];
 
 const commonOptions = [
   { label: "Careers", path: "https://rareminds.zohorecruit.in/jobs/Careers", icon: <Briefcase size={22} /> },
   { label: "Trainers: Apply Now", path: "https://rareminds.zohorecruit.in/jobs/Trainers", icon: <Zap size={22} />, isTrainers: true },
-  { label: "Blogs", path: "/institutions/blogs", icon: <BookOpen size={22} /> },
+  { label: "Blogs", path: "/universities/blogs", icon: <BookOpen size={22} /> },
 ];
 
 const mobileOptions = [
@@ -20,7 +20,7 @@ const mobileOptions = [
   ...commonOptions,
 ];
 
-const InstitutionsHeader: React.FC = () => {
+const UniversitiesHeader: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const navigate = useNavigate();
   const menuRef = useRef<HTMLDivElement>(null);
@@ -190,4 +190,4 @@ const InstitutionsHeader: React.FC = () => {
   );
 };
 
-export default InstitutionsHeader;
+export default UniversitiesHeader;

@@ -628,7 +628,7 @@ const BlogDetail = () => {
               ))}
             </div>
             <div className="text-center mt-12">
-              <Link to="/institutions/blogs">
+              <Link to="/universities/blogs">
                 <Button 
                   variant="outline" 
                   className="border-red-200 text-red-600 hover:bg-red-50 px-8 py-3 font-semibold"

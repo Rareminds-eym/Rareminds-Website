@@ -33,9 +33,9 @@ const Index = () => {
         "Transforming education through innovative learning solutions and advanced curriculum design, fostering impactful educational institution partnerships.",
     },
     {
-      heading: "Institutions network",
+      heading: "Universities network",
       img: "4-crop.png",
-      path: "/institutions",
+      path: "/universities",
       description:
         "Bridging skill gaps and enhancing capabilities to create a future-ready workforce through transformative partnerships with colleges and universities.",
     },

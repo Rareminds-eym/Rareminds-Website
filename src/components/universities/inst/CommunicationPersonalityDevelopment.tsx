@@ -70,20 +70,20 @@ const serviceCards = [
     id: "01",
     title: "Faculty Development Programs",
     image: "/institutions/vectors/insticons/1.png",
-    link: "/institutions/fdp",
+    link: "/universities/fdp",
   },
   {
     id: "02",
     title: "Communication & Personality Development",
     image: "/institutions/vectors/insticons/2.png",
-    link: "/institutions/communication-personality-development",
+    link: "/universities/communication-personality-development",
     banner: "/institutions/images/services/communication-banner.jpg",
   },
   {
     id: "03",
     title: "Mental Health & Counselling Training",
     image: "/institutions/vectors/insticons/3.png",
-    link: "/institutions/mental-health-counseling-fdp",
+    link: "/universities/mental-health-counseling-fdp",
     banner: "/institutions/images/services/mental-health-banner.jpg",
   },
   {
@@ -97,14 +97,14 @@ const serviceCards = [
     id: "05",
     title: "Leadership & Career Growth",
     image: "/institutions/vectors/insticons/5.png",
-    link: "/institutions/leadership-career-growth",
+    link: "/universities/leadership-career-growth",
     banner: "/institutions/images/services/leadership-banner.jpg",
   },
   {
     id: "06",
     title: "Institutional Value-added Services",
     image: "/institutions/vectors/insticons/6.png",
-    link: "/institutions/institutional-value-added-services",
+    link: "/universities/institutional-value-added-services",
     banner: "/institutions/images/services/value-added-banner.jpg",
   },
 ];
@@ -132,7 +132,7 @@ const CommunicationPersonalityDevelopment = () => {
         <div className="absolute inset-0 flex items-center">
           <div className="container mx-auto px-6">
             <motion.button
-              onClick={() => navigate("/institutions/services#coursecards")}
+              onClick={() => navigate("/universities/services#coursecards")}
               whileHover={{ x: -5 }}
               className="text-white text-base mb-4 flex items-center gap-2 font-medium"
             >

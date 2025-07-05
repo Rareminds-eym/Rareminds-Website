@@ -9,13 +9,12 @@ import DefaultLayout from "./layouts/DefaultLayout";
 import CorporateLayout from "./layouts/CorporateLayout";
 import GovernmentLayout from "./layouts/GovernmentLayout";
 import AcademiaLayout from "./layouts/AcademiaLayout";
-import InstitutionsLayout from "./layouts/InstitutionsLayout";
+import UniversitiesLayout from "./layouts/UniversitiesLayout";
 
 // Direct imports for direct use in routes
 import BlogDetailAcademia from "./components/Academy/Blogs/BlogDetail";
-import BlogDetail from "./pages/Blogs/BlogDetail.tsx";
+import BlogDetailPage from "./pages/Blogs/BlogDetail.tsx";
 import BlogDetailGov from "./components/Govt/Blogs/BlogDetail.tsx";
-import CourseDetailedPage from "@/components/Academy/Students/CourseDetailedPage";
 // Lazy pages
 const Home = lazy(() => import("./pages/Index"));
 const Blogs = lazy(() => import("./pages/Blogs/index"));
@@ -40,13 +39,13 @@ const Academia = lazy(() => import("./pages/Academia/Index"));
 const AcademiaBlogs = lazy(() => import("./pages/Academia/Blogs/index"));
 const Student = lazy(() => import("./pages/Academia/Student/student"));
 const School = lazy(() => import("./pages/Academia/Teacher/teacher.tsx"));
-const Institutions = lazy(() => import("./pages/Institutions/Index"));
-const InstitutionsServices = lazy(
-  () => import("./pages/Institutions/InstitutionsServices")
+const Universities = lazy(() => import("./pages/Universities/Index"));
+const UniversitiesServices = lazy(
+  () => import("./pages/Universities/UniversitiesServices")
 );
-const FDP = lazy(() => import("./pages/Institutions/Fdp"));
+const FDP = lazy(() => import("./pages/Universities/Fdp"));
 const ServicePage = lazy(
-  () => import("./components/institutions/sdp/ServicePage")
+  () => import("./components/universities/sdp/ServicePage")
 );
 const CorporateTraining = lazy(
   () => import("./pages/Corporate/Training/Home/index.tsx")
@@ -71,13 +70,13 @@ const CorporateTrainingServicesIndex = lazy(
 );
 
 import CourseDetailedPage from "@/components/Academy/Students/CourseDetailedPage";
-const BlogListing = lazy(() => import("./components/institutions/Blogs/BlogListing"));
-const BlogDetail = lazy(() => import("./components/institutions/Blogs/BlogDetail"));
-import CommunicationPersonalityDevelopment from "./components/institutions/inst/CommunicationPersonalityDevelopment";
-import MentalHealthCounselingFDP from "./components/institutions/inst/MentalHealthCounselingFDP";
-import DomainSpecificPrograms from "./components/institutions/inst/DomainSpecificPrograms";
-import LeadershipCareerGrowth from "./components/institutions/inst/LeadershipCareerGrowth";
-import InstitutionalValueAdded from "./components/institutions/inst/InstitutionalValueAdded";
+const BlogListing = lazy(() => import("./components/universities/Blogs/BlogListing"));
+const BlogDetail = lazy(() => import("./components/universities/Blogs/BlogDetail"));
+import CommunicationPersonalityDevelopment from "./components/universities/inst/CommunicationPersonalityDevelopment";
+import MentalHealthCounselingFDP from "./components/universities/inst/MentalHealthCounselingFDP";
+import DomainSpecificPrograms from "./components/universities/inst/DomainSpecificPrograms";
+import LeadershipCareerGrowth from "./components/universities/inst/LeadershipCareerGrowth";
+import InstitutionalValueAdded from "./components/universities/inst/InstitutionalValueAdded";
 
 
 const withSuspense = (Component: React.LazyExoticComponent<React.FC<{}>>) => (
@@ -119,7 +118,7 @@ const router = createBrowserRouter([
         path: "/blogs/:slug",
         element: (
           <Suspense fallback={<LoaderComponent />}>
-            <BlogDetail />
+            <BlogDetailPage />
           </Suspense>
         ),
       },
@@ -311,20 +310,20 @@ const router = createBrowserRouter([
     element: (
       <>
         <ScrollToTop />
-        <InstitutionsLayout>
+        <UniversitiesLayout>
           <Outlet />
-        </InstitutionsLayout>
+        </UniversitiesLayout>
       </>
     ),
     errorElement: <ErrorBoundary />,
     children: [
       {
-        path: "/Institutions",
-        element: withSuspense(Institutions),
+        path: "/Universities",
+        element: withSuspense(Universities),
       },
       {
-        path: "/institutions/services",
-        element: withSuspense(InstitutionsServices),
+        path: "/universities/services",
+        element: withSuspense(UniversitiesServices),
       },
       {
         path: "/service/:id",
@@ -335,52 +334,52 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "/institutions/fdp",
+        path: "/universities/fdp",
         element: withSuspense(FDP),
       },
       {
-        path: "/institutions/communication-personality-development",
+        path: "/universities/communication-personality-development",
         element: <CommunicationPersonalityDevelopment />,
       },
       {
-        path: "/institutions/mental-health-counseling-fdp",
+        path: "/universities/mental-health-counseling-fdp",
         element: <MentalHealthCounselingFDP />,
       },
       {
-        path: "/institutions/domain-specific-programs",
+        path: "/universities/domain-specific-programs",
         element: <DomainSpecificPrograms />,
       },
       {
-        path: "/institutions/leadership-career-growth",
+        path: "/universities/leadership-career-growth",
         element: <LeadershipCareerGrowth />,
       },
       {
-        path: "/institutions/institutional-value-added-services",
+        path: "/universities/institutional-value-added-services",
         element: <InstitutionalValueAdded />,
       },
       // Blog routes
       {
-        path: "/institutions/blogs",
+        path: "/universities/blogs",
         element: withSuspense(BlogListing),
       },
       {
-        path: "/institutions/blogs/:slug",
+        path: "/universities/blogs/:slug",
         element: withSuspense(BlogDetail),
       },
       {
-        path: "/institutions/sdp/blogs",
+        path: "/universities/sdp/blogs",
         element: withSuspense(BlogListing),
       },
       {
-        path: "/institutions/sdp/blogs/:slug",
+        path: "/universities/sdp/blogs/:slug",
         element: withSuspense(BlogDetail),
       },
       {
-        path: "/institutions/fdp/blogs",
+        path: "/universities/fdp/blogs",
         element: withSuspense(BlogListing),
       },
       {
-        path: "/institutions/fdp/blogs/:slug",
+        path: "/universities/fdp/blogs/:slug",
         element: withSuspense(BlogDetail),
       },
     ],
