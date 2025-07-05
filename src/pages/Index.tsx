@@ -13,7 +13,7 @@ const Index = () => {
   const [content, setContent] = useState([
     {
       heading: "Government collaborations",
-      img: "2-crop.jpg",
+      img: "2-crop.webp",
       path: "/government",
       description:
         "Collaborating on government skill development initiatives with customized training programs to uplift students beyond traditional curriculums.",
@@ -27,7 +27,7 @@ const Index = () => {
     },
     {
       heading: "School",
-      img: "5-crop.png",
+      img: "5-crop.webp",
       path: "/school",
       description:
         "Transforming education through innovative learning solutions and advanced curriculum design, fostering impactful educational institution partnerships.",
@@ -72,7 +72,7 @@ const Index = () => {
               partHover={partHover}
               activePart={activePart}
               setActivePart={setActivePart}
-              content={content[0]}
+              content={content[2]}
             />
             <Corporate
               onAction={redirectToPage}
@@ -95,7 +95,7 @@ const Index = () => {
               overlayActive={togglePartHover}
               partHover={partHover}
               setActivePart={setActivePart}
-              content={content[2]}
+              content={content[0]}
               activePart={activePart}
             />
             <Counselling

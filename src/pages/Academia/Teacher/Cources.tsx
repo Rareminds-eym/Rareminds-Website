@@ -394,8 +394,9 @@ import {
   ArrowRight,
   Search
 } from 'lucide-react';
-import { useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useRef, useState, useEffect } from 'react';
+import { useNavigate, useParams, useLocation } from 'react-router-dom';
+import { Helmet } from "react-helmet-async";
 import { Input } from "../../../components/Academy/UI/input";
 import { Book } from "@/components/ui/book";
 
@@ -748,6 +749,7 @@ export const Coursess = [
 
 export const domainSpecificCertificationDetails = {
   title: "What makes Rareminds Domain-Specific Certification Programs different?",
+   subtitle: "Schools play a crucial role in inspiring students towards future careers in emerging fields (AgriTech, EV, EdTech, AI, Biotechnology). However, many lack the resources to provide meaningful exposure and skill development in these areas.",
   intro: [
     "Schools play a crucial role in inspiring students towards future careers in emerging fields (AgriTech, EV, EdTech, AI, Biotechnology). However, many lack the resources to provide meaningful exposure and skill development in these areas.",
     "These age-appropriate certification programs combine fun, practical activities and real-world insights to introduce students to exciting career paths. Through hands-on experiments, interactive lessons, and project work, schools create an environment that nurtures curiosity and innovation."
@@ -776,10 +778,34 @@ export const domainSpecificCertificationDetails = {
 
 export const mentalHealthCounselingDetails = {
   title: "What makes Rareminds' Mental Health and Counselling Training different?",
+  // subtitle: "Mental Health Counseling for Teachers",
+  
   intro: [
     "Mental health issues among students are increasing, yet the majority of classrooms lack the capacity to react. Teachers are usually the first adults to observe signs of distress, but they do not have the training to help or refer students. This creates lost intervention opportunities, intensified emotional problems, and unnecessary classroom disruption.",
     "Rareminds' Teachers' Mental Health and Counseling Training is intended to create emotional sensitivity, communication awareness, and first-responding skills for school teachers. Our training helps teachers become more than academic facilitators, yet emotionally sensitive care-takers of students' welfare."
   ],
+  standOut: {
+    title: "What Makes Rareminds' Program Stand Out?",
+    description: "Our training is hands-on, scenario-based, and designed specifically for schools. Teachers are taught to recognize, respond, and refer with confidence — without overstepping professional boundaries or jeopardizing their own safety.",
+    assists: [
+      {
+        title: "Identifying At-Risk Students",
+        description: "Train teachers to identify warning signs of mental or emotional distress through easy-to-use observation tools and behavior indicators."
+      },
+      {
+        title: "Peer Counseling & First Response Skills",
+        description: "Introduce educators to fundamental counseling skills and response protocols so that they can provide emotional first-aid and facilitate student peer-counselor systems."
+      },
+      {
+        title: "Faculty as Mentors: Empathy & Active Listening",
+        description: "Enhance teachers' skill at reaching students through active listening, non-judgmental feedback, and reflective questioning."
+      },
+      {
+        title: "Creating a Safe Classroom",
+        description: "Assist educators in creating inclusive, emotionally safe classrooms reducing anxiety, encouraging openness, and fostering increased student trust."
+      }
+    ]
+  },
   whyItMatters: [
     "Establishes communication and trust between teachers and students",
     "Decreases classroom interruptions due to unaddressed emotional concerns",
@@ -800,11 +826,31 @@ export const mentalHealthCounselingDetails = {
 };
 
 export const communicationPersonalityDevelopmentDetails = {
-  title: "What makes Rareminds’ Communication and Personality Development Program different?",
+  title: "Communication and Personality Development",
+  // subtitle: "Communication and Personality Development for Teachers",
+  
   intro: [
     "In today’s dynamic learning environments, academic expertise alone is not enough. The role of a teacher now demands fluency in communication, confidence in handling diverse classrooms, and the ability to engage effectively with parents.",
     "Rareminds’ 21st-century teacher training modules are designed to empower educators with the practical skills and behavioral strategies needed to lead classrooms with clarity, calm, and collaboration."
   ],
+  standOut: {
+    title: "What Makes Rareminds' Program Different?",
+    description: "We equip educators with real-world tools to improve fluency, reduce stress, and foster better stakeholder relationships. Our hands-on workshops and classroom simulations ensure that teachers leave with skills they can implement from the very first day.",
+    assists: [
+      {
+        title: "English Fluency & Public Speaking for Teachers",
+        description: "Empowers educators to communicate confidently and fluently in English across classrooms, assemblies, parent interactions, and staff meetings. We cover pronunciation, presentation techniques, and situational speaking, building competence and presence."
+      },
+      {
+        title: "Classroom Management without Stress",
+        description: "Introduces stress-free, positive behavior management strategies. Teachers learn how to manage disruptions, build rapport with students, set boundaries, and maintain a calm and authoritative presence without resorting to punitive methods. The training also focuses on understanding newer student profiles and adapting to varied learning styles, enabling more inclusive and responsive classroom environments."
+      },
+      {
+        title: "Parent-Teacher Communication Mastery",
+        description: "Strengthens teachers' ability to build productive parent relationships. Modules include handling difficult conversations, setting communication protocols, giving constructive feedback, and maintaining mutual trust."
+      }
+    ]
+  },
   whyItMatters: [
     "Enhances overall teacher confidence and classroom performance",
     "Improves student engagement, discipline, and academic outcomes",
@@ -878,9 +924,93 @@ highlights: [
   }
 };
 
+// Meta content configuration for different pages/services
+const metaContent = {
+  default: {
+    title: "Bilingual NEP 2020-Aligned School Programs | Rareminds School Services",
+    description: "Bilingual, NEP 2020-aligned school programs that strengthen communication, digital skills, and career paths designed for practical, classroom-ready impact."
+  },
+  'Teacher Development Programs (TDP)': {
+    title: "Teacher Development Programs | NEP Training for Educators | Rareminds",
+    description: "Empower educators with NEP-aligned programs in ranking readiness, innovation cells, and peer-learning teacher communities."
+  },
+  'communication-personality': {
+    title: "Communication & Personality Development for Teachers | Rareminds",
+    description: "Enhance teacher communication skills, classroom management, and parent engagement with stress-free, practical training programs."
+  },
+  'mental-health-counseling': {
+    title: "Mental Health & Counseling Training for Teachers | Rareminds",
+    description: "Train teachers to recognize at-risk students, provide first response support, and create safe, empathetic classroom environments."
+  },
+  'domain-specific-certification': {
+    title: "Industry Certification Programs for Teachers | AgriTech, AI, EV | Rareminds",
+    description: "Industry-partnered certification programs in AgriTech, EV, EdTech, AI, and Biotechnology for future-ready teacher training."
+  },
+  'leadership-career-growth': {
+    title: "School Leadership & Career Growth Programs | Principal Training | Rareminds",
+    description: "Leadership development programs for academic leaders, HODs, and principals to drive positive change and institutional excellence."
+  },
+  'institutional-value-added': {
+    title: "Institutional Value-Added Services | School Excellence Programs | Rareminds",
+    description: "Comprehensive school improvement services including performance audits, ranking preparation, and teacher-led innovation programs."
+  }
+};
+
 const Courses = () => {
   const containerRef = useRef(null);
   const navigate = useNavigate();
+  const location = useLocation();
+  const params = useParams();  // Determine current meta content based on URL or selected service
+  const getCurrentMetaContent = () => {
+    const path = location.pathname.toLowerCase();
+    const searchParams = new URLSearchParams(location.search);
+    const courseParam = searchParams.get('course');
+    const hash = location.hash.toLowerCase();
+    
+    // Check URL path for specific course routes
+    if (path.includes('/tdp') || path.endsWith('tdp')) {
+      return metaContent['Teacher Development Programs (TDP)'];
+    }
+    
+    // Check for course ID in URL path (e.g., /school/teacher/Courses/communication-personality)
+    if (path.includes('/courses/communication-personality') || path.includes('communication') || path.includes('personality')) {
+      return metaContent['communication-personality'];
+    }
+    if (path.includes('/courses/mental-health-counseling') || path.includes('mental-health') || path.includes('counseling')) {
+      return metaContent['mental-health-counseling'];
+    }
+    if (path.includes('/courses/domain-specific-certification') || path.includes('domain-specific') || path.includes('certification')) {
+      return metaContent['domain-specific-certification'];
+    }
+    if (path.includes('/courses/leadership-career-growth') || path.includes('leadership') || path.includes('career-growth')) {
+      return metaContent['leadership-career-growth'];
+    }
+    if (path.includes('/courses/institutional-value-added') || path.includes('institutional') || path.includes('value-added')) {
+      return metaContent['institutional-value-added'];
+    }
+    
+    // Check URL parameters for course selection
+    if (courseParam && courseParam in metaContent) {
+      return metaContent[courseParam as keyof typeof metaContent];
+    }
+    
+    // Check route parameters for course ID
+    if (params.id && params.id in metaContent) {
+      return metaContent[params.id as keyof typeof metaContent];
+    }
+    
+    // Check hash for course selection (e.g., #communication-personality)
+    if (hash) {
+      const hashCourse = hash.replace('#', '');
+      if (hashCourse in metaContent) {
+        return metaContent[hashCourse as keyof typeof metaContent];
+      }
+    }
+    
+    return metaContent.default;
+  };
+
+  const currentMeta = getCurrentMetaContent();
   // Removed useScroll and useTransform logic for scroll-based animation
 
   const [searchQuery, setSearchQuery] = useState<string>("");
@@ -924,9 +1054,17 @@ const Courses = () => {
     { name: "leadership-career-growth", value: "leadership-career-growth", category: "program" },
     { name: "institutional-value-added", value: "institutional-value-added", category: "program" },
   ];
-
   return (
-    <section ref={containerRef} className="py-8 relative overflow-hidden">
+    <>
+      <Helmet>
+        <title>{currentMeta.title}</title>
+        <meta
+          name="description"
+          content={currentMeta.description}
+        />
+      </Helmet>
+      
+      <section ref={containerRef} className="py-8 relative overflow-hidden">
       <div className="max-full mx-auto px-6 relative z-10">
         <div className="text-center max-w-3xl mx-auto mb-16">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
@@ -1082,9 +1220,9 @@ const Courses = () => {
             whileTap={{ scale: 0.95 }}
           >
           </motion.div>
-        </motion.div>
-      </div>
+        </motion.div>      </div>
     </section>
+    </>
   );
 }
 

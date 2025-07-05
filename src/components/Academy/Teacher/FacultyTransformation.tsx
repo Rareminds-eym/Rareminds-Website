@@ -140,53 +140,48 @@ function SchoolCard({
   link?: string;
   className?: string;
 }) {
-  return (
- <div
-  className={cn(
-    "rounded-lg border border-gray-300 bg-white shadow-sm p-4 sm:p-16 flex flex-col justify-between gap-4 h-[420px] w-full max-w-[300px]",
-    
+  return ( <div  className={cn(
+    "rounded-lg border border-gray-300 bg-white shadow-sm p-4 sm:p-6 flex flex-col justify-between gap-3 h-[500px] w-full max-w-[330px] mx-auto",
+    className || ""
   )}
->
-  <div className="flex flex-col gap-4 overflow-hidden">
-    <div className="flex items-center gap-2">
-      <MapPin size={16} className="text-grey-500" />
+>  <div className="flex flex-col gap-3 h-[430px] overflow-y-auto">
+    <div className="flex items-center gap-2 mb-3">
+      <MapPin size={16} className="text-gray-700 flex-shrink-0" />
       <h3 className="font-semibold text-lg sm:text-xl text-[#222] break-words">
         {schoolName}
       </h3>
     </div>
 
-    <div className="flex flex-col gap-4 flex-grow">
-      <div className="flex items-start gap-3">
-        <AlertCircle size={18} className="text-gray-600 mt-[2px]" />
-        <div className="overflow-hidden">
-          <div className="font-medium text-base sm:text-xl text-gray-600">{problem.title}</div>
-          <div className="text-sm text-[#222] break-words line-clamp-3">{problem.description}</div>
+    <div className="flex flex-col gap-5 flex-1">
+      <div className="flex items-start gap-3 h-[100px]">
+        <AlertCircle size={18} className="text-gray-700 mt-[2px] flex-shrink-0" />
+        <div>
+          <div className="font-medium text-base sm:text-lg text-gray-700 mb-1">{problem.title}</div>
+          <div className="text-sm text-[#333] break-words">{problem.description}</div>
         </div>
       </div>
 
-      <div className="flex items-start gap-3">
-        <BookOpen size={17} className="text-gray-600 mt-[2px]" />
-        <div className="overflow-hidden">
-          <div className="font-medium text-base sm:text-xl text-gray-600">{solution.title}</div>
-          <div className="text-sm text-[#222] break-words line-clamp-3">{solution.description}</div>
+      <div className="flex items-start gap-3 h-[100px]">
+        <BookOpen size={17} className="text-gray-700 mt-[2px] flex-shrink-0" />
+        <div>
+          <div className="font-medium text-base sm:text-lg text-gray-700 mb-1">{solution.title}</div>
+          <div className="text-sm text-[#333] break-words">{solution.description}</div>
         </div>
-      </div>
-
-      <div className="flex items-start gap-3">
-        <Sparkles size={18} className="text-gray-600 mt-[2px]" />
-        <div className="overflow-hidden">
-          <div className="font-medium text-base sm:text-xl text-gray-600">{outcome.title}</div>
-          <div className="text-sm text-[#222] break-words line-clamp-3">{outcome.description}</div>
+      </div>      <div className="flex items-start gap-3 h-[100px]">
+        <Sparkles size={18} className="text-gray-700 mt-[2px] flex-shrink-0" />
+        <div>
+          <div className="font-medium text-base sm:text-lg text-gray-700 mb-1">{outcome.title}</div>
+          <div className="text-sm text-[#333] break-words">{outcome.description}</div>
         </div>
       </div>
     </div>
   </div>
 
   {link && (
-    <div className="flex justify-center mt-auto w-full">
+    <div className="flex justify-center mt-2 w-full">
       <Link
         to={link}
-        className="text-sm font-semibold text-red-600 hover:underline text-center break-words"
+        className="text-sm font-semibold text-red-600 hover:text-red-700 hover:underline text-center break-words"
       >
         Read More →
       </Link>
@@ -217,8 +212,7 @@ const FacultyTransformation=()=> {
     }, 80);
   }, [sectionIndex]);
 
-  return (
-    <div className="w-full flex flex-col items-center justify-center min-h-screen bg-white px-2 py-8" data-aos="fade-down-right">
+  return (    <div className="w-full flex flex-col items-center justify-center min-h-screen bg-white px-2 py-8" data-aos="fade-down-right">
       <div className="w-full max-w-5xl mx-auto flex flex-col items-center">
 
         <div className="w-full flex flex-wrap gap-3 justify-center">
@@ -241,19 +235,16 @@ const FacultyTransformation=()=> {
 
         <p className="mb-7 text-gray-500 text-xl md:text-xl text-center mt-6">
           Discover how schools across India transformed their teaching and learning experiences
-        </p>
-
-        <div className="relative w-full max-w-4xl">
+        </p>        <div className="relative w-full max-w-4xl mx-auto">
           <Carousel
-            className="w-full"
-            opts={{ align: "start" }}
+            className="w-full mb-10 md:mb-0"
+            opts={{ align: "center" }}
             setApi={api => { carouselApiRef.current = api; }}
             key={sectionIndex} // Remount on tab change for isolation
           >
             <CarouselContent>
-              {storyPairs.map((pair, idx) => (
-                <CarouselItem key={idx} className="px-1">
-                  <div className="flex flex-col md:flex-row gap-6 items-stretch  justify-center">
+              {storyPairs.map((pair, idx) => (                <CarouselItem key={idx} className="px-2">
+                  <div className="flex flex-col md:flex-row gap-6 items-center justify-center">
                     {pair.map((data, subIdx) => (
                       <SchoolCard
                         key={subIdx}
@@ -262,22 +253,21 @@ const FacultyTransformation=()=> {
                         problem={data.problem}
                         solution={data.solution}
                         outcome={data.outcome}
-                          link={data.link} 
-                        className={cn("w-full md:w-[400px] border bg-white", subIdx==0 ? "" : "md:ml-0")}
+                        link={data.link} 
+                        className={cn("w-full h-[500px] max-w-[330px] mx-auto md:mx-0 md:w-[340px] border bg-white", subIdx===0 ? "" : "md:ml-0")}
                       />
                     ))}
                     {pair.length === 1 && (
                       // When odd, add an empty box for symmetry
-                      <div className="w-full md:w-[290px] bg-transparent"></div>
+                      <div className="w-full h-[500px] md:w-[340px] bg-transparent hidden md:block"></div>
                     )}
                   </div>
                 </CarouselItem>
               ))}
-            </CarouselContent>
-            {/* Navigation arrows moved below cards and always visible */}
-            <div className="flex justify-center mt-8 gap-4 relative z-10">
-              <CarouselPrevious className="static relative left-0 bg-red-500 text-white border-none shadow-lg hover:bg-red-600" />
-              <CarouselNext className="static relative right-0 bg-red-600 text-white border-none shadow-lg hover:bg-red-500" />
+            </CarouselContent>            {/* Navigation arrows moved below cards and always visible */}
+            <div className="flex justify-center mt-8 gap-4 z-10 relative pb-16 md:pb-0">
+              <CarouselPrevious className="bg-red-500 text-white border-none shadow-lg hover:bg-red-600 absolute md:static bottom-0 left-1/3 transform -translate-x-1/2" />
+              <CarouselNext className="bg-red-600 text-white border-none shadow-lg hover:bg-red-500 absolute md:static bottom-0 right-1/3 transform translate-x-1/2" />
             </div>
           </Carousel>
         </div>

@@ -46,7 +46,8 @@ import { useState, useEffect } from "react";
   import Services from './Cources'
   import Testimonials from "../../../components/Academy/Teacher/Testimonials"
 import Viedo_cube from "../../../components/Academy/Teacher/Showcase_videos/viedo_Cube"
-
+import YouTubeFeed from '../../../components/Academy/Teacher/youtubelive'
+import CurrentBlogs from '../../../components/Academy/Teacher/Current_blogs'
 
   const School = ({ userType = "teacher" }: { userType?: "teacher" | "student" }) => {
   const [activeTab, setActiveTab] = useState<"teacher" | "student">("teacher");
@@ -73,10 +74,10 @@ import Viedo_cube from "../../../components/Academy/Teacher/Showcase_videos/vied
 
 
     const stats = [
-      { icon: Book, value: "20,000+", label: "Faculty Trained" },
+      { icon: Book, value: "20,000+", label: "Teachers Trained" },
       { icon: Users, value: "100+", label: "Schools Onboarded" },
       { icon: Calendar, value: "250+", label: "Pilots Deployed" },
-      { icon: Circle, value: "92%", label: "Faculty Satisfaction Rate" },
+      { icon: Circle, value: "92%", label: "Teachers Satisfaction Rate" },
     ];
 
     useEffect(() => {
@@ -185,14 +186,29 @@ useEffect(() => {
       return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
-    return (
-
-      <>
-  <Helmet>
+    return (      <>  <Helmet>
+    <title>Bilingual NEP 2020-Aligned School Programs | Rareminds School Services</title>
     <meta
       name="description"
       content="Bilingual, NEP 2020-aligned school programs that strengthen communication, digital skills, and career paths designed for practical, classroom-ready impact."
     />
+    <meta property="og:title" content="Bilingual NEP 2020-Aligned School Programs | Rareminds School Services" />
+    <meta property="og:description" content="Bilingual, NEP 2020-aligned school programs that strengthen communication, digital skills, and career paths designed for practical, classroom-ready impact." />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="https://rareminds.com/RareMinds.webp" />
+    <meta property="og:url" content="https://rareminds.com/academia/teacher" />
+    <script type="application/ld+json">
+      {`
+        {
+          "@context": "https://schema.org",
+          "@type": "EducationalOrganization",
+          "name": "Rareminds",
+          "url": "https://rareminds.com",
+          "logo": "https://rareminds.com/RMLogo.webp",
+          "description": "Bilingual, NEP 2020-aligned school programs that strengthen communication, digital skills, and career paths designed for practical, classroom-ready impact."
+        }
+      `}
+    </script>
   </Helmet>
 
 
@@ -202,7 +218,7 @@ useEffect(() => {
         <CorporateHeader />
         <div className="w-full fixed">
           {/* <div className="h-full flex items-center justify-center"> */}
-          {/* <h1 className="text-4xl font-bold text-white"></h1>
+          
         {/* </div> */}
           {/* <VideoCarousel /> */}
    
@@ -416,6 +432,9 @@ useEffect(() => {
 </div>
 
 
+<div  className="min-h-auto flex items-center justify-center relative z-10 bg-white">
+ <YouTubeFeed />     
+       </div>
 
  <div className="min-h-screen flex items-center justify-center relative z-10 bg-white">
        <EducationSection scrollToContact={scrollToContact} />
@@ -435,9 +454,9 @@ useEffect(() => {
 
 
 
-     {/* <div  className="min-h-auto w-full flex items-center justify-center relative z-10 bg-white">
+    {/* <div  className="min-h-auto w-full flex items-center justify-center relative z-10 bg-white">
      <Viedo_cube />     
-       </div> */}
+       </div>  */}
 
 
         {/* Faculty Transformation & Calendar */}     
@@ -482,6 +501,10 @@ useEffect(() => {
         <DownloadForm />
 
         </div> */}
+          <div  className="h-auto flex items-center justify-center relative z-10 bg-white">
+  <CurrentBlogs />  
+       </div>
+       
 
    <div ref={contactRef} id="contact-section">
         <ContactSection />

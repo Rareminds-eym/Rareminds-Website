@@ -188,7 +188,7 @@ export const projects = [
     location: 'Pan India',
     technologies: [],
     imageUrl: '/academy/Projects/aicte.png',
-    timeline: 'Up Comming',
+    timeline: 'UpComing',
     team: ['Lisa Thompson', 'James Wilson', 'Maria Garcia'],
     goals: ['Improve patient outcomes', 'Optimize resource allocation', 'Enhance decision making']
   },
@@ -203,7 +203,7 @@ export const projects = [
     location: 'Karnataka',
     technologies: [],
     imageUrl: '/academy/Projects/ksdc.png',
-    timeline: 'Up Comming',
+    timeline: 'UpComing',
     team: [],
     goals: []
   },
@@ -218,7 +218,7 @@ export const projects = [
     location: 'Karnataka',
     technologies: ['React', 'Node.js', 'TensorFlow', 'MongoDB'],
     imageUrl: '/academy/Projects/vtu.png',
-    timeline: 'Up Comming',
+    timeline: 'UpComing',
     team: [],
     goals: []
   },

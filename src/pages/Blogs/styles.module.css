@@ -1,31 +1,208 @@
 /* Renamed for CSS module compatibility */
-.blogContent h2 {
-    font-size: 1.5rem;
-    margin-bottom: 1rem;
-    color: red;
-}
-
-.blogContent a {
-    color: #0070f3;
-    text-decoration: none;
-}
-
-.blogContent p {
-    font-size: 1rem;
-    line-height: 1.5;
-    margin-bottom: 1rem;
-}
 .blogContent h1 {
     font-size: 2rem;
     margin-bottom: 1rem;
     color: #333;
 }
 
+.blogContent h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    color: #111;
+}
+
+.blogContent h3 {
+    font-size: 1.25rem;
+    margin-bottom: 0.75rem;
+    color: #222;
+}
+
+.blogContent h4 {
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+    color: #222;
+}
+
+.blogContent h5 {
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+    color: #222;
+}
+
+.blogContent h6 {
+    font-size: 0.95rem;
+    margin-bottom: 0.5rem;
+    color: #222;
+    font-weight: 600;
+}
+
+.blogContent p {
+    font-size: 1rem;
+    line-height: 1.5;
+    margin-bottom: 1rem;
+    color: #222;
+}
+
+.blogContent a {
+    color: #0070f3;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.blogContent a:hover {
+    text-decoration: underline;
+    color: #ef4444;
+}
+
 .blogContent img {
     max-width: 100%;
     height: auto;
+    display: block;
+    margin: 1.5rem auto;
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
 }
-.blogContent strong{
+
+.blogContent ul,
+.blogContent ol {
+    margin-bottom: 1.25rem;
+    padding-left: 2rem;
+}
+
+.blogContent ul {
+    list-style-type: disc;
+}
+
+.blogContent ol {
+    list-style-type: decimal;
+}
+
+.blogContent li {
+    font-size: 1rem;
+    line-height: 1.6;
+    margin-bottom: 0.5rem;
+    color: #444;
+}
+
+.blogContent li:last-child {
+    margin-bottom: 0;
+}
+
+.blogContent blockquote {
+    border-left: 4px solid #111;
+    background: #f3f4f6;
+    color: #222;
+    padding: 1rem 1.5rem;
+    margin: 1.5rem 0;
+    font-style: italic;
+    border-radius: 0.5rem;
+}
+
+.blogContent code {
+    background: #f3f4f6;
+    color: #d97706;
+    padding: 0.2em 0.4em;
+    border-radius: 0.3em;
+    font-size: 0.95em;
+    font-family: 'Fira Mono', 'Consolas', 'Monaco', monospace;
+}
+
+.blogContent pre {
+    background: #1e293b;
+    color: #f1f5f9;
+    padding: 1em;
+    border-radius: 0.5em;
+    overflow-x: auto;
+    margin: 1.5rem 0;
+    font-size: 0.95em;
+    font-family: 'Fira Mono', 'Consolas', 'Monaco', monospace;
+}
+
+.blogContent table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.5rem 0;
+    font-size: 1rem;
+}
+
+.blogContent th,
+.blogContent td {
+    border: 1px solid #e5e7eb;
+    padding: 0.75em 1em;
+    text-align: left;
+}
+
+.blogContent th {
+    background: #f3f4f6;
     font-weight: bold;
+}
+
+.blogContent tr:nth-child(even) {
+    background: #f9fafb;
+}
+
+.blogContent em {
+    font-style: italic;
+}
+
+.blogContent strong {
+    font-weight: bold;
+}
+
+.blogContent hr {
+    border: none;
+    border-top: 1px solid #e5e7eb;
+    margin: 2rem 0;
+}
+
+.blogContent sup {
+    font-size: 0.8em;
+    vertical-align: super;
+}
+
+.blogContent sub {
+    font-size: 0.8em;
+    vertical-align: sub;
+}
+
+.blogContent figure {
+    margin: 1.5rem 0;
+    text-align: center;
+}
+
+.blogContent figcaption {
+    font-size: 0.95em;
+    color: #6b7280;
+    margin-top: 0.5rem;
+}
+
+.blogContent caption {
+    font-size: 0.95em;
+    color: #6b7280;
+    margin-bottom: 0.5rem;
+    text-align: left;
+}
+
+.blogContent del {
+    text-decoration: line-through;
+    color: #111;
+}
+
+.blogContent mark {
+    background: #fef08a;
+    color: #92400e;
+    padding: 0.1em 0.3em;
+    border-radius: 0.2em;
+}
+
+.blogContent dt {
+    font-weight: bold;
+    color: #111;
+}
+
+.blogContent dd {
+    margin-left: 1.5rem;
+    margin-bottom: 0.5rem;
+    color: #444;
 }
 

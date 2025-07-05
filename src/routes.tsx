@@ -13,8 +13,9 @@ import UniversitiesLayout from "./layouts/UniversitiesLayout";
 
 // Direct imports for direct use in routes
 import BlogDetailAcademia from "./components/Academy/Blogs/BlogDetail";
-import BlogDetailPage from "./pages/Blogs/BlogDetail.tsx";
 import BlogDetailGov from "./components/Govt/Blogs/BlogDetail.tsx";
+import CourseDetailedPage from "@/components/Academy/Students/CourseDetailedPage";
+
 // Lazy pages
 const Home = lazy(() => import("./pages/Index"));
 const Blogs = lazy(() => import("./pages/Blogs/index"));
@@ -25,12 +26,7 @@ const Corporate = lazy(() => import("./pages/Corporate/Recruitment/Index"));
 const ContactForm = lazy(
   () => import("./pages/Corporate/ContactPage/ContactForm.tsx")
 );
-const Corporate_Blogs = lazy(
-  () => import("./pages/Corporate/Recruitment/Blogs/Index")
-);
-const BlogPost = lazy(
-  () => import("./pages/Corporate/Recruitment/Blogs/[slug]")
-);
+const BlogDetail = lazy(() => import("./pages/Blogs/BlogDetail.tsx"));
 const ServicesPage = lazy(
   () => import("./pages/Corporate/Recruitment/Services/Index.tsx")
 );
@@ -69,14 +65,20 @@ const CorporateTrainingServicesIndex = lazy(
   () => import("./pages/Corporate/Training/Services/Index.tsx")
 );
 
-import CourseDetailedPage from "@/components/Academy/Students/CourseDetailedPage";
+
 const BlogListing = lazy(() => import("./components/universities/Blogs/BlogListing"));
-const BlogDetail = lazy(() => import("./components/universities/Blogs/BlogDetail"));
 import CommunicationPersonalityDevelopment from "./components/universities/inst/CommunicationPersonalityDevelopment";
 import MentalHealthCounselingFDP from "./components/universities/inst/MentalHealthCounselingFDP";
 import DomainSpecificPrograms from "./components/universities/inst/DomainSpecificPrograms";
 import LeadershipCareerGrowth from "./components/universities/inst/LeadershipCareerGrowth";
 import InstitutionalValueAdded from "./components/universities/inst/InstitutionalValueAdded";
+// New Projects components
+const NewProjects = lazy(() => import("./components/Projects/project.tsx"));
+const NewProjectDetail = lazy(() => import("./components/Projects/ProjectDetailNew.tsx"));
+
+
+const InstitutionsBlogDetail = lazy(() => import("./components/universities/Blogs/BlogDetail"));
+
 
 
 const withSuspense = (Component: React.LazyExoticComponent<React.FC<{}>>) => (
@@ -116,11 +118,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/blogs/:slug",
-        element: (
-          <Suspense fallback={<LoaderComponent />}>
-            <BlogDetailPage />
-          </Suspense>
-        ),
+        element: withSuspense(BlogDetail),
       },
     ],
   },
@@ -161,15 +159,19 @@ const router = createBrowserRouter([
       },
       {
         path: "/corporate/training/blogs",
-        element: withSuspense(Corporate_Blogs),
+        element: withSuspense(Blogs),
+      },
+      {
+        path: "/corporate/training/blogs/:slug",
+        element: withSuspense(BlogDetail),
       },
       {
         path: "/corporate/recruitment/blogs",
-        element: withSuspense(Corporate_Blogs),
+        element: withSuspense(Blogs),
       },
       {
         path: "/corporate/recruitment/blogs/:slug",
-        element: withSuspense(BlogPost),
+        element: withSuspense(BlogDetail),
       },
       {
         path: "/corporate/recruitment/services",
@@ -299,10 +301,17 @@ const router = createBrowserRouter([
             <Academy_Course />
           </Suspense>
         ),
-      },
-      {
+      },      {
         path: "/school/teacher/tdp",
         element: withSuspense(TDPPage),
+      },      // New Projects routes
+      {
+        path: "/school/new-projects",
+        element: withSuspense(NewProjects),
+      },
+      {
+        path: "/school/new-projects/:projectId",
+        element: withSuspense(NewProjectDetail),
       },
     ],
   },
@@ -364,7 +373,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/universities/blogs/:slug",
-        element: withSuspense(BlogDetail),
+        element: withSuspense(InstitutionsBlogDetail),
       },
       {
         path: "/universities/sdp/blogs",
@@ -372,7 +381,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/universities/sdp/blogs/:slug",
-        element: withSuspense(BlogDetail),
+        element: withSuspense(InstitutionsBlogDetail),
       },
       {
         path: "/universities/fdp/blogs",
@@ -380,7 +389,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/universities/fdp/blogs/:slug",
-        element: withSuspense(BlogDetail),
+        element: withSuspense(InstitutionsBlogDetail),
       },
     ],
   },

@@ -5,6 +5,7 @@ import SearchAndFilter from "./SearchAndFilter";
 import Pagination from "./Pagination";
 import { useToast } from "@/hooks/use-toast";
 import { useLocation } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 
 /**
  * Blog post interface matching Supabase schema
@@ -73,6 +74,9 @@ const Blogs: React.FC = () => {
    * Determines subcategory based on URL path
    */
   const getSubcategoryFromPath = useCallback((pathname: string): string => {
+    if (pathname.startsWith("/corporate")) {
+      return "__CORPORATE__";
+    }
     if (pathname.includes(URL_FILTERS.STUDENT)) {
       return SUBCATEGORIES.STUDENTS;
     }
@@ -149,7 +153,8 @@ const Blogs: React.FC = () => {
    */
   const filteredPosts = useMemo(() => {
     const enforceSubcategory = getSubcategoryFromPath(location.pathname);
-    
+    const isCorporate = enforceSubcategory === "__CORPORATE__";
+
     return blogPosts.filter((post: BlogPost) => {
       // Optimized search with case-insensitive matching
       const searchLower = searchQuery.toLowerCase();
@@ -159,19 +164,21 @@ const Blogs: React.FC = () => {
         post.content,
         ...(post.tags || [])
       ].some(field => field?.toLowerCase().includes(searchLower));
-      
+
       // Category matching
-      const matchesCategory = selectedCategory === "all" || 
-        post.category.toLowerCase() === selectedCategory.toLowerCase();
-      
+      const matchesCategory = isCorporate
+        ? post.category.toLowerCase() === "corporate"
+        : selectedCategory === "all" || post.category.toLowerCase() === selectedCategory.toLowerCase();
+
       // Subcategory matching with URL enforcement
-      const effectiveSubcategory = enforceSubcategory !== SUBCATEGORIES.ALL 
-        ? enforceSubcategory 
-        : selectedSubcategory;
-        
+      const effectiveSubcategory = isCorporate
+        ? SUBCATEGORIES.ALL
+        : enforceSubcategory !== SUBCATEGORIES.ALL 
+          ? enforceSubcategory 
+          : selectedSubcategory;
       const matchesSubcategory = effectiveSubcategory === SUBCATEGORIES.ALL || 
         post.subcategory === effectiveSubcategory;
-      
+
       return matchesSearch && matchesCategory && matchesSubcategory;
     });
   }, [searchQuery, selectedCategory, selectedSubcategory, blogPosts, location.pathname, getSubcategoryFromPath]);
@@ -233,98 +240,109 @@ const Blogs: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-sage-50 via-background to-olive-50">
-      {/* Hero Section */}
-      <section className="relative py-20 px-4 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-olive-600/20 to-sage-600/20" />
-        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1441986300917-64674bd600d8?ixlib=rb-4.0.3')] bg-cover bg-center opacity-10" />
-        
-        <div className="relative max-w-7xl mx-auto text-center">
-          <h1 className="font-playfair text-5xl lg:text-6xl font-bold text-foreground mb-6">
-            Insights & Knowledge Hub
-          </h1>
-          <p className="text-xl text-muted-foreground mb-12 max-w-3xl mx-auto leading-relaxed">
-            Explore expert insights on sustainability, ESG frameworks, and environmental management. 
-            Stay informed with the latest trends and best practices in corporate sustainability.
-          </p>
+    <>
+      <Helmet>
+        <title>Rareminds Blog | Talent & Hiring Insights</title>
+        <meta name="description" content="Stay updated with data-driven insights on recruitment, talent strategy, culture fit, leadership hiring & workforce trends from the Rareminds team." />
+      </Helmet>
+      <div className="min-h-screen bg-gradient-to-br from-sage-50 via-background to-olive-50">
+        {/* Hero Section */}
+        <section className="relative py-20 px-4 overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-r from-olive-600/20 to-sage-600/20" />
+          <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1441986300917-64674bd600d8?ixlib=rb-4.0.3')] bg-cover bg-center opacity-10" />
           
-          <SearchAndFilter
-            searchQuery={searchQuery}
-            setSearchQuery={setSearchQuery}
-            onCategoryFilter={handleCategoryFilter}
-            onSubcategoryFilter={handleSubcategoryFilter}
-            selectedCategory={selectedCategory}
-            selectedSubcategory={selectedSubcategory}
-          />
-        </div>
-      </section>
-
-      {/* Main Content Section */}
-      <section className="py-16 px-4">
-        <div className="max-w-7xl mx-auto">
-          {/* Results Header */}
-          <div className="mb-8">
-            <p className="text-muted-foreground">
-              Showing {paginationData.totalResults} of {subcategoryStats.total} articles
-              {selectedSubcategory !== SUBCATEGORIES.ALL && (
-                <span className="ml-2">
-                  in <span className="font-semibold text-foreground">
-                    {selectedSubcategory.charAt(0).toUpperCase() + selectedSubcategory.slice(1)}
-                  </span>
-                </span>
-              )}
-              {searchQuery && (
-                <span className="ml-2">
-                  for "<span className="font-medium text-foreground">{searchQuery}</span>"
-                </span>
-              )}
+          <div className="relative max-w-7xl mx-auto text-center">
+            <h1 className="font-playfair text-5xl lg:text-6xl font-bold text-foreground mb-6">
+              Insights & Knowledge Hub
+            </h1>
+            <p className="text-xl text-muted-foreground mb-12 max-w-3xl mx-auto leading-relaxed">
+              Explore expert insights on sustainability, ESG frameworks, and environmental management. 
+              Stay informed with the latest trends and best practices in corporate sustainability.
             </p>
+            
+            <SearchAndFilter
+              searchQuery={searchQuery}
+              setSearchQuery={setSearchQuery}
+              onCategoryFilter={handleCategoryFilter}
+              onSubcategoryFilter={handleSubcategoryFilter}
+              selectedCategory={selectedCategory}
+              selectedSubcategory={selectedSubcategory}
+            />
           </div>
+        </section>
 
-          {/* Content Area */}
-          {loading ? (
-            <div className="flex flex-col items-center justify-center min-h-[400px] gap-4">
-              <div className="animate-spin rounded-full h-12 w-12 border-4 border-red-500 border-t-transparent" />
-              <p className="text-gray-600 animate-pulse">Loading articles...</p>
-            </div>
-          ) : paginationData.currentPosts.length > 0 ? (
-            <>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
-                {paginationData.currentPosts.map((post: BlogPost) => (
-                  <div key={post.id} className="h-[400px] flex">
-                    <BlogCard post={post} />
-                  </div>
-                ))}
-              </div>
-              
-              {/* Pagination */}
-              <Pagination
-                currentPage={currentPage}
-                totalPages={paginationData.totalPages}
-                onPageChange={setCurrentPage}
-              />
-            </>
-          ) : (
-            <div className="text-center py-16">
-              <h3 className="font-playfair text-2xl font-semibold text-foreground mb-4">
-                No articles found
-              </h3>
-              <p className="text-muted-foreground mb-8">
-                Try adjusting your search terms or filters to find what you're looking for.
+        {/* Main Content Section */}
+        <section className="py-16 px-4">
+          <div className="max-w-7xl mx-auto">
+            {/* Results Header */}
+            <div className="mb-8">
+              <p className="text-muted-foreground">
+                Showing {paginationData.totalResults} of {subcategoryStats.total} articles
+                {selectedSubcategory !== SUBCATEGORIES.ALL && selectedSubcategory !== "__CORPORATE__" && (
+                  <span className="ml-2">
+                    in <span className="font-semibold text-foreground">
+                      {selectedSubcategory.charAt(0).toUpperCase() + selectedSubcategory.slice(1)}
+                    </span>
+                  </span>
+                )}
+                {selectedSubcategory === "__CORPORATE__" && (
+                  <span className="ml-2">
+                    in <span className="font-semibold text-foreground">Corporate</span>
+                  </span>
+                )}
+                {searchQuery && (
+                  <span className="ml-2">
+                    for "<span className="font-medium text-foreground">{searchQuery}</span>"
+                  </span>
+                )}
               </p>
-              {searchQuery && (
-                <button
-                  onClick={() => setSearchQuery("")}
-                  className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition-colors"
-                >
-                  Clear Search
-                </button>
-              )}
             </div>
-          )}
-        </div>
-      </section>
-    </div>
+
+            {/* Content Area */}
+            {loading ? (
+              <div className="flex flex-col items-center justify-center min-h-[400px] gap-4">
+                <div className="animate-spin rounded-full h-12 w-12 border-4 border-red-500 border-t-transparent" />
+                <p className="text-gray-600 animate-pulse">Loading articles...</p>
+              </div>
+            ) : paginationData.currentPosts.length > 0 ? (
+              <>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
+                  {paginationData.currentPosts.map((post: BlogPost) => (
+                    <div key={post.id} className="h-[400px] flex">
+                      <BlogCard post={post} />
+                    </div>
+                  ))}
+                </div>
+                
+                {/* Pagination */}
+                <Pagination
+                  currentPage={currentPage}
+                  totalPages={paginationData.totalPages}
+                  onPageChange={setCurrentPage}
+                />
+              </>
+            ) : (
+              <div className="text-center py-16">
+                <h3 className="font-playfair text-2xl font-semibold text-foreground mb-4">
+                  No articles found
+                </h3>
+                <p className="text-muted-foreground mb-8">
+                  Try adjusting your search terms or filters to find what you're looking for.
+                </p>
+                {searchQuery && (
+                  <button
+                    onClick={() => setSearchQuery("")}
+                    className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition-colors"
+                  >
+                    Clear Search
+                  </button>
+                )}
+              </div>
+            )}
+          </div>
+        </section>
+      </div>
+    </>
   );
 };
 

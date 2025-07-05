@@ -121,12 +121,12 @@ const animations = {
       opacity: 1,
       y: 0,
       scale: 1,
-      transition: { type: "spring", stiffness: 100, damping: 12 },
+      transition: { type: "spring" as const, stiffness: 100, damping: 12 },
     },
     hover: {
       y: -8,
       scale: 1.02,
-      transition: { type: "spring", stiffness: 400, damping: 10 },
+      transition: { type: "spring" as const, stiffness: 400, damping: 10 },
     },
   },
   container: {
@@ -166,7 +166,7 @@ const ServiceCard = ({
           className="relative bg-white/40 backdrop-blur-sm rounded-r-lg shadow-2xl overflow-hidden ml-4 sm:ml-6 h-full"
           whileHover={{
             rotateY: -8,
-            translateX: 5,
+            x: 5,
             boxShadow:
               "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
           }}
@@ -174,7 +174,7 @@ const ServiceCard = ({
           <div className="relative h-40 sm:h-48 overflow-hidden">
             <img
               src={service.image}
-              alt={service.name}
+              alt={"Illustration of a book with symbols, icons, and corporate professionals interacting around gears and charts."}
               className="w-full h-full object-cover"
             />
             <div className="absolute inset-0 bg-[#222B33] opacity-50" />
@@ -184,7 +184,9 @@ const ServiceCard = ({
               <h3 className="text-sm sm:text-lg font-bold bg-gradient-to-r from-gray-800 to-gray-900 bg-clip-text text-transparent leading-tight">
                 {service.name}
               </h3>
-              <service.icon className="w-5 h-5 sm:w-7 sm:h-7 text-gray-800" />
+              {service.icon && (
+                <service.icon className="w-5 h-5 sm:w-7 sm:h-7 text-gray-800" />
+              )}
             </div>
             {service.subtitle && (
               <p

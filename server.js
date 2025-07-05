@@ -3,6 +3,7 @@ import express from 'express';
 import nodemailer from 'nodemailer';
 import cors from 'cors';
 import path from 'path';
+import fetch from 'node-fetch';  // Add node-fetch import
 
 const app = express();
 
@@ -19,6 +20,38 @@ const transporter = nodemailer.createTransport({
   },
   tls: {
     rejectUnauthorized: false
+  }
+});
+
+// YouTube API endpoint
+app.get('/api/youtube-videos', async (req, res) => {
+  try {
+    const { channelId, maxResults = 10 } = req.query;
+    const apiKey = process.env.YOUTUBE_API_KEY;
+    
+    if (!apiKey) {
+      return res.status(500).json({ error: 'YouTube API key not configured' });
+    }
+    
+    if (!channelId) {
+      return res.status(400).json({ error: 'Channel ID is required' });
+    }
+
+    const response = await fetch(
+      `https://www.googleapis.com/youtube/v3/search?key=${apiKey}&channelId=${channelId}&part=snippet,id&order=date&maxResults=${maxResults}`
+    );
+    
+    if (!response.ok) {
+      const errorData = await response.json();
+      console.error('YouTube API Error:', errorData);
+      return res.status(response.status).json(errorData);
+    }
+    
+    const data = await response.json();
+    res.json(data);
+  } catch (error) {
+    console.error('Server Error:', error);
+    res.status(500).json({ error: 'Failed to fetch videos' });
   }
 });
 

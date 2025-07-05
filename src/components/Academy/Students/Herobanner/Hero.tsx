@@ -52,7 +52,7 @@ const Hero = ({ HeroToLogo, HeroToContact, blurAmount = 0 }: HeroCarouselProps) 
   return (
     <section
       className={`w-full h-screen fixed top-0 left-0  overflow-hidden mt-10 md:mt-[80px] `}
-      style={{ filter: blurAmount ? `blur(${blurAmount}px)` : undefined, transition: 'filter 0.3s cubic-bezier(0.4,0,0.2,1)' }}
+      style={{ filter: blurAmount ? `blur(${blurAmount}px)` : undefined }}
     >
       <div className="flex flex-col justify-center md:justify-normal md:flex-row w-full h-full">
         {/* Left: Image/Illustration (2/5) */}

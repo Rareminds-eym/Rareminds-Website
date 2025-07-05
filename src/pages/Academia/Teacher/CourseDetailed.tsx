@@ -1,5 +1,6 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { Helmet } from "react-helmet-async";
 import { ArrowLeft, CheckCircle, ArrowRight, Star, Award, Lightbulb, Users2, FileText, Target, CalendarCheck, Briefcase, Users, Heart, BarChart2 } from 'lucide-react';
 import {
   Coursess,
@@ -18,6 +19,31 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '.
 import { Clock, BookOpen, TrendingUp } from 'lucide-react';
 import FloatingActionMenu from "../../../components/Academy/StickyButton/StickyButton/FloatingAction"
 
+// Define the type for assists in standOut section
+interface AssistItem {
+  title: string;
+  description: string;
+}
+
+// Define course details type to match our data structure
+interface CourseDetailsType {
+  title: string;
+  subtitle?: string;
+  intro: string[];
+  whyItMatters: string[];
+  highlights: { icon: string; text: string; }[];
+  standOut?: {
+    title: string;
+    description: string;
+    assists?: AssistItem[];
+  };
+  cta: { 
+    heading: string; 
+    text: string; 
+    button: string; 
+  };
+}
+
 const iconMap = {
   Award,
   Target,
@@ -31,48 +57,7 @@ const iconMap = {
   BarChart2,
 };
 
-const modules = [
-  {
-    id: 1,
-    title: "Spoken English for the Classroom",
-    hours: 9,
-    objectives: "Improve classroom English fluency, pronunciation, and basic command",
-    activities: "Speaking drills, situational dialogues, fluency games",
-    outcomes: "Improved everyday classroom communication and teacher confidence"
-  },
-  {
-    id: 2,
-    title: "Public Speaking & Presentation Skills",
-    hours: 9,
-    objectives: "Build effective delivery, stage presence, and clarity for group settings",
-    activities: "Presentations, voice modulation exercises, peer feedback",
-    outcomes: "Clearer articulation, stronger presence in meetings and events"
-  },
-  {
-    id: 3,
-    title: "Inclusive and Stress-Free Classroom Management",
-    hours: 9,
-    objectives: "Adopt non-punitive strategies to manage diverse student behaviors",
-    activities: "Classroom scenarios, role-play, and behavior mapping tools",
-    outcomes: "Increased control, calmer classrooms, inclusive engagement"
-  },
-  {
-    id: 4,
-    title: "Parent Communication & Feedback Delivery",
-    hours: 9,
-    objectives: "Develop structured and empathetic communication with parents",
-    activities: "Role-play with parent profiles, email templates, video-based practice",
-    outcomes: "Improved handling of parent conversations and feedback clarity"
-  },
-  {
-    id: 5,
-    title: "Personal Confidence & Influence Building",
-    hours: 9,
-    objectives: "Strengthen personal presence, emotional control, and professional demeanor",
-    activities: "Group reflection, assertiveness exercises, self-assessment journals",
-    outcomes: "Higher confidence, better influence in peer and leadership interactions"
-  }
-];
+// Modules data moved to communicationPersonalityModules below
 
 // Table data for communication-personality
 const communicationPersonalityModules = [
@@ -127,12 +112,48 @@ const communicationPersonalityModules = [
   { name: 'Institutional Value-Added Services', route: '/school/teacher/Courses/institutional-value-added' },
 ];
 
+/// ✅ Updated Meta Content Configuration
+const metaContent = {
+  'Teacher Development Programs (TDP)': {
+    title: "Teacher Development Programs | NEP Training for Educators | Rareminds",
+    description: "Empower educators with NEP-aligned programs in ranking readiness, innovation cells, and peer-learning teacher communities."
+  },
+  'communication-personality': {
+    title: "Communication & Personality Development for Teachers | Rareminds",
+    description: "Boost classroom delivery with training in educator fluency, management strategies, and effective parent-teacher communication."
+  },
+  'mental-health-counseling': {
+    title: "Mental Health & Counseling Training for Teachers | Rareminds",
+    description: "Equip teachers with tools to support at-risk students through empathy, peer counseling, and safe learning environments."
+  },
+  'domain-specific-certification': {
+    title: "Domain-Specific Certification for Teachers | Industry-Aligned Training | Rareminds",
+    description: "Offer cutting-edge, industry-certified training with sector exposure and hands-on collaboration in high-demand domains."
+  },
+  'leadership-career-growth': {
+    title: "Leadership & Career Growth for Academic Leaders | Rareminds",
+    description: "Advance academic leadership through training for HODs and principals, with a focus on excellence and professional growth."
+  },
+  'institutional-value-added': {
+    title: "Institutional Value-Added Services | School System Strengthening | Rareminds",
+    description: "Strengthen school systems with structured audits, ranking support, and teacher-led club development for continuous improvement."
+  },
+  default: {
+    title: "Bilingual NEP 2020-Aligned School Programs | Rareminds School Services",
+    description: "Bilingual, NEP 2020-aligned school programs that strengthen communication, digital skills, and career paths designed for practical, classroom-ready impact."
+  }
+};
 
 
 export default function CourseDetailed() {
   const { id } = useParams();
   const navigate = useNavigate();
   const course = Coursess.find((s) => s.id === id);
+
+  // Get meta content for current course
+  const currentMeta = course && course.id in metaContent 
+    ? metaContent[course.id as keyof typeof metaContent]
+    : metaContent.default;
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -142,7 +163,7 @@ export default function CourseDetailed() {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-2xl font-bold mb-4">Course not found</h1>
+          <h2 className="text-2xl font-bold mb-4">Course not found</h2>
           <button
             onClick={() => navigate(-1)}
             className="text-blue-600 hover:text-blue-800"
@@ -153,22 +174,28 @@ export default function CourseDetailed() {
       </div>
     );
   }
-
   // Render detailed pages for all data-driven courses
-  let data = null;
+  let data: CourseDetailsType | null = null;
   if (course.id === 'institutional-value-added') {
-    data = institutionalValueAddedDetails;
+    data = institutionalValueAddedDetails as CourseDetailsType;
   } else if (course.id === 'leadership-career-growth') {
-    data = leadershipCareerGrowthDetails;
+    data = leadershipCareerGrowthDetails as CourseDetailsType;
   } else if (course.id === 'domain-specific-certification') {
-    data = domainSpecificCertificationDetails;
+    data = domainSpecificCertificationDetails as CourseDetailsType;
   } else if (course.id === 'mental-health-counseling') {
-    data = mentalHealthCounselingDetails;
+    data = mentalHealthCounselingDetails as CourseDetailsType;
   } else if (course.id === 'communication-personality') {
-    data = communicationPersonalityDevelopmentDetails;
-  } else if (course.id === 'Teacher Development Programs (TDP)') {
+    data = communicationPersonalityDevelopmentDetails as CourseDetailsType;  }else if (course.id === 'Teacher Development Programs (TDP)') {
     return (
       <>
+        <Helmet>
+          <title>{currentMeta.title}</title>
+          <meta
+            name="description"
+            content={currentMeta.description}
+          />
+        </Helmet>
+        
         <AcademyHeader />
         <section className="pb-20">
           <div className="relative h-[45vh] mb-12 overflow-hidden mt-[80px]">
@@ -206,10 +233,17 @@ export default function CourseDetailed() {
       </>
     );
   }
-
   if (data) {
     return (
       <>
+      <Helmet>
+        <title>{currentMeta.title}</title>
+        <meta
+          name="description"
+          content={currentMeta.description}
+        />
+      </Helmet>
+      
       <AcademyHeader />
       <FloatingActionMenu />
       <section className=" mt-[80px]">
@@ -254,8 +288,37 @@ export default function CourseDetailed() {
                 </h2>
                 {data.intro.map((p, i) => (
                   <p key={i} className={`text-lg text-gray-700 leading-relaxed${i === 0 ? ' mb-8' : ''}`}>{p}</p>
-                ))}
-              </div>
+                ))}              </div>
+              
+              {/* Stand Out Section */}
+              {data.standOut && (
+                <div className="mb-8">
+                  <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
+                    {data.standOut.title}
+                  </h2>
+                  <p className="text-lg text-gray-700 leading-relaxed mb-6">
+                    {data.standOut.description}
+                  </p>
+                  
+                  <h3 className="text-xl font-semibold text-gray-900 mb-4">
+                    How Rareminds Assists:
+                  </h3>
+                  
+                  <div className="space-y-6">
+                    {data.standOut.assists && data.standOut.assists.map((item, i) => (
+                      <div key={i} className="flex flex-col">
+                        <h4 className="text-lg font-semibold text-gray-800 mb-1">
+                          {item.title}
+                        </h4>
+                        <p className="text-base text-gray-700">
+                          {item.description}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
  <div className="bg-gray-100 rounded-2xl p-8 text-black shadow-2xl">
                 <h3 className="text-2xl font-bold mb-8 flex items-center">
                   <ArrowRight className="h-6 w-6 mr-3" />
@@ -336,9 +399,9 @@ export default function CourseDetailed() {
           <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full mb-6">
             <BookOpen className="w-8 h-8 text-white" />
           </div>
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
             {course.name}
-          </h1>
+          </h2>
           <p className="text-xl text-gray-600 mb-6 max-w-3xl mx-auto">
             {course.description}
           </p>
@@ -570,19 +633,27 @@ export default function CourseDetailed() {
       </>
     );
   }
-
   // For all other courses, show a placeholder or empty detailed page
   return (
-    <div className="min-h-screen flex items-center justify-center">
+    <>
+      <Helmet>
+        <title>{currentMeta.title}</title>
+        <meta
+          name="description"
+          content={currentMeta.description}
+        />
+      </Helmet>
+      
+      <div className="min-h-screen flex items-center justify-center">
       <div className="text-center">
-        <h1 className="text-2xl font-bold mb-4">Course details coming soon</h1>
+        <h2 className="text-2xl font-bold mb-4">Course details coming soon</h2>
         <button
           onClick={() => navigate(-1)}
           className="text-blue-600 hover:text-blue-800"
         >
-          Go back
-        </button>
+          Go back        </button>
       </div>
     </div>
+    </>
   );
 }

@@ -1,10 +1,11 @@
 
 import { Button } from "../../../components/Academy/UI/button";
-import PageHeader from "../../../components/Academy/Students/courses-1/PageHeader";
+
 import { Card, CardContent } from "@/components/ui/card";
 
-import { ArrowRight, CheckCircle, BookOpen, GraduationCap, Briefcase, ExternalLink, Brain, Target, Lightbulb } from "lucide-react";
+import { CheckCircle, BookOpen, GraduationCap, ExternalLink, Brain, Target, Lightbulb } from "lucide-react";
 import { motion } from "framer-motion";
+import PageHeader from "../../../components/ui/PageHeader";
 
 const CareerToolkit = () => {
   const toolkitFeatures = [

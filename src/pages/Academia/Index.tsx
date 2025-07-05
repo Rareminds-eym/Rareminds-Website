@@ -320,10 +320,10 @@ const Academia = ({ userType = "teacher" }: { userType?: "teacher" | "student" }
 
     
   const stats = [
-    { icon: Book, value: "20,000+", label: "Faculty Trained" },
+    { icon: Book, value: "20,000+", label: "Teachers Trained" },
     { icon: Users, value: "100+", label: "Schools Onboarded" },
     { icon: Calendar, value: "250+", label: "Pilots Deployed" },
-    { icon: Circle, value: "92%", label: "Faculty Satisfaction Rate" },
+    { icon: Circle, value: "92%", label: "Teachers Satisfaction Rate" },
   ];
 
    useEffect (() =>{
