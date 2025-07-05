@@ -10,7 +10,7 @@ import {
   School,
   Building2
 } from 'lucide-react';
-import { services } from '@/components/institutions/sdp/Services';
+import { services } from '@/components/universities/sdp/Services';
 import React, { useState } from 'react';
 
 // --- PROGRAM TABLES FOR EACH SERVICE ---
