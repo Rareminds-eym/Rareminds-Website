@@ -19,6 +19,8 @@ import CourseDetailedPage from "@/components/Academy/Students/CourseDetailedPage
 // Lazy pages
 const Home = lazy(() => import("./pages/Index"));
 const Blogs = lazy(() => import("./pages/Blogs/index"));
+const Hackathons = lazy(() => import("./pages/Hackathons/index"));
+const HackathonResults = lazy(() => import("./pages/Hackathons/Results"));
 const Service = lazy(
   () => import("./pages/Corporate/Recruitment/Services/[service]")
 );
@@ -119,6 +121,14 @@ const router = createBrowserRouter([
       {
         path: "/blogs/:slug",
         element: withSuspense(BlogDetail),
+      },
+      {
+        path: "/hackathons",
+        element: withSuspense(Hackathons),
+      },
+      {
+        path: "/hackathons/:slug/results",
+        element: withSuspense(HackathonResults),
       },
     ],
   },

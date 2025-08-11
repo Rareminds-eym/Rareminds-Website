@@ -43,19 +43,17 @@ const Index: React.FC<HeaderProps> = ({ navbarOpen, setNavbarOpen }) => {
                         <Menu className='rotate-90'/>
                         <span className="font-medium">MENU</span>
                     </button>
-                    <a
-                        href="https://rareminds.zohorecruit.in/jobs/Trainers"
-                        target="_blank"
-                        rel="noopener noreferrer"
+                    <Link
+                        to="/hackathons"
                         className="bg-black text-white px-6 py-2 rounded-full flex items-center justify-center w-auto relative z-40 font-medium animate-glow group hover:bg-gray-50 hover:text-black transition"
                         style={{ minWidth: 0 }}
                     >
                         <Briefcase size={22} className="mr-2" />
-                        Trainers
+                        Hackathons
                         <span className="absolute left-1/2 -bottom-10 -translate-x-1/2 whitespace-nowrap bg-yellow-300 text-black text-xs font-semibold px-2 py-1 rounded shadow opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10">
-                            Applications filling fast. Apply Now!
+                            Explore exciting hackathons!
                         </span>
-                    </a>
+                    </Link>
                 </div>
             </div>
 
@@ -65,18 +63,16 @@ const Index: React.FC<HeaderProps> = ({ navbarOpen, setNavbarOpen }) => {
                     <div className="relative w-full h-full">
                         <div className="container mx-auto py-36">
                             <div className="flex flex-col items-center text-center space-y-8">
-                                <a 
-                                    href="https://rareminds.zohorecruit.in/jobs/Trainers" 
-                                    target="_blank" 
-                                    rel="noopener noreferrer" 
-                                    onClick={handleLinkClick} 
-                                    className="text-2xl font-medium text-white-300 animate-glow relative group p-2"
+                                <Link
+                                    to="/hackathons"
+                                    onClick={handleLinkClick}
+                                    className="text-2xl font-medium text-white-300 animate-glow relative group p-2 hover:text-blue-300"
                                 >
-                                    Trainers
+                                    Hackathons
                                     <span className="absolute left-1/2 -bottom-12 -translate-x-1/2 whitespace-nowrap bg-yellow-300 text-black text-sm font-semibold px-2 py-1 rounded shadow opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10">
-                                        Applications filling fast.Apply Now!
+                                        Explore exciting hackathons!
                                     </span>
-                                </a>
+                                </Link>
                                 <Link to="/careers" onClick={handleLinkClick} className="text-2xl font-medium hover:text-blue-300">Careers</Link>
                                 <Link to="/blogs" onClick={handleLinkClick} className="text-2xl font-medium hover:text-blue-300">Blogs</Link>
                                 <Link to="/contact" onClick={handleLinkClick} className="text-2xl font-medium hover:text-blue-300">Contact us</Link>
