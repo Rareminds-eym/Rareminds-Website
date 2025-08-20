@@ -7,6 +7,7 @@ export interface Hackathon {
   participants: string;
   prize: string;
   status: 'upcoming' | 'ongoing' | 'completed';
+  image?: string;
   registrationLink?: string;
 }
 
@@ -15,33 +16,36 @@ export const hackathons: Hackathon[] = [
     id: '1',
     name: 'CAPAthon',
     slug: 'capathon',
-    description: 'Build innovative solutions for capacity building and professional development in academic environments.',
+    description: '',
     date: 'March 15-17, 2024',
     participants: '500+ students',
     prize: '₹1,00,000',
     status: 'upcoming',
+    image: '/Hackathon/GMP.jpg',
     registrationLink: '#'
   },
   {
     id: '2',
     name: 'CodeCare 2.0',
     slug: 'codecare-2-0',
-    description: 'Create innovative healthcare solutions to improve accessibility, patient care, and medical technology.',
+    description: '',
     date: 'April 20-22, 2024',
     participants: '300+ students',
     prize: '₹75,000',
     status: 'upcoming',
+    image: '/Hackathon/MC.jpg',
     registrationLink: '#'
   },
   {
     id: '3',
     name: 'Safe Bite 2.0',
     slug: 'safe-bite-2-0',
-    description: 'Develop solutions for food security, safety monitoring, and nutritional awareness in communities.',
+    description: '',
     date: 'May 10-12, 2024',
     participants: '400+ students',
     prize: '₹80,000',
     status: 'upcoming',
+    image: '/Hackathon/FSQM.jpg',
     registrationLink: '#'
   }
 ];
