@@ -293,7 +293,7 @@ const HackathonResults: React.FC = () => {
                 <div className="absolute z-10 w-full mt-2 bg-white/95 backdrop-blur-md border border-slate-200 rounded-xl shadow-xl max-h-48 sm:max-h-64 overflow-y-auto">
                   {searchSuggestions.map((college) => (
                     <div
-                      key={college.college_code}
+                      key={college.id}
                       onClick={() => handleSearchSelect(college)}
                       className="px-3 sm:px-4 py-2.5 sm:py-3 hover:bg-slate-50 cursor-pointer border-b border-slate-100 last:border-b-0 transition-colors duration-150"
                     >
@@ -341,7 +341,7 @@ const HackathonResults: React.FC = () => {
                 {selectedUniversity ? 'Select College' : 'Select University First'}
               </option>
               {availableColleges.map(college => (
-                <option key={college.college_code} value={college.college_code}>
+                <option key={college.id} value={college.college_code}>
                   {college.college_name}
                 </option>
               ))}
@@ -527,7 +527,7 @@ const HackathonResults: React.FC = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {filteredColleges.map((college) => (
                   <div
-                    key={college.college_code}
+                    key={college.id}
                     className="bg-white/80 backdrop-blur-sm rounded-xl shadow-lg border border-white/50 p-6 hover:shadow-xl transition-all duration-200"
                   >
                     <div className="flex items-start justify-between mb-4">
