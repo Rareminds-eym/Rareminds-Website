@@ -78,8 +78,8 @@ const HackathonResults: React.FC = () => {
 
   // Get colleges for selected university
   const availableColleges = useMemo(() => {
-    if (!selectedUniversity) return [];
-    return colleges.filter(college => college.university === selectedUniversity);
+  if (!selectedUniversity) return [];
+  return colleges.filter(college => college.university === selectedUniversity);
   }, [colleges, selectedUniversity]);
 
   // Get unique college codes for dropdown based on selected university and college
@@ -340,13 +340,21 @@ const HackathonResults: React.FC = () => {
               <option value="">
                 {selectedUniversity ? 'Select College' : 'Select University First'}
               </option>
-              {Array.from(
-                new Map(availableColleges.map(college => [college.college_code, college])).values()
-              ).map(college => (
-                <option key={college.id} value={college.college_code}>
-                  {college.college_name}
-                </option>
-              ))}
+              {
+                (() => {
+                  const seen = new Set();
+                  return availableColleges.filter(college => {
+                    const code = (college.college_code || '').toLowerCase();
+                    if (seen.has(code)) return false;
+                    seen.add(code);
+                    return true;
+                  }).map(college => (
+                    <option key={college.id} value={college.college_code}>
+                      {college.college_name}
+                    </option>
+                  ));
+                })()
+              }
             </select>
 
             {/* College Code Filter */}
