@@ -340,7 +340,9 @@ const HackathonResults: React.FC = () => {
               <option value="">
                 {selectedUniversity ? 'Select College' : 'Select University First'}
               </option>
-              {availableColleges.map(college => (
+              {Array.from(
+                new Map(availableColleges.map(college => [college.college_code, college])).values()
+              ).map(college => (
                 <option key={college.id} value={college.college_code}>
                   {college.college_name}
                 </option>
