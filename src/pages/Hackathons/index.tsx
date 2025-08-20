@@ -13,7 +13,7 @@ const HackathonCard: React.FC<{ hackathon: Hackathon }> = ({ hackathon }) => {
       <div className="relative bg-white rounded-2xl m-0.5 overflow-hidden">
         {/* Image section */}
         {hackathon.image && (
-          <div className="w-full h-40 sm:h-48 lg:h-56 overflow-hidden rounded-t-2xl">
+          <div className="w-full h-52 sm:h-64 lg:h-72 overflow-hidden rounded-t-2xl">
             <img
               src={hackathon.image}
               alt={hackathon.name}

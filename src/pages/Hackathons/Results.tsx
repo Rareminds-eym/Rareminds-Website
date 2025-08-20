@@ -5,8 +5,8 @@ import { gmpStats } from './data/gmp-results';
 import { fsqmStats } from './data/fsqm-results';
 import { mcStats } from './data/mc-results';
 import { useHackathonResults } from '../../hooks/useHackathonResults';
-import { testSupabaseConnection } from '../../utils/testSupabase';
-import { supabase } from '../../lib/supabase';
+
+
 import type { College } from './data/mc-results';
 
 const HackathonResults: React.FC = () => {
@@ -173,55 +173,19 @@ const HackathonResults: React.FC = () => {
     }
   };
 
-  const handleTestConnection = async () => {
-    console.log('Testing Supabase connection...');
-    const result = await testSupabaseConnection();
-    console.log('Test result:', result);
-  };
 
-  const handleTestMcTable = async () => {
-    console.log('Testing mc_results table...');
-    try {
-      const { data, error, count } = await supabase
-        .from('mc_results')
-        .select('*', { count: 'exact' })
-        .limit(5);
 
-      console.log('mc_results table test results:');
-      console.log('- Error:', error);
-      console.log('- Count:', count);
-      console.log('- Sample data:', data);
-
-      if (error) {
-        console.error('Table access error:', error.message);
-      } else {
-        console.log(`✅ mc_results table accessible with ${count} total records`);
-      }
-    } catch (err) {
-      console.error('Unexpected error testing mc_results table:', err);
-    }
-  };
-
-  const handleTestGmpTable = async () => {
-    console.log('Testing gmp_results table...');
-    try {
-      const { data, error, count } = await supabase
-        .from('gmp_results')
-        .select('*', { count: 'exact' })
-        .limit(5);
-
-      console.log('gmp_results table test results:');
-      console.log('- Error:', error);
-      console.log('- Count:', count);
-      console.log('- Sample data:', data);
-
-      if (error) {
-        console.error('Table access error:', error.message);
-      } else {
-        console.log(`✅ gmp_results table accessible with ${count} total records`);
-      }
-    } catch (err) {
-      console.error('Unexpected error testing gmp_results table:', err);
+  // Function to get full course name from course code
+  const getCourseName = (courseCode: string): string => {
+    switch (courseCode) {
+      case 'GMP':
+        return 'Good Manufacturing Practices';
+      case 'MC':
+        return 'Medical Coding';
+      case 'FSQM':
+        return 'Food Safety & Quality Management';
+      default:
+        return courseCode;
     }
   };
 
@@ -268,15 +232,34 @@ const HackathonResults: React.FC = () => {
           </Link>
         </div>
 
+        {/* Banner */}
+        {slug && (
+          <div className="mb-6 sm:mb-8">
+            <div className="relative w-full h-32 sm:h-48 md:h-64 lg:h-80 rounded-2xl overflow-hidden shadow-lg">
+              <img
+                src={
+                  slug === 'capathon' ? '/Hackathon/banner_gmp.jpg' :
+                    slug === 'codecare-2-0' ? '/Hackathon/banner_mc.jpg' :
+                      slug === 'safe-bite-2-0' ? '/Hackathon/banner_fsqm.jpg' :
+                        '/Hackathon/banner.jpg'
+                }
+                alt={`${slug} hackathon banner`}
+                className="w-full h-full object-cover object-center"
+              />
+              <div className="absolute inset-0 bg-black/20"></div>
+            </div>
+          </div>
+        )}
+
         {/* Header */}
         <div className="text-center mb-6 sm:mb-8">
-          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-red-300 via-red-300 to-red-500 bg-clip-text text-transparent mb-4 px-2">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold   text-black mb-4 px-2">
             Hackathon 2025
           </h1>
           {selectedCourse && (
             <div className="mt-4">
               <span className="inline-flex items-center px-3 sm:px-4 py-2 bg-gradient-to-r from-blue-100 to-purple-100 text-blue-800 text-sm sm:text-base lg:text-lg font-semibold rounded-full border border-blue-200">
-                Course Name : {selectedCourse}
+                Course Name : {getCourseName(selectedCourse)}
               </span>
             </div>
           )}
@@ -321,7 +304,7 @@ const HackathonResults: React.FC = () => {
                               {college.college_code}
                             </span>
                             <span className="px-1.5 sm:px-2 py-0.5 sm:py-1 bg-gradient-to-r from-purple-100 to-purple-200 text-purple-800 text-xs font-medium rounded-full">
-                              {college.course_name}
+                              {getCourseName(college.course_name)}
                             </span>
                           </div>
                           <p className="font-semibold text-slate-900 text-xs sm:text-sm truncate">{college.college_name}</p>
@@ -372,8 +355,8 @@ const HackathonResults: React.FC = () => {
               className="w-full px-3 sm:px-4 py-2.5 sm:py-3 bg-white/70 backdrop-blur-sm border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:bg-white transition-all duration-200 appearance-none cursor-pointer disabled:bg-slate-100 disabled:cursor-not-allowed disabled:text-slate-400 text-sm sm:text-base"
             >
               <option value="">
-                {selectedUniversity ? 
-                  (selectedCollege ? 'Selected College Code' : 'All College Codes') : 
+                {selectedUniversity ?
+                  (selectedCollege ? 'Selected College Code' : 'All College Codes') :
                   'Select University First'
                 }
               </option>
@@ -390,13 +373,13 @@ const HackathonResults: React.FC = () => {
               className="w-full px-3 sm:px-4 py-2.5 sm:py-3 bg-white/70 backdrop-blur-sm border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:bg-white transition-all duration-200 appearance-none cursor-pointer disabled:bg-slate-100 disabled:cursor-not-allowed disabled:text-slate-400 text-sm sm:text-base"
             >
               <option value="">
-                {slug === 'capathon' ? 'GMP Course' :
-                  slug === 'codecare-2-0' ? 'MC Course' :
-                    slug === 'safe-bite-2-0' ? 'FSQM Course' :
+                {slug === 'capathon' ? getCourseName('GMP') :
+                  slug === 'codecare-2-0' ? getCourseName('MC') :
+                    slug === 'safe-bite-2-0' ? getCourseName('FSQM') :
                       selectedUniversity ? 'All Courses' : 'Select University First'}
               </option>
               {courses.map(course => (
-                <option key={course} value={course}>{course}</option>
+                <option key={course} value={course}>{getCourseName(course)}</option>
               ))}
             </select>
           </div>
@@ -469,7 +452,7 @@ const HackathonResults: React.FC = () => {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
               {filteredUniversityStats.universities
                 .sort((a, b) => b.hl1_attempts - a.hl1_attempts)
-                .map((university, index) => (
+                .map((university) => (
                   <div
                     key={university.name}
                     className="group bg-gradient-to-br from-white to-slate-50 rounded-xl p-4 sm:p-6 shadow-md hover:shadow-lg transition-all duration-200 border border-slate-100 hover:border-emerald-200"
@@ -477,7 +460,7 @@ const HackathonResults: React.FC = () => {
                     <div className="flex items-center justify-between mb-3 sm:mb-4">
                       <div className="flex items-center space-x-2">
                         <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center text-white font-bold text-xs sm:text-sm bg-gradient-to-r from-blue-400 to-blue-500">
-                          {index + 1}
+                          { }
                         </div>
                       </div>
                       <div className="text-right">
@@ -528,12 +511,12 @@ const HackathonResults: React.FC = () => {
             <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-white/50 p-4 sm:p-6">
               <div className="flex items-center justify-center">
                 <div className="text-center">
-                  <h2 className="text-xl sm:text-2xl font-bold text-slate-800 mb-2">
-                    Results ({filteredColleges.length} colleges)
-                  </h2>
+                  {/* <h2 className="text-xl sm:text-2xl font-bold text-slate-800 mb-2">
+                    Teams : {filteredColleges.length}
+                  </h2> */}
                   <div className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-blue-100 to-purple-100 text-blue-800 text-sm font-semibold rounded-full border border-blue-200">
                     <Users className="w-4 h-4 mr-2" />
-                    {filteredColleges.length} {filteredColleges.length === 1 ? 'College' : 'Colleges'} Found
+                    Congratulations to Our Level 1 Hackathon Achievers!
                   </div>
                 </div>
               </div>
@@ -554,11 +537,11 @@ const HackathonResults: React.FC = () => {
                             {college.college_code}
                           </span>
                           <span className="px-2 py-1 bg-purple-100 text-purple-800 text-xs font-medium rounded-full">
-                            {college.course_name}
+                            {getCourseName(college.course_name)}
                           </span>
                         </div>
                         <h3 className="font-bold text-slate-900 text-sm leading-tight mb-1">
-                         College Name : {college.college_name}
+                          College Name : {college.college_name}
                         </h3>
                         <p className="text-slate-600 text-xs">
                           {college.university}
