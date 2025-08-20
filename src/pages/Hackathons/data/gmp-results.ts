@@ -46,31 +46,24 @@ export async function fetchGmpResults(): Promise<College[]> {
         // Log first record to see structure
         console.log('Sample GMP record:', data[0]);
 
-        // Transform the data to match the expected College interface
-        const collegesMap = new Map<string, College>();
-
-        data.forEach((result: any) => {
+        // Transform the data to match the expected College interface (DO NOT de-duplicate; keep all rows)
+        const results: College[] = data.map((result: any) => {
             // Handle different possible column name variations
             const university = result.University || result.university || result.UNIVERSITY || 'Unknown University';
             const collegeCode = result.college_code || result.College_Code || result.COLLEGE_CODE || result.code || `GMP_${Math.random().toString(36).substring(2, 11)}`;
             const collegeName = result.college_name || result.College_Name || result.COLLEGE_NAME || result.name || 'Unknown College';
             const teamName = result.team_name || result.Team_Name || result.TEAM_NAME || result.team || '';
-            
-            const key = collegeCode;
-            
-            if (!collegesMap.has(key)) {
-                collegesMap.set(key, {
-                    college_code: collegeCode,
-                    college_name: collegeName,
-                    university: university,
-                    course_name: 'GMP',
-                    team_name: teamName
-                });
-            }
+
+            return {
+                college_code: collegeCode,
+                college_name: collegeName,
+                university: university,
+                course_name: 'GMP',
+                team_name: teamName
+            };
         });
 
-        const results = Array.from(collegesMap.values());
-        console.log(`Successfully processed ${results.length} unique GMP colleges from ${data.length} total records`);
+        console.log(`Successfully processed ${results.length} GMP records (including duplicates) from ${data.length} total records`);
         return results;
         
     } catch (error) {
