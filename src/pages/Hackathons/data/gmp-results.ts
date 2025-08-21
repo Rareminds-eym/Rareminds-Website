@@ -12,6 +12,7 @@ export interface College {
 export interface UniversityStats {
     name: string;
     hl1_attempts: number;
+    percentage?: number;
     course?: string;
 }
 
@@ -81,11 +82,11 @@ export const gmpStats: CourseStats = {
     course_name: "Good Manufacturing Practice",
     total: 4155,
     universities: [
-        { name: "ALAGAPPA UNIVERSITY", hl1_attempts: 483 },
-        { name: "BHARATHIAR UNIVERSITY", hl1_attempts: 323 },
-        { name: "MADURAI KAMARAJ UNIVERSITY", hl1_attempts: 526 },
-        { name: "MANONMANIAM SUNDARANAR UNIVERSITY", hl1_attempts: 844 },
-        { name: "MOTHER TERESA UNIVERSITY", hl1_attempts: 208 },
-        { name: "PERIYAR UNIVERSITY", hl1_attempts: 1771 }
+        { name: "ALAGAPPA UNIVERSITY", hl1_attempts: 483, percentage: 70 },
+        { name: "BHARATHIAR UNIVERSITY", hl1_attempts: 323, percentage: 70 },
+        { name: "MADURAI KAMARAJ UNIVERSITY", hl1_attempts: 526, percentage: 70 },
+        { name: "MANONMANIAM SUNDARANAR UNIVERSITY", hl1_attempts: 844, percentage: 70 },
+        { name: "MOTHER TERESA UNIVERSITY", hl1_attempts: 208, percentage: 70 },
+        { name: "PERIYAR UNIVERSITY", hl1_attempts: 1771, percentage: 70 }
     ]
 };

@@ -1,11 +1,10 @@
 import { Link, useParams } from 'react-router-dom';
-import React, { useState, useMemo, useEffect } from 'react';
-import { ArrowLeft, Search, Filter, Users, Loader2 } from 'lucide-react';
+import React, { useState, useMemo, useEffect, useRef } from 'react';
+import { ArrowLeft, Search, Filter, Users, Loader2, ChevronLeft, ChevronRight } from 'lucide-react';
 import { gmpStats } from './data/gmp-results';
 import { fsqmStats } from './data/fsqm-results';
 import { mcStats } from './data/mc-results';
 import { useHackathonResults } from '../../hooks/useHackathonResults';
-
 
 import type { College } from './data/mc-results';
 
@@ -17,6 +16,10 @@ const HackathonResults: React.FC = () => {
   const [selectedCollegeCode, setSelectedCollegeCode] = useState('');
   const [selectedCourse, setSelectedCourse] = useState('');
   const [showSearchDropdown, setShowSearchDropdown] = useState(false);
+  const [sortOption, setSortOption] = useState<'none' | 'university' | 'college_name' | 'team_name'>('none'); // New: Sort state
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 9;
+  const resultsSummaryRef = useRef<HTMLDivElement>(null);
 
   // Use the custom hook to fetch data
   const { colleges, loading, error } = useHackathonResults(slug);
@@ -71,6 +74,27 @@ const HackathonResults: React.FC = () => {
     return filtered;
   }, [colleges, searchTerm, selectedUniversity, selectedCollege, selectedCollegeCode, selectedCourse]);
 
+  // Apply sorting to filtered colleges
+  const sortedAndFilteredColleges = useMemo(() => {
+    let result = [...filteredColleges];
+
+    if (sortOption === 'university') {
+      result.sort((a, b) =>
+        (a.university || '').localeCompare(b.university || '')
+      );
+    } else if (sortOption === 'college_name') {
+      result.sort((a, b) =>
+        (a.college_name || '').localeCompare(b.college_name || '')
+      );
+    } else if (sortOption === 'team_name') {
+      result.sort((a, b) =>
+        (a.team_name || '').localeCompare(b.team_name || '')
+      );
+    }
+
+    return result;
+  }, [filteredColleges, sortOption]);
+
   // Get unique values for filters
   const universities = useMemo(() => {
     return Array.from(new Set(colleges.map(college => college.university).filter(Boolean))).sort();
@@ -78,8 +102,8 @@ const HackathonResults: React.FC = () => {
 
   // Get colleges for selected university
   const availableColleges = useMemo(() => {
-  if (!selectedUniversity) return [];
-  return colleges.filter(college => college.university === selectedUniversity);
+    if (!selectedUniversity) return [];
+    return colleges.filter(college => college.university === selectedUniversity);
   }, [colleges, selectedUniversity]);
 
   // Get unique college codes for dropdown based on selected university and college
@@ -130,9 +154,6 @@ const HackathonResults: React.FC = () => {
     }).slice(0, 8); // Limit to 8 suggestions
   }, [colleges, searchTerm]);
 
-
-
-
   const handleSearchSelect = (college: College) => {
     setSearchTerm(college.college_name);
     setSelectedUniversity(college.university);
@@ -173,8 +194,6 @@ const HackathonResults: React.FC = () => {
     }
   };
 
-
-
   // Function to get full course name from course code
   const getCourseName = (courseCode: string): string => {
     switch (courseCode) {
@@ -188,8 +207,6 @@ const HackathonResults: React.FC = () => {
         return courseCode;
     }
   };
-
-
 
   // Get current course stats based on route
   const currentCourseStats = useMemo(() => {
@@ -217,6 +234,29 @@ const HackathonResults: React.FC = () => {
         .reduce((sum, uni) => sum + uni.hl1_attempts, 0)
     };
   }, [currentCourseStats, selectedUniversity]);
+
+  // Pagination calculations
+  const totalResults = sortedAndFilteredColleges.length;
+  const totalPages = Math.ceil(totalResults / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const currentResults = sortedAndFilteredColleges.slice(startIndex, endIndex);
+
+  // Reset to first page when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm, selectedUniversity, selectedCollege, selectedCollegeCode, selectedCourse, sortOption]);
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+    // Scroll to results summary section
+    if (resultsSummaryRef.current) {
+      resultsSummaryRef.current.scrollIntoView({ 
+        behavior: 'smooth',
+        block: 'start'
+      });
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
@@ -253,7 +293,7 @@ const HackathonResults: React.FC = () => {
 
         {/* Header */}
         <div className="text-center mb-6 sm:mb-8">
-          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold   text-black mb-4 px-2">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-black mb-4 px-2">
             Hackathon 2025
           </h1>
           {selectedCourse && (
@@ -264,6 +304,7 @@ const HackathonResults: React.FC = () => {
             </div>
           )}
         </div>
+
         {/* Filters Section */}
         <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-white/50 p-4 sm:p-6 lg:p-8 mb-6 sm:mb-8">
           <div className="flex items-center space-x-3 mb-6 sm:mb-8">
@@ -274,9 +315,9 @@ const HackathonResults: React.FC = () => {
             <div className="flex-1 h-px bg-gradient-to-r from-blue-200 to-purple-200"></div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 sm:gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-3 sm:gap-4">
             {/* Search */}
-            <div className="relative sm:col-span-2 lg:col-span-1">
+            <div className="relative sm:col-span-2 lg:col-span-2">
               <Search className="absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5 text-slate-400" />
               <input
                 type="text"
@@ -310,7 +351,6 @@ const HackathonResults: React.FC = () => {
                           <p className="font-semibold text-slate-900 text-xs sm:text-sm truncate">{college.college_name}</p>
                           <p className="text-slate-500 text-xs truncate">{college.university}</p>
                         </div>
-
                       </div>
                     </div>
                   ))}
@@ -392,6 +432,8 @@ const HackathonResults: React.FC = () => {
                 <option key={course} value={course}>{getCourseName(course)}</option>
               ))}
             </select>
+
+           
           </div>
 
           <div className="mt-4 sm:mt-6 flex space-x-4">
@@ -401,6 +443,7 @@ const HackathonResults: React.FC = () => {
                 setSelectedUniversity('');
                 setSelectedCollege('');
                 setSelectedCollegeCode('');
+                setSortOption('none');
                 // For specific hackathon routes, keep their default course selected, otherwise clear
                 if (!['capathon', 'codecare-2-0', 'safe-bite-2-0'].includes(slug || '')) {
                   setSelectedCourse('');
@@ -413,33 +456,6 @@ const HackathonResults: React.FC = () => {
                 <Filter className="w-4 h-4 ml-2 group-hover:rotate-180 transition-transform duration-300" />
               </span>
             </button>
-
-            {/* Test Connection Button - Remove this in production */}
-            {/* <button
-              onClick={handleTestConnection}
-              className="px-4 sm:px-6 py-2.5 sm:py-3 bg-blue-500 text-white rounded-xl hover:bg-blue-600 transition-all duration-200 font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 text-sm sm:text-base"
-            >
-              Test DB Connection
-            </button> */}
-
-            {/* Route-specific test buttons - Remove these in production */}
-            {/* {slug === 'codecare-2-0' && (
-              <button
-                onClick={handleTestMcTable}
-                className="px-4 sm:px-6 py-2.5 sm:py-3 bg-green-500 text-white rounded-xl hover:bg-green-600 transition-all duration-200 font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 text-sm sm:text-base"
-              >
-                Test MC Table
-              </button>
-            )} */}
-
-            {/* {slug === 'capathon' && (
-              <button
-                onClick={handleTestGmpTable}
-                className="px-4 sm:px-6 py-2.5 sm:py-3 bg-purple-500 text-white rounded-xl hover:bg-purple-600 transition-all duration-200 font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 text-sm sm:text-base"
-              >
-                Test GMP Table
-              </button>
-            )} */}
           </div>
         </div>
 
@@ -469,8 +485,8 @@ const HackathonResults: React.FC = () => {
                   >
                     <div className="flex items-center justify-between mb-3 sm:mb-4">
                       <div className="flex items-center space-x-2">
-                        <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center text-white font-bold text-xs sm:text-sm bg-gradient-to-r from-blue-400 to-blue-500">
-                          { }
+                        <div className="p-2 rounded-full w-10 h-10 text-xs flex items-center text-white font-bold bg-gradient-to-r from-blue-400 to-blue-500">
+                          {`${university.percentage >= 1 ? `${university.percentage}%+` : 0}`}
                         </div>
                       </div>
                       <div className="text-right">
@@ -521,9 +537,6 @@ const HackathonResults: React.FC = () => {
             <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-white/50 p-4 sm:p-6">
               <div className="flex items-center justify-center">
                 <div className="text-center">
-                  {/* <h2 className="text-xl sm:text-2xl font-bold text-slate-800 mb-2">
-                    Teams : {filteredColleges.length}
-                  </h2> */}
                   <div className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-blue-100 to-purple-100 text-blue-800 text-sm font-semibold rounded-full border border-blue-200">
                     <Users className="w-4 h-4 mr-2" />
                     Congratulations to Our Level 1 Hackathon Achievers!
@@ -531,41 +544,145 @@ const HackathonResults: React.FC = () => {
                 </div>
               </div>
             </div>
-
-            {/* Results Grid */}
-            {filteredColleges.length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {filteredColleges.map((college) => (
-                  <div
-                    key={college.id}
-                    className="bg-white/80 backdrop-blur-sm rounded-xl shadow-lg border border-white/50 p-6 hover:shadow-xl transition-all duration-200"
-                  >
-                    <div className="flex items-start justify-between mb-4">
-                      <div className="flex-1">
-                        <div className="flex items-center space-x-2 mb-2">
-                          <span className="px-2 py-1 bg-blue-100 text-blue-800 text-xs font-medium rounded-full">
-                            {college.college_code}
-                          </span>
-                          <span className="px-2 py-1 bg-purple-100 text-purple-800 text-xs font-medium rounded-full">
-                            {getCourseName(college.course_name)}
-                          </span>
-                        </div>
-                        <h3 className="font-bold text-slate-900 text-sm leading-tight mb-1">
-                          College Name : {college.college_name}
-                        </h3>
-                        <p className="text-slate-600 text-xs">
-                          {college.university}
-                        </p>
-                        {college.team_name && (
-                          <p className="text-slate-500 text-xs mt-1">
-                            <span className="font-medium">Team:</span> {college.team_name}
-                          </p>
-                        )}
-                      </div>
+            {/* Sort and Results Summary */}
+            {totalResults > 0 && (
+              <div ref={resultsSummaryRef} className="p-2">
+                <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between space-y-4 lg:space-y-0 lg:space-x-6">
+                  {/* Sort Filter - Left side */}
+                  <div className="flex items-center space-x-0 p-3 bg-white/80 backdrop-blur-sm rounded-xl shadow-lg border border-white/50">
+                    <span className="text-slate-700 font-medium whitespace-nowrap">Sort :</span>
+                    <select
+                      value={sortOption}
+                      onChange={(e) => setSortOption(e.target.value as any)}
+                      className="px-3 py-2 bg-white/70 backdrop-blur-sm border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:bg-white transition-all duration-200 appearance-none cursor-pointer text-sm min-w-0 flex-1 lg:w-auto"
+                    >
+                      <option value="none">None</option>
+                      <option value="university">University (A-Z)</option>
+                      <option value="college_name">College Name (A-Z)</option>
+                      <option value="team_name">Team Name (A-Z)</option>
+                    </select>
+                  </div>
+                  
+                  {/* Results Summary - Right side */}
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between lg:justify-end space-y-2 sm:space-y-0 sm:space-x-4">
+                    <div className="text-slate-700 text-sm sm:text-base">
+                      Showing <span className="font-semibold">{startIndex + 1}</span> to <span className="font-semibold">{Math.min(endIndex, totalResults)}</span> of <span className="font-semibold">{totalResults}</span> results
+                    </div>
+                    <div className="text-slate-600 text-xs sm:text-sm whitespace-nowrap">
+                      Page {currentPage} of {totalPages}
                     </div>
                   </div>
-                ))}
+                </div>
               </div>
+            )}
+            
+            {/* Results Grid */}
+            {currentResults.length > 0 ? (
+              <>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {currentResults.map((college) => (
+                    <div
+                      key={college.id}
+                      className="bg-white/80 backdrop-blur-sm rounded-xl shadow-lg border border-white/50 p-6 hover:shadow-xl transition-all duration-200"
+                    >
+                      <div className="flex items-start justify-between mb-4">
+                        <div className="flex-1">
+                          <div className="flex items-center space-x-2 mb-2">
+                            <span className="px-2 py-1 bg-blue-100 text-blue-800 text-xs font-medium rounded-full">
+                              {college.college_code}
+                            </span>
+                            <span className="px-2 py-1 bg-purple-100 text-purple-800 text-xs font-medium rounded-full">
+                              {getCourseName(college.course_name)}
+                            </span>
+                          </div>
+                          <h3 className="font-bold text-slate-900 text-sm leading-tight mb-1">
+                            College Name : {college.college_name}
+                          </h3>
+                          <p className="text-slate-600 text-xs">
+                            {college.university}
+                          </p>
+                          {college.team_name && (
+                            <p className="text-slate-500 text-xs mt-1">
+                              <span className="font-semibold">Team:</span> {college.team_name}
+                            </p>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                
+                {/* Pagination Controls */}
+                {totalPages > 1 && (
+                  <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-lg border border-white/50 p-4 mt-6">
+                    <div className="flex flex-col sm:flex-row items-center justify-between space-y-4 sm:space-y-0">
+                      {/* Previous Button */}
+                      <button
+                        onClick={() => handlePageChange(currentPage - 1)}
+                        disabled={currentPage === 1}
+                        className="flex items-center space-x-2 px-4 py-2 bg-slate-100 hover:bg-slate-200 disabled:bg-slate-50 disabled:text-slate-400 text-slate-700 rounded-lg transition-colors duration-200 disabled:cursor-not-allowed"
+                      >
+                        <ChevronLeft className="w-4 h-4" />
+                        <span>Previous</span>
+                      </button>
+
+                      {/* Page Numbers */}
+                      <div className="flex items-center space-x-2">
+                        {Array.from({ length: Math.min(7, totalPages) }, (_, i) => {
+                          let pageNum;
+                          if (totalPages <= 7) {
+                            pageNum = i + 1;
+                          } else {
+                            if (currentPage <= 4) {
+                              pageNum = i + 1;
+                            } else if (currentPage >= totalPages - 3) {
+                              pageNum = totalPages - 6 + i;
+                            } else {
+                              pageNum = currentPage - 3 + i;
+                            }
+                          }
+                          
+                          return (
+                            <button
+                              key={pageNum}
+                              onClick={() => handlePageChange(pageNum)}
+                              className={`w-8 h-8 rounded-lg text-sm font-medium transition-colors duration-200 ${
+                                pageNum === currentPage
+                                  ? 'bg-blue-500 text-white'
+                                  : 'bg-slate-100 hover:bg-slate-200 text-slate-700'
+                              }`}
+                            >
+                              {pageNum}
+                            </button>
+                          );
+                        })}
+                        
+                        {totalPages > 7 && currentPage < totalPages - 3 && (
+                          <>
+                            <span className="text-slate-400">...</span>
+                            <button
+                              onClick={() => handlePageChange(totalPages)}
+                              className="w-8 h-8 rounded-lg text-sm font-medium bg-slate-100 hover:bg-slate-200 text-slate-700 transition-colors duration-200"
+                            >
+                              {totalPages}
+                            </button>
+                          </>
+                        )}
+                      </div>
+
+                      {/* Next Button */}
+                      <button
+                        onClick={() => handlePageChange(currentPage + 1)}
+                        disabled={currentPage === totalPages}
+                        className="flex items-center space-x-2 px-4 py-2 bg-slate-100 hover:bg-slate-200 disabled:bg-slate-50 disabled:text-slate-400 text-slate-700 rounded-lg transition-colors duration-200 disabled:cursor-not-allowed"
+                      >
+                        <span>Next</span>
+                        <ChevronRight className="w-4 h-4" />
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </>
             ) : (
               <div className="text-center py-12">
                 <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -579,7 +696,6 @@ const HackathonResults: React.FC = () => {
             )}
           </div>
         )}
-
       </div>
     </div>
   );
