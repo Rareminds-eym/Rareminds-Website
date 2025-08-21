@@ -1,0 +1,32 @@
+name: Deploy to EC2
+
+on:
+  push:
+    branches:
+      - main   # change if your repo branch is master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Deploy to EC2
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: 13.126.41.32
+          username: ubuntu
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            cd /var/www/html/rareminds
+            git reset --hard
+            git pull origin main
+            # For static HTML/PHP sites, nothing else is needed
+            # If Node.js/React/Next.js app, uncomment below:
+            # npm install --legacy-peer-deps
+            # npm run build
+            # pm2 restart app || sudo systemctl restart nginx
+
+
