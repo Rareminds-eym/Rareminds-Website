@@ -3,7 +3,7 @@ name: Deploy to EC2
 on:
   push:
     branches:
-      - main   # Change to 'master' if your repo uses master
+      - main
 
 jobs:
   deploy:
@@ -13,18 +13,47 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Deploy to EC2
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: npm install --legacy-peer-deps
+
+      - name: Debug env
+        run: |
+          echo "Supabase URL: $VITE_SUPABASE_URL"
+        env:
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+
+      - name: Build React app
+        run: npm run build
+        env:
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+
+      - name: Archive build folder into tar
+        run: tar -czf build.tar.gz -C dist .
+
+      - name: Upload tar to EC2
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ubuntu
+          key: ${{ secrets.EC2_SSH_KEY }}
+          source: "build.tar.gz"
+          target: "/home/ubuntu"
+
+      - name: Extract and move files on EC2 with sudo
         uses: appleboy/ssh-action@v0.1.10
         with:
-          host: 13.126.41.32        # Your EC2 public IP
-          username: ubuntu          # Your EC2 user
+          host: ${{ secrets.EC2_HOST }}
+          username: ubuntu
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            cd /var/www/html/rareminds
-            git reset --hard
-            git pull origin main
-            # If your project is static HTML/PHP, nothing else needed
-            # If Node.js / React / Next.js, uncomment below:
-            # npm install --legacy-peer-deps
-            # npm run build
-            # pm2 restart app || sudo systemctl restart nginx
+            mkdir -p /home/ubuntu/rm-temp
+            tar -xzf /home/ubuntu/build.tar.gz -C /home/ubuntu/rm-temp
+            sudo rm -rf /var/www/html/rareminds/*
+            sudo mv /home/ubuntu/rm-temp/* /var/www/html/rareminds/
+            rm -rf /home/ubuntu/build.tar.gz /home/ubuntu/rm-temp
