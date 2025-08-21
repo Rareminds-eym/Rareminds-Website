@@ -12,6 +12,7 @@ export interface College {
 export interface UniversityStats {
     name: string;
     hl1_attempts: number;
+    percentage?: number;
     course?: string;
 }
 
@@ -79,10 +80,10 @@ export async function fetchMcResults(): Promise<College[]> {
 export const mcStats: CourseStats = {
     course_code: "MC",
     course_name: "Medical Coding",
-    total: 3025,
+    total: 3225,
     universities: [
-        { name: "BHARATHIAR UNIVERSITY", hl1_attempts: 764 },
-        { name: "PERIYAR UNIVERSITY", hl1_attempts: 2261 },
+        { name: "BHARATHIAR UNIVERSITY", hl1_attempts: 764, percentage: 70 },
+        { name: "PERIYAR UNIVERSITY", hl1_attempts: 2261, percentage: 70 },
        
     ]
 };
