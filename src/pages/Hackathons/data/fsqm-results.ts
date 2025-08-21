@@ -80,7 +80,7 @@ export async function fetchFSQMResults(): Promise<College[]> {
 export const fsqmStats: CourseStats = {
     course_code: "FSQM",
     course_name: "Food Safety & Quality Manufacturing",
-    total: 4109,
+    total: 4108,
     universities: [
         { name: "ALAGAPPA UNIVERSITY", hl1_attempts: 304, percentage: 70 },
         { name: "ANNAMALAI UNIVERSITY", hl1_attempts: 432, percentage: 70 },
