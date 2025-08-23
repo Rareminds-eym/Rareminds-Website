@@ -28,28 +28,64 @@ export async function fetchFSQMResults(): Promise<College[]> {
     console.log('Fetching FSQM results from fsqm_results table...');
     
     try {
-        // Fetch all data from fsqm_results table
-        const { data, error, count } = await supabase
+        // First, get the total count
+        const { count, error: countError } = await supabase
             .from('fsqm_results')
-            .select('*', { count: 'exact' });
+            .select('*', { count: 'exact', head: true });
 
-        if (error) {
-            console.error('Error fetching FSQM results:', error);
-            throw error;
+        if (countError) {
+            console.error('Error getting FSQM results count:', countError);
+            throw countError;
         }
 
-        console.log(`FSQM results query successful. Found ${count} total records.`);
+        console.log(`FSQM results count query successful. Found ${count} total records.`);
         
-        if (!data || data.length === 0) {
+        if (!count || count === 0) {
             console.warn('fsqm_results table is empty.');
             return [];
         }
 
+        // Fetch all data in batches (Supabase has a limit of 1000 records per query)
+        const batchSize = 1000;
+        const batches = Math.ceil(count / batchSize);
+        const allData: any[] = [];
+
+        console.log(`Fetching ${count} records in ${batches} batches of ${batchSize} each...`);
+
+        for (let i = 0; i < batches; i++) {
+            const startRange = i * batchSize;
+            const endRange = Math.min(startRange + batchSize - 1, count - 1);
+            
+            console.log(`Fetching batch ${i + 1}/${batches}: records ${startRange} to ${endRange}`);
+            
+            const { data: batchData, error: batchError } = await supabase
+                .from('fsqm_results')
+                .select('*')
+                .range(startRange, endRange);
+
+            if (batchError) {
+                console.error(`Error fetching FSQM results batch ${i + 1}:`, batchError);
+                throw batchError;
+            }
+
+            if (batchData) {
+                allData.push(...batchData);
+                console.log(`Batch ${i + 1} fetched: ${batchData.length} records`);
+            }
+        }
+
+        console.log(`Successfully fetched ${allData.length} out of ${count} total FSQM records.`);
+        
+        if (allData.length === 0) {
+            console.warn('fsqm_results table returned no data.');
+            return [];
+        }
+
         // Log first record to see structure
-        console.log('Sample FSQM record:', data[0]);
+        console.log('Sample FSQM record:', allData[0]);
 
         // Transform the data to match the expected College interface (DO NOT de-duplicate; keep all rows)
-        const results: College[] = data.map((result: any) => {
+        const results: College[] = allData.map((result: any) => {
             // Handle different possible column name variations
             const university = result.University || result.university || result.UNIVERSITY || 'Unknown University';
             const collegeCode = result.college_code || result.College_Code || result.COLLEGE_CODE || result.code || `FSQM_${Math.random().toString(36).substring(2, 11)}`;
@@ -67,7 +103,7 @@ export async function fetchFSQMResults(): Promise<College[]> {
             };
         });
 
-        console.log(`Successfully processed ${results.length} FSQM records (including duplicates) from ${data.length} total records`);
+        console.log(`Successfully processed ${results.length} FSQM records (including duplicates) from ${allData.length} total records`);
         return results;
         
     } catch (error) {

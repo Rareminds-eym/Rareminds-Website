@@ -41,7 +41,7 @@ const HackathonResults: React.FC = () => {
   // Filter colleges based on search and filters
   const filteredColleges = useMemo(() => {
     let filtered = colleges;
-
+ 
     // Apply search filter
     if (searchTerm) {
       filtered = filtered.filter(college =>
@@ -286,16 +286,22 @@ const HackathonResults: React.FC = () => {
                 alt={`${slug} hackathon banner`}
                 className="w-full h-full object-cover object-center"
               />
-              <div className="absolute inset-0 bg-black/20"></div>
             </div>
           </div>
         )}
 
         {/* Header */}
         <div className="text-center mb-6 sm:mb-8">
-          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-black mb-4 px-2">
-            Hackathon 2025
+          <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-black stroke-red-500 mb-4 px-2">
+            {slug === 'capathon' ? 'CAPAthon' :
+             slug === 'codecare-2-0' ? 'CodeCare' :
+             slug === 'safe-bite-2-0' ? 'SafeBite' :
+             'CodeCare'}
+              <span className='ml-2'>2.0 - Results</span>
           </h1>
+          <h3 className="text-xl sm:text-xl md:text-2xl lg:text-3xl font-bold text-black mb-4 px-2">
+           Hackathon 2025
+          </h3>
           {selectedCourse && (
             <div className="mt-4">
               <span className="inline-flex items-center px-3 sm:px-4 py-2 bg-gradient-to-r from-blue-100 to-purple-100 text-blue-800 text-sm sm:text-base lg:text-lg font-semibold rounded-full border border-blue-200">
