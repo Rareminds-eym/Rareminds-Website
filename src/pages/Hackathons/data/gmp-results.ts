@@ -12,6 +12,7 @@ export interface College {
 export interface UniversityStats {
     name: string;
     hl1_attempts: number;
+    qualified_level1?: number;
     percentage?: number;
     course?: string;
 }
@@ -19,6 +20,7 @@ export interface UniversityStats {
 export interface CourseStats {
     universities: UniversityStats[];
     total: number;
+    total_qualified_level1?: number;
     course_code: string;
     course_name: string;
 }
@@ -117,12 +119,13 @@ export const gmpStats: CourseStats = {
     course_code: "GMP",
     course_name: "Good Manufacturing Practice",
     total: 4155,
+    total_qualified_level1:1321,
     universities: [
-        { name: "ALAGAPPA UNIVERSITY", hl1_attempts: 483, percentage: 70 },
-        { name: "BHARATHIAR UNIVERSITY", hl1_attempts: 323, percentage: 70 },
-        { name: "MADURAI KAMARAJ UNIVERSITY", hl1_attempts: 526, percentage: 70 },
-        { name: "MANONMANIAM SUNDARANAR UNIVERSITY", hl1_attempts: 844, percentage: 70 },
-        { name: "MOTHER TERESA UNIVERSITY", hl1_attempts: 208, percentage: 70 },
-        { name: "PERIYAR UNIVERSITY", hl1_attempts: 1771, percentage: 70 }
+        { name: "ALAGAPPA UNIVERSITY", hl1_attempts: 483,qualified_level1:125 ,percentage: 70 },
+        { name: "BHARATHIAR UNIVERSITY", hl1_attempts: 323,qualified_level1:134, percentage: 70 },
+        { name: "MADURAI KAMARAJ UNIVERSITY", hl1_attempts: 526,qualified_level1:188, percentage: 70 },
+        { name: "MANONMANIAM SUNDARANAR UNIVERSITY", hl1_attempts: 844,qualified_level1:332, percentage: 70 },
+        { name: "MOTHER TERESA UNIVERSITY", hl1_attempts: 208,qualified_level1:88, percentage: 70 },
+        { name: "PERIYAR UNIVERSITY", hl1_attempts: 1771,qualified_level1:454, percentage: 70 }
     ]
 };
