@@ -121,7 +121,7 @@ export const fsqmStats: CourseStats = {
     total: 4108,
     total_qualified_level1:1890,
     universities: [
-        { name: "ALAGAPPA UNIVERSITY", hl1_attempts: 304,qualified_level1:72, percentage: 70 },
+        { name: "ALAGAPPA UNIVERSITY", hl1_attempts: 291,qualified_level1:72, percentage: 70 },
         { name: "ANNAMALAI UNIVERSITY", hl1_attempts: 432,qualified_level1:130, percentage: 70 },
         { name: "BHARATHIAR UNIVERSITY", hl1_attempts: 185,qualified_level1:127, percentage: 70 },
         { name: "BHARATHIDASAN UNIVERSITY", hl1_attempts: 642,qualified_level1:302, percentage: 70 },
