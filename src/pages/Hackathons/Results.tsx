@@ -473,11 +473,18 @@ const HackathonResults: React.FC = () => {
                 <div className="p-2 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-lg">
                   <Users className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
                 </div>
-                <h2 className="text-lg sm:text-xl font-bold text-slate-800">University Participation - {filteredUniversityStats.course_name}</h2>
+                <h2 className="text-lg sm:text-lg font-bold text-slate-800">University Participation - {filteredUniversityStats.course_name}</h2>
               </div>
               <div className="flex-1 h-px bg-gradient-to-r from-emerald-200 to-teal-200 hidden sm:block"></div>
-              <div className="px-3 sm:px-4 py-2 bg-gradient-to-r from-emerald-100 to-teal-100 text-emerald-800 text-xs sm:text-sm font-semibold rounded-full">
-                Total: {filteredUniversityStats.total.toLocaleString()} Participants
+              <div className="flex items-center space-x-2">
+                <div className="px-3 sm:px-4 py-2 bg-gradient-to-r from-emerald-100 to-teal-100 text-emerald-800 text-xs sm:text-sm font-semibold rounded-full">
+                  Total: {filteredUniversityStats.total.toLocaleString()} Participants
+                </div>
+                {filteredUniversityStats.total_qualified_level1 && (
+                  <div className="px-3 sm:px-4 py-2 bg-gradient-to-r from-yellow-100 to-orange-100 text-orange-800 text-xs sm:text-sm font-semibold rounded-full">
+                    Total Level 1 Qualified: {filteredUniversityStats.total_qualified_level1.toLocaleString()}
+                  </div>
+                )}
               </div>
             </div>
 
@@ -546,19 +553,21 @@ const HackathonResults: React.FC = () => {
 
         {/* Congratulations Banner - Always Visible */}
         {!loading && !error && (
-          <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-white/50 p-6 sm:p-8 mb-6 sm:mb-8">
+          <div className="bg-white/80 backdrop-blur-sm rounded-xl sm:rounded-2xl shadow-lg border border-white/50 p-3 sm:p-6 lg:p-8 mb-4 sm:mb-6 lg:mb-8">
             <div className="flex items-center justify-center">
               <div className="text-center">
-                <div className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white text-base sm:text-lg font-bold rounded-full shadow-lg border-2 border-white/50">
-                  <Users className="w-5 h-5 mr-3" />
-                  🎉 Congratulations to Our Level 1 Hackathon Achievers! 🎉
+                <div className="inline-flex items-center px-3 sm:px-6 py-2 sm:py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white text-xs sm:text-base lg:text-lg font-bold rounded-full shadow-lg border-2 border-white/50">
+                  <Users className="w-3 h-3 sm:w-5 sm:h-5 mr-1 sm:mr-3" />
+                  <span className="text-center leading-tight">
+                    🎉 Congratulations to Our Level 1 Hackathon Achievers! 🎉
+                  </span>
                 </div>
                 {/* Total Level 1 Display */}
                 {currentCourseStats && currentCourseStats.total_qualified_level1 && (
-                  <div className="mt-6">
-                    <div className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-emerald-100 to-teal-100 text-emerald-800 text-sm sm:text-base font-semibold rounded-full border border-emerald-200">
-                      <span className="mr-2">🏆</span>
-                      Total Level-1 Qualified Participants: <span className="ml-1 font-bold">{currentCourseStats.total_qualified_level1.toLocaleString()}</span>
+                  <div className="mt-3 sm:mt-6">
+                    <div className="inline-flex items-center px-3 sm:px-4 py-1.5 sm:py-2 bg-gradient-to-r from-emerald-100 to-teal-100 text-emerald-800 text-xs sm:text-sm lg:text-base font-semibold rounded-full border border-emerald-200">
+                      <span className="mr-1 sm:mr-2">🏆</span>
+                      <span className="whitespace-nowrap">Total Level 1 Qualified Paticipants: <span className="ml-1 font-bold">{currentCourseStats.total_qualified_level1.toLocaleString()}</span></span>
                     </div>
                   </div>
                 )}
