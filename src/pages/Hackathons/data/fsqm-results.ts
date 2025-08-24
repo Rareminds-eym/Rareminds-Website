@@ -12,6 +12,7 @@ export interface College {
 export interface UniversityStats {
     name: string;
     hl1_attempts: number;
+    qualified_level1?: number;
     percentage?: number;
     course?: string;
 }
@@ -19,6 +20,7 @@ export interface UniversityStats {
 export interface CourseStats {
     universities: UniversityStats[];
     total: number;
+    total_qualified_level1?: number;
     course_code: string;
     course_name: string;
 }
@@ -117,16 +119,17 @@ export const fsqmStats: CourseStats = {
     course_code: "FSQM",
     course_name: "Food Safety & Quality Manufacturing",
     total: 4108,
+    total_qualified_level1:1890,
     universities: [
-        { name: "ALAGAPPA UNIVERSITY", hl1_attempts: 304, percentage: 70 },
-        { name: "ANNAMALAI UNIVERSITY", hl1_attempts: 432, percentage: 70 },
-        { name: "BHARATHIAR UNIVERSITY", hl1_attempts: 185, percentage: 70 },
-        { name: "BHARATHIDASAN UNIVERSITY", hl1_attempts: 642, percentage: 70 },
-        { name: "MADURAI KAMARAJ UNIVERSITY", hl1_attempts: 42, percentage: 70 },
-        { name: "MANONMANIAM SUNDARANAR UNIVERSITY", hl1_attempts: 386, percentage: 70 },
-        { name: "MOTHER TERESA UNIVERSITY", hl1_attempts: 66, percentage: 70 },
-        { name: "PERIYAR UNIVERSITY", hl1_attempts: 905, percentage: 70 },
-        { name: "THIRUVALLUVAR UNIVERSITY", hl1_attempts: 749, percentage: 70 },
-        { name: "UNIVERSITY OF MADRAS", hl1_attempts: 398, percentage: 70 },
+        { name: "ALAGAPPA UNIVERSITY", hl1_attempts: 304,qualified_level1:72, percentage: 70 },
+        { name: "ANNAMALAI UNIVERSITY", hl1_attempts: 432,qualified_level1:130, percentage: 70 },
+        { name: "BHARATHIAR UNIVERSITY", hl1_attempts: 185,qualified_level1:127, percentage: 70 },
+        { name: "BHARATHIDASAN UNIVERSITY", hl1_attempts: 642,qualified_level1:302, percentage: 70 },
+        { name: "MADURAI KAMARAJ UNIVERSITY", hl1_attempts: 42,qualified_level1:35, percentage: 70 },
+        { name: "MANONMANIAM SUNDARANAR UNIVERSITY", hl1_attempts: 386,qualified_level1:213, percentage: 70 },
+        { name: "MOTHER TERESA UNIVERSITY", hl1_attempts: 66,qualified_level1:40, percentage: 70 },
+        { name: "PERIYAR UNIVERSITY", hl1_attempts: 905,qualified_level1:431, percentage: 70 },
+        { name: "THIRUVALLUVAR UNIVERSITY", hl1_attempts: 749,qualified_level1:331, percentage: 70 },
+        { name: "UNIVERSITY OF MADRAS", hl1_attempts: 398,qualified_level1:209, percentage: 70 },
     ]
 };

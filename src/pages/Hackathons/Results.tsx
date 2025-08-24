@@ -500,6 +500,14 @@ const HackathonResults: React.FC = () => {
                           {university.hl1_attempts.toLocaleString()}
                         </div>
                         <div className="text-xs text-slate-500">Participants</div>
+                        {/* Qualified Level 1 Display */}
+                        {university.qualified_level1 && (
+                          <div className="mt-2">
+                            <div className="inline-flex items-center px-2 py-1 bg-gradient-to-r from-yellow-100 to-orange-100 text-orange-800 text-xs font-semibold rounded-full border border-orange-200">
+                               Qualified Level 1 Participants: {university.qualified_level1.toLocaleString()}
+                            </div>
+                          </div>
+                        )}
                       </div>
                     </div>
                     <h3 className="font-semibold text-slate-800 text-xs sm:text-sm leading-tight group-hover:text-emerald-600 transition-colors duration-200">
@@ -536,20 +544,32 @@ const HackathonResults: React.FC = () => {
           </div>
         )}
 
+        {/* Congratulations Banner - Always Visible */}
+        {!loading && !error && (
+          <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-white/50 p-6 sm:p-8 mb-6 sm:mb-8">
+            <div className="flex items-center justify-center">
+              <div className="text-center">
+                <div className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white text-base sm:text-lg font-bold rounded-full shadow-lg border-2 border-white/50">
+                  <Users className="w-5 h-5 mr-3" />
+                  🎉 Congratulations to Our Level 1 Hackathon Achievers! 🎉
+                </div>
+                {/* Total Level 1 Display */}
+                {currentCourseStats && currentCourseStats.total_qualified_level1 && (
+                  <div className="mt-6">
+                    <div className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-emerald-100 to-teal-100 text-emerald-800 text-sm sm:text-base font-semibold rounded-full border border-emerald-200">
+                      <span className="mr-2">🏆</span>
+                      Total Level-1 Qualified Participants: <span className="ml-1 font-bold">{currentCourseStats.total_qualified_level1.toLocaleString()}</span>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Results Section */}
         {!loading && !error && (
           <div className="space-y-6">
-            {/* Results Count Card */}
-            <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-white/50 p-4 sm:p-6">
-              <div className="flex items-center justify-center">
-                <div className="text-center">
-                  <div className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-blue-100 to-purple-100 text-blue-800 text-sm font-semibold rounded-full border border-blue-200">
-                    <Users className="w-4 h-4 mr-2" />
-                    Congratulations to Our Level 1 Hackathon Achievers!
-                  </div>
-                </div>
-              </div>
-            </div>
             {/* Sort and Results Summary */}
             {totalResults > 0 && (
               <div ref={resultsSummaryRef} className="p-2">
