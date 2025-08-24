@@ -12,6 +12,7 @@ export interface College {
 export interface UniversityStats {
     name: string;
     hl1_attempts: number;
+    qualified_level1?: number;
     percentage?: number;
     course?: string;
 }
@@ -19,6 +20,7 @@ export interface UniversityStats {
 export interface CourseStats {
     universities: UniversityStats[];
     total: number;
+    total_qualified_level1?: number;
     course_code: string;
     course_name: string;
 }
@@ -117,9 +119,10 @@ export const mcStats: CourseStats = {
     course_code: "MC",
     course_name: "Medical Coding",
     total: 3225,
+    total_qualified_level1:2680,
     universities: [
-        { name: "BHARATHIAR UNIVERSITY", hl1_attempts: 764, percentage: 70 },
-        { name: "PERIYAR UNIVERSITY", hl1_attempts: 2261, percentage: 70 },
+        { name: "BHARATHIAR UNIVERSITY", hl1_attempts: 764,qualified_level1:300, percentage: 70 },
+        { name: "PERIYAR UNIVERSITY", hl1_attempts: 2261,qualified_level1:1037, percentage: 70 },
        
     ]
 };
