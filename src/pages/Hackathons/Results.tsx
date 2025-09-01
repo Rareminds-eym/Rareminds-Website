@@ -69,7 +69,7 @@ const HackathonResults: React.FC = () => {
   // Filter colleges based on search and filters
   const filteredColleges = useMemo(() => {
     let filtered = colleges;
-
+ 
     // Apply search filter
     if (searchTerm) {
       filtered = filtered.filter(college =>

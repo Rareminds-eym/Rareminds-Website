@@ -222,7 +222,6 @@ export const fsqmStats: CourseStats = {
         { name: "UNIVERSITY OF MADRAS", hl1_attempts: 398,qualified_level1:209, percentage: 70 },
     ]
 };
-
 // Function to calculate Level 2 statistics dynamically from fetched data
 export async function calculateFSQMLevel2Stats(): Promise<CourseStats> {
     try {
