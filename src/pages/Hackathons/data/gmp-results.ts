@@ -97,7 +97,7 @@ export async function fetchGMPLevel2Results(): Promise<College[]> {
 
             return {
                 id,
-                college_code: collegeCode,
+                college_code: collegeCode?.toUpperCase() || collegeCode,
                 college_name: collegeName,
                 university: university,
                 course_name: 'GMP',
@@ -186,7 +186,7 @@ export async function fetchGmpResults(): Promise<College[]> {
 
             return {
                 id,
-                college_code: collegeCode,
+                college_code: collegeCode?.toUpperCase() || collegeCode,
                 college_name: collegeName,
                 university: university,
                 course_name: 'GMP',

@@ -383,7 +383,7 @@ const HackathonResults: React.FC = () => {
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center space-x-1 sm:space-x-2 mb-1 flex-wrap">
                             <span className="px-1.5 sm:px-2 py-0.5 sm:py-1 bg-gradient-to-r from-blue-100 to-blue-200 text-blue-800 text-xs font-medium rounded-full">
-                              {college.college_code}
+                              {college.college_code?.toUpperCase()}
                             </span>
                             <span className="px-1.5 sm:px-2 py-0.5 sm:py-1 bg-gradient-to-r from-purple-100 to-purple-200 text-purple-800 text-xs font-medium rounded-full">
                               {getCourseName(college.course_name)}
@@ -452,7 +452,7 @@ const HackathonResults: React.FC = () => {
                 }
               </option>
               {collegeCodes.map(code => (
-                <option key={code} value={code}>{code}</option>
+                <option key={code} value={code}>{code?.toUpperCase()}</option>
               ))}
             </select>
 
@@ -689,7 +689,7 @@ const HackathonResults: React.FC = () => {
                           <div className="flex-1">
                             <div className="flex items-center space-x-2 mb-2">
                               <span className="px-2 py-1 bg-blue-100 text-blue-800 text-xs font-medium rounded-full">
-                                {college.college_code}
+                                {college.college_code?.toUpperCase()}
                               </span>
                               <span className="px-2 py-1 bg-purple-100 text-purple-800 text-xs font-medium rounded-full">
                                 {getCourseName(college.course_name)}
@@ -815,7 +815,7 @@ const HackathonResults: React.FC = () => {
                         <div className="flex-1">
                           <div className="flex items-center space-x-2 mb-2">
                             <span className="px-2 py-1 bg-blue-100 text-blue-800 text-xs font-medium rounded-full">
-                              {college.college_code}
+                              {college.college_code?.toUpperCase()}
                             </span>
                             <span className="px-2 py-1 bg-purple-100 text-purple-800 text-xs font-medium rounded-full">
                               {getCourseName(college.course_name)}
