@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
-import { fetchMcResults } from '../pages/Hackathons/data/mc-results';
-import { fetchGmpResults } from '../pages/Hackathons/data/gmp-results';
-import { fetchFSQMResults } from '../pages/Hackathons/data/fsqm-results';
+import { fetchMcResults, fetchMCLevel2Results } from '../pages/Hackathons/data/mc-results';
+import { fetchGmpResults, fetchGMPLevel2Results } from '../pages/Hackathons/data/gmp-results';
+import { fetchFSQMResults, fetchFSQMLevel2Results } from '../pages/Hackathons/data/fsqm-results';
 import type { College } from '../pages/Hackathons/data/mc-results';
 
-export function useHackathonResults(slug?: string) {
+export function useHackathonResults(slug?: string, level: string = 'Level1') {
     const [colleges, setColleges] = useState<College[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -18,17 +18,32 @@ export function useHackathonResults(slug?: string) {
                 let results: College[] = [];
 
                 if (slug === 'capathon') {
-                    // Fetch ONLY from gmp_results table
-                    console.log('Loading results for capathon route - fetching from gmp_results table');
-                    results = await fetchGmpResults();
+                    // Use GMP Level 1 or Level 2 data based on selected level
+                    if (level === 'Level2') {
+                        console.log('Loading Level 2 results for capathon route - fetching from gmp_h2_results table');
+                        results = await fetchGMPLevel2Results();
+                    } else {
+                        console.log('Loading Level 1 results for capathon route - fetching from gmp_results table');
+                        results = await fetchGmpResults();
+                    }
                 } else if (slug === 'codecare-2-0') {
-                    // Fetch ONLY from mc_results table
-                    console.log('Loading results for codecare-2-0 route - fetching from mc_results table');
-                    results = await fetchMcResults();
+                    // Use MC Level 1 or Level 2 data based on selected level
+                    if (level === 'Level2') {
+                        console.log('Loading Level 2 results for codecare-2-0 route - fetching from mc_h2_results table');
+                        results = await fetchMCLevel2Results();
+                    } else {
+                        console.log('Loading Level 1 results for codecare-2-0 route - fetching from mc_results table');
+                        results = await fetchMcResults();
+                    }
                 } else if (slug === 'safe-bite-2-0') {
-                    // Use static FSQM data
-                    console.log('Loading results for safe-bite-2-0 route - using static FSQM data');
-                    results = await fetchFSQMResults();
+                    // Use FSQM Level 1 or Level 2 data based on selected level
+                    if (level === 'Level2') {
+                        console.log('Loading Level 2 results for safe-bite-2-0 route - fetching from fsqm_h2_results table');
+                        results = await fetchFSQMLevel2Results();
+                    } else {
+                        console.log('Loading Level 1 results for safe-bite-2-0 route - fetching from fsqm_results table');
+                        results = await fetchFSQMResults();
+                    }
                 } else {
                     // For general hackathons page, combine all results
                     console.log('Loading results for general hackathons page - combining all data sources');
@@ -40,7 +55,7 @@ export function useHackathonResults(slug?: string) {
                     results = [...gmpData, ...mcData, ...fsqmData];
                 }
 
-                console.log(`Successfully loaded ${results.length} colleges for route: ${slug || 'general'}`);
+                console.log(`Successfully loaded ${results.length} colleges for route: ${slug || 'general'}, level: ${level}`);
                 setColleges(results);
                 setError(null); // Clear any previous errors
             } catch (err) {
@@ -56,7 +71,7 @@ export function useHackathonResults(slug?: string) {
         };
 
         loadResults();
-    }, [slug]);
+    }, [slug, level]);
 
     return { colleges, loading, error };
 }
