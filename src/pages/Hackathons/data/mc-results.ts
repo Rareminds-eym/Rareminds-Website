@@ -25,6 +25,95 @@ export interface CourseStats {
     course_name: string;
 }
 
+// Function to fetch MC Level 2 results from Supabase - ONLY from mc_h2_results table
+export async function fetchMCLevel2Results(): Promise<College[]> {
+    console.log('Fetching MC Level 2 results from mc_h2_results table...');
+    
+    try {
+        // First, get the total count
+        const { count, error: countError } = await supabase
+            .from('mc_h2_results')
+            .select('*', { count: 'exact', head: true });
+
+        if (countError) {
+            console.error('Error getting MC Level 2 results count:', countError);
+            throw countError;
+        }
+
+        console.log(`MC Level 2 results count query successful. Found ${count} total records.`);
+        
+        if (!count || count === 0) {
+            console.warn('mc_h2_results table is empty.');
+            return [];
+        }
+
+        // Fetch all data in batches (Supabase has a limit of 1000 records per query)
+        const batchSize = 1000;
+        const batches = Math.ceil(count / batchSize);
+        const allData: any[] = [];
+
+        console.log(`Fetching ${count} Level 2 records in ${batches} batches of ${batchSize} each...`);
+
+        for (let i = 0; i < batches; i++) {
+            const startRange = i * batchSize;
+            const endRange = Math.min(startRange + batchSize - 1, count - 1);
+            
+            console.log(`Fetching Level 2 batch ${i + 1}/${batches}: records ${startRange} to ${endRange}`);
+            
+            const { data: batchData, error: batchError } = await supabase
+                .from('mc_h2_results')
+                .select('*')
+                .range(startRange, endRange);
+
+            if (batchError) {
+                console.error(`Error fetching MC Level 2 results batch ${i + 1}:`, batchError);
+                throw batchError;
+            }
+
+            if (batchData) {
+                allData.push(...batchData);
+                console.log(`Level 2 batch ${i + 1} fetched: ${batchData.length} records`);
+            }
+        }
+
+        console.log(`Successfully fetched ${allData.length} out of ${count} total MC Level 2 records.`);
+        
+        if (allData.length === 0) {
+            console.warn('mc_h2_results table returned no data.');
+            return [];
+        }
+
+        // Log first record to see structure
+        console.log('Sample MC Level 2 record:', allData[0]);
+
+        // Transform the data to match the expected College interface (DO NOT de-duplicate; keep all rows)
+        const results: College[] = allData.map((result: any) => {
+            // Handle different possible column name variations
+            const university = result.University || result.university || result.UNIVERSITY || 'Unknown University';
+            const collegeCode = result.college_code || result.College_Code || result.COLLEGE_CODE || result.code || `MC_H2_${Math.random().toString(36).substring(2, 11)}`;
+            const collegeName = result.college_name || result.College_Name || result.COLLEGE_NAME || result.name || 'Unknown College';
+            const teamName = result.team_name || result.Team_Name || result.TEAM_NAME || result.team || '';
+            const id = result.id || result.ID || result.Id || `${collegeCode}_${Math.random().toString(36).substring(2, 8)}`;
+
+            return {
+                id,
+                college_code: collegeCode?.toUpperCase() || collegeCode,
+                college_name: collegeName,
+                university: university,
+                course_name: 'MC',
+                team_name: teamName
+            };
+        });
+
+        console.log(`Successfully processed ${results.length} MC Level 2 records (including duplicates) from ${allData.length} total records`);
+        return results;
+        
+    } catch (error) {
+        console.error('Error in fetchMCLevel2Results:', error);
+        throw error;
+    }
+}
+
 // Function to fetch MC results from Supabase - ONLY from mc_results table
 export async function fetchMcResults(): Promise<College[]> {
     console.log('Fetching MC results from mc_results table...');
@@ -97,7 +186,7 @@ export async function fetchMcResults(): Promise<College[]> {
 
             return {
                 id,
-                college_code: collegeCode,
+                college_code: collegeCode?.toUpperCase() || collegeCode,
                 college_name: collegeName,
                 university: university,
                 course_name: 'MC',
@@ -124,5 +213,72 @@ export const mcStats: CourseStats = {
         { name: "BHARATHIAR UNIVERSITY", hl1_attempts: 764,qualified_level1:300, percentage: 70 },
         { name: "PERIYAR UNIVERSITY", hl1_attempts: 2261,qualified_level1:1037, percentage: 70 },
        
+    ]
+};
+
+// Function to calculate Level 2 statistics dynamically from fetched data
+export async function calculateMCLevel2Stats(): Promise<CourseStats> {
+    try {
+        const level2Results = await fetchMCLevel2Results();
+        
+        if (level2Results.length === 0) {
+            return {
+                course_code: "MC",
+                course_name: "Medical Coding - Level 2",
+                total: 0,
+                total_qualified_level1: 0, // This represents total_qualified_level2 for Level 2
+                universities: []
+            };
+        }
+
+        // Group by university and calculate stats
+        const universityMap = new Map<string, { total: number, results: College[] }>();
+        
+        level2Results.forEach(result => {
+            const universityName = result.university;
+            if (!universityMap.has(universityName)) {
+                universityMap.set(universityName, { total: 0, results: [] });
+            }
+            const current = universityMap.get(universityName)!;
+            current.total += 1;
+            current.results.push(result);
+        });
+
+        // Convert to university stats format
+        const universities: UniversityStats[] = Array.from(universityMap.entries()).map(([name, data]) => ({
+            name,
+            hl1_attempts: data.total, // For Level 2, this represents Level 2 participants
+            qualified_level1: data.total, // For Level 2, this represents Level 2 qualified
+            percentage: 100 // All Level 2 participants are qualified by definition
+        }));
+
+        return {
+            course_code: "MC",
+            course_name: "Medical Coding - Level 2",
+            total: level2Results.length,
+            total_qualified_level1: level2Results.length, // This represents total_qualified_level2 for Level 2
+            universities
+        };
+        
+    } catch (error) {
+        console.error('Error calculating MC Level 2 stats:', error);
+        return {
+            course_code: "MC",
+            course_name: "Medical Coding - Level 2",
+            total: 0,
+            total_qualified_level1: 0,
+            universities: []
+        };
+    }
+}
+
+// MC Level 2 University participation statistics (placeholder - will be updated when Level 2 data is available)
+export const mcLevel2Stats: CourseStats = {
+    course_code: "MC",
+    course_name: "Medical Coding - Level 2",
+    total: 0, // Will be updated based on actual Level 2 data
+    total_qualified_level1: 0, // This would be total_qualified_level2 for Level 2
+    universities: [
+        // Will be populated based on actual Level 2 results
     ]
 };
