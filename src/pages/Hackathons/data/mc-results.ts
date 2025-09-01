@@ -97,7 +97,7 @@ export async function fetchMCLevel2Results(): Promise<College[]> {
 
             return {
                 id,
-                college_code: collegeCode,
+                college_code: collegeCode?.toUpperCase() || collegeCode,
                 college_name: collegeName,
                 university: university,
                 course_name: 'MC',
@@ -186,7 +186,7 @@ export async function fetchMcResults(): Promise<College[]> {
 
             return {
                 id,
-                college_code: collegeCode,
+                college_code: collegeCode?.toUpperCase() || collegeCode,
                 college_name: collegeName,
                 university: university,
                 course_name: 'MC',
