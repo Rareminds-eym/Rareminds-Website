@@ -14,7 +14,7 @@ const HackathonResults: React.FC = () => {
   const [selectedCollege, setSelectedCollege] = useState('');
   const [selectedCollegeCode, setSelectedCollegeCode] = useState('');
   const [selectedCourse, setSelectedCourse] = useState('');
-  const [selectedLevel, setSelectedLevel] = useState('Level2'); // New: Level filter state - Default to Level2
+  const [selectedLevel, setSelectedLevel] = useState('Winners'); // New: Level filter state - Default to Winners
   const [showSearchDropdown, setShowSearchDropdown] = useState(false);
   const [sortOption, setSortOption] = useState<'none' | 'university' | 'college_name' | 'team_name'>('none'); // New: Sort state
   const [currentPage, setCurrentPage] = useState(1);
@@ -479,9 +479,9 @@ const HackathonResults: React.FC = () => {
               onChange={(e) => setSelectedLevel(e.target.value)}
               className="w-full px-3 sm:px-4 py-2.5 sm:py-3 bg-white/70 backdrop-blur-sm border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:bg-white transition-all duration-200 appearance-none cursor-pointer text-sm sm:text-base"
             >
+              <option value="Winners">Winners</option>
               <option value="Level1">Level 1</option>
               <option value="Level2">Level 2</option>
-              <option value="Winners">Winners</option>
             </select>
 
            
@@ -495,7 +495,7 @@ const HackathonResults: React.FC = () => {
                 setSelectedCollege('');
                 setSelectedCollegeCode('');
                 setSortOption('none');
-                setSelectedLevel('Level2'); // Reset level to default (Level2)
+                setSelectedLevel('Winners'); // Reset level to default (Winners)
                 // For specific hackathon routes, keep their default course selected, otherwise clear
                 if (!['capathon', 'codecare-2-0', 'safe-bite-2-0'].includes(slug || '')) {
                   setSelectedCourse('');
