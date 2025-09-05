@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
-import { fetchMcResults, fetchMCLevel2Results } from '../pages/Hackathons/data/mc-results';
-import { fetchGmpResults, fetchGMPLevel2Results } from '../pages/Hackathons/data/gmp-results';
-import { fetchFSQMResults, fetchFSQMLevel2Results } from '../pages/Hackathons/data/fsqm-results';
+import { fetchMcResults, fetchMCLevel2Results, fetchMCWinners } from '../pages/Hackathons/data/mc-results';
+import { fetchGmpResults, fetchGMPLevel2Results, fetchGMPWinners } from '../pages/Hackathons/data/gmp-results';
+import { fetchFSQMResults, fetchFSQMLevel2Results, fetchFSQMWinners } from '../pages/Hackathons/data/fsqm-results';
 import type { College } from '../pages/Hackathons/data/mc-results';
 
 export function useHackathonResults(slug?: string, level: string = 'Level1') {
@@ -18,28 +18,37 @@ export function useHackathonResults(slug?: string, level: string = 'Level1') {
                 let results: College[] = [];
 
                 if (slug === 'capathon') {
-                    // Use GMP Level 1 or Level 2 data based on selected level
+                    // Use GMP Level 1, Level 2, or Winners data based on selected level
                     if (level === 'Level2') {
                         console.log('Loading Level 2 results for capathon route - fetching from gmp_h2_results table');
                         results = await fetchGMPLevel2Results();
+                    } else if (level === 'Winners') {
+                        console.log('Loading Winners results for capathon route - fetching from gmp_winners table');
+                        results = await fetchGMPWinners();
                     } else {
                         console.log('Loading Level 1 results for capathon route - fetching from gmp_results table');
                         results = await fetchGmpResults();
                     }
                 } else if (slug === 'codecare-2-0') {
-                    // Use MC Level 1 or Level 2 data based on selected level
+                    // Use MC Level 1, Level 2, or Winners data based on selected level
                     if (level === 'Level2') {
                         console.log('Loading Level 2 results for codecare-2-0 route - fetching from mc_h2_results table');
                         results = await fetchMCLevel2Results();
+                    } else if (level === 'Winners') {
+                        console.log('Loading Winners results for codecare-2-0 route - fetching from mc_winners table');
+                        results = await fetchMCWinners();
                     } else {
                         console.log('Loading Level 1 results for codecare-2-0 route - fetching from mc_results table');
                         results = await fetchMcResults();
                     }
                 } else if (slug === 'safe-bite-2-0') {
-                    // Use FSQM Level 1 or Level 2 data based on selected level
+                    // Use FSQM Level 1, Level 2, or Winners data based on selected level
                     if (level === 'Level2') {
                         console.log('Loading Level 2 results for safe-bite-2-0 route - fetching from fsqm_h2_results table');
                         results = await fetchFSQMLevel2Results();
+                    } else if (level === 'Winners') {
+                        console.log('Loading Winners results for safe-bite-2-0 route - fetching from fsqm_winners table');
+                        results = await fetchFSQMWinners();
                     } else {
                         console.log('Loading Level 1 results for safe-bite-2-0 route - fetching from fsqm_results table');
                         results = await fetchFSQMResults();
