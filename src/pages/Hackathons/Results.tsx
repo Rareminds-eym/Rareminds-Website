@@ -5,7 +5,6 @@ import { gmpStats } from './data/gmp-results';
 import { fsqmStats } from './data/fsqm-results';
 import { mcStats } from './data/mc-results';
 import { useHackathonResults } from '../../hooks/useHackathonResults';
-
 import type { College } from './data/mc-results';
 
 const HackathonResults: React.FC = () => {
@@ -439,6 +438,20 @@ const HackathonResults: React.FC = () => {
               ))}
             </select>
 
+<<<<<<< HEAD
+=======
+            {/* Level Filter */}
+            <select
+              value={selectedLevel}
+              onChange={(e) => setSelectedLevel(e.target.value)}
+              className="w-full px-3 sm:px-4 py-2.5 sm:py-3 bg-white/70 backdrop-blur-sm border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:bg-white transition-all duration-200 appearance-none cursor-pointer text-sm sm:text-base"
+            >
+              <option value="Level1">Level 1</option>
+              <option value="Level2">Level 2</option>
+              <option value="Winners">Winners</option>
+            </select>
+
+>>>>>>> d7b0777 (Adding Winners)
            
           </div>
 
@@ -539,6 +552,7 @@ const HackathonResults: React.FC = () => {
         {/* Results Section */}
         {!loading && !error && (
           <div className="space-y-6">
+<<<<<<< HEAD
             {/* Results Count Card */}
             <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-white/50 p-4 sm:p-6">
               <div className="flex items-center justify-center">
@@ -552,6 +566,10 @@ const HackathonResults: React.FC = () => {
             </div>
             {/* Sort and Results Summary */}
             {totalResults > 0 && (
+=======
+            {/* Sort and Results Summary - Show for both Level1 and Level2 when there are results */}
+            {totalResults > 0 && selectedLevel !== 'Winners' && (
+>>>>>>> d7b0777 (Adding Winners)
               <div ref={resultsSummaryRef} className="p-2">
                 <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between space-y-4 lg:space-y-0 lg:space-x-6">
                   {/* Sort Filter - Left side */}
@@ -583,7 +601,303 @@ const HackathonResults: React.FC = () => {
             )}
             
             {/* Results Grid */}
+<<<<<<< HEAD
             {currentResults.length > 0 ? (
+=======
+            {selectedLevel === 'Winners' ? (
+              // Winners Results Display
+              currentResults.length > 0 ? (
+                // Show Winners results if data is available
+                <>
+                  {/* Winners Header */}
+                  <div className="text-center py-8">
+                    <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-white/50 p-6 sm:p-8 max-w-4xl mx-auto">
+                      <div className="flex items-center justify-center mb-4">
+                        <div className="w-16 h-16 bg-gradient-to-r from-yellow-500 to-orange-500 rounded-full flex items-center justify-center mx-auto">
+                          <Users className="w-8 h-8 text-white" />
+                        </div>
+                      </div>
+                      <h3 className="text-2xl sm:text-3xl font-bold text-slate-800 mb-2">
+                        🏆 Hackathon Winners
+                      </h3>
+                      <p className="text-lg text-slate-600 mb-4">
+                        Congratulations to our amazing winners!
+                      </p>
+                      <div className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-yellow-100 to-orange-100 text-orange-800 text-sm font-semibold rounded-full border border-orange-200">
+                        <span className="mr-2">🎉</span>
+                        Total Winners: {totalResults}
+                      </div>
+                    </div>
+                  </div>
+                  
+                  {/* Winners Grid */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {currentResults.map((college) => (
+                      <div
+                        key={college.id}
+                        className="bg-white/90 backdrop-blur-sm rounded-xl shadow-lg border-2 border-yellow-200 p-6 hover:shadow-xl transition-all duration-200 hover:border-yellow-300"
+                      >
+                        {/* Winner Badge */}
+                        <div className="flex items-center justify-center mb-4">
+                          <div className="inline-flex items-center px-3 py-2 bg-gradient-to-r from-yellow-500 to-orange-500 text-white text-sm font-bold rounded-full shadow-lg">
+                            <span className="mr-2">🏆</span>
+                            WINNER
+                          </div>
+                        </div>
+                        
+                        <div className="flex items-start justify-between mb-4">
+                          <div className="flex-1">
+                            <div className="flex items-center space-x-2 mb-3">
+                              <span className="px-3 py-1 bg-gradient-to-r from-blue-100 to-blue-200 text-blue-800 text-xs font-medium rounded-full border border-blue-300">
+                                {college.college_code?.toUpperCase()}
+                              </span>
+                              <span className="px-3 py-1 bg-gradient-to-r from-purple-100 to-purple-200 text-purple-800 text-xs font-medium rounded-full border border-purple-300">
+                                {getCourseName(college.course_name)}
+                              </span>
+                            </div>
+                            <h3 className="font-bold text-slate-900 text-sm leading-tight mb-2">
+                              <span className="text-yellow-600">🎯</span> {college.college_name}
+                            </h3>
+                            <p className="text-slate-700 text-sm font-medium mb-1">
+                              <span className="text-blue-600">🏛️</span> {college.university}
+                            </p>
+                            {college.team_name && (
+                              <p className="text-slate-600 text-sm mt-2 p-2 bg-yellow-50 rounded-lg border border-yellow-200">
+                                <span className="font-semibold text-yellow-700">👥 Team:</span> {college.team_name}
+                              </p>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  
+                  {/* Pagination Controls for Winners */}
+                  {totalPages > 1 && (
+                    <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-lg border border-white/50 p-4 mt-6">
+                      <div className="flex flex-col sm:flex-row items-center justify-between space-y-4 sm:space-y-0">
+                        {/* Previous Button */}
+                        <button
+                          onClick={() => handlePageChange(currentPage - 1)}
+                          disabled={currentPage === 1}
+                          className="flex items-center space-x-2 px-4 py-2 bg-slate-100 hover:bg-slate-200 disabled:bg-slate-50 disabled:text-slate-400 text-slate-700 rounded-lg transition-colors duration-200 disabled:cursor-not-allowed"
+                        >
+                          <ChevronLeft className="w-4 h-4" />
+                          <span>Previous</span>
+                        </button>
+
+                        {/* Page Numbers */}
+                        <div className="flex items-center space-x-2">
+                          {Array.from({ length: Math.min(7, totalPages) }, (_, i) => {
+                            let pageNum;
+                            if (totalPages <= 7) {
+                              pageNum = i + 1;
+                            } else {
+                              if (currentPage <= 4) {
+                                pageNum = i + 1;
+                              } else if (currentPage >= totalPages - 3) {
+                                pageNum = totalPages - 6 + i;
+                              } else {
+                                pageNum = currentPage - 3 + i;
+                              }
+                            }
+                            
+                            return (
+                              <button
+                                key={pageNum}
+                                onClick={() => handlePageChange(pageNum)}
+                                className={`w-8 h-8 rounded-lg text-sm font-medium transition-colors duration-200 ${
+                                  pageNum === currentPage
+                                    ? 'bg-yellow-500 text-white'
+                                    : 'bg-slate-100 hover:bg-slate-200 text-slate-700'
+                                }`}
+                              >
+                                {pageNum}
+                              </button>
+                            );
+                          })}
+                          
+                          {totalPages > 7 && currentPage < totalPages - 3 && (
+                            <>
+                              <span className="text-slate-400">...</span>
+                              <button
+                                onClick={() => handlePageChange(totalPages)}
+                                className="w-8 h-8 rounded-lg text-sm font-medium bg-slate-100 hover:bg-slate-200 text-slate-700 transition-colors duration-200"
+                              >
+                                {totalPages}
+                              </button>
+                            </>
+                          )}
+                        </div>
+
+                        {/* Next Button */}
+                        <button
+                          onClick={() => handlePageChange(currentPage + 1)}
+                          disabled={currentPage === totalPages}
+                          className="flex items-center space-x-2 px-4 py-2 bg-slate-100 hover:bg-slate-200 disabled:bg-slate-50 disabled:text-slate-400 text-slate-700 rounded-lg transition-colors duration-200 disabled:cursor-not-allowed"
+                        >
+                          <span>Next</span>
+                          <ChevronRight className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </>
+              ) : (
+                // Winners Coming Soon Message when no data
+                <div className="space-y-8">
+                  
+                  {/* Winners Announcement */}
+                  <div className="text-center py-16">
+                    <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-white/50 p-8 sm:p-12 max-w-2xl mx-auto">
+                      <div className="w-20 h-20 bg-gradient-to-r from-yellow-500 to-orange-500 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <Users className="w-10 h-10 text-white" />
+                      </div>
+                      <h3 className="text-2xl sm:text-3xl font-bold text-slate-800 mb-4">
+                        🏆 Winners
+                      </h3>
+                      <p className="text-lg sm:text-xl text-slate-600 mb-6">
+                        Results will be announced soon
+                      </p>
+                      <div className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-yellow-100 to-orange-100 text-orange-800 text-sm font-semibold rounded-full border border-orange-200">
+                        <span className="mr-2">🎉</span>
+                        Stay tuned for winners announcement
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )
+            ) : selectedLevel === 'Level2' ? (
+              // Level 2 Results Display
+              currentResults.length > 0 ? (
+                // Show Level 2 results if data is available
+                <>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {currentResults.map((college) => (
+                      <div
+                        key={college.id}
+                        className="bg-white/80 backdrop-blur-sm rounded-xl shadow-lg border border-white/50 p-6 hover:shadow-xl transition-all duration-200"
+                      >
+                        <div className="flex items-start justify-between mb-4">
+                          <div className="flex-1">
+                            <div className="flex items-center space-x-2 mb-2">
+                              <span className="px-2 py-1 bg-blue-100 text-blue-800 text-xs font-medium rounded-full">
+                                {college.college_code?.toUpperCase()}
+                              </span>
+                              <span className="px-2 py-1 bg-purple-100 text-purple-800 text-xs font-medium rounded-full">
+                                {getCourseName(college.course_name)}
+                              </span>
+                            </div>
+                            <h3 className="font-bold text-slate-900 text-sm leading-tight mb-1">
+                              College Name : {college.college_name}
+                            </h3>
+                            <p className="text-slate-600 text-xs">
+                              {college.university}
+                            </p>
+                            {college.team_name && (
+                              <p className="text-slate-500 text-xs mt-1">
+                                <span className="font-semibold">Team:</span> {college.team_name}
+                              </p>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  
+                  {/* Pagination Controls for Level 2 */}
+                  {totalPages > 1 && (
+                    <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-lg border border-white/50 p-4 mt-6">
+                      <div className="flex flex-col sm:flex-row items-center justify-between space-y-4 sm:space-y-0">
+                        {/* Previous Button */}
+                        <button
+                          onClick={() => handlePageChange(currentPage - 1)}
+                          disabled={currentPage === 1}
+                          className="flex items-center space-x-2 px-4 py-2 bg-slate-100 hover:bg-slate-200 disabled:bg-slate-50 disabled:text-slate-400 text-slate-700 rounded-lg transition-colors duration-200 disabled:cursor-not-allowed"
+                        >
+                          <ChevronLeft className="w-4 h-4" />
+                          <span>Previous</span>
+                        </button>
+
+                        {/* Page Numbers */}
+                        <div className="flex items-center space-x-2">
+                          {Array.from({ length: Math.min(7, totalPages) }, (_, i) => {
+                            let pageNum;
+                            if (totalPages <= 7) {
+                              pageNum = i + 1;
+                            } else {
+                              if (currentPage <= 4) {
+                                pageNum = i + 1;
+                              } else if (currentPage >= totalPages - 3) {
+                                pageNum = totalPages - 6 + i;
+                              } else {
+                                pageNum = currentPage - 3 + i;
+                              }
+                            }
+                            
+                            return (
+                              <button
+                                key={pageNum}
+                                onClick={() => handlePageChange(pageNum)}
+                                className={`w-8 h-8 rounded-lg text-sm font-medium transition-colors duration-200 ${
+                                  pageNum === currentPage
+                                    ? 'bg-blue-500 text-white'
+                                    : 'bg-slate-100 hover:bg-slate-200 text-slate-700'
+                                }`}
+                              >
+                                {pageNum}
+                              </button>
+                            );
+                          })}
+                          
+                          {totalPages > 7 && currentPage < totalPages - 3 && (
+                            <>
+                              <span className="text-slate-400">...</span>
+                              <button
+                                onClick={() => handlePageChange(totalPages)}
+                                className="w-8 h-8 rounded-lg text-sm font-medium bg-slate-100 hover:bg-slate-200 text-slate-700 transition-colors duration-200"
+                              >
+                                {totalPages}
+                              </button>
+                            </>
+                          )}
+                        </div>
+
+                        {/* Next Button */}
+                        <button
+                          onClick={() => handlePageChange(currentPage + 1)}
+                          disabled={currentPage === totalPages}
+                          className="flex items-center space-x-2 px-4 py-2 bg-slate-100 hover:bg-slate-200 disabled:bg-slate-50 disabled:text-slate-400 text-slate-700 rounded-lg transition-colors duration-200 disabled:cursor-not-allowed"
+                        >
+                          <span>Next</span>
+                          <ChevronRight className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </>
+              ) : (
+                // Level 2 Coming Soon Message when no data
+                <div className="text-center py-16">
+                  <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-white/50 p-8 sm:p-12 max-w-2xl mx-auto">
+                    <div className="w-20 h-20 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center mx-auto mb-6">
+                      <Users className="w-10 h-10 text-white" />
+                    </div>
+                    <h3 className="text-2xl sm:text-3xl font-bold text-slate-800 mb-4">
+                      Level 2 Results
+                    </h3>
+                    <p className="text-lg sm:text-xl text-slate-600 mb-6">
+                      Results will be announced soon
+                    </p>
+                    <div className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-100 to-purple-100 text-blue-800 text-sm font-semibold rounded-full border border-blue-200">
+                      <span className="mr-2">🏆</span>
+                      Stay tuned for Level 2 qualified participants
+                    </div>
+                  </div>
+                </div>
+              )
+            ) : currentResults.length > 0 ? (
+>>>>>>> d7b0777 (Adding Winners)
               <>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {currentResults.map((college) => (
