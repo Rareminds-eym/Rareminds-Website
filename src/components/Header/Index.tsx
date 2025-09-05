@@ -73,6 +73,7 @@ const Index: React.FC<HeaderProps> = ({ navbarOpen, setNavbarOpen }) => {
                                         Explore exciting hackathons!
                                     </span>
                                 </Link>
+                                <Link to="/events" onClick={handleLinkClick} className="text-2xl font-medium hover:text-blue-300">Events</Link>
                                 <Link to="/careers" onClick={handleLinkClick} className="text-2xl font-medium hover:text-blue-300">Careers</Link>
                                 <Link to="/blogs" onClick={handleLinkClick} className="text-2xl font-medium hover:text-blue-300">Blogs</Link>
                                 <Link to="/contact" onClick={handleLinkClick} className="text-2xl font-medium hover:text-blue-300">Contact us</Link>
