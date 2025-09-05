@@ -194,10 +194,10 @@ const EventDetail: React.FC = () => {
                         {getStatusIcon(event.status)}
                         <span className="ml-2 capitalize">{event.status}</span>
                       </div>
-                      <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-[1.1] tracking-tight">
+                      <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-6 leading-[1.1] tracking-tight">
                         {event.title}
                       </h1>
-                      <div className="flex flex-wrap items-center gap-6 md:gap-8 text-white/90 text-base md:text-lg">
+                      <div className="flex flex-wrap items-center gap-6 md:gap-8 text-white/90 text-sm md:text-base">
                         <div className="flex items-center">
                           <div className="w-6 h-6 bg-white/20 rounded-full flex items-center justify-center mr-3">
                             <Tag className="w-4 h-4" />
@@ -228,60 +228,27 @@ const EventDetail: React.FC = () => {
                     {getStatusIcon(event.status)}
                     <span className="ml-2 capitalize">{event.status}</span>
                   </div>
-                  <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent mb-6 leading-[1.1] tracking-tight">
+                  <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent mb-6 leading-[1.1] tracking-tight">
                     {event.title}
                   </h1>
-                  <p className="text-2xl md:text-3xl text-slate-600 mb-12 font-medium">{event.category}</p>
+                  <p className="text-lg md:text-xl text-slate-600 mb-12 font-medium">{event.category}</p>
                   <div className="flex flex-wrap justify-center gap-8 md:gap-12 text-slate-700">
                     <div className="flex items-center">
-                      <div className="w-8 h-8 bg-slate-200 rounded-full flex items-center justify-center mr-4">
-                        <Calendar className="w-5 h-5 text-slate-600" />
+                      <div className="w-6 h-6 bg-slate-200 rounded-full flex items-center justify-center mr-3">
+                        <Calendar className="w-4 h-4 text-slate-600" />
                       </div>
-                      <span className="text-lg md:text-xl font-medium">{formatDate(event.event_date)}</span>
+                      <span className="text-sm md:text-base font-medium">{formatDate(event.event_date)}</span>
                     </div>
                     <div className="flex items-center">
-                      <div className="w-8 h-8 bg-slate-200 rounded-full flex items-center justify-center mr-4">
-                        <MapPin className="w-5 h-5 text-slate-600" />
+                      <div className="w-6 h-6 bg-slate-200 rounded-full flex items-center justify-center mr-3">
+                        <MapPin className="w-4 h-4 text-slate-600" />
                       </div>
-                      <span className="text-lg md:text-xl font-medium">{event.location}</span>
+                      <span className="text-sm md:text-base font-medium">{event.location}</span>
                     </div>
                   </div>
                 </div>
               </div>
             )}
-          </div>
-
-          {/* Enhanced Action Bar - Properly Aligned */}
-          <div className="backdrop-blur-xl bg-white/70 rounded-2xl border border-white/20 shadow-xl mb-16">
-            <div className="p-6 lg:p-8">
-              <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
-                {/* Action Buttons Group */}
-                <div className="flex flex-wrap items-center gap-3 md:gap-4">
-                  <button className="group flex items-center gap-3 px-5 py-3 bg-gradient-to-r from-red-500/10 to-pink-500/10 hover:from-red-500/20 hover:to-pink-500/20 border border-red-200/50 rounded-xl transition-all duration-300 hover:shadow-lg">
-                    <Heart className="w-4 h-4 text-red-500 group-hover:scale-110 transition-transform" />
-                    <span className="text-red-700 font-semibold text-sm">Save</span>
-                  </button>
-                  <button className="group flex items-center gap-3 px-5 py-3 bg-gradient-to-r from-blue-500/10 to-cyan-500/10 hover:from-blue-500/20 hover:to-cyan-500/20 border border-blue-200/50 rounded-xl transition-all duration-300 hover:shadow-lg">
-                    <Share2 className="w-4 h-4 text-blue-500 group-hover:scale-110 transition-transform" />
-                    <span className="text-blue-700 font-semibold text-sm">Share</span>
-                  </button>
-                  <button className="group flex items-center gap-3 px-5 py-3 bg-gradient-to-r from-amber-500/10 to-orange-500/10 hover:from-amber-500/20 hover:to-orange-500/20 border border-amber-200/50 rounded-xl transition-all duration-300 hover:shadow-lg">
-                    <Bookmark className="w-4 h-4 text-amber-500 group-hover:scale-110 transition-transform" />
-                    <span className="text-amber-700 font-semibold text-sm">Bookmark</span>
-                  </button>
-                </div>
-                
-                {/* Primary CTA */}
-                {event.status === 'upcoming' && (
-                  <button className="group px-8 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-bold rounded-2xl transition-all duration-300 transform hover:scale-105 hover:shadow-2xl shadow-lg">
-                    <div className="flex items-center gap-3">
-                      <Zap className="w-5 h-5 group-hover:animate-pulse" />
-                      <span className="text-base">Register Now</span>
-                    </div>
-                  </button>
-                )}
-              </div>
-            </div>
           </div>
 
           {/* Main Content Grid - Optimized Layout */}
@@ -294,10 +261,10 @@ const EventDetail: React.FC = () => {
                   <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-2xl flex items-center justify-center shadow-lg">
                     <Award className="w-6 h-6 text-white" />
                   </div>
-                  <h2 className="text-3xl font-bold bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent leading-tight">About This Event</h2>
+                  <h2 className="text-xl font-bold bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent leading-tight">About This Event</h2>
                 </div>
                 <div 
-                  className="prose prose-slate max-w-none prose-headings:text-slate-800 prose-p:text-slate-700 prose-p:leading-relaxed prose-p:text-lg prose-a:text-blue-600 prose-a:hover:text-blue-700 prose-strong:text-slate-800 prose-ul:text-slate-700 prose-ol:text-slate-700"
+                  className="prose prose-slate max-w-none prose-headings:text-slate-800 prose-p:text-slate-700 prose-p:leading-relaxed prose-p:text-sm prose-a:text-blue-600 prose-a:hover:text-blue-700 prose-strong:text-slate-800 prose-ul:text-slate-700 prose-ol:text-slate-700"
                   dangerouslySetInnerHTML={{ __html: event.description }}
                 />
               </div>
@@ -309,10 +276,10 @@ const EventDetail: React.FC = () => {
                     <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-2xl flex items-center justify-center shadow-lg">
                       <CheckCircle className="w-6 h-6 text-white" />
                     </div>
-                    <h2 className="text-3xl font-bold bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent leading-tight">Requirements</h2>
+                    <h2 className="text-xl font-bold bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent leading-tight">Requirements</h2>
                   </div>
                   <div 
-                    className="bg-gradient-to-r from-blue-50/80 to-indigo-50/80 border border-blue-200/50 rounded-2xl p-6 backdrop-blur-sm prose prose-slate max-w-none prose-headings:text-slate-800 prose-p:text-slate-700 prose-p:leading-relaxed prose-p:text-lg prose-a:text-blue-600 prose-a:hover:text-blue-700 prose-strong:text-slate-800 prose-ul:text-slate-700 prose-ol:text-slate-700"
+                    className="bg-gradient-to-r from-blue-50/80 to-indigo-50/80 border border-blue-200/50 rounded-2xl p-6 backdrop-blur-sm prose prose-slate max-w-none prose-headings:text-slate-800 prose-p:text-slate-700 prose-p:leading-relaxed prose-p:text-sm prose-a:text-blue-600 prose-a:hover:text-blue-700 prose-strong:text-slate-800 prose-ul:text-slate-700 prose-ol:text-slate-700"
                     dangerouslySetInnerHTML={{ __html: event.requirements }}
                   />
                 </div>
@@ -325,10 +292,10 @@ const EventDetail: React.FC = () => {
                     <div className="w-12 h-12 bg-gradient-to-r from-green-500 to-emerald-500 rounded-2xl flex items-center justify-center shadow-lg">
                       <Clock className="w-6 h-6 text-white" />
                     </div>
-                    <h2 className="text-3xl font-bold bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent leading-tight">Event Agenda</h2>
+                    <h2 className="text-xl font-bold bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent leading-tight">Event Agenda</h2>
                   </div>
                   <div 
-                    className="bg-gradient-to-r from-green-50/80 to-emerald-50/80 border border-green-200/50 rounded-2xl p-6 backdrop-blur-sm prose prose-slate max-w-none prose-headings:text-slate-800 prose-p:text-slate-700 prose-p:leading-relaxed prose-p:text-lg prose-a:text-blue-600 prose-a:hover:text-blue-700 prose-strong:text-slate-800 prose-ul:text-slate-700 prose-ol:text-slate-700"
+                    className="bg-gradient-to-r from-green-50/80 to-emerald-50/80 border border-green-200/50 rounded-2xl p-6 backdrop-blur-sm prose prose-slate max-w-none prose-headings:text-slate-800 prose-p:text-slate-700 prose-p:leading-relaxed prose-p:text-sm prose-a:text-blue-600 prose-a:hover:text-blue-700 prose-strong:text-slate-800 prose-ul:text-slate-700 prose-ol:text-slate-700"
                     dangerouslySetInnerHTML={{ __html: event.agenda }}
                   />
                 </div>
@@ -341,17 +308,17 @@ const EventDetail: React.FC = () => {
                     <div className="w-12 h-12 bg-gradient-to-r from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center shadow-lg">
                       <Star className="w-6 h-6 text-white" />
                     </div>
-                    <h2 className="text-3xl font-bold bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent leading-tight">Featured Speakers</h2>
+                    <h2 className="text-xl font-bold bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent leading-tight">Featured Speakers</h2>
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {event.speakers.map((speaker, index) => (
-                      <div key={index} className="group bg-gradient-to-r from-white/80 to-white/60 rounded-2xl p-6 border border-white/30 backdrop-blur-sm hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+                      <div key={index} className="group bg-gradient-to-r from-white/80 to-white/60 rounded-2xl p-4 border border-white/30 backdrop-blur-sm hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
                         <div className="flex items-center">
-                          <div className="w-16 h-16 bg-gradient-to-r from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center mr-4 group-hover:scale-110 transition-transform">
-                            <User className="w-8 h-8 text-white" />
+                          <div className="w-12 h-12 bg-gradient-to-r from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center mr-3 group-hover:scale-110 transition-transform">
+                            <User className="w-6 h-6 text-white" />
                           </div>
                           <div>
-                            <p className="font-bold text-slate-800 text-lg">{speaker}</p>
+                            <p className="font-bold text-slate-800 text-sm">{speaker}</p>
                             <p className="text-slate-600">Speaker</p>
                           </div>
                         </div>
@@ -368,12 +335,12 @@ const EventDetail: React.FC = () => {
                     <div className="w-12 h-12 bg-gradient-to-r from-amber-500 to-orange-500 rounded-2xl flex items-center justify-center shadow-lg">
                       <Award className="w-6 h-6 text-white" />
                     </div>
-                    <h2 className="text-3xl font-bold bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent leading-tight">Event Sponsors</h2>
+                    <h2 className="text-xl font-bold bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent leading-tight">Event Sponsors</h2>
                   </div>
                   <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                     {event.sponsors.map((sponsor, index) => (
-                      <div key={index} className="bg-gradient-to-r from-white/80 to-white/60 rounded-2xl p-6 border border-white/30 backdrop-blur-sm text-center hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
-                        <p className="font-bold text-slate-800">{sponsor}</p>
+                      <div key={index} className="bg-gradient-to-r from-white/80 to-white/60 rounded-2xl p-4 border border-white/30 backdrop-blur-sm text-center hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
+                        <p className="font-bold text-slate-800 text-sm">{sponsor}</p>
                       </div>
                     ))}
                   </div>
@@ -385,71 +352,71 @@ const EventDetail: React.FC = () => {
             <div className="xl:col-span-4 space-y-8">
               {/* Quick Info Card - Enhanced Sticky Positioning */}
               <div className="backdrop-blur-xl bg-white/70 rounded-3xl p-6 lg:p-8 border border-white/20 shadow-xl sticky top-36">
-                <h3 className="text-2xl font-bold bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent mb-8">Event Details</h3>
+                <h3 className="text-lg font-bold bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent mb-6">Event Details</h3>
                 
-                <div className="space-y-6">
+                <div className="space-y-4">
                 <div className="group">
-                  <div className="flex items-center gap-4 p-4 bg-gradient-to-r from-blue-50/80 to-indigo-50/80 rounded-2xl border border-blue-200/30 transition-all duration-300 hover:shadow-lg">
-                    <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-2xl flex items-center justify-center">
-                      <Calendar className="w-6 h-6 text-white" />
+                  <div className="flex items-center gap-3 p-3 bg-gradient-to-r from-blue-50/80 to-indigo-50/80 rounded-2xl border border-blue-200/30 transition-all duration-300 hover:shadow-lg">
+                    <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-2xl flex items-center justify-center">
+                      <Calendar className="w-5 h-5 text-white" />
                     </div>
                     <div>
-                      <p className="font-semibold text-slate-800">Date</p>
-                      <p className="text-slate-600">{formatDate(event.event_date)}</p>
+                      <p className="font-semibold text-slate-800 text-sm">Date</p>
+                      <p className="text-slate-600 text-sm">{formatDate(event.event_date)}</p>
                     </div>
                   </div>
                 </div>
 
                 <div className="group">
-                  <div className="flex items-center gap-4 p-4 bg-gradient-to-r from-emerald-50/80 to-green-50/80 rounded-2xl border border-emerald-200/30 transition-all duration-300 hover:shadow-lg">
-                    <div className="w-12 h-12 bg-gradient-to-r from-emerald-500 to-green-500 rounded-2xl flex items-center justify-center">
-                      <Clock className="w-6 h-6 text-white" />
+                  <div className="flex items-center gap-3 p-3 bg-gradient-to-r from-emerald-50/80 to-green-50/80 rounded-2xl border border-emerald-200/30 transition-all duration-300 hover:shadow-lg">
+                    <div className="w-10 h-10 bg-gradient-to-r from-emerald-500 to-green-500 rounded-2xl flex items-center justify-center">
+                      <Clock className="w-5 h-5 text-white" />
                     </div>
                     <div>
-                      <p className="font-semibold text-slate-800">Time</p>
-                      <p className="text-slate-600">{formatTime(event.event_time)}</p>
+                      <p className="font-semibold text-slate-800 text-sm">Time</p>
+                      <p className="text-slate-600 text-sm">{formatTime(event.event_time)}</p>
                       <p className="text-sm text-slate-500">{event.duration}</p>
                     </div>
                   </div>
                 </div>
 
                 <div className="group">
-                  <div className="flex items-center gap-4 p-4 bg-gradient-to-r from-purple-50/80 to-pink-50/80 rounded-2xl border border-purple-200/30 transition-all duration-300 hover:shadow-lg">
-                    <div className="w-12 h-12 bg-gradient-to-r from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center">
-                      <MapPin className="w-6 h-6 text-white" />
+                  <div className="flex items-center gap-3 p-3 bg-gradient-to-r from-purple-50/80 to-pink-50/80 rounded-2xl border border-purple-200/30 transition-all duration-300 hover:shadow-lg">
+                    <div className="w-10 h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center">
+                      <MapPin className="w-5 h-5 text-white" />
                     </div>
                     <div>
-                      <p className="font-semibold text-slate-800">Location</p>
-                      <p className="text-slate-600">{event.location}</p>
+                      <p className="font-semibold text-slate-800 text-sm">Location</p>
+                      <p className="text-slate-600 text-sm">{event.location}</p>
                     </div>
                   </div>
                 </div>
 
                 <div className="group">
-                  <div className="flex items-center gap-4 p-4 bg-gradient-to-r from-amber-50/80 to-orange-50/80 rounded-2xl border border-amber-200/30 transition-all duration-300 hover:shadow-lg">
-                    <div className="w-12 h-12 bg-gradient-to-r from-amber-500 to-orange-500 rounded-2xl flex items-center justify-center">
-                      <Users className="w-6 h-6 text-white" />
+                  <div className="flex items-center gap-3 p-3 bg-gradient-to-r from-amber-50/80 to-orange-50/80 rounded-2xl border border-amber-200/30 transition-all duration-300 hover:shadow-lg">
+                    <div className="w-10 h-10 bg-gradient-to-r from-amber-500 to-orange-500 rounded-2xl flex items-center justify-center">
+                      <Users className="w-5 h-5 text-white" />
                     </div>
                     <div>
-                      <p className="font-semibold text-slate-800">Capacity</p>
-                      <p className="text-slate-600">{event.capacity} attendees</p>
+                      <p className="font-semibold text-slate-800 text-sm">Capacity</p>
+                      <p className="text-slate-600 text-sm">{event.capacity} attendees</p>
                     </div>
                   </div>
                 </div>
 
                 {event.price && (
-                  <div className="p-4 bg-gradient-to-r from-green-50/80 to-emerald-50/80 rounded-2xl border border-green-200/30">
-                    <p className="font-semibold text-slate-800 mb-2">Pricing</p>
-                    <p className="text-3xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">
+                  <div className="p-3 bg-gradient-to-r from-green-50/80 to-emerald-50/80 rounded-2xl border border-green-200/30">
+                    <p className="font-semibold text-slate-800 mb-2 text-sm">Pricing</p>
+                    <p className="text-xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">
                       {event.price === '0' ? 'Free Event' : `$${event.price}`}
                     </p>
                   </div>
                 )}
 
                 {event.registration_deadline && (
-                  <div className="p-4 bg-gradient-to-r from-red-50/80 to-rose-50/80 rounded-2xl border border-red-200/30">
-                    <p className="font-semibold text-slate-800 mb-2">Registration Deadline</p>
-                    <p className="text-slate-600">{formatDate(event.registration_deadline)}</p>
+                  <div className="p-3 bg-gradient-to-r from-red-50/80 to-rose-50/80 rounded-2xl border border-red-200/30">
+                    <p className="font-semibold text-slate-800 mb-2 text-sm">Registration Deadline</p>
+                    <p className="text-slate-600 text-sm">{formatDate(event.registration_deadline)}</p>
                   </div>
                 )}
               </div>

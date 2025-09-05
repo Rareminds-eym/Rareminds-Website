@@ -76,9 +76,10 @@ const EventCard: React.FC<EventCardProps> = ({ event }) => {
         </h3>
 
         {/* Event Description */}
-        <p className="text-gray-600 text-sm mb-4 line-clamp-3">
-          {event.description}
-        </p>
+        <div 
+          className="text-gray-600 text-sm mb-4 line-clamp-3"
+          dangerouslySetInnerHTML={{ __html: event.description }}
+        />
 
         {/* Event Details */}
         <div className="space-y-2 mb-4">
