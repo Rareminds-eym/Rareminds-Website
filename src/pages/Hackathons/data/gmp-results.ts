@@ -25,6 +25,95 @@ export interface CourseStats {
     course_name: string;
 }
 
+// Function to fetch GMP Winners from Supabase - ONLY from gmp_winners table
+export async function fetchGMPWinners(): Promise<College[]> {
+    console.log('Fetching GMP Winners from gmp_winners table...');
+    
+    try {
+        // First, get the total count
+        const { count, error: countError } = await supabase
+            .from('gmp_winners')
+            .select('*', { count: 'exact', head: true });
+
+        if (countError) {
+            console.error('Error getting GMP Winners count:', countError);
+            throw countError;
+        }
+
+        console.log(`GMP Winners count query successful. Found ${count} total records.`);
+        
+        if (!count || count === 0) {
+            console.warn('gmp_winners table is empty.');
+            return [];
+        }
+
+        // Fetch all data in batches (Supabase has a limit of 1000 records per query)
+        const batchSize = 1000;
+        const batches = Math.ceil(count / batchSize);
+        const allData: any[] = [];
+
+        console.log(`Fetching ${count} winner records in ${batches} batches of ${batchSize} each...`);
+
+        for (let i = 0; i < batches; i++) {
+            const startRange = i * batchSize;
+            const endRange = Math.min(startRange + batchSize - 1, count - 1);
+            
+            console.log(`Fetching winners batch ${i + 1}/${batches}: records ${startRange} to ${endRange}`);
+            
+            const { data: batchData, error: batchError } = await supabase
+                .from('gmp_winners')
+                .select('*')
+                .range(startRange, endRange);
+
+            if (batchError) {
+                console.error(`Error fetching GMP Winners batch ${i + 1}:`, batchError);
+                throw batchError;
+            }
+
+            if (batchData) {
+                allData.push(...batchData);
+                console.log(`Winners batch ${i + 1} fetched: ${batchData.length} records`);
+            }
+        }
+
+        console.log(`Successfully fetched ${allData.length} out of ${count} total GMP Winners.`);
+        
+        if (allData.length === 0) {
+            console.warn('gmp_winners table returned no data.');
+            return [];
+        }
+
+        // Log first record to see structure
+        console.log('Sample GMP Winner record:', allData[0]);
+
+        // Transform the data to match the expected College interface
+        const results: College[] = allData.map((result: any) => {
+            // Handle different possible column name variations
+            const university = result.University || result.university || result.UNIVERSITY || 'Unknown University';
+            const collegeCode = result.college_code || result.College_Code || result.COLLEGE_CODE || result.code || `GMP_WINNER_${Math.random().toString(36).substring(2, 11)}`;
+            const collegeName = result.college_name || result.College_Name || result.COLLEGE_NAME || result.name || 'Unknown College';
+            const teamName = result.team_name || result.Team_Name || result.TEAM_NAME || result.team || '';
+            const id = result.id || result.ID || result.Id || `${collegeCode}_winner_${Math.random().toString(36).substring(2, 8)}`;
+
+            return {
+                id,
+                college_code: collegeCode?.toUpperCase() || collegeCode,
+                college_name: collegeName,
+                university: university,
+                course_name: 'GMP',
+                team_name: teamName
+            };
+        });
+
+        console.log(`Successfully processed ${results.length} GMP Winners from ${allData.length} total records`);
+        return results;
+        
+    } catch (error) {
+        console.error('Error in fetchGMPWinners:', error);
+        throw error;
+    }
+}
+
 // Function to fetch GMP Level 2 results from Supabase - ONLY from gmp_h2_results table
 export async function fetchGMPLevel2Results(): Promise<College[]> {
     console.log('Fetching GMP Level 2 results from gmp_h2_results table...');
