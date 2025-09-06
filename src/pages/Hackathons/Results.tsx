@@ -726,14 +726,14 @@ const HackathonResults: React.FC = () => {
                               </span>
                             </div>
                             <h3 className="font-bold text-slate-900 text-sm leading-tight mb-2">
-                              <span className="text-yellow-600">🎯</span> {college.college_name}
+                              <span className="text-yellow-600"></span> {college.college_name}
                             </h3>
                             <p className="text-slate-700 text-sm font-medium mb-1">
-                              <span className="text-blue-600">🏛️</span> {college.university}
+                              <span className="text-blue-600"></span> {college.university}
                             </p>
                             {college.team_name && (
                               <p className="text-slate-600 text-sm mt-2 p-2 bg-yellow-50 rounded-lg border border-yellow-200">
-                                <span className="font-semibold text-yellow-700">👥 Team:</span> {college.team_name}
+                                <span className="font-semibold text-yellow-700">Team:</span> {college.team_name}
                               </p>
                             )}
                           </div>
