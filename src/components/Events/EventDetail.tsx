@@ -1,5 +1,8 @@
 import React from 'react';
 import { useParams, Link } from 'react-router-dom';
+import Carousel from './Carousel';
+import ImageModal from './ImageModal';
+import RegistrationModal from './RegistrationModal';
 import { useEvents } from '../../hooks/Events/useEvent';
 import { 
   Calendar, 
@@ -22,12 +25,14 @@ import {
   ChevronRight,
   Star,
   Award,
-  Zap
+  Zap,
+  Edit3
 } from 'lucide-react';
 
 const EventDetail: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
   const { events, loading, error } = useEvents();
+  const [modalOpen, setModalOpen] = React.useState(false);
 
   // Find the event by slug
   const event = events.find(e => e.slug === slug);
@@ -149,6 +154,12 @@ const EventDetail: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/20 relative overflow-hidden">
+      <RegistrationModal 
+        open={modalOpen} 
+        onClose={() => setModalOpen(false)} 
+        eventId={event.id} 
+        eventName={event.title} 
+      />
       {/* Animated Background Elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-20 left-10 w-72 h-72 bg-gradient-to-r from-blue-400/10 to-purple-400/10 rounded-full blur-3xl animate-pulse"></div>
@@ -158,16 +169,30 @@ const EventDetail: React.FC = () => {
       {/* Modern Floating Navigation - Properly Aligned */}
       <div className="sticky top-6 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="backdrop-blur-xl bg-white/80 rounded-2xl border border-white/20 shadow-2xl px-6 py-4 w-fit">
-            <Link
-              to="/events"
-              className="group inline-flex items-center text-slate-700 hover:text-indigo-600 transition-all duration-300 font-medium"
-            >
-              <div className="w-8 h-8 rounded-full bg-gradient-to-r from-indigo-500 to-purple-500 flex items-center justify-center mr-3 group-hover:scale-110 transition-transform">
-                <ArrowLeft className="w-4 h-4 text-white" />
-              </div>
-              Back to Events
-            </Link>
+          <div className="flex justify-between items-center" style={{ zIndex: 10 }}>
+            <div className="backdrop-blur-xl bg-white/80 rounded-2xl border border-white/20 shadow-2xl px-6 py-4 w-fit">
+              <Link
+                to="/events"
+                className="group inline-flex items-center text-slate-700 hover:text-indigo-600 transition-all duration-300 font-medium"
+              >
+                <div className="w-8 h-8 rounded-full bg-gradient-to-r from-indigo-500 to-purple-500 flex items-center justify-center mr-3 group-hover:scale-110 transition-transform">
+                  <ArrowLeft className="w-4 h-4 text-white" />
+                </div>
+                Back to Events
+              </Link>
+            </div>
+            <div className="backdrop-blur-xl bg-white/80 rounded-2xl border border-white/20 shadow-2xl px-6 py-4 w-fit">
+              <a
+                href="#register"
+                className="group inline-flex items-center text-slate-700 hover:text-indigo-600 transition-all duration-300 font-medium"
+                onClick={e => { e.preventDefault(); setModalOpen(true); }}
+              >
+                <div className="w-8 h-8 rounded-full bg-gradient-to-r from-indigo-500 to-purple-500 flex items-center justify-center mr-3 group-hover:scale-110 transition-transform">
+                  <Edit3 className="w-4 h-4 text-white" />
+                </div>
+                Register Now
+              </a>
+            </div>
           </div>
         </div>
       </div>
@@ -178,7 +203,7 @@ const EventDetail: React.FC = () => {
           {/* Hero Section with Modern Banner - Improved Spacing */}
           <div className="mb-16 pt-8">
             {(event.event_banner || event.featured_image) ? (
-              <div className="relative h-[75vh] min-h-[600px] rounded-3xl overflow-hidden shadow-2xl">
+              <div className="relative h-[40vh] min-h-[250px] rounded-3xl overflow-hidden shadow-2xl">
                 <img
                   src={event.event_banner || event.featured_image}
                   alt={event.title}
@@ -214,7 +239,34 @@ const EventDetail: React.FC = () => {
                           <div className="w-6 h-6 bg-white/20 rounded-full flex items-center justify-center mr-3">
                             <MapPin className="w-4 h-4" />
                           </div>
-                          <span className="font-medium">{event.location}</span>
+                          <span className="font-medium">
+                            {event.location}
+                            {event.location_type === 'physical' && event.location_geo && (
+                              <div className="mt-2">
+                                <iframe
+                                  title="Event Location Map"
+                                  width="250"
+                                  height="150"
+                                  style={{ borderRadius: '12px', border: 'none' }}
+                                  src={`https://maps.google.com/maps?q=${event.location_geo.lat},${event.location_geo.lng}&z=15&output=embed`}
+                                  allowFullScreen
+                                />
+                              </div>
+                            )}
+                            {event.location_type === 'virtual' && event.location_link && (
+                              <div className="mt-2">
+                                <a
+                                  href={event.location_link}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="inline-flex items-center px-3 py-1 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition ml-2"
+                                >
+                                  <ExternalLink className="w-4 h-4 mr-1" />
+                                  Join Event
+                                </a>
+                              </div>
+                            )}
+                          </span>
                         </div>
                       </div>
                     </div>
@@ -248,6 +300,10 @@ const EventDetail: React.FC = () => {
                   </div>
                 </div>
               </div>
+            )}
+            {/* Auto-scroll Carousel Below Banner */}
+            {event.events_gallery && event.events_gallery.length > 0 && (
+              <EventGallery images={event.events_gallery} />
             )}
           </div>
 
@@ -327,6 +383,21 @@ const EventDetail: React.FC = () => {
                   </div>
                 </div>
               )}
+              {/* Map below Featured Speakers if location exists */}
+              {event.location_latitude && event.location_longitude && (
+                <div className="backdrop-blur-xl bg-white/60 rounded-3xl p-8 lg:p-10 border border-white/20 shadow-xl mt-8 flex justify-center">
+                  <div className="w-full max-w-3xl">
+                    <iframe
+                      title="Event Location Map"
+                      width="100%"
+                      height="300"
+                      style={{ borderRadius: '16px', border: 'none', width: '100%' }}
+                      src={`https://maps.google.com/maps?q=${event.location_latitude},${event.location_longitude}&z=15&output=embed`}
+                      allowFullScreen
+                    />
+                  </div>
+                </div>
+              )}
 
               {/* Sponsors - Consistent Layout */}
               {event.sponsors && event.sponsors.length > 0 && (
@@ -398,7 +469,7 @@ const EventDetail: React.FC = () => {
                       <Users className="w-5 h-5 text-white" />
                     </div>
                     <div>
-                      <p className="font-semibold text-slate-800 text-sm">Capacity</p>
+                      <p className="font-semibold text-slate-800 text-sm">By Invitees</p>
                       <p className="text-slate-600 text-sm">{event.capacity} attendees</p>
                     </div>
                   </div>
@@ -491,3 +562,35 @@ const EventDetail: React.FC = () => {
 };
 
 export default EventDetail;
+
+// Gallery and Modal logic
+interface EventGalleryProps {
+  images: string[];
+}
+
+export function EventGallery({ images }: EventGalleryProps) {
+  const [modalOpen, setModalOpen] = React.useState(false);
+  const [selectedImage, setSelectedImage] = React.useState<string>("");
+
+  const handleImageClick = (img: string) => {
+    setSelectedImage(img);
+    setModalOpen(true);
+  };
+
+  const handleClose = () => {
+    setModalOpen(false);
+    setSelectedImage("");
+  };
+
+  return (
+    <>
+      <Carousel images={images} onImageClick={handleImageClick} />
+      <ImageModal 
+        image={selectedImage} 
+        images={images}
+        open={modalOpen} 
+        onClose={handleClose} 
+      />
+    </>
+  );
+}

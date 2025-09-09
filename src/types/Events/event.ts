@@ -1,4 +1,8 @@
 export interface Event {
+  location_type?: 'physical' | 'virtual';
+  location_link?: string; // For virtual events
+  location_geo?: { lat: number; lng: number }; // For physical events
+  events_gallery?: string[];
   id?: string;
   title: string;
   description: string;
