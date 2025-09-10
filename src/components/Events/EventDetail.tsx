@@ -98,9 +98,16 @@ const EventDetail: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
   const { events, loading, error } = useEvents();
   const [modalOpen, setModalOpen] = React.useState(false);
+  console.log('EventDetail rendered, slug:', slug);
 
   // Find the event by slug
   const event = events.find(e => e.slug === slug);
+  console.log('Event found:', event);
+  if (event) {
+    console.log('event.location_type:', event.location_type);
+    console.log('event.location_geo:', event.location_geo);
+    console.log('event.location:', event.location);
+  }
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-US', {
@@ -219,12 +226,15 @@ const EventDetail: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/20 relative overflow-hidden">
+              
       <RegistrationModal 
         open={modalOpen} 
         onClose={() => setModalOpen(false)} 
         eventId={event.id ?? ""} 
         eventName={event.title} 
       />
+
+      
       {/* Animated Background Elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-20 left-10 w-72 h-72 bg-gradient-to-r from-blue-400/10 to-purple-400/10 rounded-full blur-3xl animate-pulse"></div>
@@ -309,31 +319,19 @@ const EventDetail: React.FC = () => {
                             <MapPin className="w-4 h-4" />
                           </div>
                           <span className="font-medium">
-                            {event.location}
-                            {event.location_type === 'physical' && event.location_geo && (
-                              <div className="mt-2">
-                                <iframe
-                                  title="Event Location Map"
-                                  width="250"
-                                  height="150"
-                                  style={{ borderRadius: '12px', border: 'none' }}
-                                  src={`https://maps.google.com/maps?q=${event.location_geo.lat},${event.location_geo.lng}&z=15&output=embed`}
-                                  allowFullScreen
-                                />
-                              </div>
+                            {event.location_type === 'physical' && (
+                              <span className="ml-2 text-white">{event.location}</span>
                             )}
                             {event.location_type === 'virtual' && event.location_link && (
-                              <div className="mt-2">
-                                <a
-                                  href={event.location_link}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  className="inline-flex items-center px-3 py-1 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition ml-2"
-                                >
-                                  <ExternalLink className="w-4 h-4 mr-1" />
-                                  Join Event
-                                </a>
-                              </div>
+                              <a
+                                href={event.location_link}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center px-3 py-1 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition ml-2"
+                              >
+                                <ExternalLink className="w-4 h-4 mr-1" />
+                                Join Event
+                              </a>
                             )}
                           </span>
                         </div>
@@ -393,6 +391,28 @@ const EventDetail: React.FC = () => {
                   dangerouslySetInnerHTML={{ __html: event.description }}
                 />
               </div>
+              {/* Physical Event Map Section */}
+              {event.location_type === 'physical' && event.location_geo && (
+                <div className="backdrop-blur-xl bg-white/60 rounded-3xl p-8 lg:p-10 border border-white/20 shadow-xl mt-6">
+                  <div className="flex items-center gap-4 mb-8">
+                    <div className="w-12 h-12 bg-gradient-to-r from-purple-500 to-blue-500 rounded-2xl flex items-center justify-center shadow-lg">
+                      <MapPin className="w-6 h-6 text-white" />
+                    </div>
+                    <h2 className="text-xl font-bold bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent leading-tight">Event Location Map</h2>
+                  </div>
+                  <div className="flex flex-col items-center">
+                    <iframe
+                      title="Event Location Map"
+                      width="700"
+                      height="250"
+                      style={{ borderRadius: '16px', border: 'none', boxShadow: '0 2px 12px rgba(0,0,0,0.08)' }}
+                      src={`https://maps.google.com/maps?q=${event.location_geo.lat},${event.location_geo.lng}&z=15&output=embed`}
+                      allowFullScreen
+                    />
+                    <div className="mt-4 text-slate-700 text-sm font-medium">{event.location}</div>
+                  </div>
+                </div>
+              )}
 
               {/* Requirements - Consistent Layout */}
               {event.requirements && (
@@ -434,21 +454,6 @@ const EventDetail: React.FC = () => {
                       <Star className="w-6 h-6 text-white" />
                     </div>
                     <h2 className="text-xl font-bold bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent leading-tight">Featured Speakers</h2>
-                  </div>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {event.speakers.map((speaker, index) => (
-                      <div key={index} className="group bg-gradient-to-r from-white/80 to-white/60 rounded-2xl p-4 border border-white/30 backdrop-blur-sm hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
-                        <div className="flex items-center">
-                          <div className="w-12 h-12 bg-gradient-to-r from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center mr-3 group-hover:scale-110 transition-transform">
-                            <User className="w-6 h-6 text-white" />
-                          </div>
-                          <div>
-                            <p className="font-bold text-slate-800 text-sm">{speaker}</p>
-                            <p className="text-slate-600">Speaker</p>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
                   </div>
                 </div>
               )}
@@ -546,8 +551,45 @@ const EventDetail: React.FC = () => {
                     <p className="text-slate-600 text-sm">{formatDate(event.registration_deadline)}</p>
                   </div>
                 )}
-              </div>
+               </div>
+                
             </div>
+            {/* Speaker Information Card - separate container styled like Event Organizer */}
+                {event.speakers_details && Array.isArray(event.speakers_details) && event.speakers_details.length > 0 && (
+                  <div className="backdrop-blur-xl bg-white/70 rounded-3xl p-6 border border-white/20 shadow-xl">
+                    <h3 className="text-xl font-bold bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent mb-6">Speaker Details</h3>
+                    <div className="space-y-4">
+                      {event.speakers_details.map((speaker, idx) => (
+                        <div key={idx} className="flex items-center gap-4 p-4 rounded-2xl bg-gradient-to-r from-indigo-50/80 to-purple-50/80 border border-indigo-200/30 shadow hover:shadow-lg transition-all">
+                          <img
+                            src={speaker.photo}
+                            alt={speaker.name}
+                            className="w-16 h-16 rounded-full object-cover border-2 border-indigo-300 shadow"
+                            onError={e => {
+                              (e.target as HTMLImageElement).src = 'https://ui-avatars.com/api/?name=' + encodeURIComponent(speaker.name);
+                            }}
+                          />
+                          <div className="flex-1">
+                            <p className="font-bold text-slate-800">{speaker.name}</p>
+                            <p className="text-slate-600 text-sm">{speaker.profile}</p>
+                            {speaker.linkedIn && (
+                              <a
+                                href={speaker.linkedIn}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-800 text-sm font-medium mt-2"
+                              >
+                                <ExternalLink className="w-4 h-4" /> LinkedIn
+                              </a>
+                            )}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                  )}
+              
+                
 
             {/* Organizer Card */}
             <div className="backdrop-blur-xl bg-white/70 rounded-3xl p-6 border border-white/20 shadow-xl">
