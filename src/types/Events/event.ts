@@ -29,4 +29,5 @@ export interface Event {
   meta_title: string;
   meta_description: string;
   slug: string;
+  teaser_video?: string;
 }

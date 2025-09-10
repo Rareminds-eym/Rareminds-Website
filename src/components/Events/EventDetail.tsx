@@ -1,4 +1,8 @@
 import React from 'react';
+import styles from './TeaserVideoButton.module.css';
+import TeaserVideoModal from './TeaserVideoModal';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { useParams, Link } from 'react-router-dom';
 import Carousel from './Carousel';
 import ImageModal from './ImageModal';
@@ -15,19 +19,80 @@ import {
   ArrowLeft,
   Tag,
   AlertCircle,
-  Loader2,
   CheckCircle,
   XCircle,
-  Share2,
-  Heart,
-  Bookmark,
   ExternalLink,
-  ChevronRight,
   Star,
   Award,
   Zap,
   Edit3
 } from 'lucide-react';
+
+// Animated Teaser Video Button Component
+export const TeaserVideoButton: React.FC<{ teaserVideo?: string }> = (props) => {
+  // ...existing code...
+  const { teaserVideo } = props;
+  const isYouTube = teaserVideo && (teaserVideo.includes('youtube.com') || teaserVideo.includes('youtu.be'));
+  const [showPlayer, setShowPlayer] = React.useState(false);
+  React.useEffect(() => {
+    if (showPlayer) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [showPlayer]);
+
+  const handleClick = () => {
+    if (!teaserVideo) {
+      toast.error('No video posted yet', {
+        position: 'bottom-right',
+        autoClose: 2000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: false,
+        style: { background: '#fff', color: '#d90429', boxShadow: '0 2px 8px rgba(0,0,0,0.08)' },
+        icon: false,
+      });
+      return;
+    }
+    if (isYouTube) {
+      window.open(teaserVideo, '_blank');
+    } else {
+      setShowPlayer(true);
+    }
+  };
+
+  return (
+    <>
+      <ToastContainer />
+      {/* Hide everything except modal when showPlayer is true */}
+      {!showPlayer && (
+        <div className="flex flex-col items-end">
+          <button
+            className={styles.teaserButton}
+            onClick={handleClick}
+            title={teaserVideo ? (isYouTube ? 'Watch on YouTube' : 'Watch Teaser') : 'No video posted yet'}
+            type="button"
+          >
+            <span className={styles.teaserText}>Watch Teaser</span>
+            {/* YouTube icon SVG, shown on hover */}
+            <svg className={styles.teaserIcon} viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+              <path d="M23.498 6.186a2.994 2.994 0 0 0-2.112-2.112C19.633 3.5 12 3.5 12 3.5s-7.633 0-9.386.574A2.994 2.994 0 0 0 .502 6.186C0 7.94 0 12 0 12s0 4.06.502 5.814a2.994 2.994 0 0 0 2.112 2.112C4.367 20.5 12 20.5 12 20.5s7.633 0 9.386-.574a2.994 2.994 0 0 0 2.112-2.112C24 16.06 24 12 24 12s0-4.06-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
+            </svg>
+          </button>
+        </div>
+      )}
+      {/* Modal for non-YouTube video */}
+      {!isYouTube && teaserVideo && (
+        <TeaserVideoModal open={showPlayer} videoUrl={teaserVideo} onClose={() => setShowPlayer(false)} />
+      )}
+    </>
+  );
+};
 
 const EventDetail: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -157,7 +222,7 @@ const EventDetail: React.FC = () => {
       <RegistrationModal 
         open={modalOpen} 
         onClose={() => setModalOpen(false)} 
-        eventId={event.id} 
+        eventId={event.id ?? ""} 
         eventName={event.title} 
       />
       {/* Animated Background Elements */}
@@ -211,6 +276,10 @@ const EventDetail: React.FC = () => {
                 />
                 {/* Enhanced Gradient Overlay */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent"></div>
+                {/* Animated Teaser Video Button - moved to bottom right */}
+                <div className="absolute bottom-6 right-6 z-20">
+                  <TeaserVideoButton teaserVideo={event.teaser_video} />
+                </div>
                 {/* Properly Aligned Content */}
                 <div className="absolute bottom-0 left-0 right-0">
                   <div className="p-8 md:p-12 lg:p-16">
@@ -384,20 +453,7 @@ const EventDetail: React.FC = () => {
                 </div>
               )}
               {/* Map below Featured Speakers if location exists */}
-              {event.location_latitude && event.location_longitude && (
-                <div className="backdrop-blur-xl bg-white/60 rounded-3xl p-8 lg:p-10 border border-white/20 shadow-xl mt-8 flex justify-center">
-                  <div className="w-full max-w-3xl">
-                    <iframe
-                      title="Event Location Map"
-                      width="100%"
-                      height="300"
-                      style={{ borderRadius: '16px', border: 'none', width: '100%' }}
-                      src={`https://maps.google.com/maps?q=${event.location_latitude},${event.location_longitude}&z=15&output=embed`}
-                      allowFullScreen
-                    />
-                  </div>
-                </div>
-              )}
+              {/* Removed location_latitude/location_longitude map as those fields do not exist in Event type */}
 
               {/* Sponsors - Consistent Layout */}
               {event.sponsors && event.sponsors.length > 0 && (
