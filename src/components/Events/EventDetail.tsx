@@ -25,7 +25,9 @@ import {
   Star,
   Award,
   Zap,
-  Edit3
+  Edit3,
+  Plus,
+  Minus
 } from 'lucide-react';
 
 // Animated Teaser Video Button Component
@@ -99,6 +101,12 @@ const EventDetail: React.FC = () => {
   const { events, loading, error } = useEvents();
   const [modalOpen, setModalOpen] = React.useState(false);
   console.log('EventDetail rendered, slug:', slug);
+  
+  // FAQ accordion state
+  const [openFaqIdx, setOpenFaqIdx] = React.useState<number | null>(null);
+  const toggleFaq = (idx: number) => {
+    setOpenFaqIdx(openFaqIdx === idx ? null : idx);
+  };
 
   // Find the event by slug
   const event = events.find(e => e.slug === slug);
@@ -445,6 +453,33 @@ const EventDetail: React.FC = () => {
                   />
                 </div>
               )}
+
+                {/* FAQ Section - Below Agenda */}
+                {event.faq && Array.isArray(event.faq) && event.faq.length > 0 && (
+                  <div className="backdrop-blur-xl bg-white/60 rounded-3xl p-8 lg:p-10 border border-white/20 shadow-xl mt-6">
+                    <div className="flex items-center gap-4 mb-8">
+                      <div className="w-12 h-12 bg-gradient-to-r from-yellow-500 to-amber-500 rounded-2xl flex items-center justify-center shadow-lg">
+                        <AlertCircle className="w-6 h-6 text-white" />
+                      </div>
+                      <h2 className="text-xl font-bold bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent leading-tight">Frequently Asked Questions</h2>
+                    </div>
+                    <div className="space-y-6">
+                      {event.faq.map((item: { question: string; answer: string }, idx: number) => (
+                        <div key={idx} className="bg-gradient-to-r from-yellow-50/80 to-amber-50/80 border border-yellow-200/50 rounded-2xl p-3 backdrop-blur-sm shadow">
+                          <div className="flex items-center justify-between cursor-pointer" onClick={() => toggleFaq(idx)}>
+                            <h3 className="font-semibold text-slate-800 text-lg">Q: {item.question}</h3>
+                            <button type="button" aria-label="Show answer" className="ml-4 p-2 rounded-full bg-yellow-100 hover:bg-yellow-200 transition">
+                              {openFaqIdx === idx ? <Minus className="w-6 h-6 text-yellow-600" /> : <Plus className="w-6 h-6 text-yellow-600" />}
+                            </button>
+                          </div>
+                          {openFaqIdx === idx && (
+                            <p className="text-slate-700 text-base mt-4">{item.answer}</p>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
 
               {/* Speakers - Enhanced Layout */}
               {event.speakers && event.speakers.length > 0 && (
