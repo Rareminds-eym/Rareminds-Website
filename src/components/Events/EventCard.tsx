@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import RegistrationModal from './RegistrationModal';
 import { Event } from '../../types/Events/event';
 import { Calendar, Clock, MapPin, Users, Tag } from 'lucide-react';
 
@@ -8,6 +9,7 @@ interface EventCardProps {
 }
 
 const EventCard: React.FC<EventCardProps> = ({ event }) => {
+  const [modalOpen, setModalOpen] = useState(false);
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-US', {
       year: 'numeric',
@@ -33,6 +35,12 @@ const EventCard: React.FC<EventCardProps> = ({ event }) => {
 
   return (
     <div className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden group">
+      <RegistrationModal 
+        open={modalOpen} 
+        onClose={() => setModalOpen(false)} 
+        eventId={event.id ?? ""} 
+        eventName={event.title} 
+      />
       {/* Event Image */}
       {event.featured_image && (
         <div className="relative h-48 overflow-hidden">
@@ -111,19 +119,25 @@ const EventCard: React.FC<EventCardProps> = ({ event }) => {
           </p>
           {event.price && (
             <p className="text-lg font-bold text-green-600 mt-2">
-              {event.price === '0' ? 'Free' : `$${event.price}`}
+              {event.price === '0' ? 'Free' : `${event.price}`}
             </p>
           )}
         </div>
 
-        {/* Action Button */}
-        <div className="mt-4">
+        {/* Action Buttons */}
+        <div className="mt-4 flex flex-col gap-2">
           <Link 
             to={`/events/${event.slug}`}
             className="block w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-300 text-center"
           >
             View Details
           </Link>
+          <button
+            className="block w-full bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-300 text-center"
+            onClick={() => setModalOpen(true)}
+          >
+            Register
+          </button>
         </div>
       </div>
     </div>
