@@ -1,0 +1,76 @@
+/* Teaser Video Button Styles - based on user config */
+.teaserButton {
+  --teaser_sideLength: 8rem;
+  --teaser_topRightTriangleSideLength: 0.9rem;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid white;
+  width: var(--teaser_sideLength);
+  height: 2.5rem;
+  background-color: #d90429;
+  overflow: hidden;
+  border-radius: 0.5rem;
+}
+
+.teaserButton::before {
+  position: absolute;
+  content: "";
+  top: 0;
+  right: 0;
+  width: 0;
+  height: 0;
+  border-width: 0 var(--teaser_topRightTriangleSideLength) var(--teaser_topRightTriangleSideLength) 0;
+  border-style: solid;
+  border-color: transparent white transparent transparent;
+  transition-timing-function: ease-in-out;
+  transition-duration: 0.2s;
+}
+
+.teaserButton:hover {
+  cursor: pointer;
+}
+
+.teaserButton:hover::before {
+  --teaser_topRightTriangleSideLength: calc(var(--teaser_sideLength) * 2);
+}
+
+.teaserButton:focus-visible::before {
+  --teaser_topRightTriangleSideLength: calc(var(--teaser_sideLength) * 2);
+}
+
+.teaserText {
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 1rem;
+  letter-spacing: 0.02em;
+  transition: opacity 0.2s ease-in-out;
+}
+
+.teaserIcon {
+  display: none;
+  width: calc(var(--teaser_sideLength) * 0.3);
+  height: calc(var(--teaser_sideLength) * 0.3);
+  fill: white;
+}
+
+
+.teaserButton:hover .teaserText,
+.teaserButton:focus-visible .teaserText {
+  opacity: 0;
+}
+
+.teaserButton:hover .teaserIcon,
+.teaserButton:focus-visible .teaserIcon {
+  display: block;
+  opacity: 1;
+  fill: #d90429;
+  z-index: 1;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%) scale(1.1);
+  transition: opacity 0.2s, transform 0.2s;
+}
+  left: 50%;

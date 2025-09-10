@@ -78,8 +78,8 @@ const RegistrationModal: React.FC<RegistrationModalProps> = ({ open, onClose, ev
   };
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center" style={backdropStyle} onClick={onClose}>
-      <div className="bg-white rounded-2xl p-8 shadow-2xl w-full max-w-md relative" onClick={e => e.stopPropagation()}>
+    <div className="fixed inset-0 z-[100] flex items-center justify-center" style={backdropStyle}>
+      <div className="bg-white rounded-2xl p-8 shadow-2xl w-full max-w-md relative">
         <h2 className="text-2xl font-bold mb-6 text-center">Register for Event</h2>
         {success ? (
           <div className="flex flex-col items-center justify-center text-green-600 font-semibold mb-4">
