@@ -36,5 +36,10 @@ export interface Event {
       profile: string;
       linkedIn?: string;
     }>;
-    teaser_video?: string;
+  teaser_video?: string;
+
+  faq?: Array<{
+    question: string;
+    answer: string;
+  }>;
 }
