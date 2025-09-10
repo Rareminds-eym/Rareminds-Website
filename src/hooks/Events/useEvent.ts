@@ -19,7 +19,18 @@ export const useEvents = () => {
         throw error;
       }
 
-      setEvents(data || []);
+      // Map location_latitude and location_longitude to location_geo
+      const mappedEvents = (data || []).map((event: any) => ({
+        ...event,
+        location_geo:
+          event.location_latitude !== undefined && event.location_longitude !== undefined
+            ? { lat: event.location_latitude, lng: event.location_longitude }
+            : undefined,
+        location_type:
+          event.location_type ?? (event.is_physical ? 'physical' : 'virtual'),
+      }));
+
+      setEvents(mappedEvents);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred');
     } finally {
