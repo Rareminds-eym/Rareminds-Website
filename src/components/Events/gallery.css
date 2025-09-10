@@ -1,3 +1,49 @@
+/* Completely disable all non-modal interactions when modal is open */
+body.modal-open {
+  overflow: hidden !important;
+  position: fixed !important;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* Disable pointer events on all content except modal */
+body.modal-open > *:not([data-modal]) {
+  pointer-events: none !important;
+  user-select: none !important;
+}
+
+/* Re-enable pointer events only for modal content */
+body.modal-open [data-modal],
+body.modal-open [data-modal] * {
+  pointer-events: auto !important;
+  user-select: auto !important;
+}
+
+/* Hide specific potentially overlapping elements when modal is open */
+body.modal-open .back-to-events-btn,
+body.modal-open .register-btn,
+body.modal-open .floating-action-button,
+body.modal-open .sticky-button,
+body.modal-open .header,
+body.modal-open .navbar,
+body.modal-open .footer,
+body.modal-open .floating-chat,
+body.modal-open .sidebar,
+body.modal-open .notification-toast,
+body.modal-open .dropdown-menu:not(.modal *),
+body.modal-open .tooltip:not(.modal *),
+body.modal-open button:not([data-modal] button),
+body.modal-open a:not([data-modal] a),
+body.modal-open input:not([data-modal] input),
+body.modal-open select:not([data-modal] select),
+body.modal-open textarea:not([data-modal] textarea) {
+  display: none !important;
+  pointer-events: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  z-index: -9999 !important;
+  user-select: none !important;
+}
 /* Enhanced Gallery Animations and Transitions */
 
 /* Smooth scrolling container */

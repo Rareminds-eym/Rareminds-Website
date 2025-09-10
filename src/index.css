@@ -191,9 +191,35 @@
   30% { transform: scale(1.08) rotate(-8deg); box-shadow: 0 0 0 6px rgba(34,43,51,0.12); }
   40% { transform: scale(1) rotate(0deg); box-shadow: 0 0 0 0 rgba(34,43,51,0.7); }
 }
-.animate-trainers-fab {
-  animation: trainers-fab 1.6s cubic-bezier(0.4,0,0.6,1) infinite;
-}
+  .animate-trainers-fab {
+    animation: trainers-fab 1.6s cubic-bezier(0.4,0,0.6,1) infinite;
+  }
+
+  /* Modal overlay utilities */
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 99999;
+    background: rgba(0, 0, 0, 0.98);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+
+  .modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.95);
+    z-index: 99998;
+  }
+
+  /* Force all other elements below modal */
+  body.modal-open > *:not(.modal-overlay):not([data-modal]) {
+    position: relative;
+    z-index: 1;
+  }
 
 @keyframes glow {
   0%, 100% {
