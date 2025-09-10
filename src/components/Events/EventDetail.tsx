@@ -170,10 +170,10 @@ const EventDetail: React.FC = () => {
       <div className="sticky top-6 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center" style={{ zIndex: 10 }}>
-            <div className="backdrop-blur-xl bg-white/80 rounded-2xl border border-white/20 shadow-2xl px-6 py-4 w-fit">
+            <div className="backdrop-blur-xl bg-white/80 rounded-2xl border border-white/20 shadow-2xl px-6 py-4 w-fit back-to-events-btn">
               <Link
                 to="/events"
-                className="group inline-flex items-center text-slate-700 hover:text-indigo-600 transition-all duration-300 font-medium"
+                className="group inline-flex items-center text-slate-700 hover:text-indigo-600 transition-all duration-300 font-medium back-to-events-btn"
               >
                 <div className="w-8 h-8 rounded-full bg-gradient-to-r from-indigo-500 to-purple-500 flex items-center justify-center mr-3 group-hover:scale-110 transition-transform">
                   <ArrowLeft className="w-4 h-4 text-white" />
@@ -181,10 +181,10 @@ const EventDetail: React.FC = () => {
                 Back to Events
               </Link>
             </div>
-            <div className="backdrop-blur-xl bg-white/80 rounded-2xl border border-white/20 shadow-2xl px-6 py-4 w-fit">
+            <div className="backdrop-blur-xl bg-white/80 rounded-2xl border border-white/20 shadow-2xl px-6 py-4 w-fit register-btn">
               <a
                 href="#register"
-                className="group inline-flex items-center text-slate-700 hover:text-indigo-600 transition-all duration-300 font-medium"
+                className="group inline-flex items-center text-slate-700 hover:text-indigo-600 transition-all duration-300 font-medium register-btn"
                 onClick={e => { e.preventDefault(); setModalOpen(true); }}
               >
                 <div className="w-8 h-8 rounded-full bg-gradient-to-r from-indigo-500 to-purple-500 flex items-center justify-center mr-3 group-hover:scale-110 transition-transform">

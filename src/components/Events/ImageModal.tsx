@@ -9,6 +9,47 @@ interface ImageModalProps {
 }
 
 const ImageModal: React.FC<ImageModalProps> = ({ image, images = [], open, onClose }) => {
+  // Prevent background scroll when modal is open
+  useEffect(() => {
+    if (open) {
+      document.body.style.overflow = 'hidden';
+      document.body.classList.add('modal-open');
+      
+      // Prevent all clicks on background elements
+      const preventBackgroundClicks = (e: Event) => {
+        const target = e.target as Element;
+        const modalElement = document.querySelector('[data-modal="image-modal"]');
+        
+        // If the click is not inside the modal, prevent it
+        if (modalElement && !modalElement.contains(target) && target !== modalElement) {
+          e.preventDefault();
+          e.stopPropagation();
+          e.stopImmediatePropagation();
+          return false;
+        }
+      };
+      
+      // Add event listeners to capture all clicks
+      document.addEventListener('click', preventBackgroundClicks, true);
+      document.addEventListener('mousedown', preventBackgroundClicks, true);
+      document.addEventListener('mouseup', preventBackgroundClicks, true);
+      
+      return () => {
+        document.body.style.overflow = '';
+        document.body.classList.remove('modal-open');
+        document.removeEventListener('click', preventBackgroundClicks, true);
+        document.removeEventListener('mousedown', preventBackgroundClicks, true);
+        document.removeEventListener('mouseup', preventBackgroundClicks, true);
+      };
+    } else {
+      document.body.style.overflow = '';
+      document.body.classList.remove('modal-open');
+    }
+    return () => {
+      document.body.style.overflow = '';
+      document.body.classList.remove('modal-open');
+    };
+  }, [open]);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [zoom, setZoom] = useState(1);
@@ -99,21 +140,28 @@ const ImageModal: React.FC<ImageModalProps> = ({ image, images = [], open, onClo
 
   const currentImage = images.length > 0 ? images[currentImageIndex] : image;
 
+
   return (
     <div 
-      className={`fixed inset-0 z-50 flex items-center justify-center transition-all duration-300 ${
+      data-modal="image-modal"
+      className={`fixed inset-0 z-[99999] flex items-center justify-center transition-all duration-300 modal-overlay ${
         open ? 'opacity-100 visible' : 'opacity-0 invisible'
       }`}
       style={{
-        background: 'rgba(0, 0, 0, 0.95)',
-        backdropFilter: 'blur(10px)'
+        background: 'rgba(0, 0, 0, 0.98)',
+        backdropFilter: 'blur(12px)',
+        WebkitBackdropFilter: 'blur(12px)' // Safari support
       }}
-      onClick={onClose}
     >
+      {/* Additional backdrop layer for better coverage */}
+      <div 
+        className="absolute inset-0 bg-black/95 modal-backdrop" 
+        style={{ zIndex: -1 }}
+      />
       {/* Close button */}
       <button
         onClick={onClose}
-        className="absolute top-4 right-4 z-60 w-12 h-12 bg-white/10 hover:bg-white/20 rounded-full flex items-center justify-center transition-all duration-300 backdrop-blur-sm border border-white/20 hover:scale-110"
+        className="absolute top-4 right-4 z-[10000] w-12 h-12 bg-white/10 hover:bg-white/20 rounded-full flex items-center justify-center transition-all duration-300 backdrop-blur-sm border border-white/20 hover:scale-110"
       >
         <X className="w-6 h-6 text-white" />
       </button>
@@ -124,14 +172,14 @@ const ImageModal: React.FC<ImageModalProps> = ({ image, images = [], open, onClo
           <button
             onClick={(e) => { e.stopPropagation(); navigateImage('prev'); }}
             disabled={isAnimating}
-            className="absolute left-4 top-1/2 -translate-y-1/2 z-60 w-12 h-12 bg-white/10 hover:bg-white/20 rounded-full flex items-center justify-center transition-all duration-300 backdrop-blur-sm border border-white/20 hover:scale-110 disabled:opacity-50"
+            className="absolute left-4 top-1/2 -translate-y-1/2 z-[10000] w-12 h-12 bg-white/10 hover:bg-white/20 rounded-full flex items-center justify-center transition-all duration-300 backdrop-blur-sm border border-white/20 hover:scale-110 disabled:opacity-50"
           >
             <ChevronLeft className="w-6 h-6 text-white" />
           </button>
           <button
             onClick={(e) => { e.stopPropagation(); navigateImage('next'); }}
             disabled={isAnimating}
-            className="absolute right-4 top-1/2 -translate-y-1/2 z-60 w-12 h-12 bg-white/10 hover:bg-white/20 rounded-full flex items-center justify-center transition-all duration-300 backdrop-blur-sm border border-white/20 hover:scale-110 disabled:opacity-50"
+            className="absolute right-4 top-1/2 -translate-y-1/2 z-[10000] w-12 h-12 bg-white/10 hover:bg-white/20 rounded-full flex items-center justify-center transition-all duration-300 backdrop-blur-sm border border-white/20 hover:scale-110 disabled:opacity-50"
           >
             <ChevronRight className="w-6 h-6 text-white" />
           </button>
@@ -140,7 +188,7 @@ const ImageModal: React.FC<ImageModalProps> = ({ image, images = [], open, onClo
 
       {/* Image counter */}
       {images.length > 1 && (
-        <div className="absolute top-4 left-1/2 -translate-x-1/2 z-60 bg-white/10 backdrop-blur-sm rounded-full px-4 py-2 border border-white/20">
+  <div className="absolute top-4 left-1/2 -translate-x-1/2 z-[10000] bg-white/10 backdrop-blur-sm rounded-full px-4 py-2 border border-white/20">
           <span className="text-white text-sm font-medium">
             {currentImageIndex + 1} / {images.length}
           </span>
@@ -148,7 +196,7 @@ const ImageModal: React.FC<ImageModalProps> = ({ image, images = [], open, onClo
       )}
 
       {/* Action buttons */}
-      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-60 flex gap-2">
+  <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-[10000] flex gap-2">
         <button
           onClick={(e) => { e.stopPropagation(); setZoom(prev => Math.max(prev - 0.2, 0.5)); }}
           className="w-10 h-10 bg-white/10 hover:bg-white/20 rounded-full flex items-center justify-center transition-all duration-300 backdrop-blur-sm border border-white/20 hover:scale-110"
@@ -188,7 +236,7 @@ const ImageModal: React.FC<ImageModalProps> = ({ image, images = [], open, onClo
 
       {/* Main image container */}
       <div 
-        className={`relative max-w-[90vw] max-h-[90vh] transition-all duration-300 ${
+        className={`relative flex items-center justify-center w-[700px] h-[500px] transition-all duration-300 ${
           isAnimating ? 'opacity-50 scale-95' : 'opacity-100 scale-100'
         }`}
         onClick={e => e.stopPropagation()}
@@ -196,7 +244,7 @@ const ImageModal: React.FC<ImageModalProps> = ({ image, images = [], open, onClo
         <img
           src={currentImage}
           alt={`Gallery image ${currentImageIndex + 1}`}
-          className="max-w-full max-h-full object-contain rounded-lg shadow-2xl transition-all duration-500 ease-out"
+          className="w-[700px] h-[500px] object-cover rounded-lg shadow-2xl transition-all duration-500 ease-out"
           style={{
             transform: `scale(${zoom}) rotate(${rotation}deg)`,
             filter: isLoading ? 'blur(5px)' : 'blur(0px)'
@@ -214,7 +262,7 @@ const ImageModal: React.FC<ImageModalProps> = ({ image, images = [], open, onClo
       </div>
 
       {/* Keyboard shortcuts info */}
-      <div className="absolute bottom-4 right-4 z-60 bg-white/10 backdrop-blur-sm rounded-lg p-3 border border-white/20 opacity-50 hover:opacity-100 transition-opacity">
+  <div className="absolute bottom-4 right-4 z-[10000] bg-white/10 backdrop-blur-sm rounded-lg p-3 border border-white/20 opacity-50 hover:opacity-100 transition-opacity">
         <div className="text-white text-xs space-y-1">
           <div>ESC: Close</div>
           <div>←/→: Navigate</div>
