@@ -8,6 +8,7 @@ import Carousel from './Carousel';
 import ImageModal from './ImageModal';
 import RegistrationModal from './RegistrationModal';
 import { useEvents } from '../../hooks/Events/useEvent';
+import EventContactForm from './EventContactForm';
 import { 
   Calendar, 
   Clock, 
@@ -510,6 +511,56 @@ const EventDetail: React.FC = () => {
                   </div>
                 </div>
               )}
+
+              {/* Contact Us About This Event - Modern Professional Layout */}
+              <div className="backdrop-blur-xl bg-white/80 rounded-3xl p-6 border border-white/30 shadow-xl">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="w-10 h-10 bg-slate-700 rounded-xl flex items-center justify-center shadow-lg">
+                    <Mail className="w-5 h-5 text-white" />
+                  </div>
+                  <div>
+                    <h2 className="text-xl font-bold text-slate-800 leading-tight mb-1">Contact Us About This Event</h2>
+                    <p className="text-slate-600 text-sm">Have questions or need more information? We're here to help.</p>
+                  </div>
+                </div>
+                
+                <div className="bg-white/60 rounded-2xl p-4 border border-slate-200/50 shadow-sm">
+                  <EventContactForm
+                    eventId={event.id}
+                    eventTitle={event.title}
+                    onSuccess={() => {
+                      toast.success('🎉 Thank you for your inquiry! We\'ll get back to you soon.', {
+                        position: 'bottom-right',
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        style: { 
+                          background: '#059669', 
+                          color: '#fff', 
+                          boxShadow: '0 4px 12px rgba(5, 150, 105, 0.15)' 
+                        },
+                      });
+                    }}
+                    onError={(error) => {
+                      toast.error(`⚠️ ${error}`, {
+                        position: 'bottom-right',
+                        autoClose: 8000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        style: { 
+                          background: '#DC2626', 
+                          color: '#fff', 
+                          boxShadow: '0 4px 12px rgba(220, 38, 38, 0.15)' 
+                        },
+                      });
+                    }}
+                  />
+                </div>
+              </div>
           </div>
 
             {/* Modern Sidebar - Properly Positioned */}
@@ -683,6 +734,7 @@ const EventDetail: React.FC = () => {
                   </div>
                 </div>
               )}
+
             </div>
           </div>
         </div>
