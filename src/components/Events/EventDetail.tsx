@@ -33,10 +33,56 @@ import {
 
 // Animated Teaser Video Button Component
 export const TeaserVideoButton: React.FC<{ teaserVideo?: string }> = (props) => {
-  // ...existing code...
   const { teaserVideo } = props;
-  const isYouTube = teaserVideo && (teaserVideo.includes('youtube.com') || teaserVideo.includes('youtu.be'));
+  
+  // Enhanced video URL validation
+  const getVideoType = (url?: string) => {
+    if (!url) return null;
+    
+    // Trim whitespace and check for empty string
+    const cleanUrl = url.trim();
+    if (!cleanUrl) return null;
+    
+    // YouTube patterns
+    if (cleanUrl.includes('youtube.com') || cleanUrl.includes('youtu.be')) {
+      return 'youtube';
+    }
+    
+    // Other streaming services
+    if (cleanUrl.includes('vimeo.com')) return 'vimeo';
+    if (cleanUrl.includes('dailymotion.com')) return 'dailymotion';
+    if (cleanUrl.includes('facebook.com') && cleanUrl.includes('video')) return 'facebook';
+    if (cleanUrl.includes('instagram.com')) return 'instagram';
+    if (cleanUrl.includes('tiktok.com')) return 'tiktok';
+    
+    // Check for direct video file extensions
+    const videoExtensions = /\.(mp4|webm|ogg|avi|mov|wmv|flv|m4v)(\?.*)?$/i;
+    if (videoExtensions.test(cleanUrl)) {
+      return 'direct';
+    }
+    
+    // Check for blob or data URLs (uploaded files)
+    if (cleanUrl.startsWith('blob:')) return 'blob';
+    if (cleanUrl.startsWith('data:video/')) return 'data';
+    
+    // Check if it looks like a URL
+    try {
+      new URL(cleanUrl);
+      // If it's a web URL, try to detect if it's likely a video
+      if (cleanUrl.includes('video') || cleanUrl.includes('stream') || cleanUrl.includes('media')) {
+        return 'web-video';
+      }
+      return 'url';
+    } catch {
+      // Not a valid URL, might be a relative path
+      return 'path';
+    }
+  };
+  
+  const videoType = getVideoType(teaserVideo);
+  const isExternalVideo = ['youtube', 'vimeo', 'dailymotion', 'facebook', 'instagram', 'tiktok'].includes(videoType || '');
   const [showPlayer, setShowPlayer] = React.useState(false);
+  
   React.useEffect(() => {
     if (showPlayer) {
       document.body.style.overflow = 'hidden';
@@ -49,10 +95,12 @@ export const TeaserVideoButton: React.FC<{ teaserVideo?: string }> = (props) => 
   }, [showPlayer]);
 
   const handleClick = () => {
-    if (!teaserVideo) {
+    console.log('TeaserVideoButton clicked:', { teaserVideo, videoType });
+    
+    if (!teaserVideo || !videoType) {
       toast.error('No video posted yet', {
         position: 'bottom-right',
-        autoClose: 2000,
+        autoClose: 3000,
         hideProgressBar: true,
         closeOnClick: true,
         pauseOnHover: false,
@@ -62,9 +110,12 @@ export const TeaserVideoButton: React.FC<{ teaserVideo?: string }> = (props) => 
       });
       return;
     }
-    if (isYouTube) {
+    
+    if (isExternalVideo) {
+      // Open external videos in new tab
       window.open(teaserVideo, '_blank');
     } else {
+      // Show modal for direct video files or other URLs
       setShowPlayer(true);
     }
   };
@@ -78,7 +129,7 @@ export const TeaserVideoButton: React.FC<{ teaserVideo?: string }> = (props) => 
           <button
             className={styles.teaserButton}
             onClick={handleClick}
-            title={teaserVideo ? (isYouTube ? 'Watch on YouTube' : 'Watch Teaser') : 'No video posted yet'}
+            title={teaserVideo ? (isExternalVideo ? `Watch on ${videoType}` : 'Watch Teaser') : 'No video posted yet'}
             type="button"
           >
             <span className={styles.teaserText}>Watch Teaser</span>
@@ -89,8 +140,8 @@ export const TeaserVideoButton: React.FC<{ teaserVideo?: string }> = (props) => 
           </button>
         </div>
       )}
-      {/* Modal for non-YouTube video */}
-      {!isYouTube && teaserVideo && (
+      {/* Modal for non-external videos */}
+      {!isExternalVideo && teaserVideo && (
         <TeaserVideoModal open={showPlayer} videoUrl={teaserVideo} onClose={() => setShowPlayer(false)} />
       )}
     </>
@@ -116,6 +167,9 @@ const EventDetail: React.FC = () => {
     console.log('event.location_type:', event.location_type);
     console.log('event.location_geo:', event.location_geo);
     console.log('event.location:', event.location);
+    console.log('event.teaser_video:', event.teaser_video);
+    console.log('teaser_video type:', typeof event.teaser_video);
+    console.log('teaser_video length:', event.teaser_video?.length);
   }
 
   const formatDate = (dateString: string) => {
