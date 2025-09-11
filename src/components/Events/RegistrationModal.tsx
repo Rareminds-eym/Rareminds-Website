@@ -11,6 +11,16 @@ type RegistrationModalProps = {
 };
 
 const RegistrationModal: React.FC<RegistrationModalProps> = ({ open, onClose, eventId, eventName }) => {
+  React.useEffect(() => {
+    if (open) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [open]);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
@@ -79,7 +89,7 @@ const RegistrationModal: React.FC<RegistrationModalProps> = ({ open, onClose, ev
 
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center" style={backdropStyle}>
-      <div className="bg-white rounded-2xl p-8 shadow-2xl w-full max-w-md relative">
+      <div className="bg-white rounded-2xl p-4 sm:p-8 shadow-2xl w-full max-w-xs sm:max-w-md relative">
         <h2 className="text-2xl font-bold mb-6 text-center">Register for Event</h2>
         {success ? (
           <div className="flex flex-col items-center justify-center text-green-600 font-semibold mb-4">
