@@ -168,17 +168,13 @@ const EventDetail: React.FC = () => {
     return (
       <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-cyan-50 flex items-center justify-center relative overflow-hidden">
         <div className="absolute inset-0 bg-grid-pattern opacity-5"></div>
-        <div className="text-center relative z-10">
-          <div className="relative mb-8">
-            <div className="w-20 h-20 mx-auto">
-              <div className="w-20 h-20 border-4 border-transparent border-t-indigo-500 border-r-purple-500 rounded-full animate-spin"></div>
-              <div className="absolute inset-0 w-20 h-20 border-4 border-transparent border-b-cyan-500 border-l-blue-500 rounded-full animate-spin" style={{animationDirection: 'reverse', animationDuration: '3s'}}></div>
+        <div className="flex flex-col items-center justify-center text-center relative z-10">
+          <div className="relative mb-8 flex items-center justify-center">
+            <div className="w-20 h-20 flex items-center justify-center">
+              <div className="w-10 h-10 border-4 border-transparent border-t-indigo-500 border-r-purple-500 rounded-full animate-spin"></div>
             </div>
           </div>
-          <div className="backdrop-blur-md bg-white/30 rounded-3xl p-8 border border-white/20 shadow-2xl">
-            <h2 className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent mb-3">Loading Event Details</h2>
-            <p className="text-gray-600">Crafting the perfect experience for you...</p>
-          </div>
+          <h2 className="text-xl font-bold text-slate-800 mb-3">Loading Event Details</h2>
         </div>
       </div>
     );
@@ -251,26 +247,26 @@ const EventDetail: React.FC = () => {
 
       {/* Modern Floating Navigation - Properly Aligned */}
       <div className="sticky top-6 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center" style={{ zIndex: 10 }}>
-            <div className="backdrop-blur-xl bg-white/80 rounded-2xl border border-white/20 shadow-2xl px-6 py-4 w-fit back-to-events-btn">
+        <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
+          <div className="flex flex-row justify-between items-center gap-2 sm:gap-0" style={{ zIndex: 10 }}>
+            <div className="backdrop-blur-xl bg-white/80 rounded-xl sm:rounded-2xl border border-white/20 shadow-2xl px-3 py-2 sm:px-6 sm:py-4 w-fit back-to-events-btn">
               <Link
                 to="/events"
-                className="group inline-flex items-center text-slate-700 hover:text-indigo-600 transition-all duration-300 font-medium back-to-events-btn"
+                className="group inline-flex items-center text-slate-700 hover:text-indigo-600 transition-all duration-300 font-medium back-to-events-btn text-sm sm:text-base"
               >
-                <div className="w-8 h-8 rounded-full bg-gradient-to-r from-indigo-500 to-purple-500 flex items-center justify-center mr-3 group-hover:scale-110 transition-transform">
+                <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-gradient-to-r from-indigo-500 to-purple-500 flex items-center justify-center mr-2 sm:mr-3 group-hover:scale-110 transition-transform">
                   <ArrowLeft className="w-4 h-4 text-white" />
                 </div>
                 Back to Events
               </Link>
             </div>
-            <div className="backdrop-blur-xl bg-white/80 rounded-2xl border border-white/20 shadow-2xl px-6 py-4 w-fit register-btn">
+            <div className="backdrop-blur-xl bg-white/80 rounded-xl sm:rounded-2xl border border-white/20 shadow-2xl px-3 py-2 sm:px-6 sm:py-4 w-fit register-btn">
               <a
                 href="#register"
-                className="group inline-flex items-center text-slate-700 hover:text-indigo-600 transition-all duration-300 font-medium register-btn"
+                className="group inline-flex items-center text-slate-700 hover:text-indigo-600 transition-all duration-300 font-medium register-btn text-sm sm:text-base"
                 onClick={e => { e.preventDefault(); setModalOpen(true); }}
               >
-                <div className="w-8 h-8 rounded-full bg-gradient-to-r from-indigo-500 to-purple-500 flex items-center justify-center mr-3 group-hover:scale-110 transition-transform">
+                <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-gradient-to-r from-indigo-500 to-purple-500 flex items-center justify-center mr-2 sm:mr-3 group-hover:scale-110 transition-transform">
                   <Edit3 className="w-4 h-4 text-white" />
                 </div>
                 Register Now
@@ -409,14 +405,15 @@ const EventDetail: React.FC = () => {
                     <h2 className="text-xl font-bold bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent leading-tight">Event Location Map</h2>
                   </div>
                   <div className="flex flex-col items-center">
-                    <iframe
-                      title="Event Location Map"
-                      width="700"
-                      height="250"
-                      style={{ borderRadius: '16px', border: 'none', boxShadow: '0 2px 12px rgba(0,0,0,0.08)' }}
-                      src={`https://maps.google.com/maps?q=${event.location_geo.lat},${event.location_geo.lng}&z=15&output=embed`}
-                      allowFullScreen
-                    />
+                    <div className="w-full">
+                      <iframe
+                        title="Event Location Map"
+                        className="rounded-2xl border-none shadow-md w-full sm:w-[700px] h-[180px] sm:h-[250px]"
+                        style={{ minWidth: '200px', maxWidth: '100%', borderRadius: '16px', border: 'none', boxShadow: '0 2px 12px rgba(0,0,0,0.08)' }}
+                        src={`https://maps.google.com/maps?q=${event.location_geo.lat},${event.location_geo.lng}&z=15&output=embed`}
+                        allowFullScreen
+                      />
+                    </div>
                     <div className="mt-4 text-slate-700 text-sm font-medium">{event.location}</div>
                   </div>
                 </div>
