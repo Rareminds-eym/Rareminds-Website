@@ -308,29 +308,7 @@ const EventDetail: React.FC = () => {
       <div className="sticky top-6 z-50">
         <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
           <div className="flex flex-row justify-between items-center gap-2 sm:gap-0" style={{ zIndex: 10 }}>
-            <div className="backdrop-blur-xl bg-white/80 rounded-xl sm:rounded-2xl border border-white/20 shadow-2xl px-3 py-2 sm:px-6 sm:py-4 w-fit back-to-events-btn">
-              <Link
-                to="/events"
-                className="group inline-flex items-center text-slate-700 hover:text-indigo-600 transition-all duration-300 font-medium back-to-events-btn text-sm sm:text-base"
-              >
-                <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-gradient-to-r from-indigo-500 to-purple-500 flex items-center justify-center mr-2 sm:mr-3 group-hover:scale-110 transition-transform">
-                  <ArrowLeft className="w-4 h-4 text-white" />
-                </div>
-                Back to Events
-              </Link>
-            </div>
-            <div className="backdrop-blur-xl bg-white/80 rounded-xl sm:rounded-2xl border border-white/20 shadow-2xl px-3 py-2 sm:px-6 sm:py-4 w-fit register-btn">
-              <a
-                href="#register"
-                className="group inline-flex items-center text-slate-700 hover:text-indigo-600 transition-all duration-300 font-medium register-btn text-sm sm:text-base"
-                onClick={e => { e.preventDefault(); setModalOpen(true); }}
-              >
-                <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-gradient-to-r from-indigo-500 to-purple-500 flex items-center justify-center mr-2 sm:mr-3 group-hover:scale-110 transition-transform">
-                  <Edit3 className="w-4 h-4 text-white" />
-                </div>
-                Register Now
-              </a>
-            </div>
+            {/* Removed Back to Events and Register buttons from top navigation */}
           </div>
         </div>
       </div>
@@ -370,33 +348,6 @@ const EventDetail: React.FC = () => {
                             <Tag className="w-4 h-4" />
                           </div>
                           <span className="font-medium">{event.category}</span>
-                        </div>
-                        <div className="flex items-center">
-                          <div className="w-6 h-6 bg-white/20 rounded-full flex items-center justify-center mr-3">
-                            <Calendar className="w-4 h-4" />
-                          </div>
-                          <span className="font-medium">{formatDate(event.event_date)}</span>
-                        </div>
-                        <div className="flex items-center">
-                          <div className="w-6 h-6 bg-white/20 rounded-full flex items-center justify-center mr-3">
-                            <MapPin className="w-4 h-4" />
-                          </div>
-                          <span className="font-medium">
-                            {event.location_type === 'physical' && (
-                              <span className="ml-2 text-white">{event.location}</span>
-                            )}
-                            {event.location_type === 'virtual' && event.location_link && (
-                              <a
-                                href={event.location_link}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="inline-flex items-center px-3 py-1 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition ml-2"
-                              >
-                                <ExternalLink className="w-4 h-4 mr-1" />
-                                Join Event
-                              </a>
-                            )}
-                          </span>
                         </div>
                       </div>
                     </div>
@@ -444,9 +395,6 @@ const EventDetail: React.FC = () => {
               {/* About Section - Enhanced Layout */}
               <div className="backdrop-blur-xl bg-white/60 rounded-3xl p-8 lg:p-10 border border-white/20 shadow-xl">
                 <div className="flex items-center gap-4 mb-8">
-                  <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-2xl flex items-center justify-center shadow-lg">
-                    <Award className="w-6 h-6 text-white" />
-                  </div>
                   <h2 className="text-xl font-bold bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent leading-tight">About This Event</h2>
                 </div>
                 <div 
@@ -454,45 +402,40 @@ const EventDetail: React.FC = () => {
                   dangerouslySetInnerHTML={{ __html: event.description }}
                 />
               </div>
-              {/* Physical Event Map Section */}
-              {event.location_type === 'physical' && event.location_geo && (
-                <div className="backdrop-blur-xl bg-white/60 rounded-3xl p-8 lg:p-10 border border-white/20 shadow-xl mt-6">
-                  <div className="flex items-center gap-4 mb-8">
-                    <div className="w-12 h-12 bg-gradient-to-r from-purple-500 to-blue-500 rounded-2xl flex items-center justify-center shadow-lg">
-                      <MapPin className="w-6 h-6 text-white" />
+              {/* Speaker Information Card - separate container styled like Event Organizer */}
+                {event.speakers_details && Array.isArray(event.speakers_details) && event.speakers_details.length > 0 && (
+                  <div className="backdrop-blur-xl bg-white/70 rounded-3xl p-6 border border-white/20 shadow-xl">
+                    <h3 className="text-xl font-bold bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent mb-6">Speaker Details</h3>
+                    <div className="space-y-4">
+                      {event.speakers_details.map((speaker, idx) => (
+                        <div key={idx} className="flex items-center gap-4 p-4 rounded-2xl bg-gradient-to-r from-indigo-50/80 to-purple-50/80 border border-indigo-200/30 shadow hover:shadow-lg transition-all">
+                          <img
+                            src={speaker.photo}
+                            alt={speaker.name}
+                            className="w-16 h-16 rounded-full object-cover border-2 border-indigo-300 shadow"
+                            onError={e => {
+                              (e.target as HTMLImageElement).src = 'https://ui-avatars.com/api/?name=' + encodeURIComponent(speaker.name);
+                            }}
+                          />
+                          <div className="flex-1">
+                            <p className="font-bold text-slate-800">{speaker.name}</p>
+                            <p className="text-slate-600 text-sm">{speaker.profile}</p>
+                            {speaker.linkedIn && (
+                              <a
+                                href={speaker.linkedIn}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-800 text-sm font-medium mt-2"
+                              >
+                                <ExternalLink className="w-4 h-4" /> LinkedIn
+                              </a>
+                            )}
+                          </div>
+                        </div>
+                      ))}
                     </div>
-                    <h2 className="text-xl font-bold bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent leading-tight">Event Location Map</h2>
                   </div>
-                  <div className="flex flex-col items-center">
-                    <div className="w-full">
-                      <iframe
-                        title="Event Location Map"
-                        className="rounded-2xl border-none shadow-md w-full sm:w-[700px] h-[180px] sm:h-[250px]"
-                        style={{ minWidth: '200px', maxWidth: '100%', borderRadius: '16px', border: 'none', boxShadow: '0 2px 12px rgba(0,0,0,0.08)' }}
-                        src={`https://maps.google.com/maps?q=${event.location_geo.lat},${event.location_geo.lng}&z=15&output=embed`}
-                        allowFullScreen
-                      />
-                    </div>
-                    <div className="mt-4 text-slate-700 text-sm font-medium">{event.location}</div>
-                  </div>
-                </div>
-              )}
-
-              {/* Requirements - Consistent Layout */}
-              {event.requirements && (
-                <div className="backdrop-blur-xl bg-white/60 rounded-3xl p-8 lg:p-10 border border-white/20 shadow-xl">
-                  <div className="flex items-center gap-4 mb-8">
-                    <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-2xl flex items-center justify-center shadow-lg">
-                      <CheckCircle className="w-6 h-6 text-white" />
-                    </div>
-                    <h2 className="text-xl font-bold bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent leading-tight">Requirements</h2>
-                  </div>
-                  <div 
-                    className="bg-gradient-to-r from-blue-50/80 to-indigo-50/80 border border-blue-200/50 rounded-2xl p-6 backdrop-blur-sm prose prose-slate max-w-none prose-headings:text-slate-800 prose-p:text-slate-700 prose-p:leading-relaxed prose-p:text-sm prose-a:text-blue-600 prose-a:hover:text-blue-700 prose-strong:text-slate-800 prose-ul:text-slate-700 prose-ol:text-slate-700"
-                    dangerouslySetInnerHTML={{ __html: event.requirements }}
-                  />
-                </div>
-              )}
+                  )}
 
               {/* Agenda - Consistent Layout */}
               {event.agenda && (
@@ -510,32 +453,6 @@ const EventDetail: React.FC = () => {
                 </div>
               )}
 
-                {/* FAQ Section - Below Agenda */}
-                {event.faq && Array.isArray(event.faq) && event.faq.length > 0 && (
-                  <div className="backdrop-blur-xl bg-white/60 rounded-3xl p-8 lg:p-10 border border-white/20 shadow-xl mt-6">
-                    <div className="flex items-center gap-4 mb-8">
-                      <div className="w-12 h-12 bg-gradient-to-r from-yellow-500 to-amber-500 rounded-2xl flex items-center justify-center shadow-lg">
-                        <AlertCircle className="w-6 h-6 text-white" />
-                      </div>
-                      <h2 className="text-xl font-bold bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent leading-tight">Frequently Asked Questions</h2>
-                    </div>
-                    <div className="space-y-6">
-                      {event.faq.map((item: { question: string; answer: string }, idx: number) => (
-                        <div key={idx} className="bg-gradient-to-r from-yellow-50/80 to-amber-50/80 border border-yellow-200/50 rounded-2xl p-3 backdrop-blur-sm shadow">
-                          <div className="flex items-center justify-between cursor-pointer" onClick={() => toggleFaq(idx)}>
-                            <h3 className="font-semibold text-slate-800 text-lg">Q: {item.question}</h3>
-                            <button type="button" aria-label="Show answer" className="ml-4 p-2 rounded-full bg-yellow-100 hover:bg-yellow-200 transition">
-                              {openFaqIdx === idx ? <Minus className="w-6 h-6 text-yellow-600" /> : <Plus className="w-6 h-6 text-yellow-600" />}
-                            </button>
-                          </div>
-                          {openFaqIdx === idx && (
-                            <p className="text-slate-700 text-base mt-4">{item.answer}</p>
-                          )}
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
 
               {/* Speakers - Enhanced Layout */}
               {event.speakers && event.speakers.length > 0 && (
@@ -624,111 +541,104 @@ const EventDetail: React.FC = () => {
             {/* Modern Sidebar - Properly Positioned */}
             <div className="xl:col-span-4 space-y-8">
               {/* Quick Info Card - Enhanced Sticky Positioning */}
-              <div className="backdrop-blur-xl bg-white/70 rounded-3xl p-6 lg:p-8 border border-white/20 shadow-xl sticky top-36">
+              <div className="backdrop-blur-xl bg-white/70 rounded-3xl p-2 lg:p-4 border border-white/20 shadow-xl sticky top-36">
                 <h3 className="text-lg font-bold bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent mb-6">Event Details</h3>
                 
                 <div className="space-y-4">
-                <div className="group">
-                  <div className="flex items-center gap-3 p-3 bg-gradient-to-r from-blue-50/80 to-indigo-50/80 rounded-2xl border border-blue-200/30 transition-all duration-300 hover:shadow-lg">
-                    <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-2xl flex items-center justify-center">
-                      <Calendar className="w-5 h-5 text-white" />
-                    </div>
-                    <div>
-                      <p className="font-semibold text-slate-800 text-sm">Date</p>
-                      <p className="text-slate-600 text-sm">{formatDate(event.event_date)}</p>
-                    </div>
+
+                {/* Redesigned Event Details Section: icon | details, no colored icon bg */}
+                <div className="flex items-center rounded-2xl border border-slate-200/30">
+                  <div className="w-10 h-10 flex items-center justify-center">
+                    <Calendar className="w-5 h-5 text-slate-700" />
+                  </div>
+                  <div>
+                    <p className="text-slate-600 text-sm">{formatDate(event.event_date)}</p>
                   </div>
                 </div>
 
-                <div className="group">
-                  <div className="flex items-center gap-3 p-3 bg-gradient-to-r from-emerald-50/80 to-green-50/80 rounded-2xl border border-emerald-200/30 transition-all duration-300 hover:shadow-lg">
-                    <div className="w-10 h-10 bg-gradient-to-r from-emerald-500 to-green-500 rounded-2xl flex items-center justify-center">
-                      <Clock className="w-5 h-5 text-white" />
-                    </div>
-                    <div>
-                      <p className="font-semibold text-slate-800 text-sm">Time</p>
-                      <p className="text-slate-600 text-sm">{formatTime(event.event_time)}</p>
-                      <p className="text-sm text-slate-500">{event.duration}</p>
-                    </div>
+                <div className="flex items-center rounded-2xl border border-slate-200/30">
+                  <div className="w-10 h-10 flex items-center justify-center">
+                    <Clock className="w-5 h-5 text-slate-700" />
+                  </div>
+                  <div>
+                    <p className="text-slate-600 text-sm">{formatTime(event.event_time)}</p>
+                    <p className="text-sm text-slate-500">{event.duration}</p>
                   </div>
                 </div>
 
-                <div className="group">
-                  <div className="flex items-center gap-3 p-3 bg-gradient-to-r from-purple-50/80 to-pink-50/80 rounded-2xl border border-purple-200/30 transition-all duration-300 hover:shadow-lg">
-                    <div className="w-10 h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center">
-                      <MapPin className="w-5 h-5 text-white" />
-                    </div>
-                    <div>
-                      <p className="font-semibold text-slate-800 text-sm">Location</p>
-                      <p className="text-slate-600 text-sm">{event.location}</p>
-                    </div>
+                <div className="flex items-center rounded-2xl border border-slate-200/30">
+                  <div className="w-10 h-10 flex items-center justify-center">
+                    <MapPin className="w-5 h-5 text-slate-700" />
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <p className="text-slate-600 text-sm">{event.location}</p>
+                    {event.location_geo && (
+                      <button
+                        type="button"
+                        className="ml-2 px-2 py-1 rounded-full bg-slate-100 hover:bg-slate-200 border border-slate-300 flex items-center gap-1 text-xs text-slate-700"
+                        title="Open in Google Maps"
+                        onClick={() => {
+                          if (event.location_geo && event.location_geo.lat && event.location_geo.lng) {
+                            window.open(`https://www.google.com/maps/search/?api=1&query=${event.location_geo.lat},${event.location_geo.lng}`, '_blank', 'noopener');
+                          }
+                        }}
+                      >
+                        <MapPin className="w-4 h-4 text-slate-700" />
+                        <span>Map</span>
+                      </button>
+                    )}
                   </div>
                 </div>
 
-                <div className="group">
-                  <div className="flex items-center gap-3 p-3 bg-gradient-to-r from-amber-50/80 to-orange-50/80 rounded-2xl border border-amber-200/30 transition-all duration-300 hover:shadow-lg">
-                    <div className="w-10 h-10 bg-gradient-to-r from-amber-500 to-orange-500 rounded-2xl flex items-center justify-center">
-                      <Users className="w-5 h-5 text-white" />
-                    </div>
-                    <div>
-                      <p className="font-semibold text-slate-800 text-sm">By Invitees</p>
-                      <p className="text-slate-600 text-sm">{event.capacity} attendees</p>
-                    </div>
+                <div className="flex items-center rounded-2xl border border-slate-200/30">
+                  <div className="w-10 h-10 flex items-center justify-center">
+                    <Users className="w-5 h-5 text-slate-700" />
+                  </div>
+                  <div>
+                    <p className="text-slate-600 text-sm">{event.capacity} attendees</p>
                   </div>
                 </div>
 
-                {event.price && (
-                  <div className="p-3 bg-gradient-to-r from-green-50/80 to-emerald-50/80 rounded-2xl border border-green-200/30">
-                    <p className="font-semibold text-slate-800 mb-2 text-sm">Pricing</p>
-                    <p className="text-xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">
-                      {event.price === '0' ? 'Free Event' : `$${event.price}`}
-                    </p>
+                {event.registration_deadline && (
+                  <div className="flex items-center rounded-2xl border border-slate-200/30">
+                    <div className="w-10 h-10 flex items-center justify-center">
+                      {/* Calendar/Deadline icon */}
+                      <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 text-slate-700" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                    </div>
+                    <div>
+                      <p className="text-slate-600 text-sm">{formatDate(event.registration_deadline)}</p>
+                    </div>
                   </div>
                 )}
 
-                {event.registration_deadline && (
-                  <div className="p-3 bg-gradient-to-r from-red-50/80 to-rose-50/80 rounded-2xl border border-red-200/30">
-                    <p className="font-semibold text-slate-800 mb-2 text-sm">Registration Deadline</p>
-                    <p className="text-slate-600 text-sm">{formatDate(event.registration_deadline)}</p>
+                {event.price && (
+                  <div className="flex items-center gap-3 rounded-2xl border border-slate-200/30">
+                    <div className="w-10 h-10 flex items-center justify-center">
+                      {/* Money/Tag icon for pricing */}
+                      <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 text-slate-700" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 9V7a5 5 0 00-10 0v2a2 2 0 00-2 2v6a2 2 0 002 2h10a2 2 0 002-2v-6a2 2 0 00-2-2zm-5 6h.01" /></svg>
+                    </div>
+                    <div>
+                      <p className="text-xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">
+                        {event.price === '0' ? 'Free Event' : `$${event.price}`}
+                      </p>
+                    </div>
+                    {/* Register button beside price */}
+                    <a
+                      href="#register"
+                      className="group inline-flex items-center text-slate-700 hover:text-indigo-600 transition-all duration-300 font-medium register-btn text-sm sm:text-base ml-4"
+                      onClick={e => { e.preventDefault(); setModalOpen(true); }}
+                    >
+                      <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-gradient-to-r from-indigo-500 to-purple-500 flex items-center justify-center mr-2 group-hover:scale-110 transition-transform">
+                        <Edit3 className="w-4 h-4 text-white" />
+                      </div>
+                      Register Now
+                    </a>
                   </div>
                 )}
                </div>
                 
             </div>
-            {/* Speaker Information Card - separate container styled like Event Organizer */}
-                {event.speakers_details && Array.isArray(event.speakers_details) && event.speakers_details.length > 0 && (
-                  <div className="backdrop-blur-xl bg-white/70 rounded-3xl p-6 border border-white/20 shadow-xl">
-                    <h3 className="text-xl font-bold bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent mb-6">Speaker Details</h3>
-                    <div className="space-y-4">
-                      {event.speakers_details.map((speaker, idx) => (
-                        <div key={idx} className="flex items-center gap-4 p-4 rounded-2xl bg-gradient-to-r from-indigo-50/80 to-purple-50/80 border border-indigo-200/30 shadow hover:shadow-lg transition-all">
-                          <img
-                            src={speaker.photo}
-                            alt={speaker.name}
-                            className="w-16 h-16 rounded-full object-cover border-2 border-indigo-300 shadow"
-                            onError={e => {
-                              (e.target as HTMLImageElement).src = 'https://ui-avatars.com/api/?name=' + encodeURIComponent(speaker.name);
-                            }}
-                          />
-                          <div className="flex-1">
-                            <p className="font-bold text-slate-800">{speaker.name}</p>
-                            <p className="text-slate-600 text-sm">{speaker.profile}</p>
-                            {speaker.linkedIn && (
-                              <a
-                                href={speaker.linkedIn}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-800 text-sm font-medium mt-2"
-                              >
-                                <ExternalLink className="w-4 h-4" /> LinkedIn
-                              </a>
-                            )}
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                  )}
+            
               
                 
 
