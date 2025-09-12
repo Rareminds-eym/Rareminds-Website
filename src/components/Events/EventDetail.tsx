@@ -1,6 +1,5 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { ChatButton } from "../universities/ChatButton";
 import styles from './TeaserVideoButton.module.css';
 import TeaserVideoModal from './TeaserVideoModal';
 import { ToastContainer, toast } from 'react-toastify';
@@ -11,6 +10,7 @@ import ImageModal from './ImageModal';
 import RegistrationModal from './RegistrationModal';
 import { useEvents } from '../../hooks/Events/useEvent';
 import EventContactForm from './EventContactForm';
+import FloatingActionMenu from './StickyButton/FloatingAction';
 import { 
   Calendar, 
   Clock, 
@@ -154,8 +154,6 @@ const EventDetail: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
   const { events, loading, error } = useEvents();
   const [modalOpen, setModalOpen] = React.useState(false);
-  // WhatsApp Chat modal state
-  const [chatOpen, setChatOpen] = React.useState(false);
   console.log('EventDetail rendered, slug:', slug);
   
   // FAQ accordion state
@@ -289,30 +287,8 @@ const EventDetail: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/20 relative overflow-hidden">
-      {/* WhatsApp Floating Button with animation */}
-      <div className="fixed bottom-8 right-8 z-50">
-        <motion.button
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.9 }}
-          animate={{ y: [0, -27, 0] }}
-          transition={{
-            repeat: Infinity,
-            repeatType: "loop",
-            duration: 1.5,
-            ease: "easeInOut"
-          }}
-          onClick={() => setChatOpen(true)}
-          className="bg-green-200/50 hover:bg-green-300 text-white rounded-full shadow-lg p-2 flex items-center justify-center transition-all duration-200"
-          title="Chat on WhatsApp"
-        >
-          {/* WhatsApp SVG icon - larger size */}
-          <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
-            <path fill="#fff" d="M4.868,43.303l2.694-9.835C5.9,30.59,5.026,27.324,5.027,23.979C5.032,13.514,13.548,5,24.014,5c5.079,0.002,9.845,1.979,13.43,5.566c3.584,3.588,5.558,8.356,5.556,13.428c-0.004,10.465-8.522,18.98-18.986,18.98c-0.001,0,0,0,0,0h-0.008c-3.177-0.001-6.3-0.798-9.073-2.311L4.868,43.303z"></path>
-            <path fill="#40c351" d="M35.176,12.832c-2.98-2.982-6.941-4.625-11.157-4.626c-8.704,0-15.783,7.076-15.787,15.774c-0.001,2.981,0.833,5.883,2.413,8.396l0.376,0.597l-1.595,5.821l5.973-1.566l0.577,0.342c2.422,1.438,5.2,2.198,8.032,2.199h0.006c8.698,0,15.777-7.077,15.78-15.776C39.795,19.778,38.156,15.814,35.176,12.832z"></path>
-          </svg>
-        </motion.button>
-        <ChatButton isVisible={chatOpen} onClose={() => setChatOpen(false)} />
-      </div>
+      {/* Events Floating Action Menu */}
+      <FloatingActionMenu currentEvent={event} />
               
       <RegistrationModal 
         open={modalOpen} 
