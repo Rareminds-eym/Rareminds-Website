@@ -8,6 +8,7 @@ export { default as Carousel } from './Carousel';
 export { default as ImageModal } from './ImageModal';
 export { default as RegistrationModal } from './RegistrationModal';
 export { default as TeaserVideoModal } from './TeaserVideoModal';
+export { default as InterestedModal } from './InterestedModal';
 
 // Export types
 export type { EventContactFormData } from './EventContactForm';

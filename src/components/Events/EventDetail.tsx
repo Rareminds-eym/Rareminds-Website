@@ -11,6 +11,8 @@ import RegistrationModal from './RegistrationModal';
 import { useEvents } from '../../hooks/Events/useEvent';
 import EventContactForm from './EventContactForm';
 import FloatingActionMenu from './StickyButton/FloatingAction';
+import InterestedModal from './InterestedModal';
+import { eventInterestedService } from '../../services/eventInterestedService';
 import { 
   Calendar, 
   Clock, 
@@ -154,6 +156,8 @@ const EventDetail: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
   const { events, loading, error } = useEvents();
   const [modalOpen, setModalOpen] = React.useState(false);
+  const [interestedModalOpen, setInterestedModalOpen] = React.useState(false);
+  
   console.log('EventDetail rendered, slug:', slug);
   
   // FAQ accordion state
@@ -164,15 +168,106 @@ const EventDetail: React.FC = () => {
 
   // Find the event by slug
   const event = events.find(e => e.slug === slug);
-  console.log('Event found:', event);
-  if (event) {
-    console.log('event.location_type:', event.location_type);
-    console.log('event.location_geo:', event.location_geo);
-    console.log('event.location:', event.location);
-    console.log('event.teaser_video:', event.teaser_video);
-    console.log('teaser_video type:', typeof event.teaser_video);
-    console.log('teaser_video length:', event.teaser_video?.length);
-  }
+  
+  // Interest tracking state
+  const [interestCount, setInterestCount] = React.useState(0);
+  const [isLoadingCount, setIsLoadingCount] = React.useState(true);
+  const [userAlreadyInterested, setUserAlreadyInterested] = React.useState(false);
+  const [isCheckingUserInterest, setIsCheckingUserInterest] = React.useState(false);
+  
+  // Define loadInterestCount first
+  const loadInterestCount = React.useCallback(async () => {
+    if (!event?.id) return;
+    
+    setIsLoadingCount(true);
+    try {
+      const count = await eventInterestedService.getInterestedCount(event.id);
+      setInterestCount(count);
+    } catch (error) {
+      console.error('Error loading interest count:', error);
+      setInterestCount(0);
+    } finally {
+      setIsLoadingCount(false);
+    }
+  }, [event?.id]);
+  
+  // Load interest count when component mounts or event changes
+  React.useEffect(() => {
+    if (event?.id) {
+      loadInterestCount();
+    }
+  }, [event?.id, loadInterestCount]);
+  
+  // Check if user has shown interest (using localStorage for persistence)
+  const checkUserInterest = React.useCallback(() => {
+    if (!event?.id) return;
+    
+    const storedInterests = localStorage.getItem('userEventInterests');
+    if (storedInterests) {
+      try {
+        const interests = JSON.parse(storedInterests);
+        setUserAlreadyInterested(interests.includes(event.id));
+      } catch (error) {
+        console.error('Error parsing stored interests:', error);
+      }
+    }
+  }, [event?.id]);
+
+  // Load user interest status when event changes
+  React.useEffect(() => {
+    checkUserInterest();
+  }, [checkUserInterest]);
+  
+  const handleInterestedSuccess = () => {
+    // Mark user as interested in localStorage
+    if (event?.id) {
+      const storedInterests = localStorage.getItem('userEventInterests');
+      let interests = [];
+      if (storedInterests) {
+        try {
+          interests = JSON.parse(storedInterests);
+        } catch (error) {
+          console.error('Error parsing stored interests:', error);
+        }
+      }
+      if (!interests.includes(event.id)) {
+        interests.push(event.id);
+        localStorage.setItem('userEventInterests', JSON.stringify(interests));
+      }
+      setUserAlreadyInterested(true);
+    }
+    
+    // Reload the interest count after successful submission
+    loadInterestCount();
+    console.log('Interest saved successfully!');
+  };
+  
+  const handleInterestedError = (error: string) => {
+    console.error('Error saving interest:', error);
+    
+    // Show user-friendly error message
+    if (error.includes('already registered') || error.includes('already interested')) {
+      // User already showed interest - update UI state
+      setUserAlreadyInterested(true);
+      
+      // Store in localStorage to persist the state
+      if (event?.id) {
+        const storedInterests = localStorage.getItem('userEventInterests');
+        let interests = [];
+        if (storedInterests) {
+          try {
+            interests = JSON.parse(storedInterests);
+          } catch (parseError) {
+            console.error('Error parsing stored interests:', parseError);
+          }
+        }
+        if (!interests.includes(event.id)) {
+          interests.push(event.id);
+          localStorage.setItem('userEventInterests', JSON.stringify(interests));
+        }
+      }
+    }
+  };
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-US', {
@@ -296,6 +391,15 @@ const EventDetail: React.FC = () => {
         eventId={event.id ?? ""} 
         eventName={event.title} 
       />
+      
+      <InterestedModal 
+        open={interestedModalOpen}
+        onClose={() => setInterestedModalOpen(false)}
+        eventId={event.id ?? ""}
+        eventTitle={event.title}
+        onSuccess={handleInterestedSuccess}
+        onError={handleInterestedError}
+      />
 
       
       {/* Animated Background Elements */}
@@ -319,38 +423,121 @@ const EventDetail: React.FC = () => {
           {/* Hero Section with Modern Banner - Improved Spacing */}
           <div className="mb-16 pt-8">
             {(event.event_banner || event.featured_image) ? (
-              <div className="relative h-[40vh] min-h-[250px] rounded-3xl overflow-hidden shadow-2xl">
-                <img
-                  src={event.event_banner || event.featured_image}
-                  alt={event.title}
-                  className="w-full h-full object-cover"
-                />
-                {/* Enhanced Gradient Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent"></div>
-                {/* Animated Teaser Video Button - moved to bottom right */}
-                <div className="absolute bottom-6 right-6 z-20">
-                  <TeaserVideoButton teaserVideo={event.teaser_video} />
+              <div className="space-y-6">
+                {/* Hero Image Container */}
+                <div className="relative h-[60vh] min-h-[400px] rounded-3xl overflow-hidden shadow-2xl">
+                  <img
+                    src={event.event_banner || event.featured_image}
+                    alt={event.title}
+                    className="w-full h-full object-cover"
+                  />
+                  {/* Enhanced Gradient Overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+                  
+                  {/* Watch Teaser Button - Top Right */}
+                  <div className="absolute top-6 right-6 z-20">
+                    <button
+                      onClick={() => {
+                        if (event.teaser_video) {
+                          window.open(event.teaser_video, '_blank');
+                        }
+                      }}
+                      className="flex items-center gap-2 px-4 py-2 bg-red-600/90 hover:bg-red-700/90 text-white rounded-lg font-semibold transition-all duration-300 hover:scale-105 backdrop-blur-sm border border-red-400/30"
+                    >
+                      <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clipRule="evenodd" />
+                      </svg>
+                      Watch Teaser
+                    </button>
+                  </div>
+                  
+                  {/* Event Title - Bottom Left of Image */}
+                  <div className="absolute bottom-6 left-6">
+                    <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-[1.1] tracking-tight drop-shadow-lg">
+                      {event.title || "Event Name"}
+                    </h1>
+                  </div>
                 </div>
-                {/* Properly Aligned Content */}
-                <div className="absolute bottom-0 left-0 right-0">
-                  <div className="p-8 md:p-12 lg:p-16">
-                    <div className="max-w-4xl">
-                      <div className={`inline-flex items-center px-4 py-2 rounded-2xl text-sm font-semibold mb-6 ${getStatusColor(event.status)}`}>
-                        {getStatusIcon(event.status)}
-                        <span className="ml-2 capitalize">{event.status}</span>
-                      </div>
-                      <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-6 leading-[1.1] tracking-tight">
-                        {event.title}
-                      </h1>
-                      <div className="flex flex-wrap items-center gap-6 md:gap-8 text-white/90 text-sm md:text-base">
-                        <div className="flex items-center">
-                          <div className="w-6 h-6 bg-white/20 rounded-full flex items-center justify-center mr-3">
-                            <Tag className="w-4 h-4" />
-                          </div>
-                          <span className="font-medium">{event.category}</span>
-                        </div>
-                      </div>
+
+                {/* Tags and Interest Section - Below Image */}
+                <div className="flex items-center justify-between pt-4">
+                  {/* Tags Section - Bottom Left (outside image) */}
+                  <div className="flex flex-wrap gap-3">
+                    {event.event_tags && event.event_tags.length > 0 ? (
+                      // Display actual event tags from database
+                      event.event_tags.slice(0, 3).map((tag, index) => (
+                        <span
+                          key={index}
+                          className="px-4 py-2 bg-black text-white text-sm font-medium rounded-full hover:bg-gray-800 transition-all duration-300 cursor-default"
+                          title={`Tag: ${tag}`}
+                        >
+                          {tag.trim()}
+                        </span>
+                      ))
+                    ) : (
+                      // Fallback: Show relevant event information as tags when no database tags exist
+                      <>
+                        {event.category && (
+                          <span className="px-4 py-2 bg-black text-white text-sm font-medium rounded-full hover:bg-gray-800 transition-all duration-300">
+                            {event.category}
+                          </span>
+                        )}
+                        {event.location && (
+                          <span className="px-4 py-2 bg-black text-white text-sm font-medium rounded-full hover:bg-gray-800 transition-all duration-300">
+                            {event.location.split(',')[0].trim()}
+                          </span>
+                        )}
+                        {event.status && (
+                          <span className="px-4 py-2 bg-black text-white text-sm font-medium rounded-full capitalize hover:bg-gray-800 transition-all duration-300">
+                            {event.status}
+                          </span>
+                        )}
+                      </>
+                    )}
+                    
+                    {/* Show additional tags indicator if there are more than 3 */}
+                    {event.event_tags && event.event_tags.length > 3 && (
+                      <span className="px-4 py-2 bg-gray-700 text-white text-sm font-medium rounded-full cursor-default">
+                        +{event.event_tags.length - 3} more
+                      </span>
+                    )}
+                  </div>
+                  
+                  {/* Interest Section - Bottom Right (outside image) */}
+                  <div className="flex items-center gap-4">
+                    {/* Interest Counter with Thumbs Up */}
+                    <div className="flex items-center gap-2 text-gray-700">
+                      <svg className="w-5 h-5 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z" />
+                      </svg>
+                      <span className="text-lg font-semibold text-gray-600">
+                        {isLoadingCount ? (
+                          <span className="animate-pulse">Loading...</span>
+                        ) : (
+                          `${interestCount} are interested`
+                        )}
+                      </span>
                     </div>
+                    
+                    {/* I'm Interested Button */}
+                    <button 
+                      onClick={() => {
+                        if (userAlreadyInterested) {
+                          // Show a message that they're already interested
+                          alert('You are already interested in this event!');
+                          return;
+                        }
+                        setInterestedModalOpen(true);
+                      }}
+                      disabled={isLoadingCount}
+                      className={`px-6 py-2 rounded-full border-2 font-semibold transition-all duration-300 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed ${
+                        userAlreadyInterested
+                          ? 'border-green-400 bg-green-500 text-white cursor-default'
+                          : 'border-red-400 bg-white text-red-500 hover:bg-red-50'
+                      }`}
+                    >
+                      {userAlreadyInterested ? "✓ Already Interested" : "I'm Interested"}
+                    </button>
                   </div>
                 </div>
               </div>
