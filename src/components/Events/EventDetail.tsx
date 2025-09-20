@@ -176,6 +176,9 @@ const EventDetail: React.FC = () => {
   const [userAlreadyInterested, setUserAlreadyInterested] = React.useState(false);
   const [isCheckingUserInterest, setIsCheckingUserInterest] = React.useState(false);
   
+  // Registration quantity state
+  const [quantity, setQuantity] = React.useState<number>(1);
+  
   // Define loadInterestCount first
   const loadInterestCount = React.useCallback(async () => {
     if (!event?.id) return;
@@ -587,15 +590,94 @@ const EventDetail: React.FC = () => {
           <div className="grid grid-cols-1 xl:grid-cols-12 gap-8 xl:gap-12">
             {/* Main Content Area */}
             <div className="xl:col-span-8 space-y-12">
-              {/* About Section - Enhanced Layout */}
-              <div className="backdrop-blur-xl bg-white/60 rounded-3xl p-8 lg:p-10 border border-white/20 shadow-xl">
-                <div className="flex items-center gap-4 mb-8">
-                  <h2 className="text-xl font-bold bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent leading-tight">About This Event</h2>
+              {/* About The Event Section - Match Reference Layout */}
+              <div className="backdrop-blur-xl bg-white/90 rounded-3xl p-8 lg:p-10 border border-white/20 shadow-xl">
+                {/* Header Section with Title, Status Badge, and Share Button */}
+                <div className="flex items-start justify-between mb-8">
+                  <div className="flex items-center gap-4">
+                    <h2 className="text-3xl font-bold text-gray-900 leading-tight">About The Event</h2>
+                    {/* Upcoming Status Badge */}
+                    <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
+                      Upcoming
+                    </span>
+                  </div>
+                  {/* Share Button */}
+                  <button 
+                    onClick={() => {
+                      if (navigator.share) {
+                        navigator.share({
+                          title: event.title,
+                          text: `Check out this event: ${event.title}`,
+                          url: window.location.href
+                        });
+                      } else {
+                        // Fallback to copy link
+                        navigator.clipboard.writeText(window.location.href);
+                        // Note: toast is not imported, using alert as fallback
+                        alert('Link copied to clipboard!');
+                      }
+                    }}
+                    className="flex items-center gap-2 px-3 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-colors duration-200 shrink-0"
+                    title="Share this event"
+                  >
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z" />
+                    </svg>
+                  </button>
                 </div>
-                <div 
-                  className="prose prose-slate max-w-none prose-headings:text-slate-800 prose-p:text-slate-700 prose-p:leading-relaxed prose-p:text-sm prose-a:text-blue-600 prose-a:hover:text-blue-700 prose-strong:text-slate-800 prose-ul:text-slate-700 prose-ol:text-slate-700"
-                  dangerouslySetInnerHTML={{ __html: event.description }}
-                />
+                
+                {/* Event Name Heading */}
+                <h3 className="text-2xl font-bold text-gray-900 mb-6">Event Name</h3>
+                
+                {/* Event Description */}
+                <div className="mb-12">
+                  <div 
+                    className="text-gray-700 leading-relaxed prose prose-slate max-w-none prose-headings:text-slate-800 prose-p:text-slate-700 prose-p:leading-relaxed prose-a:text-blue-600 prose-a:hover:text-blue-700 prose-strong:text-slate-800 prose-ul:text-slate-700 prose-ol:text-slate-700"
+                    dangerouslySetInnerHTML={{ __html: event.description }}
+                  />
+                </div>
+                
+                {/* Key Highlights Section */}
+                <div>
+                  <h3 className="text-2xl font-bold text-gray-900 mb-6">Key Highlights</h3>
+                  <div className="text-gray-700 leading-relaxed">
+                    {event.key_highlights && event.key_highlights.length > 0 ? (
+                      <ul className="space-y-2 text-gray-600">
+                        {event.key_highlights.map((highlight, index) => (
+                          <li key={index} className="flex items-start">
+                            <span className="inline-block w-2 h-2 bg-blue-500 rounded-full mt-2 mr-3 shrink-0"></span>
+                            {highlight}
+                          </li>
+                        ))}
+                      </ul>
+                    ) : (
+                      // Fallback content when no key_highlights are available
+                      <>
+                        <p className="mb-4 text-gray-600">
+                          Join us for an engaging and informative event featuring industry experts and networking opportunities.
+                        </p>
+                        <ul className="space-y-2 text-gray-600">
+                          <li className="flex items-start">
+                            <span className="inline-block w-2 h-2 bg-blue-500 rounded-full mt-2 mr-3 shrink-0"></span>
+                            Expert speakers from leading organizations
+                          </li>
+                          <li className="flex items-start">
+                            <span className="inline-block w-2 h-2 bg-blue-500 rounded-full mt-2 mr-3 shrink-0"></span>
+                            Interactive workshops and discussions
+                          </li>
+                          <li className="flex items-start">
+                            <span className="inline-block w-2 h-2 bg-blue-500 rounded-full mt-2 mr-3 shrink-0"></span>
+                            Networking opportunities with peers
+                          </li>
+                          <li className="flex items-start">
+                            <span className="inline-block w-2 h-2 bg-blue-500 rounded-full mt-2 mr-3 shrink-0"></span>
+                            Professional development insights
+                          </li>
+                        </ul>
+                      </>
+                    )}
+                  </div>
+                </div>
               </div>
               {/* Speaker Information Card - separate container styled like Event Organizer */}
                 {event.speakers_details && Array.isArray(event.speakers_details) && event.speakers_details.length > 0 && (
@@ -735,104 +817,51 @@ const EventDetail: React.FC = () => {
 
             {/* Modern Sidebar - Properly Positioned */}
             <div className="xl:col-span-4 space-y-8">
-              {/* Quick Info Card - Enhanced Sticky Positioning */}
-              <div className="backdrop-blur-xl bg-white/70 rounded-3xl p-2 lg:p-4 border border-white/20 shadow-xl sticky top-36">
-                <h3 className="text-lg font-bold bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent mb-6">Event Details</h3>
+              {/* Information Card - Match Reference Design */}
+              <div className="backdrop-blur-xl bg-white/95 rounded-3xl border border-white/20 shadow-xl sticky top-36 overflow-hidden">
+                {/* Blue Information Header */}
+                <div className="bg-blue-600 px-6 py-4">
+                  <h3 className="text-xl font-bold text-white">Information</h3>
+                </div>
                 
-                <div className="space-y-4">
-
-                {/* Redesigned Event Details Section: icon | details, no colored icon bg */}
-                <div className="flex items-center rounded-2xl border border-slate-200/30">
-                  <div className="w-10 h-10 flex items-center justify-center">
-                    <Calendar className="w-5 h-5 text-slate-700" />
-                  </div>
-                  <div>
-                    <p className="text-slate-600 text-sm">{formatDate(event.event_date)}</p>
-                  </div>
-                </div>
-
-                <div className="flex items-center rounded-2xl border border-slate-200/30">
-                  <div className="w-10 h-10 flex items-center justify-center">
-                    <Clock className="w-5 h-5 text-slate-700" />
-                  </div>
-                  <div>
-                    <p className="text-slate-600 text-sm">{formatTime(event.event_time)}</p>
-                    <p className="text-sm text-slate-500">{event.duration}</p>
-                  </div>
-                </div>
-
-                <div className="flex items-center rounded-2xl border border-slate-200/30">
-                  <div className="w-10 h-10 flex items-center justify-center">
-                    <MapPin className="w-5 h-5 text-slate-700" />
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <p className="text-slate-600 text-sm">{event.location}</p>
-                    {event.location_geo && (
-                      <button
-                        type="button"
-                        className="ml-2 px-2 py-1 rounded-full bg-slate-100 hover:bg-slate-200 border border-slate-300 flex items-center gap-1 text-xs text-slate-700"
-                        title="Open in Google Maps"
-                        onClick={() => {
-                          if (event.location_geo && event.location_geo.lat && event.location_geo.lng) {
-                            window.open(`https://www.google.com/maps/search/?api=1&query=${event.location_geo.lat},${event.location_geo.lng}`, '_blank', 'noopener');
-                          }
-                        }}
-                      >
-                        <MapPin className="w-4 h-4 text-slate-700" />
-                        <span>Map</span>
-                      </button>
-                    )}
-                  </div>
-                </div>
-
-                <div className="flex items-center rounded-2xl border border-slate-200/30">
-                  <div className="w-10 h-10 flex items-center justify-center">
-                    <Users className="w-5 h-5 text-slate-700" />
-                  </div>
-                  <div>
-                    <p className="text-slate-600 text-sm">{event.capacity} attendees</p>
-                  </div>
-                </div>
-
-                {event.registration_deadline && (
-                  <div className="flex items-center rounded-2xl border border-slate-200/30">
-                    <div className="w-10 h-10 flex items-center justify-center">
-                      {/* Calendar/Deadline icon */}
-                      <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 text-slate-700" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                {/* Content Section */}
+                <div className="p-6">
+                  {/* Information Fields - Compact single-line rows, icons removed */}
+                  <div className="space-y-5">
+                    {/* Category */}
+                    <div className="flex items-baseline gap-3">
+                      <strong className="text-gray-900 font-semibold text-lg w-32">Category:</strong>
+                      <span className="text-gray-700 text-lg">{event.category || 'Workshop'}</span>
                     </div>
-                    <div>
-                      <p className="text-slate-600 text-sm">{formatDate(event.registration_deadline)}</p>
+
+                    {/* Date */}
+                    <div className="flex items-baseline gap-3">
+                      <strong className="text-gray-900 font-semibold text-lg w-32">Date:</strong>
+                      <span className="text-gray-700 text-lg">{formatDate(event.event_date).replace(/^\w+,\s*/, '')}</span>
+                    </div>
+
+                    {/* Time */}
+                    <div className="flex items-baseline gap-3">
+                      <strong className="text-gray-900 font-semibold text-lg w-32">Time:</strong>
+                      <span className="text-gray-700 text-lg">
+                        {formatTime(event.event_time)}{event.duration ? ` - ${event.duration}` : ''}
+                      </span>
+                    </div>
+
+                    {/* Attendees */}
+                    <div className="flex items-baseline gap-3">
+                      <strong className="text-gray-900 font-semibold text-lg w-32">Attendees:</strong>
+                      <span className="text-gray-700 text-lg">{event.capacity || '50'}</span>
+                    </div>
+
+                    {/* Location */}
+                    <div className="flex items-baseline gap-3">
+                      <strong className="text-gray-900 font-semibold text-lg w-32">Location:</strong>
+                      <span className="text-gray-700 text-lg">{event.location?.split(',')[0]?.trim() || 'Bangalore'}</span>
                     </div>
                   </div>
-                )}
-
-                {event.price && (
-                  <div className="flex items-center gap-3 rounded-2xl border border-slate-200/30">
-                    <div className="w-10 h-10 flex items-center justify-center">
-                      {/* Money/Tag icon for pricing */}
-                      <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 text-slate-700" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 9V7a5 5 0 00-10 0v2a2 2 0 00-2 2v6a2 2 0 002 2h10a2 2 0 002-2v-6a2 2 0 00-2-2zm-5 6h.01" /></svg>
-                    </div>
-                    <div>
-                      <p className="text-xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">
-                        {event.price === '0' ? 'Free Event' : `$${event.price}`}
-                      </p>
-                    </div>
-                    {/* Register button beside price */}
-                    <a
-                      href="#register"
-                      className="group inline-flex items-center text-slate-700 hover:text-indigo-600 transition-all duration-300 font-medium register-btn text-sm sm:text-base ml-4"
-                      onClick={e => { e.preventDefault(); setModalOpen(true); }}
-                    >
-                      <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-gradient-to-r from-indigo-500 to-purple-500 flex items-center justify-center mr-2 group-hover:scale-110 transition-transform">
-                        <Edit3 className="w-4 h-4 text-white" />
-                      </div>
-                      Register Now
-                    </a>
-                  </div>
-                )}
-               </div>
-                
-            </div>
+                </div>
+              </div>
             
               
                 
@@ -880,23 +909,75 @@ const EventDetail: React.FC = () => {
               </div>
             </div>
 
-            {/* Tags */}
-            {event.event_tags && event.event_tags.length > 0 && (
-              <div className="backdrop-blur-xl bg-white/70 rounded-3xl p-6 border border-white/20 shadow-xl">
-                <h3 className="text-xl font-bold bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent mb-6">Event Tags</h3>
-                <div className="flex flex-wrap gap-3">
-                  {event.event_tags.map((tag, index) => (
-                    <span
-                      key={index}
-                      className="group inline-flex items-center px-4 py-2 bg-gradient-to-r from-indigo-50/80 to-purple-50/80 border border-indigo-200/50 rounded-2xl font-medium text-indigo-700 transition-all duration-300 hover:shadow-lg hover:scale-105"
-                    >
-                      <Tag className="w-4 h-4 mr-2 group-hover:rotate-12 transition-transform" />
-                      {tag}
-                    </span>
-                  ))}
-                  </div>
+            {/* Registration Card - replaces Event Tags */}
+            <div className="backdrop-blur-xl bg-white/95 rounded-3xl p-6 border border-white/20 shadow-xl">
+              <h3 className="text-2xl font-bold text-slate-900">Registration</h3>
+              <div className="mt-2 h-1 w-16 bg-indigo-600 rounded-full"></div>
+
+              {/* Price and Stepper */}
+              <div className="flex items-center justify-between mt-6">
+                <div className="text-2xl font-extrabold text-slate-900">
+                  {(() => {
+                    const priceStr = (event.price ?? '0').toString().toLowerCase();
+                    if (priceStr === 'free' || priceStr === '0' || priceStr === '') {
+                      return 'FREE';
+                    }
+                    const numeric = parseFloat(priceStr.replace(/[^\d.]/g, '')) || 0;
+                    return new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(numeric);
+                  })()}
                 </div>
-              )}
+                <div className="flex items-center gap-3">
+                  <button
+                    aria-label="Decrease quantity"
+                    onClick={() => setQuantity(q => Math.max(1, q - 1))}
+                    className="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 text-lg leading-none flex items-center justify-center"
+                  >
+                    −
+                  </button>
+                  <span className="min-w-[1.5rem] text-center font-semibold text-slate-700">
+                    {String(quantity).padStart(2, '0')}
+                  </span>
+                  <button
+                    aria-label="Increase quantity"
+                    onClick={() => setQuantity(q => Math.min(99, q + 1))}
+                    className="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 text-lg leading-none flex items-center justify-center"
+                  >
+                    +
+                  </button>
+                </div>
+              </div>
+
+              <div className="my-5 border-t border-slate-200" />
+
+              {/* Quantity row */}
+              <div className="flex items-baseline justify-between mb-3">
+                <span className="text-lg font-semibold text-slate-800">Quantity:</span>
+                <span className="text-lg font-mono text-slate-700">{String(quantity).padStart(2, '0')}</span>
+              </div>
+
+              {/* Total cost row */}
+              <div className="flex items-baseline justify-between">
+                <span className="text-lg font-semibold text-slate-800">Total Cost:</span>
+                <span className="text-2xl font-extrabold text-emerald-600">
+                  {(() => {
+                    const priceStr = (event.price ?? '0').toString().toLowerCase();
+                    if (priceStr === 'free' || priceStr === '0' || priceStr === '') {
+                      return 'FREE';
+                    }
+                    const numeric = parseFloat(priceStr.replace(/[^\d.]/g, '')) || 0;
+                    const total = numeric * quantity;
+                    return new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(total);
+                  })()}
+                </span>
+              </div>
+
+              <button
+                onClick={() => setModalOpen(true)}
+                className="w-full mt-6 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-4 rounded-2xl shadow-lg shadow-indigo-600/30 transition-transform active:scale-[0.99]"
+              >
+                REGISTER NOW
+              </button>
+            </div>
 
             </div>
           </div>
