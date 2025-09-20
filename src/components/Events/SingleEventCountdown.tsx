@@ -141,7 +141,7 @@ const SingleEventCountdown: React.FC<SingleEventCountdownProps> = ({
   // If no registration deadline, don't show countdown
   if (!event.registration_deadline) {
     return (
-      <div className={`bg-gradient-to-r from-gray-50 to-slate-50 rounded-2xl p-8 mb-6 border border-gray-200 shadow-lg ${className}`}>
+      <div className={`bg-gradient-to-r from-gray-50 to-slate-50 rounded-2xl p-8 mb-6 border border-gray-200 ${className}`}>
         <div className="text-center">
           <AlertCircle className="w-12 h-12 text-gray-400 mx-auto mb-4" />
           <p className="text-xl font-semibold text-gray-600 mb-2">No Registration Deadline Set</p>
@@ -154,7 +154,7 @@ const SingleEventCountdown: React.FC<SingleEventCountdownProps> = ({
   // If registration is closed
   if (!isRegistrationOpen) {
     return (
-      <div className={`bg-gradient-to-r from-gray-100 to-gray-200 rounded-2xl p-8 mb-6 border border-gray-200 shadow-lg ${className}`}>
+      <div className={`bg-gradient-to-r from-gray-100 to-gray-200 rounded-2xl p-8 mb-6 border border-gray-200 ${className}`}>
         <div className={`flex ${layoutClasses} items-center justify-between gap-6`}>
           {/* Left: Status */}
           <div className="text-center lg:text-left flex-1">
@@ -180,7 +180,7 @@ const SingleEventCountdown: React.FC<SingleEventCountdownProps> = ({
   }
 
   return (
-    <div className={`bg-gradient-to-r ${backgroundColor} rounded-2xl p-6 mb-6 border border-orange-100 shadow-lg hover:shadow-xl transition-all duration-300 ${className}`}>
+    <div className={`rounded-2xl p-6 mb-6 transition-all duration-300 ${className}`}>
       <div className={`flex ${layoutClasses} items-center justify-between gap-6`}>
         
         {/* Left Side - Hurry Up Message */}
@@ -196,7 +196,7 @@ const SingleEventCountdown: React.FC<SingleEventCountdownProps> = ({
         {/* Center - Countdown Timer */}
         <div className="flex items-center gap-2 lg:gap-4 flex-wrap justify-center">
           {/* Days */}
-          <div className={`bg-[#F9C802] rounded-[24px] p-5 min-w-[100px] text-center shadow-lg`}>
+          <div className={`bg-[#F9C802] rounded-[24px] p-5 min-w-[100px] text-center`}>
             <div className="text-3xl lg:text-4xl font-black text-[#191919] mb-1">
               {timeLeft.days.toString().padStart(2, '0')}
             </div>
@@ -206,7 +206,7 @@ const SingleEventCountdown: React.FC<SingleEventCountdownProps> = ({
           </div>
 
           {/* Hours */}
-          <div className={`bg-[#F9C802] rounded-[24px] p-5 min-w-[100px] text-center shadow-lg`}>
+          <div className={`bg-[#F9C802] rounded-[24px] p-5 min-w-[100px] text-center`}>
             <div className="text-3xl lg:text-4xl font-black text-[#191919] mb-1">
               {timeLeft.hours.toString().padStart(2, '0')}
             </div>
@@ -216,7 +216,7 @@ const SingleEventCountdown: React.FC<SingleEventCountdownProps> = ({
           </div>
 
           {/* Minutes */}
-          <div className={`bg-[#F9C802] rounded-[24px] p-5 min-w-[100px] text-center shadow-lg`}>
+          <div className={`bg-[#F9C802] rounded-[24px] p-5 min-w-[100px] text-center`}>
             <div className="text-3xl lg:text-4xl font-black text-[#191919] mb-1">
               {timeLeft.minutes.toString().padStart(2, '0')}
             </div>
@@ -226,7 +226,7 @@ const SingleEventCountdown: React.FC<SingleEventCountdownProps> = ({
           </div>
 
           {/* Seconds */}
-          <div className={`bg-[#F9C802] rounded-[24px] p-5 min-w-[100px] text-center shadow-lg`}>
+          <div className={`bg-[#F9C802] rounded-[24px] p-5 min-w-[100px] text-center`}>
             <div className="text-3xl lg:text-4xl font-black text-[#191919] mb-1">
               {timeLeft.seconds.toString().padStart(2, '0')}
             </div>
@@ -238,7 +238,7 @@ const SingleEventCountdown: React.FC<SingleEventCountdownProps> = ({
 
         {/* Right Side - Location Only */}
         <div className="flex-shrink-0">
-          <div className="bg-[#4F3DFE] text-white px-6 py-4 rounded-[24px] shadow-xl transform hover:scale-105 transition-all duration-300 hover:shadow-2xl">
+          <div className="bg-[#4F3DFE] text-white px-6 py-4 rounded-[24px] transform hover:scale-105 transition-all duration-300">
             <div className="flex items-center gap-3">
               <MapPin className="w-6 h-6" />
               <div className="text-left">

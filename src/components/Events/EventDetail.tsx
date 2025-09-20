@@ -179,6 +179,13 @@ const EventDetail: React.FC = () => {
   // Registration quantity state
   const [quantity, setQuantity] = React.useState<number>(1);
   
+  // Speakers scroll ref
+  const speakersScrollRef = React.useRef<HTMLDivElement>(null);
+  const scrollSpeakers = (dir: 'left' | 'right') => {
+    if (!speakersScrollRef.current) return;
+    speakersScrollRef.current.scrollBy({ left: dir === 'left' ? -360 : 360, behavior: 'smooth' });
+  };
+  
   // Define loadInterestCount first
   const loadInterestCount = React.useCallback(async () => {
     if (!event?.id) return;
@@ -554,7 +561,7 @@ const EventDetail: React.FC = () => {
               </div>
             ) : (
               <div className="text-center py-20 relative">
-                <div className="backdrop-blur-xl bg-white/60 rounded-3xl p-12 lg:p-16 border border-white/20 shadow-2xl max-w-5xl mx-auto">
+                <div className="backdrop-blur-xl bg-white/60 rounded-3xl p-12 lg:p-16 border border-white/20 max-w-5xl mx-auto">
                   <div className={`inline-flex items-center px-4 py-2 rounded-2xl text-sm font-semibold mb-8 ${getStatusColor(event.status)}`}>
                     {getStatusIcon(event.status)}
                     <span className="ml-2 capitalize">{event.status}</span>
@@ -580,10 +587,6 @@ const EventDetail: React.FC = () => {
                 </div>
               </div>
             )}
-            {/* Auto-scroll Carousel Below Banner */}
-            {event.events_gallery && event.events_gallery.length > 0 && (
-              <EventGallery images={event.events_gallery} />
-            )}
           </div>
 
           {/* Main Content Grid - Optimized Layout */}
@@ -591,7 +594,7 @@ const EventDetail: React.FC = () => {
             {/* Main Content Area */}
             <div className="xl:col-span-8 space-y-12">
               {/* About The Event Section - Match Reference Layout */}
-              <div className="backdrop-blur-xl bg-white/90 rounded-3xl p-8 lg:p-10 border border-white/20 shadow-xl">
+              <div className="backdrop-blur-xl bg-white/90 rounded-3xl p-8 lg:p-10 border border-white/20">
                 {/* Header Section with Title, Status Badge, and Share Button */}
                 <div className="flex items-start justify-between mb-8">
                   <div className="flex items-center gap-4">
@@ -679,46 +682,12 @@ const EventDetail: React.FC = () => {
                   </div>
                 </div>
               </div>
-              {/* Speaker Information Card - separate container styled like Event Organizer */}
-                {event.speakers_details && Array.isArray(event.speakers_details) && event.speakers_details.length > 0 && (
-                  <div className="backdrop-blur-xl bg-white/70 rounded-3xl p-6 border border-white/20 shadow-xl">
-                    <h3 className="text-xl font-bold bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent mb-6">Speaker Details</h3>
-                    <div className="space-y-4">
-                      {event.speakers_details.map((speaker, idx) => (
-                        <div key={idx} className="flex items-center gap-4 p-4 rounded-2xl bg-gradient-to-r from-indigo-50/80 to-purple-50/80 border border-indigo-200/30 shadow hover:shadow-lg transition-all">
-                          <img
-                            src={speaker.photo}
-                            alt={speaker.name}
-                            className="w-16 h-16 rounded-full object-cover border-2 border-indigo-300 shadow"
-                            onError={e => {
-                              (e.target as HTMLImageElement).src = 'https://ui-avatars.com/api/?name=' + encodeURIComponent(speaker.name);
-                            }}
-                          />
-                          <div className="flex-1">
-                            <p className="font-bold text-slate-800">{speaker.name}</p>
-                            <p className="text-slate-600 text-sm">{speaker.profile}</p>
-                            {speaker.linkedIn && (
-                              <a
-                                href={speaker.linkedIn}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-800 text-sm font-medium mt-2"
-                              >
-                                <ExternalLink className="w-4 h-4" /> LinkedIn
-                              </a>
-                            )}
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                  )}
 
               {/* Agenda - Consistent Layout */}
               {event.agenda && (
-                <div className="backdrop-blur-xl bg-white/60 rounded-3xl p-8 lg:p-10 border border-white/20 shadow-xl">
+                <div className="backdrop-blur-xl bg-white/60 rounded-3xl p-8 lg:p-10 border border-white/20">
                   <div className="flex items-center gap-4 mb-8">
-                    <div className="w-12 h-12 bg-gradient-to-r from-green-500 to-emerald-500 rounded-2xl flex items-center justify-center shadow-lg">
+                    <div className="w-12 h-12 bg-gradient-to-r from-green-500 to-emerald-500 rounded-2xl flex items-center justify-center">
                       <Clock className="w-6 h-6 text-white" />
                     </div>
                     <h2 className="text-xl font-bold bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent leading-tight">Event Agenda</h2>
@@ -731,32 +700,214 @@ const EventDetail: React.FC = () => {
               )}
 
 
-              {/* Speakers - Enhanced Layout */}
-              {event.speakers && event.speakers.length > 0 && (
-                <div className="backdrop-blur-xl bg-white/60 rounded-3xl p-8 lg:p-10 border border-white/20 shadow-xl">
+              {/* Event Gallery Section */}
+              {event.events_gallery && event.events_gallery.length > 0 && (
+                <div className="backdrop-blur-xl bg-white/60 rounded-3xl p-8 lg:p-10 border border-white/20">
                   <div className="flex items-center gap-4 mb-8">
-                    <div className="w-12 h-12 bg-gradient-to-r from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center shadow-lg">
-                      <Star className="w-6 h-6 text-white" />
+                    <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-2xl flex items-center justify-center">
+                      <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                      </svg>
                     </div>
-                    <h2 className="text-xl font-bold bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent leading-tight">Featured Speakers</h2>
+                    <h2 className="text-3xl font-bold text-gray-900 leading-tight">Event Gallery</h2>
                   </div>
+                  
+                  {/* Gallery Images */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {event.events_gallery.slice(0, 6).map((image, index) => (
+                      <div 
+                        key={index} 
+                        className="relative group cursor-pointer overflow-hidden rounded-3xl transition-all duration-300 transform hover:scale-105"
+                        onClick={() => {
+                          // Optional: Add modal functionality for full-size view
+                          window.open(image, '_blank');
+                        }}
+                      >
+                        <div className="aspect-square">
+                          <img
+                            src={image}
+                            alt={`Event gallery image ${index + 1}`}
+                            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+                            onError={(e) => {
+                              (e.target as HTMLImageElement).src = '/api/placeholder/400/400';
+                            }}
+                          />
+                        </div>
+                        {/* Hover overlay */}
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-4">
+                          <span className="text-white text-sm font-medium bg-black/30 px-3 py-1 rounded-full backdrop-blur-sm">
+                            View Full Size
+                          </span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  
+                  {/* Show more button if there are more than 6 images */}
+                  {event.events_gallery.length > 6 && (
+                    <div className="mt-8 text-center">
+                      <button 
+                        onClick={() => {
+                          // You can implement a modal or expanded view here
+                          console.log('Show all gallery images');
+                        }}
+                        className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-2xl hover:from-blue-600 hover:to-indigo-600 transition-all duration-300 transform hover:scale-105"
+                      >
+                        View All {event.events_gallery.length} Images
+                        <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                        </svg>
+                      </button>
+                    </div>
+                  )}
                 </div>
               )}
+
+              {/* Speakers - Redesigned Section */}
+              {(event.speakers_details && event.speakers_details.length > 0) || (event.speakers && event.speakers.length > 0) ? (
+                <div 
+                  className="relative rounded-3xl p-6 lg:p-10 border border-white/30 overflow-hidden"
+                >
+
+                  <div className="relative flex items-center justify-between mb-6">
+                    <h2 className="text-2xl lg:text-3xl font-bold text-slate-900">Speakers</h2>
+                    <div className="hidden md:flex items-center gap-3">
+                      <button 
+                        aria-label="Previous"
+                        onClick={() => scrollSpeakers('left')} 
+                        className="w-10 h-10 rounded-full bg-white flex items-center justify-center text-slate-700 hover:bg-slate-50"
+                      >
+                        <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7"/></svg>
+                      </button>
+                      <button 
+                        aria-label="Next"
+                        onClick={() => scrollSpeakers('right')} 
+                        className="w-10 h-10 rounded-full bg-white flex items-center justify-center text-slate-700 hover:bg-slate-50"
+                      >
+                        <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"/></svg>
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Cards rail */}
+                  <div 
+                    ref={speakersScrollRef}
+                    className="relative flex gap-6 overflow-x-auto pb-2 snap-x snap-mandatory"
+                    style={{ scrollBehavior: 'smooth' }}
+                  >
+                    {((event.speakers_details && event.speakers_details.length > 0)
+                      ? event.speakers_details.map(sd => ({
+                          name: sd.name,
+                          title: sd.profile,
+                          photo: sd.photo,
+                          linkedIn: sd.linkedIn,
+                        }))
+                      : (event.speakers || []).map((s: string) => ({
+                          name: s,
+                          title: 'Speaker',
+                          photo: `https://ui-avatars.com/api/?name=${encodeURIComponent(s)}&background=E5E7EB&color=334155`,
+                        }))
+                    ).map((spk, idx) => (
+                      <div key={idx} className="min-w-[280px] max-w-[300px] w-[300px] snap-start">
+                        <div className="relative bg-white border border-gray-200 h-full"
+                             style={{
+                               borderRadius: '24px',
+                               clipPath: 'polygon(0 0, calc(100% - 36px) 0, 100% 36px, 100% 100%, 36px 100%, 0 calc(100% - 36px))'
+                             }}>
+                          
+                          {/* Main card content */}
+                          <div className="p-4 lg:p-6">
+                            {/* Speaker photo */}
+                            <div className="relative mb-6">
+                              <div className="w-52 h-52 mx-auto bg-[#eef2f7] rounded-[20px] overflow-hidden">
+                                <img
+                                  src={spk.photo}
+                                  alt={spk.name}
+                                  className="w-full h-full object-cover"
+                                  onError={(e) => { 
+                                    (e.target as HTMLImageElement).src = `https://ui-avatars.com/api/?name=${encodeURIComponent(spk.name)}&background=E5E7EB&color=334155&size=192`; 
+                                  }}
+                                />
+                              </div>
+                              
+                              {/* Social media icons */}
+                              <div className="absolute right-3 top-1/2 -translate-y-1/2 flex flex-col gap-3">
+                                {/* Facebook */}
+                                <div className="w-10 h-10 bg-black rounded-full flex items-center justify-center hover:scale-110 transition-transform cursor-pointer">
+                                  <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                                  </svg>
+                                </div>
+                                
+                                {/* Info/Website */}
+                                <div className="w-10 h-10 bg-black rounded-full flex items-center justify-center hover:scale-110 transition-transform cursor-pointer">
+                                  <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+                                  </svg>
+                                </div>
+                                
+                                {/* LinkedIn */}
+                                <div className="w-10 h-10 bg-black rounded-full flex items-center justify-center hover:scale-110 transition-transform cursor-pointer"
+                                     onClick={() => spk.linkedIn && window.open(spk.linkedIn, '_blank')}>
+                                  <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                                  </svg>
+                                </div>
+                                
+                                {/* Instagram */}
+                                <div className="w-10 h-10 bg-black rounded-full flex items-center justify-center hover:scale-110 transition-transform cursor-pointer">
+                                  <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                                  </svg>
+                                </div>
+                              </div>
+                            </div>
+                            
+                            {/* Speaker info */}
+                            <div className="text-center">
+                              <h3 className="text-2xl font-bold tracking-tight text-slate-900 mb-2">{spk.name}</h3>
+                              {spk.title && <p className="text-slate-700 text-lg">{spk.title}</p>}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Mobile arrows */}
+                  <div className="md:hidden flex justify-center gap-3 mt-4 relative z-10">
+                    <button 
+                      aria-label="Previous"
+                      onClick={() => scrollSpeakers('left')} 
+                      className="w-10 h-10 rounded-full bg-white flex items-center justify-center text-slate-700 hover:bg-slate-50"
+                    >
+                      <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7"/></svg>
+                    </button>
+                    <button 
+                      aria-label="Next"
+                      onClick={() => scrollSpeakers('right')} 
+                      className="w-10 h-10 rounded-full bg-white flex items-center justify-center text-slate-700 hover:bg-slate-50"
+                    >
+                      <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"/></svg>
+                    </button>
+                  </div>
+                </div>
+              ) : null}
               {/* Map below Featured Speakers if location exists */}
               {/* Removed location_latitude/location_longitude map as those fields do not exist in Event type */}
 
               {/* Sponsors - Consistent Layout */}
               {event.sponsors && event.sponsors.length > 0 && (
-                <div className="backdrop-blur-xl bg-white/60 rounded-3xl p-8 lg:p-10 border border-white/20 shadow-xl">
+                <div className="backdrop-blur-xl bg-white/60 rounded-3xl p-8 lg:p-10 border border-white/20">
                   <div className="flex items-center gap-4 mb-8">
-                    <div className="w-12 h-12 bg-gradient-to-r from-amber-500 to-orange-500 rounded-2xl flex items-center justify-center shadow-lg">
+                    <div className="w-12 h-12 bg-gradient-to-r from-amber-500 to-orange-500 rounded-2xl flex items-center justify-center">
                       <Award className="w-6 h-6 text-white" />
                     </div>
                     <h2 className="text-xl font-bold bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent leading-tight">Event Sponsors</h2>
                   </div>
                   <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                     {event.sponsors.map((sponsor, index) => (
-                      <div key={index} className="bg-gradient-to-r from-white/80 to-white/60 rounded-2xl p-4 border border-white/30 backdrop-blur-sm text-center hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
+                      <div key={index} className="bg-gradient-to-r from-white/80 to-white/60 rounded-2xl p-4 border border-white/30 backdrop-blur-sm text-center transition-all duration-300 transform hover:-translate-y-1">
                         <p className="font-bold text-slate-800 text-sm">{sponsor}</p>
                       </div>
                     ))}
@@ -764,61 +915,62 @@ const EventDetail: React.FC = () => {
                 </div>
               )}
 
-              {/* Contact Us About This Event - Modern Professional Layout */}
-              <div className="backdrop-blur-xl bg-white/80 rounded-3xl p-6 border border-white/30 shadow-xl">
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="w-10 h-10 bg-slate-700 rounded-xl flex items-center justify-center shadow-lg">
-                    <Mail className="w-5 h-5 text-white" />
+              {/* FAQ Section - Clean Divider Style */}
+              {event.faq && event.faq.length > 0 && (
+                <div className="backdrop-blur-xl bg-white/90 rounded-3xl p-8 lg:p-10 border border-white/20">
+                  {/* FAQ Header */}
+                  <div className="mb-8">
+                    <h2 className="text-3xl font-bold text-gray-900">Frequently Asked Questions</h2>
                   </div>
-                  <div>
-                    <h2 className="text-xl font-bold text-slate-800 leading-tight mb-1">Contact Us About This Event</h2>
-                    <p className="text-slate-600 text-sm">Have questions or need more information? We're here to help.</p>
+                  
+                  {/* FAQ Items - Clean List Style */}
+                  <div className="">
+                    {event.faq.map((faqItem, index) => (
+                      <div key={index} className="">
+                        {/* Question Button */}
+                        <button
+                          className="w-full text-left py-8 flex items-center justify-between focus:outline-none group hover:bg-gray-50/30 transition-colors duration-200"
+                          onClick={() => toggleFaq(index)}
+                        >
+                          <span className="text-2xl text-gray-900 pr-8 leading-tight">
+                            {faqItem.question}
+                          </span>
+                          
+                          {/* Plus/Minus Icon - Square Style */}
+                          <div className="flex-shrink-0 w-8 h-8 border-2 border-gray-400 rounded-sm flex items-center justify-center bg-white group-hover:border-gray-600 transition-colors duration-200">
+                            <span className="text-xl font-normal text-gray-600 group-hover:text-gray-800">
+                              {openFaqIdx === index ? '−' : '+'}
+                            </span>
+                          </div>
+                        </button>
+                        
+                        {/* Answer Section */}
+                        {openFaqIdx === index && (
+                          <div className="pb-8 px-0">
+                            <div className="">
+                              <p className="text-gray-700 leading-relaxed text-lg">
+                                {faqItem.answer}
+                              </p>
+                            </div>
+                          </div>
+                        )}
+                        
+                        {/* Full Width Divider Line - Match Reference */}
+                        {index < event.faq.length - 1 && (
+                          <div className="border-b-2 border-gray-300 w-full"></div>
+                        )}
+                      </div>
+                    ))}
                   </div>
                 </div>
-                
-                <div className="bg-white/60 rounded-2xl p-4 border border-slate-200/50 shadow-sm">
-                  <EventContactForm
-                    eventId={event.id}
-                    eventTitle={event.title}
-                    onSuccess={() => {
-                      toast.success('🎉 Thank you for your inquiry! We\'ll get back to you soon.', {
-                        position: 'bottom-right',
-                        autoClose: 5000,
-                        hideProgressBar: false,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        draggable: true,
-                        style: { 
-                          background: '#059669', 
-                          color: '#fff', 
-                          boxShadow: '0 4px 12px rgba(5, 150, 105, 0.15)' 
-                        },
-                      });
-                    }}
-                    onError={(error) => {
-                      toast.error(`⚠️ ${error}`, {
-                        position: 'bottom-right',
-                        autoClose: 8000,
-                        hideProgressBar: false,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        draggable: true,
-                        style: { 
-                          background: '#DC2626', 
-                          color: '#fff', 
-                          boxShadow: '0 4px 12px rgba(220, 38, 38, 0.15)' 
-                        },
-                      });
-                    }}
-                  />
-                </div>
-              </div>
+              )}
+
           </div>
 
             {/* Modern Sidebar - Properly Positioned */}
             <div className="xl:col-span-4 space-y-8">
               {/* Information Card - Match Reference Design */}
-              <div className="backdrop-blur-xl bg-white/95 rounded-3xl border border-white/20 shadow-xl sticky top-36 overflow-hidden">
+              <div className="backdrop-blur-xl bg-white/95 rounded-3xl border border-white/20 sticky top-36 overflow-hidden">
                 {/* Blue Information Header */}
                 <div className="bg-blue-600 px-6 py-4">
                   <h3 className="text-xl font-bold text-white">Information</h3>
@@ -867,7 +1019,7 @@ const EventDetail: React.FC = () => {
                 
 
             {/* Organizer Card */}
-            <div className="backdrop-blur-xl bg-white/70 rounded-3xl p-6 border border-white/20 shadow-xl">
+            <div className="backdrop-blur-xl bg-white/70 rounded-3xl p-6 border border-white/20">
               <h3 className="text-xl font-bold bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent mb-6">Event Organizer</h3>
               
               <div className="space-y-4">
@@ -884,7 +1036,7 @@ const EventDetail: React.FC = () => {
                 <div className="space-y-3 pt-4 border-t border-slate-200">
                   <a 
                     href={`mailto:${event.organizer_email}`}
-                    className="flex items-center gap-3 p-3 bg-gradient-to-r from-blue-50/80 to-indigo-50/80 rounded-2xl border border-blue-200/30 hover:shadow-md transition-all duration-300 group"
+                    className="flex items-center gap-3 p-3 bg-gradient-to-r from-blue-50/80 to-indigo-50/80 rounded-2xl border border-blue-200/30 transition-all duration-300 group"
                   >
                     <Mail className="w-5 h-5 text-blue-500 group-hover:scale-110 transition-transform" />
                     <span className="text-blue-700 font-medium">{event.organizer_email}</span>
@@ -893,7 +1045,7 @@ const EventDetail: React.FC = () => {
                   {event.organizer_phone && (
                     <a 
                       href={`tel:${event.organizer_phone}`}
-                      className="flex items-center gap-3 p-3 bg-gradient-to-r from-green-50/80 to-emerald-50/80 rounded-2xl border border-green-200/30 hover:shadow-md transition-all duration-300 group"
+                      className="flex items-center gap-3 p-3 bg-gradient-to-r from-green-50/80 to-emerald-50/80 rounded-2xl border border-green-200/30 transition-all duration-300 group"
                     >
                       <Phone className="w-5 h-5 text-green-500 group-hover:scale-110 transition-transform" />
                       <span className="text-green-700 font-medium">{event.organizer_phone}</span>
@@ -910,7 +1062,7 @@ const EventDetail: React.FC = () => {
             </div>
 
             {/* Registration Card - replaces Event Tags */}
-            <div className="backdrop-blur-xl bg-white/95 rounded-3xl p-6 border border-white/20 shadow-xl">
+            <div className="backdrop-blur-xl bg-white/95 rounded-3xl p-6 border border-white/20">
               <h3 className="text-2xl font-bold text-slate-900">Registration</h3>
               <div className="mt-2 h-1 w-16 bg-indigo-600 rounded-full"></div>
 
@@ -973,7 +1125,7 @@ const EventDetail: React.FC = () => {
 
               <button
                 onClick={() => setModalOpen(true)}
-                className="w-full mt-6 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-4 rounded-2xl shadow-lg shadow-indigo-600/30 transition-transform active:scale-[0.99]"
+                className="w-full mt-6 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-4 rounded-2xl transition-transform active:scale-[0.99]"
               >
                 REGISTER NOW
               </button>
