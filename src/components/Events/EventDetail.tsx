@@ -12,6 +12,7 @@ import { useEvents } from '../../hooks/Events/useEvent';
 import EventContactForm from './EventContactForm';
 import FloatingActionMenu from './StickyButton/FloatingAction';
 import InterestedModal from './InterestedModal';
+import SingleEventCountdown from './SingleEventCountdown';
 import { eventInterestedService } from '../../services/eventInterestedService';
 import { 
   Calendar, 
@@ -540,6 +541,13 @@ const EventDetail: React.FC = () => {
                     </button>
                   </div>
                 </div>
+                
+                {/* Event Registration Countdown Section - Shows countdown to registration deadline */}
+                {event.registration_deadline && (
+                  <div className="mt-8">
+                    <SingleEventCountdown event={event} />
+                  </div>
+                )}
               </div>
             ) : (
               <div className="text-center py-20 relative">
