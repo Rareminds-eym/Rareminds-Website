@@ -42,4 +42,5 @@ export interface Event {
     question: string;
     answer: string;
   }>;
+  key_highlights?: string[];
 }
