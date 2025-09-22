@@ -13,6 +13,7 @@ import EventContactForm from './EventContactForm';
 import FloatingActionMenu from './StickyButton/FloatingAction';
 import InterestedModal from './InterestedModal';
 import SingleEventCountdown from './SingleEventCountdown';
+import EventMap from './EventMap';
 import { eventInterestedService } from '../../services/eventInterestedService';
 import { 
   Calendar, 
@@ -464,7 +465,7 @@ const EventDetail: React.FC = () => {
                   
                   {/* Event Title - Bottom Left of Image */}
                   <div className="absolute bottom-6 left-6">
-                    <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-[1.1] tracking-tight drop-shadow-lg">
+                    <h1 className="text-2xl md:text-3xl lg:text-3xl font-bold text-white leading-[1.1] tracking-tight drop-shadow-lg">
                       {event.title || "Event Name"}
                     </h1>
                   </div>
@@ -915,61 +916,11 @@ const EventDetail: React.FC = () => {
                 </div>
               )}
 
-              {/* FAQ Section - Clean Divider Style */}
-              {event.faq && event.faq.length > 0 && (
-                <div className="backdrop-blur-xl bg-white/90 rounded-3xl p-8 lg:p-10 border border-white/20">
-                  {/* FAQ Header */}
-                  <div className="mb-8">
-                    <h2 className="text-3xl font-bold text-gray-900">Frequently Asked Questions</h2>
-                  </div>
-                  
-                  {/* FAQ Items - Clean List Style */}
-                  <div className="">
-                    {event.faq.map((faqItem, index) => (
-                      <div key={index} className="">
-                        {/* Question Button */}
-                        <button
-                          className="w-full text-left py-8 flex items-center justify-between focus:outline-none group hover:bg-gray-50/30 transition-colors duration-200"
-                          onClick={() => toggleFaq(index)}
-                        >
-                          <span className="text-2xl text-gray-900 pr-8 leading-tight">
-                            {faqItem.question}
-                          </span>
-                          
-                          {/* Plus/Minus Icon - Square Style */}
-                          <div className="flex-shrink-0 w-8 h-8 border-2 border-gray-400 rounded-sm flex items-center justify-center bg-white group-hover:border-gray-600 transition-colors duration-200">
-                            <span className="text-xl font-normal text-gray-600 group-hover:text-gray-800">
-                              {openFaqIdx === index ? '−' : '+'}
-                            </span>
-                          </div>
-                        </button>
-                        
-                        {/* Answer Section */}
-                        {openFaqIdx === index && (
-                          <div className="pb-8 px-0">
-                            <div className="">
-                              <p className="text-gray-700 leading-relaxed text-lg">
-                                {faqItem.answer}
-                              </p>
-                            </div>
-                          </div>
-                        )}
-                        
-                        {/* Full Width Divider Line - Match Reference */}
-                        {index < event.faq.length - 1 && (
-                          <div className="border-b-2 border-gray-300 w-full"></div>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-
           </div>
 
             {/* Modern Sidebar - Properly Positioned */}
             <div className="xl:col-span-4 space-y-8">
-              {/* Information Card - Match Reference Design */}
+              {/* 1. Information Card - First */}
               <div className="backdrop-blur-xl bg-white/95 rounded-3xl border border-white/20 sticky top-36 overflow-hidden">
                 {/* Blue Information Header */}
                 <div className="bg-blue-600 px-6 py-4">
@@ -1011,128 +962,200 @@ const EventDetail: React.FC = () => {
                       <strong className="text-gray-900 font-semibold text-lg w-32">Location:</strong>
                       <span className="text-gray-700 text-lg">{event.location?.split(',')[0]?.trim() || 'Bangalore'}</span>
                     </div>
+
+                    {/* Languages */}
+                    <div className="flex items-baseline gap-3">
+                      <strong className="text-gray-900 font-semibold text-lg w-32">Languages:</strong>
+                      <span className="text-gray-700 text-lg">
+                        {event.languages && event.languages.length > 0 
+                          ? event.languages.join(', ') 
+                          : 'English'
+                        }
+                      </span>
+                    </div>
                   </div>
                 </div>
               </div>
-            
-              
-                
 
-            {/* Organizer Card */}
-            <div className="backdrop-blur-xl bg-white/70 rounded-3xl p-6 border border-white/20">
-              <h3 className="text-xl font-bold bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent mb-6">Event Organizer</h3>
-              
-              <div className="space-y-4">
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-2xl flex items-center justify-center">
-                    <User className="w-6 h-6 text-white" />
+              {/* 2. Registration Card - Second */}
+              <div className="backdrop-blur-xl bg-white/95 rounded-3xl p-6 border border-white/20">
+                <h3 className="text-2xl font-bold text-slate-900">Registration</h3>
+                <div className="mt-2 h-1 w-16 bg-indigo-600 rounded-full"></div>
+
+                {/* Price and Stepper */}
+                <div className="flex items-center justify-between mt-6">
+                  <div className="text-2xl font-extrabold text-slate-900">
+                    {(() => {
+                      const priceStr = (event.price ?? '0').toString().toLowerCase();
+                      if (priceStr === 'free' || priceStr === '0' || priceStr === '') {
+                        return 'FREE';
+                      }
+                      const numeric = parseFloat(priceStr.replace(/[^\d.]/g, '')) || 0;
+                      return new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(numeric);
+                    })()}
                   </div>
-                  <div>
-                    <p className="font-bold text-slate-800">{event.organizer_name}</p>
-                    <p className="text-slate-600 text-sm">Event Organizer</p>
+                  <div className="flex items-center gap-3">
+                    <button
+                      aria-label="Decrease quantity"
+                      onClick={() => setQuantity(q => Math.max(1, q - 1))}
+                      className="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 text-lg leading-none flex items-center justify-center"
+                    >
+                      −
+                    </button>
+                    <span className="min-w-[1.5rem] text-center font-semibold text-slate-700">
+                      {String(quantity).padStart(2, '0')}
+                    </span>
+                    <button
+                      aria-label="Increase quantity"
+                      onClick={() => setQuantity(q => Math.min(99, q + 1))}
+                      className="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 text-lg leading-none flex items-center justify-center"
+                    >
+                      +
+                    </button>
                   </div>
                 </div>
 
-                <div className="space-y-3 pt-4 border-t border-slate-200">
-                  <a 
-                    href={`mailto:${event.organizer_email}`}
-                    className="flex items-center gap-3 p-3 bg-gradient-to-r from-blue-50/80 to-indigo-50/80 rounded-2xl border border-blue-200/30 transition-all duration-300 group"
-                  >
-                    <Mail className="w-5 h-5 text-blue-500 group-hover:scale-110 transition-transform" />
-                    <span className="text-blue-700 font-medium">{event.organizer_email}</span>
-                  </a>
+                <div className="my-5 border-t border-slate-200" />
 
-                  {event.organizer_phone && (
+                {/* Quantity row */}
+                <div className="flex items-baseline justify-between mb-3">
+                  <span className="text-lg font-semibold text-slate-800">Quantity:</span>
+                  <span className="text-lg font-mono text-slate-700">{String(quantity).padStart(2, '0')}</span>
+                </div>
+
+                {/* Total cost row */}
+                <div className="flex items-baseline justify-between">
+                  <span className="text-lg font-semibold text-slate-800">Total Cost:</span>
+                  <span className="text-2xl font-extrabold text-emerald-600">
+                    {(() => {
+                      const priceStr = (event.price ?? '0').toString().toLowerCase();
+                      if (priceStr === 'free' || priceStr === '0' || priceStr === '') {
+                        return 'FREE';
+                      }
+                      const numeric = parseFloat(priceStr.replace(/[^\d.]/g, '')) || 0;
+                      const total = numeric * quantity;
+                      return new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(total);
+                    })()}
+                  </span>
+                </div>
+
+                <button
+                  onClick={() => setModalOpen(true)}
+                  className="w-full mt-6 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-4 rounded-2xl transition-transform active:scale-[0.99]"
+                >
+                  REGISTER NOW
+                </button>
+              </div>
+
+              {/* 3. Event Organizer Card - Third */}
+              <div className="backdrop-blur-xl bg-white/70 rounded-3xl p-6 border border-white/20">
+                <h3 className="text-xl font-bold bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent mb-6">Event Organizer</h3>
+                
+                <div className="space-y-4">
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-2xl flex items-center justify-center">
+                      <User className="w-6 h-6 text-white" />
+                    </div>
+                    <div>
+                      <p className="font-bold text-slate-800">{event.organizer_name}</p>
+                      <p className="text-slate-600 text-sm">Event Organizer</p>
+                    </div>
+                  </div>
+
+                  <div className="space-y-3 pt-4 border-t border-slate-200">
                     <a 
-                      href={`tel:${event.organizer_phone}`}
-                      className="flex items-center gap-3 p-3 bg-gradient-to-r from-green-50/80 to-emerald-50/80 rounded-2xl border border-green-200/30 transition-all duration-300 group"
+                      href={`mailto:${event.organizer_email}`}
+                      className="flex items-center gap-3 p-3 bg-gradient-to-r from-blue-50/80 to-indigo-50/80 rounded-2xl border border-blue-200/30 transition-all duration-300 group"
                     >
-                      <Phone className="w-5 h-5 text-green-500 group-hover:scale-110 transition-transform" />
-                      <span className="text-green-700 font-medium">{event.organizer_phone}</span>
+                      <Mail className="w-5 h-5 text-blue-500 group-hover:scale-110 transition-transform" />
+                      <span className="text-blue-700 font-medium">{event.organizer_email}</span>
                     </a>
+
+                    {event.organizer_phone && (
+                      <a 
+                        href={`tel:${event.organizer_phone}`}
+                        className="flex items-center gap-3 p-3 bg-gradient-to-r from-green-50/80 to-emerald-50/80 rounded-2xl border border-green-200/30 transition-all duration-300 group"
+                      >
+                        <Phone className="w-5 h-5 text-green-500 group-hover:scale-110 transition-transform" />
+                        <span className="text-green-700 font-medium">{event.organizer_phone}</span>
+                      </a>
+                    )}
+                  </div>
+
+                  {event.additional_contact_info && (
+                    <div className="mt-4 p-4 bg-gradient-to-r from-slate-50/80 to-gray-50/80 rounded-2xl border border-slate-200/30">
+                      <p className="text-slate-700 text-sm leading-relaxed">{event.additional_contact_info}</p>
+                    </div>
                   )}
                 </div>
-
-                {event.additional_contact_info && (
-                  <div className="mt-4 p-4 bg-gradient-to-r from-slate-50/80 to-gray-50/80 rounded-2xl border border-slate-200/30">
-                    <p className="text-slate-700 text-sm leading-relaxed">{event.additional_contact_info}</p>
-                  </div>
-                )}
-              </div>
-            </div>
-
-            {/* Registration Card - replaces Event Tags */}
-            <div className="backdrop-blur-xl bg-white/95 rounded-3xl p-6 border border-white/20">
-              <h3 className="text-2xl font-bold text-slate-900">Registration</h3>
-              <div className="mt-2 h-1 w-16 bg-indigo-600 rounded-full"></div>
-
-              {/* Price and Stepper */}
-              <div className="flex items-center justify-between mt-6">
-                <div className="text-2xl font-extrabold text-slate-900">
-                  {(() => {
-                    const priceStr = (event.price ?? '0').toString().toLowerCase();
-                    if (priceStr === 'free' || priceStr === '0' || priceStr === '') {
-                      return 'FREE';
-                    }
-                    const numeric = parseFloat(priceStr.replace(/[^\d.]/g, '')) || 0;
-                    return new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(numeric);
-                  })()}
-                </div>
-                <div className="flex items-center gap-3">
-                  <button
-                    aria-label="Decrease quantity"
-                    onClick={() => setQuantity(q => Math.max(1, q - 1))}
-                    className="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 text-lg leading-none flex items-center justify-center"
-                  >
-                    −
-                  </button>
-                  <span className="min-w-[1.5rem] text-center font-semibold text-slate-700">
-                    {String(quantity).padStart(2, '0')}
-                  </span>
-                  <button
-                    aria-label="Increase quantity"
-                    onClick={() => setQuantity(q => Math.min(99, q + 1))}
-                    className="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 text-lg leading-none flex items-center justify-center"
-                  >
-                    +
-                  </button>
-                </div>
               </div>
 
-              <div className="my-5 border-t border-slate-200" />
-
-              {/* Quantity row */}
-              <div className="flex items-baseline justify-between mb-3">
-                <span className="text-lg font-semibold text-slate-800">Quantity:</span>
-                <span className="text-lg font-mono text-slate-700">{String(quantity).padStart(2, '0')}</span>
-              </div>
-
-              {/* Total cost row */}
-              <div className="flex items-baseline justify-between">
-                <span className="text-lg font-semibold text-slate-800">Total Cost:</span>
-                <span className="text-2xl font-extrabold text-emerald-600">
-                  {(() => {
-                    const priceStr = (event.price ?? '0').toString().toLowerCase();
-                    if (priceStr === 'free' || priceStr === '0' || priceStr === '') {
-                      return 'FREE';
-                    }
-                    const numeric = parseFloat(priceStr.replace(/[^\d.]/g, '')) || 0;
-                    const total = numeric * quantity;
-                    return new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(total);
-                  })()}
-                </span>
-              </div>
-
-              <button
-                onClick={() => setModalOpen(true)}
-                className="w-full mt-6 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-4 rounded-2xl transition-transform active:scale-[0.99]"
-              >
-                REGISTER NOW
-              </button>
-            </div>
+            {/* 4. Event Location - Fourth */}
+            {event.location && (
+              <EventMap
+                location={event.location}
+                locationGeo={event.location_geo}
+                eventTitle={event.title}
+              />
+            )}
 
             </div>
           </div>
+          
+          {/* FAQ Section - Centered Outside Grid for Full Width */}
+          {event.faq && event.faq.length > 0 && (
+            <div className="mt-16">
+              <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div className="backdrop-blur-xl bg-white/90 rounded-3xl p-8 lg:p-10 border border-white/20">
+                  {/* FAQ Header - Perfectly Centered */}
+                  <div className="text-center mb-12">
+                    <h2 className="text-3xl font-bold text-gray-900 mx-auto">Frequently Asked Questions</h2>
+                  </div>
+                  
+                  {/* FAQ Items Container - Centered */}
+                  <div className="max-w-4xl mx-auto">
+                    {event.faq.map((faqItem, index) => (
+                      <div key={index} className="">
+                        {/* Question Button */}
+                        <button
+                          className="w-full text-left py-8 flex items-center justify-between focus:outline-none group hover:bg-gray-50/30 transition-colors duration-200"
+                          onClick={() => toggleFaq(index)}
+                        >
+                          <span className="text-2xl text-gray-900 pr-8 leading-tight">
+                            {faqItem.question}
+                          </span>
+                          
+                          {/* Plus/Minus Icon - Square Style */}
+                          <div className="flex-shrink-0 w-8 h-8 border-2 border-gray-400 rounded-sm flex items-center justify-center bg-white group-hover:border-gray-600 transition-colors duration-200">
+                            <span className="text-xl font-normal text-gray-600 group-hover:text-gray-800">
+                              {openFaqIdx === index ? '−' : '+'}
+                            </span>
+                          </div>
+                        </button>
+                        
+                        {/* Answer Section */}
+                        {openFaqIdx === index && (
+                          <div className="pb-8 px-0">
+                            <div className="">
+                              <p className="text-gray-700 leading-relaxed text-lg">
+                                {faqItem.answer}
+                              </p>
+                            </div>
+                          </div>
+                        )}
+                        
+                        {/* Full Width Divider Line - Match Reference */}
+                        {index < event.faq.length - 1 && (
+                          <div className="border-b-2 border-gray-300 w-full"></div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+          
         </div>
       </div>
     </div>
