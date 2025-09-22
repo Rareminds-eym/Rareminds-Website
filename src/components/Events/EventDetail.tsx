@@ -13,6 +13,7 @@ import EventContactForm from './EventContactForm';
 import FloatingActionMenu from './StickyButton/FloatingAction';
 import InterestedModal from './InterestedModal';
 import SingleEventCountdown from './SingleEventCountdown';
+import EventMap from './EventMap';
 import { eventInterestedService } from '../../services/eventInterestedService';
 import { 
   Calendar, 
@@ -915,56 +916,6 @@ const EventDetail: React.FC = () => {
                 </div>
               )}
 
-              {/* FAQ Section - Clean Divider Style */}
-              {event.faq && event.faq.length > 0 && (
-                <div className="backdrop-blur-xl bg-white/90 rounded-3xl p-8 lg:p-10 border border-white/20">
-                  {/* FAQ Header */}
-                  <div className="mb-8">
-                    <h2 className="text-3xl font-bold text-gray-900">Frequently Asked Questions</h2>
-                  </div>
-                  
-                  {/* FAQ Items - Clean List Style */}
-                  <div className="">
-                    {event.faq.map((faqItem, index) => (
-                      <div key={index} className="">
-                        {/* Question Button */}
-                        <button
-                          className="w-full text-left py-8 flex items-center justify-between focus:outline-none group hover:bg-gray-50/30 transition-colors duration-200"
-                          onClick={() => toggleFaq(index)}
-                        >
-                          <span className="text-2xl text-gray-900 pr-8 leading-tight">
-                            {faqItem.question}
-                          </span>
-                          
-                          {/* Plus/Minus Icon - Square Style */}
-                          <div className="flex-shrink-0 w-8 h-8 border-2 border-gray-400 rounded-sm flex items-center justify-center bg-white group-hover:border-gray-600 transition-colors duration-200">
-                            <span className="text-xl font-normal text-gray-600 group-hover:text-gray-800">
-                              {openFaqIdx === index ? '−' : '+'}
-                            </span>
-                          </div>
-                        </button>
-                        
-                        {/* Answer Section */}
-                        {openFaqIdx === index && (
-                          <div className="pb-8 px-0">
-                            <div className="">
-                              <p className="text-gray-700 leading-relaxed text-lg">
-                                {faqItem.answer}
-                              </p>
-                            </div>
-                          </div>
-                        )}
-                        
-                        {/* Full Width Divider Line - Match Reference */}
-                        {index < event.faq.length - 1 && (
-                          <div className="border-b-2 border-gray-300 w-full"></div>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-
           </div>
 
             {/* Modern Sidebar - Properly Positioned */}
@@ -1131,8 +1082,72 @@ const EventDetail: React.FC = () => {
               </button>
             </div>
 
+            {/* Event Map Section */}
+            {event.location && (
+              <EventMap
+                location={event.location}
+                locationGeo={event.location_geo}
+                eventTitle={event.title}
+              />
+            )}
+
             </div>
           </div>
+          
+          {/* FAQ Section - Centered Outside Grid for Full Width */}
+          {event.faq && event.faq.length > 0 && (
+            <div className="mt-16">
+              <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div className="backdrop-blur-xl bg-white/90 rounded-3xl p-8 lg:p-10 border border-white/20">
+                  {/* FAQ Header - Perfectly Centered */}
+                  <div className="text-center mb-12">
+                    <h2 className="text-3xl font-bold text-gray-900 mx-auto">Frequently Asked Questions</h2>
+                  </div>
+                  
+                  {/* FAQ Items Container - Centered */}
+                  <div className="max-w-4xl mx-auto">
+                    {event.faq.map((faqItem, index) => (
+                      <div key={index} className="">
+                        {/* Question Button */}
+                        <button
+                          className="w-full text-left py-8 flex items-center justify-between focus:outline-none group hover:bg-gray-50/30 transition-colors duration-200"
+                          onClick={() => toggleFaq(index)}
+                        >
+                          <span className="text-2xl text-gray-900 pr-8 leading-tight">
+                            {faqItem.question}
+                          </span>
+                          
+                          {/* Plus/Minus Icon - Square Style */}
+                          <div className="flex-shrink-0 w-8 h-8 border-2 border-gray-400 rounded-sm flex items-center justify-center bg-white group-hover:border-gray-600 transition-colors duration-200">
+                            <span className="text-xl font-normal text-gray-600 group-hover:text-gray-800">
+                              {openFaqIdx === index ? '−' : '+'}
+                            </span>
+                          </div>
+                        </button>
+                        
+                        {/* Answer Section */}
+                        {openFaqIdx === index && (
+                          <div className="pb-8 px-0">
+                            <div className="">
+                              <p className="text-gray-700 leading-relaxed text-lg">
+                                {faqItem.answer}
+                              </p>
+                            </div>
+                          </div>
+                        )}
+                        
+                        {/* Full Width Divider Line - Match Reference */}
+                        {index < event.faq.length - 1 && (
+                          <div className="border-b-2 border-gray-300 w-full"></div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+          
         </div>
       </div>
     </div>
