@@ -43,4 +43,5 @@ export interface Event {
     answer: string;
   }>;
   key_highlights?: string[];
+  languages?: string[];
 }
