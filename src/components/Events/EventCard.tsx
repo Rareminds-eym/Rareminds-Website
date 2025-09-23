@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import RegistrationModal from './RegistrationModal';
 import CountdownTimer from '../ui/CountdownTimer';
 import { Event } from '../../types/Events/event';
-import { Calendar, Clock, MapPin, Users, Tag } from 'lucide-react';
+import { Calendar, Clock, MapPin, Users, Tag as TagIcon } from 'lucide-react';
 
 interface EventCardProps {
   event: Event;
@@ -67,7 +67,7 @@ const EventCard: React.FC<EventCardProps> = ({ event }) => {
                 key={index}
                 className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800"
               >
-                <Tag className="w-3 h-3 mr-1" />
+                <TagIcon className="w-3 h-3 mr-1" />
                 {tag}
               </span>
             ))}
