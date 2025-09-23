@@ -17,6 +17,7 @@ export interface Event {
   category: string;
   price?: string;
   registration_deadline?: string;
+  registration_status?: 'open' | 'closed' | 'full';
   requirements?: string;
   agenda?: string;
   speakers?: string[];

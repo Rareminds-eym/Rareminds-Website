@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import RegistrationModal from './RegistrationModal';
+import CountdownTimer from '../ui/CountdownTimer';
 import { Event } from '../../types/Events/event';
 import { Calendar, Clock, MapPin, Users, Tag } from 'lucide-react';
 
@@ -112,6 +113,43 @@ const EventCard: React.FC<EventCardProps> = ({ event }) => {
           </div>
         </div>
 
+        {/* Countdown Timer */}
+        {(() => {
+          const now = new Date();
+          const eventDate = new Date(event.event_date);
+          const registrationDeadline = event.registration_deadline ? new Date(event.registration_deadline) : null;
+          
+          // Show registration countdown if registration is still open and deadline exists
+          if (registrationDeadline && registrationDeadline > now && event.status === 'upcoming') {
+            return (
+              <div className="mb-4 p-3 bg-gradient-to-r from-orange-50 to-yellow-50 rounded-lg border border-orange-200">
+                <CountdownTimer 
+                  targetDate={event.registration_deadline!}
+                  type="registration"
+                  compact={true}
+                  className=""
+                />
+              </div>
+            );
+          }
+          
+          // Show event countdown if event is upcoming and no registration deadline or registration closed
+          if (eventDate > now && event.status === 'upcoming') {
+            return (
+              <div className="mb-4 p-3 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg border border-blue-200">
+                <CountdownTimer 
+                  targetDate={event.event_date}
+                  type="event"
+                  compact={true}
+                  className=""
+                />
+              </div>
+            );
+          }
+          
+          return null;
+        })()}
+
         {/* Organizer Info */}
         <div className="border-t pt-4">
           <p className="text-sm text-gray-500">
@@ -132,12 +170,70 @@ const EventCard: React.FC<EventCardProps> = ({ event }) => {
           >
             View Details
           </Link>
-          <button
-            className="block w-full bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-300 text-center"
-            onClick={() => setModalOpen(true)}
-          >
-            Register
-          </button>
+          {(() => {
+            // Check if registration is closed
+            const isRegistrationClosed = () => {
+              // Check explicit registration status first
+              if (event.registration_status === 'closed' || event.registration_status === 'full') {
+                return true;
+              }
+              
+              // Check event status
+              if (event.status === 'completed' || event.status === 'cancelled') {
+                return true;
+              }
+              
+              // Check registration deadline
+              if (event.registration_deadline) {
+                const deadlineDate = new Date(event.registration_deadline);
+                const currentDate = new Date();
+                return currentDate > deadlineDate;
+              }
+              
+              // Default to open if no explicit status is set
+              return false;
+            };
+
+            const registrationClosed = isRegistrationClosed();
+
+            // Get appropriate button text based on status
+            const getButtonText = () => {
+              if (!registrationClosed) return 'Register';
+              
+              if (event.registration_status === 'full') {
+                return 'Registration Full';
+              }
+              if (event.status === 'completed') {
+                return 'Event Completed';
+              }
+              if (event.status === 'cancelled') {
+                return 'Event Cancelled';
+              }
+              if (event.registration_deadline) {
+                const deadlineDate = new Date(event.registration_deadline);
+                const currentDate = new Date();
+                if (currentDate > deadlineDate) {
+                  return 'Registration Closed';
+                }
+              }
+              
+              return 'Registration Closed';
+            };
+
+            return (
+              <button
+                className={`block w-full font-medium py-2 px-4 rounded-lg transition-colors duration-300 text-center ${
+                  registrationClosed
+                    ? 'bg-gray-400 cursor-not-allowed text-gray-600'
+                    : 'bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600 text-white'
+                }`}
+                onClick={registrationClosed ? undefined : () => setModalOpen(true)}
+                disabled={registrationClosed}
+              >
+                {getButtonText()}
+              </button>
+            );
+          })()}
         </div>
       </div>
     </div>
