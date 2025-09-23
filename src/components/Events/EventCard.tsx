@@ -241,3 +241,4 @@ const EventCard: React.FC<EventCardProps> = ({ event }) => {
 };
 
 export default EventCard;
+/* Force deployment - Tag fix applied */
