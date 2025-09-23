@@ -8,7 +8,21 @@ import { Calendar, AlertCircle, Loader2 } from 'lucide-react';
 const EventsPage: React.FC = () => {
   const { events, loading, error, refetch } = useOptimizedEvents();
   const [filteredEvents, setFilteredEvents] = useState<Event[]>([]);
-
+ // Banner carousel logic (hooks must be top-level)
+  const banners = events.map(e => ({
+    img: e.event_banner || e.featured_image,
+    title: e.title,
+    status: e.status,
+    category: e.category
+  })).filter(b => b.img);
+  const [current, setCurrent] = React.useState(0);
+  React.useEffect(() => {
+    if (banners.length < 2) return;
+    const timer = setInterval(() => {
+      setCurrent(prev => (prev + 1) % banners.length);
+    }, 2000);
+    return () => clearInterval(timer);
+  }, [banners.length]);
   React.useEffect(() => {
     if (events) {
       setFilteredEvents(events);
@@ -18,6 +32,21 @@ const EventsPage: React.FC = () => {
   const handleFilteredEvents = (filtered: Event[]) => {
     setFilteredEvents(filtered);
   };
+
+    // Back to top button logic
+  const [showTopBtn, setShowTopBtn] = React.useState(false);
+  React.useEffect(() => {
+    const handleScroll = () => {
+      setShowTopBtn(window.scrollY > 100);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const handleBackToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
 
   if (loading) {
     return (
@@ -61,23 +90,53 @@ const EventsPage: React.FC = () => {
     );
   }
 
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
-      {/* Header Section */}
-      <div className="bg-white border-b border-gray-200">
-        <div className="container mx-auto px-4 py-12">
-          <div className="text-center">
-            <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-100 rounded-full mb-4">
-              <Calendar className="w-8 h-8 text-blue-600" />
+      {/* Hero Banner Carousel Section */}
+      <div className="container mx-auto px-4 pt-8">
+        {banners.length > 0 && (
+          <div className="relative h-[40vh] min-h-[250px] rounded-3xl overflow-hidden shadow-2xl mb-6">
+            <img
+              src={banners[current].img}
+              alt={banners[current].title}
+              className="w-full h-full object-cover transition-all duration-700"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent"></div>
+            <div className="absolute bottom-0 left-0 right-0">
+              <div className="p-8 md:p-12 lg:p-16">
+                <div className="max-w-4xl">
+                  <div className="inline-flex items-center px-4 py-2 rounded-2xl text-sm font-semibold mb-6 bg-gradient-to-r from-blue-500/10 to-cyan-500/10 text-blue-700 border border-blue-200/50 backdrop-blur-sm">
+                    <Calendar className="w-4 h-4" />
+                    <span className="ml-2 capitalize">{banners[current].status}</span>
+                  </div>
+                  <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-6 leading-[1.1] tracking-tight">
+                    {banners[current].title}
+                  </h1>
+                  <div className="flex flex-wrap items-center gap-6 md:gap-8 text-white/90 text-sm md:text-base">
+                    <div className="flex items-center">
+                      <div className="w-6 h-6 bg-white/20 rounded-full flex items-center justify-center mr-3">
+                        <Tag className="w-4 h-4" />
+                      </div>
+                      <span className="font-medium">{banners[current].category}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
-            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-              Events
-            </h1>
-            <p className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto">
-              Discover exciting events, workshops, and seminars. Join us for learning, networking, and growth opportunities.
-            </p>
+            {/* Pagination Dots */}
+            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-10">
+              {banners.map((_, idx) => (
+                <button
+                  key={idx}
+                  className={`w-3 h-3 rounded-full border-2 border-white transition-all duration-300 ${current === idx ? 'bg-blue-500 scale-125' : 'bg-white/40'}`}
+                  onClick={() => setCurrent(idx)}
+                  aria-label={`Go to banner ${idx + 1}`}
+                />
+              ))}
+            </div>
           </div>
-        </div>
+        )}
       </div>
 
       {/* Main Content */}
@@ -85,7 +144,7 @@ const EventsPage: React.FC = () => {
         {events.length > 0 ? (
           <>
             {/* Event Statistics */}
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+            <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-8">
               <div className="bg-white rounded-lg shadow p-6 text-center">
                 <div className="text-2xl font-bold text-blue-600 mb-2">{events.length}</div>
                 <div className="text-sm text-gray-600">Total Events</div>
@@ -108,35 +167,43 @@ const EventsPage: React.FC = () => {
                 </div>
                 <div className="text-sm text-gray-600">Categories</div>
               </div>
+              <div className="bg-white rounded-lg shadow p-6 text-center">
+                <div className="text-2xl font-bold text-blue-600 mb-2">
+                  {events.filter(e => e.status === 'completed').length}
+                </div>
+                <div className="text-sm text-gray-600">Past Events</div>
+              </div>
             </div>
 
-            {/* Filters */}
-            <EventFilters events={events} onFilteredEvents={handleFilteredEvents} />
-
-            {/* Results Summary */}
-            <div className="mb-6">
-              <p className="text-gray-600">
-                Showing <span className="font-semibold">{filteredEvents.length}</span> of{' '}
-                <span className="font-semibold">{events.length}</span> events
-              </p>
+            {/* Filters and Events Grid Layout */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {/* Vertical Filter Bar */}
+              <div className="md:col-span-1">
+                <EventFilters events={events} onFilteredEvents={handleFilteredEvents} />
+                {/* Results Summary only shown here, removed elsewhere */}
+              </div>
+              {/* Event Cards 2x2 Grid */}
+              <div className="md:col-span-2">
+                {/* Results Summary removed from here, now only in filter bar */}
+                <div style={{ paddingTop: '24px' }}>
+                  {filteredEvents.length > 0 ? (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
+                      {filteredEvents.slice(0, 4).map((event, index) => (
+                        <EventCard key={event.id || index} event={event} />
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="text-center py-12">
+                      <Calendar className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+                      <h3 className="text-xl font-semibold text-gray-600 mb-2">No events found</h3>
+                      <p className="text-gray-500">
+                        Try adjusting your filters or search terms to find more events.
+                      </p>
+                    </div>
+                  )}
+                </div>
+              </div>
             </div>
-
-            {/* Events Grid */}
-            {filteredEvents.length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {filteredEvents.map((event, index) => (
-                  <EventCard key={event.id || index} event={event} />
-                ))}
-              </div>
-            ) : (
-              <div className="text-center py-12">
-                <Calendar className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-                <h3 className="text-xl font-semibold text-gray-600 mb-2">No events found</h3>
-                <p className="text-gray-500">
-                  Try adjusting your filters or search terms to find more events.
-                </p>
-              </div>
-            )}
           </>
         ) : (
           <div className="text-center py-16">
@@ -157,6 +224,17 @@ const EventsPage: React.FC = () => {
           </div>
         )}
       </div>
+      {/* Back to Top Button */}
+      {showTopBtn && (
+        <button
+          onClick={handleBackToTop}
+          className="fixed bottom-8 right-8 z-50 bg-blue-600 hover:bg-blue-700 text-white rounded-full shadow-lg p-3 transition-colors flex items-center justify-center"
+          title="Back to Top"
+          aria-label="Back to Top"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" /></svg>
+        </button>
+      )}
     </div>
   );
 };
