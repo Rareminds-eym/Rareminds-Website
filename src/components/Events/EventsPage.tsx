@@ -4,11 +4,14 @@ import { useEvents } from '../../hooks/Events/useEvent';
 import { Event } from '../../types/Events/event';
 import EventCard from './EventCard';
 import EventFilters from './EventFilters';
+import RegistrationModal from './RegistrationModal';
 import { Calendar, AlertCircle, Loader2 } from 'lucide-react';
 
 const EventsPage: React.FC = () => {
   const { events, loading, error } = useEvents();
   const [filteredEvents, setFilteredEvents] = useState<Event[]>([]);
+  // Registration modal state for banner CTA
+  const [showRegistrationModal, setShowRegistrationModal] = React.useState(false);
  // Banner carousel logic (hooks must be top-level)
   const banners = events.map(e => ({
     img: e.event_banner || e.featured_image,
@@ -85,7 +88,7 @@ const EventsPage: React.FC = () => {
       {/* Hero Banner Carousel Section */}
       <div className="container mx-auto px-4 pt-8">
         {banners.length > 0 && (
-          <div className="relative h-[40vh] min-h-[250px] rounded-3xl overflow-hidden shadow-2xl mb-6">
+          <div className="relative h-[50vh] min-h-[320px] rounded-3xl overflow-hidden shadow-2xl mb-6">
             <img
               src={banners[current].img}
               alt={banners[current].title}
@@ -99,7 +102,7 @@ const EventsPage: React.FC = () => {
                     <Calendar className="w-4 h-4" />
                     <span className="ml-2 capitalize">{banners[current].status}</span>
                   </div>
-                  <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-6 leading-[1.1] tracking-tight">
+                  <h1 className="text-xl md:text-2xl lg:text-3xl font-bold text-white mb-6 leading-[1.1] tracking-tight">
                     {banners[current].title}
                   </h1>
                   <div className="flex flex-wrap items-center gap-6 md:gap-8 text-white/90 text-sm md:text-base">
@@ -107,25 +110,53 @@ const EventsPage: React.FC = () => {
                       <div className="w-6 h-6 bg-white/20 rounded-full flex items-center justify-center mr-3">
                         <Tag className="w-4 h-4" />
                       </div>
+                      
                       <span className="font-medium">{banners[current].category}</span>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
-            {/* Pagination Dots */}
-            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-10">
-              {banners.map((_, idx) => (
+              {/* CTA Buttons - Bottom Left of Banner */}
+              <div className="absolute bottom-8 left-16 flex gap-4 z-20 pt-4">
+                <a
+                  href={`/events/${events[current]?.slug || ''}`}
+                  className="px-6 py-3 rounded-2xl bg-white/90 text-blue-700 font-semibold shadow hover:bg-blue-50 transition-colors text-base"
+                  style={{ textDecoration: 'none' }}
+                >
+                  View Details
+                </a>
                 <button
-                  key={idx}
-                  className={`w-3 h-3 rounded-full border-2 border-white transition-all duration-300 ${current === idx ? 'bg-blue-500 scale-125' : 'bg-white/40'}`}
-                  onClick={() => setCurrent(idx)}
-                  aria-label={`Go to banner ${idx + 1}`}
-                />
-              ))}
-            </div>
-          </div>
-        )}
+                  onClick={() => setShowRegistrationModal(true)}
+                  className="px-6 py-3 rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white font-semibold shadow transition-transform active:scale-[0.99] text-base"
+                >
+                  Register
+                </button>
+              </div>
+              // Registration modal state for banner CTA
+              const [showRegistrationModal, setShowRegistrationModal] = React.useState(false);
+                  {/* Registration Modal for Banner CTA */}
+                  {showRegistrationModal && events[current] && (
+                    <RegistrationModal
+                      open={showRegistrationModal}
+                      onClose={() => setShowRegistrationModal(false)}
+                      eventId={events[current].id ?? ""}
+                      eventName={events[current].title ?? ""}
+                    />
+                  )}
+                        </div>
+                        {/* Pagination Dots */}
+                        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-10">
+                          {banners.map((_, idx) => (
+                            <button
+                              key={idx}
+                              className={`w-3 h-3 rounded-full border-2 border-white transition-all duration-300 ${current === idx ? 'bg-blue-500 scale-125' : 'bg-white/40'}`}
+                              onClick={() => setCurrent(idx)}
+                              aria-label={`Go to banner ${idx + 1}`}
+                            />
+                          ))}
+                        </div>
+                      </div>
+                    )}
       </div>
 
       {/* Main Content */}
@@ -134,29 +165,29 @@ const EventsPage: React.FC = () => {
           <>
             {/* Event Statistics */}
             <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-8">
-              <div className="bg-white rounded-lg shadow p-6 text-center">
+              <div className="rounded-lg shadow p-6 text-center" style={{ backgroundColor: '#f4f4f4' }}>
                 <div className="text-2xl font-bold text-blue-600 mb-2">{events.length}</div>
                 <div className="text-sm text-gray-600">Total Events</div>
               </div>
-              <div className="bg-white rounded-lg shadow p-6 text-center">
+              <div className="rounded-lg shadow p-6 text-center" style={{ backgroundColor: '#f4f4f4' }}>
                 <div className="text-2xl font-bold text-green-600 mb-2">
                   {events.filter(e => e.status === 'upcoming').length}
                 </div>
                 <div className="text-sm text-gray-600">Upcoming</div>
               </div>
-              <div className="bg-white rounded-lg shadow p-6 text-center">
+              <div className="rounded-lg shadow p-6 text-center" style={{ backgroundColor: '#f4f4f4' }}>
                 <div className="text-2xl font-bold text-orange-600 mb-2">
                   {events.filter(e => e.status === 'ongoing').length}
                 </div>
                 <div className="text-sm text-gray-600">Ongoing</div>
               </div>
-              <div className="bg-white rounded-lg shadow p-6 text-center">
+              <div className="rounded-lg shadow p-6 text-center" style={{ backgroundColor: '#f4f4f4' }}>
                 <div className="text-2xl font-bold text-purple-600 mb-2">
                   {[...new Set(events.map(e => e.category))].length}
                 </div>
                 <div className="text-sm text-gray-600">Categories</div>
               </div>
-              <div className="bg-white rounded-lg shadow p-6 text-center">
+              <div className="rounded-lg shadow p-6 text-center" style={{ backgroundColor: '#f4f4f4' }}>
                 <div className="text-2xl font-bold text-blue-600 mb-2">
                   {events.filter(e => e.status === 'completed').length}
                 </div>
@@ -165,9 +196,9 @@ const EventsPage: React.FC = () => {
             </div>
 
             {/* Filters and Events Grid Layout */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-16">
               {/* Vertical Filter Bar */}
-              <div className="md:col-span-1">
+              <div className="md:col-span-1" style={{ paddingTop: '24px', }}>
                 <EventFilters events={events} onFilteredEvents={handleFilteredEvents} />
                 {/* Results Summary only shown here, removed elsewhere */}
               </div>

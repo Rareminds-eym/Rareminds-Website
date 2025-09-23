@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import RegistrationModal from './RegistrationModal';
 import { Event } from '../../types/Events/event';
 import { Calendar, Clock, MapPin, Users, Tag } from 'lucide-react';
 
@@ -9,7 +8,7 @@ interface EventCardProps {
 }
 
 const EventCard: React.FC<EventCardProps> = ({ event }) => {
-  const [modalOpen, setModalOpen] = useState(false);
+  // ...existing code...
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-US', {
       year: 'numeric',
@@ -34,16 +33,14 @@ const EventCard: React.FC<EventCardProps> = ({ event }) => {
   };
 
   return (
-    <div className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden group">
-      <RegistrationModal 
-        open={modalOpen} 
-        onClose={() => setModalOpen(false)} 
-        eventId={event.id ?? ""} 
-        eventName={event.title} 
-      />
+    <Link
+      to={`/events/${event.slug}`}
+      className="block bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden group cursor-pointer"
+      style={{ textDecoration: 'none' }}
+    >
       {/* Event Image */}
       {event.featured_image && (
-        <div className="relative h-48 overflow-hidden">
+        <div className="relative h-48 overflow-hidden ">
           <img
             src={event.featured_image}
             alt={event.title}
@@ -57,7 +54,7 @@ const EventCard: React.FC<EventCardProps> = ({ event }) => {
         </div>
       )}
 
-      <div className="p-6">
+      <div className="p-6" style={{ backgroundColor: '#eef5ff', borderRadius: '0 0 0.75rem 0.75rem' }}>
         {/* Event Tags */}
         {event.event_tags && event.event_tags.length > 0 && (
           <div className="flex flex-wrap gap-2 mb-3">
@@ -82,12 +79,6 @@ const EventCard: React.FC<EventCardProps> = ({ event }) => {
         <h3 className="text-xl font-bold text-gray-900 mb-3 line-clamp-2 group-hover:text-blue-600 transition-colors">
           {event.title}
         </h3>
-
-        {/* Event Description */}
-        <div 
-          className="text-gray-600 text-sm mb-4 line-clamp-3"
-          dangerouslySetInnerHTML={{ __html: event.description }}
-        />
 
         {/* Event Details */}
         <div className="space-y-2 mb-4">
@@ -123,24 +114,8 @@ const EventCard: React.FC<EventCardProps> = ({ event }) => {
             </p>
           )}
         </div>
-
-        {/* Action Buttons */}
-        <div className="mt-4 flex flex-col gap-2">
-          <Link 
-            to={`/events/${event.slug}`}
-            className="block w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-300 text-center"
-          >
-            View Details
-          </Link>
-          <button
-            className="block w-full bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-300 text-center"
-            onClick={() => setModalOpen(true)}
-          >
-            Register
-          </button>
-        </div>
       </div>
-    </div>
+    </Link>
   );
 };
 
