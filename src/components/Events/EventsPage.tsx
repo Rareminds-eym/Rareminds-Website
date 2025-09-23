@@ -3,7 +3,7 @@ import { useOptimizedEvents } from '../../hooks/Events/useOptimizedEvents';
 import { Event } from '../../types/Events/event';
 import EventCard from './EventCard';
 import EventFilters from './EventFilters';
-import { Calendar, AlertCircle, Loader2 } from 'lucide-react';
+import { Calendar, AlertCircle, Loader2, Tag } from 'lucide-react';
 
 const EventsPage: React.FC = () => {
   const { events, loading, error, refetch } = useOptimizedEvents();
