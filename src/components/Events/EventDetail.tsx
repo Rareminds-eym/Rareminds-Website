@@ -8,12 +8,13 @@ import { useParams, Link } from 'react-router-dom';
 import Carousel from './Carousel';
 import ImageModal from './ImageModal';
 import RegistrationModal from './RegistrationModal';
-import { useEvents } from '../../hooks/Events/useEvent';
+import { useOptimizedEvents } from '../../hooks/Events/useOptimizedEvents';
 import EventContactForm from './EventContactForm';
 import FloatingActionMenu from './StickyButton/FloatingAction';
 import InterestedModal from './InterestedModal';
 import SingleEventCountdown from './SingleEventCountdown';
 import EventMap from './EventMap';
+import CountdownTimer from '../ui/CountdownTimer';
 import { eventInterestedService } from '../../services/eventInterestedService';
 import { 
   Calendar, 
@@ -156,9 +157,26 @@ export const TeaserVideoButton: React.FC<{ teaserVideo?: string }> = (props) => 
 
 const EventDetail: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
-  const { events, loading, error } = useEvents();
+  const { events, loading, error, refetch, loadFullEventDetails } = useOptimizedEvents();
   const [modalOpen, setModalOpen] = React.useState(false);
   const [interestedModalOpen, setInterestedModalOpen] = React.useState(false);
+  const [fullEventData, setFullEventData] = React.useState<Event | null>(null);
+  const [loadingFullDetails, setLoadingFullDetails] = React.useState(false);
+  
+  // Gallery Modal States
+  const [galleryModalOpen, setGalleryModalOpen] = React.useState(false);
+  const [selectedGalleryImage, setSelectedGalleryImage] = React.useState<string>('');
+  
+  // Gallery modal handlers
+  const handleGalleryImageClick = (image: string) => {
+    setSelectedGalleryImage(image);
+    setGalleryModalOpen(true);
+  };
+  
+  const handleGalleryModalClose = () => {
+    setGalleryModalOpen(false);
+    setSelectedGalleryImage('');
+  };
   
   console.log('EventDetail rendered, slug:', slug);
   
@@ -168,8 +186,35 @@ const EventDetail: React.FC = () => {
     setOpenFaqIdx(openFaqIdx === idx ? null : idx);
   };
 
-  // Find the event by slug
-  const event = events.find(e => e.slug === slug);
+  // Find the event by slug (initially minimal data)
+  const minimalEvent = events.find(e => e.slug === slug);
+  
+  // Use full event data if loaded, otherwise use minimal event data
+  const event = fullEventData || minimalEvent;
+  
+  // Load full event details when minimal event is available
+  React.useEffect(() => {
+    const loadFullDetails = async () => {
+      if (minimalEvent && minimalEvent.id && !fullEventData && !loadingFullDetails) {
+        console.log('📋 Loading full event details for:', minimalEvent.title);
+        setLoadingFullDetails(true);
+        
+        try {
+          const fullData = await loadFullEventDetails(minimalEvent.id);
+          if (fullData) {
+            setFullEventData(fullData);
+            console.log('✅ Full event details loaded');
+          }
+        } catch (err) {
+          console.error('❌ Failed to load full event details:', err);
+        } finally {
+          setLoadingFullDetails(false);
+        }
+      }
+    };
+    
+    loadFullDetails();
+  }, [minimalEvent, fullEventData, loadingFullDetails, loadFullEventDetails]);
   
   // Interest tracking state
   const [interestCount, setInterestCount] = React.useState(0);
@@ -353,15 +398,27 @@ const EventDetail: React.FC = () => {
             <div className="w-16 h-16 mx-auto mb-6 bg-gradient-to-r from-red-500 to-orange-500 rounded-full flex items-center justify-center">
               <AlertCircle className="w-8 h-8 text-white" />
             </div>
-            <h2 className="text-2xl font-bold bg-gradient-to-r from-red-600 to-orange-600 bg-clip-text text-transparent mb-3">Oops! Something went wrong</h2>
-            <p className="text-gray-600 mb-6">{error}</p>
-            <Link
-              to="/events"
-              className="group inline-flex items-center px-6 py-3 bg-gradient-to-r from-red-500 to-orange-500 text-white rounded-2xl hover:from-red-600 hover:to-orange-600 transition-all duration-300 transform hover:scale-105 hover:shadow-lg"
-            >
-              <ArrowLeft className="w-4 h-4 mr-2 group-hover:-translate-x-1 transition-transform" />
-              Back to Events
-            </Link>
+            <h2 className="text-2xl font-bold bg-gradient-to-r from-red-600 to-orange-600 bg-clip-text text-transparent mb-3">Error Loading Events</h2>
+            <p className="text-gray-600 mb-2">An error occurred while loading the events.</p>
+            <p className="text-sm text-gray-500 mb-6">{error}</p>
+            <div className="flex flex-col gap-3 sm:flex-row sm:justify-center">
+              <button
+                onClick={() => refetch()}
+                className="group inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-2xl hover:from-blue-600 hover:to-blue-700 transition-all duration-300 transform hover:scale-105 hover:shadow-lg"
+              >
+                <svg className="w-4 h-4 mr-2 group-hover:rotate-180 transition-transform duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                </svg>
+                Try Again
+              </button>
+              <Link
+                to="/events"
+                className="group inline-flex items-center px-6 py-3 bg-gradient-to-r from-red-500 to-orange-500 text-white rounded-2xl hover:from-red-600 hover:to-orange-600 transition-all duration-300 transform hover:scale-105 hover:shadow-lg"
+              >
+                <ArrowLeft className="w-4 h-4 mr-2 group-hover:-translate-x-1 transition-transform" />
+                Back to Events
+              </Link>
+            </div>
           </div>
         </div>
       </div>
@@ -590,6 +647,7 @@ const EventDetail: React.FC = () => {
             )}
           </div>
 
+
           {/* Main Content Grid - Optimized Layout */}
           <div className="grid grid-cols-1 xl:grid-cols-12 gap-8 xl:gap-12">
             {/* Main Content Area */}
@@ -699,70 +757,7 @@ const EventDetail: React.FC = () => {
               )}
 
 
-              {/* Event Gallery Section */}
-              {event.events_gallery && event.events_gallery.length > 0 && (
-                <div className="backdrop-blur-xl bg-white/60 rounded-3xl p-8 lg:p-10 border border-white/20">
-                  <div className="flex items-center gap-4 mb-8">
-                    <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-2xl flex items-center justify-center">
-                      <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                      </svg>
-                    </div>
-                    <h2 className="text-3xl font-bold text-gray-900 leading-tight">Event Gallery</h2>
-                  </div>
-                  
-                  {/* Gallery Images */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {event.events_gallery.slice(0, 6).map((image, index) => (
-                      <div 
-                        key={index} 
-                        className="relative group cursor-pointer overflow-hidden rounded-3xl transition-all duration-300 transform hover:scale-105"
-                        onClick={() => {
-                          // Optional: Add modal functionality for full-size view
-                          window.open(image, '_blank');
-                        }}
-                      >
-                        <div className="aspect-square">
-                          <img
-                            src={image}
-                            alt={`Event gallery image ${index + 1}`}
-                            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
-                            onError={(e) => {
-                              (e.target as HTMLImageElement).src = '/api/placeholder/400/400';
-                            }}
-                          />
-                        </div>
-                        {/* Hover overlay */}
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-4">
-                          <span className="text-white text-sm font-medium bg-black/30 px-3 py-1 rounded-full backdrop-blur-sm">
-                            View Full Size
-                          </span>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                  
-                  {/* Show more button if there are more than 6 images */}
-                  {event.events_gallery.length > 6 && (
-                    <div className="mt-8 text-center">
-                      <button 
-                        onClick={() => {
-                          // You can implement a modal or expanded view here
-                          console.log('Show all gallery images');
-                        }}
-                        className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-2xl hover:from-blue-600 hover:to-indigo-600 transition-all duration-300 transform hover:scale-105"
-                      >
-                        View All {event.events_gallery.length} Images
-                        <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                        </svg>
-                      </button>
-                    </div>
-                  )}
-                </div>
-              )}
-
-              {/* Speakers - Redesigned Section */}
+              {/* Speakers - Redesigned Section (MOVED FIRST) */}
               {(event.speakers_details && event.speakers_details.length > 0) || (event.speakers && event.speakers.length > 0) ? (
                 <div 
                   className="relative rounded-3xl p-6 lg:p-10 border border-white/30 overflow-hidden"
@@ -873,6 +868,66 @@ const EventDetail: React.FC = () => {
                   </div>
                 </div>
               ) : null}
+
+              {/* Event Gallery Section (MOVED SECOND) */}
+              {event.events_gallery && event.events_gallery.length > 0 && (
+                <div className="backdrop-blur-xl bg-white/60 rounded-3xl p-8 lg:p-10 border border-white/20">
+                  <div className="flex items-center gap-4 mb-8">
+                    <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-2xl flex items-center justify-center">
+                      <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                      </svg>
+                    </div>
+                    <h2 className="text-3xl font-bold text-gray-900 leading-tight">Event Gallery</h2>
+                  </div>
+                  
+                  {/* Gallery Images */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {event.events_gallery.slice(0, 6).map((image, index) => (
+                      <div 
+                        key={index} 
+                        className="relative group cursor-pointer overflow-hidden rounded-3xl transition-all duration-300 transform hover:scale-105"
+                        onClick={() => handleGalleryImageClick(image)}
+                      >
+                        <div className="aspect-square">
+                          <img
+                            src={image}
+                            alt={`Event gallery image ${index + 1}`}
+                            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+                            onError={(e) => {
+                              (e.target as HTMLImageElement).src = '/api/placeholder/400/400';
+                            }}
+                          />
+                        </div>
+                        {/* Hover overlay */}
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-4">
+                          <span className="text-white text-sm font-medium bg-black/30 px-3 py-1 rounded-full backdrop-blur-sm">
+                            View Full Size
+                          </span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  
+                  {/* Show more button if there are more than 6 images */}
+                  {event.events_gallery.length > 6 && (
+                    <div className="mt-8 text-center">
+                      <button 
+                        onClick={() => {
+                          // You can implement a modal or expanded view here
+                          console.log('Show all gallery images');
+                        }}
+                        className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-2xl hover:from-blue-600 hover:to-indigo-600 transition-all duration-300 transform hover:scale-105"
+                      >
+                        View All {event.events_gallery.length} Images
+                        <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                        </svg>
+                      </button>
+                    </div>
+                  )}
+                </div>
+              )}
               {/* Map below Featured Speakers if location exists */}
               {/* Removed location_latitude/location_longitude map as those fields do not exist in Event type */}
 
@@ -908,47 +963,47 @@ const EventDetail: React.FC = () => {
                 
                 {/* Content Section */}
                 <div className="p-6">
-                  {/* Information Fields - Compact single-line rows, icons removed */}
-                  <div className="space-y-5">
+                  {/* Information Fields - Table-like layout with proper spacing */}
+                  <div className="space-y-4">
                     {/* Category */}
-                    <div className="flex items-baseline gap-3">
-                      <strong className="text-gray-900 font-semibold text-lg w-32">Category:</strong>
-                      <span className="text-gray-700 text-lg">{event.category || 'Workshop'}</span>
+                    <div className="flex">
+                      <strong className="text-gray-900 font-semibold text-lg w-24 flex-shrink-0">Category:</strong>
+                      <span className="text-gray-700 text-lg ml-6">{event.category || 'Workshop'}</span>
                     </div>
 
                     {/* Date */}
-                    <div className="flex items-baseline gap-3">
-                      <strong className="text-gray-900 font-semibold text-lg w-32">Date:</strong>
-                      <span className="text-gray-700 text-lg">{formatDate(event.event_date).replace(/^\w+,\s*/, '')}</span>
+                    <div className="flex">
+                      <strong className="text-gray-900 font-semibold text-lg w-24 flex-shrink-0">Date:</strong>
+                      <span className="text-gray-700 text-lg ml-6">{formatDate(event.event_date).replace(/^\w+,\s*/, '')}</span>
                     </div>
 
                     {/* Time */}
-                    <div className="flex items-baseline gap-3">
-                      <strong className="text-gray-900 font-semibold text-lg w-32">Time:</strong>
-                      <span className="text-gray-700 text-lg">
+                    <div className="flex">
+                      <strong className="text-gray-900 font-semibold text-lg w-24 flex-shrink-0">Time:</strong>
+                      <span className="text-gray-700 text-lg ml-6">
                         {formatTime(event.event_time)}{event.duration ? ` - ${event.duration}` : ''}
                       </span>
                     </div>
 
                     {/* Attendees */}
-                    <div className="flex items-baseline gap-3">
-                      <strong className="text-gray-900 font-semibold text-lg w-32">Attendees:</strong>
-                      <span className="text-gray-700 text-lg">{event.capacity || '50'}</span>
+                    <div className="flex">
+                      <strong className="text-gray-900 font-semibold text-lg w-24 flex-shrink-0">Attendees:</strong>
+                      <span className="text-gray-700 text-lg ml-6">{event.capacity || '50'}</span>
                     </div>
 
                     {/* Location */}
-                    <div className="flex items-baseline gap-3">
-                      <strong className="text-gray-900 font-semibold text-lg w-32">Location:</strong>
-                      <span className="text-gray-700 text-lg">{event.location?.split(',')[0]?.trim() || 'Bangalore'}</span>
+                    <div className="flex">
+                      <strong className="text-gray-900 font-semibold text-lg w-24 flex-shrink-0">Location:</strong>
+                      <span className="text-gray-700 text-lg ml-6">{event.location?.split(',')[0]?.trim() || 'Bangalore'}</span>
                     </div>
 
                     {/* Languages */}
-                    <div className="flex items-baseline gap-3">
-                      <strong className="text-gray-900 font-semibold text-lg w-32">Languages:</strong>
-                      <span className="text-gray-700 text-lg">
+                    <div className="flex">
+                      <strong className="text-gray-900 font-semibold text-lg w-24 flex-shrink-0">Languages:</strong>
+                      <span className="text-gray-700 text-lg ml-6">
                         {event.languages && event.languages.length > 0 
                           ? event.languages.join(', ') 
-                          : 'English'
+                          : 'Kannada, English'
                         }
                       </span>
                     </div>
@@ -961,69 +1016,272 @@ const EventDetail: React.FC = () => {
                 <h3 className="text-2xl font-bold text-slate-900">Registration</h3>
                 <div className="mt-2 h-1 w-16 bg-indigo-600 rounded-full"></div>
 
-                {/* Price and Stepper */}
-                <div className="flex items-center justify-between mt-6">
-                  <div className="text-2xl font-extrabold text-slate-900">
-                    {(() => {
-                      const priceStr = (event.price ?? '0').toString().toLowerCase();
-                      if (priceStr === 'free' || priceStr === '0' || priceStr === '') {
-                        return 'FREE';
-                      }
-                      const numeric = parseFloat(priceStr.replace(/[^\d.]/g, '')) || 0;
-                      return new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(numeric);
-                    })()}
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <button
-                      aria-label="Decrease quantity"
-                      onClick={() => setQuantity(q => Math.max(1, q - 1))}
-                      className="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 text-lg leading-none flex items-center justify-center"
-                    >
-                      −
-                    </button>
-                    <span className="min-w-[1.5rem] text-center font-semibold text-slate-700">
-                      {String(quantity).padStart(2, '0')}
-                    </span>
-                    <button
-                      aria-label="Increase quantity"
-                      onClick={() => setQuantity(q => Math.min(99, q + 1))}
-                      className="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 text-lg leading-none flex items-center justify-center"
-                    >
-                      +
-                    </button>
-                  </div>
-                </div>
+                {/* Price and Stepper - Using exact same logic as countdown banner */}
+                {(() => {
+                  // EXACT SAME LOGIC FROM SingleEventCountdown.tsx
+                  const parseDeadlineEndOfDay = (dateStr: string): Date => {
+                    if (!dateStr) return new Date(0);
+                    const match = /^(\d{4})-(\d{2})-(\d{2})/.exec(String(dateStr));
+                    if (!match) return new Date(dateStr);
+                    const y = parseInt(match[1], 10);
+                    const m = parseInt(match[2], 10);
+                    const d = parseInt(match[3], 10);
+                    return new Date(y, (m || 1) - 1, d || 1, 23, 59, 59, 999);
+                  };
+                  
+                  const getRegistrationStatus = () => {
+                    if (!event.registration_deadline) return { isClosed: true };
+                    
+                    const now = new Date();
+                    const deadlineDate = parseDeadlineEndOfDay(event.registration_deadline);
+                    const eventDate = new Date(event.event_date);
+                    
+                    const isRegistrationDeadlinePassed = deadlineDate.getTime() <= now.getTime();
+                    const isEventPassed = eventDate.getTime() <= now.getTime();
+                    const isOpen = !isRegistrationDeadlinePassed && !isEventPassed;
+                    
+                    return { isClosed: !isOpen };
+                  };
+                  
+                  const registrationClosed = getRegistrationStatus().isClosed;
+                  
+                  return (
+                    <div className="flex items-center justify-between mt-6">
+                      <div className="text-2xl font-extrabold text-slate-900">
+                        {(() => {
+                          const priceStr = (event.price ?? '0').toString().toLowerCase();
+                          if (priceStr === 'free' || priceStr === '0' || priceStr === '') {
+                            return 'FREE';
+                          }
+                          const numeric = parseFloat(priceStr.replace(/[^\d.]/g, '')) || 0;
+                          return new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(numeric);
+                        })()}
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <button
+                          aria-label="Decrease quantity"
+                          onClick={registrationClosed ? undefined : () => setQuantity(q => Math.max(1, q - 1))}
+                          disabled={registrationClosed}
+                          className={`w-8 h-8 rounded-full text-lg leading-none flex items-center justify-center ${
+                            registrationClosed 
+                              ? 'bg-gray-200 text-gray-400 cursor-not-allowed' 
+                              : 'bg-slate-100 hover:bg-slate-200 text-slate-700'
+                          }`}
+                        >
+                          −
+                        </button>
+                        <span className={`min-w-[1.5rem] text-center font-semibold ${
+                          registrationClosed ? 'text-gray-400' : 'text-slate-700'
+                        }`}>
+                          {String(quantity).padStart(2, '0')}
+                        </span>
+                        <button
+                          aria-label="Increase quantity"
+                          onClick={registrationClosed ? undefined : () => setQuantity(q => Math.min(99, q + 1))}
+                          disabled={registrationClosed}
+                          className={`w-8 h-8 rounded-full text-lg leading-none flex items-center justify-center ${
+                            registrationClosed 
+                              ? 'bg-gray-200 text-gray-400 cursor-not-allowed' 
+                              : 'bg-slate-100 hover:bg-slate-200 text-slate-700'
+                          }`}
+                        >
+                          +
+                        </button>
+                      </div>
+                    </div>
+                  );
+                })()}
 
                 <div className="my-5 border-t border-slate-200" />
 
-                {/* Quantity row */}
-                <div className="flex items-baseline justify-between mb-3">
-                  <span className="text-lg font-semibold text-slate-800">Quantity:</span>
-                  <span className="text-lg font-mono text-slate-700">{String(quantity).padStart(2, '0')}</span>
-                </div>
+                {/* Quantity row - Using exact same logic as countdown banner */}
+                {(() => {
+                  // EXACT SAME LOGIC FROM SingleEventCountdown.tsx
+                  const parseDeadlineEndOfDay = (dateStr: string): Date => {
+                    if (!dateStr) return new Date(0);
+                    const match = /^(\d{4})-(\d{2})-(\d{2})/.exec(String(dateStr));
+                    if (!match) return new Date(dateStr);
+                    const y = parseInt(match[1], 10);
+                    const m = parseInt(match[2], 10);
+                    const d = parseInt(match[3], 10);
+                    return new Date(y, (m || 1) - 1, d || 1, 23, 59, 59, 999);
+                  };
+                  
+                  const getRegistrationStatus = () => {
+                    if (!event.registration_deadline) return { isClosed: true };
+                    
+                    const now = new Date();
+                    const deadlineDate = parseDeadlineEndOfDay(event.registration_deadline);
+                    const eventDate = new Date(event.event_date);
+                    
+                    const isRegistrationDeadlinePassed = deadlineDate.getTime() <= now.getTime();
+                    const isEventPassed = eventDate.getTime() <= now.getTime();
+                    const isOpen = !isRegistrationDeadlinePassed && !isEventPassed;
+                    
+                    return { isClosed: !isOpen };
+                  };
+                  
+                  const registrationClosed = getRegistrationStatus().isClosed;
+                  
+                  return (
+                    <>
+                      <div className="flex items-baseline justify-between mb-3">
+                        <span className={`text-lg font-semibold ${
+                          registrationClosed ? 'text-gray-400' : 'text-slate-800'
+                        }`}>Quantity:</span>
+                        <span className={`text-lg font-mono ${
+                          registrationClosed ? 'text-gray-400' : 'text-slate-700'
+                        }`}>{String(quantity).padStart(2, '0')}</span>
+                      </div>
 
-                {/* Total cost row */}
-                <div className="flex items-baseline justify-between">
-                  <span className="text-lg font-semibold text-slate-800">Total Cost:</span>
-                  <span className="text-2xl font-extrabold text-emerald-600">
-                    {(() => {
-                      const priceStr = (event.price ?? '0').toString().toLowerCase();
-                      if (priceStr === 'free' || priceStr === '0' || priceStr === '') {
-                        return 'FREE';
-                      }
-                      const numeric = parseFloat(priceStr.replace(/[^\d.]/g, '')) || 0;
-                      const total = numeric * quantity;
-                      return new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(total);
-                    })()}
-                  </span>
-                </div>
+                      {/* Total cost row */}
+                      <div className="flex items-baseline justify-between">
+                        <span className={`text-lg font-semibold ${
+                          registrationClosed ? 'text-gray-400' : 'text-slate-800'
+                        }`}>Total Cost:</span>
+                        <span className={`text-2xl font-extrabold ${
+                          registrationClosed ? 'text-gray-400' : 'text-emerald-600'
+                        }`}>
+                          {(() => {
+                            const priceStr = (event.price ?? '0').toString().toLowerCase();
+                            if (priceStr === 'free' || priceStr === '0' || priceStr === '') {
+                              return 'FREE';
+                            }
+                            const numeric = parseFloat(priceStr.replace(/[^\d.]/g, '')) || 0;
+                            const total = numeric * quantity;
+                            return new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(total);
+                          })()}
+                        </span>
+                      </div>
+                    </>
+                  );
+                })()}
 
-                <button
-                  onClick={() => setModalOpen(true)}
-                  className="w-full mt-6 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-4 rounded-2xl transition-transform active:scale-[0.99]"
-                >
-                  REGISTER NOW
-                </button>
+                {/* Countdown Timer */}
+                {(() => {
+                  const now = new Date();
+                  const eventDate = new Date(event.event_date);
+                  const registrationDeadline = event.registration_deadline ? new Date(event.registration_deadline) : null;
+                  
+                  // Show registration countdown if registration is still open and deadline exists
+                  if (registrationDeadline && registrationDeadline > now && event.status === 'upcoming') {
+                    return (
+                      <div className="mt-6 p-4 bg-gradient-to-r from-orange-50/80 to-yellow-50/80 rounded-2xl border border-orange-200/50">
+                        <CountdownTimer 
+                          targetDate={event.registration_deadline!}
+                          type="registration"
+                          compact={false}
+                          className=""
+                        />
+                      </div>
+                    );
+                  }
+                  
+                  // Show event countdown if event is upcoming and no registration deadline or registration closed
+                  if (eventDate > now && event.status === 'upcoming') {
+                    const isRegistrationClosed = event.registration_status === 'closed' || 
+                      event.registration_status === 'full' || 
+                      (event.registration_deadline && new Date(event.registration_deadline) <= now);
+                      
+                    if (isRegistrationClosed || !event.registration_deadline) {
+                      return (
+                        <div className="mt-6 p-4 bg-gradient-to-r from-blue-50/80 to-indigo-50/80 rounded-2xl border border-blue-200/50">
+                          <CountdownTimer 
+                            targetDate={event.event_date}
+                            type="event"
+                            compact={false}
+                            className=""
+                          />
+                        </div>
+                      );
+                    }
+                  }
+                  
+                  return null;
+                })()}
+
+                {/* Registration Button - Using EXACT SAME LOGIC as Countdown Banner */}
+                {(() => {
+                  // EXACT SAME LOGIC FROM SingleEventCountdown.tsx
+                  const parseDeadlineEndOfDay = (dateStr: string): Date => {
+                    if (!dateStr) return new Date(0);
+                    // Extract just the date portion (YYYY-MM-DD) even if a time exists
+                    const match = /^(\d{4})-(\d{2})-(\d{2})/.exec(String(dateStr));
+                    if (!match) return new Date(dateStr); // fallback
+                    const y = parseInt(match[1], 10);
+                    const m = parseInt(match[2], 10);
+                    const d = parseInt(match[3], 10);
+                    // Construct local date at 23:59:59.999
+                    return new Date(y, (m || 1) - 1, d || 1, 23, 59, 59, 999);
+                  };
+                  
+                  const getRegistrationStatus = () => {
+                    console.log('🗣️ BUTTON: Using EXACT countdown banner logic');
+                    
+                    if (!event.registration_deadline) {
+                      console.log('❌ BUTTON: No registration deadline set');
+                      return {
+                        isClosed: true,
+                        buttonText: 'NO REGISTRATION DEADLINE'
+                      };
+                    }
+                    
+                    const now = new Date();
+                    const deadlineDate = parseDeadlineEndOfDay(event.registration_deadline);
+                    const eventDate = new Date(event.event_date);
+                    
+                    console.log('📅 BUTTON Countdown Logic:', {
+                      now: now.toISOString(),
+                      now_local: now.toLocaleString(),
+                      deadline_raw: event.registration_deadline,
+                      deadline_parsed: deadlineDate.toISOString(),
+                      deadline_local: deadlineDate.toLocaleString(),
+                      event_date: eventDate.toISOString(),
+                      registration_deadline_passed: deadlineDate.getTime() <= now.getTime(),
+                      event_passed: eventDate.getTime() <= now.getTime()
+                    });
+                    
+                    const isRegistrationDeadlinePassed = deadlineDate.getTime() <= now.getTime();
+                    const isEventPassed = eventDate.getTime() <= now.getTime();
+                    const isOpen = !isRegistrationDeadlinePassed && !isEventPassed;
+                    
+                    console.log('🎯 BUTTON Final Decision:', {
+                      isRegistrationDeadlinePassed,
+                      isEventPassed,
+                      isOpen
+                    });
+                    
+                    if (!isOpen) {
+                      console.log('❌ BUTTON: Registration is CLOSED');
+                      return {
+                        isClosed: true,
+                        buttonText: 'REGISTRATION CLOSED'
+                      };
+                    }
+                    
+                    console.log('✅ BUTTON: Registration is OPEN');
+                    return {
+                      isClosed: false,
+                      buttonText: 'REGISTER NOW'
+                    };
+                  };
+
+                  const status = getRegistrationStatus();
+                  
+                  return (
+                    <button
+                      onClick={status.isClosed ? undefined : () => setModalOpen(true)}
+                      disabled={status.isClosed}
+                      className={`w-full mt-6 font-semibold py-4 rounded-2xl transition-all duration-300 ${
+                        status.isClosed
+                          ? 'bg-gray-400 cursor-not-allowed text-gray-600'
+                          : 'bg-indigo-600 hover:bg-indigo-700 text-white transition-transform active:scale-[0.99]'
+                      }`}
+                    >
+                      {status.buttonText}
+                    </button>
+                  );
+                })()}
               </div>
 
               {/* 3. Event Organizer Card - Third */}
@@ -1137,6 +1395,14 @@ const EventDetail: React.FC = () => {
           
         </div>
       </div>
+      
+      {/* Gallery Modal */}
+      <ImageModal 
+        image={selectedGalleryImage} 
+        images={event?.events_gallery || []}
+        open={galleryModalOpen} 
+        onClose={handleGalleryModalClose} 
+      />
     </div>
   );
 };

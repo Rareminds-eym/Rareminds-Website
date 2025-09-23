@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Registration Status Debug</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        .test { margin-bottom: 20px; padding: 15px; border: 1px solid #ddd; border-radius: 5px; }
+        .closed { background-color: #fee; }
+        .open { background-color: #efe; }
+        .status { font-weight: bold; }
+    </style>
+</head>
+<body>
+    <h1>Registration Status Logic Debug</h1>
+    <p>This tests the same logic used in your EventDetail component:</p>
+
+    <div id="tests"></div>
+
+    <script>
+        // Test function - same logic as in EventDetail
+        function isRegistrationClosed(event) {
+            console.log('🔍 Testing event:', event);
+            
+            // Check explicit registration status first
+            if (event.registration_status === 'closed' || event.registration_status === 'full') {
+                console.log('❌ Closed by explicit status:', event.registration_status);
+                return { closed: true, reason: `Explicit status: ${event.registration_status}` };
+            }
+            
+            // Check event status
+            if (event.status === 'completed' || event.status === 'cancelled') {
+                console.log('❌ Closed by event status:', event.status);
+                return { closed: true, reason: `Event status: ${event.status}` };
+            }
+            
+            // Check registration deadline
+            if (event.registration_deadline) {
+                const deadlineDate = new Date(event.registration_deadline);
+                const currentDate = new Date();
+                const isPastDeadline = currentDate > deadlineDate;
+                
+                console.log('📅 Deadline check:', {
+                    deadline: deadlineDate.toISOString(),
+                    current: currentDate.toISOString(),
+                    isPast: isPastDeadline
+                });
+                
+                if (isPastDeadline) {
+                    console.log('❌ Closed by deadline');
+                    return { closed: true, reason: `Deadline passed: ${deadlineDate.toLocaleString()}` };
+                }
+            }
+            
+            console.log('✅ Registration is open');
+            return { closed: false, reason: 'Registration is open' };
+        }
+
+        // Test cases
+        const testCases = [
+            {
+                name: "Event from your screenshot - Sep 24 deadline passed",
+                event: {
+                    title: "6-day Employability Training Program",
+                    registration_deadline: "2025-09-24T23:59:00Z",
+                    event_date: "2025-09-22",
+                    status: "ongoing",
+                    registration_status: undefined
+                }
+            },
+            {
+                name: "Event with explicit closed status",
+                event: {
+                    title: "Test Event - Explicit Closed",
+                    registration_deadline: "2025-12-01T23:59:00Z", // Future deadline
+                    event_date: "2025-12-15",
+                    status: "upcoming",
+                    registration_status: "closed"
+                }
+            },
+            {
+                name: "Event with full status",
+                event: {
+                    title: "Test Event - Full",
+                    registration_deadline: "2025-12-01T23:59:00Z",
+                    event_date: "2025-12-15",
+                    status: "upcoming",
+                    registration_status: "full"
+                }
+            },
+            {
+                name: "Open registration - future deadline",
+                event: {
+                    title: "Test Event - Open",
+                    registration_deadline: "2025-12-01T23:59:00Z",
+                    event_date: "2025-12-15", 
+                    status: "upcoming",
+                    registration_status: "open"
+                }
+            },
+            {
+                name: "Completed event",
+                event: {
+                    title: "Test Event - Completed",
+                    registration_deadline: "2025-08-01T23:59:00Z",
+                    event_date: "2025-08-15",
+                    status: "completed",
+                    registration_status: undefined
+                }
+            }
+        ];
+
+        // Run tests
+        const testsDiv = document.getElementById('tests');
+        
+        testCases.forEach((testCase, index) => {
+            console.log(`\n=== Test ${index + 1}: ${testCase.name} ===`);
+            const result = isRegistrationClosed(testCase.event);
+            
+            const testDiv = document.createElement('div');
+            testDiv.className = `test ${result.closed ? 'closed' : 'open'}`;
+            testDiv.innerHTML = `
+                <h3>${testCase.name}</h3>
+                <p><strong>Event:</strong> ${testCase.event.title}</p>
+                <p><strong>Status:</strong> ${testCase.event.status}</p>
+                <p><strong>Registration Status:</strong> ${testCase.event.registration_status || 'undefined'}</p>
+                <p><strong>Registration Deadline:</strong> ${testCase.event.registration_deadline}</p>
+                <p><strong>Event Date:</strong> ${testCase.event.event_date}</p>
+                <p class="status">Result: ${result.closed ? '❌ CLOSED' : '✅ OPEN'}</p>
+                <p><strong>Reason:</strong> ${result.reason}</p>
+            `;
+            testsDiv.appendChild(testDiv);
+        });
+
+        // Test the specific scenario from your screenshot
+        console.log('\n🎯 Testing your specific scenario:');
+        const yourEvent = {
+            title: "6-day Employability Training Program",
+            registration_deadline: "2025-09-24T23:59:00Z", // Sep 24, 2025 (today is Sep 23, 2025)
+            event_date: "2025-09-22", // Event already started
+            status: "ongoing", // Event is ongoing
+            registration_status: undefined // No explicit status
+        };
+        
+        const result = isRegistrationClosed(yourEvent);
+        console.log('Your event result:', result);
+    </script>
+</body>
+</html>
