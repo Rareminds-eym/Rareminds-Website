@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
-import { Tag } from 'lucide-react';
-import { useEvents } from '../../hooks/Events/useEvent';
+import { useOptimizedEvents } from '../../hooks/Events/useOptimizedEvents';
 import { Event } from '../../types/Events/event';
 import EventCard from './EventCard';
 import EventFilters from './EventFilters';
 import RegistrationModal from './RegistrationModal';
-import { Calendar, AlertCircle, Loader2 } from 'lucide-react';
+import { Calendar, AlertCircle, Loader2, Tag } from 'lucide-react';
+
 
 const EventsPage: React.FC = () => {
-  const { events, loading, error } = useEvents();
+  const { events, loading, error, refetch } = useOptimizedEvents();
   const [filteredEvents, setFilteredEvents] = useState<Event[]>([]);
   // Registration modal state for banner CTA
   const [showRegistrationModal, setShowRegistrationModal] = React.useState(false);
@@ -67,16 +67,28 @@ const EventsPage: React.FC = () => {
   if (error) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center">
-        <div className="text-center">
+        <div className="text-center max-w-md mx-auto px-6">
           <AlertCircle className="w-12 h-12 text-red-600 mx-auto mb-4" />
           <h2 className="text-xl font-semibold text-gray-700 mb-2">Error Loading Events</h2>
-          <p className="text-gray-500 mb-4">{error}</p>
-          <button
-            onClick={() => window.location.reload()}
-            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-          >
-            Try Again
-          </button>
+          <p className="text-gray-500 mb-2">Unable to load events at the moment.</p>
+          <p className="text-sm text-gray-400 mb-6">{error}</p>
+          <div className="flex flex-col gap-3 sm:flex-row sm:justify-center">
+            <button
+              onClick={() => refetch()}
+              className="inline-flex items-center px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all duration-300 transform hover:scale-105"
+            >
+              <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+              </svg>
+              Try Again
+            </button>
+            <button
+              onClick={() => window.location.reload()}
+              className="px-6 py-3 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
+            >
+              Reload Page
+            </button>
+          </div>
         </div>
       </div>
     );
