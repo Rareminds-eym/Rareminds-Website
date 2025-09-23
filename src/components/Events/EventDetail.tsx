@@ -25,7 +25,6 @@ import {
   Phone, 
   User, 
   ArrowLeft,
-  Tag,
   AlertCircle,
   CheckCircle,
   XCircle,
