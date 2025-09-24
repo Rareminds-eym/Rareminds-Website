@@ -165,6 +165,8 @@ const EventDetail: React.FC = () => {
   // Gallery Modal States
   const [galleryModalOpen, setGalleryModalOpen] = React.useState(false);
   const [selectedGalleryImage, setSelectedGalleryImage] = React.useState<string>('');
+  // Toggle to reveal all images beyond the initial 6
+  const [showAllGallery, setShowAllGallery] = React.useState(false);
   
   // Gallery modal handlers
   const handleGalleryImageClick = (image: string) => {
@@ -650,7 +652,7 @@ const EventDetail: React.FC = () => {
           {/* Main Content Grid - Optimized Layout */}
           <div className="grid grid-cols-1 xl:grid-cols-12 gap-8 xl:gap-12">
             {/* Main Content Area */}
-            <div className="xl:col-span-8 space-y-12">
+            <div className="xl:col-span-8 space-y-6">
               {/* About The Event Section - Match Reference Layout */}
               <div className="backdrop-blur-xl bg-white/90 rounded-3xl p-8 lg:p-10 border border-white/20">
                 {/* Header Section with Title, Status Badge, and Share Button */}
@@ -759,7 +761,7 @@ const EventDetail: React.FC = () => {
               {/* Speakers - Redesigned Section (MOVED FIRST) */}
               {(event.speakers_details && event.speakers_details.length > 0) || (event.speakers && event.speakers.length > 0) ? (
                 <div 
-                  className="relative rounded-3xl p-6 lg:p-10 border border-white/30 overflow-hidden"
+                  className="-mt-2 md:-mt-4 relative rounded-3xl p-6 lg:p-10 border border-white/30 overflow-hidden"
                 >
 
                   <div className="relative flex items-center justify-between mb-6">
@@ -870,7 +872,7 @@ const EventDetail: React.FC = () => {
 
               {/* Event Gallery Section (MOVED SECOND) */}
               {event.events_gallery && event.events_gallery.length > 0 && (
-                <div className="backdrop-blur-xl bg-white/60 rounded-3xl p-8 lg:p-10 border border-white/20">
+                <div className="-mt-2 md:-mt-4 backdrop-blur-xl bg-white/60 rounded-3xl p-8 lg:p-10 border border-white/20">
                   <div className="flex items-center gap-4 mb-8">
                     <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-2xl flex items-center justify-center">
                       <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -881,44 +883,44 @@ const EventDetail: React.FC = () => {
                   </div>
                   
                   {/* Gallery Images */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {event.events_gallery.slice(0, 6).map((image, index) => (
-                      <div 
-                        key={index} 
-                        className="relative group cursor-pointer overflow-hidden rounded-3xl transition-all duration-300 transform hover:scale-105"
-                        onClick={() => handleGalleryImageClick(image)}
-                      >
-                        <div className="aspect-square">
-                          <img
-                            src={image}
-                            alt={`Event gallery image ${index + 1}`}
-                            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
-                            onError={(e) => {
-                              (e.target as HTMLImageElement).src = '/api/placeholder/400/400';
-                            }}
-                          />
+                  <div className={`${showAllGallery ? 'max-h-[700px] overflow-y-auto pr-2 custom-scrollbar' : ''}`}>
+                    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6">
+                      {(showAllGallery ? event.events_gallery : event.events_gallery.slice(0, Math.min(10, event.events_gallery.length))).map((image, index) => (
+                        <div 
+                          key={index} 
+                          className="relative group cursor-pointer overflow-hidden rounded-2xl transition-all duration-300 transform hover:scale-105 ring-1 ring-gray-200/50"
+                          onClick={() => handleGalleryImageClick(image)}
+                        >
+                          <div className="aspect-square">
+                            <img
+                              src={image}
+                              alt={`Event gallery image ${index + 1}`}
+                              className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+                              onError={(e) => {
+                                (e.target as HTMLImageElement).src = '/api/placeholder/400/400';
+                              }}
+                            />
+                          </div>
+                          {/* Hover overlay */}
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-2">
+                            <span className="text-white text-xs font-medium bg-black/30 px-2.5 py-1 rounded-full backdrop-blur-sm">
+                              View Full Size
+                            </span>
+                          </div>
                         </div>
-                        {/* Hover overlay */}
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-4">
-                          <span className="text-white text-sm font-medium bg-black/30 px-3 py-1 rounded-full backdrop-blur-sm">
-                            View Full Size
-                          </span>
-                        </div>
-                      </div>
-                    ))}
+                      ))}
+                    </div>
                   </div>
                   
-                  {/* Show more button if there are more than 6 images */}
-                  {event.events_gallery.length > 6 && (
-                    <div className="mt-8 text-center">
+                  {/* Show more button if there are more than 10 images */}
+                  {event.events_gallery.length > 10 && (
+                    <div className="mt-6 text-center">
                       <button 
-                        onClick={() => {
-                          // You can implement a modal or expanded view here
-                          console.log('Show all gallery images');
-                        }}
+                        aria-expanded={showAllGallery}
+                        onClick={() => setShowAllGallery(prev => !prev)}
                         className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-2xl hover:from-blue-600 hover:to-indigo-600 transition-all duration-300 transform hover:scale-105"
                       >
-                        View All {event.events_gallery.length} Images
+                        {showAllGallery ? 'Show Less' : `View All ${event.events_gallery.length} Images`}
                         <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                         </svg>
