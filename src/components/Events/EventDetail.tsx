@@ -491,7 +491,7 @@ const EventDetail: React.FC = () => {
       <div className="relative z-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Hero Section with Modern Banner - Improved Spacing */}
-          <div className="mb-16 pt-8">
+          <div className="mb-12 pt-6 sm:mb-16 sm:pt-8">
             {(event.event_banner || event.featured_image) ? (
               <div className="space-y-6">
                 {/* Hero Image Container */}
@@ -530,15 +530,15 @@ const EventDetail: React.FC = () => {
                 </div>
 
                 {/* Tags and Interest Section - Below Image */}
-                <div className="flex items-center justify-between pt-4">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pt-4">
                   {/* Tags Section - Bottom Left (outside image) */}
-                  <div className="flex flex-wrap gap-3">
+                  <div className="flex flex-wrap gap-2 sm:gap-3 w-full">
                     {event.event_tags && event.event_tags.length > 0 ? (
                       // Display actual event tags from database
                       event.event_tags.slice(0, 3).map((tag, index) => (
                         <span
                           key={index}
-                          className="px-4 py-2 bg-black text-white text-sm font-medium rounded-full hover:bg-gray-800 transition-all duration-300 cursor-default"
+                          className="px-3 py-1.5 bg-black text-white text-xs sm:text-sm font-medium rounded-full hover:bg-gray-800 transition-all duration-300 cursor-default"
                           title={`Tag: ${tag}`}
                         >
                           {tag.trim()}
@@ -548,17 +548,17 @@ const EventDetail: React.FC = () => {
                       // Fallback: Show relevant event information as tags when no database tags exist
                       <>
                         {event.category && (
-                          <span className="px-4 py-2 bg-black text-white text-sm font-medium rounded-full hover:bg-gray-800 transition-all duration-300">
+                          <span className="px-3 py-1.5 bg-black text-white text-xs sm:text-sm font-medium rounded-full hover:bg-gray-800 transition-all duration-300">
                             {event.category}
                           </span>
                         )}
                         {event.location && (
-                          <span className="px-4 py-2 bg-black text-white text-sm font-medium rounded-full hover:bg-gray-800 transition-all duration-300">
+                          <span className="px-3 py-1.5 bg-black text-white text-xs sm:text-sm font-medium rounded-full hover:bg-gray-800 transition-all duration-300">
                             {event.location.split(',')[0].trim()}
                           </span>
                         )}
                         {event.status && (
-                          <span className="px-4 py-2 bg-black text-white text-sm font-medium rounded-full capitalize hover:bg-gray-800 transition-all duration-300">
+                          <span className="px-3 py-1.5 bg-black text-white text-xs sm:text-sm font-medium rounded-full capitalize hover:bg-gray-800 transition-all duration-300">
                             {event.status}
                           </span>
                         )}
@@ -567,20 +567,20 @@ const EventDetail: React.FC = () => {
                     
                     {/* Show additional tags indicator if there are more than 3 */}
                     {event.event_tags && event.event_tags.length > 3 && (
-                      <span className="px-4 py-2 bg-gray-700 text-white text-sm font-medium rounded-full cursor-default">
+                      <span className="px-3 py-1.5 bg-gray-700 text-white text-xs sm:text-sm font-medium rounded-full cursor-default">
                         +{event.event_tags.length - 3} more
                       </span>
                     )}
                   </div>
                   
                   {/* Interest Section - Bottom Right (outside image) */}
-                  <div className="flex items-center gap-4">
+                  <div className="flex items-center gap-3 sm:gap-4 w-full sm:w-auto justify-between sm:justify-end flex-nowrap">
                     {/* Interest Counter with Thumbs Up */}
                     <div className="flex items-center gap-2 text-gray-700">
                       <svg className="w-5 h-5 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
                         <path d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z" />
                       </svg>
-                      <span className="text-lg font-semibold text-gray-600">
+                      <span className="text-base sm:text-lg font-semibold text-gray-600 whitespace-nowrap">
                         {isLoadingCount ? (
                           <span className="animate-pulse">Loading...</span>
                         ) : (
@@ -600,7 +600,7 @@ const EventDetail: React.FC = () => {
                         setInterestedModalOpen(true);
                       }}
                       disabled={isLoadingCount}
-                      className={`px-6 py-2 rounded-full border-2 font-semibold transition-all duration-300 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed ${
+                      className={`ml-auto w-auto shrink-0 px-4 py-1.5 text-sm sm:text-base rounded-full border sm:border-2 font-semibold transition-all duration-300 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed ${
                         userAlreadyInterested
                           ? 'border-green-400 bg-green-500 text-white cursor-default'
                           : 'border-red-400 bg-white text-red-500 hover:bg-red-50'
@@ -615,6 +615,161 @@ const EventDetail: React.FC = () => {
                 {event.registration_deadline && (
                   <div className="mt-8">
                     <SingleEventCountdown event={event} />
+                    {/* Mobile: show Information and Registration right after countdown/closed banner */}
+                    <div className="mt-4 xl:hidden space-y-4">
+                      {/* Information (mobile) */}
+                      <div className="backdrop-blur-xl bg-white/95 rounded-3xl border border-white/20 overflow-hidden">
+                        <div className="bg-blue-600 px-4 py-3">
+                          <h3 className="text-lg font-bold text-white">Information</h3>
+                        </div>
+                        <div className="p-4">
+                          <div className="space-y-3">
+                            <div className="flex">
+                              <strong className="text-gray-900 font-semibold text-sm w-24 flex-shrink-0">Category:</strong>
+                              <span className="text-gray-700 text-base ml-4">{event.category || 'Workshop'}</span>
+                            </div>
+                            <div className="flex">
+                              <strong className="text-gray-900 font-semibold text-sm w-24 flex-shrink-0">Date:</strong>
+                              <span className="text-gray-700 text-base ml-4">{formatDate(event.event_date).replace(/^\w+,\s*/, '')}</span>
+                            </div>
+                            <div className="flex">
+                              <strong className="text-gray-900 font-semibold text-sm w-24 flex-shrink-0">Time:</strong>
+                              <span className="text-gray-700 text-base ml-4">{formatTime(event.event_time)}{event.duration ? ` - ${event.duration}` : ''}</span>
+                            </div>
+                            <div className="flex">
+                              <strong className="text-gray-900 font-semibold text-sm w-24 flex-shrink-0">Attendees:</strong>
+                              <span className="text-gray-700 text-base ml-4">{event.capacity || '50'}</span>
+                            </div>
+                            <div className="flex">
+                              <strong className="text-gray-900 font-semibold text-sm w-24 flex-shrink-0">Location:</strong>
+                              <span className="text-gray-700 text-base ml-4">{event.location?.split(',')[0]?.trim() || 'Bangalore'}</span>
+                            </div>
+                            <div className="flex">
+                              <strong className="text-gray-900 font-semibold text-sm w-24 flex-shrink-0">Languages:</strong>
+                              <span className="text-gray-700 text-base ml-4">{event.languages && event.languages.length > 0 ? event.languages.join(', ') : 'Kannada, English'}</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Registration (mobile) */}
+                      <div className="backdrop-blur-xl bg-white/95 rounded-3xl p-4 border border-white/20">
+                        <h3 className="text-xl font-bold text-slate-900">Registration</h3>
+                        <div className="mt-2 h-1 w-16 bg-indigo-600 rounded-full"></div>
+                        {/* Reuse existing registration UI/logic */}
+                        {(() => {
+                          const parseDeadlineEndOfDay = (dateStr: string): Date => {
+                            if (!dateStr) return new Date(0);
+                            const match = /^(\d{4})-(\d{2})-(\d{2})/.exec(String(dateStr));
+                            if (!match) return new Date(dateStr);
+                            const y = parseInt(match[1], 10);
+                            const m = parseInt(match[2], 10);
+                            const d = parseInt(match[3], 10);
+                            return new Date(y, (m || 1) - 1, d || 1, 23, 59, 59, 999);
+                          };
+                          const getRegistrationStatus = () => {
+                            if (!event.registration_deadline) return { isClosed: true };
+                            const now = new Date();
+                            const deadlineDate = parseDeadlineEndOfDay(event.registration_deadline);
+                            const eventDate = new Date(event.event_date);
+                            const isRegistrationDeadlinePassed = deadlineDate.getTime() <= now.getTime();
+                            const isEventPassed = eventDate.getTime() <= now.getTime();
+                            const isOpen = !isRegistrationDeadlinePassed && !isEventPassed;
+                            return { isClosed: !isOpen };
+                          };
+                          const registrationClosed = getRegistrationStatus().isClosed;
+                          return (
+                            <>
+                              <div className="flex items-center justify-between mt-4">
+                                <div className="text-xl font-extrabold text-slate-900">
+                                  {(() => {
+                                    const priceStr = (event.price ?? '0').toString().toLowerCase();
+                                    if (priceStr === 'free' || priceStr === '0' || priceStr === '') return 'FREE';
+                                    const numeric = parseFloat(priceStr.replace(/[^\d.]/g, '')) || 0;
+                                    return new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(numeric);
+                                  })()}
+                                </div>
+                                <div className="flex items-center gap-3">
+                                  <button aria-label="Decrease quantity" onClick={registrationClosed ? undefined : () => setQuantity(q => Math.max(1, q - 1))} disabled={registrationClosed} className={`w-8 h-8 rounded-full text-lg leading-none flex items-center justify-center ${registrationClosed ? 'bg-gray-200 text-gray-400 cursor-not-allowed' : 'bg-slate-100 hover:bg-slate-200 text-slate-700'}`}>−</button>
+                                  <span className={`min-w-[1.5rem] text-center font-semibold ${registrationClosed ? 'text-gray-400' : 'text-slate-700'}`}>{String(quantity).padStart(2, '0')}</span>
+                                  <button aria-label="Increase quantity" onClick={registrationClosed ? undefined : () => setQuantity(q => Math.min(99, q + 1))} disabled={registrationClosed} className={`w-8 h-8 rounded-full text-lg leading-none flex items-center justify-center ${registrationClosed ? 'bg-gray-200 text-gray-400 cursor-not-allowed' : 'bg-slate-100 hover:bg-slate-200 text-slate-700'}`}>+</button>
+                                </div>
+                              </div>
+
+                              <div className="my-4 border-t border-slate-200" />
+                              <div className="flex items-baseline justify-between mb-3">
+                                <span className={`text-base font-semibold ${registrationClosed ? 'text-gray-400' : 'text-slate-800'}`}>Quantity:</span>
+                                <span className={`text-base font-mono ${registrationClosed ? 'text-gray-400' : 'text-slate-700'}`}>{String(quantity).padStart(2, '0')}</span>
+                              </div>
+                              <div className="flex items-baseline justify-between">
+                                <span className={`text-base font-semibold ${registrationClosed ? 'text-gray-400' : 'text-slate-800'}`}>Total Cost:</span>
+                                <span className={`text-xl font-extrabold ${registrationClosed ? 'text-gray-400' : 'text-emerald-600'}`}>
+                                  {(() => {
+                                    const priceStr = (event.price ?? '0').toString().toLowerCase();
+                                    if (priceStr === 'free' || priceStr === '0' || priceStr === '') return 'FREE';
+                                    const numeric = parseFloat(priceStr.replace(/[^\d.]/g, '')) || 0;
+                                    const total = numeric * quantity;
+                                    return new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(total);
+                                  })()}
+                                </span>
+                              </div>
+
+                              {(() => {
+                                const now = new Date();
+                                const eventDate = new Date(event.event_date);
+                                const registrationDeadline = event.registration_deadline ? new Date(event.registration_deadline) : null;
+                                if (registrationDeadline && registrationDeadline > now && event.status === 'upcoming') {
+                                  return (
+                                    <div className="mt-4 p-3 bg-gradient-to-r from-orange-50/80 to-yellow-50/80 rounded-2xl border border-orange-200/50">
+                                      <CountdownTimer targetDate={event.registration_deadline!} type="registration" compact={false} className="" />
+                                    </div>
+                                  );
+                                }
+                                if (eventDate > now && event.status === 'upcoming') {
+                                  const isRegistrationClosed = event.registration_status === 'closed' || event.registration_status === 'full' || (event.registration_deadline && new Date(event.registration_deadline) <= now);
+                                  if (isRegistrationClosed || !event.registration_deadline) {
+                                    return (
+                                      <div className="mt-4 p-3 bg-gradient-to-r from-blue-50/80 to-indigo-50/80 rounded-2xl border border-blue-200/50">
+                                        <CountdownTimer targetDate={event.event_date} type="event" compact={false} className="" />
+                                      </div>
+                                    );
+                                  }
+                                }
+                                return null;
+                              })()}
+
+                              {(() => {
+                                const parseDeadlineEndOfDay = (dateStr: string): Date => {
+                                  if (!dateStr) return new Date(0);
+                                  const match = /^(\d{4})-(\d{2})-(\d{2})/.exec(String(dateStr));
+                                  if (!match) return new Date(dateStr);
+                                  const y = parseInt(match[1], 10);
+                                  const m = parseInt(match[2], 10);
+                                  const d = parseInt(match[3], 10);
+                                  return new Date(y, (m || 1) - 1, d || 1, 23, 59, 59, 999);
+                                };
+                                const getRegistrationStatus = () => {
+                                  if (!event.registration_deadline) return { isClosed: true };
+                                  const now = new Date();
+                                  const deadlineDate = parseDeadlineEndOfDay(event.registration_deadline);
+                                  const eventDate = new Date(event.event_date);
+                                  const isRegistrationDeadlinePassed = deadlineDate.getTime() <= now.getTime();
+                                  const isEventPassed = eventDate.getTime() <= now.getTime();
+                                  const isOpen = !isRegistrationDeadlinePassed && !isEventPassed;
+                                  return { isClosed: !isOpen, buttonText: isOpen ? 'REGISTER NOW' : 'REGISTRATION CLOSED' };
+                                };
+                                const status = getRegistrationStatus();
+                                return (
+                                  <button onClick={status.isClosed ? undefined : () => setModalOpen(true)} disabled={status.isClosed} className={`w-full mt-4 font-semibold py-3 rounded-2xl transition-all duration-300 ${status.isClosed ? 'bg-gray-400 cursor-not-allowed text-gray-600' : 'bg-indigo-600 hover:bg-indigo-700 text-white transition-transform active:scale-[0.99]'}`}>
+                                    {status.buttonText}
+                                  </button>
+                                );
+                              })()}
+                            </>
+                          );
+                        })()}
+                      </div>
+                    </div>
                   </div>
                 )}
               </div>
@@ -650,15 +805,15 @@ const EventDetail: React.FC = () => {
 
 
           {/* Main Content Grid - Optimized Layout */}
-          <div className="grid grid-cols-1 xl:grid-cols-12 gap-8 xl:gap-12">
+          <div className="grid grid-cols-1 xl:grid-cols-12 gap-6 md:gap-8 xl:gap-12">
             {/* Main Content Area */}
             <div className="xl:col-span-8 space-y-6">
               {/* About The Event Section - Match Reference Layout */}
-              <div className="backdrop-blur-xl bg-white/90 rounded-3xl p-8 lg:p-10 border border-white/20">
+              <div className="backdrop-blur-xl bg-white/90 rounded-3xl p-4 sm:p-8 lg:p-10 border border-white/20">
                 {/* Header Section with Title, Status Badge, and Share Button */}
-                <div className="flex items-start justify-between mb-8">
-                  <div className="flex items-center gap-4">
-                    <h2 className="text-3xl font-bold text-gray-900 leading-tight">About The Event</h2>
+                <div className="flex items-start justify-between mb-4 sm:mb-8">
+                  <div className="flex items-center gap-3 sm:gap-4">
+                    <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 leading-tight">About The Event</h2>
                     {/* Dynamic Status Badge */}
                     <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium capitalize ${getStatusColor(event.status)}`}>
                       {getStatusIcon(event.status)}
@@ -691,7 +846,7 @@ const EventDetail: React.FC = () => {
                 </div>
                 
                 {/* Event Description */}
-                <div className="mb-12">
+                <div className="mb-6 sm:mb-12">
                   <div 
                     className="text-gray-700 leading-relaxed prose prose-slate max-w-none prose-headings:text-slate-800 prose-p:text-slate-700 prose-p:leading-relaxed prose-a:text-blue-600 prose-a:hover:text-blue-700 prose-strong:text-slate-800 prose-ul:text-slate-700 prose-ol:text-slate-700"
                     dangerouslySetInnerHTML={{ __html: event.description }}
@@ -700,7 +855,7 @@ const EventDetail: React.FC = () => {
                 
                 {/* Key Highlights Section */}
                 <div>
-                  <h3 className="text-2xl font-bold text-gray-900 mb-6">Key Highlights</h3>
+                  <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6">Key Highlights</h3>
                   <div className="text-gray-700 leading-relaxed">
                     {event.key_highlights && event.key_highlights.length > 0 ? (
                       <ul className="space-y-2 text-gray-600">
@@ -743,12 +898,12 @@ const EventDetail: React.FC = () => {
 
               {/* Agenda - Consistent Layout */}
               {event.agenda && (
-                <div className="backdrop-blur-xl bg-white/60 rounded-3xl p-8 lg:p-10 border border-white/20">
-                  <div className="flex items-center gap-4 mb-8">
-                    <div className="w-12 h-12 bg-gradient-to-r from-green-500 to-emerald-500 rounded-2xl flex items-center justify-center">
-                      <Clock className="w-6 h-6 text-white" />
+                <div className="backdrop-blur-xl bg-white/60 rounded-3xl p-4 sm:p-8 lg:p-10 border border-white/20">
+                  <div className="flex items-center gap-4 mb-6 sm:mb-8">
+                    <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-r from-green-500 to-emerald-500 rounded-2xl flex items-center justify-center">
+                      <Clock className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
                     </div>
-                    <h2 className="text-xl font-bold bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent leading-tight">Event Agenda</h2>
+                    <h2 className="text-lg sm:text-xl font-bold bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent leading-tight">Event Agenda</h2>
                   </div>
                   <div 
                     className="bg-gradient-to-r from-green-50/80 to-emerald-50/80 border border-green-200/50 rounded-2xl p-6 backdrop-blur-sm prose prose-slate max-w-none prose-headings:text-slate-800 prose-p:text-slate-700 prose-p:leading-relaxed prose-p:text-sm prose-a:text-blue-600 prose-a:hover:text-blue-700 prose-strong:text-slate-800 prose-ul:text-slate-700 prose-ol:text-slate-700"
@@ -761,11 +916,11 @@ const EventDetail: React.FC = () => {
               {/* Speakers - Redesigned Section (MOVED FIRST) */}
               {(event.speakers_details && event.speakers_details.length > 0) || (event.speakers && event.speakers.length > 0) ? (
                 <div 
-                  className="-mt-2 md:-mt-4 relative rounded-3xl p-6 lg:p-10 border border-white/30 overflow-hidden"
+                  className="-mt-2 md:-mt-4 relative rounded-3xl p-4 md:p-8 lg:p-10 border border-white/30 overflow-hidden"
                 >
 
-                  <div className="relative flex items-center justify-between mb-6">
-                    <h2 className="text-2xl lg:text-3xl font-bold text-slate-900">Speakers</h2>
+                  <div className="relative flex items-center justify-between mb-4 md:mb-6">
+                    <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-slate-900">Speakers</h2>
                     <div className="hidden md:flex items-center gap-3">
                       <button 
                         aria-label="Previous"
@@ -872,14 +1027,14 @@ const EventDetail: React.FC = () => {
 
               {/* Event Gallery Section (MOVED SECOND) */}
               {event.events_gallery && event.events_gallery.length > 0 && (
-                <div className="-mt-2 md:-mt-4 backdrop-blur-xl bg-white/60 rounded-3xl p-8 lg:p-10 border border-white/20">
-                  <div className="flex items-center gap-4 mb-8">
-                    <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-2xl flex items-center justify-center">
-                      <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="-mt-2 md:-mt-4 backdrop-blur-xl bg-white/60 rounded-3xl p-4 sm:p-8 lg:p-10 border border-white/20">
+                  <div className="flex items-center gap-4 mb-6 sm:mb-8">
+                    <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-2xl flex items-center justify-center">
+                      <svg className="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                       </svg>
                     </div>
-                    <h2 className="text-3xl font-bold text-gray-900 leading-tight">Event Gallery</h2>
+                    <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 leading-tight">Event Gallery</h2>
                   </div>
                   
                   {/* Gallery Images */}
@@ -934,12 +1089,12 @@ const EventDetail: React.FC = () => {
 
               {/* Sponsors - Consistent Layout */}
               {event.sponsors && event.sponsors.length > 0 && (
-                <div className="backdrop-blur-xl bg-white/60 rounded-3xl p-8 lg:p-10 border border-white/20">
-                  <div className="flex items-center gap-4 mb-8">
-                    <div className="w-12 h-12 bg-gradient-to-r from-amber-500 to-orange-500 rounded-2xl flex items-center justify-center">
-                      <Award className="w-6 h-6 text-white" />
+                <div className="backdrop-blur-xl bg-white/60 rounded-3xl p-4 sm:p-8 lg:p-10 border border-white/20">
+                  <div className="flex items-center gap-4 mb-6 sm:mb-8">
+                    <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-r from-amber-500 to-orange-500 rounded-2xl flex items-center justify-center">
+                      <Award className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
                     </div>
-                    <h2 className="text-xl font-bold bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent leading-tight">Event Sponsors</h2>
+                    <h2 className="text-lg sm:text-xl font-bold bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent leading-tight">Event Sponsors</h2>
                   </div>
                   <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                     {event.sponsors.map((sponsor, index) => (
@@ -954,54 +1109,54 @@ const EventDetail: React.FC = () => {
           </div>
 
             {/* Modern Sidebar - Properly Positioned */}
-            <div className="xl:col-span-4 space-y-8">
+            <div className="xl:col-span-4 space-y-8 hidden xl:block">
               {/* 1. Information Card - First */}
               <div className="backdrop-blur-xl bg-white/95 rounded-3xl border border-white/20 sticky top-36 overflow-hidden">
                 {/* Blue Information Header */}
-                <div className="bg-blue-600 px-6 py-4">
-                  <h3 className="text-xl font-bold text-white">Information</h3>
+                <div className="bg-blue-600 px-4 py-3 md:py-4">
+                  <h3 className="text-lg sm:text-xl font-bold text-white">Information</h3>
                 </div>
                 
                 {/* Content Section */}
-                <div className="p-6">
+                <div className="p-4 md:p-6">
                   {/* Information Fields - Table-like layout with proper spacing */}
-                  <div className="space-y-4">
+                  <div className="space-y-3 md:space-y-4">
                     {/* Category */}
                     <div className="flex">
-                      <strong className="text-gray-900 font-semibold text-lg w-24 flex-shrink-0">Category:</strong>
-                      <span className="text-gray-700 text-lg ml-6">{event.category || 'Workshop'}</span>
+                      <strong className="text-gray-900 font-semibold text-sm sm:text-lg w-24 flex-shrink-0">Category:</strong>
+                      <span className="text-gray-700 text-base sm:text-lg ml-4 sm:ml-6">{event.category || 'Workshop'}</span>
                     </div>
 
                     {/* Date */}
                     <div className="flex">
-                      <strong className="text-gray-900 font-semibold text-lg w-24 flex-shrink-0">Date:</strong>
-                      <span className="text-gray-700 text-lg ml-6">{formatDate(event.event_date).replace(/^\w+,\s*/, '')}</span>
+                      <strong className="text-gray-900 font-semibold text-sm sm:text-lg w-24 flex-shrink-0">Date:</strong>
+                      <span className="text-gray-700 text-base sm:text-lg ml-4 sm:ml-6">{formatDate(event.event_date).replace(/^\w+,\s*/, '')}</span>
                     </div>
 
                     {/* Time */}
                     <div className="flex">
-                      <strong className="text-gray-900 font-semibold text-lg w-24 flex-shrink-0">Time:</strong>
-                      <span className="text-gray-700 text-lg ml-6">
+                      <strong className="text-gray-900 font-semibold text-sm sm:text-lg w-24 flex-shrink-0">Time:</strong>
+                      <span className="text-gray-700 text-base sm:text-lg ml-4 sm:ml-6">
                         {formatTime(event.event_time)}{event.duration ? ` - ${event.duration}` : ''}
                       </span>
                     </div>
 
                     {/* Attendees */}
                     <div className="flex">
-                      <strong className="text-gray-900 font-semibold text-lg w-24 flex-shrink-0">Attendees:</strong>
-                      <span className="text-gray-700 text-lg ml-6">{event.capacity || '50'}</span>
+                      <strong className="text-gray-900 font-semibold text-sm sm:text-lg w-24 flex-shrink-0">Attendees:</strong>
+                      <span className="text-gray-700 text-base sm:text-lg ml-4 sm:ml-6">{event.capacity || '50'}</span>
                     </div>
 
                     {/* Location */}
                     <div className="flex">
-                      <strong className="text-gray-900 font-semibold text-lg w-24 flex-shrink-0">Location:</strong>
-                      <span className="text-gray-700 text-lg ml-6">{event.location?.split(',')[0]?.trim() || 'Bangalore'}</span>
+                      <strong className="text-gray-900 font-semibold text-sm sm:text-lg w-24 flex-shrink-0">Location:</strong>
+                      <span className="text-gray-700 text-base sm:text-lg ml-4 sm:ml-6">{event.location?.split(',')[0]?.trim() || 'Bangalore'}</span>
                     </div>
 
                     {/* Languages */}
                     <div className="flex">
-                      <strong className="text-gray-900 font-semibold text-lg w-24 flex-shrink-0">Languages:</strong>
-                      <span className="text-gray-700 text-lg ml-6">
+                      <strong className="text-gray-900 font-semibold text-sm sm:text-lg w-24 flex-shrink-0">Languages:</strong>
+                      <span className="text-gray-700 text-base sm:text-lg ml-4 sm:ml-6">
                         {event.languages && event.languages.length > 0 
                           ? event.languages.join(', ') 
                           : 'Kannada, English'
@@ -1013,8 +1168,8 @@ const EventDetail: React.FC = () => {
               </div>
 
               {/* 2. Registration Card - Second */}
-              <div className="backdrop-blur-xl bg-white/95 rounded-3xl p-6 border border-white/20">
-                <h3 className="text-2xl font-bold text-slate-900">Registration</h3>
+              <div className="backdrop-blur-xl bg-white/95 rounded-3xl p-4 md:p-6 border border-white/20">
+                <h3 className="text-xl sm:text-2xl font-bold text-slate-900">Registration</h3>
                 <div className="mt-2 h-1 w-16 bg-indigo-600 rounded-full"></div>
 
                 {/* Price and Stepper - Using exact same logic as countdown banner */}
@@ -1286,8 +1441,8 @@ const EventDetail: React.FC = () => {
               </div>
 
               {/* 3. Event Organizer Card - Third */}
-              <div className="backdrop-blur-xl bg-white/70 rounded-3xl p-6 border border-white/20">
-                <h3 className="text-xl font-bold bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent mb-6">Event Organizer</h3>
+              <div className="backdrop-blur-xl bg-white/70 rounded-3xl p-4 md:p-6 border border-white/20">
+                <h3 className="text-lg sm:text-xl font-bold bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent mb-4 sm:mb-6">Event Organizer</h3>
                 
                 <div className="space-y-4">
                   <div className="flex items-center gap-4">
@@ -1344,10 +1499,10 @@ const EventDetail: React.FC = () => {
           {event.faq && event.faq.length > 0 && (
             <div className="mt-16">
               <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="backdrop-blur-xl bg-white/90 rounded-3xl p-8 lg:p-10 border border-white/20">
+                <div className="backdrop-blur-xl bg-white/90 rounded-3xl p-4 sm:p-8 lg:p-10 border border-white/20">
                   {/* FAQ Header - Perfectly Centered */}
-                  <div className="text-center mb-12">
-                    <h2 className="text-3xl font-bold text-gray-900 mx-auto">Frequently Asked Questions</h2>
+                  <div className="text-center mb-8 sm:mb-12">
+                    <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mx-auto">Frequently Asked Questions</h2>
                   </div>
                   
                   {/* FAQ Items Container - Centered */}
@@ -1356,10 +1511,10 @@ const EventDetail: React.FC = () => {
                       <div key={index} className="">
                         {/* Question Button */}
                         <button
-                          className="w-full text-left py-8 flex items-center justify-between focus:outline-none group hover:bg-gray-50/30 transition-colors duration-200"
+                          className="w-full text-left py-6 sm:py-8 flex items-center justify-between focus:outline-none group hover:bg-gray-50/30 transition-colors duration-200"
                           onClick={() => toggleFaq(index)}
                         >
-                          <span className="text-2xl text-gray-900 pr-8 leading-tight">
+                          <span className="text-xl sm:text-2xl text-gray-900 pr-6 sm:pr-8 leading-tight">
                             {faqItem.question}
                           </span>
                           
@@ -1373,9 +1528,9 @@ const EventDetail: React.FC = () => {
                         
                         {/* Answer Section */}
                         {openFaqIdx === index && (
-                          <div className="pb-8 px-0">
+                          <div className="pb-6 sm:pb-8 px-0">
                             <div className="">
-                              <p className="text-gray-700 leading-relaxed text-lg">
+                              <p className="text-gray-700 leading-relaxed text-base sm:text-lg">
                                 {faqItem.answer}
                               </p>
                             </div>

@@ -11,13 +11,13 @@ const EventMap: React.FC<EventMapProps> = ({ location, locationGeo, eventTitle }
   // If no coordinates available, show location info only
   if (!locationGeo || !locationGeo.lat || !locationGeo.lng) {
     return (
-      <div className="backdrop-blur-xl bg-white/95 rounded-3xl p-6 border border-white/20">
-        <h3 className="text-2xl font-bold text-slate-900">Event Location</h3>
+      <div className="backdrop-blur-xl bg-white/95 rounded-3xl p-4 md:p-6 border border-white/20">
+        <h3 className="text-xl md:text-2xl font-bold text-slate-900">Event Location</h3>
         <div className="mt-2 h-1 w-16 bg-green-600 rounded-full"></div>
         
-        <div className="text-center py-8 mt-6">
-          <MapPin className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-          <p className="text-gray-600 text-lg font-medium mb-2">{location}</p>
+        <div className="text-center py-6 md:py-8 mt-4 md:mt-6">
+          <MapPin className="w-12 h-12 md:w-16 md:h-16 text-gray-400 mx-auto mb-3 md:mb-4" />
+          <p className="text-gray-600 text-base md:text-lg font-medium mb-2">{location}</p>
           <p className="text-gray-500 text-sm">Map coordinates not available</p>
           
           {/* Search Location Button */}
@@ -39,17 +39,17 @@ const EventMap: React.FC<EventMapProps> = ({ location, locationGeo, eventTitle }
   const { lat, lng } = locationGeo;
 
   return (
-    <div className="backdrop-blur-xl bg-white/95 rounded-3xl p-6 border border-white/20">
-      <h3 className="text-2xl font-bold text-slate-900">Event Location</h3>
+    <div className="backdrop-blur-xl bg-white/95 rounded-3xl p-4 md:p-6 border border-white/20">
+      <h3 className="text-xl md:text-2xl font-bold text-slate-900">Event Location</h3>
       <div className="mt-2 h-1 w-16 bg-green-600 rounded-full"></div>
       
       {/* Location Address */}
-      <div className="mt-6 mb-4 p-3 bg-gradient-to-r from-green-50/80 to-emerald-50/80 rounded-2xl border border-green-200/30">
+      <div className="mt-4 md:mt-6 mb-3 md:mb-4 p-3 bg-gradient-to-r from-green-50/80 to-emerald-50/80 rounded-2xl border border-green-200/30">
         <p className="text-green-800 font-medium text-sm">{location}</p>
       </div>
       
       {/* Static Map Preview */}
-      <div className="h-64 w-full rounded-2xl overflow-hidden border border-gray-200 mb-4 relative">
+      <div className="h-56 md:h-64 w-full rounded-2xl overflow-hidden border border-gray-200 mb-3 md:mb-4 relative">
         <iframe
           width="100%"
           height="100%"
