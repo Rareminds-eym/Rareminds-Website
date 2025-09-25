@@ -482,7 +482,21 @@ const EventDetail: React.FC = () => {
       <div className="sticky top-6 z-50">
         <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
           <div className="flex flex-row justify-between items-center gap-2 sm:gap-0" style={{ zIndex: 10 }}>
-            {/* Removed Back to Events and Register buttons from top navigation */}
+            <button
+              type="button"
+              onClick={() => {
+                if (window.history.length > 1) {
+                  window.history.back();
+                } else {
+                  window.location.href = '/events';
+                }
+              }}
+              className="inline-flex items-center gap-2 px-3 sm:px-4 py-2 rounded-full bg-white/90 hover:bg-white text-gray-700 border border-gray-200 shadow-sm backdrop-blur-sm"
+              aria-label="GO Back"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              <span className="font-medium">GO Back</span>
+            </button>
           </div>
         </div>
       </div>
@@ -491,39 +505,35 @@ const EventDetail: React.FC = () => {
       <div className="relative z-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Hero Section with Modern Banner - Improved Spacing */}
-          <div className="mb-12 pt-6 sm:mb-16 sm:pt-8">
+          <div className="mb-12 pt-0 sm:pt-8 sm:mb-16">
             {(event.event_banner || event.featured_image) ? (
               <div className="space-y-6">
-                {/* Hero Image Container */}
-                <div className="relative h-[60vh] min-h-[400px] rounded-3xl overflow-hidden shadow-2xl">
-                  <img
-                    src={event.event_banner || event.featured_image}
-                    alt={event.title}
-                    className="w-full h-full object-cover"
-                  />
-                  {/* Enhanced Gradient Overlay */}
+                {/* Responsive Hero Banner (contained, rounded, bg-cover) */}
+                <div
+                  className="relative w-screen left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] sm:left-auto sm:right-auto sm:ml-0 sm:mr-0 sm:w-full rounded-none sm:rounded-3xl overflow-hidden shadow-none sm:shadow-2xl h-[70vh] sm:h-[60vh] lg:h-[70vh] min-h-[320px] bg-cover bg-center bg-no-repeat"
+                  style={{ backgroundImage: `url(${event.event_banner || event.featured_image})` }}
+                >
+                  {/* Gradient overlay for readability */}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
-                  
-                  {/* Watch Teaser Button - Top Right */}
-                  <div className="absolute top-6 right-6 z-20">
-                    <button
-                      onClick={() => {
-                        if (event.teaser_video) {
-                          window.open(event.teaser_video, '_blank');
-                        }
-                      }}
-                      className="flex items-center gap-2 px-4 py-2 bg-red-600/90 hover:bg-red-700/90 text-white rounded-lg font-semibold transition-all duration-300 hover:scale-105 backdrop-blur-sm border border-red-400/30"
-                    >
-                      <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clipRule="evenodd" />
-                      </svg>
-                      Watch Teaser
-                    </button>
-                  </div>
-                  
+
+                  {/* Watch Teaser - Top Left (if available) */}
+                  {event.teaser_video && (
+                    <div className="absolute top-4 left-4 z-20">
+                      <button
+                        onClick={() => window.open(event.teaser_video!, '_blank')}
+                        className="flex items-center gap-2 px-4 py-2 bg-red-600/90 hover:bg-red-700/90 text-white rounded-lg font-semibold transition-all duration-300 hover:scale-105 backdrop-blur-sm border border-red-400/30"
+                      >
+                        <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clipRule="evenodd" />
+                        </svg>
+                        Watch Teaser
+                      </button>
+                    </div>
+                  )}
+
                   {/* Event Title - Bottom Left of Image */}
                   <div className="absolute bottom-6 left-6">
-                    <h1 className="text-2xl md:text-3xl lg:text-3xl font-bold text-white leading-[1.1] tracking-tight drop-shadow-lg">
+                    <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-white leading-[1.1] tracking-tight drop-shadow-lg">
                       {event.title || "Event Name"}
                     </h1>
                   </div>
@@ -618,36 +628,36 @@ const EventDetail: React.FC = () => {
                     {/* Mobile: show Information and Registration right after countdown/closed banner */}
                     <div className="mt-4 xl:hidden space-y-4">
                       {/* Information (mobile) */}
-                      <div className="rm-card p-3 sm:p-4 overflow-hidden">
+                      <div className="rm-card p-1 sm:p-4 overflow-hidden">
                         <div className="px-3 sm:px-4 pt-2">
                           <h3 className="text-lg sm:text-xl font-bold text-slate-900">Information</h3>
                           <div className="mt-2 h-1 w-12 sm:w-16 bg-indigo-600 rounded-full"></div>
                         </div>
-                        <div className="px-3 sm:px-4 pb-3 sm:pb-4">
+                        <div className="mt-2 px-3 sm:px-4 pb-3 sm:pb-4">
                           <div className="space-y-2">
                             <div className="flex">
-                              <strong className="text-gray-900 font-semibold text-xs sm:text-sm w-20 sm:w-24 flex-shrink-0">Category:</strong>
-                              <span className="text-gray-700 text-xs md:text-sm ml-3 sm:ml-4">{event.category || 'Workshop'}</span>
+                              <strong className="text-gray-900 font-semibold text-sm md:text-base w-20 sm:w-24 flex-shrink-0">Category:</strong>
+                              <span className="text-gray-700 text-base md:text-lg ml-3 md:ml-4">{event.category || 'Workshop'}</span>
                             </div>
                             <div className="flex">
-                              <strong className="text-gray-900 font-semibold text-xs sm:text-sm w-20 sm:w-24 flex-shrink-0">Date:</strong>
-                              <span className="text-gray-700 text-xs md:text-sm ml-3 sm:ml-4">{formatDate(event.event_date).replace(/^\\w+,\\s*/, '')}</span>
+                              <strong className="text-gray-900 font-semibold text-sm md:text-base w-20 sm:w-24 flex-shrink-0">Date:</strong>
+                              <span className="text-gray-700 text-base md:text-lg ml-3 md:ml-4">{formatDate(event.event_date).replace(/^\\w+,\\s*/, '')}</span>
                             </div>
                             <div className="flex">
-                              <strong className="text-gray-900 font-semibold text-xs sm:text-sm w-20 sm:w-24 flex-shrink-0">Time:</strong>
-                              <span className="text-gray-700 text-xs md:text-sm ml-3 sm:ml-4">{formatTime(event.event_time)}{event.duration ? ` - ${event.duration}` : ''}</span>
+                              <strong className="text-gray-900 font-semibold text-sm md:text-base w-20 sm:w-24 flex-shrink-0">Time:</strong>
+                              <span className="text-gray-700 text-base md:text-lg ml-3 md:ml-4">{formatTime(event.event_time)}{event.duration ? ` - ${event.duration}` : ''}</span>
                             </div>
                             <div className="flex">
-                              <strong className="text-gray-900 font-semibold text-xs sm:text-sm w-20 sm:w-24 flex-shrink-0">Attendees:</strong>
-                              <span className="text-gray-700 text-xs md:text-sm ml-3 sm:ml-4">{event.capacity || '50'}</span>
+                              <strong className="text-gray-900 font-semibold text-sm md:text-base w-20 sm:w-24 flex-shrink-0">Attendees:</strong>
+                              <span className="text-gray-700 text-base md:text-lg ml-3 md:ml-4">{event.capacity || '50'}</span>
                             </div>
                             <div className="flex">
-                              <strong className="text-gray-900 font-semibold text-xs sm:text-sm w-20 sm:w-24 flex-shrink-0">Location:</strong>
-                              <span className="text-gray-700 text-xs md:text-sm ml-3 sm:ml-4">{event.location?.split(',')[0]?.trim() || 'Bangalore'}</span>
+                              <strong className="text-gray-900 font-semibold text-sm md:text-base w-20 sm:w-24 flex-shrink-0">Location:</strong>
+                              <span className="text-gray-700 text-base md:text-lg ml-3 md:ml-4">{event.location?.split(',')[0]?.trim() || 'Bangalore'}</span>
                             </div>
                             <div className="flex">
-                              <strong className="text-gray-900 font-semibold text-xs sm:text-sm w-20 sm:w-24 flex-shrink-0">Languages:</strong>
-                              <span className="text-gray-700 text-xs md:text-sm ml-3 sm:ml-4">{event.languages && event.languages.length > 0 ? event.languages.join(', ') : 'Kannada, English'}</span>
+                              <strong className="text-gray-900 font-semibold text-sm md:text-base w-20 sm:w-24 flex-shrink-0">Languages:</strong>
+                              <span className="text-gray-700 text-base md:text-lg ml-3 md:ml-4">{event.languages && event.languages.length > 0 ? event.languages.join(', ') : 'Kannada, English'}</span>
                             </div>
                           </div>
                         </div>
@@ -849,8 +859,8 @@ const EventDetail: React.FC = () => {
                 
                 {/* Event Description */}
                 <div className="mb-6 sm:mb-12">
-                  <div 
-                    className="text-gray-700 leading-relaxed prose prose-slate max-w-none prose-headings:text-slate-800 prose-p:text-slate-700 prose-p:leading-relaxed prose-a:text-blue-600 prose-a:hover:text-blue-700 prose-strong:text-slate-800 prose-ul:text-slate-700 prose-ol:text-slate-700"
+                <div 
+                    className="text-gray-700 leading-relaxed prose prose-base md:prose-lg prose-slate max-w-none prose-headings:text-slate-800 prose-p:text-slate-700 prose-p:leading-relaxed prose-a:text-blue-600 prose-a:hover:text-blue-700 prose-strong:text-slate-800 prose-ul:text-slate-700 prose-ol:text-slate-700"
                     dangerouslySetInnerHTML={{ __html: event.description }}
                   />
                 </div>
@@ -860,7 +870,7 @@ const EventDetail: React.FC = () => {
                   <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6">Key Highlights</h3>
                   <div className="text-gray-700 leading-relaxed">
                     {event.key_highlights && event.key_highlights.length > 0 ? (
-                      <ul className="space-y-2 text-gray-600">
+                      <ul className="space-y-2 text-gray-600 text-base md:text-lg">
                         {event.key_highlights.map((highlight, index) => (
                           <li key={index} className="flex items-start">
                             <span className="inline-block w-2 h-2 bg-blue-500 rounded-full mt-2 mr-3 shrink-0"></span>
@@ -871,10 +881,10 @@ const EventDetail: React.FC = () => {
                     ) : (
                       // Fallback content when no key_highlights are available
                       <>
-                        <p className="mb-4 text-gray-600">
+                        <p className="mb-4 text-gray-600 text-base md:text-lg">
                           Join us for an engaging and informative event featuring industry experts and networking opportunities.
                         </p>
-                        <ul className="space-y-2 text-gray-600">
+                        <ul className="space-y-2 text-gray-600 text-base md:text-lg">
                           <li className="flex items-start">
                             <span className="inline-block w-2 h-2 bg-blue-500 rounded-full mt-2 mr-3 shrink-0"></span>
                             Expert speakers from leading organizations
@@ -908,7 +918,7 @@ const EventDetail: React.FC = () => {
                     <h2 className="rm-section-title">Event Agenda</h2>
                   </div>
                   <div 
-                    className="bg-gradient-to-r from-green-50/80 to-emerald-50/80 border border-green-200/50 rounded-2xl p-6 backdrop-blur-sm prose prose-slate max-w-none prose-headings:text-slate-800 prose-p:text-slate-700 prose-p:leading-relaxed prose-p:text-sm prose-a:text-blue-600 prose-a:hover:text-blue-700 prose-strong:text-slate-800 prose-ul:text-slate-700 prose-ol:text-slate-700"
+                    className="bg-gradient-to-r from-green-50/80 to-emerald-50/80 border border-green-200/50 rounded-2xl p-6 backdrop-blur-sm prose prose-base md:prose-lg prose-slate max-w-none prose-headings:text-slate-800 prose-p:text-slate-700 prose-p:leading-relaxed prose-a:text-blue-600 prose-a:hover:text-blue-700 prose-strong:text-slate-800 prose-ul:text-slate-700 prose-ol:text-slate-700"
                     dangerouslySetInnerHTML={{ __html: event.agenda }}
                   />
                 </div>
@@ -1101,7 +1111,7 @@ const EventDetail: React.FC = () => {
                   <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                     {event.sponsors.map((sponsor, index) => (
                       <div key={index} className="bg-gradient-to-r from-white/80 to-white/60 rounded-2xl p-4 border border-white/30 backdrop-blur-sm text-center transition-all duration-300 transform hover:-translate-y-1">
-                        <p className="font-bold text-slate-800 text-sm">{sponsor}</p>
+                        <p className="font-bold text-slate-800 text-base md:text-lg">{sponsor}</p>
                       </div>
                     ))}
                   </div>
@@ -1548,12 +1558,12 @@ const EventDetail: React.FC = () => {
 
           {/* FAQ Section - Centered Outside Grid for Full Width */}
           {event.faq && event.faq.length > 0 && (
-            <div className="mt-16">
-              <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="rm-card p-4 sm:p-8 lg:p-10">
+            <div className="mt-6 mb-8 sm:mt-12 sm:mb-0">
+              <div className="max-w-5xl mx-auto  sm:px-6 lg:px-8">
+                <div className="rm-card px-2 py-3 sm:p-6 lg:p-8">
                   {/* FAQ Header - Perfectly Centered */}
-                  <div className="text-center mb-8 sm:mb-12">
-                    <h2 className="rm-section-title mx-auto">Frequently Asked Questions</h2>
+                  <div className="text-center mb-4 sm:mb-8">
+                    <h2 className="rm-section-title mx-auto text-xl sm:text-2xl">Frequently Asked Questions</h2>
                   </div>
                   
                   {/* FAQ Items Container - Centered */}
@@ -1562,16 +1572,16 @@ const EventDetail: React.FC = () => {
                       <div key={index} className="">
                         {/* Question Button */}
                         <button
-                          className="w-full text-left py-6 sm:py-8 flex items-center justify-between focus:outline-none group hover:bg-gray-50/30 transition-colors duration-200"
+                          className="w-full text-left py-4 sm:py-6 flex items-center justify-between focus:outline-none group hover:bg-gray-50/30 transition-colors duration-200"
                           onClick={() => toggleFaq(index)}
                         >
-                          <span className="text-xl sm:text-2xl text-gray-900 pr-6 sm:pr-8 leading-tight">
+                          <span className="text-lg sm:text-xl text-gray-900 pr-6 sm:pr-8 leading-tight">
                             {faqItem.question}
                           </span>
                           
                           {/* Plus/Minus Icon - Square Style */}
-                          <div className="flex-shrink-0 w-8 h-8 border-2 border-gray-400 rounded-sm flex items-center justify-center bg-white group-hover:border-gray-600 transition-colors duration-200">
-                            <span className="text-xl font-normal text-gray-600 group-hover:text-gray-800">
+                          <div className="flex-shrink-0 w-7 h-7 sm:w-8 sm:h-8 border-2 border-gray-400 rounded-sm flex items-center justify-center bg-white group-hover:border-gray-600 transition-colors duration-200">
+                            <span className="text-lg sm:text-xl font-normal text-gray-600 group-hover:text-gray-800">
                               {openFaqIdx === index ? '−' : '+'}
                             </span>
                           </div>
@@ -1579,9 +1589,9 @@ const EventDetail: React.FC = () => {
                         
                         {/* Answer Section */}
                         {openFaqIdx === index && (
-                          <div className="pb-6 sm:pb-8 px-0">
+                          <div className="pb-4 sm:pb-6 px-0">
                             <div className="">
-                              <p className="text-gray-700 leading-relaxed text-base sm:text-lg">
+                              <p className="text-gray-700 leading-relaxed text-base md:text-lg">
                                 {faqItem.answer}
                               </p>
                             </div>
