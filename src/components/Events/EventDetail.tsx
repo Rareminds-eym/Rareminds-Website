@@ -618,43 +618,44 @@ const EventDetail: React.FC = () => {
                     {/* Mobile: show Information and Registration right after countdown/closed banner */}
                     <div className="mt-4 xl:hidden space-y-4">
                       {/* Information (mobile) */}
-                      <div className="backdrop-blur-xl bg-white/95 rounded-3xl border border-white/20 overflow-hidden">
-                        <div className="bg-blue-600 px-4 py-3">
-                          <h3 className="text-lg font-bold text-white">Information</h3>
+                      <div className="rm-card p-3 sm:p-4 overflow-hidden">
+                        <div className="px-3 sm:px-4 pt-2">
+                          <h3 className="text-lg sm:text-xl font-bold text-slate-900">Information</h3>
+                          <div className="mt-2 h-1 w-12 sm:w-16 bg-indigo-600 rounded-full"></div>
                         </div>
-                        <div className="p-4">
-                          <div className="space-y-3">
+                        <div className="px-3 sm:px-4 pb-3 sm:pb-4">
+                          <div className="space-y-2">
                             <div className="flex">
-                              <strong className="text-gray-900 font-semibold text-sm w-24 flex-shrink-0">Category:</strong>
-                              <span className="text-gray-700 text-base ml-4">{event.category || 'Workshop'}</span>
+                              <strong className="text-gray-900 font-semibold text-xs sm:text-sm w-20 sm:w-24 flex-shrink-0">Category:</strong>
+                              <span className="text-gray-700 text-xs md:text-sm ml-3 sm:ml-4">{event.category || 'Workshop'}</span>
                             </div>
                             <div className="flex">
-                              <strong className="text-gray-900 font-semibold text-sm w-24 flex-shrink-0">Date:</strong>
-                              <span className="text-gray-700 text-base ml-4">{formatDate(event.event_date).replace(/^\w+,\s*/, '')}</span>
+                              <strong className="text-gray-900 font-semibold text-xs sm:text-sm w-20 sm:w-24 flex-shrink-0">Date:</strong>
+                              <span className="text-gray-700 text-xs md:text-sm ml-3 sm:ml-4">{formatDate(event.event_date).replace(/^\\w+,\\s*/, '')}</span>
                             </div>
                             <div className="flex">
-                              <strong className="text-gray-900 font-semibold text-sm w-24 flex-shrink-0">Time:</strong>
-                              <span className="text-gray-700 text-base ml-4">{formatTime(event.event_time)}{event.duration ? ` - ${event.duration}` : ''}</span>
+                              <strong className="text-gray-900 font-semibold text-xs sm:text-sm w-20 sm:w-24 flex-shrink-0">Time:</strong>
+                              <span className="text-gray-700 text-xs md:text-sm ml-3 sm:ml-4">{formatTime(event.event_time)}{event.duration ? ` - ${event.duration}` : ''}</span>
                             </div>
                             <div className="flex">
-                              <strong className="text-gray-900 font-semibold text-sm w-24 flex-shrink-0">Attendees:</strong>
-                              <span className="text-gray-700 text-base ml-4">{event.capacity || '50'}</span>
+                              <strong className="text-gray-900 font-semibold text-xs sm:text-sm w-20 sm:w-24 flex-shrink-0">Attendees:</strong>
+                              <span className="text-gray-700 text-xs md:text-sm ml-3 sm:ml-4">{event.capacity || '50'}</span>
                             </div>
                             <div className="flex">
-                              <strong className="text-gray-900 font-semibold text-sm w-24 flex-shrink-0">Location:</strong>
-                              <span className="text-gray-700 text-base ml-4">{event.location?.split(',')[0]?.trim() || 'Bangalore'}</span>
+                              <strong className="text-gray-900 font-semibold text-xs sm:text-sm w-20 sm:w-24 flex-shrink-0">Location:</strong>
+                              <span className="text-gray-700 text-xs md:text-sm ml-3 sm:ml-4">{event.location?.split(',')[0]?.trim() || 'Bangalore'}</span>
                             </div>
                             <div className="flex">
-                              <strong className="text-gray-900 font-semibold text-sm w-24 flex-shrink-0">Languages:</strong>
-                              <span className="text-gray-700 text-base ml-4">{event.languages && event.languages.length > 0 ? event.languages.join(', ') : 'Kannada, English'}</span>
+                              <strong className="text-gray-900 font-semibold text-xs sm:text-sm w-20 sm:w-24 flex-shrink-0">Languages:</strong>
+                              <span className="text-gray-700 text-xs md:text-sm ml-3 sm:ml-4">{event.languages && event.languages.length > 0 ? event.languages.join(', ') : 'Kannada, English'}</span>
                             </div>
                           </div>
                         </div>
                       </div>
 
                       {/* Registration (mobile) */}
-                      <div className="backdrop-blur-xl bg-white/95 rounded-3xl p-4 border border-white/20">
-                        <h3 className="text-xl font-bold text-slate-900">Registration</h3>
+                      <div className="rm-card p-3 sm:p-4">
+                        <h3 className="text-lg sm:text-xl font-bold text-slate-900">Registration</h3>
                         <div className="mt-2 h-1 w-16 bg-indigo-600 rounded-full"></div>
                         {/* Reuse existing registration UI/logic */}
                         {(() => {
@@ -681,7 +682,7 @@ const EventDetail: React.FC = () => {
                           return (
                             <>
                               <div className="flex items-center justify-between mt-4">
-                                <div className="text-xl font-extrabold text-slate-900">
+                                <div className="text-lg sm:text-xl font-extrabold text-slate-900">
                                   {(() => {
                                     const priceStr = (event.price ?? '0').toString().toLowerCase();
                                     if (priceStr === 'free' || priceStr === '0' || priceStr === '') return 'FREE';
@@ -698,12 +699,12 @@ const EventDetail: React.FC = () => {
 
                               <div className="my-4 border-t border-slate-200" />
                               <div className="flex items-baseline justify-between mb-3">
-                                <span className={`text-base font-semibold ${registrationClosed ? 'text-gray-400' : 'text-slate-800'}`}>Quantity:</span>
-                                <span className={`text-base font-mono ${registrationClosed ? 'text-gray-400' : 'text-slate-700'}`}>{String(quantity).padStart(2, '0')}</span>
+                                <span className={`text-sm sm:text-base font-semibold ${registrationClosed ? 'text-gray-400' : 'text-slate-800'}`}>Quantity:</span>
+                                <span className={`text-sm sm:text-base font-mono ${registrationClosed ? 'text-gray-400' : 'text-slate-700'}`}>{String(quantity).padStart(2, '0')}</span>
                               </div>
                               <div className="flex items-baseline justify-between">
-                                <span className={`text-base font-semibold ${registrationClosed ? 'text-gray-400' : 'text-slate-800'}`}>Total Cost:</span>
-                                <span className={`text-xl font-extrabold ${registrationClosed ? 'text-gray-400' : 'text-emerald-600'}`}>
+                                <span className={`text-sm sm:text-base font-semibold ${registrationClosed ? 'text-gray-400' : 'text-slate-800'}`}>Total Cost:</span>
+                                <span className={`text-lg sm:text-xl font-extrabold ${registrationClosed ? 'text-gray-400' : 'text-emerald-600'}`}>
                                   {(() => {
                                     const priceStr = (event.price ?? '0').toString().toLowerCase();
                                     if (priceStr === 'free' || priceStr === '0' || priceStr === '') return 'FREE';
@@ -769,6 +770,7 @@ const EventDetail: React.FC = () => {
                           );
                         })()}
                       </div>
+
                     </div>
                   </div>
                 )}
@@ -809,11 +811,11 @@ const EventDetail: React.FC = () => {
             {/* Main Content Area */}
             <div className="xl:col-span-8 space-y-6">
               {/* About The Event Section - Match Reference Layout */}
-              <div className="backdrop-blur-xl bg-white/90 rounded-3xl p-4 sm:p-8 lg:p-10 border border-white/20">
+              <div className="rm-card p-4 sm:p-8 lg:p-10">
                 {/* Header Section with Title, Status Badge, and Share Button */}
                 <div className="flex items-start justify-between mb-4 sm:mb-8">
                   <div className="flex items-center gap-3 sm:gap-4">
-                    <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 leading-tight">About The Event</h2>
+                    <h2 className="rm-section-title">About The Event</h2>
                     {/* Dynamic Status Badge */}
                     <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium capitalize ${getStatusColor(event.status)}`}>
                       {getStatusIcon(event.status)}
@@ -898,12 +900,12 @@ const EventDetail: React.FC = () => {
 
               {/* Agenda - Consistent Layout */}
               {event.agenda && (
-                <div className="backdrop-blur-xl bg-white/60 rounded-3xl p-4 sm:p-8 lg:p-10 border border-white/20">
+                <div className="rm-card p-4 sm:p-8 lg:p-10">
                   <div className="flex items-center gap-4 mb-6 sm:mb-8">
                     <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-r from-green-500 to-emerald-500 rounded-2xl flex items-center justify-center">
                       <Clock className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
                     </div>
-                    <h2 className="text-lg sm:text-xl font-bold bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent leading-tight">Event Agenda</h2>
+                    <h2 className="rm-section-title">Event Agenda</h2>
                   </div>
                   <div 
                     className="bg-gradient-to-r from-green-50/80 to-emerald-50/80 border border-green-200/50 rounded-2xl p-6 backdrop-blur-sm prose prose-slate max-w-none prose-headings:text-slate-800 prose-p:text-slate-700 prose-p:leading-relaxed prose-p:text-sm prose-a:text-blue-600 prose-a:hover:text-blue-700 prose-strong:text-slate-800 prose-ul:text-slate-700 prose-ol:text-slate-700"
@@ -916,11 +918,11 @@ const EventDetail: React.FC = () => {
               {/* Speakers - Redesigned Section (MOVED FIRST) */}
               {(event.speakers_details && event.speakers_details.length > 0) || (event.speakers && event.speakers.length > 0) ? (
                 <div 
-                  className="-mt-2 md:-mt-4 relative rounded-3xl p-4 md:p-8 lg:p-10 border border-white/30 overflow-hidden"
+                  className="rm-card -mt-2 md:-mt-4 relative p-4 md:p-8 lg:p-10 border-white/30 overflow-hidden"
                 >
 
                   <div className="relative flex items-center justify-between mb-4 md:mb-6">
-                    <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-slate-900">Speakers</h2>
+                    <h2 className="rm-section-title">Speakers</h2>
                     <div className="hidden md:flex items-center gap-3">
                       <button 
                         aria-label="Previous"
@@ -1027,14 +1029,14 @@ const EventDetail: React.FC = () => {
 
               {/* Event Gallery Section (MOVED SECOND) */}
               {event.events_gallery && event.events_gallery.length > 0 && (
-                <div className="-mt-2 md:-mt-4 backdrop-blur-xl bg-white/60 rounded-3xl p-4 sm:p-8 lg:p-10 border border-white/20">
+                <div className="rm-card -mt-2 md:-mt-4 p-4 sm:p-8 lg:p-10">
                   <div className="flex items-center gap-4 mb-6 sm:mb-8">
                     <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-2xl flex items-center justify-center">
                       <svg className="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                       </svg>
                     </div>
-                    <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 leading-tight">Event Gallery</h2>
+                    <h2 className="rm-section-title">Event Gallery</h2>
                   </div>
                   
                   {/* Gallery Images */}
@@ -1094,7 +1096,7 @@ const EventDetail: React.FC = () => {
                     <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-r from-amber-500 to-orange-500 rounded-2xl flex items-center justify-center">
                       <Award className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
                     </div>
-                    <h2 className="text-lg sm:text-xl font-bold bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent leading-tight">Event Sponsors</h2>
+                    <h2 className="rm-section-title">Event Sponsors</h2>
                   </div>
                   <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                     {event.sponsors.map((sponsor, index) => (
@@ -1111,14 +1113,15 @@ const EventDetail: React.FC = () => {
             {/* Modern Sidebar - Properly Positioned */}
             <div className="xl:col-span-4 space-y-8 hidden xl:block">
               {/* 1. Information Card - First */}
-              <div className="backdrop-blur-xl bg-white/95 rounded-3xl border border-white/20 sticky top-36 overflow-hidden">
-                {/* Blue Information Header */}
-                <div className="bg-blue-600 px-4 py-3 md:py-4">
-                  <h3 className="text-lg sm:text-xl font-bold text-white">Information</h3>
+              <div className="rm-card sticky top-36 overflow-hidden">
+                {/* Information Header (match Registration UI) */}
+                <div className="p-4 md:p-6 pb-0 md:pb-0">
+                  <h3 className="rm-section-title">Information</h3>
+                  <div className="mt-2 h-1 w-16 bg-indigo-600 rounded-full"></div>
                 </div>
                 
                 {/* Content Section */}
-                <div className="p-4 md:p-6">
+                <div className="p-4 pt-4 md:px-6 md:pt-4">
                   {/* Information Fields - Table-like layout with proper spacing */}
                   <div className="space-y-3 md:space-y-4">
                     {/* Category */}
@@ -1168,8 +1171,8 @@ const EventDetail: React.FC = () => {
               </div>
 
               {/* 2. Registration Card - Second */}
-              <div className="backdrop-blur-xl bg-white/95 rounded-3xl p-4 md:p-6 border border-white/20">
-                <h3 className="text-xl sm:text-2xl font-bold text-slate-900">Registration</h3>
+              <div className="rm-card p-4 md:p-6">
+                        <h3 className="rm-section-title">Registration</h3>
                 <div className="mt-2 h-1 w-16 bg-indigo-600 rounded-full"></div>
 
                 {/* Price and Stepper - Using exact same logic as countdown banner */}
@@ -1441,8 +1444,8 @@ const EventDetail: React.FC = () => {
               </div>
 
               {/* 3. Event Organizer Card - Third */}
-              <div className="backdrop-blur-xl bg-white/70 rounded-3xl p-4 md:p-6 border border-white/20">
-                <h3 className="text-lg sm:text-xl font-bold bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent mb-4 sm:mb-6">Event Organizer</h3>
+              <div className="rm-card p-4 md:p-6">
+                <h3 className="rm-section-title mb-4 sm:mb-6">Event Organizer</h3>
                 
                 <div className="space-y-4">
                   <div className="flex items-center gap-4">
@@ -1495,14 +1498,62 @@ const EventDetail: React.FC = () => {
             </div>
           </div>
           
+          {/* Mobile Organizer + Location (always visible on mobile) */}
+          <div className="mt-8 xl:hidden space-y-4">
+            {/* Event Organizer (mobile) */}
+            <div className="rm-card p-3 sm:p-4">
+              <h3 className="text-lg sm:text-xl font-bold text-slate-900">Event Organizer</h3>
+              <div className="mt-2 h-1 w-12 sm:w-16 bg-indigo-600 rounded-full"></div>
+              <div className="mt-3 sm:mt-4 space-y-3">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-2xl flex items-center justify-center">
+                    <User className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
+                  </div>
+                  <div>
+                    <p className="font-bold text-slate-800 text-sm sm:text-base">{event.organizer_name}</p>
+                    <p className="text-slate-600 text-xs sm:text-sm">Event Organizer</p>
+                  </div>
+                </div>
+
+                <div className="space-y-2 pt-3 border-t border-slate-200">
+                  <a href={`mailto:${event.organizer_email}`} className="flex items-center gap-2 p-2 bg-gradient-to-r from-blue-50/80 to-indigo-50/80 rounded-xl border border-blue-200/30">
+                    <Mail className="w-4 h-4 text-blue-500" />
+                    <span className="text-blue-700 text-sm font-medium">{event.organizer_email}</span>
+                  </a>
+                  {event.organizer_phone && (
+                    <a href={`tel:${event.organizer_phone}`} className="flex items-center gap-2 p-2 bg-gradient-to-r from-green-50/80 to-emerald-50/80 rounded-xl border border-green-200/30">
+                      <Phone className="w-4 h-4 text-green-500" />
+                      <span className="text-green-700 text-sm font-medium">{event.organizer_phone}</span>
+                    </a>
+                  )}
+                </div>
+
+                {event.additional_contact_info && (
+                  <div className="p-3 bg-gradient-to-r from-slate-50/80 to-gray-50/80 rounded-xl border border-slate-200/30 text-xs sm:text-sm text-slate-700">
+                    {event.additional_contact_info}
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Event Location (mobile) */}
+            {event.location && (
+              <EventMap
+                location={event.location}
+                locationGeo={event.location_geo}
+                eventTitle={event.title}
+              />
+            )}
+          </div>
+
           {/* FAQ Section - Centered Outside Grid for Full Width */}
           {event.faq && event.faq.length > 0 && (
             <div className="mt-16">
               <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="backdrop-blur-xl bg-white/90 rounded-3xl p-4 sm:p-8 lg:p-10 border border-white/20">
+                <div className="rm-card p-4 sm:p-8 lg:p-10">
                   {/* FAQ Header - Perfectly Centered */}
                   <div className="text-center mb-8 sm:mb-12">
-                    <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mx-auto">Frequently Asked Questions</h2>
+                    <h2 className="rm-section-title mx-auto">Frequently Asked Questions</h2>
                   </div>
                   
                   {/* FAQ Items Container - Centered */}

@@ -11,8 +11,8 @@ const EventMap: React.FC<EventMapProps> = ({ location, locationGeo, eventTitle }
   // If no coordinates available, show location info only
   if (!locationGeo || !locationGeo.lat || !locationGeo.lng) {
     return (
-      <div className="backdrop-blur-xl bg-white/95 rounded-3xl p-4 md:p-6 border border-white/20">
-        <h3 className="text-xl md:text-2xl font-bold text-slate-900">Event Location</h3>
+      <div className="rm-card p-4 md:p-6">
+        <h3 className="rm-section-title">Event Location</h3>
         <div className="mt-2 h-1 w-16 bg-green-600 rounded-full"></div>
         
         <div className="text-center py-6 md:py-8 mt-4 md:mt-6">
@@ -39,8 +39,8 @@ const EventMap: React.FC<EventMapProps> = ({ location, locationGeo, eventTitle }
   const { lat, lng } = locationGeo;
 
   return (
-    <div className="backdrop-blur-xl bg-white/95 rounded-3xl p-4 md:p-6 border border-white/20">
-      <h3 className="text-xl md:text-2xl font-bold text-slate-900">Event Location</h3>
+    <div className="rm-card p-4 md:p-6">
+      <h3 className="rm-section-title">Event Location</h3>
       <div className="mt-2 h-1 w-16 bg-green-600 rounded-full"></div>
       
       {/* Location Address */}
