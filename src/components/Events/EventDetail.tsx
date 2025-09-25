@@ -168,6 +168,20 @@ const EventDetail: React.FC = () => {
   // Toggle to reveal all images beyond the initial 6
   const [showAllGallery, setShowAllGallery] = React.useState(false);
   
+  // Track mobile viewport to control gallery count
+  const [isMobile, setIsMobile] = React.useState(false);
+  React.useEffect(() => {
+    const mq = window.matchMedia('(max-width: 640px)');
+    const onChange = (e: MediaQueryListEvent) => setIsMobile(e.matches);
+    setIsMobile(mq.matches);
+    if ((mq as any).addEventListener) (mq as any).addEventListener('change', onChange);
+    else (mq as any).addListener(onChange);
+    return () => {
+      if ((mq as any).removeEventListener) (mq as any).removeEventListener('change', onChange);
+      else (mq as any).removeListener(onChange);
+    };
+  }, []);
+  
   // Gallery modal handlers
   const handleGalleryImageClick = (image: string) => {
     setSelectedGalleryImage(image);
@@ -1052,7 +1066,7 @@ const EventDetail: React.FC = () => {
                   {/* Gallery Images */}
                   <div className={`${showAllGallery ? 'max-h-[700px] overflow-y-auto pr-2 custom-scrollbar' : ''}`}>
                     <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6">
-                      {(showAllGallery ? event.events_gallery : event.events_gallery.slice(0, Math.min(10, event.events_gallery.length))).map((image, index) => (
+                      {(showAllGallery ? event.events_gallery : event.events_gallery.slice(0, Math.min(isMobile ? 4 : 10, event.events_gallery.length))).map((image, index) => (
                         <div 
                           key={index} 
                           className="relative group cursor-pointer overflow-hidden rounded-2xl transition-all duration-300 transform hover:scale-105 ring-1 ring-gray-200/50"
@@ -1079,15 +1093,17 @@ const EventDetail: React.FC = () => {
                     </div>
                   </div>
                   
-                  {/* Show more button if there are more than 10 images */}
-                  {event.events_gallery.length > 10 && (
+                  {/* Mobile: if more than 4 images show 'View More'; Desktop: keep threshold 10 */}
+                  {((isMobile ? event.events_gallery.length > 4 : event.events_gallery.length > 10)) && (
                     <div className="mt-6 text-center">
                       <button 
                         aria-expanded={showAllGallery}
                         onClick={() => setShowAllGallery(prev => !prev)}
                         className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-2xl hover:from-blue-600 hover:to-indigo-600 transition-all duration-300 transform hover:scale-105"
                       >
-                        {showAllGallery ? 'Show Less' : `View All ${event.events_gallery.length} Images`}
+                        {showAllGallery 
+                          ? 'Show Less' 
+                          : (isMobile ? 'View More' : `View All ${event.events_gallery.length} Images`)}
                         <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                         </svg>
