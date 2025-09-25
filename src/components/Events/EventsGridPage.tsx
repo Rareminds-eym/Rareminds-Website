@@ -97,7 +97,7 @@ const EventsGridPage: React.FC = () => {
         </AnimatePresence>
         <div className="grid grid-cols-2 gap-4 md:gap-6 lg:gap-8">
           {filteredEvents.map((event, idx) => (
-            <div className="bg-white rounded-xl shadow p-2 md:p-3 flex flex-col min-h-[220px] max-h-[320px] justify-between" style={{ minWidth: 0 }}>
+            <div className="bg-white rounded-xl shadow  md:p-3 flex flex-col min-h-[320px] max-h-[420px] justify-between" style={{ minWidth: 0 }}>
               <EventCard key={event.id || idx} event={event} compact />
             </div>
           ))}
