@@ -58,7 +58,7 @@ const EventFilters: React.FC<EventFiltersProps> = ({ events, onFilteredEvents })
   const hasActiveFilters = searchTerm || selectedStatus !== 'all' || selectedCategory !== 'all' || selectedLocation !== 'all';
 
   return (
-    <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
+    <div className="bg-[#f4f4f4] rounded-xl shadow-lg p-6 mb-8" style={{ minHeight: '570px' }}>
       <div className="flex items-center mb-4">
         <h3 className="text-lg font-semibold text-gray-900 flex items-center">
           <Filter className="w-5 h-5 mr-2" />
@@ -66,77 +66,74 @@ const EventFilters: React.FC<EventFiltersProps> = ({ events, onFilteredEvents })
         </h3>
       </div>
 
-      {/* Search Bar and Filters Row */}
-      <div className="flex flex-col md:flex-row gap-4 mb-4">
-        {/* Search Bar - Reduced Width */}
-        <div className="relative flex-1 md:max-w-md">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-          <input
-            type="text"
-            placeholder="Search events by title, description, or organizer..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-          />
-          {searchTerm && (
-            <button
-              onClick={() => setSearchTerm('')}
-              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
-            >
-              <X className="w-5 h-5" />
-            </button>
-          )}
+      {/* Search Bar - Full Width at Top */}
+      <div className="relative w-full mb-4">
+        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+        <input
+          type="text"
+          placeholder="Search events by title, description, or organizer..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+        />
+        {searchTerm && (
+          <button
+            onClick={() => setSearchTerm('')}
+            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+          >
+            <X className="w-5 h-5" />
+          </button>
+        )}
+      </div>
+
+      {/* Filters - Stacked Vertically */}
+      <div className="flex flex-col gap-4">
+        {/* Status Dropdown */}
+        <div>
+          <select
+            value={selectedStatus}
+            onChange={(e) => setSelectedStatus(e.target.value)}
+            className="w-full py-3 px-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+          >
+            <option value="all">All Events</option>
+            {statuses.map(status => (
+              <option key={status} value={status} className="capitalize">
+                {status}
+              </option>
+            ))}
+          </select>
         </div>
 
-        {/* Filters Row */}
-        <div className="flex flex-wrap gap-3 items-center">
-          {/* Status Dropdown */}
-          <div className="min-w-[140px]">
-            <select
-              value={selectedStatus}
-              onChange={(e) => setSelectedStatus(e.target.value)}
-              className="w-full py-3 px-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
-            >
-              <option value="all">All Events</option>
-              {statuses.map(status => (
-                <option key={status} value={status} className="capitalize">
-                  {status}
-                </option>
-              ))}
-            </select>
-          </div>
+        {/* Category Dropdown */}
+        <div>
+          <select
+            value={selectedCategory}
+            onChange={(e) => setSelectedCategory(e.target.value)}
+            className="w-full py-3 px-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+          >
+            <option value="all">All Categories</option>
+            {categories.map(category => (
+              <option key={category} value={category}>
+                {category}
+              </option>
+            ))}
+          </select>
+        </div>
 
-          {/* Category Dropdown */}
-          <div className="min-w-[140px]">
-            <select
-              value={selectedCategory}
-              onChange={(e) => setSelectedCategory(e.target.value)}
-              className="w-full py-3 px-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
-            >
-              <option value="all">All Categories</option>
-              {categories.map(category => (
-                <option key={category} value={category}>
-                  {category}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          {/* Location Dropdown */}
-          <div className="min-w-[140px]">
-            <select
-              value={selectedLocation}
-              onChange={(e) => setSelectedLocation(e.target.value)}
-              className="w-full py-3 px-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
-            >
-              <option value="all">All Locations</option>
-              {locations.map(location => (
-                <option key={location} value={location}>
-                  {location}
-                </option>
-              ))}
-            </select>
-          </div>
+        {/* Location Dropdown */}
+        <div>
+          <select
+            value={selectedLocation}
+            onChange={(e) => setSelectedLocation(e.target.value)}
+            className="w-full py-3 px-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+          >
+            <option value="all">All Locations</option>
+            {locations.map(location => (
+              <option key={location} value={location}>
+                {location}
+              </option>
+            ))}
+          </select>
         </div>
       </div>
 
@@ -152,6 +149,12 @@ const EventFilters: React.FC<EventFiltersProps> = ({ events, onFilteredEvents })
           </button>
         </div>
       )}
+      <div className='pt-36'>
+      <hr className="my-6 border-gray-300" />
+        <div className="text-center text-gray-600 text-sm font-medium">
+          Showing {typeof window !== 'undefined' && Array.isArray(events) ? (typeof filteredEvents !== 'undefined' ? filteredEvents.length : events.length) : events.length} of {events.length} events
+        </div>
+      </div>
     </div>
   );
 };
