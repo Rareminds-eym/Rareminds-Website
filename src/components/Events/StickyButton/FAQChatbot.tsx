@@ -124,7 +124,7 @@ const FAQChatbot: React.FC<FAQChatbotProps> = ({ isVisible, onClose, eventFAQs, 
               stiffness: 260,
               damping: 20
             }}
-            className="fixed bottom-24 right-6 w-[350px] max-h-[80vh] bg-white shadow-2xl rounded-2xl z-50 overflow-hidden flex flex-col"
+            className="fixed bottom-20 right-4 w-[90vw] max-w-[350px] max-h-[80vh] bg-white shadow-2xl rounded-2xl z-50 overflow-hidden flex flex-col"
           >
             <div className="bg-red-600 p-4 flex items-center justify-between shrink-0">
               <h2 className="text-lg font-semibold text-white">
