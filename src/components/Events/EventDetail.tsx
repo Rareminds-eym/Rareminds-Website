@@ -493,7 +493,7 @@ const EventDetail: React.FC = () => {
       </div>
 
       {/* Modern Floating Navigation - Properly Aligned */}
-      <div className="sticky top-6 z-50">
+      <div className="sticky top-6 z-50 mb-6 sm:mb-0">
         <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
           <div className="flex flex-row justify-between items-center gap-2 sm:gap-0" style={{ zIndex: 10 }}>
             <button
@@ -516,7 +516,7 @@ const EventDetail: React.FC = () => {
       </div>
 
       {/* Main Container with Proper Alignment */}
-      <div className="relative z-10">
+      <div className="relative z-10 mt-8 sm:mt-0">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Hero Section with Modern Banner - Improved Spacing */}
           <div className="mb-12 pt-0 sm:pt-8 sm:mb-16">
