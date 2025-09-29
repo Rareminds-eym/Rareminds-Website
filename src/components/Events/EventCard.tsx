@@ -113,42 +113,6 @@ const EventCard: React.FC<EventCardProps> = ({ event }) => {
           </div>
         </div>
 
-        {/* Countdown Timer */}
-        {(() => {
-          const now = new Date();
-          const eventDate = new Date(event.event_date);
-          const registrationDeadline = event.registration_deadline ? new Date(event.registration_deadline) : null;
-          
-          // Show registration countdown if registration is still open and deadline exists
-          if (registrationDeadline && registrationDeadline > now && event.status === 'upcoming') {
-            return (
-              <div className="mb-4 p-3 bg-gradient-to-r from-orange-50 to-yellow-50 rounded-lg border border-orange-200">
-                <CountdownTimer 
-                  targetDate={event.registration_deadline!}
-                  type="registration"
-                  compact={true}
-                  className=""
-                />
-              </div>
-            );
-          }
-          
-          // Show event countdown if event is upcoming and no registration deadline or registration closed
-          if (eventDate > now && event.status === 'upcoming') {
-            return (
-              <div className="mb-4 p-3 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg border border-blue-200">
-                <CountdownTimer 
-                  targetDate={event.event_date}
-                  type="event"
-                  compact={true}
-                  className=""
-                />
-              </div>
-            );
-          }
-          
-          return null;
-        })()}
 
         {/* Organizer Info */}
         <div className="border-t pt-4">

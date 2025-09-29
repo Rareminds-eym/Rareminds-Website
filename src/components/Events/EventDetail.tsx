@@ -739,29 +739,6 @@ const EventDetail: React.FC = () => {
                                 </span>
                               </div>
 
-                              {(() => {
-                                const now = new Date();
-                                const eventDate = new Date(event.event_date);
-                                const registrationDeadline = event.registration_deadline ? new Date(event.registration_deadline) : null;
-                                if (registrationDeadline && registrationDeadline > now && event.status === 'upcoming') {
-                                  return (
-                                    <div className="mt-4 p-3 bg-gradient-to-r from-orange-50/80 to-yellow-50/80 rounded-2xl border border-orange-200/50">
-                                      <CountdownTimer targetDate={event.registration_deadline!} type="registration" compact={false} className="" />
-                                    </div>
-                                  );
-                                }
-                                if (eventDate > now && event.status === 'upcoming') {
-                                  const isRegistrationClosed = event.registration_status === 'closed' || event.registration_status === 'full' || (event.registration_deadline && new Date(event.registration_deadline) <= now);
-                                  if (isRegistrationClosed || !event.registration_deadline) {
-                                    return (
-                                      <div className="mt-4 p-3 bg-gradient-to-r from-blue-50/80 to-indigo-50/80 rounded-2xl border border-blue-200/50">
-                                        <CountdownTimer targetDate={event.event_date} type="event" compact={false} className="" />
-                                      </div>
-                                    );
-                                  }
-                                }
-                                return null;
-                              })()}
 
                               {(() => {
                                 const parseDeadlineEndOfDay = (dateStr: string): Date => {
@@ -1346,48 +1323,6 @@ const EventDetail: React.FC = () => {
                   );
                 })()}
 
-                {/* Countdown Timer */}
-                {(() => {
-                  const now = new Date();
-                  const eventDate = new Date(event.event_date);
-                  const registrationDeadline = event.registration_deadline ? new Date(event.registration_deadline) : null;
-                  
-                  // Show registration countdown if registration is still open and deadline exists
-                  if (registrationDeadline && registrationDeadline > now && event.status === 'upcoming') {
-                    return (
-                      <div className="mt-6 p-4 bg-gradient-to-r from-orange-50/80 to-yellow-50/80 rounded-2xl border border-orange-200/50">
-                        <CountdownTimer 
-                          targetDate={event.registration_deadline!}
-                          type="registration"
-                          compact={false}
-                          className=""
-                        />
-                      </div>
-                    );
-                  }
-                  
-                  // Show event countdown if event is upcoming and no registration deadline or registration closed
-                  if (eventDate > now && event.status === 'upcoming') {
-                    const isRegistrationClosed = event.registration_status === 'closed' || 
-                      event.registration_status === 'full' || 
-                      (event.registration_deadline && new Date(event.registration_deadline) <= now);
-                      
-                    if (isRegistrationClosed || !event.registration_deadline) {
-                      return (
-                        <div className="mt-6 p-4 bg-gradient-to-r from-blue-50/80 to-indigo-50/80 rounded-2xl border border-blue-200/50">
-                          <CountdownTimer 
-                            targetDate={event.event_date}
-                            type="event"
-                            compact={false}
-                            className=""
-                          />
-                        </div>
-                      );
-                    }
-                  }
-                  
-                  return null;
-                })()}
 
                 {/* Registration Button - Using EXACT SAME LOGIC as Countdown Banner */}
                 {(() => {
