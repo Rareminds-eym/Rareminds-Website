@@ -26,6 +26,7 @@ export interface Event {
   status: 'upcoming' | 'ongoing' | 'completed' | 'cancelled';
   event_banner?: string;
   featured_image?: string;
+  mobile_featured_image?: string;
   event_tags?: string[];
   meta_title: string;
   meta_description: string;

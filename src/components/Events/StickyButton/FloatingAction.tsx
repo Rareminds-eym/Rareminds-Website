@@ -66,28 +66,28 @@ const FloatingActionMenu: React.FC<FloatingActionMenuProps> = ({ currentEvent })
   };
 
   const getItemPosition = (index: number, total: number) => {
-    // Desktop/tablet: place two items at top-left and top-right
+    // Adjusted for bottom-right anchor: fan items upwards toward the left (left/up)
     let radius = 80;
     if (window.innerWidth < 768) radius = 70;
 
     if (total === 2) {
-      // Index 0 (Calendar) -> 45° (top-left)
-      // Index 1 (Chat/WhatsApp) -> 135° (top-right)
-      const angles = [(45 * Math.PI) / 180, (135 * Math.PI) / 180];
+      // Index 0 (Calendar) -> 135° (top-left)
+      // Index 1 (Chat/WhatsApp) -> 90° (straight up)
+      const angles = [(135 * Math.PI) / 180, (90 * Math.PI) / 180];
       const theta = angles[index];
       return {
-        x: -Math.cos(theta) * radius,
+        x: Math.cos(theta) * radius,
         y: -Math.sin(theta) * radius,
       };
     }
 
     // Fallback: evenly distribute over an arc above the FAB
-    const startDeg = 130;
-    const endDeg = 50;
-    const step = total > 1 ? (startDeg - endDeg) / (total - 1) : 0;
-    const theta = ((startDeg - step * index) * Math.PI) / 180;
+    const startDeg = 50;  // Start from top-left relative to right anchor
+    const endDeg = 130;   // to top-right
+    const step = total > 1 ? (endDeg - startDeg) / (total - 1) : 0;
+    const theta = ((startDeg + step * index) * Math.PI) / 180;
     return {
-      x: -Math.cos(theta) * radius,
+      x: -Math.cos(theta) * radius, // Negative to expand left
       y: -Math.sin(theta) * radius,
     };
   };
@@ -202,7 +202,7 @@ const FloatingActionMenu: React.FC<FloatingActionMenuProps> = ({ currentEvent })
                       <motion.div
                         initial={{ opacity: 0, y: 8 }}
                         animate={{ opacity: 1, y: 0 }}
-                        className={`absolute bg-gray-800 text-white px-2 py-1 rounded text-sm whitespace-nowrap invisible group-hover:visible transition-all z-20 pointer-events-none bottom-16 left-1/2 -translate-x-1/2`}
+                        className={`absolute bg-gray-800 text-white px-2 py-1 rounded text-sm whitespace-nowrap invisible group-hover:visible transition-all z-20 pointer-events-none bottom-16 right-0 -translate-x-0`}
                       >
                         {item.label}
                       </motion.div>
