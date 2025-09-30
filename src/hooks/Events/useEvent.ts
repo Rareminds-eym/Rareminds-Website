@@ -54,6 +54,7 @@ export const useEvents = () => {
           status,
           event_banner,
           featured_image,
+          mobile_featured_image,
           event_tags,
           meta_title,
           meta_description,

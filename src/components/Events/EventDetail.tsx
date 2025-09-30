@@ -520,34 +520,51 @@ const EventDetail: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Hero Section with Modern Banner - Improved Spacing */}
           <div className="mb-12 pt-0 sm:pt-8 sm:mb-16">
-            {(event.event_banner || event.featured_image) ? (
+            {(event.event_banner || event.featured_image || event.mobile_featured_image) ? (
               <div className="space-y-6">
                 {/* Responsive Hero Banner (contained, rounded, bg-cover) */}
                 <div
-                  className="relative w-screen left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] sm:left-auto sm:right-auto sm:ml-0 sm:mr-0 sm:w-full rounded-none sm:rounded-3xl overflow-hidden shadow-none sm:shadow-2xl h-[70vh] sm:h-[60vh] lg:h-[70vh] min-h-[320px] bg-cover bg-center bg-no-repeat"
-                  style={{ backgroundImage: `url(${event.event_banner || event.featured_image})` }}
+                  className="relative w-screen left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] sm:left-auto sm:right-auto sm:ml-0 sm:mr-0 sm:w-full rounded-none sm:rounded-3xl overflow-hidden shadow-none sm:shadow-2xl h-[45vh] sm:h-[60vh] lg:h-[70vh] min-h-[300px] max-h-[450px] sm:max-h-none"
+                  style={{
+                    backgroundImage: `url(${
+                      isMobile && event.mobile_featured_image 
+                        ? event.mobile_featured_image 
+                        : event.event_banner || event.featured_image
+                    })`,
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center center',
+                    backgroundRepeat: 'no-repeat',
+                    backgroundAttachment: 'scroll',
+                    // Ensure full coverage on mobile
+                    ...(typeof window !== 'undefined' && window.innerWidth <= 640 ? {
+                      width: '100vw',
+                      minWidth: '100vw',
+                      backgroundSize: 'cover'
+                    } : {})
+                  }}
                 >
-                  {/* Gradient overlay for readability */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+                  {/* Gradient overlay for readability - stronger on mobile */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent sm:from-black/70 sm:via-black/20 sm:to-transparent"></div>
 
                   {/* Watch Teaser - Top Left (if available) */}
                   {event.teaser_video && (
-                    <div className="absolute top-4 left-4 z-20">
+                    <div className="absolute top-3 left-3 sm:top-4 sm:left-4 z-20">
                       <button
                         onClick={() => window.open(event.teaser_video!, '_blank')}
-                        className="flex items-center gap-2 px-4 py-2 bg-red-600/90 hover:bg-red-700/90 text-white rounded-lg font-semibold transition-all duration-300 hover:scale-105 backdrop-blur-sm border border-red-400/30"
+                        className="flex items-center gap-1.5 sm:gap-2 px-2.5 py-1.5 sm:px-4 sm:py-2 bg-red-600/90 hover:bg-red-700/90 text-white rounded-md sm:rounded-lg text-xs sm:text-sm font-semibold transition-all duration-300 hover:scale-105 backdrop-blur-sm border border-red-400/30"
                       >
-                        <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                        <svg className="w-3 h-3 sm:w-4 sm:h-4" fill="currentColor" viewBox="0 0 20 20">
                           <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clipRule="evenodd" />
                         </svg>
-                        Watch Teaser
+                        <span className="hidden sm:inline">Watch Teaser</span>
+                        <span className="sm:hidden">Teaser</span>
                       </button>
                     </div>
                   )}
 
                   {/* Event Title - Bottom Left of Image */}
-                  <div className="absolute bottom-6 left-6">
-                    <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-white leading-[1.1] tracking-tight drop-shadow-lg">
+                  <div className="absolute bottom-4 left-4 right-4 sm:bottom-6 sm:left-6 sm:right-auto">
+                    <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-white leading-tight sm:leading-[1.1] tracking-tight drop-shadow-xl">
                       {event.title || "Event Name"}
                     </h1>
                   </div>
@@ -777,26 +794,26 @@ const EventDetail: React.FC = () => {
                 )}
               </div>
             ) : (
-              <div className="text-center py-20 relative">
-                <div className="backdrop-blur-xl bg-white/60 rounded-3xl p-12 lg:p-16 border border-white/20 max-w-5xl mx-auto">
-                  <div className={`inline-flex items-center px-4 py-2 rounded-2xl text-sm font-semibold mb-8 ${getStatusColor(event.status)}`}>
+              <div className="text-center py-12 sm:py-20 relative px-4 sm:px-0">
+                <div className="backdrop-blur-xl bg-white/60 rounded-2xl sm:rounded-3xl p-6 sm:p-12 lg:p-16 border border-white/20 max-w-5xl mx-auto">
+                  <div className={`inline-flex items-center px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl sm:rounded-2xl text-xs sm:text-sm font-semibold mb-6 sm:mb-8 ${getStatusColor(event.status)}`}>
                     {getStatusIcon(event.status)}
                     <span className="ml-2 capitalize">{event.status}</span>
                   </div>
-                  <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent mb-6 leading-[1.1] tracking-tight">
+                  <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent mb-4 sm:mb-6 leading-tight sm:leading-[1.1] tracking-tight px-2 sm:px-0">
                     {event.title}
                   </h1>
-                  <p className="text-lg md:text-xl text-slate-600 mb-12 font-medium">{event.category}</p>
-                  <div className="flex flex-wrap justify-center gap-8 md:gap-12 text-slate-700">
-                    <div className="flex items-center">
-                      <div className="w-6 h-6 bg-slate-200 rounded-full flex items-center justify-center mr-3">
-                        <Calendar className="w-4 h-4 text-slate-600" />
+                  <p className="text-base sm:text-lg md:text-xl text-slate-600 mb-8 sm:mb-12 font-medium">{event.category}</p>
+                  <div className="flex flex-col sm:flex-row sm:flex-wrap justify-center gap-4 sm:gap-8 md:gap-12 text-slate-700">
+                    <div className="flex items-center justify-center sm:justify-start">
+                      <div className="w-5 h-5 sm:w-6 sm:h-6 bg-slate-200 rounded-full flex items-center justify-center mr-2 sm:mr-3">
+                        <Calendar className="w-3 h-3 sm:w-4 sm:h-4 text-slate-600" />
                       </div>
                       <span className="text-sm md:text-base font-medium">{formatDate(event.event_date)}</span>
                     </div>
-                    <div className="flex items-center">
-                      <div className="w-6 h-6 bg-slate-200 rounded-full flex items-center justify-center mr-3">
-                        <MapPin className="w-4 h-4 text-slate-600" />
+                    <div className="flex items-center justify-center sm:justify-start">
+                      <div className="w-5 h-5 sm:w-6 sm:h-6 bg-slate-200 rounded-full flex items-center justify-center mr-2 sm:mr-3">
+                        <MapPin className="w-3 h-3 sm:w-4 sm:h-4 text-slate-600" />
                       </div>
                       <span className="text-sm md:text-base font-medium">{event.location}</span>
                     </div>
