@@ -21,6 +21,7 @@ const Home = lazy(() => import("./pages/Index"));
 const Blogs = lazy(() => import("./pages/Blogs/index"));
 const Events = lazy(() => import("./pages/Events/index"));
 const EventDetail = lazy(() => import("./components/Events/EventDetail"));
+const EventsGridPage = lazy(() => import("./components/Events/EventsGridPage"));
 const Careers = lazy(() => import("./pages/Careers/index"));
 const ContactPage = lazy(() => import("./pages/Contact/index"));
 const Hackathons = lazy(() => import("./pages/Hackathons/index"));
@@ -130,6 +131,10 @@ const router = createBrowserRouter([
         path: "/events",
         element: withSuspense(Events),
       },
+        {
+          path: "/events/all",
+          element: withSuspense(EventsGridPage),
+        },
       {
         path: "/events/:slug",
         element: withSuspense(EventDetail),
