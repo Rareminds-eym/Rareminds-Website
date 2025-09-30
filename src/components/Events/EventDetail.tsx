@@ -16,6 +16,7 @@ import SingleEventCountdown from './SingleEventCountdown';
 import EventMap from './EventMap';
 import CountdownTimer from '../ui/CountdownTimer';
 import { eventInterestedService } from '../../services/eventInterestedService';
+import { parsePrice } from '../../utils/priceUtils';
 import { 
   Calendar, 
   Clock, 
@@ -473,7 +474,8 @@ const EventDetail: React.FC = () => {
         open={modalOpen} 
         onClose={() => setModalOpen(false)} 
         eventId={event.id ?? ""} 
-        eventName={event.title} 
+        eventName={event.title}
+        eventPrice={parsePrice(event.price)}
       />
       
       <InterestedModal 

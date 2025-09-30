@@ -43,7 +43,6 @@ export const useEvents = () => {
           location,
           location_latitude,
           location_longitude,
-          location_type,
           organizer_name,
           organizer_email,
           organizer_phone,
