@@ -495,7 +495,7 @@ const EventDetail: React.FC = () => {
       </div>
 
       {/* Modern Floating Navigation - Properly Aligned */}
-      <div className="sticky top-6 z-50">
+      <div className="sticky top-6 z-50 mb-6 sm:mb-0">
         <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
           <div className="flex flex-row justify-between items-center gap-2 sm:gap-0" style={{ zIndex: 10 }}>
             <button
@@ -518,7 +518,7 @@ const EventDetail: React.FC = () => {
       </div>
 
       {/* Main Container with Proper Alignment */}
-      <div className="relative z-10">
+      <div className="relative z-10 mt-8 sm:mt-0">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Hero Section with Modern Banner - Improved Spacing */}
           <div className="mb-12 pt-0 sm:pt-8 sm:mb-16">
@@ -741,29 +741,6 @@ const EventDetail: React.FC = () => {
                                 </span>
                               </div>
 
-                              {(() => {
-                                const now = new Date();
-                                const eventDate = new Date(event.event_date);
-                                const registrationDeadline = event.registration_deadline ? new Date(event.registration_deadline) : null;
-                                if (registrationDeadline && registrationDeadline > now && event.status === 'upcoming') {
-                                  return (
-                                    <div className="mt-4 p-3 bg-gradient-to-r from-orange-50/80 to-yellow-50/80 rounded-2xl border border-orange-200/50">
-                                      <CountdownTimer targetDate={event.registration_deadline!} type="registration" compact={false} className="" />
-                                    </div>
-                                  );
-                                }
-                                if (eventDate > now && event.status === 'upcoming') {
-                                  const isRegistrationClosed = event.registration_status === 'closed' || event.registration_status === 'full' || (event.registration_deadline && new Date(event.registration_deadline) <= now);
-                                  if (isRegistrationClosed || !event.registration_deadline) {
-                                    return (
-                                      <div className="mt-4 p-3 bg-gradient-to-r from-blue-50/80 to-indigo-50/80 rounded-2xl border border-blue-200/50">
-                                        <CountdownTimer targetDate={event.event_date} type="event" compact={false} className="" />
-                                      </div>
-                                    );
-                                  }
-                                }
-                                return null;
-                              })()}
 
                               {(() => {
                                 const parseDeadlineEndOfDay = (dateStr: string): Date => {
@@ -1012,9 +989,13 @@ const EventDetail: React.FC = () => {
                               <div className="absolute right-3 top-3 flex flex-col gap-3">
                                 {/* LinkedIn */}
                                 {spk.linkedIn && (
-                                  <div className="w-10 h-10 bg-black rounded-full flex items-center justify-center hover:scale-110 transition-transform cursor-pointer"
-                                       onClick={() => window.open(spk.linkedIn, '_blank')}>
-                                    <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+                                  <div
+                                       className="w-10 h-10 rounded-full flex items-center justify-center hover:scale-110 transition-transform cursor-pointer bg-[#0A66C2] hover:brightness-110 shadow-md"
+                                       onClick={() => window.open(spk.linkedIn, '_blank')}
+                                       aria-label="View LinkedIn profile"
+                                       role="button"
+                                     >
+                                    <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                                       <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
                                     </svg>
                                   </div>
@@ -1344,48 +1325,6 @@ const EventDetail: React.FC = () => {
                   );
                 })()}
 
-                {/* Countdown Timer */}
-                {(() => {
-                  const now = new Date();
-                  const eventDate = new Date(event.event_date);
-                  const registrationDeadline = event.registration_deadline ? new Date(event.registration_deadline) : null;
-                  
-                  // Show registration countdown if registration is still open and deadline exists
-                  if (registrationDeadline && registrationDeadline > now && event.status === 'upcoming') {
-                    return (
-                      <div className="mt-6 p-4 bg-gradient-to-r from-orange-50/80 to-yellow-50/80 rounded-2xl border border-orange-200/50">
-                        <CountdownTimer 
-                          targetDate={event.registration_deadline!}
-                          type="registration"
-                          compact={false}
-                          className=""
-                        />
-                      </div>
-                    );
-                  }
-                  
-                  // Show event countdown if event is upcoming and no registration deadline or registration closed
-                  if (eventDate > now && event.status === 'upcoming') {
-                    const isRegistrationClosed = event.registration_status === 'closed' || 
-                      event.registration_status === 'full' || 
-                      (event.registration_deadline && new Date(event.registration_deadline) <= now);
-                      
-                    if (isRegistrationClosed || !event.registration_deadline) {
-                      return (
-                        <div className="mt-6 p-4 bg-gradient-to-r from-blue-50/80 to-indigo-50/80 rounded-2xl border border-blue-200/50">
-                          <CountdownTimer 
-                            targetDate={event.event_date}
-                            type="event"
-                            compact={false}
-                            className=""
-                          />
-                        </div>
-                      );
-                    }
-                  }
-                  
-                  return null;
-                })()}
 
                 {/* Registration Button - Using EXACT SAME LOGIC as Countdown Banner */}
                 {(() => {

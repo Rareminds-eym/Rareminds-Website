@@ -149,7 +149,7 @@ export const AddToCalendar: React.FC<AddToCalendarProps> = ({ isVisible, onClose
                     initial={{ opacity: 0, scale: 0.8 }}
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.8 }}
-                    className="fixed bottom-40 right-24 z-50 bg-white rounded-xl shadow-2xl p-6 w-[400px]"
+                    className="fixed bottom-24 right-4 z-50 bg-white rounded-xl shadow-2xl p-4 sm:p-6 w-[90vw] max-w-[400px]"
                 >
                     <div className="flex justify-between items-center mb-6">
                         <div className="flex items-center gap-2">

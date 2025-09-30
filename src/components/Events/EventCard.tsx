@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import RegistrationModal from './RegistrationModal';
 import { Event } from '../../types/Events/event';
 import { Calendar, Clock, MapPin, Users, Tag } from 'lucide-react';
 
