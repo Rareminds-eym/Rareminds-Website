@@ -6,6 +6,7 @@ import EventCard from './EventCard';
 import EventFilters from './EventFilters';
 import RegistrationModal from './RegistrationModal';
 import { Calendar, AlertCircle, Loader2, Tag, X, Filter  } from 'lucide-react';
+import { parsePrice } from '../../utils/priceUtils';
 
 const EventsPage: React.FC = () => {
   const { events, loading, error, refetch } = useOptimizedEvents();
@@ -293,6 +294,7 @@ const EventsPage: React.FC = () => {
                       onClose={() => setShowRegistrationModal(false)}
                       eventId={events[current].id ?? ""}
                       eventName={events[current].title ?? ""}
+                      eventPrice={parsePrice(events[current].price)}
                     />
                   )}
                         </div>

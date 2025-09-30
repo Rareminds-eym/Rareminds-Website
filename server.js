@@ -4,12 +4,20 @@ import nodemailer from 'nodemailer';
 import cors from 'cors';
 import path from 'path';
 import fetch from 'node-fetch';  // Add node-fetch import
+import Razorpay from 'razorpay';
+import crypto from 'crypto';
 
 const app = express();
 
 // Middleware
 app.use(cors());
 app.use(express.json());
+
+// Initialize Razorpay
+const razorpay = new Razorpay({
+  key_id: process.env.VITE_RAZORPAY_KEY_ID,
+  key_secret: process.env.RAZORPAY_KEY_SECRET,
+});
 
 // Create nodemailer transporter
 const transporter = nodemailer.createTransport({
@@ -96,6 +104,72 @@ app.post('/send-pdf', async (req, res) => {
   } catch (error) {
     console.error('Error sending email:', error);
     res.status(500).json({ error: 'Failed to send email' });
+  }
+});
+
+// Create Razorpay order
+app.post('/api/create-payment-order', async (req, res) => {
+  try {
+    const { amount, currency, registrationId, eventName } = req.body;
+
+    const options = {
+      amount: amount, // amount in paise
+      currency: currency || 'INR',
+      receipt: `receipt_${registrationId}`,
+      notes: {
+        registrationId,
+        eventName,
+      },
+    };
+
+    const order = await razorpay.orders.create(options);
+    res.json(order);
+  } catch (error) {
+    console.error('Error creating Razorpay order:', error);
+    res.status(500).json({ error: 'Failed to create payment order' });
+  }
+});
+
+// Verify Razorpay payment
+app.post('/api/verify-payment', async (req, res) => {
+  try {
+    const {
+      razorpay_order_id,
+      razorpay_payment_id,
+      razorpay_signature,
+      registrationId,
+    } = req.body;
+
+    // Create signature for verification
+    const body = razorpay_order_id + '|' + razorpay_payment_id;
+    const expectedSignature = crypto
+      .createHmac('sha256', process.env.RAZORPAY_KEY_SECRET)
+      .update(body.toString())
+      .digest('hex');
+
+    if (expectedSignature === razorpay_signature) {
+      // Payment is verified
+      // Here you can update your database to mark payment as successful
+      console.log('Payment verified successfully for registration:', registrationId);
+      
+      res.json({
+        success: true,
+        message: 'Payment verified successfully',
+        paymentId: razorpay_payment_id,
+        orderId: razorpay_order_id,
+      });
+    } else {
+      res.status(400).json({
+        success: false,
+        message: 'Payment verification failed',
+      });
+    }
+  } catch (error) {
+    console.error('Error verifying payment:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Payment verification failed',
+    });
   }
 });
 
