@@ -160,8 +160,20 @@ const EventDetail: React.FC = () => {
   const { events, loading, error, refetch, loadFullEventDetails } = useOptimizedEvents();
   const [modalOpen, setModalOpen] = React.useState(false);
   const [interestedModalOpen, setInterestedModalOpen] = React.useState(false);
+  const [contactModalOpen, setContactModalOpen] = React.useState(false);
   const [fullEventData, setFullEventData] = React.useState<Event | null>(null);
   const [loadingFullDetails, setLoadingFullDetails] = React.useState(false);
+
+  React.useEffect(() => {
+    if (contactModalOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [contactModalOpen]);
   
   // Gallery Modal States
   const [galleryModalOpen, setGalleryModalOpen] = React.useState(false);
@@ -487,12 +499,40 @@ const EventDetail: React.FC = () => {
         onError={handleInterestedError}
       />
 
-      
-      {/* Animated Background Elements */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-20 left-10 w-72 h-72 bg-gradient-to-r from-blue-400/10 to-purple-400/10 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-20 right-10 w-96 h-96 bg-gradient-to-r from-cyan-400/10 to-blue-400/10 rounded-full blur-3xl animate-pulse" style={{animationDelay: '2s'}}></div>
-      </div>
+      {contactModalOpen && (
+        <div className="fixed inset-0 z-[110] flex items-center justify-center px-4 py-6 bg-slate-900/60 backdrop-blur-sm">
+          <div className="absolute inset-0" onClick={() => setContactModalOpen(false)} aria-hidden="true"></div>
+          <div className="relative w-full max-w-2xl mx-auto">
+            <div className="bg-white rounded-3xl shadow-2xl border border-slate-100 overflow-hidden">
+              <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 bg-slate-50/80">
+                <div>
+                  <h2 className="text-xl font-semibold text-slate-900">Send an Enquiry</h2>
+                  <p className="text-sm text-slate-500">We’ll get back to you shortly about {event.title}</p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setContactModalOpen(false)}
+                  className="text-slate-400 hover:text-red-500 transition-colors"
+                  aria-label="Close enquiry form"
+                >
+                  <span className="text-2xl leading-none">×</span>
+                </button>
+              </div>
+              <div className="px-6 py-6">
+                <EventContactForm
+                  eventId={event.id ?? ""}
+                  eventTitle={event.title}
+                  onSuccess={() => toast.success('Enquiry submitted successfully!')}
+                  onError={(error) => toast.error(error)}
+                  onClose={() => setContactModalOpen(false)}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <div className="absolute bottom-20 right-10 w-96 h-96 bg-gradient-to-r from-cyan-400/10 to-blue-400/10 rounded-full blur-3xl animate-pulse" style={{animationDelay: '2s'}}></div>
 
       {/* Modern Floating Navigation - Properly Aligned */}
       <div className="sticky top-6 z-50 mb-6 sm:mb-0">
@@ -520,7 +560,7 @@ const EventDetail: React.FC = () => {
       {/* Main Container with Proper Alignment */}
       <div className="relative z-10 mt-8 sm:mt-0">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Hero Section with Modern Banner - Improved Spacing */}
+        {/* Hero Section with Modern Banner - Improved Spacing */}
           <div className="mb-12 pt-0 sm:pt-8 sm:mb-16">
             {(event.event_banner || event.featured_image || event.mobile_featured_image) ? (
               <div className="space-y-6">
@@ -1412,17 +1452,31 @@ const EventDetail: React.FC = () => {
                   const status = getRegistrationStatus();
                   
                   return (
-                    <button
-                      onClick={status.isClosed ? undefined : () => setModalOpen(true)}
-                      disabled={status.isClosed}
-                      className={`w-full mt-6 font-semibold py-4 rounded-2xl transition-all duration-300 ${
-                        status.isClosed
-                          ? 'bg-gray-400 cursor-not-allowed text-gray-600'
-                          : 'bg-indigo-600 hover:bg-indigo-700 text-white transition-transform active:scale-[0.99]'
-                      }`}
-                    >
-                      {status.buttonText}
-                    </button>
+                    <div className="space-y-3 mt-6">
+                      <button
+                        onClick={status.isClosed ? undefined : () => setModalOpen(true)}
+                        disabled={status.isClosed}
+                        className={`w-full font-semibold py-4 rounded-2xl transition-all duration-300 ${
+                          status.isClosed
+                            ? 'bg-gray-400 cursor-not-allowed text-gray-600'
+                            : 'bg-indigo-600 hover:bg-indigo-700 text-white transition-transform active:scale-[0.99]'
+                        }`}
+                      >
+                        {status.buttonText}
+                      </button>
+
+                      <button
+                        onClick={status.isClosed ? undefined : () => setContactModalOpen(true)}
+                        disabled={status.isClosed}
+                        className={`w-full py-4 font-semibold rounded-2xl transition-all duration-300 ${
+                          status.isClosed
+                            ? 'bg-red-300 cursor-not-allowed text-red-100'
+                            : 'bg-red-600 hover:bg-red-700 text-white shadow-sm active:scale-[0.99]'
+                        }`}
+                      >
+                        Enquiry
+                      </button>
+                    </div>
                   );
                 })()}
               </div>

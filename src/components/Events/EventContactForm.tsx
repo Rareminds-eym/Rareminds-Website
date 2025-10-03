@@ -18,7 +18,9 @@ const eventContactSchema = z.object({
     .min(10, { message: "Phone number must be at least 10 characters" })
     .regex(/^\+?[0-9\- ]{10,}$/, { message: "Please enter a valid phone number (numbers, spaces, hyphens, and + allowed)" })
     .max(20, { message: "Phone number must be less than 20 characters" }),
-  organization: z.string().max(100, { message: "Organization name must be less than 100 characters" }).optional(),
+  organization: z.string()
+    .min(1, { message: "Organization name is required" })
+    .max(100, { message: "Organization name must be less than 100 characters" }),
 }).refine(
   (data) => EventContactService.validateEmail(data.email),
   {
@@ -40,6 +42,7 @@ interface EventContactFormProps {
   eventTitle?: string;
   onSuccess?: () => void;
   onError?: (error: string) => void;
+  onClose?: () => void;
 }
 
 interface Event {
@@ -120,6 +123,12 @@ const EventContactForm: React.FC<EventContactFormProps> = ({
       setFormStatus('success');
       reset();
       onSuccess?.();
+
+      if (onClose) {
+        setTimeout(() => setFormStatus('idle'), 1500);
+        setTimeout(() => onClose(), 1600);
+        return;
+      }
 
       // Reset success message after 5 seconds
       setTimeout(() => {
@@ -274,6 +283,7 @@ const EventContactForm: React.FC<EventContactFormProps> = ({
             label="Organization"
             name="organization"
             placeholder="Company or Institution"
+            required
             icon={<Building2 className="w-4 h-4" />}
           />
         </div>
