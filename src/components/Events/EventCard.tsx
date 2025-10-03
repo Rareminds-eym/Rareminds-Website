@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import RegistrationModal from './RegistrationModal';
 import { Event } from '../../types/Events/event';
 import { Calendar, Clock, MapPin, Users, Tag } from 'lucide-react';
+import compact from 'lodash/compact';
 
 interface EventCardProps {
   event: Event;
@@ -10,7 +11,7 @@ interface EventCardProps {
 }
 
 
-const EventCard: React.FC<EventCardProps> = ({ event }) => {
+const EventCard: React.FC<EventCardProps> = ({ event, compact = false }) => {
   const [modalOpen, setModalOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   
