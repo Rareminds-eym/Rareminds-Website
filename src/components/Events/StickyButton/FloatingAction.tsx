@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Plus, HelpCircle, MessageCircle, Calendar } from 'lucide-react';
-import FAQChatbot from "./FAQChatbot";
+import { Plus, Calendar } from 'lucide-react';
 import { ChatButton } from './ChatButton';
 import { AddToCalendar } from './AddToCalendar';
 import { Event } from '../../../types/Events/event';
@@ -17,9 +16,16 @@ interface FloatingActionMenuProps {
   currentEvent?: Event;
 }
 
+// Minimal WhatsApp icon used for the FAB menu
+const WhatsAppIcon: React.FC<{ size?: number; className?: string }> = ({ size = 24, className }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 48 48" className={className}>
+    <path fill="#40c351" d="M35.176,12.832c-2.98-2.982-6.941-4.625-11.157-4.626c-8.704,0-15.783,7.076-15.787,15.774c-0.001,2.981,0.833,5.883,2.413,8.396l0.376,0.597l-1.595,5.821l5.973-1.566l0.577,0.342c2.422,1.438,5.2,2.198,8.032,2.199h0.006c8.698,0,15.777-7.077,15.78-15.776C39.795,19.778,38.156,15.814,35.176,12.832z"></path>
+    <path fill="#fff" fillRule="evenodd" d="M19.268,16.045c-0.355-0.79-0.729-0.806-1.068-0.82c-0.277-0.012-0.593-0.011-0.909-0.011c-0.316,0-0.83,0.119-1.265,0.594c-0.435,0.475-1.661,1.622-1.661,3.956c0,2.334,1.7,4.59,1.937,4.906c0.237,0.316,3.282,5.259,8.104,7.161c4.007,1.58,4.823,1.266,5.693,1.187c0.87-0.079,2.807-1.147,3.202-2.255c0.395-1.108,0.395-2.057,0.277-2.255c-0.119-0.198-0.435-0.316-0.909-0.554s-2.807-1.385-3.242-1.543c-0.435-0.158-0.751-0.237-1.068,0.238c-0.316,0.474-1.225,1.543-1.502,1.859c-0.277,0.317-0.554,0.357-1.028,0.119c-0.474-0.238-2.002-0.738-3.815-2.354c-1.41-1.257-2.362-2.81-2.639-3.285c-0.277-0.474-0.03-0.731,0.208-0.968c0.213-0.213,0.474-0.554,0.712-0.831c0.237-0.277,0.316-0.475,0.474-0.791c0.158-0.317,0.079-0.594-0.04-0.831C20.612,19.329,19.69,16.983,19.268,16.045z" clipRule="evenodd"></path>
+  </svg>
+);
+
 const FloatingActionMenu: React.FC<FloatingActionMenuProps> = ({ currentEvent }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [showFAQChatbot, setShowFAQChatbot] = useState(false);
   const [showChat, setShowChat] = useState(false);
   const [showAddToCalendar, setShowAddToCalendar] = useState(false);
   const [activeIcon, setActiveIcon] = useState<React.ComponentType<any>>(Plus);
@@ -32,16 +38,10 @@ const FloatingActionMenu: React.FC<FloatingActionMenuProps> = ({ currentEvent })
       onClick: () => setShowAddToCalendar(true),
     },
     {
-      id: 'faq',
-      icon: HelpCircle,
-      label: 'FAQ',
-      onClick: () => {}, 
-    },
-    {
       id: 'chat',
-      icon: MessageCircle,
+      icon: WhatsAppIcon,
       label: 'Live Chat',
-      onClick: () => {}, 
+      onClick: () => {},
     },
   ];
 
@@ -50,19 +50,12 @@ const FloatingActionMenu: React.FC<FloatingActionMenuProps> = ({ currentEvent })
   };
 
   const handleMenuItemClick = (item: MenuItem) => {
-    if (item.id === 'faq') {
-      setShowFAQChatbot(!showFAQChatbot);
-      setShowChat(false);
-      setShowAddToCalendar(false);
-      setActiveIcon(showFAQChatbot ? Plus : HelpCircle);
-    } else if (item.id === 'chat') {
+    if (item.id === 'chat') {
       setShowChat(!showChat);
-      setShowFAQChatbot(false);
       setShowAddToCalendar(false);
-      setActiveIcon(showChat ? Plus : MessageCircle);
+      setActiveIcon(showChat ? Plus : WhatsAppIcon);
     } else if (item.id === 'calendar') {
       setShowAddToCalendar(!showAddToCalendar);
-      setShowFAQChatbot(false);
       setShowChat(false);
       setActiveIcon(showAddToCalendar ? Plus : Calendar);
     } else {
@@ -73,14 +66,29 @@ const FloatingActionMenu: React.FC<FloatingActionMenuProps> = ({ currentEvent })
   };
 
   const getItemPosition = (index: number, total: number) => {
-    const radius = 80;
-    const startAngle = -10; 
-    const angleStep = 80 / (total - 1); 
-    const angle = (startAngle + angleStep * index) * (Math.PI / 100);
-    
+    // Adjusted for bottom-right anchor: fan items upwards toward the left (left/up)
+    let radius = 80;
+    if (window.innerWidth < 768) radius = 70;
+
+    if (total === 2) {
+      // Index 0 (Calendar) -> 135° (top-left)
+      // Index 1 (Chat/WhatsApp) -> 90° (straight up)
+      const angles = [(135 * Math.PI) / 180, (90 * Math.PI) / 180];
+      const theta = angles[index];
+      return {
+        x: Math.cos(theta) * radius,
+        y: -Math.sin(theta) * radius,
+      };
+    }
+
+    // Fallback: evenly distribute over an arc above the FAB
+    const startDeg = 50;  // Start from top-left relative to right anchor
+    const endDeg = 130;   // to top-right
+    const step = total > 1 ? (endDeg - startDeg) / (total - 1) : 0;
+    const theta = ((startDeg + step * index) * Math.PI) / 180;
     return {
-      x: -Math.cos(angle) * radius, 
-      y: -Math.sin(angle) * radius, 
+      x: -Math.cos(theta) * radius, // Negative to expand left
+      y: -Math.sin(theta) * radius,
     };
   };
 
@@ -131,15 +139,9 @@ const FloatingActionMenu: React.FC<FloatingActionMenuProps> = ({ currentEvent })
 
   return (
     <>
-      <FAQChatbot 
-        isVisible={showFAQChatbot} 
-        onClose={() => setShowFAQChatbot(false)}
-        eventFAQs={currentEvent?.faq}
-        eventTitle={currentEvent?.title}
-      />
       <ChatButton isVisible={showChat} onClose={() => setShowChat(false)} />
       <AddToCalendar isVisible={showAddToCalendar} onClose={() => setShowAddToCalendar(false)} currentEvent={currentEvent} />
-      <div className="fixed bottom-7 right-7 md:bottom-10 md:right-16 z-50">
+      <div className="fixed bottom-6 right-4 sm:bottom-8 sm:right-6 md:bottom-10 md:right-16 z-50">
         {/* Menu Items */}
         <AnimatePresence>
           {isOpen && (
@@ -192,19 +194,15 @@ const FloatingActionMenu: React.FC<FloatingActionMenuProps> = ({ currentEvent })
                       whileHover={{ scale: 1.1 }}
                       whileTap={{ scale: 0.9 }}
                       onClick={() => handleMenuItemClick(item)}
-                      className="w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center text-gray-700 hover:bg-gray-50 transition-colors group "
+                      className="w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center text-gray-700 hover:bg-gray-50 transition-colors group relative"
                     >
-                      <IconComponent size={20} />
+                      <IconComponent size={26} />
                       
                       {/* Tooltip */}
                       <motion.div
-                        initial={{ opacity: 0, x: 10 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        className={`absolute bg-gray-800 text-white px-2 py-1 rounded text-sm whitespace-nowrap invisible group-hover:visible transition-all ${
-                          index === menuItems.length - 1 
-                            ? 'bottom-16 right-0 ' 
-                            : 'right-14' 
-                        }`}
+                        initial={{ opacity: 0, y: 8 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className={`absolute bg-gray-800 text-white px-2 py-1 rounded text-sm whitespace-nowrap invisible group-hover:visible transition-all z-20 pointer-events-none bottom-16 right-0 -translate-x-0`}
                       >
                         {item.label}
                       </motion.div>
@@ -227,7 +225,7 @@ const FloatingActionMenu: React.FC<FloatingActionMenuProps> = ({ currentEvent })
             animate={{ rotate: isOpen ? 0 : 0 }}
             transition={{ duration: 0.3, type: "spring", stiffness: 200 }}
           >
-            {React.createElement(activeIcon, { size: 24, className: 'animate-pulse' })}
+            <Plus size={24} className="animate-pulse" />
           </motion.div>
         </motion.button>
 

@@ -16,6 +16,7 @@ interface MinimalEvent {
   registration_status?: 'open' | 'closed' | 'full';
   registration_deadline?: string;
   featured_image?: string;
+  mobile_featured_image?: string;
   slug: string;
   organizer_name: string;
   capacity: number;
@@ -61,6 +62,7 @@ export const useOptimizedEvents = () => {
           price,
           registration_deadline,
           featured_image,
+          mobile_featured_image,
           slug,
           organizer_name,
           capacity
@@ -103,6 +105,7 @@ export const useOptimizedEvents = () => {
         sponsors: [],
         additional_contact_info: '',
         event_banner: event.featured_image,
+        mobile_featured_image: event.mobile_featured_image,
         event_tags: [],
         meta_title: event.title,
         meta_description: '',

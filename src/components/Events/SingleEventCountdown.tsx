@@ -154,23 +154,23 @@ const SingleEventCountdown: React.FC<SingleEventCountdownProps> = ({
   // If registration is closed
   if (!isRegistrationOpen) {
     return (
-      <div className={`bg-gradient-to-r from-gray-100 to-gray-200 rounded-2xl p-8 mb-6 border border-gray-200 ${className}`}>
-        <div className={`flex ${layoutClasses} items-center justify-between gap-6`}>
+      <div className={`bg-gradient-to-r from-gray-100 to-gray-200 rounded-2xl p-4 md:p-8 mb-6 border border-gray-200 ${className}`}>
+        <div className={`flex ${layoutClasses} items-center justify-between gap-4 md:gap-6`}>
           {/* Left: Status */}
           <div className="text-center lg:text-left flex-1">
-            <AlertCircle className="w-12 h-12 text-gray-500 mx-auto lg:mx-0 mb-4" />
-            <p className="text-2xl font-bold text-gray-600 mb-2">Registration Closed</p>
-            <p className="text-gray-500">
+            <AlertCircle className="w-10 h-10 md:w-12 md:h-12 text-gray-500 mx-auto lg:mx-0 mb-3 md:mb-4" />
+            <p className="text-xl md:text-2xl font-bold text-gray-600 mb-1 md:mb-2">Registration Closed</p>
+            <p className="text-sm md:text-base text-gray-500">
               Registration deadline passed on {formatDate(event.registration_deadline)} at 11:59 PM
             </p>
           </div>
           {/* Right: Location pill */}
-          <div className="flex-shrink-0">
-            <div className="bg-gray-300 text-gray-700 px-6 py-3 rounded-full inline-flex items-center gap-3">
-              <MapPin className="w-5 h-5" />
+          <div className="flex-shrink-0 w-full lg:w-auto mt-4 lg:mt-0">
+            <div className="bg-gray-300 text-gray-700 px-4 py-2 md:px-6 md:py-3 rounded-full inline-flex items-center gap-2 md:gap-3 w-full lg:w-auto justify-center">
+              <MapPin className="w-4 h-4 md:w-5 md:h-5" />
               <div className="text-center">
-                <div className="font-bold text-lg">{formatLocation(event.location)}</div>
-                <div className="text-sm opacity-75">Event: {formatDate(event.event_date)}</div>
+                <div className="font-bold text-base md:text-lg">{formatLocation(event.location)}</div>
+                <div className="text-xs md:text-sm opacity-75">Event: {formatDate(event.event_date)}</div>
               </div>
             </div>
           </div>
@@ -180,15 +180,15 @@ const SingleEventCountdown: React.FC<SingleEventCountdownProps> = ({
   }
 
   return (
-    <div className={`rounded-2xl p-6 mb-6 transition-all duration-300 ${className}`}>
-      <div className={`flex ${layoutClasses} items-center justify-between gap-6`}>
+    <div className={`rounded-2xl p-4 md:p-6 mb-6 transition-all duration-300 ${className}`}>
+      <div className={`flex ${layoutClasses} items-center justify-between gap-4 md:gap-6`}>
         
         {/* Left Side - Hurry Up Message */}
         <div className="flex-shrink-0 text-center lg:text-left">
-          <h3 className="text-3xl lg:text-4xl font-extrabold text-[#1b1b1b] mb-1 leading-tight">
+          <h3 className="text-2xl md:text-3xl lg:text-4xl font-extrabold text-[#1b1b1b] mb-1 leading-tight">
             Hurry Up!
           </h3>
-          <p className="text-lg text-[#1b1b1b] font-semibold">
+          <p className="text-base md:text-lg text-[#1b1b1b] font-semibold">
             Register Now
           </p>
         </div>
@@ -196,53 +196,53 @@ const SingleEventCountdown: React.FC<SingleEventCountdownProps> = ({
         {/* Center - Countdown Timer */}
         <div className="flex items-center gap-2 lg:gap-4 flex-wrap justify-center">
           {/* Days */}
-          <div className={`bg-[#F9C802] rounded-[24px] p-5 min-w-[100px] text-center`}>
-            <div className="text-3xl lg:text-4xl font-black text-[#191919] mb-1">
+          <div className={`bg-[#F9C802] rounded-[24px] p-3 md:p-5 min-w-[72px] md:min-w-[100px] text-center`}>
+            <div className="text-2xl md:text-3xl lg:text-4xl font-black text-[#191919] mb-1">
               {timeLeft.days.toString().padStart(2, '0')}
             </div>
-            <div className="text-[10px] lg:text-xs font-extrabold text-[#1b1b1b] uppercase tracking-[0.2em]">
+            <div className="text-[10px] md:text-xs font-extrabold text-[#1b1b1b] uppercase tracking-[0.2em]">
               DAY{timeLeft.days !== 1 ? 'S' : ''}
             </div>
           </div>
 
           {/* Hours */}
-          <div className={`bg-[#F9C802] rounded-[24px] p-5 min-w-[100px] text-center`}>
-            <div className="text-3xl lg:text-4xl font-black text-[#191919] mb-1">
+          <div className={`bg-[#F9C802] rounded-[24px] p-3 md:p-5 min-w-[72px] md:min-w-[100px] text-center`}>
+            <div className="text-2xl md:text-3xl lg:text-4xl font-black text-[#191919] mb-1">
               {timeLeft.hours.toString().padStart(2, '0')}
             </div>
-            <div className="text-[10px] lg:text-xs font-extrabold text-[#1b1b1b] uppercase tracking-[0.2em]">
+            <div className="text-[10px] md:text-xs font-extrabold text-[#1b1b1b] uppercase tracking-[0.2em]">
               HRS
             </div>
           </div>
 
           {/* Minutes */}
-          <div className={`bg-[#F9C802] rounded-[24px] p-5 min-w-[100px] text-center`}>
-            <div className="text-3xl lg:text-4xl font-black text-[#191919] mb-1">
+          <div className={`bg-[#F9C802] rounded-[24px] p-3 md:p-5 min-w-[72px] md:min-w-[100px] text-center`}>
+            <div className="text-2xl md:text-3xl lg:text-4xl font-black text-[#191919] mb-1">
               {timeLeft.minutes.toString().padStart(2, '0')}
             </div>
-            <div className="text-[10px] lg:text-xs font-extrabold text-[#1b1b1b] uppercase tracking-[0.2em]">
+            <div className="text-[10px] md:text-xs font-extrabold text-[#1b1b1b] uppercase tracking-[0.2em]">
               MINS
             </div>
           </div>
 
           {/* Seconds */}
-          <div className={`bg-[#F9C802] rounded-[24px] p-5 min-w-[100px] text-center`}>
-            <div className="text-3xl lg:text-4xl font-black text-[#191919] mb-1">
+          <div className={`bg-[#F9C802] rounded-[24px] p-3 md:p-5 min-w-[72px] md:min-w-[100px] text-center`}>
+            <div className="text-2xl md:text-3xl lg:text-4xl font-black text-[#191919] mb-1">
               {timeLeft.seconds.toString().padStart(2, '0')}
             </div>
-            <div className="text-[10px] lg:text-xs font-extrabold text-[#1b1b1b] uppercase tracking-[0.2em]">
+            <div className="text-[10px] md:text-xs font-extrabold text-[#1b1b1b] uppercase tracking-[0.2em]">
               SECS
             </div>
           </div>
         </div>
 
         {/* Right Side - Location Only */}
-        <div className="flex-shrink-0">
-          <div className="bg-[#4F3DFE] text-white px-6 py-4 rounded-[24px] transform hover:scale-105 transition-all duration-300">
-            <div className="flex items-center gap-3">
-              <MapPin className="w-6 h-6" />
+        <div className="flex-shrink-0 w-full lg:w-auto mt-4 lg:mt-0">
+          <div className="bg-[#4F3DFE] text-white px-4 md:px-6 py-3 md:py-4 rounded-[24px] transform hover:scale-105 transition-all duration-300 w-full lg:w-auto">
+            <div className="flex items-center justify-center lg:justify-start gap-2 md:gap-3">
+              <MapPin className="w-5 h-5 md:w-6 md:h-6" />
               <div className="text-left">
-                <div className="font-extrabold text-lg">{formatLocation(event.location)}</div>
+                <div className="font-extrabold text-base md:text-lg">{formatLocation(event.location)}</div>
                 <div className="text-xs opacity-95 mt-0.5 tracking-wide">{formatEventDate(event.event_date)}</div>
               </div>
             </div>

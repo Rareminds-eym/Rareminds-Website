@@ -18,7 +18,9 @@ const eventContactSchema = z.object({
     .min(10, { message: "Phone number must be at least 10 characters" })
     .regex(/^\+?[0-9\- ]{10,}$/, { message: "Please enter a valid phone number (numbers, spaces, hyphens, and + allowed)" })
     .max(20, { message: "Phone number must be less than 20 characters" }),
-  organization: z.string().max(100, { message: "Organization name must be less than 100 characters" }).optional(),
+  organization: z.string()
+    .min(1, { message: "Organization name is required" })
+    .max(100, { message: "Organization name must be less than 100 characters" }),
 }).refine(
   (data) => EventContactService.validateEmail(data.email),
   {
@@ -40,6 +42,7 @@ interface EventContactFormProps {
   eventTitle?: string;
   onSuccess?: () => void;
   onError?: (error: string) => void;
+  onClose?: () => void;
 }
 
 interface Event {
@@ -56,9 +59,10 @@ const EventContactForm: React.FC<EventContactFormProps> = ({
   onError
 }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [formStatus, setFormStatus] = useState<'idle' | 'success' | 'error'>('idle');
+  const [formStatus, setFormStatus] = useState<'idle' | 'success' | 'error' | 'duplicate'>('idle');
   const [availableEvents, setAvailableEvents] = useState<Event[]>([]);
   const [loadingEvents, setLoadingEvents] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string>('');
 
   const {
     register,
@@ -85,6 +89,17 @@ const EventContactForm: React.FC<EventContactFormProps> = ({
   React.useEffect(() => {
     if (!defaultEventId) {
       loadEvents();
+    }
+  }, [defaultEventId]);
+
+  // Check if user has already submitted for this event
+  React.useEffect(() => {
+    if (defaultEventId) {
+      const submittedEvents = JSON.parse(localStorage.getItem('submittedEventContacts') || '[]');
+      if (submittedEvents.includes(defaultEventId)) {
+        setFormStatus('duplicate');
+        setErrorMessage('You have already submitted a contact request for this event');
+      }
     }
   }, [defaultEventId]);
 
@@ -117,9 +132,22 @@ const EventContactForm: React.FC<EventContactFormProps> = ({
     try {
       await EventContactService.submitEventContact(data);
 
+      // Store successful submission in localStorage
+      const submittedEvents = JSON.parse(localStorage.getItem('submittedEventContacts') || '[]');
+      if (!submittedEvents.includes(data.eventId)) {
+        submittedEvents.push(data.eventId);
+        localStorage.setItem('submittedEventContacts', JSON.stringify(submittedEvents));
+      }
+
       setFormStatus('success');
       reset();
       onSuccess?.();
+
+      if (onClose) {
+        setTimeout(() => setFormStatus('idle'), 1500);
+        setTimeout(() => onClose(), 1600);
+        return;
+      }
 
       // Reset success message after 5 seconds
       setTimeout(() => {
@@ -127,9 +155,24 @@ const EventContactForm: React.FC<EventContactFormProps> = ({
       }, 5000);
     } catch (error) {
       console.error('Error submitting form:', error);
-      setFormStatus('error');
-      const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
-      onError?.(errorMessage);
+      const errorMsg = error instanceof Error ? error.message : 'Unknown error occurred';
+      setErrorMessage(errorMsg);
+      
+      // Check if it's a duplicate submission error
+      if (errorMsg.includes('already submitted')) {
+        setFormStatus('duplicate');
+        
+        // Store duplicate submission attempt in localStorage
+        const submittedEvents = JSON.parse(localStorage.getItem('submittedEventContacts') || '[]');
+        if (!submittedEvents.includes(data.eventId)) {
+          submittedEvents.push(data.eventId);
+          localStorage.setItem('submittedEventContacts', JSON.stringify(submittedEvents));
+        }
+      } else {
+        setFormStatus('error');
+      }
+      
+      onError?.(errorMsg);
     } finally {
       setIsSubmitting(false);
     }
@@ -194,12 +237,22 @@ const EventContactForm: React.FC<EventContactFormProps> = ({
         </div>
       )}
 
+      {formStatus === 'duplicate' && (
+        <div className="mb-4 p-4 bg-amber-50 border-l-4 border-amber-400 rounded-lg flex items-start text-amber-800 animate-fadeIn">
+          <AlertCircle className="w-5 h-5 mr-3 mt-0.5 flex-shrink-0" />
+          <div>
+            <p className="font-semibold text-amber-900">Already Submitted</p>
+            <p className="text-sm text-amber-700 mt-1">You have already submitted a contact request for this event. We'll get back to you soon!</p>
+          </div>
+        </div>
+      )}
+
       {formStatus === 'error' && (
         <div className="mb-4 p-4 bg-red-50 border-l-4 border-red-400 rounded-lg flex items-start text-red-800 animate-fadeIn">
           <AlertCircle className="w-5 h-5 mr-3 mt-0.5 flex-shrink-0" />
           <div>
             <p className="font-semibold text-red-900">Unable to send message</p>
-            <p className="text-sm text-red-700 mt-1">Please check your information and try again. If the problem persists, contact us directly.</p>
+            <p className="text-sm text-red-700 mt-1">{errorMessage || 'Please check your information and try again. If the problem persists, contact us directly.'}</p>
           </div>
         </div>
       )}
@@ -274,6 +327,7 @@ const EventContactForm: React.FC<EventContactFormProps> = ({
             label="Organization"
             name="organization"
             placeholder="Company or Institution"
+            required
             icon={<Building2 className="w-4 h-4" />}
           />
         </div>
@@ -281,10 +335,10 @@ const EventContactForm: React.FC<EventContactFormProps> = ({
         <div className="pt-4">
           <button
             type="submit"
-            disabled={isSubmitting}
+            disabled={isSubmitting || formStatus === 'duplicate'}
             className={`w-full flex items-center justify-center px-4 py-3 font-semibold rounded-lg text-white
               transition-all duration-200 transform hover:translate-y-[-1px] focus:outline-none focus:ring-4 focus:ring-slate-300
-              ${isSubmitting 
+              ${isSubmitting || formStatus === 'duplicate'
                 ? 'bg-slate-400 cursor-not-allowed' 
                 : 'bg-slate-800 hover:bg-slate-900 shadow-lg hover:shadow-xl'
               }`}
@@ -293,6 +347,11 @@ const EventContactForm: React.FC<EventContactFormProps> = ({
               <>
                 <Loader2 className="w-5 h-5 mr-3 animate-spin" />
                 Sending Message...
+              </>
+            ) : formStatus === 'duplicate' ? (
+              <>
+                <CheckCircle className="w-5 h-5 mr-3" />
+                Already Submitted
               </>
             ) : (
               <>

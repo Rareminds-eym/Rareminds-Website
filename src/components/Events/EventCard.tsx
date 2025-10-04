@@ -1,15 +1,32 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import RegistrationModal from './RegistrationModal';
 import { Event } from '../../types/Events/event';
 import { Calendar, Clock, MapPin, Users, Tag } from 'lucide-react';
+import compact from 'lodash/compact';
 
 interface EventCardProps {
   event: Event;
   compact?: boolean;
 }
 
+
 const EventCard: React.FC<EventCardProps> = ({ event, compact = false }) => {
-  // ...existing code...
+  const [modalOpen, setModalOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  
+  // Track mobile viewport to use appropriate image
+  React.useEffect(() => {
+    const mq = window.matchMedia('(max-width: 640px)');
+    const onChange = (e: MediaQueryListEvent) => setIsMobile(e.matches);
+    setIsMobile(mq.matches);
+    if ((mq as any).addEventListener) (mq as any).addEventListener('change', onChange);
+    else (mq as any).addListener(onChange);
+    return () => {
+      if ((mq as any).removeEventListener) (mq as any).removeEventListener('change', onChange);
+      else (mq as any).removeListener(onChange);
+    };
+  }, []);
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-US', {
       year: 'numeric',
@@ -40,12 +57,24 @@ const EventCard: React.FC<EventCardProps> = ({ event, compact = false }) => {
       style={{ textDecoration: 'none' }}
     >
       {/* Event Image */}
-      {event.featured_image && (
-        <div className={`relative ${compact ? 'h-28' : 'h-48'} overflow-hidden`}>
+      {(event.featured_image || event.mobile_featured_image) && (
+        <div className="relative h-40 sm:h-48 overflow-hidden">
           <img
-            src={event.featured_image}
+            src={
+              // Use mobile_featured_image for mobile devices if available, otherwise fallback to featured_image
+              isMobile && event.mobile_featured_image 
+                ? event.mobile_featured_image 
+                : event.featured_image
+            }
             alt={event.title}
-            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+            className="w-full h-full object-cover object-center transition-transform duration-300 group-hover:scale-105"
+            onError={(e) => {
+              // Fallback to featured_image if mobile_featured_image fails to load
+              const target = e.target as HTMLImageElement;
+              if (isMobile && event.mobile_featured_image && target.src === event.mobile_featured_image) {
+                target.src = event.featured_image || '';
+              }
+            }}
           />
           <div className="absolute top-2 right-2">
             <span className={`px-2 py-0.5 rounded-full text-xs font-medium capitalize ${getStatusColor(event.status)}`}>{event.status}</span>
