@@ -192,11 +192,70 @@ serve(async (req) => {
       );
     }
 
+    const paymentDate = new Date().toISOString();
+
+    const { data: existingPayment, error: paymentFetchError } = await supabase
+      .from('payments')
+      .select('amount, payment_amount, total_amount, quantity')
+      .eq('razorpay_order_id', razorpay_order_id)
+      .single();
+
+    if (paymentFetchError || !existingPayment) {
+      console.error("Failed to fetch existing payment record:", paymentFetchError);
+      return new Response(
+        JSON.stringify({ error: "Payment record not found for legacy update" }),
+        {
+          status: 500,
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "POST, OPTIONS",
+            "Access-Control-Allow-Headers": "Content-Type, Authorization, x-client-info, apikey",
+          }
+        }
+      );
+    }
+
+    const resolvedQuantity = existingPayment.quantity ?? 1;
+    const resolvedAmount = existingPayment.amount ?? existingPayment.payment_amount ?? existingPayment.total_amount ?? null;
+    const legacyUpdatePayload: Record<string, unknown> = {
+      payment_id: razorpay_payment_id,
+      payment_date: paymentDate,
+      quantity: resolvedQuantity
+    };
+
+    if (resolvedAmount !== null) {
+      legacyUpdatePayload.payment_amount = resolvedAmount;
+      legacyUpdatePayload.total_amount = resolvedAmount * resolvedQuantity;
+    }
+
+    const { error: paymentLegacyUpdateError } = await supabase
+      .from('payments')
+      .update(legacyUpdatePayload)
+      .eq('razorpay_order_id', razorpay_order_id);
+
+    if (paymentLegacyUpdateError) {
+      console.error("Failed to update legacy payment columns:", paymentLegacyUpdateError);
+      return new Response(
+        JSON.stringify({ error: "Failed to update legacy payment fields" }), 
+        { 
+          status: 500,
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "POST, OPTIONS",
+            "Access-Control-Allow-Headers": "Content-Type, Authorization, x-client-info, apikey",
+          }
+        }
+      );
+    }
+
     return new Response(
       JSON.stringify({ 
         success: true, 
         message: "Payment verified successfully",
-        paymentId: razorpay_payment_id
+        paymentId: razorpay_payment_id,
+        paymentDate
       }), 
       { 
         status: 200,

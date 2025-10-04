@@ -11,7 +11,7 @@ type PaymentModalProps = {
   open: boolean;
   onClose: () => void;
   onSuccess: () => void;
-  registrationId: string;
+  registrationId: number | null;
   eventName: string;
   amount: number; // Amount in rupees
   userDetails: {
@@ -50,6 +50,11 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
   }, [open]);
 
   const handlePayment = async () => {
+    if (registrationId == null) {
+      setError('Registration reference missing. Please close and try again.');
+      return;
+    }
+
     setProcessing(true);
     setError('');
 
@@ -57,7 +62,7 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
       // Create order using Supabase Edge Function
       const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
       const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
-      
+
       const response = await fetch(`${supabaseUrl}/functions/v1/create-payment-order`, {
         method: 'POST',
         headers: {
@@ -66,13 +71,13 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
         },
         body: JSON.stringify({
           registrationId,
-          amount: amount, // Amount in rupees
+          amount, // Amount in rupees
           currency: 'INR',
         }),
       });
 
       if (!response.ok) {
-        const errorData = await response.json();
+        const errorData = await response.json().catch(() => ({}));
         throw new Error(errorData.error || 'Failed to create payment order');
       }
 
@@ -85,7 +90,7 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
         name: 'Rareminds',
         description: `Payment for ${eventName}`,
         order_id: order.orderId,
-        handler: async function (response: any) {
+        handler: async (paymentResult: any) => {
           try {
             // Verify payment using Supabase Edge Function
             const verifyResponse = await fetch(`${supabaseUrl}/functions/v1/verify-payment`, {
@@ -95,21 +100,23 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
                 'Authorization': `Bearer ${supabaseKey}`,
               },
               body: JSON.stringify({
-                razorpay_order_id: response.razorpay_order_id,
-                razorpay_payment_id: response.razorpay_payment_id,
-                razorpay_signature: response.razorpay_signature,
+                razorpay_order_id: paymentResult.razorpay_order_id,
+                razorpay_payment_id: paymentResult.razorpay_payment_id,
+                razorpay_signature: paymentResult.razorpay_signature,
                 registrationId,
               }),
             });
 
-            if (verifyResponse.ok) {
-              onSuccess();
-            } else {
-              const errorData = await verifyResponse.json();
-              setError(errorData.error || 'Payment verification failed. Please contact support.');
+            if (!verifyResponse.ok) {
+              const errorData = await verifyResponse.json().catch(() => ({}));
+              throw new Error(errorData.error || 'Payment verification failed. Please contact support.');
             }
-          } catch (err) {
-            setError('Payment verification failed. Please contact support.');
+
+            onSuccess();
+            setProcessing(false);
+          } catch (verificationError: any) {
+            setError(verificationError?.message || 'Payment verification failed. Please contact support.');
+            setProcessing(false);
           }
         },
         prefill: {
@@ -129,8 +136,8 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
 
       const rzp = new window.Razorpay(options);
       rzp.open();
-    } catch (err) {
-      setError('Failed to initiate payment. Please try again.');
+    } catch (err: any) {
+      setError(err?.message || 'Failed to initiate payment. Please try again.');
       setProcessing(false);
     }
   };

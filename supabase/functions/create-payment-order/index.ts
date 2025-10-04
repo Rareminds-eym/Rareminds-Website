@@ -97,14 +97,15 @@ serve(async (req) => {
     // Create Razorpay order
     const orderData = {
       amount: Math.round(amount * 100), // Convert to paise
-      currency: currency,
+      currency,
       receipt: `reg_${registrationId}_${Date.now()}`,
       notes: {
         registration_id: registrationId.toString(),
-        participant_name: registration.participant_name,
-        event_id: registration.event_id.toString()
+        participant_name: registration.name ?? registration.email ?? 'Unknown',
+        event_id: registration.event_id ? registration.event_id.toString() : undefined,
+        event_name: registration.event_name ?? ''
       }
-    };
+    } as const;
 
     const authHeader = btoa(`${razorpayKeyId}:${razorpayKeySecret}`);
     
@@ -142,6 +143,7 @@ serve(async (req) => {
       .insert({
         registration_id: registrationId,
         razorpay_order_id: razorpayOrder.id,
+        order_id: razorpayOrder.id,
         amount: amount,
         currency: currency,
         status: 'pending'
