@@ -276,20 +276,27 @@ const RegistrationModal: React.FC<RegistrationModalProps> = ({ open, onClose, ev
     e.preventDefault();
     setSubmitError("");
     console.log('Form submitted with eventPrice:', eventPrice);
+    console.log('Form submitted with ticketQuantity:', ticketQuantity);
     console.log('Will require payment?', eventPrice > 0);
     
     if (validate()) {
       setSubmitting(true);
       try {
-        const { data, error } = await supabase.from('event_registrations').insert({
+        const registrationData = {
           event_id: eventId,
           event_name: eventName,
           name,
           email,
           phone,
           organization,
+          quantity: ticketQuantity,
+          total_amount: eventPrice > 0 ? Math.round(eventPrice * 100) : null, // Convert to paise for Razorpay
           payment_status: eventPrice > 0 ? 'pending' : 'not_required'
-        }).select().single();
+        };
+        
+        console.log('🚀 Inserting registration data:', registrationData);
+        
+        const { data, error } = await supabase.from('event_registrations').insert(registrationData).select().single();
         
         if (error) {
           console.error('Registration error:', error);
