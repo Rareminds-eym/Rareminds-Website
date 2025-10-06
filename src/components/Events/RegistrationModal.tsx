@@ -9,10 +9,12 @@ type RegistrationModalProps = {
   onClose: () => void;
   eventId: string;
   eventName: string;
-  eventPrice?: number; // Optional price for paid events
+  eventPrice?: number; // Optional price for paid events (total amount)
+  ticketQuantity?: number; // Number of tickets
+  pricePerTicket?: number; // Price per individual ticket
 };
 
-const RegistrationModal: React.FC<RegistrationModalProps> = ({ open, onClose, eventId, eventName, eventPrice = 0 }) => {
+const RegistrationModal: React.FC<RegistrationModalProps> = ({ open, onClose, eventId, eventName, eventPrice = 0, ticketQuantity = 1, pricePerTicket }) => {
   // Debug logging
   React.useEffect(() => {
     if (open) {
@@ -571,6 +573,8 @@ const RegistrationModal: React.FC<RegistrationModalProps> = ({ open, onClose, ev
         registrationId={registrationId}
         eventName={eventName}
         amount={eventPrice}
+        ticketQuantity={ticketQuantity}
+        pricePerTicket={pricePerTicket}
         userDetails={{
           name,
           email,

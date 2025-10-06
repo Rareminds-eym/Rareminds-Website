@@ -484,10 +484,18 @@ const EventDetail: React.FC = () => {
               
       <RegistrationModal 
         open={modalOpen} 
-        onClose={() => setModalOpen(false)} 
+        onClose={() => {
+          console.log('DEBUG - Raw event.price from database:', event.price);
+          console.log('DEBUG - parsePrice result:', parsePrice(event.price));
+          console.log('DEBUG - quantity:', quantity);
+          console.log('DEBUG - total being sent:', parsePrice(event.price) * quantity);
+          setModalOpen(false);
+        }} 
         eventId={event.id ?? ""} 
         eventName={event.title}
-        eventPrice={parsePrice(event.price)}
+        eventPrice={parsePrice(event.price) * quantity}
+        ticketQuantity={quantity}
+        pricePerTicket={parsePrice(event.price)}
       />
       
       <InterestedModal 

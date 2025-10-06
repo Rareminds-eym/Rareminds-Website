@@ -29,9 +29,9 @@ serve(async (req) => {
   }
 
   try {
-    const { registrationId, amount, currency = "INR" } = await req.json();
+    const { registrationId, amount, currency = "INR", quantity = 1 } = await req.json();
 
-    if (!registrationId || !amount) {
+    if (!registrationId || typeof amount !== "number") {
       return new Response(
         JSON.stringify({ error: "Missing required fields: registrationId, amount" }), 
         { 
@@ -45,6 +45,14 @@ serve(async (req) => {
         }
       );
     }
+
+    const normalizedAmount = Math.max(0, Math.round(amount));
+    const effectiveQuantity = Math.max(1, Math.round(quantity));
+    const totalAmount = normalizedAmount * effectiveQuantity;
+    
+    // Ensure minimum amount is 1 rupee (100 paise) as required by Razorpay
+    const minimumAmount = 1; // ₹1
+    const finalAmount = Math.max(minimumAmount, totalAmount);
 
     // Get Razorpay credentials from environment
     const razorpayKeyId = Deno.env.get("RAZORPAY_KEY_ID");
@@ -74,12 +82,12 @@ serve(async (req) => {
     // Get registration details
     const { data: registration, error: regError } = await supabase
       .from('event_registrations')
-      .select('*')
+      .select('id, event_id, event_name, name, email, payment_amount, payment_currency')
       .eq('id', registrationId)
       .single();
 
     if (regError || !registration) {
-      console.error("Registration not found:", regError);
+      console.error("Registration not found:", regError?.message || regError);
       return new Response(
         JSON.stringify({ error: "Registration not found" }), 
         { 
@@ -96,14 +104,17 @@ serve(async (req) => {
 
     // Create Razorpay order
     const orderData = {
-      amount: Math.round(amount * 100), // Convert to paise
+      amount: Math.round(finalAmount * 100), // Convert total (rupees) to paise, ensuring minimum amount
       currency,
       receipt: `reg_${registrationId}_${Date.now()}`,
       notes: {
         registration_id: registrationId.toString(),
         participant_name: registration.name ?? registration.email ?? 'Unknown',
         event_id: registration.event_id ? registration.event_id.toString() : undefined,
-        event_name: registration.event_name ?? ''
+        event_name: registration.event_name ?? '',
+        quantity: effectiveQuantity.toString(),
+        unit_amount_rupees: normalizedAmount.toString(),
+        total_amount_rupees: finalAmount.toString()
       }
     } as const;
 
@@ -121,8 +132,14 @@ serve(async (req) => {
     if (!razorpayResponse.ok) {
       const errorText = await razorpayResponse.text();
       console.error("Razorpay API error:", errorText);
+      console.error("Razorpay request data:", JSON.stringify(orderData, null, 2));
+      console.error("Razorpay response status:", razorpayResponse.status);
       return new Response(
-        JSON.stringify({ error: "Failed to create payment order" }), 
+        JSON.stringify({ 
+          error: "Failed to create payment order",
+          details: errorText,
+          status: razorpayResponse.status
+        }), 
         { 
           status: 500,
           headers: {
@@ -137,22 +154,31 @@ serve(async (req) => {
 
     const razorpayOrder = await razorpayResponse.json();
 
-    // Store payment record in database
-    const { error: paymentError } = await supabase
-      .from('payments')
-      .insert({
-        registration_id: registrationId,
-        razorpay_order_id: razorpayOrder.id,
-        order_id: razorpayOrder.id,
-        amount: amount,
-        currency: currency,
-        status: 'pending'
-      });
+    // Update registration with order details (only fields that exist)
+    const updateData: any = {
+      payment_status: 'pending',
+      order_id: razorpayOrder.id,
+      payment_id: razorpayOrder.id
+    };
 
-    if (paymentError) {
-      console.error("Failed to store payment record:", paymentError);
+    // Only add fields if they exist in the database
+    if (typeof totalAmount === 'number') {
+      updateData.payment_amount = Math.round(totalAmount * 100); // store in paise
+    }
+    
+    // Update registration with order details
+    const { error: registrationUpdateError } = await supabase
+      .from('event_registrations')
+      .update(updateData)
+      .eq('id', registrationId);
+
+    if (registrationUpdateError) {
+      console.error("Failed to update registration with order details:", registrationUpdateError);
       return new Response(
-        JSON.stringify({ error: "Failed to store payment record" }), 
+        JSON.stringify({ 
+          error: "Failed to update registration",
+          details: registrationUpdateError.message
+        }), 
         { 
           status: 500,
           headers: {
@@ -184,10 +210,13 @@ serve(async (req) => {
       }
     );
 
-  } catch (error) {
+  } catch (error: any) {
     console.error("Unexpected error:", error);
     return new Response(
-      JSON.stringify({ error: "Internal server error" }), 
+      JSON.stringify({ 
+        error: "Internal server error",
+        details: error.message
+      }), 
       { 
         status: 500,
         headers: {
