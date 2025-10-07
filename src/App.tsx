@@ -7,7 +7,6 @@ import LoaderComponent from "@/components/LoaderComponent";
 const Index = lazy(() => import("./pages/Index"));
 const About = lazy(() => import("./pages/Corporate/Recruitment/Index"));
 const Government = lazy(() => import("./pages/Government/Index"));
-const Passport = lazy(() => import("./pages/Corporate/Passport/Index"));
 
 
 const App: React.FC = () => {
@@ -20,7 +19,6 @@ const App: React.FC = () => {
               <Route path="/" element={<Index />} />
               <Route path="/corporate" element={<About />} />
               <Route path="/government" element={<Government />} />
-              <Route path="/passport" element={<Passport />} />
             </Routes>
           </Suspense>
         </DefaultLayout>
