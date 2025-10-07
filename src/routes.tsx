@@ -74,6 +74,8 @@ const CorporateTrainingServicesIndex = lazy(
 
 // Passport page
 const Passport = lazy(() => import("./pages/Corporate/Passport/Index.tsx"));
+const UniversitiesPassport = lazy(() => import("./pages/Universities/Passport/Index.tsx"));
+
 
 const BlogListing = lazy(() => import("./components/universities/Blogs/BlogListing"));
 import CommunicationPersonalityDevelopment from "./components/universities/inst/CommunicationPersonalityDevelopment";
@@ -429,6 +431,10 @@ const router = createBrowserRouter([
         path: "/universities/fdp/blogs/:slug",
         element: withSuspense(InstitutionsBlogDetail),
       },
+      {
+       path: "/universities/skill-passport",
+        element: withSuspense(UniversitiesPassport),
+      }
     ],
   },
   {
