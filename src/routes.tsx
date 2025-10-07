@@ -72,6 +72,8 @@ const CorporateTrainingServicesIndex = lazy(
   () => import("./pages/Corporate/Training/Services/Index.tsx")
 );
 
+// Passport page
+const Passport = lazy(() => import("./pages/Corporate/Passport/Index.tsx"));
 
 const BlogListing = lazy(() => import("./components/universities/Blogs/BlogListing"));
 import CommunicationPersonalityDevelopment from "./components/universities/inst/CommunicationPersonalityDevelopment";
@@ -83,10 +85,7 @@ import InstitutionalValueAdded from "./components/universities/inst/Institutiona
 const NewProjects = lazy(() => import("./components/Projects/project.tsx"));
 const NewProjectDetail = lazy(() => import("./components/Projects/ProjectDetailNew.tsx"));
 
-
 const InstitutionsBlogDetail = lazy(() => import("./components/universities/Blogs/BlogDetail"));
-
-
 
 const withSuspense = (Component: React.LazyExoticComponent<React.FC<{}>>) => (
   <Suspense fallback={<LoaderComponent />}>
@@ -195,6 +194,10 @@ const router = createBrowserRouter([
       {
         path: "/corporate/training/blogs",
         element: withSuspense(Blogs),
+      },
+      {
+        path: "/corporate/skill-passport",
+        element: withSuspense(Passport),
       },
       {
         path: "/corporate/training/blogs/:slug",
