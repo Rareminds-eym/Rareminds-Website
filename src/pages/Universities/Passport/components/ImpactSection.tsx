@@ -58,12 +58,12 @@ export default function ImpactSection() {
   ];
 
   const universities = [
-    { logo: Icon1, name: "Chennai University" },
-    { logo: Icon2, name: "IIT Madras" },
-    { logo: Icon3, name: "Anna University" },
-    { logo: Icon4, name: "Amrita School" },
-    { logo: Icon5, name: "Bharathiar University" },
-    { logo: Icon6, name: "PSG College" },
+    { logo: Icon1, name: "TNSDC" },
+    { logo: Icon2, name: "Tamil Nadu Universities" },
+    { logo: Icon3, name: "Corporate Partner 1" },
+    { logo: Icon4, name: "Corporate Partner 2" },
+    { logo: Icon5, name: "Corporate Partner 3" },
+    { logo: Icon6, name: "Corporate Partner 4" },
   ];
 
   const statsRef = useRef<HTMLDivElement | null>(null);
@@ -94,10 +94,13 @@ export default function ImpactSection() {
         </div>
 
         <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-[#0B2A5A] mb-2">
-          Real Impact. <span className="text-[#FF6B6B]">Real Numbers.</span>
+          📊 Real Impact. <span className="text-[#FF6B6B]">Real Numbers</span>.
         </h2>
         <p className="text-gray-500 text-sm md:text-base mb-16">
-          Transforming employability across India and beyond.
+          Stats: <br />
+          • 14,000+ Students skilled across India <br />
+          • 10+ Universities partnered <br />
+          • 25+ Corporates engaged
         </p>
 
         {/* ✅ Stats with animation on scroll */}

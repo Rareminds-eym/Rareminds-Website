@@ -5,25 +5,25 @@ export const ProblemSection = () => {
   const problems = [
     {
       icon: TrendingDown,
-      title: "70% Lack Job–Ready Skills",
+      title: "70% of Graduates Lack Job–Ready Skills",
       description:
-        "Graduates enter the workforce without the practical skills employers need.",
+        "Students often graduate without the practical skills required by employers.",
       circleBg: "bg-indigo-500",
       iconColor: "text-white",
     },
     {
       icon: Clock,
-      title: "Easy Scheduling & Attendance Tracking",
+      title: "Employers Spend Months Screening Candidates",
       description:
-        "Employers spend countless hours screening candidates without verified credentials.",
+        "Without verified credentials, employers struggle to identify job-ready talent quickly.",
       circleBg: "bg-rose-500",
       iconColor: "text-white",
     },
     {
       icon: EyeOff,
-      title: "Customer Tracking",
+      title: "Students Remain Invisible Despite Talent",
       description:
-        "Students remain unseen despite having valuable skills and training.",
+        "Many talented students don’t get opportunities because their skills are not showcased or verified",
       circleBg: "bg-sky-400",
       iconColor: "text-white",
     },
@@ -37,7 +37,10 @@ export const ProblemSection = () => {
           The <span className="text-[#FF6B6B]">Employability Gap</span> Nobody Talks About
         </h2>
         <p className="text-sm md:text-base text-gray-500 mt-5 mb-20">
-          Degrees alone no longer guarantee jobs.
+          Degrees alone no longer guarantee jobs.  
+70% of graduates lack job-ready skills.  
+Employers spend months filtering candidates.  
+Students remain invisible despite talent.
         </p>
 
         {/* Problem Cards */}
@@ -77,7 +80,7 @@ export const ProblemSection = () => {
             type="button"
             className="inline-flex items-center gap-3 bg-[#FF6B6B] hover:bg-[#ff8787] text-white px-6 py-3 rounded-full font-semibold shadow-md transition-all duration-200"
           >
-            See How It Works <ArrowRight className="h-4 w-4" />
+            Try Skill Passport Free <ArrowRight className="h-4 w-4" />
           </button>
         </div>
       </div>
