@@ -9,7 +9,7 @@ import TestimonialsSection from './components/TestimonialsSection';
 
 const Passport = () => {
     return (
-        <div className="relative w-full">
+        <div className="relative w-full mt-24">
             <HeroSection
                 phoneImage={phoneImage}
             />
@@ -18,7 +18,7 @@ const Passport = () => {
             <ImpactSection />
             <WorkSection />
             <TestimonialsSection />
-            <section className="bg-[#1E2630] py-20 px-6 text-center">
+            <section className="bg-[#F9FAFB] py-20 px-6 text-center">
                 <CTASection />
             </section>
         </div>

@@ -37,10 +37,10 @@ export default function WorkSection() {
 
         {/* Heading */}
         <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold text-[#0B2A5A] mb-3">
-          How Skill Passport <span className="text-[#FF6B6B]">Works.</span>
+          ⚡ How Skill Passport <span className="text-[#FF6B6B]">Works</span>
         </h2>
         <p className="text-sm text-gray-500 mb-16">
-          Follow three simple steps
+          3 Simple Steps to Get Verified and Future-Ready
         </p>
 
         {/* Steps with Arcs */}
