@@ -13,7 +13,9 @@ type PaymentModalProps = {
   onSuccess: () => void;
   registrationId: number | null;
   eventName: string;
-  amount: number; // Amount in rupees
+  amount: number; // Amount in rupees (total)
+  ticketQuantity?: number; // Number of tickets
+  pricePerTicket?: number; // Price per individual ticket
   userDetails: {
     name: string;
     email: string;
@@ -28,6 +30,8 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
   registrationId,
   eventName,
   amount,
+  ticketQuantity = 1,
+  pricePerTicket,
   userDetails
 }) => {
   const [processing, setProcessing] = useState(false);
@@ -55,6 +59,10 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
       return;
     }
 
+    // Ensure minimum amount is ₹1 as required by Razorpay
+    const minimumAmount = 1;
+    const finalAmount = Math.max(minimumAmount, amount);
+
     setProcessing(true);
     setError('');
 
@@ -62,6 +70,14 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
       // Create order using Supabase Edge Function
       const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
       const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+
+      console.log('Creating payment order with:', {
+        registrationId,
+        amount: finalAmount,
+        ticketQuantity,
+        pricePerTicket,
+        currency: 'INR'
+      });
 
       const response = await fetch(`${supabaseUrl}/functions/v1/create-payment-order`, {
         method: 'POST',
@@ -71,14 +87,19 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
         },
         body: JSON.stringify({
           registrationId,
-          amount, // Amount in rupees
+          amount: finalAmount, // Amount in rupees, ensuring minimum amount
           currency: 'INR',
         }),
       });
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.error || 'Failed to create payment order');
+        console.error('Payment order creation failed:', {
+          status: response.status,
+          statusText: response.statusText,
+          errorData
+        });
+        throw new Error(errorData.error || `Failed to create payment order (${response.status})`);
       }
 
       const order = await response.json();
@@ -174,6 +195,15 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
             <span className="text-slate-600">Attendee:</span>
             <span className="font-medium">{userDetails.name}</span>
           </div>
+          {ticketQuantity > 1 && pricePerTicket && (
+            <>
+              <div className="flex justify-between items-center mb-2">
+                <span className="text-slate-600">Tickets:</span>
+                <span className="font-medium">{ticketQuantity} × ₹{pricePerTicket}</span>
+              </div>
+              <div className="border-t border-slate-200 my-2"></div>
+            </>
+          )}
           <div className="flex justify-between items-center text-lg font-bold">
             <span>Total Amount:</span>
             <span className="text-indigo-600">₹{amount}</span>

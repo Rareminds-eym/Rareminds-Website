@@ -158,6 +158,15 @@ export class EventContactService {
         throw new Error(`Failed to submit contact request: ${error.message}`);
       }
 
+      // Send automated emails after successful submission
+      try {
+        await this.sendEnquiryEmails(data);
+        console.log('✅ Event enquiry emails triggered successfully');
+      } catch (emailError) {
+        console.warn('⚠️ Failed to send automated emails, but enquiry was saved:', emailError);
+        // Don't throw the email error - the enquiry was already saved successfully
+      }
+
       return data;
     } catch (error) {
       console.error('Error in submitEventContact:', error);
@@ -225,6 +234,58 @@ export class EventContactService {
   static validatePhone(phone: string): boolean {
     const phoneRegex = /^\+?[0-9\- ]{10,}$/;
     return phoneRegex.test(phone);
+  }
+
+  /**
+   * Send automated emails after enquiry submission
+   */
+  static async sendEnquiryEmails(enquiryData: EventContact): Promise<void> {
+    try {
+      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+      const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+
+      if (!supabaseUrl || !supabaseKey) {
+        throw new Error('Supabase configuration not found');
+      }
+
+      console.log('🚀 Triggering automated email for enquiry:', enquiryData.id);
+
+      const response = await fetch(`${supabaseUrl}/functions/v1/send-event-enquiry-email`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${supabaseKey}`,
+        },
+        body: JSON.stringify({
+          record: {
+            id: enquiryData.id,
+            event_id: enquiryData.event_id,
+            event_title: enquiryData.event_title,
+            name: enquiryData.name,
+            email: enquiryData.email,
+            phone: enquiryData.phone,
+            organization: enquiryData.organization,
+            created_at: enquiryData.created_at
+          }
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(`Email service responded with ${response.status}: ${errorData.message || response.statusText}`);
+      }
+
+      const result = await response.json();
+      console.log('📬 Email service response:', result);
+
+      if (!result.success) {
+        console.warn('⚠️ Email sending had issues:', result.message);
+        // Log but don't throw - partial success is acceptable
+      }
+    } catch (error) {
+      console.error('❌ Failed to trigger automated emails:', error);
+      throw error;
+    }
   }
 
   /**

@@ -9,10 +9,12 @@ type RegistrationModalProps = {
   onClose: () => void;
   eventId: string;
   eventName: string;
-  eventPrice?: number; // Optional price for paid events
+  eventPrice?: number; // Optional price for paid events (total amount)
+  ticketQuantity?: number; // Number of tickets
+  pricePerTicket?: number; // Price per individual ticket
 };
 
-const RegistrationModal: React.FC<RegistrationModalProps> = ({ open, onClose, eventId, eventName, eventPrice = 0 }) => {
+const RegistrationModal: React.FC<RegistrationModalProps> = ({ open, onClose, eventId, eventName, eventPrice = 0, ticketQuantity = 1, pricePerTicket }) => {
   // Debug logging
   React.useEffect(() => {
     if (open) {
@@ -274,20 +276,27 @@ const RegistrationModal: React.FC<RegistrationModalProps> = ({ open, onClose, ev
     e.preventDefault();
     setSubmitError("");
     console.log('Form submitted with eventPrice:', eventPrice);
+    console.log('Form submitted with ticketQuantity:', ticketQuantity);
     console.log('Will require payment?', eventPrice > 0);
     
     if (validate()) {
       setSubmitting(true);
       try {
-        const { data, error } = await supabase.from('event_registrations').insert({
+        const registrationData = {
           event_id: eventId,
           event_name: eventName,
           name,
           email,
           phone,
           organization,
+          quantity: ticketQuantity,
+          total_amount: eventPrice > 0 ? Math.round(eventPrice * 100) : null, // Convert to paise for Razorpay
           payment_status: eventPrice > 0 ? 'pending' : 'not_required'
-        }).select().single();
+        };
+        
+        console.log('🚀 Inserting registration data:', registrationData);
+        
+        const { data, error } = await supabase.from('event_registrations').insert(registrationData).select().single();
         
         if (error) {
           console.error('Registration error:', error);
@@ -571,6 +580,8 @@ const RegistrationModal: React.FC<RegistrationModalProps> = ({ open, onClose, ev
         registrationId={registrationId}
         eventName={eventName}
         amount={eventPrice}
+        ticketQuantity={ticketQuantity}
+        pricePerTicket={pricePerTicket}
         userDetails={{
           name,
           email,

@@ -120,15 +120,14 @@ serve(async (req) => {
     if (!isValidSignature) {
       console.error("Invalid Razorpay signature");
       
-      // Update payment status to failed
+      // Mark registration as failed
       await supabase
-        .from('payments')
+        .from('event_registrations')
         .update({ 
-          status: 'failed',
-          razorpay_payment_id: razorpay_payment_id,
-          failure_reason: 'Invalid signature'
+          payment_status: 'failed',
+          payment_verified_at: new Date().toISOString()
         })
-        .eq('razorpay_order_id', razorpay_order_id);
+        .eq('id', registrationId);
 
       return new Response(
         JSON.stringify({ error: "Payment verification failed" }), 
@@ -144,22 +143,21 @@ serve(async (req) => {
       );
     }
 
-    // Update payment status to completed
-    const { error: paymentUpdateError } = await supabase
-      .from('payments')
-      .update({ 
-        status: 'completed',
-        razorpay_payment_id: razorpay_payment_id,
-        verified_at: new Date().toISOString()
-      })
-      .eq('razorpay_order_id', razorpay_order_id);
+    const completionTimestamp = new Date().toISOString();
 
-    if (paymentUpdateError) {
-      console.error("Failed to update payment status:", paymentUpdateError);
+    // Fetch existing registration details for amount and quantity
+    const { data: registrationData, error: registrationFetchError } = await supabase
+      .from('event_registrations')
+      .select('payment_amount, payment_currency, quantity, event_id, event_name, email')
+      .eq('id', registrationId)
+      .single();
+
+    if (registrationFetchError || !registrationData) {
+      console.error("Failed to fetch registration details:", registrationFetchError);
       return new Response(
-        JSON.stringify({ error: "Failed to update payment status" }), 
-        { 
-          status: 500,
+        JSON.stringify({ error: "Registration not found" }),
+        {
+          status: 404,
           headers: {
             "Content-Type": "application/json",
             "Access-Control-Allow-Origin": "*",
@@ -170,75 +168,31 @@ serve(async (req) => {
       );
     }
 
-    // Update registration payment status
+    const paymentAmountPaise = registrationData.payment_amount ?? null;
+    const paymentAmountRupees = paymentAmountPaise != null ? paymentAmountPaise / 100 : null;
+
+    // Update registration payment status with Razorpay details
     const { error: registrationUpdateError } = await supabase
       .from('event_registrations')
-      .update({ payment_status: 'completed' })
+      .update({
+        payment_status: 'completed',
+        payment_verified_at: completionTimestamp,
+        payment_date: completionTimestamp,
+        razorpay_payment_id: razorpay_payment_id,
+        payment_id: razorpay_payment_id,
+        payment_method: 'razorpay',
+        payment_currency: registrationData.payment_currency ?? 'INR',
+        payment_amount: paymentAmountPaise,
+        total_amount: paymentAmountPaise != null ? paymentAmountPaise / 100 : null,
+        quantity: registrationData.quantity ?? 1
+      })
       .eq('id', registrationId);
 
     if (registrationUpdateError) {
       console.error("Failed to update registration payment status:", registrationUpdateError);
       return new Response(
-        JSON.stringify({ error: "Failed to update registration status" }), 
-        { 
-          status: 500,
-          headers: {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-            "Access-Control-Allow-Methods": "POST, OPTIONS",
-            "Access-Control-Allow-Headers": "Content-Type, Authorization, x-client-info, apikey",
-          }
-        }
-      );
-    }
-
-    const paymentDate = new Date().toISOString();
-
-    const { data: existingPayment, error: paymentFetchError } = await supabase
-      .from('payments')
-      .select('amount, payment_amount, total_amount, quantity')
-      .eq('razorpay_order_id', razorpay_order_id)
-      .single();
-
-    if (paymentFetchError || !existingPayment) {
-      console.error("Failed to fetch existing payment record:", paymentFetchError);
-      return new Response(
-        JSON.stringify({ error: "Payment record not found for legacy update" }),
+        JSON.stringify({ error: "Failed to update registration status" }),
         {
-          status: 500,
-          headers: {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-            "Access-Control-Allow-Methods": "POST, OPTIONS",
-            "Access-Control-Allow-Headers": "Content-Type, Authorization, x-client-info, apikey",
-          }
-        }
-      );
-    }
-
-    const resolvedQuantity = existingPayment.quantity ?? 1;
-    const resolvedAmount = existingPayment.amount ?? existingPayment.payment_amount ?? existingPayment.total_amount ?? null;
-    const legacyUpdatePayload: Record<string, unknown> = {
-      payment_id: razorpay_payment_id,
-      payment_date: paymentDate,
-      quantity: resolvedQuantity
-    };
-
-    if (resolvedAmount !== null) {
-      legacyUpdatePayload.payment_amount = resolvedAmount;
-      legacyUpdatePayload.total_amount = resolvedAmount * resolvedQuantity;
-    }
-
-    const { error: paymentLegacyUpdateError } = await supabase
-      .from('payments')
-      .update(legacyUpdatePayload)
-      .eq('razorpay_order_id', razorpay_order_id);
-
-    if (paymentLegacyUpdateError) {
-      console.error("Failed to update legacy payment columns:", paymentLegacyUpdateError);
-      return new Response(
-        JSON.stringify({ error: "Failed to update legacy payment fields" }), 
-        { 
           status: 500,
           headers: {
             "Content-Type": "application/json",
@@ -255,7 +209,10 @@ serve(async (req) => {
         success: true, 
         message: "Payment verified successfully",
         paymentId: razorpay_payment_id,
-        paymentDate
+        paymentDate: completionTimestamp,
+        amount: paymentAmountRupees,
+        currency: registrationData.payment_currency ?? 'INR',
+        quantity: registrationData.quantity ?? 1
       }), 
       { 
         status: 200,

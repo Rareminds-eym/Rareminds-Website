@@ -6,7 +6,11 @@ ADD COLUMN IF NOT EXISTS payment_status VARCHAR(20) DEFAULT 'not_required',
 ADD COLUMN IF NOT EXISTS payment_id VARCHAR(100),
 ADD COLUMN IF NOT EXISTS order_id VARCHAR(100),
 ADD COLUMN IF NOT EXISTS payment_amount INTEGER,
-ADD COLUMN IF NOT EXISTS payment_date TIMESTAMP WITH TIME ZONE;
+ADD COLUMN IF NOT EXISTS payment_date TIMESTAMP WITH TIME ZONE,
+ADD COLUMN IF NOT EXISTS payment_currency VARCHAR(3) DEFAULT 'INR',
+ADD COLUMN IF NOT EXISTS quantity INTEGER DEFAULT 1,
+ADD COLUMN IF NOT EXISTS total_amount INTEGER,
+ADD COLUMN IF NOT EXISTS payment_verified_at TIMESTAMP WITH TIME ZONE;
 
 -- Add comment to explain payment_status values
 COMMENT ON COLUMN event_registrations.payment_status IS 'Values: not_required, pending, completed, failed';

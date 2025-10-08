@@ -56,7 +56,8 @@ const EventContactForm: React.FC<EventContactFormProps> = ({
   eventId: defaultEventId,
   eventTitle: defaultEventTitle,
   onSuccess,
-  onError
+  onError,
+  onClose
 }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formStatus, setFormStatus] = useState<'idle' | 'success' | 'error' | 'duplicate'>('idle');
