@@ -17,7 +17,8 @@ export default function TestimonialsSection() {
       role: "TechCorp",
     },
     {
-      quote: "It bridges education and employability in one shot.",
+      quote:
+        "It bridges education and employability in one shot.",
       name: "Registrar",
       role: "Partner University",
     },
@@ -65,11 +66,10 @@ export default function TestimonialsSection() {
 
         {/* Heading */}
         <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 mb-16">
-          <span className="text-[#FF6B6B]">Voices</span>{" "}
-          <span className="text-[#0B2A5A]">Behind the Movement.</span>
+          💬 <span className="text-[#FF6B6B]">Voices</span> Behind the Movement
         </h2>
 
-        {/* ✅ MOBILE SLIDER */}
+        {/* MOBILE SLIDER */}
         <div className="block md:hidden relative">
           <div
             key={currentIndex}
@@ -89,7 +89,7 @@ export default function TestimonialsSection() {
             </div>
           </div>
 
-          {/* ✅ Dots only for mobile */}
+          {/* Dots for mobile */}
           <div className="flex justify-center mt-6 space-x-2">
             {testimonials.map((_, idx) => (
               <button
@@ -103,7 +103,7 @@ export default function TestimonialsSection() {
           </div>
         </div>
 
-        {/* ✅ DESKTOP SCROLL (NO DOTS) */}
+        {/* DESKTOP SCROLL */}
         <div className="hidden md:block overflow-hidden">
           <div className="flex gap-8 animate-scroll">
             {desktopTestimonials.map((item, index) => (

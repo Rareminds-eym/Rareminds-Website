@@ -6,34 +6,44 @@ export const CTASection = () => {
     <div>
       <div className="max-w-6xl mx-auto">
         {/* Heading */}
-        <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-4">
-          Your Passport to Jobs – Launching Oct 13 at GITEX
+        <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-black mb-4">
+          Ready to Transform Learning?
         </h2>
 
         {/* Subtext */}
-        <p className="text-base md:text-lg text-gray-300 mb-10">
-          Join the movement redefining how the world looks at skills. <br />
-          From India → to the World.
+        <p className="text-base md:text-lg text-gray-600 mb-10">
+          Join leading institutions already redefining student development with the Rareminds Skill Passport.
         </p>
 
         {/* Buttons */}
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          {/* Left button (white) */}
+          {/* Schedule a Demo */}
+          <Button
+            size="lg"
+            className="bg-[#1E3A5F] hover:bg-[#2A4A6F] text-white px-6 py-5 rounded-full font-semibold flex items-center justify-center"
+            onClick={() => (window.location.href = "/passport/demo")}
+          >
+            <Calendar className="mr-2 h-5 w-5" />
+            Schedule a Demo
+          </Button>
+
+          {/* Talk to Academic Partner Team */}
           <Button
             size="lg"
             className="bg-white text-black hover:bg-gray-100 px-6 py-5 rounded-full font-semibold flex items-center justify-center"
+            onClick={() => (window.location.href = "/passport/contact")}
           >
             <Users className="mr-2 h-5 w-5" />
-            Join the Waitlist
+            Talk to Our Academic Partner Team
           </Button>
 
-          {/* Right button (dark blue) */}
+          {/* Download Institutional Brochure */}
           <Button
             size="lg"
-            className="bg-[#1E3A8A] hover:bg-[#1E40AF] text-white px-6 py-5 rounded-full font-semibold flex items-center justify-center"
+            className="bg-[#FF6B6B] hover:bg-[#ff8787] text-white px-6 py-5 rounded-full font-semibold flex items-center justify-center"
+            onClick={() => (window.location.href = "/passport/brochure")}
           >
-            <Calendar className="mr-2 h-5 w-5" />
-            Book a Demo
+            Download Institutional Brochure
           </Button>
         </div>
       </div>

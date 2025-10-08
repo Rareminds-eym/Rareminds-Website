@@ -13,25 +13,24 @@ type Feature = {
 const FEATURES: Feature[] = [
   {
     Icon: FiShield,
-    title: "Verified Training",
-    description:
-      "All certifications and training programs are verified by trusted institutions.",
+    title: "Verified Training & Certifications",
+    description: "All training and certifications are verified by trusted institutions.",
     circleBg: "bg-rose-100 text-rose-600",
   },
   {
     Icon: AiOutlineQrcode,
-    title: "QR-Enabled",
+    title: "QR-Enabled & Shareable",
     description: "Instantly shareable with a simple scan — no paperwork, no delays.",
     circleBg: "bg-violet-100 text-violet-600",
   },
   {
     Icon: FiCheckCircle,
-    title: "Trusted by All",
-    description:
-      "Universities and recruiters rely on Skill Passport for authentic credentials.",
+    title: "Trusted by Universities & Recruiters",
+    description: "Universities and recruiters rely on Skill Passport for authentic credentials.",
     circleBg: "bg-sky-100 text-sky-600",
   },
 ];
+
 
 export default function SolutionSection() {
   return (
@@ -52,6 +51,10 @@ export default function SolutionSection() {
 
         <p className="text-sm md:text-base text-gray-500 mt-5 mb-20">
           The Skill Passport is your digital identity for employability.
+Verified training & certifications
+QR-enabled, instantly shareable
+rusted by universities & recruiters
+
         </p>
 
         {/* Cards grid */}
@@ -90,7 +93,7 @@ export default function SolutionSection() {
             type="button"
             className="inline-flex items-center justify-center gap-3 px-6 py-3 rounded-full border border-rose-200 text-rose-600 hover:bg-rose-50 transition"
           >
-            See more features
+            Try Skill Passport Free
           </button>
         </div>
       </div>
