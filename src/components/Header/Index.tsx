@@ -47,17 +47,17 @@ const Index: React.FC<HeaderProps> = ({ navbarOpen, setNavbarOpen }) => {
                           <Menu className='rotate-90'/>
                           <span className="font-medium">MENU</span>
                       </button>
-                      <Link
-                          to="/hackathons"
+                      <a
+                          href="https://skillpassport.rareminds.in/"
                           className="bg-black text-white px-6 py-2 rounded-full flex items-center justify-center w-auto relative z-40 font-medium animate-glow group hover:bg-gray-50 hover:text-black transition"
                           style={{ minWidth: 0 }}
                       >
                           <Briefcase size={22} className="mr-2" />
-                          Hackathons
-                          <span className="absolute left-1/2 -bottom-10 -translate-x-1/2 whitespace-nowrap bg-yellow-300 text-black text-xs font-semibold px-2 py-1 rounded shadow opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10">
+                          Skill Passport
+                          {/* <span className="absolute left-1/2 -bottom-10 -translate-x-1/2 whitespace-nowrap bg-yellow-300 text-black text-xs font-semibold px-2 py-1 rounded shadow opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10">
                               Explore exciting hackathons!
-                          </span>
-                      </Link>
+                          </span> */}
+                      </a>
                   </div>
                 )}
             </div>
