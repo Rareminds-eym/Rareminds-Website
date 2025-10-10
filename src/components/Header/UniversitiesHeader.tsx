@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Menu, X, HomeIcon, BookOpen, Briefcase, Users, School, GraduationCap, AlertTriangle, Zap, BookAIcon } from "lucide-react";
-import { motion } from "framer-motion";
+
 
 const verticalOptions = [
   { label: "SDP", path: "/universities", icon: <School size={22} /> },

@@ -1,7 +1,7 @@
 import { Card } from "@/components/ui/card";
 import { ArrowRight, TrendingDown, Clock, EyeOff } from "lucide-react";
 
-export const ProblemSection = () => {
+export const ProblemSection = ({ onDemoClick }: { onDemoClick: () => void }) => {
   const problems = [
     {
       icon: TrendingDown,
@@ -77,6 +77,7 @@ Students remain invisible despite talent.
 
         <div className="flex justify-center">
           <button
+          onClick={onDemoClick}
             type="button"
             className="inline-flex items-center gap-3 bg-[#FF6B6B] hover:bg-[#ff8787] text-white px-6 py-3 rounded-full font-semibold shadow-md transition-all duration-200"
           >

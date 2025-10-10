@@ -1,48 +1,117 @@
-import { FaUserGraduate, FaBriefcase, FaCalendarAlt } from "react-icons/fa";
 
-export default function HeroSection({ phoneImage }: { phoneImage: string }) {
+import { FaCalendarAlt } from "react-icons/fa";
+import { motion, AnimatePresence } from "framer-motion";
+import { useState, useEffect } from "react";
+import desktopBanner from "../../../../../public/passport/banner 1.1.jpg";
+import mobileBanner from "../../../../../public/passport/BANNER 1 MOB.jpg";
+
+const slides = [
+  {
+    desktopImage: desktopBanner,
+    mobileImage: mobileBanner,
+    heading: "More Than Certificates — Credibility Matters",
+  },
+];
+
+const HeroSection = ({ onDemoClick }: { onDemoClick: () => void }) => {
+  const [current, setCurrent] = useState(0);
+  const multipleSlides = slides.length > 1;
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Detect mobile or desktop
+  useEffect(() => {
+    const checkScreen = () => setIsMobile(window.innerWidth < 768);
+    checkScreen();
+    window.addEventListener("resize", checkScreen);
+    return () => window.removeEventListener("resize", checkScreen);
+  }, []);
+
+  // Auto fade only if multiple banners
+  useEffect(() => {
+    if (!multipleSlides) return;
+
+    const interval = setInterval(() => {
+      setCurrent((prev) => (prev + 1) % slides.length);
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, [multipleSlides]);
+
+  const currentImage = isMobile
+    ? slides[current].mobileImage
+    : slides[current].desktopImage;
+
   return (
-    <div className="bg-gradient-to-br from-[#0A1F3D] via-[#0D2847] to-[#0A1F3D] text-white py-10 md:py-16 rounded-3xl m-4 md:m-6 shadow-lg ">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
-
-          {/* Left Section with fade-in / slide-up */}
-          <div className="animate-slide-up">
-            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold mb-4 leading-snug tracking-wider">
-              ✨Empowering Institutions to Build Future-Ready Students
-            </h1>
-            <p className="text-base sm:text-lg md:text-xl text-gray-200 mb-6 tracking-wider">
-             The Rareminds Skill Passport is a verified digital learning identity that captures every student’s growth — from classroom learning to employability readiness.
-            </p>
-
-            <div>
-              <div className="flex flex-col sm:flex-row gap-4">
-                <button
-                  onClick={() => (window.location.href = "/passport/demo")}
-                  className="flex-1 bg-[#1E3A5F] hover:bg-[#2A4A6F] px-6 py-3 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center gap-2"
-                >
-                  <FaCalendarAlt /> Schedule a Demo
-                </button>
-                <button
-                  onClick={() => (window.location.href = 'https://wa.me/1234567890')}
-                  className="flex-1 bg-[#1E3A5F] hover:bg-[#2A4A6F] px-6 py-3 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center gap-2"
-                >
-                <FaBriefcase /> Connect with Us
-                </button>
-              </div>
-            </div>
-          </div>
-
-          {/* Image Section with float effect */}
-          <div className="flex justify-center">
-            <img
-              src={phoneImage}
-              alt="Skill Passport App"
-              className="w-64 sm:w-72 md:w-[26rem] lg:w-[35rem] drop-shadow-2xl"
+    <section className="relative w-auto h-[600px] md:h-[600px] overflow-hidden m-4 md:m-6 rounded-2xl shadow-sm bg-[#EDF2F9]">
+      {/* Banner Image */}
+      <div className="absolute inset-0 z-0">
+        {multipleSlides ? (
+          <AnimatePresence>
+            <motion.img
+              key={currentImage}
+              src={currentImage}
+              alt="Hero Banner"
+              className="w-full h-full object-cover absolute"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 1.2, ease: "easeInOut" }}
             />
-          </div>
+          </AnimatePresence>
+        ) : (
+          <img
+            src={currentImage}
+            alt="Hero Banner"
+            className="w-full h-full object-cover absolute"
+          />
+        )}
+      </div>
+
+      {/* Content */}
+      <div className="relative z-10 max-w-7xl mx-auto px-6 sm:px-10 py-16 sm:py-20 md:py-28">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1.2, ease: "easeInOut" }}
+            className="text-white"
+          >
+            {/* Heading */}
+            <AnimatePresence mode="wait">
+              <motion.h1
+                key={slides[current].heading}
+                className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight mb-6 text-black"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.6, ease: "easeInOut" }}
+              >
+                {slides[current].heading}
+              </motion.h1>
+            </AnimatePresence>
+
+            {/* Buttons */}
+            <div className="flex flex-col sm:flex-row gap-4">
+              <button
+                onClick={onDemoClick}
+                className="bg-[#E32A18] hover:bg-[#cc2515] px-7 py-3 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center gap-2 shadow-lg text-white"
+              >
+                Enquiry <FaCalendarAlt />
+              </button>
+              <button
+                onClick={() =>
+                  (window.location.href = "https://wa.me/1234567890")
+                }
+                className="bg-[#E32A18] hover:bg-[#cc2515] px-7 py-3 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center gap-2 shadow-lg text-white"
+              >
+                Connect with us <FaCalendarAlt />
+              </button>
+            </div>
+          </motion.div>
         </div>
       </div>
-    </div>
+    </section>
   );
-}
+};
+
+export default HeroSection;

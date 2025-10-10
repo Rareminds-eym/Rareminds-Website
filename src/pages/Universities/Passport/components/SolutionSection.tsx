@@ -32,7 +32,7 @@ const FEATURES: Feature[] = [
 ];
 
 
-export default function SolutionSection() {
+export default function SolutionSection({ onDemoClick }: { onDemoClick: () => void }) {
   return (
     <section className="py-20 bg-white">
       <div className="max-w-7xl mx-auto px-6 text-center">
@@ -90,6 +90,7 @@ rusted by universities & recruiters
         {/* CTA pill */}
         <div className="flex justify-center">
           <button
+            onClick={onDemoClick}
             type="button"
             className="inline-flex items-center justify-center gap-3 px-6 py-3 rounded-full border border-rose-200 text-rose-600 hover:bg-rose-50 transition"
           >
