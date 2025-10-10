@@ -99,9 +99,7 @@ const HeroSection = ({ onDemoClick }: { onDemoClick: () => void }) => {
                 Enquiry <FaCalendarAlt />
               </button>
               <button
-                onClick={() =>
-                  (window.location.href = "https://wa.me/1234567890")
-                }
+                onClick={onDemoClick}
                 className="bg-[#E32A18] hover:bg-[#cc2515] px-7 py-3 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center gap-2 shadow-lg text-white"
               >
                 Connect with us <FaCalendarAlt />
