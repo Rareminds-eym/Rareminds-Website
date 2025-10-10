@@ -1,55 +1,87 @@
-import { FaUserGraduate, FaBriefcase, FaCalendarAlt } from "react-icons/fa";
+import { FaCalendarAlt } from "react-icons/fa";
+import { motion, AnimatePresence } from "framer-motion";
+import { useState, useEffect } from "react";
+import banner1 from "../../../../../public/passport/Home-page-banner_1.png";
+import banner2 from "../../../../../public/passport/Home-page-banner_2.png";
 
-export default function HeroSection({ phoneImage }: { phoneImage: string }) {
+const slides = [
+  {
+    image: banner1,
+    heading: "Still Reading Resumes? You’re Already Behind",
+  },
+  {
+    image: banner2,
+    heading: "Stop Guessing. Start Hiring Verified.",
+  },
+];
+
+const HeroSection = ({ onDemoClick }: { onDemoClick: () => void }) => {
+  const [current, setCurrent] = useState(0);
+
+  // Auto fade every 5s
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrent((prev) => (prev + 1) % slides.length);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, []);
+
   return (
-    <div className="bg-gradient-to-br from-[#0A1F3D] via-[#0D2847] to-[#0A1F3D] text-white py-10 md:py-16 rounded-3xl m-4 md:m-6">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
+    <section className="relative w-auto h-[480px] md:h-[600px] overflow-hidden m-4 md:m-6 rounded-2xl shadow-sm bg-[#EDF2F9]">
+      {/* Fade Images */}
+      <div className="absolute inset-0 z-0">
+        <AnimatePresence>
+          <motion.img
+            key={slides[current].image}
+            src={slides[current].image}
+            alt="Hero Banner"
+            className="w-full h-full object-cover absolute"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 1.2, ease: "easeInOut" }}
+          />
+        </AnimatePresence>
+      </div>
 
-          {/* Left Section with fade-in / slide-up */}
-          <div className="animate-slide-up">
-            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold mb-4 leading-snug">
-              ✨India's First Skill Passport – Now Global at GITEX
-            </h1>
-            <p className="text-base sm:text-lg md:text-xl text-gray-200 mb-6">
-              From Classrooms to careers → verified, portable, and future-ready
-              skills at your fingertips
+      {/* Content */}
+      <div className="relative z-10 max-w-7xl mx-auto px-6 sm:px-10 py-16 sm:py-20 md:py-28">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1.2, ease: "easeInOut" }}
+            className="text-white"
+          >
+            {/* Fade Headings */}
+            <AnimatePresence mode="wait">
+              <motion.h1
+                key={slides[current].heading}
+                className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight mb-6 text-black"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.6, ease: "easeInOut" }}
+              >
+                {slides[current].heading}
+              </motion.h1>
+            </AnimatePresence>
+
+            <p className="text-base sm:text-lg md:text-xl mb-8 max-w-xl text-gray-700">
+              From classrooms to careers → verified, portable, and future-ready skills at your fingertips.
             </p>
 
-            <div>
-              <div className="flex flex-col sm:flex-row gap-4">
-                <button
-                  onClick={() => (window.location.href = "/passport/student")}
-                  className="flex-1 bg-[#1E3A5F] hover:bg-[#2A4A6F] px-6 py-3 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center gap-2"
-                >
-                  <FaUserGraduate /> I'm a Student
-                </button>
-                <button
-                  onClick={() => (window.location.href = "/passport/recruiter")}
-                  className="flex-1 bg-[#1E3A5F] hover:bg-[#2A4A6F] px-6 py-3 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center gap-2"
-                >
-                  <FaBriefcase /> I'm a Recruiter
-                </button>
-              </div>
-              <button
-                onClick={() => (window.location.href = "/passport/demo")}
-                className="w-full mt-4 bg-blue-600 hover:bg-blue-700 px-8 py-4 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center gap-2"
-              >
-                <FaCalendarAlt /> Book a Demo
-              </button>
-            </div>
-          </div>
-
-          {/* Image Section with float effect */}
-          <div className="flex justify-center">
-            <img
-              src={phoneImage}
-              alt="Skill Passport App"
-              className="w-64 sm:w-72 md:w-[26rem] lg:w-[35rem] drop-shadow-2xl"
-            />
-          </div>
+            <button
+              onClick={onDemoClick}
+              className="bg-[#E32A18] hover:bg-[#cc2515] px-7 py-3 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center gap-2 shadow-lg text-white"
+            >
+              <FaCalendarAlt /> Enquiry
+            </button>
+          </motion.div>
         </div>
       </div>
-    </div>
+    </section>
   );
-}
+};
+
+export default HeroSection;

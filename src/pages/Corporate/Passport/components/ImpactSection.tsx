@@ -14,7 +14,11 @@ interface CounterProps {
   duration?: number;
 }
 
-const Counter: React.FC<CounterProps> = ({ target, suffix = "", duration = 1500 }) => {
+const Counter: React.FC<CounterProps> = ({
+  target,
+  suffix = "",
+  duration = 1500,
+}) => {
   const [count, setCount] = useState(0);
   const startRef = useRef<number | null>(null);
   const rafRef = useRef<number | null>(null);
@@ -43,18 +47,18 @@ const Counter: React.FC<CounterProps> = ({ target, suffix = "", duration = 1500 
   }, [target, duration]);
 
   return (
-    <span className="text-4xl md:text-5xl font-extrabold text-[#0B2A5A]">
+    <span className="text-4xl md:text-5xl font-extrabold text-[#000000]">
       {count.toLocaleString()}
-      <span className="text-[#FF6B6B]">{suffix}</span>
+      <span className="text-[#E32A18]">{suffix}</span>
     </span>
   );
 };
 
 export default function ImpactSection() {
   const stats = [
-    { number: 14000, suffix: "+", label: "Students Skilled Across India" },
+    { number: 145000, suffix: "+", label: "Students Skilled Across India" },
     { number: 10, suffix: "+", label: "Universities Partnered" },
-    { number: 25, suffix: "+", label: "Corporates Engaged" },
+    { number: 52, suffix: "+", label: "Corporates Engaged" },
   ];
 
   const universities = [
@@ -84,23 +88,24 @@ export default function ImpactSection() {
   }, []);
 
   return (
-    <section className="py-20 bg-white">
+    <section className="py-20">
       <div className="max-w-6xl mx-auto px-6 text-center">
-
+        {/* Top Icon */}
         <div className="flex justify-center mb-6">
-          <div className="bg-black w-12 h-12 rounded-2xl flex items-center justify-center">
+          <div className="bg-[#000000] w-12 h-12 rounded-2xl flex items-center justify-center">
             <LineChart className="w-6 h-6 text-white" />
           </div>
         </div>
 
-        <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-[#0B2A5A] mb-2">
-          Real Impact. <span className="text-[#FF6B6B]">Real Numbers.</span>
+        {/* Heading */}
+        <h2 className="text-3xl md:text-4xl font-extrabold text-[#000000] mb-2">
+          Real Impact. <span className="text-[#E32A18]">Real Numbers.</span>
         </h2>
         <p className="text-gray-500 text-sm md:text-base mb-16">
           Transforming employability across India and beyond.
         </p>
 
-        {/* ✅ Stats with animation on scroll */}
+        {/* Stats with animation on scroll */}
         <div
           ref={statsRef}
           className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-6 mb-20"
@@ -109,16 +114,18 @@ export default function ImpactSection() {
             stats.map((stat, idx) => (
               <div key={idx} className="flex flex-col items-center">
                 <Counter target={stat.number} suffix={stat.suffix} />
-                <p className="mt-2 text-sm md:text-base text-gray-600">{stat.label}</p>
+                <p className="mt-2 text-sm md:text-base text-gray-600">
+                  {stat.label}
+                </p>
               </div>
             ))}
         </div>
 
-        <h3 className="text-2xl font-bold text-gray-900 mb-10">
+        {/* Universities */}
+        <h3 className="text-2xl font-bold text-[#000000] mb-10">
           Trusted by Leading Institutions
         </h3>
 
-        {/* ✅ Auto-Slider for ALL devices */}
         <div className="relative overflow-hidden py-6">
           <div className="flex gap-10 animate-marquee whitespace-nowrap">
             {[...universities, ...universities].map((uni, idx) => (

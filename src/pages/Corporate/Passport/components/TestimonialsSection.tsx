@@ -6,25 +6,79 @@ export default function TestimonialsSection() {
   const testimonials = [
     {
       quote:
-        "With my Skill Passport, recruiters noticed my projects instantly. It gave me confidence to apply anywhere.",
-      name: "Priya",
-      role: "B.Sc. Student",
+        "The session was informative and well-structured. I appreciated the use of real-life examples and how doubts were addressed clearly. A little more time for interactive discussions or Q&A would make it even better. Thank you!",
+      name: "K. Yuvaraj",
+      role: "Madurai Kamaraj University",
     },
     {
       quote:
-        "Filtering job-ready candidates has never been faster. Skill Passport saves us weeks of screening.",
-      name: "HR Head",
-      role: "TechCorp",
+        "session was clear and engaging. I appreciated the practical examples and how doubts were addressed patiently. Keep up the great work!",
+      name: "Priya Rajnarayanan",
+      role: "Bharathiar University",
     },
     {
-      quote: "It bridges education and employability in one shot.",
-      name: "Registrar",
-      role: "Partner University",
+      quote:
+        "I truly appreciate the effort you put into making us understand each topic. I sincerely thank you for your guidance and support during the Naan Mudhalvan program.",
+      name: "Abdul Azeez",
+      role: "Manonmaniam Sundaranar University",
+    },
+    {
+      quote:
+        "The trainer explained the topic in a clear and simple way, which made it easy to understand.",
+      name: "Jeevanandha Aadhina R.",
+      role: "Periyar University",
+    },
+    {
+      quote:
+        "The trainer conducted the session in a clear and well-structured manner, making the concepts easy to understand with practical examples. The explanations were interactive and engaging, which helped in maintaining interest throughout the class. Doubts were addressed patiently, and the trainer ensured that everyone was able to follow the topics. Overall, the session was very informative and useful for gaining a better understanding of Good Manufacturing Practices",
+      name: "Poovarasan",
+      role: "Bharathiar University",
+    },
+    {
+      quote:
+        "The trainer explained the topics clearly and was very patient in addressing questions. It would be helpful if more practical examples or case studies could be included to enhance understanding.",
+      name: "Muthu Keerthi",
+      role: "Madurai Kamaraj University",
+    },
+    {
+      quote:
+        "Amazing teacher. Patience and explanations make complex topics so much easier to understand.",
+      name: "Reshma Devi",
+      role: "Madurai Kamaraj University",
+    },
+    {
+      quote:
+        "The trainer conducted the session in a clear and well-structured manner, making the concepts easy to understand with practical examples. The explanations were interactive and engaging, which helped in maintaining interest throughout the class.",
+      name: "Mothishwaran S",
+      role: "Periyar University",
+    },
+    {
+      quote:
+        "The trainer's explanations were clear and concise making complex topics easier to understand.",
+      name: "Vishalini Alagusokkan",
+      role: "Manonmaniam Sundaranar University",
+    },
+    {
+      quote:
+        "Great session on product recalls and food safety regulations! The examples and case studies really helped illustrate the key points.",
+      name: "Delina",
+      role: "Bharathidasan University",
+    },
+    {
+      quote:
+        "The trainer explained the concepts clearly with practical examples, which made learning easy and useful.",
+      name: "Kousalya",
+      role: "Thiruvalluvar University",
+    },
+    {
+      quote:
+        "1. The trainer explained every concept clearly and made learning easy. 2. Sessions were engaging, interactive, and well-structured. 3. They encouraged questions and patiently cleared all doubts. 4. Real-life examples helped us understand the topics better. 5. Overall, a very knowledgeable and supportive trainer.",
+      name: "Ramesh Kanna",
+      role: "Thiruvalluvar University",
     },
   ];
 
   const desktopTestimonials = [...testimonials, ...testimonials];
-
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
 
@@ -53,9 +107,8 @@ export default function TestimonialsSection() {
   }, [isMobile]);
 
   return (
-    <section className="py-20 bg-white">
+    <section className="py-20 bg-[#F9FAFB]">
       <div className="max-w-7xl mx-auto px-6 text-center">
-
         {/* Top Icon */}
         <div className="flex justify-center mb-6">
           <div className="bg-black rounded-2xl w-12 h-12 flex items-center justify-center shadow-sm">
@@ -65,11 +118,11 @@ export default function TestimonialsSection() {
 
         {/* Heading */}
         <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 mb-16">
-          <span className="text-[#FF6B6B]">Voices</span>{" "}
-          <span className="text-[#0B2A5A]">Behind the Movement.</span>
+          <span className="text-[#E32A18]">Voices</span>{" "}
+          <span className="text-[#000000]">Behind the Movement.</span>
         </h2>
 
-        {/* ✅ MOBILE SLIDER */}
+        {/* MOBILE SLIDER */}
         <div className="block md:hidden relative">
           <div
             key={currentIndex}
@@ -89,21 +142,21 @@ export default function TestimonialsSection() {
             </div>
           </div>
 
-          {/* ✅ Dots only for mobile */}
+          {/* Dots only for mobile */}
           <div className="flex justify-center mt-6 space-x-2">
             {testimonials.map((_, idx) => (
               <button
                 key={idx}
                 onClick={() => setCurrentIndex(idx)}
                 className={`w-3 h-3 rounded-full transition-all ${
-                  idx === currentIndex ? "bg-[#FF6B6B] scale-110" : "bg-gray-300"
+                  idx === currentIndex ? "bg-[#E32A18] scale-110" : "bg-gray-300"
                 }`}
               />
             ))}
           </div>
         </div>
 
-        {/* ✅ DESKTOP SCROLL (NO DOTS) */}
+        {/* DESKTOP SCROLL */}
         <div className="hidden md:block overflow-hidden">
           <div className="flex gap-8 animate-scroll">
             {desktopTestimonials.map((item, index) => (
