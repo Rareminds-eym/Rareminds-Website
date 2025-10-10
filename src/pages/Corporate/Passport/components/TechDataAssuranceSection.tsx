@@ -38,13 +38,13 @@ const FEATURES: Feature[] = [
     Icon: Cloud,
     title: "Scalable, Cloud-Native Infrastructure",
     description:
-      "Powered by a cloud-first architecture, Skill Passport scales effortlessly from small cohorts to large state-level implementations.Built for reliability, uptime, and speed — it supports thousands of concurrent users without compromising performance.",
+      "Powered by a cloud-first architecture, Skill Passport scales effortlessly from small cohorts to large state-level implementations. Built for reliability, uptime, and speed — it supports thousands of concurrent users without compromising performance.",
   },
   {
     Icon: BarChart3,
     title: "Transparent Analytics & Audit Trails",
     description:
-      "Every action — from assessment upload to credential issue — is logged, auditable, and accessible via dashboards.This transparency helps organizations stay compliance-ready for internal audits, CSR reporting, or government reviews.",
+      "Every action — from assessment upload to credential issue — is logged, auditable, and accessible via dashboards. This transparency helps organizations stay compliance-ready for internal audits, CSR reporting, or government reviews.",
   },
   {
     Icon: Plug,

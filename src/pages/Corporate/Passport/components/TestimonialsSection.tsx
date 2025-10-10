@@ -48,7 +48,7 @@ export default function TestimonialsSection() {
     },
     {
       quote:
-        "The trainer conducted the session in a clear and well-structured manner, making the concepts easy to understand with practical examples. The explanations were interactive and engaging, which helped in maintaining interest throughout the class.",
+        "The trainer conducted the session in a clear and well-structured manner, making the concepts easy to understand with practical examples. The explanations were interactive and engaging, which helped in maintaining interest throughout the class. Doubts were addressed patiently, and the trainer ensured that everyone was able to follow the topics. Overall, the session was very informative and useful for gaining a better understanding of Good Manufacturing Practices.",
       name: "Mothishwaran S",
       role: "Periyar University",
     },
