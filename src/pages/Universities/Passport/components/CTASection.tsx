@@ -1,7 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { Users, Calendar } from "lucide-react";
 
-export const CTASection = () => {
+
+export const CTASection = ({ onDemoClick }: { onDemoClick: () => void }) => {
   return (
     <div>
       <div className="max-w-6xl mx-auto">
@@ -21,7 +22,8 @@ export const CTASection = () => {
           <Button
             size="lg"
             className="bg-[#1E3A5F] hover:bg-[#2A4A6F] text-white px-6 py-5 rounded-full font-semibold flex items-center justify-center"
-            onClick={() => (window.location.href = "/passport/demo")}
+            // onClick={() => (window.location.href = "/passport/demo")}
+            onClick={onDemoClick}
           >
             <Calendar className="mr-2 h-5 w-5" />
             Schedule a Demo
