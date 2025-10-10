@@ -1,42 +1,32 @@
-import { Button } from "@/components/ui/button";
 import { Users, Calendar } from "lucide-react";
 
-export const CTASection = () => {
+export const CTASection = ({ onDemoClick, onWaitlistClick }: { onDemoClick: () => void, onWaitlistClick: () => void }) => {
   return (
-    <div>
-      <div className="max-w-6xl mx-auto">
-        {/* Heading */}
-        <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-4">
-          Your Passport to Jobs – Launching Oct 13 at GITEX
+    <section className="py-20 px-6 text-center">
+      <div className="max-w-7xl mx-auto">
+        <h2 className="text-2xl md:text-4xl font-bold text-[#000000] mb-4">
+          Talent isn't missing — it's just not mapped. The Rareminds Skill Passport changes that.
         </h2>
 
-        {/* Subtext */}
-        <p className="text-base md:text-lg text-gray-300 mb-10">
-          Join the movement redefining how the world looks at skills. <br />
-          From India → to the World.
-        </p>
+        <p className="text-base md:text-lg text-gray-600 mb-10">Launching Oct 13 at GITEX</p>
 
-        {/* Buttons */}
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          {/* Left button (white) */}
-          <Button
-            size="lg"
-            className="bg-white text-black hover:bg-gray-100 px-6 py-5 rounded-full font-semibold flex items-center justify-center"
-          >
+          <button 
+          onClick={onWaitlistClick}
+          className="bg-white border-2 border-[#000000] text-[#000000] hover:bg-gray-100 px-6 py-5 rounded-full font-semibold flex items-center justify-center transition-all">
             <Users className="mr-2 h-5 w-5" />
             Join the Waitlist
-          </Button>
+          </button>
 
-          {/* Right button (dark blue) */}
-          <Button
-            size="lg"
-            className="bg-[#1E3A8A] hover:bg-[#1E40AF] text-white px-6 py-5 rounded-full font-semibold flex items-center justify-center"
+          <button
+            onClick={onDemoClick}
+            className="bg-[#E32A18] hover:bg-[#C41F0D] text-white px-6 py-5 rounded-full font-semibold flex items-center justify-center transition-all"
           >
             <Calendar className="mr-2 h-5 w-5" />
             Book a Demo
-          </Button>
+          </button>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
