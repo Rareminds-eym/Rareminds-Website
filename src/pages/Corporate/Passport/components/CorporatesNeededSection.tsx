@@ -5,7 +5,7 @@ const benefits = [
   {
     Icon: Eye,
     title: "Talent Visibility at Every Level",
-    subtitle: "See workforce skills in real time.",
+    subtitle: "See your workforce capabilities in real time.",
     description:
       "The Skill Passport converts every employee’s training, performance, and project data into a live skill map — giving leaders instant visibility into who’s ready, who’s learning, and where the gaps lie.",
   },
@@ -102,12 +102,12 @@ const CorporatesNeededSection = ({
           </div>
 
           {/* Title */}
-          <h2 className="text-3xl md:text-4xl font-extrabold text-[#000000] leading-tight mb-2">
+          <h2 className="text-3xl md:text-4xl font-extrabold text-[#000000] leading-tight mb-4">
             Why <span className="text-[#E32A18]">Corporates</span> Need It
           </h2>
 
-          <p className="text-gray-500 text-sm md:text-base max-w-2xl mx-auto">
-            In today’s workplace, skills — not tenure or certificates — define competitiveness.
+          <p className="text-gray-500 text-sm md:text-base max-w-7xl mx-auto">
+            In today’s evolving workplace, skills define competitiveness — but most organizations still rely on outdated indicators like attendance, certifications, or tenure.
           </p>
 
           <p className="mt-4 text-base md:text-lg text-gray-600 leading-relaxed max-w-3xl mx-auto">
@@ -115,8 +115,7 @@ const CorporatesNeededSection = ({
             <span className="font-semibold text-[#E32A18]">
               Rareminds Skill Passport
             </span>{" "}
-            replaces assumptions with verified skill intelligence, giving
-            visibility and accountability across workforce development.
+            helps corporates move from assumptions to evidence by bringing skill intelligence, visibility, and accountability into every stage of workforce development.
           </p>
         </div>
 
@@ -127,6 +126,11 @@ const CorporatesNeededSection = ({
           ))}
         </div>
 
+        {/* Result Note */}
+        <p className="mt-8 text-center text-[#000000] text-sm md:text-base italic font-medium max-w-6xl mx-auto">
+          <span className="text-[#E32A18]">Result:</span> From Training to Transformation. The Skill Passport transforms training data into business intelligence — helping organizations make better people decisions, faster.
+        </p>
+        
         {/* CTA */}
         <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
           <button
@@ -146,10 +150,7 @@ const CorporatesNeededSection = ({
           </button>
         </div>
 
-        {/* Result Note */}
-        <p className="mt-8 text-center text-[#000000] text-sm md:text-base italic font-medium max-w-6xl mx-auto">
-          <span className="text-[#E32A18]">Result:</span> The Skill Passport transforms training data into business intelligence — helping organizations make better people decisions, faster.
-        </p>
+
       </div>
     </section>
   );

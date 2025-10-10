@@ -3,8 +3,10 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
 import banner1 from "../../../../../public/passport/Home-page-banner_1.png";
 import banner2 from "../../../../../public/passport/Home-page-banner_2.png";
+import mobileBanner1 from "../../../../../public/passport/Home-page-banner_mobile_1.png";
+import mobileBanner2 from "../../../../../public/passport/Home-page-banner_mobile_2.png";
 
-const slides = [
+const desktopSlides = [
   {
     image: banner1,
     heading: "Still Reading Resumes? You’re Already Behind",
@@ -15,8 +17,30 @@ const slides = [
   },
 ];
 
+const mobileSlides = [
+  {
+    image: mobileBanner1,
+    heading: "Still Reading Resumes? You’re Already Behind",
+  },
+  {
+    image: mobileBanner2,
+    heading: "Stop Guessing. Start Hiring Verified.",
+  },
+];
+
 const HeroSection = ({ onDemoClick }: { onDemoClick: () => void }) => {
   const [current, setCurrent] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Detect screen size
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
+  const slides = isMobile ? mobileSlides : desktopSlides;
 
   // Auto fade every 5s
   useEffect(() => {
@@ -24,10 +48,10 @@ const HeroSection = ({ onDemoClick }: { onDemoClick: () => void }) => {
       setCurrent((prev) => (prev + 1) % slides.length);
     }, 5000);
     return () => clearInterval(interval);
-  }, []);
+  }, [slides]);
 
   return (
-    <section className="relative w-auto h-[480px] md:h-[600px] overflow-hidden m-4 md:m-6 rounded-2xl shadow-sm bg-[#EDF2F9]">
+    <section className="relative w-auto h-[600px] md:h-[640px] overflow-hidden m-4 md:m-6 rounded-2xl shadow-sm bg-[#EDF2F9]">
       {/* Fade Images */}
       <div className="absolute inset-0 z-0">
         <AnimatePresence>

@@ -18,7 +18,7 @@ const OverviewSection = () => {
         <>
           It transforms every training session, project, and performance milestone
           into a <strong>living, data-driven record</strong> of capability helping
-          organizations see their workforce not as static résumés, but as evolving
+          organizations see their workforce not as static resumes, but as evolving
           portfolios of potential.
         </>
       ),
@@ -27,7 +27,7 @@ const OverviewSection = () => {
       Icon: Award,
       text: (
         <>
-          For learners, it becomes a <strong>career growth passport</strong>
+          For learners, it becomes a <strong>career growth passport&nbsp;</strong>
           highlighting certified skills, behavioral strengths, and real-world
           accomplishments that open doors to new opportunities.
         </>

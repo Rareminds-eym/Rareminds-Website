@@ -13,7 +13,7 @@ const FEATURES: Feature[] = [
     Icon: Eye,
     title: "Visible",
     description:
-      "Every training, project, and assessment translates into a skill badge giving you a real-time, visual snapshot of what each learner or employee can do. No more hidden potential or guesswork you see skills evolve, team by teamk.",
+      "Every training, project, and assessment translates into a skill badge giving you a real-time, visual snapshot of what each learner or employee can do. No more hidden potential or guesswork you see skills evolve, team by team.",
     circleBg: "bg-indigo-100 text-indigo-600",
   },
   {
@@ -51,9 +51,7 @@ const SolutionSection = () => {
         </h2>
 
         <p className="text-gray-500 text-sm md:text-base mb-16">
-          In today’s data-driven talent landscape, skills speak louder than certificates. 
-          The Skill Passport makes every learner’s capability Visible, Verifiable, and Valuable — 
-          helping organizations measure what truly matters.
+          In today’s data-driven talent landscape, skills speak louder than certificates. Rareminds Skill Passport makes every learner’s capability Visible, Verifiable, and Valuable — helping organizations measure what truly matters.
         </p>
 
         {/* Feature Cards */}

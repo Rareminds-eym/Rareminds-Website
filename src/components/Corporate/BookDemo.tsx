@@ -39,8 +39,7 @@ export const BookDemo: React.FC<BookDemoProps> = ({ isVisible, onClose }) => {
 
                     {root && (
                         <PopupButton
-                            // url="https://calendly.com/karthikeyan-rareminds/30min?month=2025-05"
-                            url="https://calendly.com/litikesh-rareminds/30min"
+                            url="https://calendly.com/rareminds-marketing/30min"
                             text="Book a Demo Call"
                             rootElement={root}
                             className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-blue-700 transition-colors"
