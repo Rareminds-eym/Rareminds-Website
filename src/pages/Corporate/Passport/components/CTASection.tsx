@@ -8,7 +8,7 @@ export const CTASection = ({ onDemoClick, onWaitlistClick }: { onDemoClick: () =
           Talent isn't missing — it's just not mapped. The Rareminds Skill Passport changes that.
         </h2>
 
-        <p className="text-base md:text-lg text-gray-600 mb-10">Launching Oct 13 at GITEX</p>
+        <p className="text-base md:text-xl text-gray-600 mb-10">Launching @ GITEX on 13 Oct</p>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <button 
