@@ -23,7 +23,7 @@ export const ProblemSection = ({ onDemoClick }: { onDemoClick: () => void }) => 
       icon: EyeOff,
       title: "Talent Without Visibility",
       description:
-        "Skilled learners remain unseen. Without a single, live source of truth, students and employees lose opportunities — and organizations lose great talent.",
+        "Skilled learners remain unseen. Without a single, live source of truth, employees lose opportunities — and  organizations lose great talent. Managing Resources better - With Skill Passport.",
       circleBg: "bg-sky-400",
       iconColor: "text-white",
     },
@@ -38,7 +38,7 @@ export const ProblemSection = ({ onDemoClick }: { onDemoClick: () => void }) => 
           <span className="text-[#E32A18]">Visibility Gap.</span>
         </h2>
         <p className="text-sm md:text-base text-gray-500 mb-16">
-          Degrees alone no longer guarantee jobs.
+         The right talent isn’t found through resumes — it’s revealed through skills.
         </p>
 
         {/* Problem Cards */}
@@ -70,7 +70,7 @@ export const ProblemSection = ({ onDemoClick }: { onDemoClick: () => void }) => 
 
         {/* Small italic line + CTA */}
         <p className="text-sm text-gray-500 italic mt-12 mb-6">
-          It's time to change how skills are recognized.
+          It's time to change how skills are recognized & resources are managed.
         </p>
 
         <div className="flex justify-center">

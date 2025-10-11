@@ -3,6 +3,10 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
 import banner1 from "../../../../../public/passport/Home-page-banner_1.png";
 import banner2 from "../../../../../public/passport/Home-page-banner_2.png";
+// import Banner3 from "../../../../../public/passport/Home-page-banner_3.png";
+import Banner4 from "../../../../../public/passport/Home-page-banner_4.png";
+import Banner5 from "../../../../../public/passport/Home-page-banner_5.png";
+
 import mobileBanner1 from "../../../../../public/passport/Home-page-banner_mobile_1.png";
 import mobileBanner2 from "../../../../../public/passport/Home-page-banner_mobile_2.png";
 
@@ -15,6 +19,18 @@ const desktopSlides = [
     image: banner2,
     heading: "Stop Guessing. Start Hiring Verified.",
   },
+  // {
+  //   image: Banner3,
+  //   heading: "AI Verifies. Not Guesses. Your Hiring Should Too.",
+  // },
+  {
+    image: Banner4,
+    heading: "Smart Companies Don’t Hunt Talent — They Scan SkillPassports.",
+  },
+  {
+    image: Banner5,
+    heading: "Cut Hiring Time by 70%. Keep Every Bit of Quality.",
+  }
 ];
 
 const mobileSlides = [
@@ -26,6 +42,18 @@ const mobileSlides = [
     image: mobileBanner2,
     heading: "Stop Guessing. Start Hiring Verified.",
   },
+  // {
+  //   image: Banner3,
+  //   heading: "AI Verifies. Not Guesses. Your Hiring Should Too.",
+  // },
+  {
+    image: Banner4,
+    heading: "Smart Companies Don’t Hunt Talent. They Scan SkillPassports.",
+  },
+  {
+    image: Banner5,
+    heading: "Cut Hiring Time by 70%. Keep Every Bit of Quality.",
+  }
 ];
 
 const HeroSection = ({ onDemoClick }: { onDemoClick: () => void }) => {
@@ -81,7 +109,7 @@ const HeroSection = ({ onDemoClick }: { onDemoClick: () => void }) => {
             <AnimatePresence mode="wait">
               <motion.h1
                 key={slides[current].heading}
-                className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight mb-6 text-black"
+                className={`text-3xl sm:text-4xl md:text-5xl lg:text-[50px] xl:text-6xl font-extrabold leading-tight mb-6 text-black`}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
