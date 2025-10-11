@@ -12,6 +12,9 @@ import Seo from "@/components/Govt/Seo/Seo";
 import OverviewSection from "./components/OverviewSection";
 import InstitutionsNeededSection from "./components/InstitutionsNeededSection";
 import KeyFeaturesSection from "./components/KeyFeaturesSection";
+import BenefitsSection from "./components/BenefitsSections";
+import BuiltSection from "./components/BuiltSection";
+import OutcomeSection from "./components/OutcomeSection";
 const Passport = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -38,11 +41,15 @@ const Passport = () => {
           onDemoClick={() => setIsModalOpen(true)}
           onAnalyticsClick={() => setIsModalOpen(true)}
         />
-        <KeyFeaturesSection />
+        
         {/* <ProblemSection onDemoClick={() => setIsModalOpen(true)} /> */}
         {/* <SolutionSection onDemoClick={() => setIsModalOpen(true)}/>
         <ImpactSection /> */}
         <WorkSection />
+        <KeyFeaturesSection />
+        <BenefitsSection />
+        <BuiltSection />
+        <OutcomeSection />
         {/* <TestimonialsSection /> */}
         <section className="bg-[#F9FAFB] py-20 px-6 text-center">
           <CTASection onDemoClick={() => setIsModalOpen(true)}/>
