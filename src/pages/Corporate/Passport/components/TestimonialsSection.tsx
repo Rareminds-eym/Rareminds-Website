@@ -6,75 +6,21 @@ export default function TestimonialsSection() {
   const testimonials = [
     {
       quote:
-        "The session was informative and well-structured. I appreciated the use of real-life examples and how doubts were addressed clearly. A little more time for interactive discussions or Q&A would make it even better. Thank you!",
-      name: "K. Yuvaraj",
-      role: "Madurai Kamaraj University",
+        "Working at Rareminds has been a great learning experience. It's a good place to start your career, you will not only learn the process but have a good time working. The work culture is fun and management is always encouraging.",
+      name: "Dr. Aravinth Amanaai",
+      role: "Trainer",
     },
     {
       quote:
-        "session was clear and engaging. I appreciated the practical examples and how doubts were addressed patiently. Keep up the great work!",
-      name: "Priya Rajnarayanan",
-      role: "Bharathiar University",
+        "I've had an excellent experience with this company! The materials provided are well-organized and interactive, which really helps reinforce what is being taught. I appreciate how responsive the support team is and how they genuinely care about student success. Overall, this company has exceeded my expectations, and I feel much more confident in my skills thanks to their quality education.",
+      name: "RANJITH KUMAR",
+      role: "Trainer",
     },
     {
       quote:
-        "I truly appreciate the effort you put into making us understand each topic. I sincerely thank you for your guidance and support during the Naan Mudhalvan program.",
-      name: "Abdul Azeez",
-      role: "Manonmaniam Sundaranar University",
-    },
-    {
-      quote:
-        "The trainer explained the topic in a clear and simple way, which made it easy to understand.",
-      name: "Jeevanandha Aadhina R.",
-      role: "Periyar University",
-    },
-    {
-      quote:
-        "The trainer conducted the session in a clear and well-structured manner, making the concepts easy to understand with practical examples. The explanations were interactive and engaging, which helped in maintaining interest throughout the class. Doubts were addressed patiently, and the trainer ensured that everyone was able to follow the topics. Overall, the session was very informative and useful for gaining a better understanding of Good Manufacturing Practices",
-      name: "Poovarasan",
-      role: "Bharathiar University",
-    },
-    {
-      quote:
-        "The trainer explained the topics clearly and was very patient in addressing questions. It would be helpful if more practical examples or case studies could be included to enhance understanding.",
-      name: "Muthu Keerthi",
-      role: "Madurai Kamaraj University",
-    },
-    {
-      quote:
-        "Amazing teacher. Patience and explanations make complex topics so much easier to understand.",
-      name: "Reshma Devi",
-      role: "Madurai Kamaraj University",
-    },
-    {
-      quote:
-        "The trainer conducted the session in a clear and well-structured manner, making the concepts easy to understand with practical examples. The explanations were interactive and engaging, which helped in maintaining interest throughout the class. Doubts were addressed patiently, and the trainer ensured that everyone was able to follow the topics. Overall, the session was very informative and useful for gaining a better understanding of Good Manufacturing Practices.",
-      name: "Mothishwaran S",
-      role: "Periyar University",
-    },
-    {
-      quote:
-        "The trainer's explanations were clear and concise making complex topics easier to understand.",
-      name: "Vishalini Alagusokkan",
-      role: "Manonmaniam Sundaranar University",
-    },
-    {
-      quote:
-        "Great session on product recalls and food safety regulations! The examples and case studies really helped illustrate the key points.",
-      name: "Delina",
-      role: "Bharathidasan University",
-    },
-    {
-      quote:
-        "The trainer explained the concepts clearly with practical examples, which made learning easy and useful.",
-      name: "Kousalya",
-      role: "Thiruvalluvar University",
-    },
-    {
-      quote:
-        "1. The trainer explained every concept clearly and made learning easy. 2. Sessions were engaging, interactive, and well-structured. 3. They encouraged questions and patiently cleared all doubts. 4. Real-life examples helped us understand the topics better. 5. Overall, a very knowledgeable and supportive trainer.",
-      name: "Ramesh Kanna",
-      role: "Thiruvalluvar University",
+        "Great opportunity for fresher and training teaching skills helps future.",
+      name: "Meeradevi P",
+      role: "Trainer",
     },
   ];
 
@@ -96,13 +42,12 @@ export default function TestimonialsSection() {
     };
   }, []);
 
-  const nextTestimonial = () => {
-    setCurrentIndex((prev) => (prev + 1) % testimonials.length);
-  };
-
+  // Mobile auto slide
   useEffect(() => {
     if (!isMobile) return;
-    const interval = setInterval(nextTestimonial, 4000);
+    const interval = setInterval(() => {
+      setCurrentIndex((prev) => (prev + 1) % testimonials.length);
+    }, 4000);
     return () => clearInterval(interval);
   }, [isMobile]);
 
@@ -142,7 +87,7 @@ export default function TestimonialsSection() {
             </div>
           </div>
 
-          {/* Dots only for mobile */}
+          {/* Dots */}
           <div className="flex justify-center mt-6 space-x-2">
             {testimonials.map((_, idx) => (
               <button
@@ -156,7 +101,7 @@ export default function TestimonialsSection() {
           </div>
         </div>
 
-        {/* DESKTOP SCROLL */}
+        {/* DESKTOP INFINITE SCROLL */}
         <div className="hidden md:block overflow-hidden">
           <div className="flex gap-8 animate-scroll">
             {desktopTestimonials.map((item, index) => (

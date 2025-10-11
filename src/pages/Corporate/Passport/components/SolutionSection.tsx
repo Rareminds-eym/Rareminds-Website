@@ -61,9 +61,7 @@ const SolutionSection = () => {
             return (
               <div
                 key={i}
-                className={`relative bg-white rounded-2xl shadow-lg p-8 h-full flex flex-col items-center text-center transition-transform duration-300 hover:-translate-y-2 hover:shadow-2xl ${
-                  i % 2 === 1 ? "lg:mt-10" : ""
-                }`}
+                className={`relative bg-white rounded-2xl shadow-lg p-8 h-full flex flex-col items-center text-center transition-transform duration-300 hover:-translate-y-2 hover:shadow-2xl`}
               >
                 {/* Icon circle */}
                 <div

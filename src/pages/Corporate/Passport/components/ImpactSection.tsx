@@ -1,13 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { LineChart } from "lucide-react";
 
-import Icon1 from "../../../../../public/passport/Group.png";
-import Icon2 from "../../../../../public/passport/Group-1.png";
-import Icon3 from "../../../../../public/passport/Group-2.png";
-import Icon4 from "../../../../../public/passport/Group-3.png";
-import Icon5 from "../../../../../public/passport/Group-4.png";
-import Icon6 from "../../../../../public/passport/Group-5.png";
-
 interface CounterProps {
   target: number;
   suffix?: string;
@@ -62,16 +55,121 @@ export default function ImpactSection() {
   ];
 
   const universities = [
-    { logo: Icon1, name: "Chennai University" },
-    { logo: Icon2, name: "IIT Madras" },
-    { logo: Icon3, name: "Anna University" },
-    { logo: Icon4, name: "Amrita School" },
-    { logo: Icon5, name: "Bharathiar University" },
-    { logo: Icon6, name: "PSG College" },
+    {
+      name: "UNIVERSITY OF MADRAS",
+      logo: "https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Government/Home/Logos/logo2.webp",
+    },
+    {
+      name: "ALAGAPPA UNIVERSITY",
+      logo: "https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Government/Home/Logos/logo1.webp",
+    },
+    {
+      name: "ANNAMALAI UNIVERSITY",
+      logo: "https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Government/Home/Logos/logo2.webp",
+    },
+    {
+      name: "THIRUVALLUR UNIVERSITY",
+      logo: "https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Government/Home/Logos/logo9.webp",
+    },
+    {
+      name: "BHARATHIAR UNIVERSITY",
+      logo: "https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Government/Home/Logos/logo3.webp",
+    },
+    {
+      name: "BHARATHIDASAN UNIVERSITY",
+      logo: "https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Government/Home/Logos/logo4.webp",
+    }, {
+      name: "UNIVERSITY OF MADRAS",
+      logo: "https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Government/Home/Logos/logo10.webp",
+    },
+    {
+      name: "MADURAI KAMARAJ UNIVERSITY",
+      logo: "https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Government/Home/Logos/logo5.webp",
+    },
+    {
+      name: "MANONMANIAM SUNDARANAR UNIVERSITY",
+      logo: "https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Government/Home/Logos/logo10.webp",
+    },
+    {
+      name: "MOTHER TERESA UNIVERSITY",
+      logo: "https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Government/Home/Logos/logo7.webp",
+    },
+    {
+      name: "PERIYAR UNIVERSITY",
+      logo: "https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Government/Home/Logos/logo8.webp",
+    },
   ];
 
   const statsRef = useRef<HTMLDivElement | null>(null);
   const [hasAnimated, setHasAnimated] = useState(false);
+
+  const marqueeRef = useRef<HTMLDivElement | null>(null);
+  const marqueeContentRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const marquee = marqueeRef.current;
+    const content = marqueeContentRef.current;
+    if (!marquee || !content) return;
+
+    let rafId = 0;
+    let last = performance.now();
+    let pos = 0;
+    let paused = false;
+    const speed = 60;
+
+    const getHalfWidth = () => {
+      return content.scrollWidth / 2;
+    };
+
+    let halfWidth = getHalfWidth();
+
+    const onResize = () => {
+      const prevHalf = halfWidth;
+      halfWidth = getHalfWidth();
+      if (prevHalf > 0 && halfWidth > 0) {
+        pos = (pos / prevHalf) * halfWidth;
+      }
+    };
+
+    const step = (now: number) => {
+      if (!content) return;
+      const dt = now - last;
+      last = now;
+
+      if (!paused) {
+        pos -= (speed * dt) / 1000;
+        if (pos <= -halfWidth) {
+          pos += halfWidth;
+        }
+        content.style.transform = `translateX(${pos}px)`;
+      }
+      rafId = requestAnimationFrame(step);
+    };
+
+    const onMouseEnter = () => {
+      paused = true;
+    };
+    const onMouseLeave = () => {
+      paused = false;
+    };
+
+    window.addEventListener("resize", onResize);
+    marquee.addEventListener("mouseenter", onMouseEnter);
+    marquee.addEventListener("mouseleave", onMouseLeave);
+
+    // ensure initial transform is set
+    content.style.willChange = "transform";
+    content.style.transform = `translateX(0px)`;
+    last = performance.now();
+    rafId = requestAnimationFrame(step);
+
+    return () => {
+      cancelAnimationFrame(rafId);
+      window.removeEventListener("resize", onResize);
+      marquee.removeEventListener("mouseenter", onMouseEnter);
+      marquee.removeEventListener("mouseleave", onMouseLeave);
+    };
+  }, [universities]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -126,8 +224,13 @@ export default function ImpactSection() {
           Trusted by Leading Institutions
         </h3>
 
-        <div className="relative overflow-hidden py-6">
-          <div className="flex gap-10 animate-marquee whitespace-nowrap">
+        <div className="relative overflow-hidden py-6" ref={marqueeRef}>
+          {/* content duplicated in render so that width = 2 * single set width */}
+          <div
+            ref={marqueeContentRef}
+            className="flex gap-10 whitespace-nowrap"
+            aria-hidden={false}
+          >
             {[...universities, ...universities].map((uni, idx) => (
               <div
                 key={idx}
