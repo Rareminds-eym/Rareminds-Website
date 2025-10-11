@@ -1,3 +1,4 @@
+
 // import { Eye, BadgeCheck, LineChart, Route, Layers, FileCheck2, Briefcase } from "lucide-react";
 // import { motion } from "framer-motion";
 
@@ -52,34 +53,89 @@
 //   subtitle: string;
 //   description: string;
 // };
-
 // const Card = ({ Icon, title, subtitle, description }: CardProps) => (
 //   <motion.div
 //     whileHover={{ y: -6 }}
 //     transition={{ type: "spring", stiffness: 300, damping: 20 }}
-//     className="group h-full rounded-2xl border border-gray-100 bg-white p-6 shadow-sm hover:shadow-lg"
+//     className="group h-full rounded-2xl border border-gray-100 bg-white p-6 shadow-sm hover:shadow-lg cursor-pointer"
 //     role="article"
 //     aria-labelledby={`benefit-${title}`}
 //   >
 //     <div className="flex items-start gap-4">
-//       <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[#FFECEC]">
+//       {/* Icon */}
+//       <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[#FFECEC] group-hover:bg-[#FFD3D0] transition-colors duration-300">
 //         <Icon className="h-6 w-6 text-[#E32A18]" strokeWidth={2} aria-hidden />
 //       </div>
+
+//       {/* Text Content */}
 //       <div className="flex-1">
 //         <h3
 //           id={`benefit-${title}`}
-//           className="text-lg md:text-xl font-semibold text-[#000000]"
+//           className="text-lg md:text-xl font-semibold text-[#000000] group-hover:text-[#E32A18] transition-colors duration-300"
 //         >
 //           {title}
 //         </h3>
-//         <p className="mt-1 text-sm text-[#E32A18] font-medium">{subtitle}</p>
-//         <p className="mt-3 text-sm md:text-base text-gray-600 leading-relaxed">
+//         <p className="mt-1 text-sm text-[#E32A18] font-medium group-hover:text-[#FF4C3B] transition-colors duration-300">
+//           {subtitle}
+//         </p>
+
+//         {/* Description: hidden by default, visible on hover */}
+//         <p className="mt-3 text-sm md:text-base text-gray-600 leading-relaxed opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-center">
 //           {description}
 //         </p>
 //       </div>
 //     </div>
 //   </motion.div>
 // );
+
+// const Card = ({ Icon, title, subtitle, description }: CardProps) => (
+//   <motion.div
+//     initial="rest"
+//     whileHover="hover"
+//     animate="rest"
+//     variants={{
+//       rest: { y: 0 },
+//       hover: { y: -6 },
+//     }}
+//     transition={{ type: "spring", stiffness: 300, damping: 20 }}
+//     className="h-full rounded-2xl border border-gray-100 bg-white p-6 shadow-sm cursor-pointer flex flex-col"
+//     role="article"
+//     aria-labelledby={`benefit-${title}`}
+//   >
+//     {/* Top section: icon, title, subtitle */}
+//     <div className="flex items-start gap-4">
+//       <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[#FFECEC] transition-colors duration-300">
+//         <Icon className="h-6 w-6 text-[#E32A18]" strokeWidth={2} aria-hidden />
+//       </div>
+
+//       <div className="flex-1 flex flex-col">
+//         <h3
+//           id={`benefit-${title}`}
+//           className="text-lg md:text-xl font-semibold text-[#000000] transition-colors duration-300"
+//         >
+//           {title}
+//         </h3>
+//         <p className="mt-1 text-sm text-[#E32A18] font-medium transition-colors duration-300">
+//           {subtitle}
+//         </p>
+//       </div>
+//     </div>
+
+//     {/* Description section */}
+//     <motion.p
+//       variants={{
+//         rest: { opacity: 0, height: 0 },
+//         hover: { opacity: 1, height: "auto" },
+//       }}
+//       transition={{ duration: 0.3 }}
+//       className="mt-3 text-sm md:text-base text-gray-600 leading-relaxed overflow-hidden text-center"
+//     >
+//       {description}
+//     </motion.p>
+//   </motion.div>
+// );
+
+
 
 // type InstitutionsNeededSectionProps = {
 //   onDemoClick: () => void;
@@ -91,8 +147,8 @@
 //   onAnalyticsClick,
 // }: InstitutionsNeededSectionProps) => {
 //   return (
-//     <section className="bg-[#F9FAFB] py-16 md:py-24 px-4 sm:px-6 lg:px-8 min-h-screen flex flex-col justify-center">
-//       <div className="max-w-7xl mx-auto text-center">
+//     <section className="bg-gray-100 min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8">
+//       <div className="w-full max-w-7xl text-center py-10 md:py-14">
 //         {/* Top Icon */}
 //         <div className="flex items-center justify-center mb-4">
 //           <div className="bg-[#000000] rounded-2xl w-12 h-12 flex items-center justify-center shadow-md">
@@ -114,7 +170,7 @@
 //         </p>
 
 //         {/* Benefits Grid */}
-//         <div className="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+//         <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
 //           {benefits.map((item, idx) => (
 //             <Card key={item.title ?? idx} {...item} />
 //           ))}
@@ -130,7 +186,6 @@
 //           <button
 //             onClick={onDemoClick}
 //             className="inline-flex items-center justify-center rounded-full bg-[#E32A18] px-6 py-3 text-white font-semibold shadow-sm transition-colors hover:bg-[#cc2515] focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#E32A18]"
-//             aria-label="Book an institutional demo"
 //           >
 //             Book an Institutional Demo
 //           </button>
@@ -138,7 +193,6 @@
 //           <button
 //             onClick={onAnalyticsClick}
 //             className="inline-flex items-center justify-center rounded-full border border-gray-300 bg-white px-6 py-3 text-[#000000] font-semibold shadow-sm transition-colors hover:border-[#E32A18] hover:text-[#E32A18] focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#E32A18]"
-//             aria-label="See skill analytics in action"
 //           >
 //             See Skill Analytics in Action
 //           </button>
@@ -151,6 +205,7 @@
 // export default InstitutionsNeededSection;
 
 
+import { useState } from "react";
 import { Eye, BadgeCheck, LineChart, Route, Layers, FileCheck2, Briefcase } from "lucide-react";
 import { motion } from "framer-motion";
 
@@ -206,33 +261,66 @@ type CardProps = {
   description: string;
 };
 
-const Card = ({ Icon, title, subtitle, description }: CardProps) => (
-  <motion.div
-    whileHover={{ y: -6 }}
-    transition={{ type: "spring", stiffness: 300, damping: 20 }}
-    className="group h-full rounded-2xl border border-gray-100 bg-white p-6 shadow-sm hover:shadow-lg"
-    role="article"
-    aria-labelledby={`benefit-${title}`}
-  >
-    <div className="flex items-start gap-4">
-      <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[#FFECEC]">
-        <Icon className="h-6 w-6 text-[#E32A18]" strokeWidth={2} aria-hidden />
-      </div>
-      <div className="flex-1">
-        <h3
-          id={`benefit-${title}`}
-          className="text-lg md:text-xl font-semibold text-[#000000]"
+const Card = ({ Icon, title, subtitle, description }: CardProps) => {
+  const [isHovered, setIsHovered] = useState(false);
+
+  return (
+    <motion.div
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      animate={{ y: isHovered ? -6 : 0 }}
+      transition={{ type: "spring", stiffness: 300, damping: 20 }}
+      className="h-full rounded-2xl border border-gray-100 bg-white p-6 shadow-sm cursor-pointer flex flex-col"
+      role="article"
+      aria-labelledby={`benefit-${title}`}
+    >
+      {/* Top section: icon, title, subtitle */}
+      <div className="flex items-start gap-4">
+        <div
+          className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl transition-colors duration-300 ${
+            isHovered ? "bg-[#FFD3D0]" : "bg-[#FFECEC]"
+          }`}
         >
-          {title}
-        </h3>
-        <p className="mt-1 text-sm text-[#E32A18] font-medium">{subtitle}</p>
-        <p className="mt-3 text-sm md:text-base text-gray-600 leading-relaxed">
-          {description}
-        </p>
+          <Icon
+            className="h-6 w-6 text-[#E32A18] transition-colors duration-300"
+            strokeWidth={2}
+            aria-hidden
+          />
+        </div>
+
+        <div className="flex-1 flex flex-col">
+          <h3
+            id={`benefit-${title}`}
+            className={`text-lg md:text-xl font-semibold transition-colors duration-300 ${
+              isHovered ? "text-[#E32A18]" : "text-[#000000]"
+            }`}
+          >
+            {title}
+          </h3>
+          <p
+            className={`mt-1 text-sm font-medium transition-colors duration-300 ${
+              isHovered ? "text-[#FF4C3B]" : "text-[#E32A18]"
+            }`}
+          >
+            {subtitle}
+          </p>
+        </div>
       </div>
-    </div>
-  </motion.div>
-);
+
+      {/* Description section */}
+      <motion.p
+        animate={{
+          opacity: isHovered ? 1 : 0,
+          height: isHovered ? "auto" : 0,
+        }}
+        transition={{ duration: 0.3 }}
+        className="mt-3 text-sm md:text-base text-gray-600 leading-relaxed overflow-hidden text-center"
+      >
+        {description}
+      </motion.p>
+    </motion.div>
+  );
+};
 
 type InstitutionsNeededSectionProps = {
   onDemoClick: () => void;
