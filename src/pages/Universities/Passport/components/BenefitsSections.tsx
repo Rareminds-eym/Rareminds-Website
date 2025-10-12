@@ -1,38 +1,84 @@
-
 import { Card } from "@/components/ui/card";
-import { Briefcase, GraduationCap, CheckCircle } from "lucide-react";
+import {
+  Briefcase,
+  GraduationCap,
+  BarChart3,
+  FileText,
+  Target,
+  Users,
+  LineChart,
+  Brain,
+  Award,
+  Lightbulb,
+  TrendingUp,
+  Layers,
+  Rocket,
+} from "lucide-react";
 
 const InstitutionsNeededSection = () => {
+  // Benefits for Institutions with icons
   const institutionBenefits = [
-    "Track and measure learning outcomes institution-wide.",
-    "Quantify employability skills with precision and accuracy.",
-    "Access real-time placement readiness and performance insights.",
-    "Simplify accreditation and compliance reporting effortlessly.",
-    "Build a stronger industry-academia bridge with verified skill data.",
+    {
+      text: "Track and measure learning outcomes institution-wide.",
+      icon: BarChart3,
+    },
+    {
+      text: "Quantify employability skills with precision and accuracy.",
+      icon: Target,
+    },
+    {
+      text: "Access real-time placement readiness and performance insights.",
+      icon: LineChart,
+    },
+    {
+      text: "Simplify accreditation and compliance reporting effortlessly.",
+      icon: FileText,
+    },
+    {
+      text: "Build a stronger industry-academia bridge with verified skill data.",
+      icon: Users,
+    },
   ];
 
+  // Benefits for Students with icons
   const studentBenefits = [
-    "A personalized digital skill passport that evolves every semester.",
-    "Gain clear insights into strengths, gaps, and next learning goals.",
-    "Showcase verified competencies during placement interviews.",
-    "Get AI-powered career guidance and tailored recommendations.",
-    "Stay motivated through progress tracking and global visibility.",
+    {
+      text: "A personalized digital skill passport that evolves every semester.",
+      icon: Award,
+    },
+    {
+      text: "Gain clear insights into strengths, gaps, and next learning goals.",
+      icon: Lightbulb,
+    },
+    {
+      text: "Showcase verified competencies during placement interviews.",
+      icon: Briefcase,
+    },
+    {
+      text: "Get AI-powered career guidance and tailored recommendations.",
+      icon: Brain,
+    },
+    {
+      text: "Stay motivated through progress tracking and global visibility.",
+      icon: Rocket,
+    },
   ];
 
-  const renderCards = (items: string[]) => (
+  // Render card grid dynamically
+  const renderCards = (items: { text: string; icon: any }[]) => (
     <>
       {/* First Row - 3 Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 justify-items-center">
-        {items.slice(0, 3).map((benefit, idx) => (
+        {items.slice(0, 3).map(({ text, icon: Icon }, idx) => (
           <Card
             key={idx}
             className="relative w-[95%] sm:w-[320px] md:w-[340px] lg:w-[360px] min-h-[250px] bg-white rounded-3xl shadow-md hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 flex flex-col items-center justify-center text-center p-8 mt-10"
           >
-            <div className="absolute -top-7 left-1/2 transform -translate-x-1/2 w-10 h-10 rounded-full bg-[#E32A18] text-white flex items-center justify-center shadow-md ring-4 ring-white">
-              <CheckCircle className="w-6 h-6" />
+            <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 w-14 h-14 rounded-full bg-[#E32A18] text-white flex items-center justify-center shadow-md ring-4 ring-white">
+              <Icon className="w-7 h-7" />
             </div>
-            <h4 className="text-base sm:text-lg md:text-l font-regular text-gray-900 leading-relaxed mt-8 px-2">
-              {benefit}
+            <h4 className="text-base sm:text-lg md:text-l font-regular text-gray-900 leading-relaxed mt-10 px-2">
+              {text}
             </h4>
           </Card>
         ))}
@@ -41,16 +87,16 @@ const InstitutionsNeededSection = () => {
       {/* Second Row - Centered 2 Cards */}
       <div className="mt-12 flex justify-center">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 justify-items-center">
-          {items.slice(3).map((benefit, idx) => (
+          {items.slice(3).map(({ text, icon: Icon }, idx) => (
             <Card
               key={idx}
               className="relative w-[95%] sm:w-[320px] md:w-[340px] lg:w-[360px] min-h-[250px] bg-white rounded-3xl shadow-md hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 flex flex-col items-center justify-center text-center p-8 mt-10"
             >
-              <div className="absolute -top-7 left-1/2 transform -translate-x-1/2 w-10 h-10 rounded-full bg-[#E32A18] text-white flex items-center justify-center shadow-md ring-4 ring-white">
-                <CheckCircle className="w-6 h-6" />
+              <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 w-14 h-14 rounded-full bg-[#E32A18] text-white flex items-center justify-center shadow-md ring-4 ring-white">
+                <Icon className="w-7 h-7" />
               </div>
-              <h4 className="text-base sm:text-lg md:text-l font-regular text-gray-900 leading-relaxed mt-8 px-2">
-                {benefit}
+              <h4 className="text-base sm:text-lg md:text-l font-regular text-gray-900 leading-relaxed mt-10 px-2">
+                {text}
               </h4>
             </Card>
           ))}
