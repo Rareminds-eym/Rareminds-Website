@@ -8,7 +8,7 @@ export const CTASection = ({ onDemoClick }: { onDemoClick: () => void }) => {
       <div className="max-w-6xl mx-auto">
         {/* Heading */}
         <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-black mb-4">
-          Ready to Transform Learning?
+          Ready to <span className="text-[#E32A18]">Transform Learning?</span>
         </h2>
 
         {/* Subtext */}
