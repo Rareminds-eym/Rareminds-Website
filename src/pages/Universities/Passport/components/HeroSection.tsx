@@ -184,63 +184,60 @@
 //       </div>
 
 //       {/* ✅ Centered Content */}
-//       <div className="absolute inset-0 flex flex-col items-center justify-center text-center z-5">
-//         <motion.div
-//           initial={{ opacity: 0, y: 30 }}
-//           animate={{ opacity: 1, y: 0 }}
-//           transition={{ duration: 1.2, ease: "easeInOut" }}
-//           className="text-white flex flex-col items-center justify-center"
-//         >
-//           {/* Heading */}
-//           <AnimatePresence mode="wait">
-//             <motion.h1
-//               key={slides[current].heading}
-//               className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight mb-6 text-black text-center drop-shadow-md px-4 sm:px-6 md:px-10 max-w-[90%] md:max-w-[80%] break-words mx-aut"
-//               initial={{ opacity: 0, y: 20 }}
-//               animate={{ opacity: 1, y: 0 }}
-//               exit={{ opacity: 0, y: -20 }}
-//               transition={{ duration: 0.6, ease: "easeInOut" }}
-//             >
-//               {slides[current].heading}
-//             </motion.h1>
-//           </AnimatePresence>
+      // <div className="absolute inset-0 flex flex-col items-center justify-center text-center z-5">
+      //   <motion.div
+      //     initial={{ opacity: 0, y: 30 }}
+      //     animate={{ opacity: 1, y: 0 }}
+      //     transition={{ duration: 1.2, ease: "easeInOut" }}
+      //     className="text-white flex flex-col items-center justify-center"
+      //   >
+      //     {/* Heading */}
+      //     <AnimatePresence mode="wait">
+      //       <motion.h1
+      //         key={slides[current].heading}
+      //         className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight mb-6 text-black text-center drop-shadow-md px-4 sm:px-6 md:px-10 max-w-[90%] md:max-w-[80%] break-words mx-aut"
+      //         initial={{ opacity: 0, y: 20 }}
+      //         animate={{ opacity: 1, y: 0 }}
+      //         exit={{ opacity: 0, y: -20 }}
+      //         transition={{ duration: 0.6, ease: "easeInOut" }}
+      //       >
+      //         {slides[current].heading}
+      //       </motion.h1>
+      //     </AnimatePresence>
 
-//           {/* Buttons */}
-//           <div className="flex flex-col sm:flex-row gap-4">
-//             <button
-//               onClick={onDemoClick}
-//               className="bg-[#E32A18] hover:bg-[#cc2515] px-7 py-3 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center gap-2 shadow-lg text-white"
-//             >
-//               Enquiry <FaCalendarAlt />
-//             </button>
-//             <button
-//               onClick={onDemoClick}
-//               className="bg-[#E32A18] hover:bg-[#cc2515] px-7 py-3 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center gap-2 shadow-lg text-white"
-//             >
-//               Connect with us <FaCalendarAlt />
-//             </button>
-//           </div>
-//         </motion.div>
-//       </div>
+      //     {/* Buttons */}
+      //     <div className="flex flex-col sm:flex-row gap-4">
+      //       <button
+      //         onClick={onDemoClick}
+      //         className="bg-[#E32A18] hover:bg-[#cc2515] px-7 py-3 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center gap-2 shadow-lg text-white"
+      //       >
+      //         Enquiry <FaCalendarAlt />
+      //       </button>
+      //       <button
+      //         onClick={onDemoClick}
+      //         className="bg-[#E32A18] hover:bg-[#cc2515] px-7 py-3 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center gap-2 shadow-lg text-white"
+      //       >
+      //         Connect with us <FaCalendarAlt />
+      //       </button>
+      //     </div>
+      //   </motion.div>
+      // </div>
 //     </section>
 //   );
 // };
 
 // export default HeroSection;
 
-
-
 import { FaCalendarAlt } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
 import banner1 from "../../../../../public/passport/banner 1.2.jpg";
 import banner2 from "../../../../../public/passport/BANNER 2.2.jpg";
-// import Banner3 from "../../../../../public/passport/Home-page-banner_3.png";
 import Banner4 from "../../../../../public/passport/banner 4.1.jpg";
-// import Banner5 from "../../../../../public/passport/Home-page-banner_5.png";
 
 import mobileBanner1 from "../../../../../public/passport/BANNER 1 MOB.jpg";
-// import mobileBanner2 from "../../../../../public/passport/Home-page-banner_mobile_2.png";
+import mobileBanner2 from "../../../../../public/passport/banner 2 mob.jpg";
+import mobileBanner4 from "../../../../../public/passport/banner 4.MOB.jpg";
 
 const desktopSlides = [
   {
@@ -251,18 +248,10 @@ const desktopSlides = [
     image: banner2,
     heading: "Transform Every Student into a Verified Employable Talent.",
   },
-  // {
-  //   image: Banner3,
-  //   heading: "AI Verifies. Not Guesses. Your Hiring Should Too.",
-  // },
   {
     image: Banner4,
     heading: "Successful Placements Aren’t Luck — They’re Verified",
   },
-  // {
-  //   image: Banner5,
-  //   heading: "Cut Hiring Time by 70%. Keep Every Bit of Quality.",
-  // }
 ];
 
 const mobileSlides = [
@@ -270,22 +259,14 @@ const mobileSlides = [
     image: mobileBanner1,
     heading: "Your Students Deserve More Than Certificates — They Deserve Credibility",
   },
-  // {
-  //   image: mobileBanner2,
-  //   heading: "Stop Guessing. Start Hiring Verified.",
-  // },
-  // {
-  //   image: Banner3,
-  //   heading: "AI Verifies. Not Guesses. Your Hiring Should Too.",
-  // },
-  // {
-  //   image: Banner4,
-  //   heading: "Smart Companies Don’t Hunt Talent. They Scan SkillPassports.",
-  // },
-  // {
-  //   image: Banner5,
-  //   heading: "Cut Hiring Time by 70%. Keep Every Bit of Quality.",
-  // }
+  {
+    image: mobileBanner2,
+    heading: "Transform Every Student into a Verified Employable Talent",
+  },
+  {
+    image: mobileBanner4,
+    heading: "Successful Placements Aren’t Luck — They’re Verified",
+  },
 ];
 
 const HeroSection = ({ onDemoClick }: { onDemoClick: () => void }) => {
@@ -329,49 +310,81 @@ const HeroSection = ({ onDemoClick }: { onDemoClick: () => void }) => {
       </div>
 
       {/* Content */}
-      <div className="relative z-10 max-w-7xl mx-auto px-6 sm:px-10 py-16 sm:py-20 md:py-28">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1.2, ease: "easeInOut" }}
-            className="text-white"
-          >
-            {/* Fade Headings */}
-            <AnimatePresence mode="wait">
-              <motion.h1
-                key={slides[current].heading}
-                className={`text-3xl sm:text-4xl md:text-5xl lg:text-[50px] xl:text-6xl font-extrabold leading-tight mb-6 text-black`}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.6, ease: "easeInOut" }}
-              >
-                {slides[current].heading}
-              </motion.h1>
-            </AnimatePresence>
+      <div
+        className="
+          absolute inset-0 
+          flex flex-col 
+          justify-center 
+          items-center md:items-start 
+          text-center md:text-left 
+          px-6 sm:px-10 md:px-20 
+          z-10
+        "
+      >
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1.2, ease: 'easeInOut' }}
+          className="flex flex-col items-center md:items-start"
+        >
+          {/* Heading */}
+          <AnimatePresence mode="wait">
+            <motion.h1
+              key={slides[current].heading}
+              className="
+                text-2xl sm:text-4xl md:text-5xl lg:text-6xl 
+                font-extrabold 
+                leading-tight 
+                mb-6 
+                text-black 
+                drop-shadow-md 
+                max-w-[90%] md:max-w-[55%]
+              "
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.6, ease: 'easeInOut' }}
+            >
+              {slides[current].heading}
+            </motion.h1>
+          </AnimatePresence>
 
-            <p className="text-base sm:text-lg md:text-xl mb-8 max-w-xl text-gray-700">
-              The Rareminds Skill Passport is a verified digital learning identity that captures every student’s growth — from classroom learning to employability readiness.
-
-            </p>
-
-            <div className="flex flex-col sm:flex-row gap-4">
+          {/* Buttons */}
+          <div className="flex flex-col sm:flex-row gap-4">
             <button
               onClick={onDemoClick}
-              className="bg-[#E32A18] hover:bg-[#cc2515] px-7 py-3 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center gap-2 shadow-lg text-white"
+              className="
+                bg-[#E32A18] 
+                hover:bg-[#cc2515] 
+                px-6 sm:px-7 py-3 
+                rounded-lg 
+                font-semibold 
+                transition-all duration-300 
+                flex items-center justify-center gap-2 
+                shadow-lg 
+                text-white
+              "
             >
               Enquiry <FaCalendarAlt />
             </button>
             <button
               onClick={onDemoClick}
-              className="bg-[#E32A18] hover:bg-[#cc2515] px-7 py-3 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center gap-2 shadow-lg text-white"
+              className="
+                bg-[#E32A18] 
+                hover:bg-[#cc2515] 
+                px-6 sm:px-7 py-3 
+                rounded-lg 
+                font-semibold 
+                transition-all duration-300 
+                flex items-center justify-center gap-2 
+                shadow-lg 
+                text-white
+              "
             >
               Connect with us <FaCalendarAlt />
             </button>
           </div>
-          </motion.div>
-        </div>
+        </motion.div>
       </div>
     </section>
   );

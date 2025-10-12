@@ -15,6 +15,7 @@ import KeyFeaturesSection from "./components/KeyFeaturesSection";
 import BenefitsSection from "./components/BenefitsSections";
 import BuiltSection from "./components/BuiltSection";
 import OutcomeSection from "./components/OutcomeSection";
+import UseSection from "./components/UseSection";
 const Passport = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -49,7 +50,9 @@ const Passport = () => {
         <KeyFeaturesSection />
         <BenefitsSection />
         <BuiltSection />
+        <UseSection />
         <OutcomeSection />
+
         {/* <TestimonialsSection /> */}
         <section className="bg-[#F9FAFB] py-20 px-6 text-center">
           <CTASection onDemoClick={() => setIsModalOpen(true)}/>
