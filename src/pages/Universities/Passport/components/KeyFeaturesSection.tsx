@@ -755,7 +755,7 @@ const TechDataAssuranceSection: React.FC = () => {
 
         <div className="text-center mb-8">
           <div className="flex items-center justify-center mb-4">
-            <div className="bg-black rounded-2xl w-14 h-14 flex items-center justify-center shadow-md">
+            <div className="bg-black rounded-2xl w-12 h-12 flex items-center justify-center shadow-md">
               <ShieldAlert className="text-white w-6 h-6" aria-hidden />
             </div>
           </div>
@@ -765,7 +765,7 @@ const TechDataAssuranceSection: React.FC = () => {
             className="text-3xl md:text-4xl font-extrabold text-[#000000] leading-tight mb-2"
           >
             Key&nbsp;
-            <span className="text-[#E32A18]">Features</span>
+            <span className="text-[#000000]">Features</span>
           </h2>
           <p className="text-gray-500 text-sm md:text-bas mx-auto">
             Explore the essential capabilities of the Skill Passport platform that empower institutions and students alike.

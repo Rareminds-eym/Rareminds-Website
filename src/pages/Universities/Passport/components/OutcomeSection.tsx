@@ -24,14 +24,14 @@ export default function OutcomeSection() {
       <div className="max-w-7xl mx-auto px-6 text-center">
         {/* Top Icon */}
         <div className="flex justify-center mb-6">
-          <div className="bg-[#E32A18] w-12 h-12 rounded-2xl flex items-center justify-center shadow-md">
+          <div className="bg-[#000000] w-12 h-12 rounded-2xl flex items-center justify-center shadow-md">
             <FiTarget className="text-white w-6 h-6" />
           </div>
         </div>
 
         {/* Section Title */}
-        <h2 className="text-3xl md:text-4xl font-extrabold text-[#0B2A5A]">
-          The <span className="text-[#E32A18]">Outcome</span>
+        <h2 className="text-3xl md:text-4xl font-extrabold text-[#000000]">
+          The <span className="text-[#000000]">Outcome</span>
         </h2>
         <div className="w-24 h-1 bg-[#E32A18] mx-auto mt-4 mb-16 rounded-full" />
 

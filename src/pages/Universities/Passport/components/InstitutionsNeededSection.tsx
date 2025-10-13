@@ -555,7 +555,7 @@ const CorporatesNeededSection = ({ onDemoClick,onAnalyticsClick }: CorporatesNee
           </div>
 
                   <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-[#000000] leading-tight mb-4">
-          Why <span className="text-[#E32A18]">Institutions</span> Need It
+          Why <span className="text-[#000000]">Institutions</span> Need It
         </h2>
 
         <p className="text-gray-500 text-sm md:text-base max-w-3xl mx-auto">

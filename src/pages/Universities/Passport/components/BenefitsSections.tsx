@@ -10,13 +10,11 @@ import {
   Brain,
   Award,
   Lightbulb,
-  TrendingUp,
-  Layers,
   Rocket,
 } from "lucide-react";
 
 const InstitutionsNeededSection = () => {
-  // Benefits for Institutions with icons
+  // Benefits for Institutions
   const institutionBenefits = [
     {
       text: "Track and measure learning outcomes institution-wide.",
@@ -40,7 +38,7 @@ const InstitutionsNeededSection = () => {
     },
   ];
 
-  // Benefits for Students with icons
+  // Benefits for Students
   const studentBenefits = [
     {
       text: "A personalized digital skill passport that evolves every semester.",
@@ -64,7 +62,7 @@ const InstitutionsNeededSection = () => {
     },
   ];
 
-  // Render card grid dynamically
+  // Card Renderer
   const renderCards = (items: { text: string; icon: any }[]) => (
     <>
       {/* First Row - 3 Cards */}
@@ -72,12 +70,12 @@ const InstitutionsNeededSection = () => {
         {items.slice(0, 3).map(({ text, icon: Icon }, idx) => (
           <Card
             key={idx}
-            className="relative w-[95%] sm:w-[320px] md:w-[340px] lg:w-[360px] min-h-[250px] bg-white rounded-3xl shadow-md hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 flex flex-col items-center justify-center text-center p-8 mt-10"
+            className="relative w-[95%] sm:w-[300px] md:w-[320px] lg:w-[340px] min-h-[200px] bg-white rounded-3xl shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 flex flex-col items-center justify-center text-center p-6 mt-10"
           >
-            <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 w-14 h-14 rounded-full bg-[#E32A18] text-white flex items-center justify-center shadow-md ring-4 ring-white">
-              <Icon className="w-7 h-7" />
+            <div className="absolute -top-7 left-1/2 transform -translate-x-1/2 w-12 h-12 rounded-full bg-[#E32A18] text-white flex items-center justify-center shadow-md ring-4 ring-white">
+              <Icon className="w-6 h-6" />
             </div>
-            <h4 className="text-base sm:text-lg md:text-l font-regular text-gray-900 leading-relaxed mt-10 px-2">
+            <h4 className="text-base sm:text-lg font-medium text-gray-800 leading-relaxed mt-8 px-2">
               {text}
             </h4>
           </Card>
@@ -85,17 +83,17 @@ const InstitutionsNeededSection = () => {
       </div>
 
       {/* Second Row - Centered 2 Cards */}
-      <div className="mt-12 flex justify-center">
+      <div className="mt-10 flex justify-center">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 justify-items-center">
           {items.slice(3).map(({ text, icon: Icon }, idx) => (
             <Card
               key={idx}
-              className="relative w-[95%] sm:w-[320px] md:w-[340px] lg:w-[360px] min-h-[250px] bg-white rounded-3xl shadow-md hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 flex flex-col items-center justify-center text-center p-8 mt-10"
+              className="relative w-[95%] sm:w-[300px] md:w-[320px] lg:w-[340px] min-h-[200px] min-w-[150px] bg-white rounded-3xl shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 flex flex-col items-center justify-center text-center p-6 mt-10"
             >
-              <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 w-14 h-14 rounded-full bg-[#E32A18] text-white flex items-center justify-center shadow-md ring-4 ring-white">
-                <Icon className="w-7 h-7" />
+              <div className="absolute -top-7 left-1/2 transform -translate-x-1/2 w-12 h-12 rounded-full bg-[#E32A18] text-white flex items-center justify-center shadow-md ring-4 ring-white">
+                <Icon className="w-6 h-6" />
               </div>
-              <h4 className="text-base sm:text-lg md:text-l font-regular text-gray-900 leading-relaxed mt-10 px-2">
+              <h4 className="text-base sm:text-lg font-medium text-gray-800 leading-relaxed mt-8 px-2">
                 {text}
               </h4>
             </Card>
@@ -106,29 +104,29 @@ const InstitutionsNeededSection = () => {
   );
 
   return (
-    <section className="py-24 md:py-32 bg-[#F9FAFB] min-h-screen flex flex-col justify-center">
+    <section className="py-20 md:py-28 bg-[#F9FAFB] flex flex-col justify-center">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        {/* Section Header */}
+        {/* Header */}
         <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-gray-900 mb-6 leading-tight">
           Benefits of the{" "}
-          <span className="text-[#E32A18]">Skill Passport</span>
+          <span className="text-[#000000]">Skill Passport</span>
         </h2>
         <p className="text-gray-600 text-base sm:text-lg max-w-2xl mx-auto mb-16 leading-relaxed">
           Empower institutions and students through verified, data-driven, and
           transparent skill tracking that drives real-world success.
         </p>
 
-        {/* Institutions Section */}
-        <div className="mb-24">
-          <h3 className="text-2xl sm:text-3xl md:text-4xl font-semibold text-gray-900 flex items-center justify-center gap-3 mb-12">
+        {/* Institutions */}
+        <div className="mb-20">
+          <h3 className="text-2xl sm:text-3xl md:text-4xl font-semibold text-gray-900 flex items-center justify-center gap-3 mb-10">
             <Briefcase className="w-7 h-7 text-[#E32A18]" /> Benefits for Institutions
           </h3>
           {renderCards(institutionBenefits)}
         </div>
 
-        {/* Students Section */}
+        {/* Students */}
         <div>
-          <h3 className="text-2xl sm:text-3xl md:text-4xl font-semibold text-gray-900 flex items-center justify-center gap-3 mb-12">
+          <h3 className="text-2xl sm:text-3xl md:text-4xl font-semibold text-gray-900 flex items-center justify-center gap-3 mb-10">
             <GraduationCap className="w-7 h-7 text-[#E32A18]" /> Benefits for Students
           </h3>
           {renderCards(studentBenefits)}
