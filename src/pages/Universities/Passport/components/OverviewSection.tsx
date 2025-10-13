@@ -61,7 +61,7 @@ const OverviewSection = () => {
       <div className="max-w-7xl mx-auto text-center">
         {/* Section Title */}
         <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-[#000000]">
-          What is <span className="text-[#E32A18]">Rareminds Skill Passport</span>?
+          What is <span className="text-[#000000]">Rareminds Skill Passport</span>?
         </h2>
         <div className="w-24 h-1 bg-[#E32A18] mx-auto mt-4 mb-16 rounded-full opacity-80" />
 

@@ -8,7 +8,7 @@ export const CTASection = ({ onDemoClick }: { onDemoClick: () => void }) => {
       <div className="max-w-6xl mx-auto">
         {/* Heading */}
         <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-black mb-4">
-          Ready to <span className="text-[#E32A18]">Transform Learning?</span>
+          Ready to <span className="text-[#000000]">Transform Learning?</span>
         </h2>
 
         {/* Subtext */}
@@ -33,7 +33,7 @@ export const CTASection = ({ onDemoClick }: { onDemoClick: () => void }) => {
           <Button
             size="lg"
             className="bg-white text-black hover:bg-gray-100 px-6 py-5 rounded-full font-semibold flex items-center justify-center"
-            onClick={() => (window.location.href = "/passport/contact")}
+            onClick={onDemoClick}
           >
             <Users className="mr-2 h-5 w-5" />
             Talk to Our Academic Partner Team
@@ -43,7 +43,7 @@ export const CTASection = ({ onDemoClick }: { onDemoClick: () => void }) => {
           <Button
             size="lg"
             className="bg-[#FF6B6B] hover:bg-[#ff8787] text-white px-6 py-5 rounded-full font-semibold flex items-center justify-center"
-            onClick={() => (window.location.href = "/passport/brochure")}
+            onClick={onDemoClick}
           >
             Download Institutional Brochure
           </Button>

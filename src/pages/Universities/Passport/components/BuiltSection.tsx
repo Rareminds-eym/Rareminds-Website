@@ -77,7 +77,7 @@ const InstitutionsNeededSection = () => {
           </div>
 
           <h2 className="mt-6 text-2xl sm:text-3xl md:text-4xl font-extrabold text-gray-900 leading-tight">
-            Built for Every Type of <span className="text-[#E32A18]">Institution</span>
+            Built for Every Type of <span className="text-[#000000]">Institution</span>
           </h2>
 
           <p className="mt-4 text-gray-600 max-w-2xl mx-auto text-sm md:text-base">
@@ -98,7 +98,7 @@ const InstitutionsNeededSection = () => {
               tabIndex={0}
               className="w-full max-w-[320px] h-[220px] bg-white border border-gray-200 rounded-2xl p-6 flex flex-col items-center justify-center text-center shadow-sm hover:shadow-lg transition-transform duration-300 hover:-translate-y-2 focus:outline-none focus:ring-4 focus:ring-[#E32A18]/20"
             >
-              <div className="flex items-center justify-center w-14 h-14 rounded-full bg-[#E32A18]/10 text-[#E32A18] mb-4">
+              <div className="flex items-center justify-center rounded-2xl w-12 h-12 bg-[#E32A18]/10 text-[#E32A18] mb-4">
                 <Icon className="w-7 h-7" aria-hidden="true" />
               </div>
 
