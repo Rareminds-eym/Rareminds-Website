@@ -3,12 +3,13 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
 import banner1 from "../../../../../public/passport/Home-page-banner_1.png";
 import banner2 from "../../../../../public/passport/Home-page-banner_2.png";
-// import Banner3 from "../../../../../public/passport/Home-page-banner_3.png";
+import Banner3 from "../../../../../public/passport/Home-page-banner_3.png";
 import Banner4 from "../../../../../public/passport/Home-page-banner_4.png";
 import Banner5 from "../../../../../public/passport/Home-page-banner_5.png";
 
 import mobileBanner1 from "../../../../../public/passport/Home-page-banner_mobile_1.png";
 import mobileBanner2 from "../../../../../public/passport/Home-page-banner_mobile_2.png";
+import mobileBanner3 from "../../../../../public/passport/Home-page-banner_mobile_3.png";
 import mobileBanner4 from "../../../../../public/passport/Home-page-banner_mobile_4.png";
 import mobileBanner5 from "../../../../../public/passport/Home-page-banner_mobile_5.png";
 
@@ -22,10 +23,10 @@ const desktopSlides = [
     image: banner2,
     heading: "Stop Guessing. Start Hiring Verified.",
   },
-  // {
-  //   image: Banner3,
-  //   heading: "AI Verifies. Not Guesses. Your Hiring Should Too.",
-  // },
+  {
+    image: Banner3,
+    heading: "AI Verifies. Not Guesses. Your Hiring Should Too.",
+  },
   {
     image: Banner4,
     heading: "Smart Companies Don’t Hunt Talent — They Scan SkillPassports.",
@@ -45,10 +46,10 @@ const mobileSlides = [
     image: mobileBanner2,
     heading: "Stop Guessing. Start Hiring Verified.",
   },
-  // {
-  //   image: Banner3,
-  //   heading: "AI Verifies. Not Guesses. Your Hiring Should Too.",
-  // },
+  {
+    image: mobileBanner3,
+    heading: "AI Verifies. Not Guesses. Your Hiring Should Too.",
+  },
   {
     image: mobileBanner4,
     heading: "Smart Companies Don’t Hunt Talent. They Scan SkillPassports.",
@@ -90,6 +91,7 @@ const HeroSection = ({ onDemoClick }: { onDemoClick: () => void }) => {
             key={slides[current].image}
             src={slides[current].image}
             alt="Hero Banner"
+            loading="lazy"
             className="w-full h-full object-cover absolute"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
