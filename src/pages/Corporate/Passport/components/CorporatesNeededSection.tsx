@@ -151,7 +151,7 @@ type CorporatesNeededSectionProps = {
 
 const CorporatesNeededSection = ({ onDemoClick }: CorporatesNeededSectionProps) => {
   return (
-    <section className="py-16 md:py-20 bg-[#F9FAFB]">
+    <section className="py-16 md:py-20">
       <div className="max-w-7xl mx-auto px-6">
         <div className="text-center">
           <div className="flex items-center justify-center mb-4">
