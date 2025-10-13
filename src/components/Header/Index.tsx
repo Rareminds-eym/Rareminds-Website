@@ -1,5 +1,5 @@
 import React, { useState, Dispatch, SetStateAction } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useParams } from 'react-router-dom';
 import { Menu, Briefcase } from 'lucide-react';
 
 interface HeaderProps {
@@ -9,6 +9,9 @@ interface HeaderProps {
 
 const Index: React.FC<HeaderProps> = ({ navbarOpen, setNavbarOpen }) => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const location = useLocation();
+    // Check if current path matches /events/:slug
+    const isEventDetailPage = /^\/events\/.+/.test(location.pathname);
 
     const toggleMenu = () => {
         setIsMenuOpen(!isMenuOpen);
@@ -32,33 +35,35 @@ const Index: React.FC<HeaderProps> = ({ navbarOpen, setNavbarOpen }) => {
                     </div>
                 </div>
 
-                {/* Menu Button and Trainers Button */}
-                <div className="mt-0 flex items-center gap-2">
-                    <button
-                        onClick={toggleMenu}
-                        className="bg-black text-white px-6 py-2 space-x-1 rounded-full flex items-center justify-center w-auto relative z-50"
-                        aria-label="Menu"
-                        aria-expanded={isMenuOpen}
-                    >
-                        <Menu className='rotate-90'/>
-                        <span className="font-medium">MENU</span>
-                    </button>
-                    <Link
-                        to="/hackathons"
-                        className="bg-black text-white px-6 py-2 rounded-full flex items-center justify-center w-auto relative z-40 font-medium animate-glow group hover:bg-gray-50 hover:text-black transition"
-                        style={{ minWidth: 0 }}
-                    >
-                        <Briefcase size={22} className="mr-2" />
-                        Hackathons
-                        <span className="absolute left-1/2 -bottom-10 -translate-x-1/2 whitespace-nowrap bg-yellow-300 text-black text-xs font-semibold px-2 py-1 rounded shadow opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10">
-                            Explore exciting hackathons!
-                        </span>
-                    </Link>
-                </div>
+                {/* Menu Button and Hackathons Button - hidden on event details page */}
+                {!isEventDetailPage && (
+                  <div className="mt-0 flex items-center gap-2">
+                      <button
+                          onClick={toggleMenu}
+                          className="bg-black text-white px-6 py-2 space-x-1 rounded-full flex items-center justify-center w-auto relative z-50"
+                          aria-label="Menu"
+                          aria-expanded={isMenuOpen}
+                      >
+                          <Menu className='rotate-90'/>
+                          <span className="font-medium">MENU</span>
+                      </button>
+                      <a
+                          href="https://skillpassport.rareminds.in/"
+                          className="bg-black text-white px-6 py-2 rounded-full flex items-center justify-center w-auto relative z-40 font-medium animate-glow group hover:bg-gray-50 hover:text-black transition"
+                          style={{ minWidth: 0 }}
+                      >
+                          <Briefcase size={22} className="mr-2" />
+                          Skill Passport
+                          {/* <span className="absolute left-1/2 -bottom-10 -translate-x-1/2 whitespace-nowrap bg-yellow-300 text-black text-xs font-semibold px-2 py-1 rounded shadow opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10">
+                              Explore exciting hackathons!
+                          </span> */}
+                      </a>
+                  </div>
+                )}
             </div>
 
-            {/* Fullscreen Menu Overlay */}
-            {isMenuOpen && (
+            {/* Fullscreen Menu Overlay - hidden on event details page */}
+            {isMenuOpen && !isEventDetailPage && (
                 <div className="fixed inset-0 bg-black/90  text-white z-40 flex items-center justify-center">
                     <div className="relative w-full h-full">
                         <div className="container mx-auto py-36">

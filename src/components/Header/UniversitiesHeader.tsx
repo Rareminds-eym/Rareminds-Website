@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Menu, X, HomeIcon, BookOpen, Briefcase, Users, School, GraduationCap, AlertTriangle, Zap } from "lucide-react";
-import { motion } from "framer-motion";
+import { Menu, X, HomeIcon, BookOpen, Briefcase, Users, School, GraduationCap, AlertTriangle, Zap, BookAIcon } from "lucide-react";
+
 
 const verticalOptions = [
   { label: "SDP", path: "/universities", icon: <School size={22} /> },
@@ -13,6 +13,8 @@ const commonOptions = [
   { label: "Careers", path: "https://rareminds.zohorecruit.in/jobs/Careers", icon: <Briefcase size={22} /> },
   { label: "Trainers: Apply Now", path: "https://rareminds.zohorecruit.in/jobs/Trainers", icon: <Zap size={22} />, isTrainers: true },
   { label: "Blogs", path: "/universities/blogs", icon: <BookOpen size={22} /> },
+  { label: "Skill Passport", path: "/universities/skill-passport", icon: <BookAIcon size={22} /> },
+
 ];
 
 const mobileOptions = [

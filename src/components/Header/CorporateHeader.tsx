@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Home, BookOpen, Newspaper, Phone } from "lucide-react";
+import { Home, BookOpen, Newspaper, Phone, BookAIcon } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Icon } from "@iconify/react";
 
@@ -23,6 +23,7 @@ const CorporateHeader: React.FC = () => {
     },
     { path: `${prefix}/blogs`, label: "Blogs", icon: Newspaper },
     { path: `${prefix}/contact`, label: "Contact", icon: Phone },
+    { path: `/corporate/skill-passport`, label: "Skill Passport", icon: BookAIcon },
   ];
 
   const container = {

@@ -1,60 +1,42 @@
-import React from 'react';
-import { Button } from '../UI/button';
-import { useToast } from '@/hooks/use-toast';
+import { Button } from "@/components/ui/button";
+import { Users, Calendar } from "lucide-react";
 
-const CTASection: React.FC = () => {
-  const { toast } = useToast();
-  
-  const handleDownloadPDF = () => {
-    toast({
-      title: "PDF Download Started",
-      description: "Your 5-Day TDP Calendar PDF is being downloaded.",
-    });
-  };
-  
-  const handleContactRequest = () => {
-    toast({
-      title: "Request Received",
-      description: "Our Academic Program Head will contact you shortly.",
-    });
-  };
-  
+export const CTASection = () => {
   return (
-    <div className="bg-gradient-to-r from-education-primary to-education-secondary text-white rounded-xl p-8 shadow-xl">
-      <div className="text-center mb-8 max-w-2xl mx-auto">
-        <h2 className="text-3xl font-bold mb-4">Faculty who learn, lead. Classrooms that change, inspire.</h2>
-        <p className="text-lg opacity-90">
-          Transform your teaching approach and empower your educators with our comprehensive development program.
+    <div>
+      <div className="max-w-3xl mx-auto">
+        {/* Heading */}
+        <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-4">
+          Your Passport to Jobs – Launching Oct 13 at GITEX
+        </h2>
+
+        {/* Subtext */}
+        <p className="text-base md:text-lg text-gray-300 mb-10">
+          Join the movement redefining how the world looks at skills. <br />
+          From India → to the World.
         </p>
-      </div>
-      
-      <div className="flex flex-col sm:flex-row gap-4 justify-center">
-        <Button 
-          variant="outline" 
-          size="lg"
-          onClick={handleDownloadPDF}
-          className="bg-white/10 hover:bg-white/20 text-white border-white/30"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-          </svg>
-          Download Full 5-Day TDP Calendar PDF
-        </Button>
-        
-        <Button 
-          variant="secondary" 
-          size="lg"
-          onClick={handleContactRequest}
-          className="bg-white text-education-primary hover:bg-opacity-90"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
-          </svg>
-          Talk to Our Academic Program Head
-        </Button>
+
+        {/* Buttons */}
+        <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          {/* Left button (white) */}
+          <Button
+            size="lg"
+            className="bg-white text-black hover:bg-gray-100 px-6 py-5 rounded-full font-semibold flex items-center justify-center"
+          >
+            <Users className="mr-2 h-5 w-5" />
+            Join the Waitlist
+          </Button>
+
+          {/* Right button (dark blue) */}
+          <Button
+            size="lg"
+            className="bg-[#1E3A8A] hover:bg-[#1E40AF] text-white px-6 py-5 rounded-full font-semibold flex items-center justify-center"
+          >
+            <Calendar className="mr-2 h-5 w-5" />
+            Book a Demo
+          </Button>
+        </div>
       </div>
     </div>
   );
 };
-
-export default CTASection;
