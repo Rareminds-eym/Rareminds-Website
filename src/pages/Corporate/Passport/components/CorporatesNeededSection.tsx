@@ -131,7 +131,7 @@ const BenefitCard: React.FC<Benefit> = ({ Icon, title, subtitle, description }) 
         <motion.div
           initial={{ height: 0, opacity: 0 }}
           animate={open ? { height: "auto", opacity: 1 } : { height: 0, opacity: 0 }}
-          transition={{ duration: reduce ? 0 : 0.18 }}
+          transition={{ duration: reduce ? 0 : 0.3, ease: "easeInOut" }}
           className="overflow-hidden mt-3 text-gray-600"
           aria-hidden={!open}
         >
