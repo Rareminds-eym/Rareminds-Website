@@ -1,8 +1,13 @@
 import { Workflow } from "lucide-react";
-import step1 from "../../../../../public/passport/StepProcess/Step1.webp";
-import step2 from "../../../../../public/passport/StepProcess/Step2.webp";
-import step3 from "../../../../../public/passport/StepProcess/Step3.webp";
-import step4 from "../../../../../public/passport/StepProcess/Step4.webp";
+// import step1 from "../../../../../public/passport/StepProcess/Step1.webp";
+// import step2 from "../../../../../public/passport/StepProcess/Step2.webp";
+// import step3 from "../../../../../public/passport/StepProcess/Step3.webp";
+// import step4 from "../../../../../public/passport/StepProcess/Step4.webp";
+
+const step1 = "/passport/StepProcess/Step1.webp";
+const step2 = "/passport/StepProcess/Step2.webp";
+const step3 = "/passport/StepProcess/Step3.webp";
+const step4 = "/passport/StepProcess/Step4.webp";
 
 const StepBlock = ({
   title,
