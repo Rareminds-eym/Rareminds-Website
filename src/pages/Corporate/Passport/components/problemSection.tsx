@@ -34,8 +34,7 @@ export const ProblemSection = ({ onDemoClick }: { onDemoClick: () => void }) => 
       <div className="container mx-auto px-6 text-center">
         {/* Section Title */}
         <h2 className="text-3xl md:text-4xl font-extrabold text-[#000000] mb-4">
-          It’s Not the Employability Gap — It’s the{" "}
-          <span className="text-[#E32A18]">Visibility Gap.</span>
+          It’s Not the Employability Gap — It’s the Visibility Gap.
         </h2>
         <p className="text-sm md:text-base text-gray-500 mb-16">
          The right talent isn’t found through resumes — it’s revealed through skills.

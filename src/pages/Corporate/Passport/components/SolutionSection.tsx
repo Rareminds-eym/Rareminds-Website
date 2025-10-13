@@ -47,7 +47,7 @@ const SolutionSection = () => {
         <h2 className="text-3xl md:text-4xl font-extrabold text-[#000000] leading-tight mb-4">
           Skills <span className="text-[#000000]">Visible</span>,{" "}
           <span className="text-[#000000]">Verifiable</span>,{" "}
-          <span className="text-[#E32A18]">Valuable</span>
+          <span className="text-[#000000]">Valuable</span>
         </h2>
 
         <p className="text-gray-500 text-sm md:text-base mb-16">

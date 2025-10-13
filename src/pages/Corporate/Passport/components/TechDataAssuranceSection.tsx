@@ -33,6 +33,12 @@ const FEATURES: Feature[] = [
       "Each credential is digitally signed and time-stamped to ensure authenticity. Once verified, data cannot be altered or duplicated — maintaining a single source of truth for learners, employers, and ecosystem partners.",
   },
   {
+    Icon: Plug,
+    title: "Integration & API Readiness",
+    description:
+      "Skill Passport is designed to fit within your digital ecosystem. Our open APIs enable seamless integration with existing LMS, HRMS, ERP, and BI systems, ensuring smooth data flow and zero duplication.",
+  },
+  {
     Icon: ShieldCheck,
     title: "Compliance with Global Standards",
     description:
@@ -49,13 +55,7 @@ const FEATURES: Feature[] = [
     title: "Transparent Analytics & Audit Trails",
     description:
       "Every action — from assessment upload to credential issue — is logged, auditable, and accessible via dashboards. This transparency helps organizations stay compliance-ready for internal audits, CSR reporting, or government reviews.",
-  },
-  {
-    Icon: Plug,
-    title: "Integration & API Readiness",
-    description:
-      "Skill Passport is designed to fit within your digital ecosystem. Our open APIs enable seamless integration with existing LMS, HRMS, ERP, and BI systems, ensuring smooth data flow and zero duplication.",
-  },
+  }
 ];
 
 const FeatureCard: React.FC<{ f: Feature; idx: number }> = ({ f }) => {
@@ -159,7 +159,7 @@ const TechDataAssuranceSection: React.FC<{ onDemoClick: () => void; onAnalyticsC
             className="text-3xl md:text-4xl font-extrabold text-[#000000] leading-tight mb-2"
           >
             Tech & Data&nbsp;
-            <span className="text-[#E32A18]">Assurance</span>
+            <span className="text-[#000000]">Assurance</span>
           </h2>
           <p className="text-gray-500 text-sm md:text-bas mx-auto">
             Trust is at the core of every verified skill.
@@ -169,7 +169,7 @@ const TechDataAssuranceSection: React.FC<{ onDemoClick: () => void; onAnalyticsC
             className="mt-4 text-base md:text-lg text-gray-600 leading-relaxed max-w-3xl mx-auto mb-16"
             aria-describedby="tech-assurance-heading"
           >
-            The Rareminds Skill Passport is built on a robust, enterprise-grade technology framework that ensures every skill record is <span className="font-semibold text-[#E32A18]">secure, traceable, and tamper-proof</span> — from creation to verification.
+            The Rareminds Skill Passport is built on a robust, enterprise-grade technology framework that ensures every skill record is <span className="font-semibold text-[#000000]">secure, traceable, and tamper-proof</span> — from creation to verification.
           </p>
         </div>
 
@@ -181,7 +181,7 @@ const TechDataAssuranceSection: React.FC<{ onDemoClick: () => void; onAnalyticsC
 
         <div className="max-w-7xl mx-auto mt-14 px-6 text-center">
           <p className="text-base text-gray-800 italic">
-            <span className="font-semibold text-[#E32A18]">In Short:{" "}</span>
+            <span className="font-semibold text-[#000000]">In Short:{" "}</span>
             <strong>Secure. Scalable. Compliant. Trusted.{" "}</strong>
             Skill Passport ensures every skill you validate is authentic, traceable, and enterprise-ready — empowering you to build workforce intelligence with absolute confidence.
           </p>
