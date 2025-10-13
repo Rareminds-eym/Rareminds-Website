@@ -1,17 +1,29 @@
 import { FaCalendarAlt } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
-import banner1 from "../../../../../public/passport/Home-page-banner_1.png";
-import banner2 from "../../../../../public/passport/Home-page-banner_2.png";
-import Banner3 from "../../../../../public/passport/Home-page-banner_3.png";
-import Banner4 from "../../../../../public/passport/Home-page-banner_4.png";
-import Banner5 from "../../../../../public/passport/Home-page-banner_5.png";
+// import banner1 from "../../../../../public/passport/Home-page-banner_1.png";
+// import banner2 from "../../../../../public/passport/Home-page-banner_2.png";
+// import Banner3 from "../../../../../public/passport/Home-page-banner_3.png";
+// import Banner4 from "../../../../../public/passport/Home-page-banner_4.png";
+// import Banner5 from "../../../../../public/passport/Home-page-banner_5.png";
 
-import mobileBanner1 from "../../../../../public/passport/Home-page-banner_mobile_1.png";
-import mobileBanner2 from "../../../../../public/passport/Home-page-banner_mobile_2.png";
-import mobileBanner3 from "../../../../../public/passport/Home-page-banner_mobile_3.png";
-import mobileBanner4 from "../../../../../public/passport/Home-page-banner_mobile_4.png";
-import mobileBanner5 from "../../../../../public/passport/Home-page-banner_mobile_5.png";
+// import mobileBanner1 from "../../../../../public/passport/Home-page-banner_mobile_1.png";
+// import mobileBanner2 from "../../../../../public/passport/Home-page-banner_mobile_2.png";
+// import mobileBanner3 from "../../../../../public/passport/Home-page-banner_mobile_3.png";
+// import mobileBanner4 from "../../../../../public/passport/Home-page-banner_mobile_4.png";
+// import mobileBanner5 from "../../../../../public/passport/Home-page-banner_mobile_5.png";
+
+const banner1 = "/passport/Home-page-banner_1.png";
+const banner2 = "/passport/Home-page-banner_2.png";
+const Banner3 = "/passport/Home-page-banner_3.png";
+const Banner4 = "/passport/Home-page-banner_4.png";
+const Banner5 = "/passport/Home-page-banner_5.png";
+
+const mobileBanner1 = "/passport/Home-page-banner_mobile_1.png";
+const mobileBanner2 = "/passport/Home-page-banner_mobile_2.png";
+const mobileBanner3 = "/passport/Home-page-banner_mobile_3.png";
+const mobileBanner4 = "/passport/Home-page-banner_mobile_4.png";
+const mobileBanner5 = "/passport/Home-page-banner_mobile_5.png";
 
 
 const desktopSlides = [
