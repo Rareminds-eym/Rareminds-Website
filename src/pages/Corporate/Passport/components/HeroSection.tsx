@@ -9,6 +9,9 @@ import Banner5 from "../../../../../public/passport/Home-page-banner_5.png";
 
 import mobileBanner1 from "../../../../../public/passport/Home-page-banner_mobile_1.png";
 import mobileBanner2 from "../../../../../public/passport/Home-page-banner_mobile_2.png";
+import mobileBanner4 from "../../../../../public/passport/Home-page-banner_mobile_4.png";
+import mobileBanner5 from "../../../../../public/passport/Home-page-banner_mobile_5.png";
+
 
 const desktopSlides = [
   {
@@ -47,11 +50,11 @@ const mobileSlides = [
   //   heading: "AI Verifies. Not Guesses. Your Hiring Should Too.",
   // },
   {
-    image: Banner4,
+    image: mobileBanner4,
     heading: "Smart Companies Don’t Hunt Talent. They Scan SkillPassports.",
   },
   {
-    image: Banner5,
+    image: mobileBanner5,
     heading: "Cut Hiring Time by 70%. Keep Every Bit of Quality.",
   }
 ];

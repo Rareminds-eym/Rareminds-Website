@@ -126,7 +126,7 @@ const FeatureCard: React.FC<{ f: Feature; idx: number }> = ({ f }) => {
         <motion.div
           initial={{ height: 0, opacity: 0 }}
           animate={open ? { height: "auto", opacity: 1 } : { height: 0, opacity: 0 }}
-          transition={{ duration: reduce ? 0 : 0.18 }}
+          transition={{ duration: reduce ? 0 : 0.3, ease: "easeInOut" }}
           className="overflow-hidden mt-4 text-neutral-700"
           aria-hidden={!open}
         >
