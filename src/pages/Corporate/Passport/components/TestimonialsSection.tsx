@@ -63,7 +63,7 @@ export default function TestimonialsSection() {
 
         {/* Heading */}
         <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 mb-16">
-          <span className="text-[#E32A18]">Voices</span>{" "}
+          <span className="text-[#000000]">Voices</span>{" "}
           <span className="text-[#000000]">Behind the Movement.</span>
         </h2>
 

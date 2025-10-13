@@ -113,7 +113,7 @@ const BenefitCard: React.FC<Benefit> = ({ Icon, title, subtitle, description }) 
           </div>
           <div className="flex-1">
             <h3 className="text-base font-semibold text-[#000000]">{title}</h3>
-            <p className="mt-1 text-sm text-[#E32A18] font-medium">{subtitle}</p>
+            <p className="mt-1 text-sm text-[#6f6e6e] font-medium">{subtitle}</p>
           </div>
 
           {/* Arrow only on touch devices */}
@@ -161,7 +161,7 @@ const CorporatesNeededSection = ({ onDemoClick }: CorporatesNeededSectionProps) 
           </div>
 
           <h2 className="text-3xl md:text-4xl font-extrabold text-[#000000] leading-tight mb-4">
-            Why <span className="text-[#E32A18]">Corporates</span> Need It
+            Why Corporates Need It
           </h2>
 
           <p className="text-gray-500 text-sm md:text-base max-w-4xl mx-auto">
@@ -169,7 +169,7 @@ const CorporatesNeededSection = ({ onDemoClick }: CorporatesNeededSectionProps) 
           </p>
 
           <p className="mt-4 text-base md:text-lg text-gray-600 leading-relaxed max-w-3xl mx-auto">
-            The <span className="font-semibold text-[#E32A18]">Rareminds Skill Passport</span> helps corporates move from assumptions to evidence by bringing skill intelligence, visibility, and accountability into every stage of workforce development.
+            The Rareminds Skill Passport helps corporates move from assumptions to evidence by bringing skill intelligence, visibility, and accountability into every stage of workforce development.
           </p>
         </div>
 
@@ -182,7 +182,7 @@ const CorporatesNeededSection = ({ onDemoClick }: CorporatesNeededSectionProps) 
 
         {/* Result Note */}
         <p className="mt-8 text-center text-[#000000] text-sm md:text-base italic font-medium max-w-6xl mx-auto">
-          <span className="text-[#E32A18]">Result:</span> From Training to Transformation. The Skill Passport transforms training data into business intelligence — helping organizations make better people decisions, faster.
+          <span className="text-[#000000] font-bold">Result:</span> From Training to Transformation. The Skill Passport transforms training data into business intelligence — helping organizations make better people decisions, faster.
         </p>
 
         {/* CTA */}

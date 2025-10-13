@@ -95,7 +95,7 @@ const HeroSection = ({ onDemoClick }: { onDemoClick: () => void }) => {
   }, [slides]);
 
   return (
-    <section className="relative w-auto h-[600px] md:h-[640px] overflow-hidden m-4 md:m-6 rounded-2xl shadow-sm bg-[#EDF2F9]">
+    <section className="relative w-auto h-[640px] md:h-[640px] overflow-hidden m-4 md:m-6 rounded-2xl shadow-sm bg-[#EDF2F9]">
       {/* Fade Images */}
       <div className="absolute inset-0 z-0">
         <AnimatePresence>
@@ -114,7 +114,7 @@ const HeroSection = ({ onDemoClick }: { onDemoClick: () => void }) => {
       </div>
 
       {/* Content */}
-      <div className="relative z-10 max-w-7xl mx-auto px-6 sm:px-10 py-16 sm:py-20 md:py-28">
+      <div className="relative z-10 max-w-7xl mx-auto px-6 sm:px-10 py-10 sm:py-20 md:py-28">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
           <motion.div
             initial={{ opacity: 0, y: 30 }}

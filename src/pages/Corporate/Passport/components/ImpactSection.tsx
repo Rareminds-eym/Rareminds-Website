@@ -42,7 +42,7 @@ const Counter: React.FC<CounterProps> = ({
   return (
     <span className="text-4xl md:text-5xl font-extrabold text-[#000000]">
       {count.toLocaleString()}
-      <span className="text-[#E32A18]">{suffix}</span>
+      <span className="text-[#000000]">{suffix}</span>
     </span>
   );
 };
@@ -197,7 +197,7 @@ export default function ImpactSection() {
 
         {/* Heading */}
         <h2 className="text-3xl md:text-4xl font-extrabold text-[#000000] mb-2">
-          Real Impact. <span className="text-[#E32A18]">Real Numbers.</span>
+          Real Impact. <span className="text-[#000000]">Real Numbers.</span>
         </h2>
         <p className="text-gray-500 text-sm md:text-base mb-16">
           Transforming employability across India and beyond.
