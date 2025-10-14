@@ -159,7 +159,7 @@ const TechDataAssuranceSection: React.FC<{ onDemoClick: () => void; onAnalyticsC
             className="text-3xl md:text-4xl font-extrabold text-[#000000] leading-tight mb-2"
           >
             Tech & Data&nbsp;
-            <span className="text-[#000000]">Assurance</span>
+            <span className="text-[#E32A18]">Assurance</span>
           </h2>
           <p className="text-gray-500 text-sm md:text-bas mx-auto">
             Trust is at the core of every verified skill.
@@ -169,7 +169,7 @@ const TechDataAssuranceSection: React.FC<{ onDemoClick: () => void; onAnalyticsC
             className="mt-4 text-base md:text-lg text-gray-600 leading-relaxed max-w-3xl mx-auto mb-16"
             aria-describedby="tech-assurance-heading"
           >
-            The Rareminds Skill Passport is built on a robust, enterprise-grade technology framework that ensures every skill record is <span className="font-semibold text-[#000000]">secure, traceable, and tamper-proof</span> — from creation to verification.
+            The Rareminds Skill Passport is built on a robust, enterprise-grade technology framework that ensures every skill record is <span className="font-semibold text-[#E32A18]">secure, traceable, and tamper-proof</span> — from creation to verification.
           </p>
         </div>
 
@@ -181,7 +181,7 @@ const TechDataAssuranceSection: React.FC<{ onDemoClick: () => void; onAnalyticsC
 
         <div className="max-w-7xl mx-auto mt-14 px-6 text-center">
           <p className="text-base text-gray-800 italic">
-            <span className="font-semibold text-[#000000]">In Short:{" "}</span>
+            <span className="font-semibold text-[#E32A18]">In Short:{" "}</span>
             <strong>Secure. Scalable. Compliant. Trusted.{" "}</strong>
             Skill Passport ensures every skill you validate is authentic, traceable, and enterprise-ready — empowering you to build workforce intelligence with absolute confidence.
           </p>

@@ -69,9 +69,9 @@ export default function WorkSection() {
         </div>
         {/* Heading */}
         <h2 className="text-center text-3xl md:text-4xl font-extrabold text-[#011938] mb-4">
-          How Skill Passport <span className="text-[#000000]">Works.</span>
+          How Skill Passport <span className="text-[#E32A18]">Works.</span>
         </h2>
-        <p className="text-center text-gray-500 text-sm md:text-base mb-16">
+        <p className="text-center text-gray-500 text-sm md:text-base max-w-7xl mb-16">
           The Rareminds Skill Passport transforms training outcomes into
           measurable skill intelligence through a simple yet powerful process —
           from learning to verification to employability.
