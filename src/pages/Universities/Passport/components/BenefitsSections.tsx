@@ -1,139 +1,504 @@
-import { Card } from "@/components/ui/card";
-import {
-  Briefcase,
-  GraduationCap,
-  BarChart3,
-  FileText,
-  Target,
-  Users,
-  LineChart,
-  Brain,
-  Award,
-  Lightbulb,
-  Rocket,
-} from "lucide-react";
 
-const InstitutionsNeededSection = () => {
-  // Benefits for Institutions
-  const institutionBenefits = [
+// import React from "react";
+// import { GraduationCap, Target, Star, CheckCircle, Users } from "lucide-react";
+
+// export default function StudentBenefits() {
+//   const benefits = [
+//     {
+//       id: 1,
+//       icon: GraduationCap,
+//       title: "Personalized Digital Passport",
+//       text: "Own a dynamic digital passport that grows each semester with verified skills.",
+//       position: "top-left",
+//     },
+//     {
+//       id: 2,
+//       icon: Target,
+//       title: "Visibility into Strengths & Gaps",
+//       text: "Gain visibility into strengths, skill gaps, and personalized learning paths.",
+//       position: "bottom-left",
+//     },
+//     {
+//       id: 3,
+//       icon: Star,
+//       title: "Digital Proof of Skills",
+//       text: "Use verified digital proof of competencies for placements and internships globally.",
+//       position: "top-right",
+//     },
+//     {
+//       id: 4,
+//       icon: CheckCircle,
+//       title: "AI Career Insights & Motivation",
+//       text: "Get AI-powered career insights, guided recommendations, and motivation to keep learning.",
+//       position: "bottom-right",
+//     },
+//     {
+//       id: 5,
+//       icon: Users,
+//       title: "Continuous Learning & Global Recognition",
+//       text: "Stay motivated to learn continuously and showcase your verified achievements globally.",
+//       position: "bottom-center",
+//     },
+//   ];
+
+//   return (
+//     <section className="relative py-28 bg-gradient-to-b from-white to-[#F6F8FA] overflow-hidden">
+//       <div className="max-w-6xl mx-auto px-6">
+//         {/* Header */}
+//         <div className="text-center mb-16">
+//           <h2 className="text-3xl sm:text-4xl font-extrabold text-gray-900 mb-3">
+//             Benefits for <span className="text-[#E32A18]">Students</span>
+//           </h2>
+//           <p className="text-gray-600 max-w-2xl mx-auto">
+//             Empower students with clear insights, verified skills, and a global-ready digital identity.
+//           </p>
+//         </div>
+
+//         {/* Central Image + Benefits */}
+//         <div className="relative flex justify-center items-center min-h-[620px]">
+//           {/* Central Image */}
+//           <div className="absolute z-10 w-64 h-64 rounded-full bg-white shadow-lg flex items-center justify-center overflow-hidden hidden md:flex">
+//             <img
+//               src="https://clipart-library.com/img/1764426.gif"
+//               alt="Student Illustration"
+//               className="object-contain w-full h-full p-6"
+//             />
+//           </div>
+
+//           {/* Connector Line for Bottom Center */}
+//           <div className="absolute left-1/2 top-[420px] -translate-x-1/2 w-[2px] h-[120px] bg-gray-400 border-dashed border-gray-500" style={{ borderLeft: "2px dashed #9CA3AF" }}></div>
+
+//           {/* Benefit Points (excluding 5th) */}
+//           {benefits.slice(0, 4).map(({ id, icon: Icon, title, text, position }) => (
+//             <div
+//               key={id}
+//               className={`absolute bg-white shadow-md border border-gray-200 rounded-xl p-5 w-72 flex gap-4 items-start transition-all hover:shadow-xl ${position}`}
+//             >
+//               <div className="flex-shrink-0">
+//                 <div className="inline-flex items-center justify-center h-11 w-11 rounded-xl bg-red-50 text-[#E32A18]">
+//                   <Icon className="h-6 w-6" />
+//                 </div>
+//               </div>
+//               <div>
+//                 <h4 className="font-semibold text-gray-900 mb-1 text-[15px]">{title}</h4>
+//                 <p className="text-gray-600 text-[14px] leading-relaxed">{text}</p>
+//               </div>
+
+//               {/* Connector Lines */}
+//               <span
+//                 className={`absolute w-20 h-[2px] bg-gray-400 hidden md:block ${
+//                   position.includes("left")
+//                     ? "right-[-80px] top-1/2 -translate-y-1/2"
+//                     : "left-[-80px] top-1/2 -translate-y-1/2"
+//                 }`}
+//               ></span>
+//               <span
+//                 className={`absolute w-[2px] h-10 bg-gray-400 hidden md:block ${
+//                   position.includes("top")
+//                     ? position.includes("left")
+//                       ? "right-[-80px] top-1/2"
+//                       : "left-[-80px] top-1/2"
+//                     : position.includes("left")
+//                     ? "right-[-80px] bottom-1/2"
+//                     : "left-[-80px] bottom-1/2"
+//                 }`}
+//               ></span>
+//             </div>
+//           ))}
+
+//           {/* 5th Point (Below Image - Centered) */}
+//           <div className="absolute bottom-[-60px] left-1/2 -translate-x-1/2 bg-white shadow-md border border-gray-200 rounded-xl p-5 w-80 flex gap-4 items-start transition-all hover:shadow-xl">
+//             <div className="flex-shrink-0">
+//               <div className="inline-flex items-center justify-center h-11 w-11 rounded-xl bg-red-50 text-[#E32A18]">
+//                 <Users className="h-6 w-6" />
+//               </div>
+//             </div>
+//             <div>
+//               <h4 className="font-semibold text-gray-900 mb-1 text-[15px]">
+//                 {benefits[4].title}
+//               </h4>
+//               <p className="text-gray-600 text-[14px] leading-relaxed">
+//                 {benefits[4].text}
+//               </p>
+//             </div>
+//           </div>
+//         </div>
+//       </div>
+
+//       {/* TailwindCSS Position Helpers */}
+//       <style>
+//         {`
+//           .top-left { top: 10%; left: 4%; }
+//           .bottom-left { bottom: 12%; left: 4%; }
+//           .top-right { top: 10%; right: 4%; }
+//           .bottom-right { bottom: 12%; right: 4%; }
+//           .bottom-center { bottom: -60px; left: 50%; transform: translateX(-50%); }
+
+//           @media (max-width: 1024px) {
+//             .top-left { top: 5%; left: 2%; }
+//             .bottom-left { bottom: 8%; left: 2%; }
+//             .top-right { top: 5%; right: 2%; }
+//             .bottom-right { bottom: 8%; right: 2%; }
+//           }
+
+//           @media (max-width: 768px) {
+//             .top-left, .bottom-left, .top-right, .bottom-right, .bottom-center {
+//               position: relative !important;
+//               left: 0 !important;
+//               right: 0 !important;
+//               top: auto !important;
+//               bottom: auto !important;
+//               transform: none !important;
+//               margin: 16px auto;
+//             }
+//           }
+//         `}
+//       </style>
+//     </section>
+//   );
+// }
+
+
+// import React from "react";
+// import { GraduationCap, Target, Star, CheckCircle, Users } from "lucide-react";
+
+// export default function StudentBenefits() {
+//   const benefits = [
+//     {
+//       id: 1,
+//       icon: GraduationCap,
+//       title: "Personalized Digital Passport",
+//       text: "Own a dynamic digital passport that grows each semester with verified skills.",
+//       position: "top-left",
+//     },
+//     {
+//       id: 2,
+//       icon: Target,
+//       title: "Visibility into Strengths & Gaps",
+//       text: "Gain visibility into strengths, skill gaps, and personalized learning paths.",
+//       position: "bottom-left",
+//     },
+//     {
+//       id: 3,
+//       icon: Star,
+//       title: "Digital Proof of Skills",
+//       text: "Use verified digital proof of competencies for placements and internships globally.",
+//       position: "top-right",
+//     },
+//     {
+//       id: 4,
+//       icon: CheckCircle,
+//       title: "AI Career Insights & Motivation",
+//       text: "Get AI-powered career insights, guided recommendations, and motivation to keep learning.",
+//       position: "bottom-right",
+//     },
+//     {
+//       id: 5,
+//       icon: Users,
+//       title: "Continuous Learning & Global Recognition",
+//       text: "Stay motivated to learn continuously and showcase your verified achievements globally.",
+//       position: "bottom-center",
+//     },
+//   ];
+
+//   return (
+//     <section className="relative py-28 bg-gradient-to-b from-white to-[#F6F8FA] overflow-hidden">
+//       <div className="max-w-6xl mx-auto px-6">
+//         {/* Header */}
+//         <div className="text-center mb-16">
+//           <h2 className="text-3xl sm:text-4xl font-extrabold text-gray-900 mb-3">
+//             Benefits for <span className="text-[#E32A18]">Students</span>
+//           </h2>
+//           <p className="text-gray-600 max-w-2xl mx-auto">
+//             Empower students with clear insights, verified skills, and a global-ready digital identity.
+//           </p>
+//         </div>
+
+//         {/* Central Image + Benefits */}
+//         <div className="relative flex justify-center items-center min-h-[620px]">
+//           {/* Central Image */}
+//           <div className="absolute z-10 w-64 h-64 rounded-full bg-white shadow-lg flex items-center justify-center overflow-hidden hidden md:flex">
+//             <img
+//               src="https://clipart-library.com/img/1764426.gif"
+//               alt="Student Illustration"
+//               className="object-contain w-full h-full p-6"
+//             />
+//           </div>
+
+//           {/* Connector Line for Bottom Center */}
+//           <div className="absolute left-1/2 top-[420px] -translate-x-1/2 w-[2px] h-[120px] bg-gray-400 border-dashed border-gray-500 hidden md:block" style={{ borderLeft: "2px dashed #9CA3AF" }}></div>
+
+//           {/* Benefit Points (excluding 5th) */}
+//           {benefits.slice(0, 4).map(({ id, icon: Icon, title, text, position }) => (
+//             <div
+//               key={id}
+//               className={`absolute bg-white shadow-md border border-gray-200 rounded-xl p-5 w-72 flex gap-4 items-start transition-all hover:shadow-xl ${position}`}
+//             >
+//               <div className="flex-shrink-0">
+//                 <div className="inline-flex items-center justify-center h-11 w-11 rounded-xl bg-red-50 text-[#E32A18]">
+//                   <Icon className="h-6 w-6" />
+//                 </div>
+//               </div>
+//               <div>
+//                 <h4 className="font-semibold text-gray-900 mb-1 text-[15px]">{title}</h4>
+//                 <p className="text-gray-600 text-[14px] leading-relaxed">{text}</p>
+//               </div>
+
+//               {/* Connector Lines */}
+//               <span
+//                 className={`absolute w-20 h-[2px] bg-gray-400 hidden md:block ${
+//                   position.includes("left")
+//                     ? "right-[-80px] top-1/2 -translate-y-1/2"
+//                     : "left-[-80px] top-1/2 -translate-y-1/2"
+//                 }`}
+//               ></span>
+//               <span
+//                 className={`absolute w-[2px] h-10 bg-gray-400 hidden md:block ${
+//                   position.includes("top")
+//                     ? position.includes("left")
+//                       ? "right-[-80px] top-1/2"
+//                       : "left-[-80px] top-1/2"
+//                     : position.includes("left")
+//                     ? "right-[-80px] bottom-1/2"
+//                     : "left-[-80px] bottom-1/2"
+//                 }`}
+//               ></span>
+//             </div>
+//           ))}
+
+//           {/* 5th Point (Below Image - Centered) */}
+//           <div className="absolute bottom-[-60px] left-1/2 -translate-x-1/2 bg-white shadow-md border border-gray-200 rounded-xl p-5 w-80 flex gap-4 items-start transition-all hover:shadow-xl">
+//             <div className="flex-shrink-0">
+//               <div className="inline-flex items-center justify-center h-11 w-11 rounded-xl bg-red-50 text-[#E32A18]">
+//                 <Users className="h-6 w-6" />
+//               </div>
+//             </div>
+//             <div>
+//               <h4 className="font-semibold text-gray-900 mb-1 text-[15px]">
+//                 {benefits[4].title}
+//               </h4>
+//               <p className="text-gray-600 text-[14px] leading-relaxed">
+//                 {benefits[4].text}
+//               </p>
+//             </div>
+//             {/* Connector lines removed for the 5th card */}
+//           </div>
+//         </div>
+//       </div>
+
+//       {/* TailwindCSS Position Helpers */}
+//       <style>
+//         {`
+//           .top-left { top: 10%; left: 4%; }
+//           .bottom-left { bottom: 12%; left: 4%; }
+//           .top-right { top: 10%; right: 4%; }
+//           .bottom-right { bottom: 12%; right: 4%; }
+//           .bottom-center { bottom: -60px; left: 50%; transform: translateX(-50%); }
+
+//           @media (max-width: 1024px) {
+//             .top-left { top: 5%; left: 2%; }
+//             .bottom-left { bottom: 8%; left: 2%; }
+//             .top-right { top: 5%; right: 2%; }
+//             .bottom-right { bottom: 8%; right: 2%; }
+//           }
+
+//           @media (max-width: 768px) {
+//             .top-left, .bottom-left, .top-right, .bottom-right, .bottom-center {
+//               position: relative !important;
+//               left: 0 !important;
+//               right: 0 !important;
+//               top: auto !important;
+//               bottom: auto !important;
+//               transform: none !important;
+//               margin: 16px auto;
+//             }
+//           }
+//         `}
+//       </style>
+//     </section>
+//   );
+// }
+
+
+import React from "react";
+import { GraduationCap, Target, Star, CheckCircle, Users } from "lucide-react";
+import student from "../../../../../public/passport/StepProcess/Benefits-Students.webp";
+export default function StudentBenefits() {
+  const benefits = [
     {
-      text: "Track and measure learning outcomes institution-wide.",
-      icon: BarChart3,
+      id: 1,
+      icon: GraduationCap,
+      title: "Personalized Digital Passport",
+      text: "Own a dynamic digital passport that grows each semester with verified skills.",
+      position: "top-left",
     },
     {
-      text: "Quantify employability skills with precision and accuracy.",
+      id: 2,
       icon: Target,
+      title: "Visibility into Strengths & Gaps",
+      text: "Gain visibility into strengths, skill gaps, and personalized learning paths.",
+      position: "bottom-left",
     },
     {
-      text: "Access real-time placement readiness and performance insights.",
-      icon: LineChart,
+      id: 3,
+      icon: Star,
+      title: "Digital Proof of Skills",
+      text: "Use verified digital proof of competencies for placements and internships globally.",
+      position: "top-right",
     },
     {
-      text: "Simplify accreditation and compliance reporting effortlessly.",
-      icon: FileText,
+      id: 4,
+      icon: CheckCircle,
+      title: "AI Career Insights & Motivation",
+      text: "Get AI-powered career insights, guided recommendations, and motivation to keep learning.",
+      position: "bottom-right",
     },
     {
-      text: "Build a stronger industry-academia bridge with verified skill data.",
+      id: 5,
       icon: Users,
+      title: "Continuous Learning & Global Recognition",
+      text: "Stay motivated to learn continuously and showcase your verified achievements globally.",
+      position: "bottom-center",
     },
   ];
 
-  // Benefits for Students
-  const studentBenefits = [
-    {
-      text: "A personalized digital skill passport that evolves every semester.",
-      icon: Award,
-    },
-    {
-      text: "Gain clear insights into strengths, gaps, and next learning goals.",
-      icon: Lightbulb,
-    },
-    {
-      text: "Showcase verified competencies during placement interviews.",
-      icon: Briefcase,
-    },
-    {
-      text: "Get AI-powered career guidance and tailored recommendations.",
-      icon: Brain,
-    },
-    {
-      text: "Stay motivated through progress tracking and global visibility.",
-      icon: Rocket,
-    },
-  ];
+  return (
+    <section className="relative py-28 bg-gradient-to-b from-white to-[#F6F8FA] overflow-hidden">
+      <div className="max-w-6xl mx-auto px-6">
+        {/* Header */}
+        <div className="text-center mb-16">
+          <h2 className="text-3xl sm:text-4xl font-extrabold text-gray-900 mb-3">
+            Benefits for Students
+          </h2>
+          <p className="text-gray-600 max-w-2xl mx-auto">
+            Empower students with clear insights, verified skills, and a global-ready digital identity.
+          </p>
+        </div>
 
-  // Card Renderer
-  const renderCards = (items: { text: string; icon: any }[]) => (
-    <>
-      {/* First Row - 3 Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 justify-items-center">
-        {items.slice(0, 3).map(({ text, icon: Icon }, idx) => (
-          <Card
-            key={idx}
-            className="relative w-[95%] sm:w-[300px] md:w-[320px] lg:w-[340px] min-h-[200px] bg-white rounded-3xl shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 flex flex-col items-center justify-center text-center p-6 mt-10"
-          >
-            <div className="absolute -top-7 left-1/2 transform -translate-x-1/2 w-12 h-12 rounded-full bg-[#E32A18] text-white flex items-center justify-center shadow-md ring-4 ring-white">
-              <Icon className="w-6 h-6" />
-            </div>
-            <h4 className="text-base sm:text-lg font-medium text-gray-800 leading-relaxed mt-8 px-2">
-              {text}
-            </h4>
-          </Card>
-        ))}
-      </div>
+        {/* DESKTOP VIEW (unchanged) */}
+        <div className="relative justify-center items-center min-h-[620px] hidden md:flex">
+          {/* Central Image */}
+          <div className="absolute z-10 w-64 h-64 rounded-full bg-white shadow-lg flex items-center justify-center overflow-hidden">
+            <img
+              src={student}
+              alt="Student Illustration"
+              className="object-contain w-full h-full p-6"
+            />
+          </div>
 
-      {/* Second Row - Centered 2 Cards */}
-      <div className="mt-10 flex justify-center">
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 justify-items-center">
-          {items.slice(3).map(({ text, icon: Icon }, idx) => (
-            <Card
-              key={idx}
-              className="relative w-[95%] sm:w-[300px] md:w-[320px] lg:w-[340px] min-h-[200px] min-w-[150px] bg-white rounded-3xl shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 flex flex-col items-center justify-center text-center p-6 mt-10"
+          {/* Connector Line for Bottom Center */}
+          <div
+            className="absolute left-1/2 top-[420px] -translate-x-1/2 w-[2px] h-[120px] bg-gray-400 border-dashed border-gray-500 hidden md:block"
+            style={{ borderLeft: "2px dashed #9CA3AF" }}
+          ></div>
+
+          {/* Benefit Points (excluding 5th) */}
+          {benefits.slice(0, 4).map(({ id, icon: Icon, title, text, position }) => (
+            <div
+              key={id}
+              className={`absolute bg-white shadow-md border border-gray-200 rounded-xl p-5 w-72 flex gap-4 items-start transition-all hover:shadow-xl ${position}`}
             >
-              <div className="absolute -top-7 left-1/2 transform -translate-x-1/2 w-12 h-12 rounded-full bg-[#E32A18] text-white flex items-center justify-center shadow-md ring-4 ring-white">
-                <Icon className="w-6 h-6" />
+              <div className="flex-shrink-0">
+                <div className="inline-flex items-center justify-center h-11 w-11 rounded-xl bg-red-50 text-[#E32A18]">
+                  <Icon className="h-6 w-6" />
+                </div>
               </div>
-              <h4 className="text-base sm:text-lg font-medium text-gray-800 leading-relaxed mt-8 px-2">
-                {text}
+              <div>
+                <h4 className="font-semibold text-gray-900 mb-1 text-[15px]">{title}</h4>
+                <p className="text-gray-600 text-[14px] leading-relaxed">{text}</p>
+              </div>
+
+              {/* Connector Lines */}
+              <span
+                className={`absolute w-20 h-[2px] bg-gray-400 hidden md:block ${
+                  position.includes("left")
+                    ? "right-[-80px] top-1/2 -translate-y-1/2"
+                    : "left-[-80px] top-1/2 -translate-y-1/2"
+                }`}
+              ></span>
+              <span
+                className={`absolute w-[2px] h-10 bg-gray-400 hidden md:block ${
+                  position.includes("top")
+                    ? position.includes("left")
+                      ? "right-[-80px] top-1/2"
+                      : "left-[-80px] top-1/2"
+                    : position.includes("left")
+                    ? "right-[-80px] bottom-1/2"
+                    : "left-[-80px] bottom-1/2"
+                }`}
+              ></span>
+            </div>
+          ))}
+
+          {/* 5th Point (Below Image - Centered) */}
+          <div className="absolute bottom-[-60px] left-1/2 -translate-x-1/2 bg-white shadow-md border border-gray-200 rounded-xl p-5 w-80 flex gap-4 items-start transition-all hover:shadow-xl">
+            <div className="flex-shrink-0">
+              <div className="inline-flex items-center justify-center h-11 w-11 rounded-xl bg-red-50 text-[#E32A18]">
+                <Users className="h-6 w-6" />
+              </div>
+            </div>
+            <div>
+              <h4 className="font-semibold text-gray-900 mb-1 text-[15px]">
+                {benefits[4].title}
               </h4>
-            </Card>
+              <p className="text-gray-600 text-[14px] leading-relaxed">
+                {benefits[4].text}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* MOBILE VIEW — clean vertical cards */}
+        <div className="flex flex-col gap-6 md:hidden mt-6">
+          {benefits.map(({ id, icon: Icon, title, text }) => (
+            <div
+              key={id}
+              className="bg-white shadow-md border border-gray-200 rounded-xl p-6 flex gap-4 items-start hover:shadow-lg transition-all"
+            >
+              <div className="flex-shrink-0">
+                <div className="inline-flex items-center justify-center h-11 w-11 rounded-xl bg-red-50 text-[#E32A18]">
+                  <Icon className="h-6 w-6" />
+                </div>
+              </div>
+              <div>
+                <h4 className="font-semibold text-gray-900 mb-1 text-[16px] leading-snug">{title}</h4>
+                <p className="text-gray-600 text-[14px] leading-relaxed">{text}</p>
+              </div>
+            </div>
           ))}
         </div>
       </div>
-    </>
-  );
 
-  return (
-    <section className="py-20 md:py-28 bg-[#F9FAFB] flex flex-col justify-center">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        {/* Header */}
-        <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-gray-900 mb-6 leading-tight">
-          Benefits of the{" "}
-          <span className="text-[#000000]">Skill Passport</span>
-        </h2>
-        <p className="text-gray-600 text-base sm:text-lg max-w-2xl mx-auto mb-16 leading-relaxed">
-          Empower institutions and students through verified, data-driven, and
-          transparent skill tracking that drives real-world success.
-        </p>
+      {/* TailwindCSS Position Helpers */}
+      <style>
+        {`
+          .top-left { top: 10%; left: 4%; }
+          .bottom-left { bottom: 12%; left: 4%; }
+          .top-right { top: 10%; right: 4%; }
+          .bottom-right { bottom: 12%; right: 4%; }
+          .bottom-center { bottom: -60px; left: 50%; transform: translateX(-50%); }
 
-        {/* Institutions */}
-        <div className="mb-20">
-          <h3 className="text-2xl sm:text-3xl md:text-4xl font-semibold text-gray-900 flex items-center justify-center gap-3 mb-10">
-            <Briefcase className="w-7 h-7 text-[#E32A18]" /> Benefits for Institutions
-          </h3>
-          {renderCards(institutionBenefits)}
-        </div>
+          @media (max-width: 1024px) {
+            .top-left { top: 5%; left: 2%; }
+            .bottom-left { bottom: 8%; left: 2%; }
+            .top-right { top: 5%; right: 2%; }
+            .bottom-right { bottom: 8%; right: 2%; }
+          }
 
-        {/* Students */}
-        <div>
-          <h3 className="text-2xl sm:text-3xl md:text-4xl font-semibold text-gray-900 flex items-center justify-center gap-3 mb-10">
-            <GraduationCap className="w-7 h-7 text-[#E32A18]" /> Benefits for Students
-          </h3>
-          {renderCards(studentBenefits)}
-        </div>
-      </div>
+          /* Mobile stacked cards view */
+          @media (max-width: 768px) {
+            .top-left, .bottom-left, .top-right, .bottom-right, .bottom-center {
+              position: relative !important;
+              left: 0 !important;
+              right: 0 !important;
+              top: auto !important;
+              bottom: auto !important;
+              transform: none !important;
+              margin: 0 auto !important;
+            }
+          }
+        `}
+      </style>
     </section>
   );
-};
-
-export default InstitutionsNeededSection;
+}
