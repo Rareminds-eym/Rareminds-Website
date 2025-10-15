@@ -465,7 +465,7 @@ export default function WorkSection() {
           </div>
         </div>
 
-        <div className="mt-20 md:mt-0 lg:-mt-25">
+        <div className="mt-20 md:mt-0 lg:-mt-20">
           {/* Step 4 */}
          <StepBlock
             title="Result"

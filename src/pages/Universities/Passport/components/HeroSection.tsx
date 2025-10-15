@@ -215,6 +215,7 @@ import { useState, useEffect } from "react";
 import banner1 from "../../../../../public/passport/banner 1.2.jpg";
 import banner2 from "../../../../../public/passport/BANNER 2.2.jpg";
 import Banner4 from "../../../../../public/passport/banner 4.1.jpg";
+import Banner5 from "../../../../../public/passport/One-Partnership_2.png"
 
 import mobileBanner1 from "../../../../../public/passport/BANNER 1 MOB.jpg";
 import mobileBanner2 from "../../../../../public/passport/banner 2 mob.jpg";
@@ -236,6 +237,11 @@ const desktopSlides = [
     image: Banner4,
     heading: "Successful Placements Aren’t Luck — They’re Verified",
     align: "center",
+  },
+  {
+    image: Banner5,
+    heading: "Successful Placements Aren’t Luck — They’re Verified",
+    align: "left",
   },
 ];
 
