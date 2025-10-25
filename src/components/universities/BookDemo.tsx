@@ -23,8 +23,9 @@ export const BookDemo: React.FC<BookDemoProps> = ({ isVisible, onClose }) => {
                     initial={{ opacity: 0, scale: 0.8 }}
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.8 }}
-                    className={`fixed z-50 bg-white rounded-xl shadow-2xl p-6 w-[400px] ${
-                        isOnUniversitySkillPassport ? "left-16 bottom-5" : "bottom-40 right-24"
+                    className={`fixed z-50 bg-white rounded-xl shadow-2xl p-6 ${
+                        isOnUniversitySkillPassport ? "left-3 md:left-16 bottom-5 w-[300px] md:w-[400px]" : "bottom-40 right-24  w-[400px]"
+                        
                     }`}
                 >
                     <div className="flex justify-between items-center mb-6">

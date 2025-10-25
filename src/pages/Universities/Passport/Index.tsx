@@ -13,6 +13,7 @@ import OverviewSection from "./components/OverviewSection";
 import InstitutionsNeededSection from "./components/InstitutionsNeededSection";
 import KeyFeaturesSection from "./components/KeyFeaturesSection";
 import BenefitsSection from "./components/BenefitsSections";
+import InstitutionsBenefits from "./components/InstitutionsBenefits";
 import BuiltSection from "./components/BuiltSection";
 import OutcomeSection from "./components/OutcomeSection";
 import UseSection from "./components/UseSection";
@@ -49,6 +50,7 @@ const Passport = () => {
         <WorkSection />
         <KeyFeaturesSection />
         <BenefitsSection />
+        <InstitutionsBenefits />
         <BuiltSection />
         <UseSection />
         <OutcomeSection />

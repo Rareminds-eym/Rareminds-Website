@@ -51,9 +51,9 @@ const OverviewSection = () => {
       <div className="container mx-auto px-6 text-center">
         {/* Section Title */}
         <h2 className="text-3xl md:text-4xl font-extrabold text-[#000000]">
-          What is SkillPassport?
+          What is <span className="text-[#E32A18]">SkillPassport</span>?
         </h2>
-        <div className="w-24 h-1 bg-[#000000] mx-auto mt-4 mb-16 rounded-full opacity-80" />
+        <div className="w-24 h-1 bg-[#E32A18] mx-auto mt-4 mb-16 rounded-full opacity-80" />
 
         {/* Content */}
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 text-left">

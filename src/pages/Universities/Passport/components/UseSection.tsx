@@ -7,7 +7,7 @@ const Index = () => {
       <div className="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 py-12 sm:py-16 md:py-24">
         <header className="max-w-3xl mx-auto text-center mb-12 sm:mb-16">
           <h1
-            className="font-extrabold text-black leading-tight mb-3"
+            className="text-3xl md:text-4xl font-extrabold text-[#000000]"
             style={{ fontSize: "clamp(1.375rem, 3.6vw, 2.75rem)" }}
           >
             A Success Story in{" "}
@@ -53,7 +53,7 @@ const Index = () => {
         {/* Stats Cards */}
         <section className="max-w-6xl mx-auto">
           <h3 className="text-base sm:text-lg md:text-2xl font-bold text-center text-black mb-8">
-            Key <span className="text-[#E32A18]">Results</span>
+            Key <span className="text-[#000000]">Results</span>
           </h3>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 md:gap-8">

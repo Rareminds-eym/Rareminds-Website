@@ -45,17 +45,17 @@ export default function OutcomeSection() {
                 className="flex flex-col items-center justify-between border border-gray-200 rounded-2xl shadow-sm p-8 transition-all duration-300 hover:shadow-lg hover:-translate-y-2 bg-white h-full"
               >
                 {/* Icon */}
-                <div className="w-16 h-16 flex items-center justify-center rounded-xl border border-gray-300 bg-gray-50 mb-6">
-                  <Icon className="w-8 h-8 text-[#0B2A5A]" />
+                <div className="flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-red-50 mb-4">
+                  <Icon className="w-6 h-6 text-[#E32A18]" />
                 </div>
 
                 {/* Title */}
-                <h3 className="text-xl font-semibold text-[#0B2A5A] mb-3">
+                <h3 className="text-xl font-semibold text-[#000000] mb-3">
                   {s.title}
                 </h3>
 
                 {/* Description */}
-                <p className="text-gray-600 text-sm leading-relaxed">
+                <p className="text-black-600 text-sm leading-relaxed">
                   {s.desc}
                 </p>
               </div>
