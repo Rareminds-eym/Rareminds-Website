@@ -7,8 +7,7 @@ import LoaderComponent from "@/components/LoaderComponent";
 const Index = lazy(() => import("./pages/Index"));
 const About = lazy(() => import("./pages/Corporate/Recruitment/Index"));
 const Government = lazy(() => import("./pages/Government/Index"));
-
-
+const ContactPage = lazy(() => import("./pages/Contact/index"));
 const App: React.FC = () => {
   return (
     <>
@@ -17,6 +16,7 @@ const App: React.FC = () => {
           <Suspense fallback={<LoaderComponent />}>
             <Routes>
               <Route path="/" element={<Index />} />
+              <Route path="/contact-us" element={<ContactPage />} />
               <Route path="/corporate" element={<About />} />
               <Route path="/government" element={<Government />} />
             </Routes>
