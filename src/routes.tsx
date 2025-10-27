@@ -16,6 +16,7 @@ import BlogDetailAcademia from "./components/Academy/Blogs/BlogDetail";
 import BlogDetailGov from "./components/Govt/Blogs/BlogDetail.tsx";
 import CourseDetailedPage from "@/components/Academy/Students/CourseDetailedPage";
 
+
 // Lazy pages
 const Home = lazy(() => import("./pages/Index"));
 const Blogs = lazy(() => import("./pages/Blogs/index"));
@@ -146,6 +147,10 @@ const router = createBrowserRouter([
       },
       {
         path: "/contact",
+        element: withSuspense(ContactPage),
+      },
+      {
+        path: "/contact-us",
         element: withSuspense(ContactPage),
       },
       {
