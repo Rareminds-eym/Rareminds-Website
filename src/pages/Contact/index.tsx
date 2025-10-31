@@ -1,19 +1,25 @@
 import React from 'react';
 
+import Input from '../../components/Contact/Input'
+import ContactPage from "../../components/Contact/ContactPage"
+import FloatingAction from "../../components/Contact/StickyButton/StickyButton/FloatingAction";
 const Contact: React.FC = () => {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center">
-      <div className="text-center">
+    <div className="relative w-full mt-23">
+      {/* <div className="text-center">
         <h1 className="text-4xl md:text-6xl font-bold text-gray-800 mb-4">
           Contact us
         </h1>
         <p className="text-lg md:text-xl text-gray-600 mb-8">
           Get in touch with our team
         </p>
-        <div className="max-w-2xl mx-auto text-gray-500">
+        <div className="max-w-2xl mx-auto  text-gray-500">
           <p>We'd love to hear from you! Contact information will be available soon.</p>
-        </div>
-      </div>
+        </div> */}
+      {/* </div> */}
+      <Input/>
+      <ContactPage />
+      <FloatingAction />
     </div>
   );
 };
