@@ -2,6 +2,7 @@ import React from 'react';
 
 import Input from '../../components/Contact/Input'
 import ContactPage from "../../components/Contact/ContactPage"
+import FloatingAction from "../../components/Contact/StickyButton/StickyButton/FloatingAction";
 const Contact: React.FC = () => {
   return (
     <div className="relative w-full mt-23">
@@ -18,6 +19,7 @@ const Contact: React.FC = () => {
       {/* </div> */}
       <Input/>
       <ContactPage />
+      <FloatingAction />
     </div>
   );
 };
