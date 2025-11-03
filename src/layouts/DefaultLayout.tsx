@@ -2,7 +2,7 @@ import React, { useState, ReactNode } from "react";
 import FooterBar from "@/components/Footer/FooterBar";
 import Header from "@/components/Header/Index";
 import { usePageTracking } from "@/hooks/usePageTracking";
-
+import { Toaster } from "@/components/Academy/UI/toaster";
 interface DefaultLayoutProps {
   children: ReactNode;
 }
@@ -16,6 +16,7 @@ const DefaultLayout: React.FC<DefaultLayoutProps> = ({ children }) => {
       <Header navbarOpen={navbarOpen} setNavbarOpen={setNavbarOpen} />
       <main className="App w-full flex-1 ">{children}</main>
       <FooterBar hideServices={true} />
+      <Toaster />
     </div>
   );
 };

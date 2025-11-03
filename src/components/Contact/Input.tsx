@@ -1368,8 +1368,76 @@ import bannerBg from "../../assets/bannergif.gif";
 import leftCardBg from "../../assets/Banner10.png";
 import mobileCardBg from "../../assets/Mobileversion.png";
 import { FaEnvelope, FaPhone, FaMapMarkerAlt, FaClock } from "react-icons/fa";
-
+import { supabase } from "@/lib/supabaseClient";
+import { useToast } from "@/hooks/use-toast";
+import { useState } from "react";
 const ContactPage: React.FC = () => {
+   const { toast } = useToast();
+
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    role: "",
+    phone: "",
+    message: "",
+  });
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // handle field change
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+  ) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  // handle form submit
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    // simple validation
+    if (!formData.name || !formData.email || !formData.phone || !formData.message) {
+      toast({
+        title: "Missing fields",
+        description: "Please fill in your name, email, and message.",
+      });
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      const { error } = await supabase.from("contact_form").insert([formData]);
+
+      if (error) {
+        console.error("Supabase insert error:", error);
+        toast({
+          title: "Submission failed",
+          description: "Something went wrong. Please try again later.",
+        });
+      } else {
+        toast({
+          title: "Message sent successfully",
+          description: "Thank you for contacting Rareminds! We'll be in touch soon.",
+        });
+        setFormData({ name: "", email: "", role: "", phone: "", message: "" });
+      }
+    } catch (err) {
+      console.error("Unexpected error:", err);
+      toast({
+        title: "Unexpected error",
+        description: "Please try again later.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <div className="contact-page relative w-full min-h-screen bg-white">
       {/* Banner Section */}
@@ -1402,12 +1470,16 @@ const ContactPage: React.FC = () => {
       </div>
 
       {/* Contact Form */}
-      <div className="contact-form absolute top-[16%] left-[20%] w-[440px] bg-white rounded-2xl shadow-xl p-4 flex flex-col justify-between z-20">
+      <form  onSubmit={handleSubmit}
+      className="contact-form absolute top-[16%] left-[20%] w-[440px] bg-white rounded-2xl shadow-xl p-4 flex flex-col justify-between z-20">
         <div className="space-y-3">
           <div>
             <label className="block text-gray-700 font-medium mb-1">Name</label>
             <input
               type="text"
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
               placeholder="Enter your name"
               className="w-full h-[45px] border border-gray-300 rounded-md px-4 py-1 focus:outline-none"
             />
@@ -1416,6 +1488,9 @@ const ContactPage: React.FC = () => {
           <div>
             <label className="block text-gray-700 font-medium mb-1">Email</label>
             <input
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
               type="email"
               placeholder="Enter your email"
               className="w-full h-[45px] border border-gray-300 rounded-md px-4 py-1 focus:outline-none"
@@ -1425,6 +1500,9 @@ const ContactPage: React.FC = () => {
           <div>
             <label className="block text-gray-700 font-medium mb-1">Role</label>
             <select
+              name="role"
+              value={formData.role}
+              onChange={handleChange}
               className="w-full h-[45px] border border-gray-300 rounded-md px-4 py-1 focus:outline-none bg-white"
               defaultValue=""
             >
@@ -1446,6 +1524,9 @@ const ContactPage: React.FC = () => {
             <label className="block text-gray-700 font-medium mb-1">Phone</label>
             <input
               type="tel"
+              name="phone"
+              value={formData.phone}
+              onChange={handleChange}
               placeholder="Enter your phone number"
               className="w-full h-[45px] border border-gray-300 rounded-md px-4 py-1 focus:outline-none"
             />
@@ -1454,16 +1535,22 @@ const ContactPage: React.FC = () => {
           <div>
             <label className="block text-gray-700 font-medium mb-1">Message</label>
             <textarea
+              name="message"
+              value={formData.message}
+              onChange={handleChange}
               placeholder="Enter your message"
               className="w-full h-[115px] border border-gray-300 rounded-md px-4 py-1 focus:outline-none resize-none"
             ></textarea>
           </div>
         </div>
 
-        <button className="mt-6 mx-auto w-[250px] h-[45px] bg-[#1D8AD1] text-white font-semibold rounded-md hover:bg-red-700 transition-all block text-center">
-          Send
+        <button 
+        type="submit"
+        disabled={isSubmitting}
+        className="mt-6 mx-auto w-[250px] h-[45px] bg-[#1D8AD1] text-white font-semibold rounded-md hover:bg-red-700 transition-all block text-center">
+        {isSubmitting ? "Sending..." : "Send"}
         </button>
-      </div>
+      </form>
 
       {/* Left Contact Card */}
       <div className="left-card-wrapper relative right-[15%] -mt-[200px] flex justify-end items-start px-8 pb-16 ml-18">

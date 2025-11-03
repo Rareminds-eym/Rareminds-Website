@@ -2068,23 +2068,23 @@ const InteractiveWorldMap = () => {
   const intervalRef = useRef(null);
 
   const locations = [
-    { id: 'bangalore', name: 'RareMinds Bangalore', city: '231, 13th Cross Road, Hoysala Nagar, Indiranagar, Bangalore - 560038', country: 'India', position: { top: '53.4%', left: '68.5%' }, mapLink: 'https://www.google.com/maps/search/location+of+rareminds+in+bangalore/@12.9752479,77.631305,3232m/data=!3m2!1e3!4b1?entry=ttu&g_ep=EgoyMDI1MTAyOC4wIKXMDSoASAFQAw%3D%3D', email: 'marketing@rareminds.com', phone: '+91 9562481110' },
-    { id: 'goa', name: 'RareMinds Goa', city: 'Goa', country: 'India', position: { top: '53.5%', left: '67.3%' }, mapLink: 'https://www.google.com/maps/search/RareMinds+Goa+India', email: 'marketing@rareminds.com', phone: '+91 xxx xxx xxxx' },
-    { id: 'delhi', name: 'RareMinds Delhi', city: 'Delhi', country: 'India', position: { top: '50%', left: '68.6%' }, mapLink: 'https://www.google.com/maps/search/RareMinds+Delhi+India', email: 'marketing@rareminds.com', phone: '+91 xxx xxx xxxx' },
-    { id: 'mumbai', name: 'RareMinds Mumbai', city: 'Mumbai, Maharashtra', country: 'India', position: { top: '49.9%', left: '67.1%' }, mapLink: 'https://www.google.com/maps/search/RareMinds+Mumbai+India', email: 'marketing@rareminds.com', phone: '+91 xxx xxx xxxx' },
-    { id: 'pune', name: 'RareMinds Pune', city: 'Pune, Maharashtra', country: 'India', position: { top: '51%', left: '67.1%' }, mapLink: 'https://www.google.com/maps/search/RareMinds+Pune+India', email: 'marketing@rareminds.com', phone: '+91 xxx xxx xxxx' },
-    { id: 'salem', name: 'RareMinds Salem', city: 'Salem, Tamil Nadu', country: 'India', position: { top: '56.8%', left: '68.2%' }, mapLink: 'https://www.google.com/maps/search/RareMinds+Salem+Tamil+Nadu+India', email: 'marketing@rareminds.com', phone: '+91 xxx xxx xxxx' },
-    { id: 'vellore', name: 'RareMinds Vellore', city: 'Vellore, Tamil Nadu', country: 'India', position: { top: '55.5%', left: '69%' }, mapLink: 'https://www.google.com/maps/search/RareMinds+Vellore+Tamil+Nadu+India', email: 'marketing@rareminds.com', phone: '+91 xxx xxx xxxx' },
-    { id: 'coimbatore', name: 'RareMinds Coimbatore', city: 'Coimbatore, Tamil Nadu', country: 'India', position: { top: '54.9%', left: '69%' }, mapLink: 'https://www.google.com/maps/search/RareMinds+Coimbatore+Tamil+Nadu+India', email: 'marketing@rareminds.com', phone: '+91 xxx xxx xxxx' },
-    { id: 'madurai', name: 'RareMinds Madurai', city: 'Madurai, Tamil Nadu', country: 'India', position: { top: '56.1%', left: '69%' }, mapLink: 'https://www.google.com/maps/search/RareMinds+Madurai+Tamil+Nadu+India', email: 'marketing@rareminds.com', phone: '+91 xxx xxx xxxx' },
-    { id: 'tirunelveli', name: 'RareMinds Tirunelveli', city: 'Tirunelveli, Tamil Nadu', country: 'India', position: { top: '56.5%', left: '68.8%' }, mapLink: 'https://www.google.com/maps/search/RareMinds+Tirunelveli+Tamil+Nadu+India', email: 'marketing@rareminds.com', phone: '+91 xxx xxx xxxx' },
-    { id: 'karaikudi', name: 'RareMinds Karaikudi', city: 'Karaikudi, Tamil Nadu', country: 'India', position: { top: '55.2%', left: '69.2%' }, mapLink: 'https://www.google.com/maps/search/RareMinds+Karaikudi+Tamil+Nadu+India', email: 'marketing@rareminds.com', phone: '+91 xxx xxx xxxx' },
-    { id: 'dubai', name: 'RareMinds Dubai', city: 'Dubai', country: 'UAE', position: { top: '47%', left: '61.5%' }, mapLink: 'https://www.google.com/maps/search/RareMinds+Dubai+UAE', email: 'dubai@rareminds.com', phone: '+971 xxx xxx xxxx' },
-    { id: 'abudhabi', name: 'RareMinds Abu Dhabi', city: 'Abu Dhabi', country: 'UAE', position: { top: '47.2%', left: '61%' }, mapLink: 'https://www.google.com/maps/search/RareMinds+Abu+Dhabi+UAE', email: 'marketing@rareminds.com', phone: '+971 xxx xxx xxxx' },
-    { id: 'sharjah', name: 'RareMinds Sharjah', city: 'Sharjah', country: 'UAE', position: { top: '48.3%', left: '61.7%' }, mapLink: 'https://www.google.com/maps/search/RareMinds+Sharjah+UAE', email: 'marketing@rareminds.com', phone: '+971 xxx xxx xxxx' },
-    { id: 'uk', name: 'RareMinds UK', city: 'London', country: 'United Kingdom', position: { top: '22%', left: '42.8%' }, mapLink: 'https://www.google.com/maps/search/RareMinds+London+UK', email: 'marketing@rareminds.com', phone: '+44 xxx xxx xxxx' },
-    { id: 'newyork', name: 'RareMinds New York', city: 'New York, NY', country: 'United States', position: { top: '37%', left: '19%' }, mapLink: 'https://www.google.com/maps/search/RareMinds+New+York+NY+USA', email: 'marketing@rareminds.com', phone: '+1 xxx xxx xxxx' },
-    { id: 'portland', name: 'RareMinds Portland', city: 'Portland, OR', country: 'United States', position: { top: '30.5%', left: '4.5%' }, mapLink: 'https://www.google.com/maps/search/RareMinds+Portland+OR+USA', email: 'marketing@rareminds.com', phone: '+1 xxx xxx xxxx' },
+    { id: 'bangalore', name: 'RareMinds Bangalore', city: '231, 13th Cross Road, Hoysala Nagar, Indiranagar, Bangalore - 560038', country: 'India', position: { top: '53.4%', left: '68.5%' }, mapLink: 'https://www.google.com/maps/search/location+of+rareminds+in+bangalore/@12.9752479,77.631305,3232m/data=!3m2!1e3!4b1?entry=ttu&g_ep=EgoyMDI1MTAyOC4wIKXMDSoASAFQAw%3D%3D', email: 'marketing@rareminds.in', phone: '+91 9562481110' },
+    { id: 'goa', name: 'RareMinds Goa', city: 'Goa', country: 'India', position: { top: '53.5%', left: '67.3%' }, mapLink: 'https://www.google.com/maps/search/RareMinds+Goa+India', email: 'marketing@rareminds.in', phone: '+91 xxx xxx xxxx' },
+    { id: 'delhi', name: 'RareMinds Delhi', city: 'Delhi', country: 'India', position: { top: '50%', left: '68.6%' }, mapLink: 'https://www.google.com/maps/search/RareMinds+Delhi+India', email: 'marketing@rareminds.in', phone: '+91 xxx xxx xxxx' },
+    { id: 'mumbai', name: 'RareMinds Mumbai', city: 'Mumbai, Maharashtra', country: 'India', position: { top: '49.9%', left: '67.1%' }, mapLink: 'https://www.google.com/maps/search/RareMinds+Mumbai+India', email: 'marketing@rareminds.in', phone: '+91 xxx xxx xxxx' },
+    { id: 'pune', name: 'RareMinds Pune', city: 'Pune, Maharashtra', country: 'India', position: { top: '51%', left: '67.1%' }, mapLink: 'https://www.google.com/maps/search/RareMinds+Pune+India', email: 'marketing@rareminds.in', phone: '+91 xxx xxx xxxx' },
+    { id: 'salem', name: 'RareMinds Salem', city: 'Salem, Tamil Nadu', country: 'India', position: { top: '56.8%', left: '68.2%' }, mapLink: 'https://www.google.com/maps/search/RareMinds+Salem+Tamil+Nadu+India', email: 'marketing@rareminds.in', phone: '+91 xxx xxx xxxx' },
+    { id: 'vellore', name: 'RareMinds Vellore', city: 'Vellore, Tamil Nadu', country: 'India', position: { top: '55.5%', left: '69%' }, mapLink: 'https://www.google.com/maps/search/RareMinds+Vellore+Tamil+Nadu+India', email: 'marketing@rareminds.in', phone: '+91 xxx xxx xxxx' },
+    { id: 'coimbatore', name: 'RareMinds Coimbatore', city: 'Coimbatore, Tamil Nadu', country: 'India', position: { top: '54.9%', left: '69%' }, mapLink: 'https://www.google.com/maps/search/RareMinds+Coimbatore+Tamil+Nadu+India', email: 'marketing@rareminds.in', phone: '+91 xxx xxx xxxx' },
+    { id: 'madurai', name: 'RareMinds Madurai', city: 'Madurai, Tamil Nadu', country: 'India', position: { top: '56.1%', left: '69%' }, mapLink: 'https://www.google.com/maps/search/RareMinds+Madurai+Tamil+Nadu+India', email: 'marketing@rareminds.in', phone: '+91 xxx xxx xxxx' },
+    { id: 'tirunelveli', name: 'RareMinds Tirunelveli', city: 'Tirunelveli, Tamil Nadu', country: 'India', position: { top: '56.5%', left: '68.8%' }, mapLink: 'https://www.google.com/maps/search/RareMinds+Tirunelveli+Tamil+Nadu+India', email: 'marketing@rareminds.in', phone: '+91 xxx xxx xxxx' },
+    { id: 'karaikudi', name: 'RareMinds Karaikudi', city: 'Karaikudi, Tamil Nadu', country: 'India', position: { top: '55.2%', left: '69.2%' }, mapLink: 'https://www.google.com/maps/search/RareMinds+Karaikudi+Tamil+Nadu+India', email: 'marketing@rareminds.in', phone: '+91 xxx xxx xxxx' },
+    { id: 'dubai', name: 'RareMinds Dubai', city: 'Dubai', country: 'UAE', position: { top: '47%', left: '61.5%' }, mapLink: 'https://www.google.com/maps/search/RareMinds+Dubai+UAE', email: 'dubai@rareminds.in', phone: '+971 xxx xxx xxxx' },
+    { id: 'abudhabi', name: 'RareMinds Abu Dhabi', city: 'Abu Dhabi', country: 'UAE', position: { top: '47.2%', left: '61%' }, mapLink: 'https://www.google.com/maps/search/RareMinds+Abu+Dhabi+UAE', email: 'marketing@rareminds.in', phone: '+971 xxx xxx xxxx' },
+    { id: 'sharjah', name: 'RareMinds Sharjah', city: 'Sharjah', country: 'UAE', position: { top: '48.3%', left: '61.7%' }, mapLink: 'https://www.google.com/maps/search/RareMinds+Sharjah+UAE', email: 'marketing@rareminds.in', phone: '+971 xxx xxx xxxx' },
+    { id: 'uk', name: 'RareMinds UK', city: 'London', country: 'United Kingdom', position: { top: '22%', left: '42.8%' }, mapLink: 'https://www.google.com/maps/search/RareMinds+London+UK', email: 'marketing@rareminds.in', phone: '+44 xxx xxx xxxx' },
+    { id: 'newyork', name: 'RareMinds New York', city: 'New York, NY', country: 'United States', position: { top: '37%', left: '19%' }, mapLink: 'https://www.google.com/maps/search/RareMinds+New+York+NY+USA', email: 'marketing@rareminds.in', phone: '+1 xxx xxx xxxx' },
+    { id: 'portland', name: 'RareMinds Portland', city: 'Portland, OR', country: 'United States', position: { top: '30.5%', left: '4.5%' }, mapLink: 'https://www.google.com/maps/search/RareMinds+Portland+OR+USA', email: 'marketing@rareminds.in', phone: '+1 xxx xxx xxxx' },
   ];
 
   // 🟢 Auto animation effect (with popup)
@@ -2182,80 +2182,86 @@ const InteractiveWorldMap = () => {
 {/* 
 {(isHovered || (isAuto && showAutoPopup)) && (
   <div
-  className={`absolute ${
-    location.id === "portland"
-      ? "top-[115%] left-[54.8%] -translate-x-1/2 px-2 py-1.5 lg:px-2 lg:py-1.5 md:px-4 md:py-1 sm:left-[60%] sm:translate-x-0 sm:px-1 sm:py-0.5"
-      : "top-full left-1/2 -translate-x-1/2 px-3 py-2 lg:px-3 lg:py-2 md:px-2 md:py-1 sm:px-1 sm:py-0.5"
-  } mt-2 bg-gray-900 text-white rounded-lg sm:rounded-md text-xs lg:text-xs md:text-xs sm:text-[5px] font-medium whitespace-nowrap shadow-xl sm:shadow-md z-50 sm:z-40 animate-fade`}
->
+    className={`absolute ${
+      location.id === "portland"
+        ? "top-[115%] left-[54.8%] lg:left-1/2  -translate-x-1/2 px-2 py-1.5 lg:px-2 lg:py-1.5 md:top-[100%] md:left-[54.8%] md-translate-x-1/2 md:px-4 md:py-1 max-sm:top[90] max-sm:left-[45%] max-sm:translate-x-0 max-sm:px-1 max-sm:py-0.5"
+        : "top-full left-1/2 -translate-x-1/2 px-3 py-2 lg:px-3 lg:py-2 md:px-2 md:py-1 max-sm:px-1 max-sm:py-0.5"
+    } mt-2 bg-gray-900 text-white rounded-lg max-sm:rounded-md text-xs lg:text-xs md:text-xs max-sm:text-[5px] font-medium whitespace-nowrap shadow-xl max-sm:shadow-md z-50 max-sm:z-40 animate-fade`}
+  >
+
+    
+    <div
+      className={`font-semibold ${
+        location.id === "portland"
+          ? "text-[11.5px] lg:text-[11.5px] md:text-[7.5px] max-sm:text-[5px]"
+          : "text-[12px] lg:text-[12px] md:text-[11px] max-sm:text-[8px]"
+      }`}
+    >
+      {location.name}
+    </div>
+
+    
+    <div
+      className={`text-gray-300 ${
+        location.id === "portland"
+          ? "text-[10.5px] lg:text-[10.5px] md:text-[7.5px] max-sm:text-[5px]"
+          : "text-[11px] lg:text-[11px] md:text-[10px] max-sm:text-[8px]"
+      }`}
+      style={
+        location.id === "bangalore"
+          ? {
+              whiteSpace: "normal",
+              width: "220px",
+              textAlign: "left",
+              lineHeight: "1.2",
+            }
+          : {}
+      }
+    >
+      {location.id === "bangalore"
+        ? `231, 13th Cross Road, Hoysala Nagar,
+Indiranagar, Bangalore - 560038`
+        : location.city}
+    </div>
+
 
     <div
-  className={`font-semibold ${
-    location.id === "portland"
-      ? "text-[11.5px] lg:text-[11.5px] md:text-[10.5px] sm:text-[5.5px]"
-      : "text-[12px] lg:text-[12px] md:text-[11px] sm:text-[5px]"
-  }`}
->
-  {location.name}
-</div>
+      className={`text-blue-300 mt-1 ${
+        location.id === "portland"
+          ? "text-[10px] lg:text-[10px] md:text-[9px] max-sm:text-[8px]"
+          : "text-[10.5px] lg:text-[10.5px] md:text-[9.5px] max-sm:text-[8.5px]"
+      }`}
+    >
+      Click for details
+    </div>
+
 
     <div
-  className={`text-gray-300 ${
-    location.id === "portland"
-      ? "text-[10.5px] lg:text-[10.5px] md:text-[9.5px] sm:text-[5.5px]"
-      : "text-[11px] lg:text-[11px] md:text-[10px] sm:text-[5px]"
-  }`}
-  style={
-    location.id === "bangalore"
-      ? { 
-          whiteSpace: "normal", 
-          width: "220px", 
-          textAlign: "left",
-          lineHeight: "1.2"
-        }
-      : {}
-  }
->
-  {location.id === "bangalore"
-    ? `231, 13th Cross Road, Hoysala Nagar,
-\nIndiranagar, Bangalore - 560038`
-    : location.city}
-</div>
-
-    <div
-  className={`text-blue-300 mt-1 ${
-    location.id === "portland"
-      ? "text-[10px] lg:text-[10px] md:text-[9px] sm:text-[5px]"
-      : "text-[10.5px] lg:text-[10.5px] md:text-[9.5px] sm:text-[5.5px]"
-  }`}
->
-  Click for details
-</div>
-
-   <div
-  className={`absolute -top-1 ${
-    location.id === "portland"
-      ? "left-[47%] sm:left-[15%]"
-      : "left-1/2 -translate-x-1/2"
-  } w-2 h-2 lg:w-2 lg:h-2 md:w-1.5 md:h-1.5 sm:w-1.5 sm:h-1.5 bg-gray-900 rotate-45`}
-></div>
+      className={`absolute -top-1 ${
+        location.id === "portland"
+          ? "left-[47%] max-sm:left-[5%]"
+          : "left-1/2 -translate-x-1/2"
+      } w-2 h-2 lg:w-2 lg:h-2 md:w-1.5 md:h-1.5 max-sm:w-1 max-sm:h-1 bg-gray-900 rotate-45`}
+    ></div>
   </div>
 )} */}
-
 {(isHovered || (isAuto && showAutoPopup)) && (
   <div
     className={`absolute ${
       location.id === "portland"
-        ? "top-[115%] left-[54.8%] -translate-x-1/2 px-2 py-1.5 lg:px-2 lg:py-1.5 md:px-4 md:py-1 max-sm:left-[75%] max-sm:translate-x-0 max-sm:px-1 max-sm:py-0.5"
-        : "top-full left-1/2 -translate-x-1/2 px-3 py-2 lg:px-3 lg:py-2 md:px-2 md:py-1 max-sm:px-1 max-sm:py-0.5"
-    } mt-2 bg-gray-900 text-white rounded-lg max-sm:rounded-md text-xs lg:text-xs md:text-xs max-sm:text-[5px] font-medium whitespace-nowrap shadow-xl max-sm:shadow-md z-50 max-sm:z-40 animate-fade`}
+        ? // ✅ PORTLAND fixed for all screens
+          "top-[115%] left-1/2 -translate-x-1/2 px-2 py-1.5 md:top-[110%] md:left-1/2 md:-translate-x-1/2 sm:top-[108%] sm:left-1/2 sm:-translate-x-1/2 max-sm:top-[105%] max-sm:left-1/2 max-sm:-translate-x-1/2 max-sm:px-1 max-sm:py-0.5"
+        : // other locations
+          "top-full left-1/2 -translate-x-1/2 px-3 py-2 lg:px-3 lg:py-2 md:px-2 md:py-1 max-sm:px-1 max-sm:py-0.5"
+    } 
+    mt-2 bg-gray-900 text-white rounded-lg max-sm:rounded-md text-xs lg:text-xs md:text-xs max-sm:text-[5px] font-medium whitespace-nowrap shadow-xl max-sm:shadow-md z-50 max-sm:z-40 animate-fade`}
   >
 
     {/* Location Name */}
     <div
       className={`font-semibold ${
         location.id === "portland"
-          ? "text-[11.5px] lg:text-[11.5px] md:text-[10.5px] max-sm:text-[8.5px]"
+          ? "text-[11.5px] lg:text-[11.5px] md:text-[7.5px] max-sm:text-[5px]"
           : "text-[12px] lg:text-[12px] md:text-[11px] max-sm:text-[8px]"
       }`}
     >
@@ -2266,7 +2272,7 @@ const InteractiveWorldMap = () => {
     <div
       className={`text-gray-300 ${
         location.id === "portland"
-          ? "text-[10.5px] lg:text-[10.5px] md:text-[9.5px] max-sm:text-[8.5px]"
+          ? "text-[10.5px] lg:text-[10.5px] md:text-[7.5px] max-sm:text-[5px]"
           : "text-[11px] lg:text-[11px] md:text-[10px] max-sm:text-[8px]"
       }`}
       style={
@@ -2301,7 +2307,8 @@ Indiranagar, Bangalore - 560038`
     <div
       className={`absolute -top-1 ${
         location.id === "portland"
-          ? "left-[47%] max-sm:left-[20%]"
+          ? // ✅ Centered arrow for all screens
+            "left-1/2 -translate-x-1/2"
           : "left-1/2 -translate-x-1/2"
       } w-2 h-2 lg:w-2 lg:h-2 md:w-1.5 md:h-1.5 max-sm:w-1 max-sm:h-1 bg-gray-900 rotate-45`}
     ></div>
@@ -2410,3 +2417,66 @@ Indiranagar, Bangalore - 560038`
 };
 
 export default InteractiveWorldMap;
+
+{/* 
+{(isHovered || (isAuto && showAutoPopup)) && (
+  <div
+  className={`absolute ${
+    location.id === "portland"
+      ? "top-[115%] left-[54.8%] -translate-x-1/2 px-2 py-1.5 lg:px-2 lg:py-1.5 md:px-4 md:py-1 sm:left-[60%] sm:translate-x-0 sm:px-1 sm:py-0.5"
+      : "top-full left-1/2 -translate-x-1/2 px-3 py-2 lg:px-3 lg:py-2 md:px-2 md:py-1 sm:px-1 sm:py-0.5"
+  } mt-2 bg-gray-900 text-white rounded-lg sm:rounded-md text-xs lg:text-xs md:text-xs sm:text-[5px] font-medium whitespace-nowrap shadow-xl sm:shadow-md z-50 sm:z-40 animate-fade`}
+>
+
+    <div
+  className={`font-semibold ${
+    location.id === "portland"
+      ? "text-[11.5px] lg:text-[11.5px] md:text-[10.5px] sm:text-[5.5px]"
+      : "text-[12px] lg:text-[12px] md:text-[11px] sm:text-[5px]"
+  }`}
+>
+  {location.name}
+</div>
+
+    <div
+  className={`text-gray-300 ${
+    location.id === "portland"
+      ? "text-[10.5px] lg:text-[10.5px] md:text-[9.5px] sm:text-[5.5px]"
+      : "text-[11px] lg:text-[11px] md:text-[10px] sm:text-[5px]"
+  }`}
+  style={
+    location.id === "bangalore"
+      ? { 
+          whiteSpace: "normal", 
+          width: "220px", 
+          textAlign: "left",
+          lineHeight: "1.2"
+        }
+      : {}
+  }
+>
+  {location.id === "bangalore"
+    ? `231, 13th Cross Road, Hoysala Nagar,
+\nIndiranagar, Bangalore - 560038`
+    : location.city}
+</div>
+
+    <div
+  className={`text-blue-300 mt-1 ${
+    location.id === "portland"
+      ? "text-[10px] lg:text-[10px] md:text-[9px] sm:text-[5px]"
+      : "text-[10.5px] lg:text-[10.5px] md:text-[9.5px] sm:text-[5.5px]"
+  }`}
+>
+  Click for details
+</div>
+
+   <div
+  className={`absolute -top-1 ${
+    location.id === "portland"
+      ? "left-[47%] sm:left-[15%]"
+      : "left-1/2 -translate-x-1/2"
+  } w-2 h-2 lg:w-2 lg:h-2 md:w-1.5 md:h-1.5 sm:w-1.5 sm:h-1.5 bg-gray-900 rotate-45`}
+></div>
+  </div>
+)} */}
