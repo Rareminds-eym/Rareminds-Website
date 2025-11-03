@@ -1399,11 +1399,28 @@ const ContactPage: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // simple validation
-    if (!formData.name || !formData.email || !formData.phone || !formData.message) {
+    // Validate required fields
+    const errors = [];
+    if (!formData.name?.trim()) errors.push("Name");
+    if (!formData.email?.trim()) errors.push("Email");
+    if (!formData.message?.trim()) errors.push("Message");
+    
+    if (errors.length > 0) {
       toast({
-        title: "Missing fields",
-        description: "Please fill in your name, email, and message.",
+        title: "Required fields missing",
+        description: `Please fill in: ${errors.join(", ")}`,
+        variant: "destructive"
+      });
+      return;
+    }
+    
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      toast({
+        title: "Invalid email",
+        description: "Please enter a valid email address",
+        variant: "destructive"
       });
       return;
     }
@@ -1411,27 +1428,69 @@ const ContactPage: React.FC = () => {
     setIsSubmitting(true);
 
     try {
-      const { error } = await supabase.from("contact_form").insert([formData]);
+      // First save to database
+      const { error: dbError } = await supabase
+        .from("contact_form")
+        .insert([{
+          name: formData.name,
+          email: formData.email,
+          role: formData.role || null,
+          phone: formData.phone || null,
+          message: formData.message
+        }]);
 
-      if (error) {
-        console.error("Supabase insert error:", error);
+      if (dbError) {
+        console.error("Supabase insert error:", dbError);
+        
+        if (dbError.code === '42P01') {
+          toast({
+            title: "Setup required",
+            description: "Contact form database table is not set up. Please contact support.",
+            variant: "destructive"
+          });
+        } else {
+          toast({
+            title: "Submission failed",
+            description: "Unable to save your message. Please try again later.",
+            variant: "destructive"
+          });
+        }
+        return;
+      }
+
+      // Send email notification
+      const { error: emailError } = await supabase.functions.invoke('contact-form-email', {
+        body: {
+          name: formData.name,
+          email: formData.email,
+          role: formData.role || 'Not specified',
+          phone: formData.phone || 'Not provided',
+          message: formData.message
+        }
+      });
+
+      if (emailError) {
+        console.error('Email notification error:', emailError);
         toast({
-          title: "Submission failed",
-          description: "Something went wrong. Please try again later.",
+          title: "Message received",
+          description: "Your message was saved but email notification failed. We'll still contact you soon!",
         });
       } else {
         toast({
           title: "Message sent successfully",
           description: "Thank you for contacting Rareminds! We'll be in touch soon.",
         });
-        setFormData({ name: "", email: "", role: "", phone: "", message: "" });
       }
+      
+      // Clear form
+      setFormData({ name: "", email: "", role: "", phone: "", message: "" });
+
     } catch (err) {
       console.error("Unexpected error:", err);
       toast({
-        title: "Unexpected error",
-        description: "Please try again later.",
-        variant: "destructive",
+        title: "Error",
+        description: "An unexpected error occurred. Please try again.",
+        variant: "destructive"
       });
     } finally {
       setIsSubmitting(false);
