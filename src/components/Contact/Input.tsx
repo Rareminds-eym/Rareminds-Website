@@ -1636,7 +1636,7 @@ const ContactPage: React.FC = () => {
             </p>
 
             <p className="flex items-center gap-3 pl-3">
-              <FaPhone className="mt-1" /> +91 9562481110
+              <FaPhone className="mt-1" /> +91 9902326951
             </p>
 
             <p className="flex items-start gap-3 text-left pl-3">
