@@ -2053,61 +2053,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { MapPin, X, ExternalLink, Mail, Phone } from 'lucide-react';
 import { ComposableMap, Geographies, Geography } from 'react-simple-maps';
-
+import RareMindsLogo from "../../assets/RareMindsLogo.svg";
 const geoUrl = "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json";
 // 🧠 Custom RareMinds Bulb Icon
 const RareMindsBulbIcon = ({ className }) => (
-   <svg
-    xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 200 200"
-    fill="none"
-    className={className}
-  >
-    {/* Light rays around the bulb */}
-    <line x1="100" y1="25" x2="100" y2="10" stroke="#FF4433" strokeWidth="5" strokeLinecap="round" />
-    <line x1="138" y1="35" x2="148" y2="25" stroke="#FF4433" strokeWidth="5" strokeLinecap="round" />
-    <line x1="160" y1="62" x2="175" y2="62" stroke="#FF4433" strokeWidth="5" strokeLinecap="round" />
-    <line x1="62" y1="35" x2="52" y2="25" stroke="#FF4433" strokeWidth="5" strokeLinecap="round" />
-    <line x1="40" y1="62" x2="25" y2="62" stroke="#FF4433" strokeWidth="5" strokeLinecap="round" />
-    <line x1="70" y1="42" x2="58" y2="32" stroke="#FF4433" strokeWidth="5" strokeLinecap="round" />
-    <line x1="130" y1="42" x2="142" y2="32" stroke="#FF4433" strokeWidth="5" strokeLinecap="round" />
-
-    {/* Main bulb shape */}
-    <path
-      d="M 100 45 Q 120 45 130 60 Q 138 72 138 88 Q 138 105 125 120 L 125 138 L 75 138 L 75 120 Q 62 105 62 88 Q 62 72 70 60 Q 80 45 100 45 Z"
-      stroke="#FF4433"
-      strokeWidth="5"
-      strokeLinejoin="round"
-    />
-
-    {/* Brain pattern inside bulb */}
-    {/* Left hemisphere */}
-    <path d="M 78 70 Q 75 73 75 78 Q 75 83 78 86 Q 82 89 85 86" stroke="#FF4433" strokeWidth="4" strokeLinecap="round" />
-    <path d="M 85 70 Q 82 73 82 78 Q 82 82 85 85" stroke="#FF4433" strokeWidth="4" strokeLinecap="round" />
-
-    {/* Right hemisphere */}
-    <path d="M 115 70 Q 118 73 118 78 Q 118 82 115 85" stroke="#FF4433" strokeWidth="4" strokeLinecap="round" />
-    <path d="M 122 70 Q 125 73 125 78 Q 125 83 122 86 Q 118 89 115 86" stroke="#FF4433" strokeWidth="4" strokeLinecap="round" />
-
-    {/* Center brain division */}
-    <path d="M 100 68 L 100 95" stroke="#FF4433" strokeWidth="4" strokeLinecap="round" />
-
-    {/* Lower brain curves */}
-    <path d="M 78 92 Q 82 96 88 96 Q 94 96 96 92" stroke="#FF4433" strokeWidth="4" strokeLinecap="round" />
-    <path d="M 104 92 Q 106 96 112 96 Q 118 96 122 92" stroke="#FF4433" strokeWidth="4" strokeLinecap="round" />
-
-    {/* Middle brain curves */}
-    <path d="M 80 100 Q 85 105 92 105" stroke="#FF4433" strokeWidth="4" strokeLinecap="round" />
-    <path d="M 108 105 Q 115 105 120 100" stroke="#FF4433" strokeWidth="4" strokeLinecap="round" />
-
-    {/* Bulb base (screw threads) */}
-    <rect x="75" y="138" width="50" height="8" fill="none" stroke="#FF4433" strokeWidth="5" />
-    <rect x="78" y="146" width="44" height="7" fill="none" stroke="#FF4433" strokeWidth="5" />
-    <rect x="81" y="153" width="38" height="7" fill="none" stroke="#FF4433" strokeWidth="5" />
-
-    {/* Base bottom cap */}
-    <ellipse cx="100" cy="165" rx="16" ry="5" fill="none" stroke="#FF4433" strokeWidth="5" />
-  </svg>
+  <img src={RareMindsLogo} alt="RareMinds Logo" className={className} />
 );
 
 const InteractiveWorldMap = () => {
@@ -2231,7 +2181,7 @@ const InteractiveWorldMap = () => {
                   onClick={() => handleMarkerClick(location)}
                 >
                   <div className="relative">
-                    <div className="transition-all group-hover:bg-blue-700">
+                    <div className="transition-all">
                       <RareMindsBulbIcon
                         className={`transition-all duration-200 ${
                           isMajor
