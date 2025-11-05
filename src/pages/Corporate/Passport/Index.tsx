@@ -10,6 +10,7 @@ import OverviewSection from "./components/OverviewSection";
 import CorporatesNeededSection from "./components/CorporatesNeededSection";
 import TechDataAssuranceSection from "./components/TechDataAssuranceSection";
 import { BookDemo } from "@/components/Corporate/BookDemo";
+// import { CookieConsent } from "@/components/Corporate/CookieConsent";
 import { HelmetProvider } from "react-helmet-async";
 import Seo from "@/components/Govt/Seo/Seo";
 
@@ -29,6 +30,7 @@ const Passport = () => {
   return (
     <HelmetProvider>
       <Seo {...seoData} />
+      {/* <CookieConsent pageName="Skill Passport" /> */}
       <BookDemo isVisible={isModalOpen} onClose={() => setIsModalOpen(false)} />
       <div className="relative w-full">
         <HeroSection onDemoClick={() => setIsModalOpen(true)} />
