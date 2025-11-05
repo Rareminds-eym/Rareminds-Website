@@ -195,10 +195,18 @@ const HeroSection = ({ onDemoClick }: { onDemoClick: () => void }) => {
             </AnimatePresence>
 
             <p className="text-base sm:text-lg md:text-xl mb-8 max-w-xl text-gray-700">
-              From classrooms to careers → verified, portable, and future-ready skills at your fingertips.
+              From Classrooms To Careers → Verified, Portable, And Future-Ready Skills At Your Fingertips.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4">
+              {/* 
+                Enquiry Button Flow:
+                1. onClick triggers onDemoClick prop from parent (Index.tsx)
+                2. Index.tsx passes setIsModalOpen(true) as onDemoClick
+                3. This opens the BookDemo modal component
+                4. BookDemo component uses Calendly link: https://calendly.com/rareminds-marketing/30min
+                Location: src/components/Corporate/BookDemo.tsx
+              */}
               <button
                 onClick={onDemoClick}
                 className="bg-[#E32A18] hover:bg-[#cc2515] px-7 py-3 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center gap-2 shadow-lg text-white"
