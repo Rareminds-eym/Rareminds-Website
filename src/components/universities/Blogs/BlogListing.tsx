@@ -103,6 +103,16 @@ const BlogListing = () => {
     }
     
     return blogPosts.filter((post: BlogPost) => {
+      // Wildcard category "*" shows on all pages
+      if (post.category === "*") {
+        // Only filter by search query for wildcard posts
+        const matchesSearch = searchQuery === "" || 
+          post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          post.excerpt.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          post.content.toLowerCase().includes(searchQuery.toLowerCase());
+        return matchesSearch;
+      }
+      
       const matchesSearch = searchQuery === "" || 
         post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
         post.excerpt.toLowerCase().includes(searchQuery.toLowerCase()) ||
