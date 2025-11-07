@@ -64,9 +64,9 @@ const BlogListing = () => {
           .from('blog_posts')
           .select('*');
         
-        // If we're on the government blogs page, filter by Government category
+        // If we're on the government blogs page, filter by Government category OR wildcard
         if (location.pathname.includes("/government/blogs")) {
-          query = query.eq('category', 'Government');
+          query = query.or('category.eq.Government,category.eq.*');
         } else if (location.pathname.includes("/school/student/blogs")) {
           query = query.eq('subcategory', 'Students');
         } else if (location.pathname.includes("/school/teacher/blogs")) {
@@ -116,6 +116,16 @@ const BlogListing = () => {
     }
     
     return blogPosts.filter((post: BlogPost) => {
+      // Wildcard category "*" shows on all pages
+      if (post.category === "*") {
+        // Only filter by search query for wildcard posts
+        const matchesSearch = searchQuery === "" || 
+          post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          post.excerpt.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          post.content.toLowerCase().includes(searchQuery.toLowerCase());
+        return matchesSearch;
+      }
+      
       const matchesSearch = searchQuery === "" || 
         post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
         post.excerpt.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -123,8 +133,8 @@ const BlogListing = () => {
       
       // Handle category matching - enforce Government category if on government pages
       const matchesCategory = enforceCategory 
-        ? post.category.toLowerCase() === enforceCategory
-        : selectedCategory === "all" || post.category.toLowerCase() === selectedCategory;
+        ? post.category.toLowerCase() === enforceCategory.toLowerCase()
+        : selectedCategory === "all" || post.category.toLowerCase() === selectedCategory.toLowerCase();
       
       // Use enforced subcategory if we're on a specific path
       const matchesSubcategory = enforceSubcategory 

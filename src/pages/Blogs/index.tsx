@@ -156,6 +156,19 @@ const Blogs: React.FC = () => {
     const isCorporate = enforceSubcategory === "__CORPORATE__";
 
     return blogPosts.filter((post: BlogPost) => {
+      // Wildcard category "*" shows on all pages
+      if (post.category === "*") {
+        // Only filter by search query for wildcard posts
+        const searchLower = searchQuery.toLowerCase();
+        const matchesSearch = !searchQuery || [
+          post.title,
+          post.excerpt,
+          post.content,
+          ...(post.tags || [])
+        ].some(field => field?.toLowerCase().includes(searchLower));
+        return matchesSearch;
+      }
+      
       // Optimized search with case-insensitive matching
       const searchLower = searchQuery.toLowerCase();
       const matchesSearch = !searchQuery || [
