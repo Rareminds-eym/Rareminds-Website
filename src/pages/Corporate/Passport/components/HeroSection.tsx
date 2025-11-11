@@ -138,12 +138,19 @@ const HeroSection = ({ onDemoClick }: { onDemoClick: () => void }) => {
     setLoading(true);
     setError(null);
     try {
-      const { error } = await supabase.from('contact').insert([form]);
+      const { error } = await supabase.from('training_forms').insert([form]);
       if (error) {
         setError('Failed to submit. Please try again.');
         setSubmitted(false);
       } else {
         setSubmitted(true);
+        // Start download after successful submit
+        const link = document.createElement('a');
+        link.href = '/passport/SkillPassport-Brochure.pdf'; // Update this path to your actual file
+        link.download = 'SkillPassport-Brochure.pdf';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
       }
     } catch (err) {
       setError('Unexpected error. Please try again.');
