@@ -8,6 +8,7 @@ const Index = lazy(() => import("./pages/Index"));
 const About = lazy(() => import("./pages/Corporate/Recruitment/Index"));
 const Government = lazy(() => import("./pages/Government/Index"));
 const ContactPage = lazy(() => import("./pages/Contact/index"));
+const About = lazy(() => import("./pages/About/index"));
 const App: React.FC = () => {
   return (
     <>
@@ -19,6 +20,7 @@ const App: React.FC = () => {
               <Route path="/contact-us" element={<ContactPage />} />
               <Route path="/corporate" element={<About />} />
               <Route path="/government" element={<Government />} />
+              <Route path="/about" element={<About />} />
             </Routes>
           </Suspense>
         </DefaultLayout>

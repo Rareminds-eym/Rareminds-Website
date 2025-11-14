@@ -25,6 +25,7 @@ const EventDetail = lazy(() => import("./components/Events/EventDetail"));
 const EventsGridPage = lazy(() => import("./components/Events/EventsGridPage"));
 const Careers = lazy(() => import("./pages/Careers/index"));
 const ContactPage = lazy(() => import("./pages/Contact/index"));
+const About = lazy(() => import("./pages/About/index.tsx"));
 const Hackathons = lazy(() => import("./pages/Hackathons/index"));
 const HackathonResults = lazy(() => import("./pages/Hackathons/Results"));
 const Service = lazy(
@@ -152,6 +153,10 @@ const router = createBrowserRouter([
       {
         path: "/contact-us",
         element: withSuspense(ContactPage),
+      },
+      {
+        path: "/about",
+        element: withSuspense(About),
       },
       {
         path: "/hackathons",
