@@ -26,5 +26,13 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
+    <script>
+      window.$zoho = window.$zoho || {};
+      $zoho.salesiq = $zoho.salesiq || { ready: function() {} };
+      $zoho.salesiq.floatposition = "left";
+      $zoho.salesiq.widgetcode = "siq85740827d442fdfad727c23eb50d61276e1e478af9841b5169a99498fc35da01";
+      $zoho.salesiq.autoload = false;
+    </script>
+    <script id="zsiqscript" src="https://salesiq.zohopublic.in/widget?wc=siq85740827d442fdfad727c23eb50d61276e1e478af9841b5169a99498fc35da01" defer onload="$zoho.salesiq.init();"></script>
   </body>
 </html>
