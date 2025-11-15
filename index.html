@@ -26,5 +26,40 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
+    
+    <!-- Zoho SalesIQ Widget -->
+    <script>
+      window.$zoho = window.$zoho || {};
+      $zoho.salesiq = $zoho.salesiq || {
+        ready: function () {}
+      };
+      
+      // Store original ready function
+      var originalReady = $zoho.salesiq.ready;
+      
+      // Override with new function that calls original
+      $zoho.salesiq.ready = function() {
+        originalReady();
+        
+        const urlParams = new URLSearchParams(window.location.search);
+        const openChat = urlParams.get('openChat');
+        
+        if (openChat === 'true' || openChat === '1') {
+          setTimeout(function() {
+            $zoho.salesiq.floatwindow.visible('show');
+          }, 500);
+        } else {
+          // Explicitly close the chat if parameter is not present
+          setTimeout(function() {
+            $zoho.salesiq.floatwindow.visible('hide');
+          }, 500);
+        }
+      };
+    </script>
+    <script
+      id="zsiqscript"
+      src="https://salesiq.zohopublic.in/widget?wc=siq85740827d442fdfad727c23eb50d61276e1e478af9841b5169a99498fc35da01"
+      defer
+    ></script>
   </body>
 </html>
