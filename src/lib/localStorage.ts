@@ -6,9 +6,18 @@
 // Check if localStorage is available
 const isLocalStorageAvailable = (): boolean => {
   try {
+    // First check if window is defined
+    if (typeof window === 'undefined') {
+      return false;
+    }
+
+    // Try to access localStorage - this itself can throw in some browsers
+    const storage = window.localStorage;
+
+    // Test if we can actually use it
     const testKey = '__localStorage_test__';
-    window.localStorage.setItem(testKey, testKey);
-    window.localStorage.removeItem(testKey);
+    storage.setItem(testKey, testKey);
+    storage.removeItem(testKey);
     return true;
   } catch (e) {
     return false;
