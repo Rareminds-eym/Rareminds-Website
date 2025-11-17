@@ -1,9 +1,10 @@
-import { useEffect, useRef, useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
-import { Facebook, Instagram, Youtube, Linkedin } from "lucide-react";
+import { safeGetItem } from "@/lib/localStorage";
+import { supabase } from "@/lib/supabaseClient";
 import { Icon } from "@iconify/react";
 import { motion } from "framer-motion";
-import { supabase } from "@/lib/supabaseClient";
+import { Facebook, Instagram, Linkedin, Youtube } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 const socialIcons = [
 	{
@@ -47,7 +48,7 @@ const FooterBar: React.FC<FooterBarProps> = ({ hideServices }) => {
 	const [subscriberEmail, setSubscriberEmail] = useState<string | null>(null);
 	const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
-	const userType = localStorage.getItem("currentUserType");
+	const userType = safeGetItem("currentUserType");
 	const navigate = useNavigate();
 
 	useEffect(() => {

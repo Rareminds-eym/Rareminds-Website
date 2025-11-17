@@ -1,42 +1,35 @@
+import { safeGetItem, safeSetItem } from '@/lib/localStorage';
+import {
+    AlertCircle,
+    ArrowLeft,
+    Award,
+    Calendar,
+    CheckCircle,
+    Clock,
+    Mail,
+    MapPin,
+    Phone,
+    User,
+    XCircle,
+    Zap
+} from 'lucide-react';
 import React from 'react';
-import { motion } from 'framer-motion';
-import styles from './TeaserVideoButton.module.css';
-import TeaserVideoModal from './TeaserVideoModal';
+import { Link, useParams } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { useParams, Link } from 'react-router-dom';
-import Carousel from './Carousel';
-import ImageModal from './ImageModal';
-import RegistrationModal from './RegistrationModal';
 import { useOptimizedEvents } from '../../hooks/Events/useOptimizedEvents';
-import EventContactForm from './EventContactForm';
-import FloatingActionMenu from './StickyButton/FloatingAction';
-import InterestedModal from './InterestedModal';
-import SingleEventCountdown from './SingleEventCountdown';
-import EventMap from './EventMap';
-import CountdownTimer from '../ui/CountdownTimer';
 import { eventInterestedService } from '../../services/eventInterestedService';
 import { parsePrice } from '../../utils/priceUtils';
-import { 
-  Calendar, 
-  Clock, 
-  MapPin, 
-  Users, 
-  Mail, 
-  Phone, 
-  User, 
-  ArrowLeft,
-  AlertCircle,
-  CheckCircle,
-  XCircle,
-  ExternalLink,
-  Star,
-  Award,
-  Zap,
-  Edit3,
-  Plus,
-  Minus
-} from 'lucide-react';
+import Carousel from './Carousel';
+import EventContactForm from './EventContactForm';
+import EventMap from './EventMap';
+import ImageModal from './ImageModal';
+import InterestedModal from './InterestedModal';
+import RegistrationModal from './RegistrationModal';
+import SingleEventCountdown from './SingleEventCountdown';
+import FloatingActionMenu from './StickyButton/FloatingAction';
+import styles from './TeaserVideoButton.module.css';
+import TeaserVideoModal from './TeaserVideoModal';
 
 // Animated Teaser Video Button Component
 export const TeaserVideoButton: React.FC<{ teaserVideo?: string }> = (props) => {
@@ -287,7 +280,7 @@ const EventDetail: React.FC = () => {
   const checkUserInterest = React.useCallback(() => {
     if (!event?.id) return;
     
-    const storedInterests = localStorage.getItem('userEventInterests');
+    const storedInterests = safeGetItem('userEventInterests');
     if (storedInterests) {
       try {
         const interests = JSON.parse(storedInterests);
@@ -306,7 +299,7 @@ const EventDetail: React.FC = () => {
   const handleInterestedSuccess = () => {
     // Mark user as interested in localStorage
     if (event?.id) {
-      const storedInterests = localStorage.getItem('userEventInterests');
+      const storedInterests = safeGetItem('userEventInterests');
       let interests = [];
       if (storedInterests) {
         try {
@@ -317,7 +310,7 @@ const EventDetail: React.FC = () => {
       }
       if (!interests.includes(event.id)) {
         interests.push(event.id);
-        localStorage.setItem('userEventInterests', JSON.stringify(interests));
+        safeSetItem('userEventInterests', JSON.stringify(interests));
       }
       setUserAlreadyInterested(true);
     }
@@ -337,7 +330,7 @@ const EventDetail: React.FC = () => {
       
       // Store in localStorage to persist the state
       if (event?.id) {
-        const storedInterests = localStorage.getItem('userEventInterests');
+        const storedInterests = safeGetItem('userEventInterests');
         let interests = [];
         if (storedInterests) {
           try {
@@ -348,7 +341,7 @@ const EventDetail: React.FC = () => {
         }
         if (!interests.includes(event.id)) {
           interests.push(event.id);
-          localStorage.setItem('userEventInterests', JSON.stringify(interests));
+          safeSetItem('userEventInterests', JSON.stringify(interests));
         }
       }
     }

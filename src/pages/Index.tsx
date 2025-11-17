@@ -3,6 +3,7 @@ import College from "@/components/LandingPage/college";
 import Corporate from "@/components/LandingPage/corporate";
 import Govt from "@/components/LandingPage/govt";
 import School from "@/components/LandingPage/school";
+import { safeSetItem } from "@/lib/localStorage";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -52,7 +53,7 @@ const Index = () => {
 
   const redirectToPage = (slug: string) => {
     setTimeout(() => {
-      localStorage.setItem("currentUserType", slug);
+      safeSetItem("currentUserType", slug);
       navigate(`/${slug}`);
     }, 200);
   };
