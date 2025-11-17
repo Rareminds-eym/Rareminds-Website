@@ -1,5 +1,6 @@
-import { useState, useEffect } from 'react';
-import { X, Cookie, Shield, CheckCircle2 } from 'lucide-react';
+import { safeGetItem, safeSetItem } from '@/lib/localStorage';
+import { CheckCircle2, Cookie, Shield, X } from 'lucide-react';
+import { useEffect, useState } from 'react';
 
 interface CookieConsentProps {
   pageName?: string;
@@ -11,7 +12,7 @@ export const CookieConsent = ({ pageName = 'this page' }: CookieConsentProps) =>
 
   useEffect(() => {
     // Check if user has already accepted cookies
-    const cookieConsent = localStorage.getItem('cookieConsent');
+    const cookieConsent = safeGetItem('cookieConsent');
     if (!cookieConsent) {
       // Show banner after a short delay
       setTimeout(() => setIsVisible(true), 1000);
@@ -19,7 +20,7 @@ export const CookieConsent = ({ pageName = 'this page' }: CookieConsentProps) =>
   }, []);
 
   const handleAccept = () => {
-    localStorage.setItem('cookieConsent', 'accepted');
+    safeSetItem('cookieConsent', 'accepted');
     handleClose();
   };
 
