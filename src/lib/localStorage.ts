@@ -1,0 +1,78 @@
+/**
+ * Safe localStorage access utility
+ * Handles cases where localStorage is not available due to browser restrictions
+ */
+
+// Check if localStorage is available
+const isLocalStorageAvailable = (): boolean => {
+  try {
+    // First check if window is defined
+    if (typeof window === 'undefined') {
+      return false;
+    }
+
+    // Try to access localStorage - this itself can throw in some browsers
+    const storage = window.localStorage;
+
+    // Test if we can actually use it
+    const testKey = '__localStorage_test__';
+    storage.setItem(testKey, testKey);
+    storage.removeItem(testKey);
+    return true;
+  } catch (e) {
+    return false;
+  }
+};
+
+// Safe getItem wrapper
+export const safeGetItem = (key: string): string | null => {
+  if (!isLocalStorageAvailable()) {
+    return null;
+  }
+  
+  try {
+    return window.localStorage.getItem(key);
+  } catch (e) {
+    console.warn(`Error reading from localStorage for key "${key}":`, e);
+    return null;
+  }
+};
+
+// Safe setItem wrapper
+export const safeSetItem = (key: string, value: string): void => {
+  if (!isLocalStorageAvailable()) {
+    return;
+  }
+  
+  try {
+    window.localStorage.setItem(key, value);
+  } catch (e) {
+    console.warn(`Error writing to localStorage for key "${key}":`, e);
+  }
+};
+
+// Safe removeItem wrapper
+export const safeRemoveItem = (key: string): void => {
+  if (!isLocalStorageAvailable()) {
+    return;
+  }
+  
+  try {
+    window.localStorage.removeItem(key);
+  } catch (e) {
+    console.warn(`Error removing from localStorage for key "${key}":`, e);
+  }
+};
+
+// Safe clear wrapper
+export const safeClear = (): void => {
+  if (!isLocalStorageAvailable()) {
+    return;
+  }
+  
+  try {
+    window.localStorage.clear();
+  } catch (e) {
+    console.warn('Error clearing localStorage:', e);
+  }
+};

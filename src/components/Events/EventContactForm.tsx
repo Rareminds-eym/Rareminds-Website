@@ -1,8 +1,9 @@
+import { safeGetItem, safeSetItem } from '@/lib/localStorage';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { AlertCircle, Building2, Calendar, CheckCircle, Loader2, Mail, Phone, Send, User } from 'lucide-react';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { Send, CheckCircle, AlertCircle, Loader2, Calendar, User, Mail, Phone, Building2 } from 'lucide-react';
 import { EventContactService } from '../../services/eventContactService';
 
 // Validation schema based on the database constraints
@@ -96,7 +97,7 @@ const EventContactForm: React.FC<EventContactFormProps> = ({
   // Check if user has already submitted for this event
   React.useEffect(() => {
     if (defaultEventId) {
-      const submittedEvents = JSON.parse(localStorage.getItem('submittedEventContacts') || '[]');
+      const submittedEvents = JSON.parse(safeGetItem('submittedEventContacts') || '[]');
       if (submittedEvents.includes(defaultEventId)) {
         setFormStatus('duplicate');
         setErrorMessage('You have already submitted a contact request for this event');
@@ -134,10 +135,10 @@ const EventContactForm: React.FC<EventContactFormProps> = ({
       await EventContactService.submitEventContact(data);
 
       // Store successful submission in localStorage
-      const submittedEvents = JSON.parse(localStorage.getItem('submittedEventContacts') || '[]');
+      const submittedEvents = JSON.parse(safeGetItem('submittedEventContacts') || '[]');
       if (!submittedEvents.includes(data.eventId)) {
         submittedEvents.push(data.eventId);
-        localStorage.setItem('submittedEventContacts', JSON.stringify(submittedEvents));
+        safeSetItem('submittedEventContacts', JSON.stringify(submittedEvents));
       }
 
       setFormStatus('success');
@@ -164,10 +165,10 @@ const EventContactForm: React.FC<EventContactFormProps> = ({
         setFormStatus('duplicate');
         
         // Store duplicate submission attempt in localStorage
-        const submittedEvents = JSON.parse(localStorage.getItem('submittedEventContacts') || '[]');
+        const submittedEvents = JSON.parse(safeGetItem('submittedEventContacts') || '[]');
         if (!submittedEvents.includes(data.eventId)) {
           submittedEvents.push(data.eventId);
-          localStorage.setItem('submittedEventContacts', JSON.stringify(submittedEvents));
+          safeSetItem('submittedEventContacts', JSON.stringify(submittedEvents));
         }
       } else {
         setFormStatus('error');
