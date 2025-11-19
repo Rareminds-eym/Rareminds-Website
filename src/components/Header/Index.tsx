@@ -68,6 +68,7 @@ const Index: React.FC<HeaderProps> = ({ navbarOpen, setNavbarOpen }) => {
                     <div className="relative w-full h-full">
                         <div className="container mx-auto py-36">
                             <div className="flex flex-col items-center text-center space-y-8">
+                                <Link to="/about" onClick={handleLinkClick} className="text-2xl font-medium hover:text-blue-300">About</Link>
                                 <Link
                                     to="/hackathons"
                                     onClick={handleLinkClick}

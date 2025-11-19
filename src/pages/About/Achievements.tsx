@@ -241,7 +241,7 @@ export default function AchievementsSection() {
   ];
 
   return (
-    <div className="flex flex-col items-center justify-center py-20 px-6 bg-white pb-20 md:pb-48 lg">
+    <div className="flex flex-col items-center justify-center py-20 px-6 bg-white pb-14 md:pb-18 lg">
       <h1 className="text-center mb-14 text-3xl md:text-4xl font-bold text-black">
         Our Achievements
       </h1>

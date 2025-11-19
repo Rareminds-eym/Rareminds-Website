@@ -67,8 +67,19 @@ import { FaFlask, FaEye, FaTrophy } from "react-icons/fa";
 
 const MissionVisionValues = () => {
   return (
-    <div className="container mx-auto pt-0 pb-0 mb-1 -mt-8 px-4 md:pt-0 md:-mt-20 md:pb-10 md:mb-10">
-      <h2 className="text-3xl font-bold text-center mb-6 md:mb-16 text-gray-900">
+    // <div className="container mx-auto pt-0 pb-0 mb-0 mt-40 px-4 md:pt-0 md:-mt-18 md:pb-10 md:mb-10">
+    <div
+  className="
+    container mx-auto 
+    px-4 
+    mt-20         /* mobile: reduced top space */
+    md:mt-40       /* laptop: remove extra top space */
+    md:pt-0 
+    md:pb-14       /* laptop: reduced bottom space */
+  "
+>
+
+      <h2 className="text-4xl font-bold text-center mb-6 md:mb-16 text-gray-900">
         Mission Vision Values
       </h2>
 
