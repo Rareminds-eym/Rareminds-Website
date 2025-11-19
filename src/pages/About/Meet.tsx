@@ -430,12 +430,12 @@
 //         {/* Cards Grid */}
 
 import React from "react";
-import personImage from "../../assets/vishak.png"; // example image import
-import ps1 from "../../assets/Subhashini.jpg"
+import personImage from "../../assets/Vishak.jpg"; // example image import
+import ps1 from "../../assets/Subhashini.jpg";
 import ps2 from "../../assets/sandya.jpg"
 import ps3 from "../../assets/KrishanLatha.jpg"
 import ps4 from "../../assets/Lalitha.jpg"
-import ps5 from "../../assets/Labhitha.jpg"
+import ps5 from "../../assets/Labhita-Ma-39_am.png"
 export default function LeadershipTeam() {
   const leaders = [
     {
@@ -504,7 +504,7 @@ export default function LeadershipTeam() {
     
 `}</style>
 
-      <div className="leadership-section min-h-screen bg-white mb-28 md:mb-60 px-6 -mt-2 md:-mt-16">
+      <div className="leadership-section min-h-screen bg-white mb-28 md:mb-52 px-6 -mt-2 md:-mt-16">
         <div className="max-w-6xl mx-auto px-0 md:px-2">
           {/* Header */}
           <div className="text-center mb-16">
@@ -534,7 +534,7 @@ export default function LeadershipTeam() {
                   border border-blue-400 rounded-2xl overflow-hidden bg-white shadow-sm hover:shadow-lg 
                   transition-all duration-300 flex flex-col justify-between group
                   w-64 sm:w-48 md:w-56 lg:w-64   /* 👈 narrower for tablet */
-                  h-[390px]
+                  
                 "
               >
                 {/* Image Section */}

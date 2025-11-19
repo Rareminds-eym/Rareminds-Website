@@ -14,13 +14,14 @@ const About: React.FC = () => {
   return (
     <div className="relative w-full mt-23">
       <Hero />
+       <MissionVisionValues />
+      <Achievements />
       <Who />
       <JourneyTimeline />
       <CoreFeatures />
       <Why />
       <LeadershipTeam />
-      <MissionVisionValues />
-      <Achievements />
+     
       <Partners />
       <CalltoAction />
     </div>

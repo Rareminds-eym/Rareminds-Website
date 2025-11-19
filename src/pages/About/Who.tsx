@@ -133,13 +133,12 @@ import checkIcon from "../../assets/Checkmark.png";
 const AboutEcosystem = () => {
   return (
     <section
-      className="w-[90%] mx-auto mt-20 mb-16 lg:pt-40 xl:pt-16 lg:mb-16 flex flex-col lg:flex-row items-center gap-10 lg:gap-16"
+      className="w-[90%] mx-auto mt-20 mb-12 lg:pt-40 xl:pt-16 lg:mb-16 flex flex-col lg:flex-row items-center gap-10 lg:gap-16"
     >
       {/* Left Side */}
       <div className="lg:w-1/2">
-        <h2 className="text-3xl font-bold text-black mb-10 leading-snug lg:text-4xl">
-          Building India’s Skill Ecosystem — <br className="hidden lg:block" />
-          One Mind at a Time.
+        <h2 className="text-3xl font-bold text-black mb-10 leading-snug lg:text-4xl text-center lg:text-left">
+          Building India’s Skill Ecosystem
         </h2>
 
         <div className="space-y-8">
@@ -163,14 +162,20 @@ const AboutEcosystem = () => {
         <img
           src={aboutImage}
           alt="About Ecosystem"
-          className="w-full max-w-[600px] h-auto rounded-[24px] object-cover"
+          className="w-full max-w-[680px] h-auto rounded-[24px] object-cover"
         />
 
         {/* Overlay Cards */}
-        <div
-  className="
+        {/* <div
+          className="
     absolute top-8 left-24 flex flex-col sm:flex-row flex-wrap gap-3
     sm:gap-2 sm:top-4 sm:left-28
+  "
+        > */}
+        <div
+  className="
+    absolute bottom-8 left-24 flex flex-col sm:flex-row flex-wrap gap-3
+    sm:gap-2 sm:bottom-4 sm:left-28
   "
 >
 
