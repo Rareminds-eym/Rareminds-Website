@@ -431,7 +431,7 @@
 
 import React from "react";
 import personImage from "../../assets/Vishak.jpg"; // example image import
-import ps1 from "../../assets/Subhashini.jpg";
+import ps1 from "../../assets/Subashini_Mam.jpg";
 import ps2 from "../../assets/sandya.jpg"
 import ps3 from "../../assets/KrishanLatha.jpg"
 import ps4 from "../../assets/Lalitha.jpg"
