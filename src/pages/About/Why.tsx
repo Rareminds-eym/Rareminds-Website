@@ -1284,7 +1284,7 @@ const WhyChooseRareminds = () => {
       <div className="container mx-auto px-4 max-w-7xl">
         <h2
           className="
-            text-3xl sm:text-3xl md:text-3xl font-bold text-center text-gray-900
+            text-3xl sm:text-3xl md:text-4xl font-bold text-center text-gray-900
             mb-10 sm:mb-10 md:mb-16 lg:mb-24
             mt-[-10px] sm:mt-[-50px] md:mt-[-170px] lg:mt-[-20px]
           "
@@ -1365,7 +1365,7 @@ const WhyChooseRareminds = () => {
                   <h3 className="text-[#1E88E5] font-semibold text-base sm:text-xs md:text-xs mb-2 sm:mb-1 py-3">
                     {card.title}
                   </h3>
-                  <p className="text-gray-700 text-sm sm:text-[11px] md:text-[11px] leading-snug px-1">
+                  <p className="text-gray-700 text-sm sm:text-[11px] md:text-[12px] leading-snug px-1">
                     {card.desc}
                   </p>
                 </div>
