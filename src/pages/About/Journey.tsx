@@ -1,6 +1,4 @@
 
-
-
 // import React from "react";
 
 // const timelineData = [
@@ -345,7 +343,7 @@ const JourneyTimeline: React.FC = () => {
   const ref = React.useRef<HTMLDivElement>(null);
 
   return (
-<section ref={ref} className="relative w-[90%] mx-auto pt-8 pb-12 sm:pt-10 sm:pb-12 md:pt-12 md:pb-12 overflow-hidden">
+<section ref={ref} className="relative w-[90%] mx-auto pt-8 pb-12 sm:pt-10 sm:pb-12 md:pt-12 md:pb-16 overflow-hidden">
   <h2 className="text-4xl font-bold text-center mb-10">Our Journey</h2>
 
   {/* === Timeline Wrapper with Extra Top Padding === */}

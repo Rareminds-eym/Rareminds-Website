@@ -133,7 +133,7 @@ import checkIcon from "../../assets/Checkmark.png";
 const AboutEcosystem = () => {
   return (
     <section
-      className="w-[90%] mx-auto mt-20 mb-12 lg:pt-40 xl:pt-16 lg:mb-16 flex flex-col lg:flex-row items-center gap-10 lg:gap-16"
+      className="w-[90%] mx-auto mt-20 mb-12 lg:pt-40 xl:pt-16 lg:mb-20 flex flex-col lg:flex-row items-center gap-10 lg:gap-16"
     >
       {/* Left Side */}
       <div className="lg:w-1/2">
