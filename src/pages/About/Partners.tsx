@@ -605,8 +605,8 @@ const PartnersAndCollaborations: React.FC = () => {
           </h3>
           <MarqueeRow
             logos={[{ image: tnsdc, name: "Tamil Nadu Skill Development Corporation" }, { image: naan, name: "NAAN MADUHLVAN" }, { image: tripura, name: "Tripura Skill Development Mission" },
-              { image: '/public/institutions/logos/Alagappa_University_Logo.png', name: "Alagappa" },
-              { image: '/public/institutions/logos/Manonmaniam_Sundaranar_University_logo.png', name: "Manonmaniam" }
+              { image: '/institutions/logos/Alagappa_University_Logo.png', name: "Alagappa" },
+              { image: '/institutions/logos/Manonmaniam_Sundaranar_University_logo.png', name: "Manonmaniam" }
             ]}
             direction="left"
             duration={15}
@@ -620,10 +620,10 @@ const PartnersAndCollaborations: React.FC = () => {
           </h3>
           <MarqueeRow
             logos={[{ image: vels, name: "VELS University" }, { image: anna, name: "ANNA University" }, { image: bharathiar, name: "Bharathiyar University" }, { image: multiple, name: "Multiple Arts and Science Colleges Across Tamil Nadu" },
-              { image: '/public/institutions/logos/Alagappa_University_Logo.png', name: "Alagappa" },
-              { image: '/public/institutions/logos/Bharathidasan_University_logo.png', name: "Bharathidasan" },
-              { image: '/public/institutions/logos/Manonmaniam_Sundaranar_University_logo.png', name: "Manonmaniam" },
-              { image: '/public/institutions/logos/Mother_Teresa_University_logo.png', name: "Mother_Teresa" }
+              { image: '/institutions/logos/Alagappa_University_Logo.png', name: "Alagappa" },
+              { image: '/institutions/logos/Bharathidasan_University_logo.png', name: "Bharathidasan" },
+              { image: '/institutions/logos/Manonmaniam_Sundaranar_University_logo.png', name: "Manonmaniam" },
+              { image: '/institutions/logos/Mother_Teresa_University_logo.png', name: "Mother_Teresa" }
             ]}
             direction="right"
             duration={18}
