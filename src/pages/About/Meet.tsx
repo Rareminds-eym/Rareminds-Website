@@ -1,11 +1,11 @@
 
 import React from "react";
-import personImage from "../../assets/Vishak.jpg"; // example image import
-import ps1 from "../../assets/Subashini_Mam.jpg";
-import ps2 from "../../assets/sandya.jpg"
-import ps3 from "../../assets/KrishanLatha.jpg"
-import ps4 from "../../assets/Lalitha.jpg"
-import ps5 from "../../assets/Labhita-Ma-39_am.png"
+import personImage from "../../assets/v.jpg"; // example image import
+import ps1 from "../../assets/sr.jpg";
+import ps2 from "../../assets/s.jpg"
+import ps3 from "../../assets/la.jpg"
+import ps4 from "../../assets/l.jpg"
+import ps5 from "../../assets/LB.jpg"
 export default function LeadershipTeam() {
   const leaders = [
     {
