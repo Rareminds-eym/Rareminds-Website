@@ -605,8 +605,8 @@ const PartnersAndCollaborations: React.FC = () => {
           </h3>
           <MarqueeRow
             logos={[{ image: tnsdc, name: "Tamil Nadu Skill Development Corporation" }, { image: naan, name: "NAAN MADUHLVAN" }, { image: tripura, name: "Tripura Skill Development Mission" },
-              { image: '/public/institutions/logos/Alagappa_University_Logo.png', name: "Dummy 1" },
-              { image: '/public/institutions/logos/Alagappa_University_Logo.png', name: "Dummy 2" }
+              { image: '/public/institutions/logos/Alagappa_University_Logo.png', name: "Alagappa" },
+              { image: '/public/institutions/logos/Manonmaniam_Sundaranar_University_logo.png', name: "Manonmaniam" }
             ]}
             direction="left"
             duration={15}
@@ -620,10 +620,10 @@ const PartnersAndCollaborations: React.FC = () => {
           </h3>
           <MarqueeRow
             logos={[{ image: vels, name: "VELS University" }, { image: anna, name: "ANNA University" }, { image: bharathiar, name: "Bharathiyar University" }, { image: multiple, name: "Multiple Arts and Science Colleges Across Tamil Nadu" },
-              { image: '/public/institutions/logos/Alagappa_University_Logo.png', name: "Institution Logo 1" },
-              { image: '/public/institutions/logos/Bharathidasan_University_logo.png', name: "Institution Logo 2" },
-              { image: '/public/institutions/logos/Manonmaniam_Sundaranar_University_logo.png', name: "Institution Logo 3" },
-              { image: '/public/institutions/logos/Mother_Teresa_University_logo.png', name: "Institution Logo 4" }
+              { image: '/public/institutions/logos/Alagappa_University_Logo.png', name: "Alagappa" },
+              { image: '/public/institutions/logos/Bharathidasan_University_logo.png', name: "Bharathidasan" },
+              { image: '/public/institutions/logos/Manonmaniam_Sundaranar_University_logo.png', name: "Manonmaniam" },
+              { image: '/public/institutions/logos/Mother_Teresa_University_logo.png', name: "Mother_Teresa" }
             ]}
             direction="right"
             duration={18}
@@ -637,8 +637,8 @@ const PartnersAndCollaborations: React.FC = () => {
           </h3>
           <MarqueeRow
             logos={[{ image: toyota, name: "TOYOTA" }, { image: industry, name: "Partner industries for skill training" },
-              { image: 'https://media.glassdoor.com/sqll/423113/infolob-solutions-squarelogo-1457532897669.png', name: "Dummy 5" },
-              { image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ5Ik35QrNrZsTxJDmMKuyS7RfaX6w_I7vCPQ&s', name: "Dummy 6" }
+              { image: 'https://media.glassdoor.com/sqll/423113/infolob-solutions-squarelogo-1457532897669.png', name: "Golden Source" },
+              { image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ5Ik35QrNrZsTxJDmMKuyS7RfaX6w_I7vCPQ&s', name: "InfoLabs" }
             ]}
             direction="left"
             duration={15}

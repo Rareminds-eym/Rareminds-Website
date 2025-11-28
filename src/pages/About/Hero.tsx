@@ -113,13 +113,13 @@ const HeroSection = () => {
       }}
     >
       {/* Left Text Section */}
-      <div className="md:w-[50%] text-center md:text-left space-y-5 md:pl-10 lg:pl-16">
-        <h1 className="text-3xl md:text-4xl font-bold leading-snug">
-          The Powerhouse Behind <br /> India’s Skill Revolution.
+      <div className="md:w-[70%] text-center md:text-left space-y-5 md:pl-10 lg:pl-16">
+        <h1 className="text-3xl md:text-6xl font-bold leading-snug">
+          The Powerhouse Behind <br /> India’s Skill Revolution
         </h1>
 
         <p className="text-base md:text-lg font-medium text-black/90 leading-relaxed mt-2">
-          From schools to corporates, from learning to livelihoods — <br />
+          From schools to corporates, from learning to livelihoods <br />
           Rareminds powers skill, scale, and success.
         </p>
 

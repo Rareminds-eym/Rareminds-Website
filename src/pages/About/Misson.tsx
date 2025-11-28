@@ -67,60 +67,76 @@ import { FaFlask, FaEye, FaTrophy } from "react-icons/fa";
 
 const MissionVisionValues = () => {
   return (
-    <div className="container mx-auto pt-0 pb-0 mb-1 -mt-8 px-4 md:pt-0 md:-mt-20 md:pb-10 md:mb-10">
-      <h2 className="text-3xl font-bold text-center mb-6 md:mb-16 text-gray-900">
+    // <div className="container mx-auto pt-0 pb-0 mb-0 mt-40 px-4 md:pt-0 md:-mt-18 md:pb-10 md:mb-10">
+    <div
+  className="
+    container mx-auto 
+    px-4 
+    mt-20         /* mobile: reduced top space */
+    md:mt-40       /* laptop: remove extra top space */
+    md:pt-0 
+    md:pb-32      /* laptop: reduced bottom space */
+  "
+>
+
+      <h2 className="text-4xl font-bold text-center mb-6 md:mb-16 text-gray-900">
         Mission Vision Values
       </h2>
 
       {/* Desktop layout remains unchanged */}
-      <div className="hidden md:flex items-center justify-center space-x-16">
-        {/* Mission Section */}
-        <div className="flex flex-col items-center relative">
-          <div className="bg-black p-2 rounded-xl mb-3">
-            <FaFlask className="h-8 w-8 text-white" />
-          </div>
-          <h3 className="text-xl font-semibold text-gray-900 mb-3">Mission</h3>
-          <p className="text-gray-600 text-lg text-center max-w-xs mx-auto">
-            To build a sustainable Skill Ecosystem that transforms learning into livelihoods and creates measurable social impact.
-          </p>
-        </div>
+     {/* Desktop layout - with SVG lines and perfect alignment */}
+<div className="hidden md:grid grid-cols-3 gap-0 items-start text-center relative">
 
-        {/* SVG Connector Line Between Mission and Vision */}
-        <div className="hidden md:block relative">
-          <svg width="2" height="350" viewBox="0 0 2 400" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <line x1="1" y1="0" x2="1" y2="350" stroke="black" strokeWidth="2" />
-          </svg>
-        </div>
+  {/* Mission */}
+  <div className="flex flex-col items-center h-full px-8">
+    <div className="bg-black p-2 rounded-xl mb-5">
+      <FaFlask className="h-8 w-8 text-white" />
+    </div>
+    <h3 className="text-xl font-semibold text-gray-900 mb-5">Mission</h3>
+    <p className="text-gray-600 text-lg max-w-xs">
+      To build a sustainable Skill Ecosystem that transforms learning into livelihoods
+      and creates measurable social impact.
+    </p>
+  </div>
 
-        {/* Vision Section */}
-        <div className="flex flex-col items-center relative">
-          <div className="bg-black p-2 rounded-xl mb-3">
-            <FaEye className="h-8 w-8 text-white" />
-          </div>
-          <h3 className="text-xl font-semibold text-gray-900 mb-3">Vision</h3>
-          <p className="text-gray-600 text-lg text-center max-w-xs mx-auto">
-            To be India’s most trusted catalyst for employability and skill-driven growth, empowering one million learners by 2030.
-          </p>
-        </div>
+  {/* SVG Divider Left */}
+  <div className="absolute left-1/3 top-0 h-full flex justify-center items-center pointer-events-none">
+    <svg width="2" height="100%" viewBox="0 0 2 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <line x1="1" y1="0" x2="1" y2="400" stroke="black" strokeWidth="2" />
+    </svg>
+  </div>
 
-        {/* SVG Connector Line Between Values */}
-        <div className="hidden md:block relative">
-          <svg width="2" height="350" viewBox="0 0 2 400" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <line x1="1" y1="0" x2="1" y2="350" stroke="black" strokeWidth="2" />
-          </svg>
-        </div>
+  {/* Vision */}
+  <div className="flex flex-col items-center h-full px-8">
+    <div className="bg-black p-2 rounded-xl mb-5">
+      <FaEye className="h-8 w-8 text-white" />
+    </div>
+    <h3 className="text-xl font-semibold text-gray-900 mb-5">Vision</h3>
+    <p className="text-gray-600 text-lg max-w-xs">
+      To be India’s most trusted catalyst for employability and skill-driven growth,
+      empowering one million learners by 2030.
+    </p>
+  </div>
 
-        {/* Values Section */}
-        <div className="flex flex-col items-center relative">
-          <div className="bg-black p-2 rounded-xl mb-3">
-            <FaTrophy className="h-8 w-8 text-white" />
-          </div>
-          <h3 className="text-xl font-semibold text-gray-900 mb-16">Values</h3>
-          <p className="text-gray-600 text-lg text-center max-w-xs mx-auto">
-            Empathy, Innovation, Collaboration, Excellence, Ownership
-          </p>
-        </div>
-      </div>
+  {/* SVG Divider Right */}
+  <div className="absolute left-2/3 top-0 h-full flex justify-center items-center pointer-events-none">
+    <svg width="2" height="100%" viewBox="0 0 2 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <line x1="1" y1="0" x2="1" y2="400" stroke="black" strokeWidth="2" />
+    </svg>
+  </div>
+
+  {/* Values */}
+  <div className="flex flex-col items-center h-full px-8">
+    <div className="bg-black p-2 rounded-xl mb-5">
+      <FaTrophy className="h-8 w-8 text-white" />
+    </div>
+    <h3 className="text-xl font-semibold text-gray-900 mb-5">Values</h3>
+    <p className="text-gray-600 text-lg max-w-xs">
+      Empathy, Innovation, Collaboration, Excellence, Ownership
+    </p>
+  </div>
+</div>
+
 
       {/* Mobile view layout */}
       <div className="flex flex-col items-center space-y-10 md:hidden mt-6">

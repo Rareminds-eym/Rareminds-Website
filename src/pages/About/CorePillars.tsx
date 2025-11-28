@@ -1,4 +1,3 @@
-
 import React, {useEffect} from "react";
 import { FiCheckCircle, FiUsers, FiTrendingUp, FiShield, FiGitBranch } from "react-icons/fi";
 import CorePilars from "../../assets/our core pillar.webp"
@@ -225,7 +224,7 @@ const CoreFeatures: React.FC = () => {
     absolute 
     top-[190px] 
     left-[360px] 
-    lg:left-[310px]
+    lg:left-[319px]
     lg:top-[190px] 
     xl:left-[360px]
     xl:top-[190px] 
@@ -321,7 +320,7 @@ const CoreFeatures: React.FC = () => {
     absolute 
     bottom-[180px] 
     left-[380px] 
-    lg:left-[310px] 
+    lg:left-[316px] 
     lg:bottom-[180px]
     xl:left-[360px] 
     xl:bottom-[180px]
