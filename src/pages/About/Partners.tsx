@@ -545,15 +545,15 @@ const MarqueeRow: React.FC<MarqueeRowProps> = ({ logos, direction, duration = 15
 import React from "react";
 
 // import your logos from assets
-import tnsdc from "../../assets/tamil.png";
-import naan from "../../assets/Tripura Skill Development Mission 1.png";
-import tripura from "../../assets/skill.png";
+import tnsdc from "../../assets/tamil_nadu.jpg";
+import tripura from "../../assets/logo_sdp.webp";
+import naan from "../../assets/skill.png";
 import vels from "../../assets/Vels_University_logo 1.png";
 import anna from "../../assets/Anna_University_Logo.svg 1.png";
 import bharathiar from "../../assets/Bharathiar_University_logo 1.png";
 import multiple from "../../assets/university.png";
 import toyota from "../../assets/toyato.png";
-import industry from "../../assets/skill.png";
+import industry from "../../assets/sugam.png";
 
 interface PartnerCardProps {
   image: string;
@@ -636,7 +636,7 @@ const PartnersAndCollaborations: React.FC = () => {
             Corporate Collaborations
           </h3>
           <MarqueeRow
-            logos={[{ image: toyota, name: "TOYOTA" }, { image: industry, name: "Partner industries for skill training" },
+            logos={[{ image: toyota, name: "TOYOTA" }, { image: industry, name: "Sugam" },
               { image: 'https://media.glassdoor.com/sqll/423113/infolob-solutions-squarelogo-1457532897669.png', name: "Golden Source" },
               { image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ5Ik35QrNrZsTxJDmMKuyS7RfaX6w_I7vCPQ&s', name: "InfoLabs" }
             ]}
