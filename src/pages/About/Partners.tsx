@@ -545,15 +545,15 @@ const MarqueeRow: React.FC<MarqueeRowProps> = ({ logos, direction, duration = 15
 import React from "react";
 
 // import your logos from assets
-import tnsdc from "../../assets/tamil.png";
-import naan from "../../assets/Tripura Skill Development Mission 1.png";
-import tripura from "../../assets/skill.png";
+import tnsdc from "../../assets/tamil_nadu.jpg";
+import tripura from "../../assets/logo_sdp.webp";
+import naan from "../../assets/skill.png";
 import vels from "../../assets/Vels_University_logo 1.png";
 import anna from "../../assets/Anna_University_Logo.svg 1.png";
 import bharathiar from "../../assets/Bharathiar_University_logo 1.png";
-import multiple from "../../assets/university.png";
+// import multiple from "../../assets/university.png";
 import toyota from "../../assets/toyato.png";
-import industry from "../../assets/skill.png";
+import industry from "../../assets/sugam.png";
 
 interface PartnerCardProps {
   image: string;
@@ -599,7 +599,7 @@ const PartnersAndCollaborations: React.FC = () => {
 
       <div className="container mx-auto">
         {/* Government & Mission Collaborations */}
-        <div className="mb-9 text-center">
+        {/* <div className="mb-9 text-center">
           <h3 className="text-lg font-semibold text-gray-900 mb-8">
             Government & Mission Collaborations
           </h3>
@@ -611,7 +611,7 @@ const PartnersAndCollaborations: React.FC = () => {
             direction="left"
             duration={15}
           />
-        </div>
+        </div> */}
 
         {/* Universities & Institutions */}
         <div className="mb-9 text-center">
@@ -619,7 +619,9 @@ const PartnersAndCollaborations: React.FC = () => {
             Universities & Institutions
           </h3>
           <MarqueeRow
-            logos={[{ image: vels, name: "VELS University" }, { image: anna, name: "ANNA University" }, { image: bharathiar, name: "Bharathiyar University" }, { image: multiple, name: "Multiple Arts and Science Colleges Across Tamil Nadu" },
+            logos={[{ image: vels, name: "VELS University" }, { image: anna, name: "ANNA University" }, 
+              { image: bharathiar, name: "Bharathiyar University" }, 
+              // { image: multiple, name: "Multiple Arts and Science Colleges Across Tamil Nadu" },
               { image: '/institutions/logos/Alagappa_University_Logo.png', name: "Alagappa" },
               { image: '/institutions/logos/Bharathidasan_University_logo.png', name: "Bharathidasan" },
               { image: '/institutions/logos/Manonmaniam_Sundaranar_University_logo.png', name: "Manonmaniam" },
@@ -636,7 +638,7 @@ const PartnersAndCollaborations: React.FC = () => {
             Corporate Collaborations
           </h3>
           <MarqueeRow
-            logos={[{ image: toyota, name: "TOYOTA" }, { image: industry, name: "Partner industries for skill training" },
+            logos={[{ image: toyota, name: "TOYOTA" }, { image: industry, name: "Sugam" },
               { image: 'https://media.glassdoor.com/sqll/423113/infolob-solutions-squarelogo-1457532897669.png', name: "Golden Source" },
               { image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ5Ik35QrNrZsTxJDmMKuyS7RfaX6w_I7vCPQ&s', name: "InfoLabs" }
             ]}

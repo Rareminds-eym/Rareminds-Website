@@ -22,10 +22,11 @@ export default function LeadershipTeam() {
       image: personImage,
     },
     {
-      name: "KRISHNALATHA",
-      title: "Director, Operations",
-      description: "Leading state-wide projects with precision and passion.",
-      image: ps3,
+      name: "LABHITHA BORA",
+      title: "Project Leads, Institutional Skilling",
+      description:
+        "Driving large-scale implementation and college engagement excellence",
+      image: ps5,
     },
     {
       name: "SANDHYARANI",
@@ -35,18 +36,17 @@ export default function LeadershipTeam() {
       image: ps2,
     },
     {
+      name: "KRISHNALATHA",
+      title: "Director, Operations",
+      description: "Leading state-wide projects with precision and passion.",
+      image: ps3,
+    },
+    {
       name: "LALITHA",
       title: "Project Leads, Institutional Skilling",
       description:
         "Driving large-scale implementation and college engagement excellence",
       image: ps4,
-    },
-    {
-      name: "LABHITHA BORA",
-      title: "Project Leads, Institutional Skilling",
-      description:
-        "Driving large-scale implementation and college engagement excellence",
-      image: ps5,
     },
   ];
 
