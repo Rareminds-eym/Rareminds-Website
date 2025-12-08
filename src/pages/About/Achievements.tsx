@@ -221,7 +221,7 @@ export default function AchievementsSection() {
     },
     {
       icon: FaUsers,
-      value: 80,
+      value: 800,
       suffix: "+",
       label: "Trainers & Mentors Nationwide",
     },
