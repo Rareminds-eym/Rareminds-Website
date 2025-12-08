@@ -551,7 +551,7 @@ import naan from "../../assets/skill.png";
 import vels from "../../assets/Vels_University_logo 1.png";
 import anna from "../../assets/Anna_University_Logo.svg 1.png";
 import bharathiar from "../../assets/Bharathiar_University_logo 1.png";
-import multiple from "../../assets/university.png";
+// import multiple from "../../assets/university.png";
 import toyota from "../../assets/toyato.png";
 import industry from "../../assets/sugam.png";
 
@@ -599,7 +599,7 @@ const PartnersAndCollaborations: React.FC = () => {
 
       <div className="container mx-auto">
         {/* Government & Mission Collaborations */}
-        <div className="mb-9 text-center">
+        {/* <div className="mb-9 text-center">
           <h3 className="text-lg font-semibold text-gray-900 mb-8">
             Government & Mission Collaborations
           </h3>
@@ -611,7 +611,7 @@ const PartnersAndCollaborations: React.FC = () => {
             direction="left"
             duration={15}
           />
-        </div>
+        </div> */}
 
         {/* Universities & Institutions */}
         <div className="mb-9 text-center">
@@ -619,7 +619,9 @@ const PartnersAndCollaborations: React.FC = () => {
             Universities & Institutions
           </h3>
           <MarqueeRow
-            logos={[{ image: vels, name: "VELS University" }, { image: anna, name: "ANNA University" }, { image: bharathiar, name: "Bharathiyar University" }, { image: multiple, name: "Multiple Arts and Science Colleges Across Tamil Nadu" },
+            logos={[{ image: vels, name: "VELS University" }, { image: anna, name: "ANNA University" }, 
+              { image: bharathiar, name: "Bharathiyar University" }, 
+              // { image: multiple, name: "Multiple Arts and Science Colleges Across Tamil Nadu" },
               { image: '/institutions/logos/Alagappa_University_Logo.png', name: "Alagappa" },
               { image: '/institutions/logos/Bharathidasan_University_logo.png', name: "Bharathidasan" },
               { image: '/institutions/logos/Manonmaniam_Sundaranar_University_logo.png', name: "Manonmaniam" },
