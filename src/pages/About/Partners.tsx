@@ -625,7 +625,11 @@ const PartnersAndCollaborations: React.FC = () => {
               { image: '/institutions/logos/Alagappa_University_Logo.png', name: "Alagappa" },
               { image: '/institutions/logos/Bharathidasan_University_logo.png', name: "Bharathidasan" },
               { image: '/institutions/logos/Manonmaniam_Sundaranar_University_logo.png', name: "Manonmaniam" },
-              { image: '/institutions/logos/Mother_Teresa_University_logo.png', name: "Mother_Teresa" }
+              { image: '/institutions/logos/Mother_Teresa_University_logo.png', name: "Mother_Teresa" },
+              {image: '/institutions/logos/Madurai_Kamaraj_University_logo.png', name: "Madurai_Kamaraj"},
+              {image: '/institutions/logos/University_Of_Madras_logo.png', name: "Madras"},
+              {image: '/institutions/logos/TUemblem.png', name: "Thiruvalluvar"},
+              {image: '/institutions/logos/PES-University-Bangalore.png', name: "PES"},
             ]}
             direction="right"
             duration={18}
@@ -640,7 +644,23 @@ const PartnersAndCollaborations: React.FC = () => {
           <MarqueeRow
             logos={[{ image: toyota, name: "TOYOTA" }, { image: industry, name: "Sugam" },
               { image: 'https://media.glassdoor.com/sqll/423113/infolob-solutions-squarelogo-1457532897669.png', name: "Golden Source" },
-              { image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ5Ik35QrNrZsTxJDmMKuyS7RfaX6w_I7vCPQ&s', name: "InfoLabs" }
+              { image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ5Ik35QrNrZsTxJDmMKuyS7RfaX6w_I7vCPQ&s', name: "InfoLabs" },
+              { image: 'https://verastarsolutions.in/images/headerlogo.png', name: "Verastar" },
+              { image: 'https://static.ambitionbox.com/assets/v2/images/rs:fit:1280:960:false:false/aHR0cHM6Ly9tZWRpYS5uYXVrcmkuY29tL21lZGlhL2FiY29tcGxvZ28vZGF0YWZvcnR1bmUtb3JpZ2luYWwuanBn.png', name: "DataFortune" },
+              { image: 'https://5.imimg.com/data5/SELLER/Default/2023/9/347644752/ZT/PQ/MO/3625416/csm-technologies-software.png', name: "CSM" },
+              { image: 'https://nexgendrying.com/wp-content/uploads/2023/08/Nexgen-drying-logo-2.png', name: "Nexgen" },
+              {image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSVGpFDm8UIB2QED8UCgbTIUj5YDm9qL3wM-A&s', name: "E4m"},
+              {image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRsqnyIYYYsKCZROUdbJ-B5R_2l9GnibTkyrg&s', name: "BSV"},
+              {image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQK0R5DChZSJdBHUl_Xa1eWSoleAQjGXZARGQ&s', name: "motherson"},
+              {image: 'https://rmkcdn.successfactors.com/83e0592a/d435f4cf-cd4f-4907-a013-d.png', name: "NEC"},
+              {image: 'https://qwqer.in/wp-content/uploads/2023/03/Frame-2.png', name: "QWQER"},
+              {image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQf7c1SPaEXSdaxOv5n_wc4or5u8itx7a0CUw&s', name: "AceGroup"},
+              {image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT8iG8P3xhinUN6s9Qo4i5cViiF2NO9z5bqFA&s', name: "BNM"},
+              {image: 'https://www.sssi.in/assets/front_new/new-style/images/logo_trademark_3.webp', name: "SSSi"},
+              {image: 'https://quadgenwireless.com/wp-content/uploads/2022/12/Quadgen-Logopng.png', name: "QuadGen"},
+              {image: 'https://arbrands.in/demo2/navkis-landing/images/logo/logo2.png', name:"Navkis"},
+              {image: 'https://www.parkcontrols.com/image/logo/PCC%20Logo%20(No%20Background)(9.12.24)-01.png', name:"PCC"},
+              {image: 'https://images.squarespace-cdn.com/content/v1/650bf3ee96714871f4364ce8/77e20a8e-6555-4c3b-84fd-817f06fa88b6/PFC+Logo+-+High+Res..png', name:'PFC'}
             ]}
             direction="left"
             duration={15}
