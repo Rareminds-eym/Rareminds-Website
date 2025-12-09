@@ -62,6 +62,7 @@ export const CTASection = ({ onDemoClick, onWaitlistClick }: { onDemoClick: () =
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <button 
+            id="daily-learning-download"
             onClick={() => setShowForm(true)}
             className="bg-white border-2 border-[#000000] text-[#000000] hover:bg-gray-100 px-6 py-5 rounded-full font-semibold flex items-center justify-center transition-all">
             <Download className="mr-2 h-5 w-5" />

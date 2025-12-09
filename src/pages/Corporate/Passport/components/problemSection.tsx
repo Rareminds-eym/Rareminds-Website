@@ -131,6 +131,7 @@ export const ProblemSection = ({ onDemoClick }: { onDemoClick: () => void }) => 
             See How It Works <ArrowRight className="h-4 w-4" />
           </button>
           <button
+            id="habit-card-download"
             onClick={() => setShowForm(true)}
             type="button"
             className="inline-flex items-center gap-3 bg-white hover:bg-gray-50 border-2 border-[#E32A18] text-[#E32A18] hover:text-[#cc2515] px-6 py-3 rounded-full font-semibold shadow-md transition-all duration-200"
