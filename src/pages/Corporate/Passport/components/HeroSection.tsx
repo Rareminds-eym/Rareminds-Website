@@ -225,6 +225,7 @@ const HeroSection = ({ onDemoClick }: { onDemoClick: () => void }) => {
                 <FaCalendarAlt /> Enquiry
               </button>
               <button
+                id="resume-checklist-download"
                 onClick={() => setShowForm(true)}
                 className="bg-white hover:bg-gray-50 border-2 border-[#E32A18] text-[#E32A18] hover:text-[#cc2515] px-7 py-3 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center gap-2 shadow-lg"
               >
