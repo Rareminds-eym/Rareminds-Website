@@ -82,6 +82,7 @@ const HeroSection = ({ onDemoClick }: { onDemoClick: () => void }) => {
     name: "",
     company: "",
     email: "",
+    phone: "",
     role: "",
     message: ""
   });
@@ -138,7 +139,10 @@ const HeroSection = ({ onDemoClick }: { onDemoClick: () => void }) => {
     setLoading(true);
     setError(null);
     try {
-      const { error } = await supabase.from('training_forms').insert([form]);
+      const { error } = await supabase.from('pdf_downloads').insert([{
+        ...form,
+        download_type: 'Resume Checklist'
+      }]);
       if (error) {
         setError('Failed to submit. Please try again.');
         setSubmitted(false);
@@ -146,8 +150,8 @@ const HeroSection = ({ onDemoClick }: { onDemoClick: () => void }) => {
         setSubmitted(true);
         // Start download after successful submit
         const link = document.createElement('a');
-        link.href = '/passport/SkillPassport-Brochure.pdf'; // Update this path to your actual file
-        link.download = 'SkillPassport-Brochure.pdf';
+        link.href = '/passport/pdf/Resume checklist.pdf';
+        link.download = 'Resume-Checklist.pdf';
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
@@ -235,7 +239,10 @@ const HeroSection = ({ onDemoClick }: { onDemoClick: () => void }) => {
                 setLoading(true);
                 setError(null);
                 try {
-                  const { error } = await supabase.from('training_forms').insert([form]);
+                  const { error } = await supabase.from('pdf_downloads').insert([{
+                    ...form,
+                    download_type: 'Resume Checklist'
+                  }]);
                   if (error) {
                     setError('Failed to submit. Please try again.');
                     setSubmitted(false);
@@ -243,8 +250,8 @@ const HeroSection = ({ onDemoClick }: { onDemoClick: () => void }) => {
                     setSubmitted(true);
                     // Start download after successful submit
                     const link = document.createElement('a');
-                    link.href = '/path/to/your/file.pdf'; // Replace with actual file path
-                    link.download = 'SkillPassport-Brochure.pdf'; // Replace with actual filename
+                    link.href = '/passport/pdf/Resume checklist.pdf';
+                    link.download = 'Resume-Checklist.pdf';
                     document.body.appendChild(link);
                     link.click();
                     document.body.removeChild(link);
@@ -278,6 +285,12 @@ const HeroSection = ({ onDemoClick }: { onDemoClick: () => void }) => {
                     <label className="block text-gray-700 font-semibold mb-2">Email Address</label>
                     <input type="email" name="email" value={form.email} onChange={handleChange} placeholder="name@company.com" className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E32A18] text-black bg-white" />
                   </div>
+                  <div className="flex-1">
+                    <label className="block text-gray-700 font-semibold mb-2">Phone Number</label>
+                    <input type="tel" name="phone" value={form.phone} onChange={handleChange} placeholder="+91 98765 43210" className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E32A18] text-black bg-white" />
+                  </div>
+                </div>
+                <div className="flex flex-col sm:flex-row gap-4 mb-4">
                   <div className="flex-1">
                     <label className="block text-gray-700 font-semibold mb-2">Role to Hire</label>
                     <input type="text" name="role" value={form.role} onChange={handleChange} placeholder="Job Title/Position" className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E32A18] text-black bg-white" />
