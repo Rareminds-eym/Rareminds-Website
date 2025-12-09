@@ -1,16 +1,16 @@
 # PDF Download Buttons Reference
 
-## Download Button IDs and Links
+## Download Section IDs and Links
 
 ### 1. Resume Checklist Download
-- **Button ID:** `resume-checklist-download`
-- **Location:** Hero Section (Top banner)
+- **Section ID:** `resume-checklist-download`
+- **Location:** Hero Section (Top banner - "Still Reading Resumes?")
 - **Component:** `src/pages/Corporate/Passport/components/HeroSection.tsx`
 - **PDF File:** `public/passport/pdf/Resume checklist.pdf`
-- **Direct Link:** `https://yourwebsite.com/corporate/recruitment#resume-checklist-download`
+- **Direct Link:** `https://rareminds.in/corporate/recruitment#resume-checklist-download`
 - **Download Type:** "Resume Checklist"
 
-**To link to this button:**
+**To link to this section:**
 ```html
 <a href="/corporate/recruitment#resume-checklist-download">Download Resume Checklist</a>
 ```
@@ -18,14 +18,14 @@
 ---
 
 ### 2. Habit Card Download
-- **Button ID:** `habit-card-download`
-- **Location:** Problem Section (After "See How It Works")
+- **Section ID:** `habit-card-download`
+- **Location:** Problem Section ("It's Not the Employability Gap — It's the Visibility Gap")
 - **Component:** `src/pages/Corporate/Passport/components/problemSection.tsx`
 - **PDF File:** `public/passport/pdf/Habit Card_Website.pdf`
-- **Direct Link:** `https://yourwebsite.com/corporate/recruitment#habit-card-download`
+- **Direct Link:** `https://rareminds.in/corporate/recruitment#habit-card-download`
 - **Download Type:** "Habit Card"
 
-**To link to this button:**
+**To link to this section:**
 ```html
 <a href="/corporate/recruitment#habit-card-download">Download Habit Card</a>
 ```
@@ -33,14 +33,14 @@
 ---
 
 ### 3. Daily Learning Download
-- **Button ID:** `daily-learning-download`
-- **Location:** CTA Section (Bottom of page, replaced "Join Waitlist")
+- **Section ID:** `daily-learning-download`
+- **Location:** CTA Section ("Talent isn't missing — it's just not mapped")
 - **Component:** `src/pages/Corporate/Passport/components/CTASection.tsx`
 - **PDF File:** `public/passport/pdf/Daily Learning.pdf`
-- **Direct Link:** `https://yourwebsite.com/corporate/recruitment#daily-learning-download`
+- **Direct Link:** `https://rareminds.in/corporate/recruitment#daily-learning-download`
 - **Download Type:** "Daily Learning"
 
-**To link to this button:**
+**To link to this section:**
 ```html
 <a href="/corporate/recruitment#daily-learning-download">Download Daily Learning</a>
 ```
