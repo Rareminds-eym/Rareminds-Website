@@ -7,12 +7,12 @@
 - **Location:** Hero Section (Top banner - "Still Reading Resumes?")
 - **Component:** `src/pages/Corporate/Passport/components/HeroSection.tsx`
 - **PDF File:** `public/passport/pdf/Resume checklist.pdf`
-- **Direct Link:** `https://rareminds.in/corporate/recruitment#resume-checklist-download`
+- **Direct Link:** `https://rareminds.in/corporate/skill-passport#resume-checklist-download`
 - **Download Type:** "Resume Checklist"
 
 **To link to this section:**
 ```html
-<a href="/corporate/recruitment#resume-checklist-download">Download Resume Checklist</a>
+<a href="/corporate/skill-passport#resume-checklist-download">Download Resume Checklist</a>
 ```
 
 ---
@@ -22,12 +22,12 @@
 - **Location:** Problem Section ("It's Not the Employability Gap — It's the Visibility Gap")
 - **Component:** `src/pages/Corporate/Passport/components/problemSection.tsx`
 - **PDF File:** `public/passport/pdf/Habit Card_Website.pdf`
-- **Direct Link:** `https://rareminds.in/corporate/recruitment#habit-card-download`
+- **Direct Link:** `https://rareminds.in/corporate/skill-passport#habit-card-download`
 - **Download Type:** "Habit Card"
 
 **To link to this section:**
 ```html
-<a href="/corporate/recruitment#habit-card-download">Download Habit Card</a>
+<a href="/corporate/skill-passport#habit-card-download">Download Habit Card</a>
 ```
 
 ---
@@ -37,12 +37,12 @@
 - **Location:** CTA Section ("Talent isn't missing — it's just not mapped")
 - **Component:** `src/pages/Corporate/Passport/components/CTASection.tsx`
 - **PDF File:** `public/passport/pdf/Daily Learning.pdf`
-- **Direct Link:** `https://rareminds.in/corporate/recruitment#daily-learning-download`
+- **Direct Link:** `https://rareminds.in/corporate/skill-passport#daily-learning-download`
 - **Download Type:** "Daily Learning"
 
 **To link to this section:**
 ```html
-<a href="/corporate/recruitment#daily-learning-download">Download Daily Learning</a>
+<a href="/corporate/skill-passport#daily-learning-download">Download Daily Learning</a>
 ```
 
 ---
@@ -60,16 +60,16 @@ document.getElementById('resume-checklist-download').click();
 ```jsx
 import { Link } from 'react-router-dom';
 
-<Link to="/corporate/recruitment#resume-checklist-download">
+<Link to="/corporate/skill-passport#resume-checklist-download">
   Download Resume Checklist
 </Link>
 ```
 
 ### External Link (Email, Social Media)
 ```
-Resume Checklist: https://rareminds.in/corporate/recruitment#resume-checklist-download
-Habit Card: https://rareminds.in/corporate/recruitment#habit-card-download
-Daily Learning: https://rareminds.in/corporate/recruitment#daily-learning-download
+Resume Checklist: https://rareminds.in/corporate/skill-passport#resume-checklist-download
+Habit Card: https://rareminds.in/corporate/skill-passport#habit-card-download
+Daily Learning: https://rareminds.in/corporate/skill-passport#daily-learning-download
 ```
 
 ---
@@ -91,9 +91,9 @@ Email notifications sent to: `marketing@rareminds.in`
 
 ## Testing Links
 
-You can test each button by visiting:
-1. `http://localhost:5173/corporate/recruitment#resume-checklist-download`
-2. `http://localhost:5173/corporate/recruitment#habit-card-download`
-3. `http://localhost:5173/corporate/recruitment#daily-learning-download`
+You can test each section by visiting:
+1. `http://localhost:5173/corporate/skill-passport#resume-checklist-download`
+2. `http://localhost:5173/corporate/skill-passport#habit-card-download`
+3. `http://localhost:5173/corporate/skill-passport#daily-learning-download`
 
 The page will automatically scroll to the button when using the hash link.

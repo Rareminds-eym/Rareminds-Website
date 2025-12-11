@@ -7,7 +7,7 @@ export const CTASection = () => {
       <div className="max-w-3xl mx-auto">
         {/* Heading */}
         <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-4">
-          Your Passport to Jobs – Launching Oct 13 at GITEX
+          Your Passport to Jobs
         </h2>
 
         {/* Subtext */}
