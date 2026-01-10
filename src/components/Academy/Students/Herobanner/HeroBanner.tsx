@@ -10,7 +10,6 @@ import DownloadForm from './DownloadForm';
 import FloatingActionButton from '../FAB/FloatingActionButton';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useCallback } from 'react';
-import { PopupButton } from 'react-calendly';
 
 
 interface HeaderProps {
@@ -144,17 +143,16 @@ const HeroBanner = ({  HeroToContact,HeroToLogo, isBlurred }: HeaderProps) =>{
                   <p className="text-lg text-gray-700 mb-6">
                     {activeService.subtext}
                   </p>
-                  {/* <PopupButton 
-                    url="https://calendly.com/karthikeyan-rareminds/30min"
-                    rootElement={document.getElementById('root')!}
-                    text="Schedule"
-                    className="mb-6 px-4 py-2 text-lg rounded-xl shadow-md bg-red-500 hover:bg-red-600"
-                  />
-                  {showSchedule && (
-                    <div className="mb-4">
-                      <Schedule />
-                    </div>
-                  )} */}
+                  {/* Zoho Booking can be added here if needed
+                    <iframe
+                      width="100%"
+                      height="500px"
+                      src="https://subashini-rareminds37.zohobookings.in/portal-embed#/rareminds"
+                      frameBorder="0"
+                      allowFullScreen
+                      title="Schedule"
+                    />
+                  */}
                   {/* <div className="flex gap-4">
                     <Button 
                       variant="outline" 

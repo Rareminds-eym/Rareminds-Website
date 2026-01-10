@@ -3,7 +3,6 @@ import { Calendar, CircleChevronDown, Eye } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { GooeyText } from "../../ui/GooeyText";
 import { ParticleButton } from "../../../components/ui/particle-button";
-import { PopupButton } from "react-calendly";
 
 const heroSlides = [
   {
@@ -114,12 +113,8 @@ export const HeroSection = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [autoPlay] = useState(true);
   const [direction, setDirection] = useState(0);
-  const [root, setRoot] = useState<HTMLElement | null>(null);
+  const [showBookingModal, setShowBookingModal] = useState(false);
   const slideIndex = wrap(0, heroSlides.length, currentSlide);
-
-  useEffect(() => {
-    setRoot(document.getElementById('root'));
-  }, []);
 
   const paginate = (newDirection: number) => {
     setDirection(newDirection);
@@ -246,20 +241,14 @@ export const HeroSection = () => {
                       <Eye className="h-5 sm:h-6 w-5 sm:w-6 mr-2" aria-hidden="true" />
                       View Our Government Training Portfolio
                     </ParticleButton>
-                    <div 
-                      className="flex items-center bg-white/80 hover:bg-white transition-colors px-4 sm:px-6 py-2 sm:py-3 backdrop-blur rounded-full shadow-sm shadow-white border-2 border-black/70 text-black"
+                    <button 
+                      className="flex items-center bg-white/80 hover:bg-white transition-colors px-4 sm:px-6 py-2 sm:py-3 backdrop-blur rounded-full shadow-sm shadow-white border-2 border-black/70 text-black cursor-pointer"
                       aria-label="Schedule a strategy call"
+                      onClick={() => setShowBookingModal(true)}
                     >
                       <Calendar className="h-4 sm:h-5 w-4 sm:w-5 mr-2" aria-hidden="true" />
-                      {root && (
-                        <PopupButton
-                          url="https://calendly.com/gowdanavi279/new-meeting"
-                          text="Schedule a Strategy Call"
-                          rootElement={root}
-                          aria-label="Open calendar to schedule a call"
-                        />
-                      )}
-                    </div>
+                      Schedule a Strategy Call
+                    </button>
                   </motion.div>
                 </div>
               </motion.div>
@@ -291,6 +280,46 @@ export const HeroSection = () => {
           />
         ))}
       </motion.div>
+
+      {/* Zoho Booking Modal */}
+      <AnimatePresence>
+        {showBookingModal && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/50 z-[100] flex items-center justify-center p-4"
+            onClick={() => setShowBookingModal(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.8, opacity: 0 }}
+              className="bg-white rounded-xl shadow-2xl p-4 w-[90vw] max-w-[600px] max-h-[90vh]"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="flex justify-between items-center mb-4">
+                <h3 className="text-lg font-semibold text-gray-900">Schedule a Strategy Call</h3>
+                <button
+                  onClick={() => setShowBookingModal(false)}
+                  className="text-gray-500 hover:text-gray-700 text-2xl font-bold"
+                  aria-label="Close booking dialog"
+                >
+                  &times;
+                </button>
+              </div>
+              <iframe
+                width="100%"
+                height="550px"
+                src="https://subashini-rareminds37.zohobookings.in/portal-embed#/rareminds"
+                frameBorder="0"
+                allowFullScreen
+                title="Schedule a Strategy Call"
+              />
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <div 
         className="absolute bottom-2 md:bottom-6 left-10 sm:left-20 md:left-32 flex flex-col items-center z-50 animate-pulse bg-white/90 p-1 sm:p-2 backdrop-blur-sm shadow-md shadow-red-600 ring-2 sm:ring-4 ring-white/50 rounded-full cursor-pointer"
