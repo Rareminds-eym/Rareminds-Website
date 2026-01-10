@@ -215,7 +215,7 @@ const HeroSection = ({ onDemoClick }: { onDemoClick: () => void }) => {
                 1. onClick triggers onDemoClick prop from parent (Index.tsx)
                 2. Index.tsx passes setIsModalOpen(true) as onDemoClick
                 3. This opens the BookDemo modal component
-                4. BookDemo component uses Calendly link: https://calendly.com/rareminds-marketing/30min
+                4. BookDemo component uses Zoho Bookings: https://subashini-rareminds37.zohobookings.in/portal-embed#/rareminds
                 Location: src/components/Corporate/BookDemo.tsx
               */}
               <button
