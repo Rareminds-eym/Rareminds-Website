@@ -11,7 +11,7 @@ export default function LeadershipTeam() {
       name: "Dr. SUBHASHINI RAMASWAMY",
       title: "Founder & CEO",
       description:
-        "Visionary leader redefining India's skill and employability landscape.",
+        "Visionary leader, redefining India's Skill and Employability landscape.",
       image: ps1,
     },
     {
@@ -24,27 +24,27 @@ export default function LeadershipTeam() {
       name: "LABHITHA BORA",
       title: "Chief Growth & Innovation Officer",
       description:
-        "Driving large-scale implementation and college engagement excellence",
+        "Driving large-scale growth and implementation excellence",
       image: ps5,
     },
     {
       name: "SANDHYARANI",
       title: "Lead - L&D",
       description:
-        "Bridging talent and opportunity through strategic partnerships.",
+        "Driving learning and excellence, from grass root to the top",
       image: ps2,
     },
     {
       name: "KRISHNALATHA",
       title: "Lead - Growth & Partnerships",
-      description: "Leading state-wide projects with precision and passion.",
+      description: "Bridging talent and opportunity through strategic partnerships.",
       image: ps3,
     },
     {
       name: "LALITHA",
       title: "Project Manager",
       description:
-        "Driving large-scale implementation and college engagement excellence",
+        "Building future ready work-force by bringing the change at School level.",
       image: ps4,
     },
   ];
