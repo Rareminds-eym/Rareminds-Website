@@ -13,7 +13,7 @@ import {
 import { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Modal from 'react-modal';
-import { supabase } from '@/lib/supabaseClient'; 
+import { submitBlueprintRequest, submitCourseListRequest } from '@/services/sdp/enrollmentService';
 
 // Make sure this matches your app's root element
 if (typeof document !== "undefined") {
@@ -151,48 +151,6 @@ Rareminds ensures that students not only gain technical skills but also master c
     ]
   },
 ];
-// New: Email automation for Course List
-const sendCourseListEmail = async (name: string, email: string) => {
-  const response = await fetch('https://rareminds.in/api/send-pdf', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      name,
-      email,
-      pdfUrl: '/institutions/pdfs/Course_List.pdf',
-      institution: 'Course List Download'
-    }),
-  });
-  const data = await response.json();
-  if (!response.ok) {
-    throw new Error(data.error || 'Failed to send email');
-  }
-};
-
-// Email automation logic (from CaseStudies.tsx)
-const sendEmail = async (
-  name: string,
-  email: string,
-  location: string,
-  university: string
-) => {
-  const response = await fetch('https://rareminds.in/api/send-pdf', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      name,
-      email,
-      location,
-      university,
-      pdfUrl: '/institutions/pdfs/Blueprint.pdf',
-      institution: university
-    }),
-  });
-  const data = await response.json();
-  if (!response.ok) {
-    throw new Error(data.error || 'Failed to send email');
-  }
-};
 
 export default function Services() {
   const containerRef = useRef(null);
@@ -234,21 +192,7 @@ export default function Services() {
     setSending(true);
     setError('');
     try {
-      // Store in Supabase
-      const { error: supabaseError } = await supabase.from('blueprint_requests').insert([
-        {
-          name: form.name,
-          phone: form.phone,
-          email: form.email,
-          location: form.location,
-          university: form.university
-        }
-      ]);
-      if (supabaseError) throw supabaseError;
-
-      // Send email with PDF
-      await sendEmail(form.name, form.email, form.location, form.university);
-
+      await submitBlueprintRequest(form);
       setSuccess(true);
       setTimeout(() => {
         setModalOpen(false);
@@ -266,18 +210,14 @@ export default function Services() {
     }
     setSending(false);
   };
-  // New: handle Course List download automation
+
+  // Handle Course List download automation
   const handleCourseSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setCourseSending(true);
     setCourseError('');
     try {
-      // Store in Supabase (optional, if you want to track downloads)
-      await supabase.from('course_list_requests').insert([
-        { name: courseForm.name, email: courseForm.email }
-      ]);
-      // Send email with Course List PDF
-      await sendCourseListEmail(courseForm.name, courseForm.email);
+      await submitCourseListRequest(courseForm);
       setCourseSuccess(true);
       setTimeout(() => {
         setCourseModalOpen(false);
@@ -291,7 +231,7 @@ export default function Services() {
   };
 
   return (
-    <section ref={containerRef} className="py-16 relative overflow-hidden">
+    <section ref={containerRef} className="py-16 pt-32 relative overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50" />
       <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50" />
 
@@ -301,12 +241,12 @@ export default function Services() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
-          className="text-center mb-4"
+          className="text-center mb-12"
         >
-          <h1 className="text-xl font-bold mb-4 bg-black bg-clip-text text-transparent">
+          <h1 className="text-4xl font-bold mb-4 text-slate-900">
             Our Services
           </h1>
-          <p className="text-sm text-gray-600 mx-auto">
+          <p className="text-lg text-slate-600 max-w-2xl mx-auto">
             Transform your institution with our integrated learning programs
           </p>
         </motion.div>
@@ -324,7 +264,15 @@ export default function Services() {
                 key={index}
                 style={{ y: yOffset }}
                 className="relative group h-[360px] cursor-pointer max-w-xs mx-auto"
-                onClick={() => navigate(`/service/${service.id}`)}
+                onClick={() => {
+                  // Services with courses go to course list
+                  // Services without courses go to service detail page
+                  if (service.id === 'full-semester') {
+                    navigate(`/universities/${service.id}/courses`);
+                  } else {
+                    navigate(`/service/${service.id}`);
+                  }
+                }}
               >
                 <div className={`absolute left-0 top-0 bottom-0 w-6 bg-[#020202] rounded-l-lg transform -skew-y-12`} />
                 
