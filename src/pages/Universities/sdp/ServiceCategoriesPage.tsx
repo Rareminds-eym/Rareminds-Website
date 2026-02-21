@@ -208,16 +208,13 @@ export default function Services() {
           </motion.div>
         ) : (
           services.map((service, index) => {
-            const yOffset = useTransform(
-              scrollYProgress,
-              [index / services.length, (index + 1) / services.length],
-              [50, -50]
-            );
-
             return (
               <motion.div
                 key={index}
-                style={{ y: yOffset }}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
                 className="relative group h-[360px] cursor-pointer max-w-xs mx-auto"
                 onClick={() => {
                   // Only Engineering has courses - all others go to service detail

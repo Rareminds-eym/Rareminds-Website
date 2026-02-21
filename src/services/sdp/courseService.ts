@@ -46,25 +46,32 @@ export const getServiceBySlug = async (slug: string) => {
 
 // Fetch courses by service type from Supabase
 export const getCoursesByService = async (serviceType: string): Promise<Course[]> => {
+  console.log('🔎 getCoursesByService called with:', serviceType);
+  
   const { data, error } = await supabase
     .from('courses')
     .select('*')
     .eq('category', 'course')
-    .eq('service_type', serviceType)
+    .ilike('course_category', serviceType)  // Case-insensitive match
     .eq('is_active', true)
     .order('display_order', { ascending: true });
 
+  console.log('📦 Supabase response:', { data, error });
+
   if (error) {
-    console.error('Error fetching courses:', error);
+    console.error('❌ Error fetching courses:', error);
     return [];
   }
 
+  console.log('✨ Raw data from DB:', data);
+  console.log('📝 Number of courses:', data?.length || 0);
+
   // Map database fields to Course interface
-  return (data || []).map(course => ({
+  const mappedCourses = (data || []).map(course => ({
     id: course.id,
     slug: course.slug,
     name: course.title,
-    duration: course.duration || '',
+    duration: course.duration_hours ? `${course.duration_hours} hr` : '',
     level: course.level || 'Beginner',
     mode: course.mode || 'Hybrid',
     price: course.price || 0,
@@ -83,6 +90,10 @@ export const getCoursesByService = async (serviceType: string): Promise<Course[]
     instructors: course.instructors || [],
     brochureUrl: course.brochure_url
   }));
+
+  console.log('🎯 Mapped courses:', mappedCourses);
+  
+  return mappedCourses;
 };
 
 // Get course by slug from Supabase
@@ -107,7 +118,7 @@ export const getCourseBySlug = async (slug: string): Promise<Course | null> => {
     id: data.id,
     slug: data.slug,
     name: data.title,
-    duration: data.duration || '',
+    duration: data.duration_hours ? `${data.duration_hours} hr` : '',
     level: data.level || 'Beginner',
     mode: data.mode || 'Hybrid',
     price: data.price || 0,
@@ -149,7 +160,7 @@ export const getRelatedCourses = async (currentCourse: Course, limit: number = 3
     id: course.id,
     slug: course.slug,
     name: course.title,
-    duration: course.duration || '',
+    duration: course.duration_hours ? `${course.duration_hours} hr` : '',
     level: course.level || 'Beginner',
     mode: course.mode || 'Hybrid',
     price: course.price || 0,
