@@ -25,8 +25,11 @@ export default function CourseList() {
   // Fetch courses from Supabase
   useEffect(() => {
     const fetchCourses = async () => {
+      console.log('🔍 Fetching courses for service:', serviceId);
       setLoading(true);
       const data = await getCoursesByService(serviceId);
+      console.log('✅ Courses fetched:', data);
+      console.log('📊 Total courses:', data.length);
       setCourses(data);
       setLoading(false);
     };
