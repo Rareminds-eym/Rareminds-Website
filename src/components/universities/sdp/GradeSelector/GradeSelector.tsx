@@ -3,23 +3,23 @@ import { motion } from 'framer-motion';
 import { School, Building2 } from 'lucide-react';
 
 interface GradeSelectorProps {
-  onSelect: (institutionType: 'college' | 'university') => void;
+  onSelect: (institutionType: 'school' | 'college') => void;
 }
 
 export default function GradeSelector({ onSelect }: GradeSelectorProps) {
   const institutions = [
     {
-      type: 'college' as const,
+      type: 'school' as const,
       icon: School,
-      title: 'College',
-      description: 'Programs designed for college students',
+      title: 'School',
+      description: 'Programs designed for school students',
       color: 'from-blue-600 to-purple-600'
     },
     {
-      type: 'university' as const,
+      type: 'college' as const,
       icon: Building2,
-      title: 'University',
-      description: 'Programs designed for university students',
+      title: 'College',
+      description: 'Programs designed for college students',
       color: 'from-purple-600 to-pink-600'
     }
   ];

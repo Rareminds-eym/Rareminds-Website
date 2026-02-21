@@ -2,17 +2,46 @@ import { motion } from 'framer-motion';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, CheckCircle, Users, Target, Award, BookOpen } from 'lucide-react';
 import { getCourseBySlug, getCoursesByService } from '@/services/sdp/courseService';
+import { useState, useEffect } from 'react';
+import type { Course } from '@/types/sdp/course.types';
 
 export default function CourseDetail() {
   const { courseSlug } = useParams<{ courseSlug: string }>();
   const navigate = useNavigate();
-  
-  const course = courseSlug ? getCourseBySlug(courseSlug) : null;
+  const [course, setCourse] = useState<Course | null>(null);
+  const [otherCourses, setOtherCourses] = useState<Course[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  // Get other courses in the same program (excluding current course)
-  const otherCourses = course 
-    ? getCoursesByService(course.serviceType).filter(c => c.slug !== courseSlug)
-    : [];
+  // Fetch course data
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!courseSlug) return;
+      
+      setLoading(true);
+      const courseData = await getCourseBySlug(courseSlug);
+      setCourse(courseData);
+
+      if (courseData) {
+        const allCourses = await getCoursesByService(courseData.serviceType);
+        setOtherCourses(allCourses.filter(c => c.slug !== courseSlug));
+      }
+      
+      setLoading(false);
+    };
+    fetchData();
+  }, [courseSlug]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <motion.div
+          animate={{ rotate: 360 }}
+          transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+          className="w-16 h-16 border-4 border-blue-100 border-t-blue-700 rounded-full"
+        />
+      </div>
+    );
+  }
 
   if (!course) {
     return (
@@ -276,7 +305,7 @@ export default function CourseDetail() {
                           initial={{ opacity: 0, x: 20 }}
                           animate={{ opacity: 1, x: 0 }}
                           transition={{ delay: 0.3 + index * 0.05 }}
-                          onClick={() => navigate(`/universities/course/${otherCourse.slug}`)}
+                          onClick={() => navigate(`/universities/sdp/course/${otherCourse.slug}`)}
                           className="w-full text-left p-4 hover:bg-blue-50 transition-colors group"
                         >
                           <div className="flex gap-4">

@@ -20,7 +20,7 @@ export const getInstitutionTypes = (): InstitutionType[] => {
       title: 'SCHOOL',
       icon: School,
       description: 'Comprehensive programs designed for school-level education',
-      path: '/universities/services',
+      path: '/universities/sdp/school/categories',
       color: 'from-blue-600 to-indigo-600',
       bgGradient: 'from-blue-50 to-indigo-50',
       iconBg: 'from-blue-100 to-indigo-200'
@@ -30,7 +30,7 @@ export const getInstitutionTypes = (): InstitutionType[] => {
       title: 'COLLEGE',
       icon: Building2,
       description: 'Advanced solutions tailored for college institutions',
-      path: '/universities/services',
+      path: '/universities/sdp/college/categories',
       color: 'from-purple-600 to-pink-600',
       bgGradient: 'from-purple-50 to-pink-50',
       iconBg: 'from-purple-100 to-pink-200'

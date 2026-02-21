@@ -17,8 +17,19 @@ import { Provider } from "react-redux";
 import { store } from "./store";
 import { AuthProvider } from "./context/AuthContext";
 
-// Create a client
-const queryClient = new QueryClient();
+// Create a client with optimized caching for smooth back navigation
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 5 * 60 * 1000, // 5 minutes - data stays fresh longer
+      gcTime: 10 * 60 * 1000, // 10 minutes - keep cached data longer (formerly cacheTime)
+      refetchOnMount: false, // Don't refetch when component mounts if data exists
+      refetchOnWindowFocus: false, // Don't refetch when window regains focus
+      refetchOnReconnect: false, // Don't refetch on reconnect
+      retry: 1, // Only retry failed requests once
+    },
+  },
+});
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>

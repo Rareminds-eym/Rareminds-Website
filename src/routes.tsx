@@ -61,6 +61,9 @@ const CoursesListingPage = lazy(
 const CourseDetailPage = lazy(
   () => import("./pages/Universities/sdp/CourseDetailPage")
 );
+const ServiceDetailPage = lazy(
+  () => import("./pages/Universities/sdp/ServiceDetailPage")
+);
 const CorporateTraining = lazy(
   () => import("./pages/Corporate/Training/Home/index.tsx")
 );
@@ -113,7 +116,9 @@ const router = createBrowserRouter([
       <>
         <ScrollToTop />
         <DefaultLayout>
-          <Outlet />
+          <Suspense fallback={<LoaderComponent />}>
+            <Outlet />
+          </Suspense>
         </DefaultLayout>
       </>
     ),
@@ -186,7 +191,9 @@ const router = createBrowserRouter([
       <>
         <ScrollToTop />
         <CorporateLayout>
-          <Outlet />
+          <Suspense fallback={<LoaderComponent />}>
+            <Outlet />
+          </Suspense>
         </CorporateLayout>
       </>
     ),
@@ -251,7 +258,9 @@ const router = createBrowserRouter([
       <>
         <ScrollToTop />
         <GovernmentLayout>
-          <Outlet />
+          <Suspense fallback={<LoaderComponent />}>
+            <Outlet />
+          </Suspense>
         </GovernmentLayout>
       </>
     ),
@@ -290,7 +299,9 @@ const router = createBrowserRouter([
       <>
         <ScrollToTop />
         <AcademiaLayout>
-          <Outlet />
+          <Suspense fallback={<LoaderComponent />}>
+            <Outlet />
+          </Suspense>
         </AcademiaLayout>
       </>
     ),
@@ -383,7 +394,9 @@ const router = createBrowserRouter([
       <>
         <ScrollToTop />
         <UniversitiesLayout>
-          <Outlet />
+          <Suspense fallback={<LoaderComponent />}>
+            <Outlet />
+          </Suspense>
         </UniversitiesLayout>
       </>
     ),
@@ -394,7 +407,7 @@ const router = createBrowserRouter([
         element: withSuspense(Universities),
       },
       {
-        path: "/universities/services",
+        path: "/universities/sdp/:institutionType/categories",
         element: withSuspense(ServiceCategoriesPage),
       },
       {
@@ -406,11 +419,15 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "/universities/:serviceId/courses",
+        path: "/universities/sdp/:institutionType/:categorySlug",
+        element: withSuspense(ServiceDetailPage),
+      },
+      {
+        path: "/universities/sdp/:institutionType/engineering/courses",
         element: withSuspense(CoursesListingPage),
       },
       {
-        path: "/universities/course/:courseSlug",
+        path: "/universities/sdp/course/:courseSlug",
         element: withSuspense(CourseDetailPage),
       },
       {

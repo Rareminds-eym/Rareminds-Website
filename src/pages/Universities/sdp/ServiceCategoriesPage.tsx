@@ -1,164 +1,105 @@
 import { motion, useScroll, useTransform } from 'framer-motion';
-import { 
+import {
   GraduationCap,
   Briefcase,
   BookOpen,
   Users,
   School,
-  Building2,
+  Award,
   ArrowRight,
   Download,
-  FileSpreadsheet
+  FileSpreadsheet,
+  LucideIcon
 } from 'lucide-react';
-import { useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useRef, useState, useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import Modal from 'react-modal';
 import { submitBlueprintRequest, submitCourseListRequest } from '@/services/sdp/enrollmentService';
+import { getServices } from '@/services/sdp/courseService';
 
 // Make sure this matches your app's root element
 if (typeof document !== "undefined") {
   Modal.setAppElement('#root');
 }
 
-export const services  = [
-  // ...existing services array...
-  {
-    id: 'full-semester',
-    icon: GraduationCap,
-    name: 'Full Semester Skill Program',
-    subtitle: '(Naan Mudhalvan)',
-    description: 'Multiple courses + internships + final evaluation + certification',
-    whatitis: `Offered in collaboration with the Tamil Nadu government’s Naan Mudhalvan initiative, this is a full-semester skill development program designed and delivered by Rareminds. It includes a series of industry-aligned certification courses, intensive hands-on training, and internship opportunities. The program ends with a final evaluation and certification that reflects the student's overall skill progression.
-Rareminds ensures that students not only gain technical skills but also master communication, problem-solving, and workplace adaptability – all essential for modern careers.`,
-    image: "/institutions/images/services/1.png",
-    color: 'from-blue-600 to-purple-600',
-    duration: '6 Months',
-    mode: 'Hybrid',
-    servicesimg: 'https://images.unsplash.com/photo-1532012197267-da84d127e765?auto=format&fit=crop&w=800',
-    focus: 'Comprehensive skill development',
-    benefits: [
-      'Industry-aligned curriculum',
-      'Hands-on projects',
-      'Internship opportunities',
-      'Professional certification',
-      'Placement assistance',
-    ]
-  },
-  // ...rest of the services...
-  {
-    id: 'pre-placement',
-    icon: Briefcase,
-    name: 'Pre-Placement Accelerator',
-    subtitle: 'Career Oriented',
-    description: 'Final year focused bootcamp + placement tie-up',
-    whatitis: `This is Rareminds' flagship bootcamp-style training for final-year students, tailored to ensure placement readiness. It combines technical revision, aptitude training, mock interviews, group discussions, personality development, and career coaching. The program is integrated with strategic placement tie-ups, giving students access to recruitment drives and hiring partners.`,
-    image: "/institutions/images/services/2.png",
-    color: 'from-blue-600 to-purple-600',
-    duration: '3 Months',
-    mode: 'Intensive',
-    servicesimg: 'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?auto=format&fit=crop&w=800',
-    focus: 'Placement preparation',
-    benefits: [
-      'Interview preparation',
-      'Resume building',
-      'Mock interviews',
-      'Technical training',
-      'Soft skills development'
-    ]
-  },
-  {
-    id: 'bridge-courses',
-    icon: BookOpen,
-    name: 'Bridge Courses',
-    subtitle: 'First Years',
-    description: 'Foundational programs on communication, digital tools, work ethics',
-    whatitis: `Designed for newly admitted students, this Rareminds initiative focuses on building a strong foundation for college success. It covers effective communication, digital fluency (MS Office, Google tools, etc.), teamwork, and ethical behavior. The courses promote emotional intelligence and self-awareness to help students manage the transition to college life and adapt to a new learning environment.`,
-    image: "/institutions/images/services/3.png",
-    color: 'from-blue-600 to-purple-600',
-    duration: '2 Months',
-    mode: 'Regular',
-    servicesimg: 'https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?auto=format&fit=crop&w=800',
-    focus: 'Foundation building',
-    benefits: [
-      'Basic communication skills',
-      'Digital literacy',
-      'Professional ethics',
-      'Time management',
-      'Team collaboration'
-    ]
-  },
-  {
-    id: 'skill-based',
-    icon: School,
-    name: 'Skill-Based Training',
-    subtitle: 'Credit-Linked',
-    description: 'Add-on courses that enhance your academic profile',
-    whatitis: `These modular training programs, developed by Rareminds, are either integrated into the curriculum (credit-linked) or offered as supplementary add-ons. Covering areas like data analytics, digital marketing, communication mastery, coding, food safety, and more – they align with industry trends and student aspirations. Each module is designed for hands-on, measurable learning.`,
-    image: "/institutions/images/services/4.png",
-    color: 'from-blue-600 to-purple-600',
-    duration: 'Flexible',
-    mode: 'Modular',
-    servicesimg: 'https://images.unsplash.com/photo-1516979187457-637abb4f9353?auto=format&fit=crop&w=800',
-    focus: 'Specialized skills',
-    benefits: [
-      'Industry certifications',
-      'Practical workshops',
-      'Expert sessions',
-      'Project-based learning',
-      'Credit recognition'
-    ]
-  },
-  {
-    id: 'faculty-development',
-    icon: Users,
-    name: 'Faculty Development',
-    subtitle: 'NEP & Technology',
-    description: 'Comprehensive training on NEP and Industry Integration',
-    whatitis: `Rareminds conducts specialized FDPs to help educators embrace National Education Policy (NEP) guidelines, integrate emerging technologies, and implement industry-relevant content. These programs are interactive, insightful, and practice-oriented—equipping faculty to become facilitators of innovation and mentors of the future workforce.`,
-    image: "/institutions/images/services/1.png",
-    color: 'from-blue-600 to-purple-600',
-    duration: '1 Week',
-    mode: 'Intensive',
-    servicesimg:'https://images.unsplash.com/photo-1550399105-c4db5fb85c18?auto=format&fit=crop&w=800',
-    focus: 'Teacher training',
-    benefits: [
-      'NEP 2020 implementation',
-      'Modern teaching methods',
-      'Technology integration',
-      'Research guidance',
-      'Industry collaboration'
-    ]
-  },
-  {
-    id: 'internship-placement',
-    icon: Building2,
-    name: 'Internship & Placement',
-    subtitle: 'Industry Connect',
-    description: 'Direct industry partnerships for real-world experience',
-    whatitis: `Rareminds acts as a bridge between institutions and industries by forming structured internship and placement partnerships. We facilitate student access to internships, project work, and job interviews with reputed companies across domains. Through close collaboration with Career Services Cells and Training & Placement Officers, Rareminds ensures seamless employability pathways.`,
-    image: "/institutions/images/services/2.png",
-    color: 'from-blue-600 to-purple-600',
-    duration: 'Ongoing',
-    mode: 'Facilitation',
-    servicesimg: 'https://images.unsplash.com/photo-1497633762265-9d179a990aa6?auto=format&fit=crop&w=800',
-    focus: 'Career launch',
-    benefits: [
-      'Industry partnerships',
-      'Internship opportunities',
-      'Placement drives',
-      'Career counseling',
-      'Alumni network'
-    ]
-  },
-];
+// Icon mapping for services
+const iconMap: Record<string, LucideIcon> = {
+  'arts-science': BookOpen,
+  'engineering': GraduationCap,
+  'management-business': Briefcase,
+  'corporate-faculty-training': Users,
+  'bsc-level': School,
+  'skill-based': Award
+};
+
+// Service image mapping (fallback images)
+const serviceImageMap: Record<string, string> = {
+  'arts-science': 'https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?auto=format&fit=crop&w=800',
+  'engineering': 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=800',
+  'management-business': 'https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=800',
+  'corporate-faculty-training': 'https://images.unsplash.com/photo-1550399105-c4db5fb85c18?auto=format&fit=crop&w=800',
+  'bsc-level': 'https://images.unsplash.com/photo-1532012197267-da84d127e765?auto=format&fit=crop&w=800',
+  'skill-based': 'https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=800'
+};
+
+interface Service {
+  id: string;
+  slug: string;
+  icon: LucideIcon;
+  name: string;
+  subtitle: string;
+  description: string;
+  whatitis: string;
+  image: string;
+  color: string;
+  duration: string;
+  mode: string;
+  servicesimg: string;
+  focus: string;
+  benefits: string[];
+}
 
 export default function Services() {
   const containerRef = useRef(null);
   const navigate = useNavigate();
+  const { institutionType } = useParams<{ institutionType: string }>();
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start start", "end end"]
   });
+
+  const [services, setServices] = useState<Service[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  // Fetch services from Supabase
+  useEffect(() => {
+    const fetchServicesData = async () => {
+      setLoading(true);
+      const data = await getServices(institutionType);
+
+      // Map database data to UI format
+      const mappedServices: Service[] = data.map((service: any) => ({
+        id: service.slug,
+        slug: service.slug,
+        icon: iconMap[service.slug] || BookOpen,
+        name: service.title,
+        subtitle: service.subtitle || '',
+        description: service.description || '',
+        whatitis: service.overview || '',
+        image: service.image_url || '/institutions/images/services/1.png',
+        color: service.color_gradient || 'from-blue-600 to-purple-600',
+        duration: service.duration || 'Flexible',
+        mode: service.mode || 'Hybrid',
+        servicesimg: serviceImageMap[service.slug] || 'https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?auto=format&fit=crop&w=800',
+        focus: service.focus || '',
+        benefits: service.benefits || []
+      }));
+
+      setServices(mappedServices);
+      setLoading(false);
+    };
+    fetchServicesData();
+  }, [institutionType]);
 
   // Modal state
   const [modalOpen, setModalOpen] = useState(false);
@@ -252,7 +193,21 @@ export default function Services() {
         </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-16">
-          {services.map((service, index) => {
+        {loading ? (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="text-center py-20 col-span-full"
+          >
+            <motion.div
+              animate={{ rotate: 360 }}
+              transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+              className="w-16 h-16 border-4 border-blue-100 border-t-blue-700 rounded-full mx-auto mb-4"
+            />
+            <p className="text-slate-600 font-medium">Loading services...</p>
+          </motion.div>
+        ) : (
+          services.map((service, index) => {
             const yOffset = useTransform(
               scrollYProgress,
               [index / services.length, (index + 1) / services.length],
@@ -265,17 +220,16 @@ export default function Services() {
                 style={{ y: yOffset }}
                 className="relative group h-[360px] cursor-pointer max-w-xs mx-auto"
                 onClick={() => {
-                  // Services with courses go to course list
-                  // Services without courses go to service detail page
-                  if (service.id === 'full-semester') {
-                    navigate(`/universities/${service.id}/courses`);
+                  // Only Engineering has courses - all others go to service detail
+                  if (service.slug === 'engineering') {
+                    navigate(`/universities/sdp/${institutionType || 'college'}/engineering/courses`);
                   } else {
-                    navigate(`/service/${service.id}`);
+                    navigate(`/universities/sdp/${institutionType || 'college'}/${service.slug}`);
                   }
                 }}
               >
                 <div className={`absolute left-0 top-0 bottom-0 w-6 bg-[#020202] rounded-l-lg transform -skew-y-12`} />
-                
+
                 <motion.div
                   whileHover={{ rotateY: -15, translateX: 10 }}
                   transition={{ type: "spring", stiffness: 300, damping: 20 }}
@@ -305,7 +259,7 @@ export default function Services() {
                     <p className="text-gray-600 text-sm leading-relaxed mb-4">
                       {service.description}
                     </p>
-                    
+
                     <motion.div
                       whileHover={{ x: 10 }}
                       className={`flex items-center gap-2 text-xs font-semibold bg-gradient-to-r ${service.color} bg-clip-text text-transparent`}
@@ -319,207 +273,208 @@ export default function Services() {
                 </motion.div>
               </motion.div>
             );
-          })}
-        </div>
+          })
+        )}
+      </div>
 
-<motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="text-center mt-9 relative"
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        className="text-center mt-9 relative"
+      >
+        <div className="absolute inset-0 blur-3xl bg-gradient-to-r from-blue-400/30 via-purple-400/30 to-pink-400/30 animate-pulse" />
+        <motion.div className="relative" />
+        <motion.div
+          className="relative inline-block"
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
         >
-          <div className="absolute inset-0 blur-3xl bg-gradient-to-r from-blue-400/30 via-purple-400/30 to-pink-400/30 animate-pulse" />
-          <motion.div className="relative" />
-          <motion.div
-            className="relative inline-block"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            <div className="flex flex-col sm:flex-row gap-8 pt-8 justify-center">
-              {/* Course List Download with automation */}
-              <motion.button
-                type="button"
-                onClick={() => setCourseModalOpen(true)}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="button-primary py-2 flex items-center"
-              >
-                <Download className="inline-block mr-2 h-5 w-5" />
-                Download Course List
-              </motion.button>
-              {/* Blueprint Request */}
-              <motion.button
-                type="button"
-                onClick={() => setModalOpen(true)}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="button-secondary py-2 flex items-center"
-              >
-                <FileSpreadsheet className="inline-block mr-2 h-5 w-5" />
-                Request Blueprint
-              </motion.button>
-            </div>
-          </motion.div>
+          <div className="flex flex-col sm:flex-row gap-8 pt-8 justify-center">
+            {/* Course List Download with automation */}
+            <motion.button
+              type="button"
+              onClick={() => setCourseModalOpen(true)}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="button-primary py-2 flex items-center"
+            >
+              <Download className="inline-block mr-2 h-5 w-5" />
+              Download Course List
+            </motion.button>
+            {/* Blueprint Request */}
+            <motion.button
+              type="button"
+              onClick={() => setModalOpen(true)}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="button-secondary py-2 flex items-center"
+            >
+              <FileSpreadsheet className="inline-block mr-2 h-5 w-5" />
+              Request Blueprint
+            </motion.button>
+          </div>
         </motion.div>
+      </motion.div>
       </div>
 
       {/* Modal for Request Blueprint */}
       <Modal
-        isOpen={modalOpen}
-        onRequestClose={() => {
-          setModalOpen(false);
-          setSuccess(false);
-          setForm({
-            name: '',
-            phone: '',
-            email: '',
-            location: '',
-            university: ''
-          });
-          setError('');
-        }}
-        className="bg-white rounded-lg p-8 max-w-md mx-auto mt-24 shadow-lg relative z-[9999]"
-        overlayClassName="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-[9998]"
-      >
-        <button
-          className="absolute top-2 right-2 text-gray-500"
-          onClick={() => {
-            setModalOpen(false);
-            setSuccess(false);
-            setForm({
-              name: '',
-              phone: '',
-              email: '',
-              location: '',
-              university: ''
-            });
-            setError('');
-          }}
-        >
-          ×
-        </button>
-        <h2 className="text-lg font-bold mb-4">Request Blueprint</h2>
-        {success ? (
-          <div className="text-green-600">
-            Blueprint sent to your email!
-          </div>
-        ) : (
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <input
-              name="name"
-              value={form.name}
-              onChange={handleChange}
-              required
-              placeholder="Your Name"
-              className="w-full border px-3 py-2 rounded"
-            />
-            <input
-              name="phone"
-              value={form.phone}
-              onChange={handleChange}
-              required
-              placeholder="Phone Number"
-              className="w-full border px-3 py-2 rounded"
-            />
-            <input
-              name="email"
-              value={form.email}
-              onChange={handleChange}
-              required
-              type="email"
-              placeholder="Email ID"
-              className="w-full border px-3 py-2 rounded"
-            />
-            <input
-              name="university"
-              value={form.university}
-              onChange={handleChange}
-              required
-              placeholder="University Name"
-              className="w-full border px-3 py-2 rounded"
-            />
-            <input
-              name="location"
-              value={form.location}
-              onChange={handleChange}
-              required
-              placeholder="Location"
-              className="w-full border px-3 py-2 rounded"
-            />
-            {error && (
-              <p className="text-red-500 text-sm text-center">{error}</p>
-            )}
-            <button
-              type="submit"
-              disabled={sending}
-              className="w-full bg-blue-600 text-white py-2 rounded font-semibold"
-            >
-              {sending ? 'Sending...' : 'Request & Send PDF'}
-            </button>
-          </form>
+    isOpen={modalOpen}
+    onRequestClose={() => {
+      setModalOpen(false);
+      setSuccess(false);
+      setForm({
+        name: '',
+        phone: '',
+        email: '',
+        location: '',
+        university: ''
+      });
+      setError('');
+    }}
+    className="bg-white rounded-lg p-8 max-w-md mx-auto mt-24 shadow-lg relative z-[9999]"
+    overlayClassName="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-[9998]"
+  >
+    <button
+      className="absolute top-2 right-2 text-gray-500"
+      onClick={() => {
+        setModalOpen(false);
+        setSuccess(false);
+        setForm({
+          name: '',
+          phone: '',
+          email: '',
+          location: '',
+          university: ''
+        });
+        setError('');
+      }}
+    >
+      ×
+    </button>
+    <h2 className="text-lg font-bold mb-4">Request Blueprint</h2>
+    {success ? (
+      <div className="text-green-600">
+        Blueprint sent to your email!
+      </div>
+    ) : (
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <input
+          name="name"
+          value={form.name}
+          onChange={handleChange}
+          required
+          placeholder="Your Name"
+          className="w-full border px-3 py-2 rounded"
+        />
+        <input
+          name="phone"
+          value={form.phone}
+          onChange={handleChange}
+          required
+          placeholder="Phone Number"
+          className="w-full border px-3 py-2 rounded"
+        />
+        <input
+          name="email"
+          value={form.email}
+          onChange={handleChange}
+          required
+          type="email"
+          placeholder="Email ID"
+          className="w-full border px-3 py-2 rounded"
+        />
+        <input
+          name="university"
+          value={form.university}
+          onChange={handleChange}
+          required
+          placeholder="University Name"
+          className="w-full border px-3 py-2 rounded"
+        />
+        <input
+          name="location"
+          value={form.location}
+          onChange={handleChange}
+          required
+          placeholder="Location"
+          className="w-full border px-3 py-2 rounded"
+        />
+        {error && (
+          <p className="text-red-500 text-sm text-center">{error}</p>
         )}
-      </Modal>
+        <button
+          type="submit"
+          disabled={sending}
+          className="w-full bg-blue-600 text-white py-2 rounded font-semibold"
+        >
+          {sending ? 'Sending...' : 'Request & Send PDF'}
+        </button>
+      </form>
+    )}
+  </Modal>
 
-      {/* Modal for Course List Download */}
-      <Modal
-        isOpen={courseModalOpen}
-        onRequestClose={() => {
-          setCourseModalOpen(false);
-          setCourseSuccess(false);
-          setCourseForm({ name: '', email: '' });
-          setCourseError('');
-        }}
-        className="bg-white rounded-lg p-8 max-w-md mx-auto mt-24 shadow-lg relative z-[9999]"
-        overlayClassName="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-[9998]"
-      >
-        <button
-          className="absolute top-2 right-2 text-gray-500"
-          onClick={() => {
-            setCourseModalOpen(false);
-            setCourseSuccess(false);
-            setCourseForm({ name: '', email: '' });
-            setCourseError('');
-          }}
-        >
-          ×
-        </button>
-        <h2 className="text-lg font-bold mb-4">Download Course List</h2>
-        {courseSuccess ? (
-          <div className="text-green-600">
-            Course List sent to your email!
-          </div>
-        ) : (
-          <form onSubmit={handleCourseSubmit} className="space-y-4">
-            <input
-              name="name"
-              value={courseForm.name}
-              onChange={handleCourseChange}
-              required
-              placeholder="Your Name"
-              className="w-full border px-3 py-2 rounded"
-            />
-            <input
-              name="email"
-              value={courseForm.email}
-              onChange={handleCourseChange}
-              required
-              type="email"
-              placeholder="Email ID"
-              className="w-full border px-3 py-2 rounded"
-            />
-            {courseError && (
-              <p className="text-red-500 text-sm text-center">{courseError}</p>
-            )}
-            <button
-              type="submit"
-              disabled={courseSending}
-              className="w-full bg-blue-600 text-white py-2 rounded font-semibold"
-            >
-              {courseSending ? 'Sending...' : 'Send & Download'}
-            </button>
-          </form>
+  {/* Modal for Course List Download */}
+  <Modal
+    isOpen={courseModalOpen}
+    onRequestClose={() => {
+      setCourseModalOpen(false);
+      setCourseSuccess(false);
+      setCourseForm({ name: '', email: '' });
+      setCourseError('');
+    }}
+    className="bg-white rounded-lg p-8 max-w-md mx-auto mt-24 shadow-lg relative z-[9999]"
+    overlayClassName="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-[9998]"
+  >
+    <button
+      className="absolute top-2 right-2 text-gray-500"
+      onClick={() => {
+        setCourseModalOpen(false);
+        setCourseSuccess(false);
+        setCourseForm({ name: '', email: '' });
+        setCourseError('');
+      }}
+    >
+      ×
+    </button>
+    <h2 className="text-lg font-bold mb-4">Download Course List</h2>
+    {courseSuccess ? (
+      <div className="text-green-600">
+        Course List sent to your email!
+      </div>
+    ) : (
+      <form onSubmit={handleCourseSubmit} className="space-y-4">
+        <input
+          name="name"
+          value={courseForm.name}
+          onChange={handleCourseChange}
+          required
+          placeholder="Your Name"
+          className="w-full border px-3 py-2 rounded"
+        />
+        <input
+          name="email"
+          value={courseForm.email}
+          onChange={handleCourseChange}
+          required
+          type="email"
+          placeholder="Email ID"
+          className="w-full border px-3 py-2 rounded"
+        />
+        {courseError && (
+          <p className="text-red-500 text-sm text-center">{courseError}</p>
         )}
-      </Modal>
+        <button
+          type="submit"
+          disabled={courseSending}
+          className="w-full bg-blue-600 text-white py-2 rounded font-semibold"
+        >
+          {courseSending ? 'Sending...' : 'Send & Download'}
+        </button>
+      </form>
+    )}
+  </Modal>
     </section>
   );
 }

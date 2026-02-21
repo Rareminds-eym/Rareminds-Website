@@ -1,14 +1,16 @@
 import { motion } from 'framer-motion';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { BookOpen, ArrowLeft, GraduationCap, Search, Filter, Clock, Monitor, BarChart3, IndianRupee, X } from 'lucide-react';
 import { useState, useEffect, useRef, useMemo } from 'react';
-import { getCoursesByService, serviceNames } from '@/services/sdp/courseService';
+import { getCoursesByService } from '@/services/sdp/courseService';
+import type { Course } from '@/types/sdp/course.types';
 
 export default function CourseList() {
-  const { serviceId } = useParams<{ serviceId: string }>();
   const navigate = useNavigate();
   const [displayCount, setDisplayCount] = useState(10);
   const loadMoreRef = useRef<HTMLDivElement>(null);
+  const [courses, setCourses] = useState<Course[]>([]);
+  const [loading, setLoading] = useState(true);
 
   // Filter states
   const [searchQuery, setSearchQuery] = useState('');
@@ -16,8 +18,20 @@ export default function CourseList() {
   const [selectedMode, setSelectedMode] = useState('');
   const [selectedLevel, setSelectedLevel] = useState('');
 
-  const courses = serviceId ? getCoursesByService(serviceId) : [];
-  const serviceName = serviceId ? (serviceNames[serviceId] || 'Available Courses') : 'Available Courses';
+  // Hardcoded to engineering service
+  const serviceId = 'engineering';
+  const serviceName = 'Engineering Programs';
+
+  // Fetch courses from Supabase
+  useEffect(() => {
+    const fetchCourses = async () => {
+      setLoading(true);
+      const data = await getCoursesByService(serviceId);
+      setCourses(data);
+      setLoading(false);
+    };
+    fetchCourses();
+  }, [serviceId]);
 
   // Extract unique filter options from courses
   const durations = useMemo(() => {
@@ -241,7 +255,20 @@ export default function CourseList() {
         )}
 
         {/* Course Grid */}
-        {filteredCourses.length === 0 ? (
+        {loading ? (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="text-center py-20"
+          >
+            <motion.div
+              animate={{ rotate: 360 }}
+              transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+              className="w-16 h-16 border-4 border-blue-100 border-t-blue-700 rounded-full mx-auto mb-4"
+            />
+            <p className="text-slate-600 font-medium">Loading courses...</p>
+          </motion.div>
+        ) : filteredCourses.length === 0 ? (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -296,7 +323,7 @@ export default function CourseList() {
               transition={{ duration: 0.4, delay: index * 0.05 }}
               whileHover={{ y: -8 }}
               className="group cursor-pointer"
-              onClick={() => navigate(`/universities/course/${course.slug}`)}
+              onClick={() => navigate(`/universities/sdp/course/${course.slug}`)}
             >
               <div className="relative bg-white rounded-2xl shadow-sm border border-slate-200/60 overflow-hidden h-full flex flex-col transition-all duration-300 hover:shadow-xl hover:shadow-blue-500/5 hover:border-blue-200">
                 {/* Course Number Watermark */}
