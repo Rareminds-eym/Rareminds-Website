@@ -2,6 +2,9 @@
 import { supabase } from '@/lib/supabaseClient';
 import type { Course } from '@/types/sdp/course.types';
 
+// Pagination configuration
+export const COURSES_PER_PAGE = 15;
+
 // Fetch services from Supabase
 export const getServices = async (institutionType?: string) => {
   let query = supabase
@@ -42,6 +45,163 @@ export const getServiceBySlug = async (slug: string) => {
   }
 
   return data;
+};
+
+// Fetch courses by service type with server-side pagination, search, filters, and sorting
+export const getCoursesByServicePaginated = async (
+  serviceType: string,
+  page: number = 0,
+  pageSize: number = COURSES_PER_PAGE,
+  searchTerm: string = '',
+  filters: {
+    durations?: string[];
+    modes?: string[];
+    levels?: string[];
+    priceRanges?: Array<{ min: number; max: number }>;
+  } = {},
+  sortBy: string = 'newest'
+): Promise<{ courses: Course[]; totalCount: number; hasMore: boolean }> => {
+  const from = page * pageSize;
+  const to = from + pageSize - 1;
+
+  console.log('📄 Fetching courses - Page:', page, 'Range:', from, '-', to, 'Service:', serviceType);
+
+  try {
+    const hasSearch = searchTerm && searchTerm.trim() !== '';
+    const trimmedSearch = hasSearch ? searchTerm.trim().toLowerCase() : '';
+
+    let query = supabase
+      .from('courses')
+      .select(`
+        id,
+        slug,
+        title,
+        subtitle,
+        description,
+        duration_hours,
+        mode,
+        level,
+        price,
+        currency,
+        course_category,
+        banner_url,
+        is_featured,
+        created_at
+      `, { count: 'exact' })
+      .eq('category', 'course')
+      .ilike('course_category', serviceType)
+      .eq('is_active', true);
+
+    if (hasSearch) {
+      const words = trimmedSearch.split(/\s+/).filter(w => w.length > 0);
+      const searchConditions = words.flatMap(word => {
+        const escaped = word.replace(/%/g, '\\%').replace(/_/g, '\\_');
+        return [
+          `title.ilike.*${escaped}*`,
+          `description.ilike.*${escaped}*`
+        ];
+      }).join(',');
+      query = query.or(searchConditions);
+    }
+
+    if (filters.durations && filters.durations.length > 0) {
+      query = query.in('duration_hours', filters.durations);
+    }
+
+    if (filters.modes && filters.modes.length > 0) {
+      query = query.in('mode', filters.modes);
+    }
+
+    if (filters.levels && filters.levels.length > 0) {
+      query = query.in('level', filters.levels);
+    }
+
+    if (filters.priceRanges && filters.priceRanges.length > 0) {
+      const priceFilters = filters.priceRanges.map(range => {
+        if (range.max === Infinity) {
+          return `price.gte.${range.min}`;
+        }
+        return `and(price.gte.${range.min},price.lt.${range.max})`;
+      });
+      query = query.or(priceFilters.join(','));
+    }
+
+    if (!hasSearch) {
+      switch (sortBy) {
+        case 'name-asc':
+          query = query.order('title', { ascending: true });
+          break;
+        case 'name-desc':
+          query = query.order('title', { ascending: false });
+          break;
+        case 'price-low':
+          query = query.order('price', { ascending: true });
+          break;
+        case 'price-high':
+          query = query.order('price', { ascending: false });
+          break;
+        case 'oldest':
+          query = query.order('created_at', { ascending: true });
+          break;
+        case 'newest':
+        default:
+          query = query.order('created_at', { ascending: false });
+          break;
+      }
+    }
+
+    const { data, error, count } = await query;
+
+    if (error) {
+      console.error('❌ Error fetching courses:', error);
+      return { courses: [], totalCount: 0, hasMore: false };
+    }
+
+    let allCourses = (data || []).map((course: any) => ({
+      id: course.id,
+      slug: course.slug,
+      name: course.title,
+      duration: course.duration_hours ? `${course.duration_hours} hours` : '',
+      level: course.level || 'Beginner',
+      mode: course.mode || 'Hybrid',
+      price: course.price || 0,
+      currency: course.currency || 'INR',
+      category: 'course' as const,
+      serviceType: serviceType,
+      courseCategory: serviceType,
+      description: course.description || '',
+      overview: '',
+      heroBannerImage: course.banner_url,
+      programBenefits: [],
+      whatYouLearn: [],
+      whoShouldTake: [],
+      outcomes: [],
+      curriculum: [],
+      instructors: [],
+      brochureUrl: ''
+    }));
+
+    if (hasSearch) {
+      allCourses.sort((a, b) => {
+        const aTitle = a.name.toLowerCase();
+        const bTitle = b.name.toLowerCase();
+        const aExact = aTitle === trimmedSearch ? 0 : 1;
+        const bExact = bTitle === trimmedSearch ? 0 : 1;
+        return aExact - bExact;
+      });
+    }
+
+    const totalCount = count || 0;
+    const paginatedCourses = allCourses.slice(from, to + 1);
+    const hasMore = to < totalCount - 1;
+
+    console.log('✅ Fetched:', paginatedCourses.length, 'courses. Total:', totalCount);
+
+    return { courses: paginatedCourses, totalCount, hasMore };
+  } catch (err) {
+    console.error('❌ Exception fetching courses:', err);
+    return { courses: [], totalCount: 0, hasMore: false };
+  }
 };
 
 // Fetch courses by service type from Supabase

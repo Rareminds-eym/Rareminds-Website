@@ -1,4 +1,4 @@
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion } from 'framer-motion';
 import {
   GraduationCap,
   Briefcase,
@@ -16,6 +16,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import Modal from 'react-modal';
 import { submitBlueprintRequest, submitCourseListRequest } from '@/services/sdp/enrollmentService';
 import { getServices, serviceHasCourses } from '@/services/sdp/courseService';
+import ExpandableText from '@/components/universities/sdp/shared/ExpandableText';
 
 // Make sure this matches your app's root element
 if (typeof document !== "undefined") {
@@ -64,10 +65,6 @@ export default function Services() {
   const containerRef = useRef(null);
   const navigate = useNavigate();
   const { institutionType } = useParams<{ institutionType: string }>();
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start start", "end end"]
-  });
 
   const [services, setServices] = useState<Service[]>([]);
   const [loading, setLoading] = useState(true);
@@ -111,7 +108,7 @@ export default function Services() {
     name: '',
     phone: '',
     email: '',
-    location: '',
+    location: '', 
     university: ''
   });
   const [sending, setSending] = useState(false);
@@ -196,7 +193,7 @@ export default function Services() {
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-16 items-start">
         {loading ? (
           <motion.div
             initial={{ opacity: 0 }}
@@ -214,12 +211,12 @@ export default function Services() {
           services.map((service, index) => {
             return (
               <motion.div
-                key={index}
+                key={service.id}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="relative group h-[360px] cursor-pointer max-w-xs mx-auto"
+                className="relative group min-h-[360px] cursor-pointer max-w-xs mx-auto"
                 onClick={() => {
                   // Dynamically check if service has courses
                   if (service.hasCourses) {
@@ -234,9 +231,9 @@ export default function Services() {
                 <motion.div
                   whileHover={{ rotateY: -15, translateX: 10 }}
                   transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                  className="relative bg-white/40 backdrop-blur-sm rounded-r-lg shadow-2xl overflow-hidden ml-6 h-full"
+                  className="relative bg-white/40 backdrop-blur-sm rounded-r-lg shadow-2xl overflow-visible ml-6 flex flex-col"
                 >
-                  <div className="relative h-40 overflow-hidden">
+                  <div className="relative h-40 overflow-hidden flex-shrink-0">
                     <img
                       src={service.image}
                       alt={service.name}
@@ -245,25 +242,31 @@ export default function Services() {
                     <div className={`absolute inset-0 bg-[#222B33] opacity-50`} />
                   </div>
 
-                  <div className="p-6">
+                  <div className="p-6 flex-1 flex flex-col">
                     <div className="flex items-center justify-between mb-3">
                       <h3 className="text-medium font-bold bg-gradient-to-r from-gray-800 to-gray-900 bg-clip-text text-transparent">
                         {service.name}
                       </h3>
-                      <service.icon className="w-7 h-7 text-gray-800" />
+                      <service.icon className="w-7 h-7 text-gray-800 flex-shrink-0" />
                     </div>
                     {service.subtitle && (
                       <p className={`text-xs font-medium bg-gradient-to-r ${service.color} bg-clip-text text-transparent mb-3`}>
                         {service.subtitle}
                       </p>
                     )}
-                    <p className="text-gray-600 text-sm leading-relaxed mb-4">
-                      {service.description}
-                    </p>
+                    
+                    {/* Description - WITH conditional expansion */}
+                    <div className="mb-4 flex-1">
+                      <ExpandableText
+                        text={service.description}
+                        maxLines={2}
+                        className="text-gray-600 text-sm leading-relaxed"
+                      />
+                    </div>
 
                     <motion.div
                       whileHover={{ x: 10 }}
-                      className={`flex items-center gap-2 text-xs font-semibold bg-gradient-to-r ${service.color} bg-clip-text text-transparent`}
+                      className={`flex items-center gap-2 text-xs font-semibold bg-gradient-to-r ${service.color} bg-clip-text text-transparent mt-auto`}
                     >
                       Learn More
                       <ArrowRight className="w-4 h-4" />

@@ -5,6 +5,7 @@ import { getCourseBySlug, getCoursesByService } from '@/services/sdp/courseServi
 import { useState, useEffect } from 'react';
 import type { Course } from '@/types/sdp/course.types';
 import { supabase } from '@/lib/supabaseClient';
+import ExpandableText from '@/components/universities/sdp/shared/ExpandableText';
 
 export default function CourseDetail() {
   const { courseSlug } = useParams<{ courseSlug: string }>();
@@ -178,9 +179,11 @@ export default function CourseDetail() {
             <Target className="w-6 h-6 text-blue-700" />
             Course Overview
           </h2>
-          <p className="text-slate-700 leading-relaxed">
-            {course.overview}
-          </p>
+          <ExpandableText
+            text={course.overview}
+            maxLines={5}
+            className="text-slate-700 leading-relaxed"
+          />
         </motion.div>
 
         {/* What You'll Learn */}
@@ -197,7 +200,7 @@ export default function CourseDetail() {
           <div className="grid md:grid-cols-2 gap-4">
             {course.whatYouLearn.map((item: string, index: number) => (
               <motion.div
-                key={index}
+                key={`learn-${course.id}-${index}`}
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.3 + index * 0.05 }}
@@ -224,7 +227,7 @@ export default function CourseDetail() {
           <ul className="space-y-3">
             {course.whoShouldTake.map((item: string, index: number) => (
               <motion.li
-                key={index}
+                key={`should-take-${course.id}-${index}`}
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.4 + index * 0.05 }}
@@ -254,7 +257,7 @@ export default function CourseDetail() {
           <div className="flex flex-wrap gap-3">
             {course.outcomes.map((outcome: string, index: number) => (
               <motion.span
-                key={index}
+                key={`outcome-${course.id}-${index}`}
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.5 + index * 0.05 }}
@@ -280,7 +283,7 @@ export default function CourseDetail() {
           <div className="grid md:grid-cols-2 gap-4">
             {benefits.map((benefit: string, index: number) => (
               <motion.div
-                key={index}
+                key={`benefit-${course.id}-${index}`}
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.55 + index * 0.05 }}
