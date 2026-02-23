@@ -10,8 +10,8 @@ import {
   School,
   Building2
 } from 'lucide-react';
-import { services } from '@/pages/Universities/sdp/ServiceCategoriesPage';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { getServices } from '@/services/sdp/courseService';
 
 // --- PROGRAM TABLES FOR EACH SERVICE ---
 const programTables: Record<string, Array<any>> = {
@@ -714,11 +714,75 @@ const programTables: Record<string, Array<any>> = {
 };
 
 export default function ServicePage() {
-  const { id } = useParams();
+  const { id, institutionType } = useParams();
   const navigate = useNavigate();
-  const service = services.find(s => s.id === id);
+  const [service, setService] = useState<any>(null);
+  const [otherServices, setOtherServices] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
   const tableData = programTables[id as string] || [];
   const [selectedProgramIndex, setSelectedProgramIndex] = useState(0);
+
+  // Fetch services from database
+  useEffect(() => {
+    const fetchServiceData = async () => {
+      setLoading(true);
+      const data = await getServices(institutionType);
+      
+      // Map database data to UI format
+      const iconMap: Record<string, any> = {
+        'arts-science': BookOpen,
+        'engineering': GraduationCap,
+        'management-business': Briefcase,
+        'corporate-faculty-training': Users,
+        'bsc-level': School,
+        'skill-based': Building2
+      };
+
+      const serviceImageMap: Record<string, string> = {
+        'arts-science': 'https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?auto=format&fit=crop&w=800',
+        'engineering': 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=800',
+        'management-business': 'https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=800',
+        'corporate-faculty-training': 'https://images.unsplash.com/photo-1550399105-c4db5fb85c18?auto=format&fit=crop&w=800',
+        'bsc-level': 'https://images.unsplash.com/photo-1532012197267-da84d127e765?auto=format&fit=crop&w=800',
+        'skill-based': 'https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=800'
+      };
+
+      const mappedServices = data.map((s: any) => ({
+        id: s.slug,
+        slug: s.slug,
+        icon: iconMap[s.slug] || BookOpen,
+        name: s.title,
+        subtitle: s.subtitle || '',
+        description: s.description || '',
+        whatitis: s.overview || '',
+        image: s.image_url || '/institutions/images/services/1.png',
+        color: s.color_gradient || 'from-blue-600 to-purple-600',
+        duration: s.duration || 'Flexible',
+        mode: s.mode || 'Hybrid',
+        servicesimg: serviceImageMap[s.slug] || 'https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?auto=format&fit=crop&w=800',
+        focus: s.focus || '',
+        benefits: s.benefits || []
+      }));
+
+      const currentService = mappedServices.find((s: any) => s.id === id);
+      setService(currentService);
+      setOtherServices(mappedServices.filter((s: any) => s.id !== id));
+      setLoading(false);
+    };
+    
+    fetchServiceData();
+  }, [id, institutionType]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-16 h-16 border-4 border-blue-100 border-t-blue-700 rounded-full animate-spin mx-auto mb-4" />
+          <p className="text-slate-600">Loading service...</p>
+        </div>
+      </div>
+    );
+  }
 
   if (!service) {
     return (
@@ -737,7 +801,6 @@ export default function ServicePage() {
   }
 
   // Other services for bookmark section (excluding current)
-  const otherServices = services.filter(s => s.id !== id);
 
   return (
     <div className="pt-20 bg-gray-50 min-h-screen">

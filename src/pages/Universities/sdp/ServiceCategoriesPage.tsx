@@ -15,7 +15,7 @@ import { useRef, useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import Modal from 'react-modal';
 import { submitBlueprintRequest, submitCourseListRequest } from '@/services/sdp/enrollmentService';
-import { getServices } from '@/services/sdp/courseService';
+import { getServices, serviceHasCourses } from '@/services/sdp/courseService';
 
 // Make sure this matches your app's root element
 if (typeof document !== "undefined") {
@@ -57,6 +57,7 @@ interface Service {
   servicesimg: string;
   focus: string;
   benefits: string[];
+  hasCourses: boolean;
 }
 
 export default function Services() {
@@ -77,23 +78,26 @@ export default function Services() {
       setLoading(true);
       const data = await getServices(institutionType);
 
-      // Map database data to UI format
-      const mappedServices: Service[] = data.map((service: any) => ({
-        id: service.slug,
-        slug: service.slug,
-        icon: iconMap[service.slug] || BookOpen,
-        name: service.title,
-        subtitle: service.subtitle || '',
-        description: service.description || '',
-        whatitis: service.overview || '',
-        image: service.image_url || '/institutions/images/services/1.png',
-        color: service.color_gradient || 'from-blue-600 to-purple-600',
-        duration: service.duration || 'Flexible',
-        mode: service.mode || 'Hybrid',
-        servicesimg: serviceImageMap[service.slug] || 'https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?auto=format&fit=crop&w=800',
-        focus: service.focus || '',
-        benefits: service.benefits || []
-      }));
+      // Map database data to UI format and check which services have courses
+      const mappedServices: Service[] = await Promise.all(
+        data.map(async (service: any) => ({
+          id: service.slug,
+          slug: service.slug,
+          icon: iconMap[service.slug] || BookOpen,
+          name: service.title,
+          subtitle: service.subtitle || '',
+          description: service.description || '',
+          whatitis: service.overview || '',
+          image: service.image_url || '/institutions/images/services/1.png',
+          color: service.color_gradient || 'from-blue-600 to-purple-600',
+          duration: service.duration || 'Flexible',
+          mode: service.mode || 'Hybrid',
+          servicesimg: serviceImageMap[service.slug] || 'https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?auto=format&fit=crop&w=800',
+          focus: service.focus || '',
+          benefits: service.benefits || [],
+          hasCourses: await serviceHasCourses(service.slug)
+        }))
+      );
 
       setServices(mappedServices);
       setLoading(false);
@@ -217,9 +221,9 @@ export default function Services() {
                 transition={{ duration: 0.5, delay: index * 0.1 }}
                 className="relative group h-[360px] cursor-pointer max-w-xs mx-auto"
                 onClick={() => {
-                  // Only Engineering has courses - all others go to service detail
-                  if (service.slug === 'engineering') {
-                    navigate(`/universities/sdp/${institutionType || 'college'}/engineering/courses`);
+                  // Dynamically check if service has courses
+                  if (service.hasCourses) {
+                    navigate(`/universities/sdp/${institutionType || 'college'}/${service.slug}/courses`);
                   } else {
                     navigate(`/universities/sdp/${institutionType || 'college'}/${service.slug}`);
                   }

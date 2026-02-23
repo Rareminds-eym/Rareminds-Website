@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { BookOpen, ArrowLeft, GraduationCap, Search, Filter, Clock, Monitor, BarChart3, IndianRupee, X } from 'lucide-react';
 import { useState, useEffect, useRef, useMemo } from 'react';
 import { getCoursesByService } from '@/services/sdp/courseService';
@@ -7,6 +7,7 @@ import type { Course } from '@/types/sdp/course.types';
 
 export default function CourseList() {
   const navigate = useNavigate();
+  const { categorySlug } = useParams<{ categorySlug: string }>();
   const [displayCount, setDisplayCount] = useState(10);
   const loadMoreRef = useRef<HTMLDivElement>(null);
   const [courses, setCourses] = useState<Course[]>([]);
@@ -18,9 +19,11 @@ export default function CourseList() {
   const [selectedMode, setSelectedMode] = useState('');
   const [selectedLevel, setSelectedLevel] = useState('');
 
-  // Hardcoded to engineering service
-  const serviceId = 'engineering';
-  const serviceName = 'Engineering Programs';
+  // Dynamic service from URL parameter
+  const serviceId = categorySlug || 'engineering';
+  const serviceName = serviceId.split('-').map(word => 
+    word.charAt(0).toUpperCase() + word.slice(1)
+  ).join(' ') + ' Programs';
 
   // Fetch courses from Supabase
   useEffect(() => {
@@ -329,11 +332,6 @@ export default function CourseList() {
               onClick={() => navigate(`/universities/sdp/course/${course.slug}`)}
             >
               <div className="relative bg-white rounded-2xl shadow-sm border border-slate-200/60 overflow-hidden h-full flex flex-col transition-all duration-300 hover:shadow-xl hover:shadow-blue-500/5 hover:border-blue-200">
-                {/* Course Number Watermark */}
-                <div className="absolute top-4 right-4 text-6xl font-black text-slate-900 opacity-[0.03] select-none pointer-events-none z-0">
-                  {course.id}
-                </div>
-
                 <div className="p-6 flex-1 flex flex-col relative z-10">
                   {/* Category Badge */}
                   <div className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200/60 rounded-lg mb-4 w-fit">
