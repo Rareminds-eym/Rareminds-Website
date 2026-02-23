@@ -181,12 +181,29 @@ export const getRelatedCourses = async (currentCourse: Course, limit: number = 3
   }));
 };
 
-// Service names mapping
-export const serviceNames: Record<string, string> = {
-  'engineering': 'Engineering Programs',
-  'arts-science': 'Arts & Science',
-  'management-business': 'Management / Business',
-  'corporate-faculty-training': 'Corporate / Faculty Training',
-  'bsc-level': 'BSc Level',
-  'skill-based': 'Skill-Based'
+// Check if a service has courses (fully dynamic, no hardcoding)
+export const serviceHasCourses = async (serviceSlug: string): Promise<boolean> => {
+  const { data, error } = await supabase
+    .from('courses')
+    .select('course_category')
+    .eq('category', 'course')
+    .eq('is_active', true);
+
+  if (error || !data) return false;
+
+  // Normalize both strings for comparison
+  const normalize = (str: string) => 
+    str.toLowerCase()
+       .replace(/\s+/g, '')        // Remove spaces
+       .replace(/[&]/g, 'and')     // Replace & with 'and'
+       .replace(/[^a-z0-9]/g, ''); // Remove special chars
+
+  const normalizedSlug = normalize(serviceSlug);
+
+  // Check if any course matches this service
+  return data.some(course => 
+    normalize(course.course_category) === normalizedSlug
+  );
 };
+
+

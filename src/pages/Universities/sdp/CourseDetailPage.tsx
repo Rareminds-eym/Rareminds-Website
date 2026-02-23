@@ -4,6 +4,7 @@ import { ArrowLeft, CheckCircle, Users, Target, Award, BookOpen } from 'lucide-r
 import { getCourseBySlug, getCoursesByService } from '@/services/sdp/courseService';
 import { useState, useEffect } from 'react';
 import type { Course } from '@/types/sdp/course.types';
+import { supabase } from '@/lib/supabaseClient';
 
 export default function CourseDetail() {
   const { courseSlug } = useParams<{ courseSlug: string }>();
@@ -11,8 +12,9 @@ export default function CourseDetail() {
   const [course, setCourse] = useState<Course | null>(null);
   const [otherCourses, setOtherCourses] = useState<Course[]>([]);
   const [loading, setLoading] = useState(true);
+  const [benefits, setBenefits] = useState<string[]>([]);
 
-  // Fetch course data
+  // Fetch course data and service benefits as fallback
   useEffect(() => {
     const fetchData = async () => {
       if (!courseSlug) return;
@@ -22,7 +24,24 @@ export default function CourseDetail() {
       setCourse(courseData);
 
       if (courseData) {
-        const allCourses = await getCoursesByService(courseData.serviceType);
+        // If course has benefits, use them
+        if (courseData.programBenefits && courseData.programBenefits.length > 0) {
+          setBenefits(courseData.programBenefits);
+        } else {
+          // Otherwise, fetch service benefits as fallback
+          const { data: serviceData } = await supabase
+            .from('courses')
+            .select('benefits')
+            .eq('category', 'service')
+            .eq('slug', courseData.courseCategory.toLowerCase().replace(/\s+/g, '-'))
+            .single();
+          
+          if (serviceData && serviceData.benefits) {
+            setBenefits(serviceData.benefits);
+          }
+        }
+
+        const allCourses = await getCoursesByService(courseData.courseCategory);
         setOtherCourses(allCourses.filter(c => c.slug !== courseSlug));
       }
       
@@ -259,7 +278,7 @@ export default function CourseDetail() {
             Program Benefits
           </h2>
           <div className="grid md:grid-cols-2 gap-4">
-            {course.programBenefits.map((benefit: string, index: number) => (
+            {benefits.map((benefit: string, index: number) => (
               <motion.div
                 key={index}
                 initial={{ opacity: 0, x: -20 }}
@@ -312,7 +331,7 @@ export default function CourseDetail() {
                             {/* Serial Number */}
                             <div className="flex-shrink-0 w-10 h-10 bg-slate-100 group-hover:bg-blue-100 rounded-lg flex items-center justify-center transition-colors">
                               <span className="text-slate-700 group-hover:text-blue-700 font-bold text-sm">
-                                {otherCourse.id}
+                                {index + 1}
                               </span>
                             </div>
 

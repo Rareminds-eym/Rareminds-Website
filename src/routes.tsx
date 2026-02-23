@@ -423,7 +423,7 @@ const router = createBrowserRouter([
         element: withSuspense(ServiceDetailPage),
       },
       {
-        path: "/universities/sdp/:institutionType/engineering/courses",
+        path: "/universities/sdp/:institutionType/:categorySlug/courses",
         element: withSuspense(CoursesListingPage),
       },
       {
