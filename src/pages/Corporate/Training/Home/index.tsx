@@ -57,6 +57,19 @@ const CorporateTraining: React.FC = () => {
     }
   }, [location.state]);
 
+  // Handle hash-based scrolling (e.g., /corporate/training#services)
+  useEffect(() => {
+    if (location.hash) {
+      const id = location.hash.replace('#', '');
+      const el = document.getElementById(id);
+      if (el) {
+        setTimeout(() => {
+          el.scrollIntoView({ behavior: "smooth" });
+        }, 100);
+      }
+    }
+  }, [location.hash]);
+
   return (
     <>
       <Helmet>
