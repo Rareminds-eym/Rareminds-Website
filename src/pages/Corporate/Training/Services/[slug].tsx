@@ -9,9 +9,9 @@ import { useLocation } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 
 const LeadershipPrograms = () => {
-  const { id } = useParams();
+  const { serviceSlug, programId } = useParams<{ serviceSlug: string; programId: string }>();
   const navigate = useNavigate();
-  const service = services.find((s) => s.id === id);
+  const service = services.find((s) => s.id === serviceSlug);
 
   if (!service) {
     return (
@@ -23,17 +23,31 @@ const LeadershipPrograms = () => {
   }
 
   const { heroTitle, heroSubtitle, programs } = service;
-  const [activeProgram, setActiveProgram] = useState(programs[0].id);
+  
+  // Find the specific program if programId is provided
+  const initialProgram = programId 
+    ? programs.find(p => p.id === programId) || programs[0]
+    : programs[0];
+    
+  const [activeProgram, setActiveProgram] = useState(initialProgram.id);
 
   const location = useLocation();
 
   useEffect(() => {
-    setActiveProgram(programs[0].id);
+    if (programId) {
+      const program = programs.find(p => p.id === programId);
+      if (program) {
+        setActiveProgram(program.id);
+      }
+    } else {
+      setActiveProgram(programs[0].id);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [location]);
+  }, [location, programId]);
 
   const handleBack = () => {
-    navigate("/corporate/training", { state: { scrollTo: "services" } });
+    navigate(`/corporate/training/services/${serviceSlug}`, { replace: true });
+
   };
 
   const handleClick = () => {

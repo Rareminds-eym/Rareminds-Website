@@ -1,0 +1,364 @@
+import { motion } from 'framer-motion';
+import { useParams, useNavigate } from 'react-router-dom';
+import { ArrowLeft, CheckCircle, Users, Target, Award, BookOpen } from 'lucide-react';
+import { services } from './serviceData';
+import ErrorComponent from '@/components/ErrorComponent';
+import { Helmet } from 'react-helmet-async';
+import ExpandableText from '@/components/universities/sdp/shared/ExpandableText';
+
+// Utility function to calculate and format duration
+function calculateDuration(modules: any[]): string {
+  if (!modules || modules.length === 0) return '0 hours';
+  
+  // Sum up all module hours
+  const totalHours = modules.reduce((sum, module) => {
+    if (module.hours) {
+      // Extract number from strings like "4 hrs", "5 hrs"
+      const match = module.hours.match(/(\d+)/);
+      if (match) {
+        return sum + parseInt(match[1], 10);
+      }
+    }
+    return sum;
+  }, 0);
+
+  // If no hours found, estimate 2 hours per module
+  const hours = totalHours > 0 ? totalHours : modules.length * 2;
+
+  // Format duration
+  if (hours < 24) {
+    return `${hours} hours`;
+  } else if (hours < 168) { // Less than a week
+    const days = Math.ceil(hours / 8); // 8 hours per day
+    return `${days} ${days === 1 ? 'day' : 'days'}`;
+  } else {
+    const weeks = Math.ceil(hours / 40); // 40 hours per week
+    return `${weeks} ${weeks === 1 ? 'week' : 'weeks'}`;
+  }
+}
+
+export default function CourseDetailPage() {
+  const { serviceSlug, programId } = useParams<{ serviceSlug: string; programId: string }>();
+  const navigate = useNavigate();
+  
+  const service = services.find((s) => s.id === serviceSlug);
+  const program = service?.programs.find((p) => p.id === programId);
+
+  if (!service || !program) {
+    return (
+      <ErrorComponent
+        title="404 - Course Not Found"
+        message="The course you are looking for does not exist or is not available."
+      />
+    );
+  }
+
+  // Get other programs in this service
+  const otherPrograms = service.programs.filter(p => p.id !== programId);
+
+  return (
+    <>
+      <Helmet>
+        <title>{program.title} | {service.heroTitle} | Rareminds</title>
+        <meta name="description" content={program.overview} />
+      </Helmet>
+
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-gray-50 to-slate-100">
+        {/* Hero Banner Section */}
+        <div className="relative h-[400px] lg:h-[500px] overflow-hidden">
+          {/* Gradient Background */}
+          <div className="absolute inset-0 bg-gradient-to-br from-blue-900 via-indigo-900 to-slate-900" />
+
+          {/* Content Container */}
+          <div className="relative h-full container mx-auto px-6 lg:px-8 flex flex-col justify-center max-w-7xl">
+            {/* Back Button */}
+            <motion.button
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.5 }}
+             onClick={() => navigate(`/corporate/training/services/${serviceSlug}`, { replace: true })}
+
+              className="flex items-center gap-2 text-white/90 hover:text-white mb-8 transition-colors font-medium group w-fit"
+            >
+              <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
+              <span>Back to Courses</span>
+            </motion.button>
+
+            {/* Course Category Badge */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+              className="mb-4"
+            >
+              <span className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-md border border-white/20 rounded-full text-white text-sm font-semibold">
+                <div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse"></div>
+                {(program as any).category || service.heroTitle}
+              </span>
+            </motion.div>
+
+            {/* Course Title */}
+            <motion.h1
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 leading-tight max-w-4xl"
+            >
+              {program.title}
+            </motion.h1>
+
+            {/* Course Meta Info */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+              className="flex flex-wrap items-center gap-4 text-white/90"
+            >
+              <div className="flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-lg border border-white/20">
+                <span className="text-sm font-medium">{calculateDuration(program.modules || [])}</span>
+              </div>
+              <div className="flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-lg border border-white/20">
+                <span className="text-sm font-medium">{program.modules?.length || 0} Modules</span>
+              </div>
+              <div className="flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-lg border border-white/20">
+                <span className="text-sm font-medium">Online</span>
+              </div>
+              <div className="flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-lg border border-white/20">
+                <span className="text-sm font-medium">Professional</span>
+              </div>
+              <div className="flex items-center gap-2 px-4 py-2 bg-blue-600/90 backdrop-blur-sm rounded-lg border border-blue-500/50">
+                <span className="text-sm font-bold">₹0</span>
+              </div>
+            </motion.div>
+          </div>
+
+          {/* Bottom Fade Effect */}
+          <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-slate-50 to-transparent"></div>
+        </div>
+
+        {/* Main Content */}
+        <div className="container mx-auto px-6 py-12 max-w-7xl -mt-12 relative z-10">
+          {/* Two Column Layout */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            {/* LEFT COLUMN - Main Content */}
+            <div className="lg:col-span-8 space-y-8">
+
+              {/* Course Overview */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.1 }}
+                className="bg-white rounded-2xl shadow-lg p-8 border border-slate-200"
+              >
+                <h2 className="text-2xl font-bold text-slate-900 mb-4 flex items-center gap-2">
+                  <Target className="w-6 h-6 text-blue-700" />
+                  Course Overview
+                </h2>
+                <ExpandableText
+                  text={program.overview}
+                  maxLines={5}
+                  className="text-slate-700 leading-relaxed"
+                />
+              </motion.div>
+
+              {/* What We Cover */}
+              {program.whatWeCover && program.whatWeCover.length > 0 && (
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.2 }}
+                  className="bg-white rounded-2xl shadow-lg p-8 border border-slate-200"
+                >
+                  <h2 className="text-2xl font-bold text-slate-900 mb-6 flex items-center gap-2">
+                    <CheckCircle className="w-6 h-6 text-blue-700" />
+                    What We Cover
+                  </h2>
+                  <div className="grid md:grid-cols-2 gap-4">
+                    {program.whatWeCover.map((item: string, index: number) => (
+                      <motion.div
+                        key={index}
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: 0.3 + index * 0.05 }}
+                        className="flex items-start gap-3"
+                      >
+                        <CheckCircle className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
+                        <span className="text-slate-700">{item}</span>
+                      </motion.div>
+                    ))}
+                  </div>
+                </motion.div>
+              )}
+
+              {/* Delivery Approach */}
+              {program.delivery && program.delivery.length > 0 && (
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.3 }}
+                  className="bg-white rounded-2xl shadow-lg p-8 border border-slate-200"
+                >
+                  <h2 className="text-2xl font-bold text-slate-900 mb-6 flex items-center gap-2">
+                    <Users className="w-6 h-6 text-blue-700" />
+                    Our Approach
+                  </h2>
+                  <ul className="space-y-3">
+                    {program.delivery.map((item: string, index: number) => (
+                      <motion.li
+                        key={index}
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: 0.4 + index * 0.05 }}
+                        className="flex items-start gap-3 text-slate-700"
+                      >
+                        <span className="w-2 h-2 bg-blue-600 rounded-full mt-2 flex-shrink-0"></span>
+                        <span>{item}</span>
+                      </motion.li>
+                    ))}
+                  </ul>
+                </motion.div>
+              )}
+
+              {/* Course Modules */}
+              {program.modules && program.modules.length > 0 && (
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.4 }}
+                  className="bg-white rounded-2xl shadow-lg p-8 border border-slate-200"
+                >
+                  <h2 className="text-2xl font-bold text-slate-900 mb-6 flex items-center gap-2">
+                    <BookOpen className="w-6 h-6 text-blue-700" />
+                    Course Modules
+                  </h2>
+                  <div className="overflow-x-auto">
+                    <table className="w-full border-collapse">
+                      <thead>
+                        <tr className="bg-slate-50 border-b border-slate-200">
+                          <th className="py-3 px-4 text-left text-sm font-semibold text-slate-700">Module</th>
+                          <th className="py-3 px-4 text-left text-sm font-semibold text-slate-700">Title</th>
+                          <th className="py-3 px-4 text-left text-sm font-semibold text-slate-700">Duration</th>
+                          <th className="py-3 px-4 text-left text-sm font-semibold text-slate-700">Objectives</th>
+                          <th className="py-3 px-4 text-left text-sm font-semibold text-slate-700">Activities</th>
+                          <th className="py-3 px-4 text-left text-sm font-semibold text-slate-700">Outcome</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-slate-100">
+                        {program.modules.map((module: any, index: number) => (
+                          <motion.tr
+                            key={index}
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.5 + index * 0.05 }}
+                            className="hover:bg-slate-50 transition-colors"
+                          >
+                            <td className="py-4 px-4">
+                              <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
+                                <span className="text-blue-700 font-bold text-sm">{index + 1}</span>
+                              </div>
+                            </td>
+                            <td className="py-4 px-4 text-sm font-medium text-slate-900">{module.title}</td>
+                            <td className="py-4 px-4 text-sm text-slate-600">{module.hours}</td>
+                            <td className="py-4 px-4 text-sm text-slate-600">{module.objectives}</td>
+                            <td className="py-4 px-4 text-sm text-slate-600">{module.activities}</td>
+                            <td className="py-4 px-4 text-sm text-slate-600">{module.outcome}</td>
+                          </motion.tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </motion.div>
+              )}
+
+              {/* Why Choose */}
+              {program.whyChoose && (
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.5 }}
+                  className="bg-white rounded-2xl shadow-lg p-8 border border-slate-200"
+                >
+                  <h2 className="text-2xl font-bold text-slate-900 mb-6 flex items-center gap-2">
+                    <Award className="w-6 h-6 text-blue-700" />
+                    Why Choose This Program
+                  </h2>
+                  <p className="text-slate-700 leading-relaxed">{program.whyChoose}</p>
+                </motion.div>
+              )}
+            </div>
+
+            {/* RIGHT COLUMN - Sidebar */}
+            <div className="lg:col-span-4">
+              <motion.div
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.6, delay: 0.2 }}
+                className="lg:sticky lg:top-24"
+              >
+                <div className="bg-white rounded-2xl shadow-lg border border-slate-200 overflow-hidden">
+                  {/* Sidebar Header */}
+                  <div className="bg-gradient-to-r from-blue-600 to-indigo-600 p-6">
+                    <div className="flex items-center gap-3 text-white">
+                      <BookOpen className="w-6 h-6" />
+                      <h3 className="text-xl font-bold">Training Programs</h3>
+                    </div>
+                    <p className="text-blue-100 text-sm mt-2">
+                      Explore more programs in this service
+                    </p>
+                  </div>
+
+                  {/* Program List */}
+                  <div className="max-h-[600px] overflow-y-auto">
+                    {otherPrograms.length > 0 ? (
+                      <div className="divide-y divide-slate-100">
+                        {otherPrograms.map((otherProgram, index) => (
+                          <motion.button
+                            key={otherProgram.id}
+                            initial={{ opacity: 0, x: 20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: 0.3 + index * 0.05 }}
+                            onClick={() => navigate(`/corporate/training/services/${serviceSlug}/course/${otherProgram.id}`)}
+                            className="w-full text-left p-4 hover:bg-blue-50 transition-colors group"
+                          >
+                            <div className="flex gap-4">
+                              {/* Serial Number */}
+                              <div className="flex-shrink-0 w-10 h-10 bg-slate-100 group-hover:bg-blue-100 rounded-lg flex items-center justify-center transition-colors">
+                                <span className="text-slate-700 group-hover:text-blue-700 font-bold text-sm">
+                                  {index + 1}
+                                </span>
+                              </div>
+
+                              {/* Program Info */}
+                              <div className="flex-1 min-w-0">
+                                <h4 className="text-sm font-semibold text-slate-900 group-hover:text-blue-700 transition-colors line-clamp-2 mb-1">
+                                  {otherProgram.title}
+                                </h4>
+                                <div className="flex flex-wrap gap-2 mt-2">
+                                  <span className="inline-flex items-center px-2 py-0.5 bg-slate-100 text-slate-600 text-xs rounded-md">
+                                    {otherProgram.modules?.length || 0} modules
+                                  </span>
+                                  <span className="inline-flex items-center px-2 py-0.5 bg-slate-100 text-slate-600 text-xs rounded-md">
+                                    Online
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+                          </motion.button>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="p-8 text-center text-slate-500">
+                        <BookOpen className="w-12 h-12 mx-auto mb-3 text-slate-300" />
+                        <p className="text-sm">No other programs available in this service</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </motion.div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}
