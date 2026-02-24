@@ -148,16 +148,18 @@ export const getCoursesByServicePaginated = async (
           query = query.order('created_at', { ascending: false });
           break;
       }
+    } else {
+      query = query.order('created_at', { ascending: false });
     }
 
-    const { data, error, count } = await query;
+    const { data, error, count } = await query.range(from, to);
 
     if (error) {
       console.error('❌ Error fetching courses:', error);
       return { courses: [], totalCount: 0, hasMore: false };
     }
 
-    let allCourses = (data || []).map((course: any) => ({
+    let courses = (data || []).map((course: any) => ({
       id: course.id,
       slug: course.slug,
       name: course.title,
@@ -182,7 +184,7 @@ export const getCoursesByServicePaginated = async (
     }));
 
     if (hasSearch) {
-      allCourses.sort((a, b) => {
+      courses.sort((a, b) => {
         const aTitle = a.name.toLowerCase();
         const bTitle = b.name.toLowerCase();
         const aExact = aTitle === trimmedSearch ? 0 : 1;
@@ -192,12 +194,11 @@ export const getCoursesByServicePaginated = async (
     }
 
     const totalCount = count || 0;
-    const paginatedCourses = allCourses.slice(from, to + 1);
     const hasMore = to < totalCount - 1;
 
-    console.log('✅ Fetched:', paginatedCourses.length, 'courses. Total:', totalCount);
+    console.log('✅ Fetched:', courses.length, 'courses. Total:', totalCount);
 
-    return { courses: paginatedCourses, totalCount, hasMore };
+    return { courses, totalCount, hasMore };
   } catch (err) {
     console.error('❌ Exception fetching courses:', err);
     return { courses: [], totalCount: 0, hasMore: false };

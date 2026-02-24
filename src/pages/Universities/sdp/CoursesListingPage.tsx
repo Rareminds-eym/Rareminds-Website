@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { BookOpen, ArrowLeft, GraduationCap, Clock, Monitor, BarChart3, IndianRupee, X, ChevronDown, Check, Search, ArrowUpDown } from 'lucide-react';
 import { useState, useEffect, useMemo, useRef } from 'react';
 import { getCoursesByServicePaginated, COURSES_PER_PAGE } from '@/services/sdp/courseService';
@@ -30,15 +30,16 @@ function useDebounce<T>(value: T, delay: number): T {
 
 export default function CourseList() {
   const navigate = useNavigate();
+  const { categorySlug } = useParams<{ categorySlug: string }>();
   const [courses, setCourses] = useState<Course[]>([]);
   const [loading, setLoading] = useState(true);
-  const [currentPage, setCurrentPage] = useState(0); // 0-based for internal use
+  const [currentPage, setCurrentPage] = useState(0);
   const [totalCount, setTotalCount] = useState(0);
-  const [pageBeforeSearch, setPageBeforeSearch] = useState<number | null>(null); // Store page before search
+  const [pageBeforeSearch, setPageBeforeSearch] = useState<number | null>(null);
 
   // Filter states
   const [searchTerm, setSearchTerm] = useState('');
-  const debouncedSearchTerm = useDebounce(searchTerm, 400); // 400ms debounce
+  const debouncedSearchTerm = useDebounce(searchTerm, 400);
   
   // Log when search term changes (immediate)
   useEffect(() => {
@@ -67,9 +68,12 @@ export default function CourseList() {
     { id: '15000+', label: '₹15,000+', min: 15000, max: Infinity }
   ], []);
 
-  // Hardcoded to engineering service
-  const serviceId = 'engineering';
-  const serviceName = 'Engineering Programs';
+  // Get service info from URL
+  const serviceId = categorySlug || 'engineering';
+  const serviceName = serviceId
+    .split('-')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ') + ' Programs';
 
   // Create stable filter signature
   const filterSignature = useMemo(() => 
@@ -672,7 +676,8 @@ export default function CourseList() {
                   onClick={() => navigate(`/universities/sdp/course/${course.slug}`)}
                 >
                   <div className="relative bg-white rounded-2xl shadow-sm border border-slate-200/60 overflow-hidden h-full flex flex-col transition-all duration-300 hover:shadow-xl hover:shadow-blue-500/5 hover:border-blue-200">
-                    <div className="p-6 flex-1 flex flex-col relative z-10">
+                    {/* Card Body */}
+                    <div className="p-6 flex-1">
                       {/* Category Badge */}
                       <div className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200/60 rounded-lg mb-4 w-fit">
                         <div className="w-1.5 h-1.5 bg-blue-600 rounded-full"></div>
@@ -695,11 +700,8 @@ export default function CourseList() {
                         />
                       </div>
 
-                      {/* Spacer to push footer to bottom */}
-                      <div className="flex-1"></div>
-
                       {/* Course Meta Info */}
-                      <div className="grid grid-cols-3 gap-2 mb-6 pb-6 border-b border-slate-100">
+                      <div className="grid grid-cols-3 gap-2">
                         <div className="flex flex-col">
                           <div className="flex items-center gap-1.5 text-blue-500 mb-1">
                             <Clock className="w-3.5 h-3.5" />
@@ -719,27 +721,24 @@ export default function CourseList() {
                           <span className="text-xs font-semibold text-slate-900">{course.level}</span>
                         </div>
                       </div>
-
-                      {/* Price and CTA - Always at bottom */}
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-baseline gap-1">
-                          <IndianRupee className="w-5 h-5 text-slate-900 font-bold" />
-                          <span className="text-2xl font-bold text-slate-900">
-                            {course.price.toLocaleString('en-IN')}
-                          </span>
-                        </div>
-                        <motion.div
-                          whileHover={{ x: 4 }}
-                          className="flex items-center gap-2 text-blue-700 font-semibold text-sm group-hover:gap-3 transition-all"
-                        >
-                          <span>View Details</span>
-                          <ArrowLeft className="w-4 h-4 rotate-180" />
-                        </motion.div>
-                      </div>
                     </div>
 
-                    {/* Bottom Accent Bar */}
-                    <div className="h-1 bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" />
+                    {/* Card Footer - Always visible with consistent border */}
+                    <div className="flex items-center justify-between px-6 py-4 border-t border-slate-200 bg-white">
+                      <div className="flex items-baseline gap-1">
+                        <IndianRupee className="w-5 h-5 text-slate-900 font-bold" />
+                        <span className="text-2xl font-bold text-slate-900">
+                          {course.price.toLocaleString('en-IN')}
+                        </span>
+                      </div>
+                      <motion.div
+                        whileHover={{ x: 4 }}
+                        className="flex items-center gap-2 text-blue-700 font-semibold text-sm group-hover:gap-3 transition-all"
+                      >
+                        <span>View Details</span>
+                        <ArrowLeft className="w-4 h-4 rotate-180" />
+                      </motion.div>
+                    </div>
                   </div>
                 </motion.div>
               ))}
