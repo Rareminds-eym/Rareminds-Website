@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { useState } from 'react';
+import { submitInstitutionalEnquiry } from '@/services/sdp/enrollmentService';
 
 export default function InstitutionalEnquiry() {
   const [formData, setFormData] = useState({
@@ -11,15 +12,37 @@ export default function InstitutionalEnquiry() {
     serviceType: '',
     description: '',
   });
+  const [submitting, setSubmitting] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState('');
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log(formData); // Replace with actual form submission
-    alert('Enquiry Submitted!');
+    setSubmitting(true);
+    setError('');
+    
+    try {
+      await submitInstitutionalEnquiry(formData);
+      setSuccess(true);
+      setFormData({
+        fullName: '',
+        collegeName: '',
+        course: '',
+        email: '',
+        phone: '',
+        serviceType: '',
+        description: '',
+      });
+      setTimeout(() => setSuccess(false), 3000);
+    } catch (err: any) {
+      setError(err.message || 'Failed to submit enquiry. Please try again.');
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -127,13 +150,26 @@ export default function InstitutionalEnquiry() {
             />
           </div>
 
+          {error && (
+            <div className="text-red-600 text-center bg-red-50 py-2 rounded-lg">
+              {error}
+            </div>
+          )}
+
+          {success && (
+            <div className="text-green-600 text-center bg-green-50 py-2 rounded-lg">
+              Enquiry submitted successfully! We'll get back to you soon.
+            </div>
+          )}
+
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             type="submit"
-            className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-4 rounded-xl text-xl font-medium shadow-md"
+            disabled={submitting}
+            className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-4 rounded-xl text-xl font-medium shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            Submit Enquiry
+            {submitting ? 'Submitting...' : 'Submit Enquiry'}
           </motion.button>
         </form>
       </motion.div>

@@ -69,7 +69,7 @@ export default function LogoCarousel() {
           >
             {[...collegeLogos, ...collegeLogos].map((logo, index) => (
               <div
-                key={index}
+                key={`logo-${index}-${logo.name}`}
                 className="flex-shrink-0 relative group"
               >
                 <div className="w-28 h-16 bg-white rounded-lg shadow-md flex items-center justify-center p-2 transition-transform duration-300 group-hover:scale-105">

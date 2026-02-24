@@ -1,4 +1,4 @@
-// src/pages/Universities.tsx
+// src/pages/Universities/LandingPage.tsx
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import React from 'react';
@@ -11,14 +11,11 @@ import CaseStudies from "@/components/universities/sdp/CaseStudies";
 import InstitutionTypeSelector from "@/components/universities/sdp/InstitutionTypeSelector";
 import InstitutionDashboardSection from '@/components/universities/sdp/InstitutionDashboardSection';
 import TestimonialVideos from "@/components/universities/sdp/TestimonialVideos";
-//import FinalCTA from '@/components/universities/FinalCTA';
 import FDPButton from "@/components/universities/sdp/FDPButton";
 import FloatingActionMenu from '@/components/universities/sdp/FloatingAction';
 import ContactSection from '@/components/universities/Contact/ContactSection';
 
-
-
-const Universities: React.FC = () => {
+const LandingPage: React.FC = () => {
    const location = useLocation();
 
   useEffect(() => {
@@ -29,34 +26,27 @@ const Universities: React.FC = () => {
       }
     }
   }, [location]);
+  
   return (
-    
-      <div className="pt-20">
+    <div className="pt-20">
       <FDPButton />
       <Hero />
       <LogoCarousel />
       <section className="relative overflow-hidden rounded-t-[50px] md:rounded-t-[200px] shadow-[0_-20px_30px_-22px_rgba(0,0,0,0.25)] bg-white z-10">
-      <Problem />
-      <TestimonialQuotes />
-      <Solution />
-      <CaseStudies />
-      <div id="services-section">
-        <InstitutionTypeSelector />
-      </div>
-      <InstitutionDashboardSection />
-      <TestimonialVideos />
-      <ContactSection /> 
+        <Problem />
+        <TestimonialQuotes />
+        <Solution />
+        <CaseStudies />
+        <div id="services-section">
+          <InstitutionTypeSelector />
+        </div>
+        <InstitutionDashboardSection />
+        <TestimonialVideos />
+        <ContactSection /> 
       </section>
       <FloatingActionMenu />
-      
-      {/* Uncomment if you have a FinalCTA component */}
-      {/* <FinalCTA /> */}
-      
-      
-      
-      
     </div>
   );
 };
 
-export default Universities;
+export default LandingPage;

@@ -46,12 +46,23 @@ const AcademiaBlogs = lazy(() => import("./pages/Academia/Blogs/index"));
 const Student = lazy(() => import("./pages/Academia/Student/student"));
 const School = lazy(() => import("./pages/Academia/Teacher/teacher.tsx"));
 const Universities = lazy(() => import("./pages/Universities/Index"));
+const SDPLandingPage = lazy(() => import("./pages/Universities/sdp/SDPLandingPage"));
+const ServiceCategoriesPage = lazy(() => import("./pages/Universities/sdp/ServiceCategoriesPage"));
 const UniversitiesServices = lazy(
   () => import("./pages/Universities/UniversitiesServices")
 );
 const FDP = lazy(() => import("./pages/Universities/Fdp"));
-const ServicePage = lazy(
-  () => import("./components/universities/sdp/ServicePage")
+const ServiceCategoryCard = lazy(
+  () => import("./components/universities/sdp/ServiceCategoryCard/ServiceCategoryCard")
+);
+const CoursesListingPage = lazy(
+  () => import("./pages/Universities/sdp/CoursesListingPage")
+);
+const CourseDetailPage = lazy(
+  () => import("./pages/Universities/sdp/CourseDetailPage")
+);
+const ServiceDetailPage = lazy(
+  () => import("./pages/Universities/sdp/ServiceDetailPage")
 );
 const CorporateTraining = lazy(
   () => import("./pages/Corporate/Training/Home/index.tsx")
@@ -105,7 +116,9 @@ const router = createBrowserRouter([
       <>
         <ScrollToTop />
         <DefaultLayout>
-          <Outlet />
+          <Suspense fallback={<LoaderComponent />}>
+            <Outlet />
+          </Suspense>
         </DefaultLayout>
       </>
     ),
@@ -178,7 +191,9 @@ const router = createBrowserRouter([
       <>
         <ScrollToTop />
         <CorporateLayout>
-          <Outlet />
+          <Suspense fallback={<LoaderComponent />}>
+            <Outlet />
+          </Suspense>
         </CorporateLayout>
       </>
     ),
@@ -243,7 +258,9 @@ const router = createBrowserRouter([
       <>
         <ScrollToTop />
         <GovernmentLayout>
-          <Outlet />
+          <Suspense fallback={<LoaderComponent />}>
+            <Outlet />
+          </Suspense>
         </GovernmentLayout>
       </>
     ),
@@ -282,7 +299,9 @@ const router = createBrowserRouter([
       <>
         <ScrollToTop />
         <AcademiaLayout>
-          <Outlet />
+          <Suspense fallback={<LoaderComponent />}>
+            <Outlet />
+          </Suspense>
         </AcademiaLayout>
       </>
     ),
@@ -375,27 +394,41 @@ const router = createBrowserRouter([
       <>
         <ScrollToTop />
         <UniversitiesLayout>
-          <Outlet />
+          <Suspense fallback={<LoaderComponent />}>
+            <Outlet />
+          </Suspense>
         </UniversitiesLayout>
       </>
     ),
     errorElement: <ErrorBoundary />,
     children: [
       {
-        path: "/Universities",
+        path: "/universities",
         element: withSuspense(Universities),
       },
       {
-        path: "/universities/services",
-        element: withSuspense(UniversitiesServices),
+        path: "/universities/sdp/:institutionType/categories",
+        element: withSuspense(ServiceCategoriesPage),
       },
       {
         path: "/service/:id",
         element: (
           <Suspense fallback={<LoaderComponent />}>
-            <ServicePage />
+            <ServiceCategoryCard />
           </Suspense>
         ),
+      },
+      {
+        path: "/universities/sdp/:institutionType/:categorySlug",
+        element: withSuspense(ServiceDetailPage),
+      },
+      {
+        path: "/universities/sdp/:institutionType/:categorySlug/courses",
+        element: withSuspense(CoursesListingPage),
+      },
+      {
+        path: "/universities/sdp/course/:courseSlug",
+        element: withSuspense(CourseDetailPage),
       },
       {
         path: "/universities/fdp",

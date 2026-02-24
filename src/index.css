@@ -2,6 +2,24 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Prevent layout shift during navigation */
+@layer base {
+  /* Ensure images don't cause layout shift */
+  img {
+    @apply max-w-full h-auto;
+  }
+  
+  /* Prevent content jump during page transitions */
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  /* Stable layout for back navigation */
+  body {
+    @apply overflow-x-hidden;
+  }
+}
+
 /* Design tokens for consistent UI */
 :root {
   --rm-primary: #4f46e5; /* indigo-600 */
