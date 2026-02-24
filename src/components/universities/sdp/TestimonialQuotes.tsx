@@ -42,7 +42,7 @@ const Testimonials: React.FC = () => {
           <div className="absolute inset-0 flex flex-col animate-scroll-y">
             {sideImages.concat(sideImages).map((src, idx) => (
               <img
-                key={idx}
+                key={`side-img-${idx}`}
                 src={src}
                 alt={`testimonial-img-${idx}`}
                 className="w-full h-64 object-cover"
@@ -68,13 +68,12 @@ const Testimonials: React.FC = () => {
                 ease: 'linear',
               }}
             >
-              {duplicate(col1).map(({ id, name, role, message, avatarUrl }) => (
+              {duplicate(col1).map(({ id, name, role, message }, idx) => (
                 <TestimonialCard
-                  key={`col1-${id}`}
+                  key={`col1-${id}-${idx}`}
                   name={name}
                   role={role}
                   message={message}
-                  avatarUrl={avatarUrl}
                 />
               ))}
             </motion.div>
@@ -89,13 +88,12 @@ const Testimonials: React.FC = () => {
                 ease: 'linear',
               }}
             >
-              {duplicate(col2).map(({ id, name, role, message, avatarUrl }) => (
+              {duplicate(col2).map(({ id, name, role, message }, idx) => (
                 <TestimonialCard
-                  key={`col2-${id}`}
+                  key={`col2-${id}-${idx}`}
                   name={name}
                   role={role}
                   message={message}
-                  avatarUrl={avatarUrl}
                 />
               ))}
             </motion.div>
@@ -104,7 +102,7 @@ const Testimonials: React.FC = () => {
       </div>
 
       {/* Scroll animation keyframes */}
-      <style jsx>{`
+      <style>{`
         @keyframes scroll-y {
           0% {
             transform: translateY(0%);
@@ -124,7 +122,7 @@ const Testimonials: React.FC = () => {
 
 type TestimonialCardProps = {
   name: string;
-  role: string;
+  role?: string;
   message: string;
   avatarUrl?: string;
 };
@@ -145,7 +143,7 @@ const TestimonialCard: React.FC<TestimonialCardProps> = ({
     )}
     <p className="text-gray-700 text-sm mb-4 italic">&quot;{message}&quot;</p>
     <p className="font-semibold">{name}</p>
-    <p className="text-xs text-gray-500 mt-4">{role}</p>
+    {role && <p className="text-xs text-gray-500 mt-4">{role}</p>}
   </div>
 );
 
