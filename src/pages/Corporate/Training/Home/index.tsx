@@ -4,17 +4,24 @@ import FullScreenCarousel from "@/components/Corporate/Training/hero/FullScreenC
 import InstitutionDashboardSection from "@/components/Corporate/Training/InstitutionDashboardSection";
 import Numbers from "@/components/Corporate/Training/Numbers";
 import Problem from "@/components/Corporate/Training/Problem";
-import Services from "@/components/Corporate/Training/Services";
 import Solution from "@/components/Corporate/Training/Solution";
 import TestimonialQuotes from "@/components/Corporate/Training/TestimonialQuotes";
 import TestimonialVideos from "@/components/Corporate/Training/TestimonialVideos";
 import WorkWith from "@/components/Corporate/Training/WorkWith";
 import React, { useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
+import { motion } from "framer-motion";
+import { Building2 } from "lucide-react";
 
 const CorporateTraining: React.FC = () => {
   const location = useLocation();
+  const navigate = useNavigate();
+
+  const handleCorporateClick = () => {
+    navigate('/corporate/training/services');
+  };
+
   const slides = [
     {
       heading: "Your Training ROI Partner",
@@ -92,7 +99,61 @@ const CorporateTraining: React.FC = () => {
         <CaseStudies />
       </div> */}
       <div className="relative bg-white" id="services">
-        <Services />
+        <div className="py-20 px-4">
+          {/* Heading Section */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-12 max-w-3xl mx-auto"
+          >
+            <h1 className="text-4xl sm:text-5xl lg:text-3xl font-bold tracking-tight text-slate-900 leading-tight">
+              Corporate Training Solutions for Your Organization
+            </h1>
+            <p className="text-m sm:text-m text-slate-700 leading-relaxed mt-4">
+              Empower your teams with industry-relevant programs designed for real business impact.
+            </p>
+          </motion.div>
+
+          <div className="max-w-md mx-auto">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5 }}
+              whileHover={{ y: -8, scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              onClick={handleCorporateClick}
+              className="group relative bg-white rounded-2xl shadow-lg border-2 border-slate-200 overflow-hidden cursor-pointer transition-all duration-300 hover:shadow-2xl hover:border-blue-500"
+            >
+              <div className="absolute inset-0 bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-600 opacity-0 group-hover:opacity-10 transition-opacity duration-300" />
+              <div className="relative p-8 text-center">
+                <motion.div
+                  whileHover={{ rotate: 360 }}
+                  transition={{ duration: 0.6 }}
+                  className="w-20 h-20 mx-auto mb-6 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-2xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition-shadow"
+                >
+                  <Building2 className="w-10 h-10 text-white" />
+                </motion.div>
+                <h2 className="text-3xl font-bold text-slate-900 mb-3 group-hover:text-blue-700 transition-colors">
+                  CORPORATE
+                </h2>
+                <p className="text-slate-600 mb-6 leading-relaxed">
+                  Professional training solutions designed for corporate workforce development
+                </p>
+                <motion.button
+                  whileHover={{ x: 4 }}
+                  className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-xl font-semibold shadow-md group-hover:bg-blue-700 group-hover:shadow-lg transition-all"
+                >
+                  <span>Explore Programs</span>
+                  <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </motion.button>
+              </div>
+              <div className="h-2 bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" />
+            </motion.div>
+          </div>
+        </div>
       </div>
       <div className="relative bg-white">
         <Numbers />

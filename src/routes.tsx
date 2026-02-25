@@ -69,8 +69,8 @@ const CorporateTraining = lazy(
 );
 const Contact = lazy(() => import("./pages/Government/Contact/Index"));
 const handleSubscribe = lazy(() => import("./pages/Academia/ComingSoon"));
-const LeadershipPrograms = lazy(
-  () => import("./pages/Corporate/Training/Services/[slug].tsx")
+const CorporateCourseDetailPage = lazy(
+  () => import("./pages/Corporate/Training/Services/CourseDetailPage.tsx")
 );
 const Projectlist = lazy(() => import("./pages/Academia/projects/projectlist"));
 const Naan = lazy(() => import("./pages/Academia/projects/[name]"));
@@ -82,8 +82,11 @@ const Academy_Course = lazy(
 const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
 const Terms = lazy(() => import("./pages/Terms"));
 const TDPPage = lazy(() => import("./pages/Academia/Teacher/TDPPage.tsx"));
-const CorporateTrainingServicesIndex = lazy(
-  () => import("./pages/Corporate/Training/Services/Index.tsx")
+const CorporateTrainingServicesPage = lazy(
+  () => import("./pages/Corporate/Training/ServicesPage.tsx")
+);
+const CorporateCoursesPage = lazy(
+  () => import("./pages/Corporate/Training/Services/CoursesPage.tsx")
 );
 
 // Passport page
@@ -207,13 +210,22 @@ const router = createBrowserRouter([
         path: "/corporate/recruitment/services/:name",
         element: withSuspense(Service),
       },
+      // Corporate Training Routes
       {
         path: "/corporate/training",
-        element: withSuspense(CorporateTraining),
+        element: withSuspense(CorporateTraining), // Training landing page - NO redirect
       },
       {
-        path: "/corporate/training/services/:id",
-        element: withSuspense(LeadershipPrograms),
+        path: "/corporate/training/services",
+        element: withSuspense(CorporateTrainingServicesPage), // Services listing page
+      },
+      {
+        path: "/corporate/training/services/:serviceSlug",
+        element: withSuspense(CorporateCoursesPage), // Courses page for specific service
+      },
+      {
+        path: "/corporate/training/services/:serviceSlug/course/:programId",
+        element: withSuspense(CorporateCourseDetailPage), // Individual course detail
       },
       {
         path: "/corporate/training/contact",
@@ -249,7 +261,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/corporate/training/services",
-        element: withSuspense(CorporateTrainingServicesIndex),
+        element: withSuspense(CorporateTrainingServicesPage),
       },
     ],
   },

@@ -151,9 +151,10 @@ export default function CourseDetail() {
             <div className="flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-lg border border-white/20">
               <span className="text-sm font-medium">{course.level}</span>
             </div>
-            <div className="flex items-center gap-2 px-4 py-2 bg-blue-600/90 backdrop-blur-sm rounded-lg border border-blue-500/50">
+            {/* Price Display - Commented out for now */}
+            {/* <div className="flex items-center gap-2 px-4 py-2 bg-blue-600/90 backdrop-blur-sm rounded-lg border border-blue-500/50">
               <span className="text-sm font-bold">₹{course.price.toLocaleString('en-IN')}</span>
-            </div>
+            </div> */}
           </motion.div>
         </div>
 

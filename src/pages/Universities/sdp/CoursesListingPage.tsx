@@ -493,8 +493,8 @@ export default function CourseList() {
                 </AnimatePresence>
               </div>
 
-              {/* Price Chip */}
-              <div className="relative">
+              {/* Price Chip - Commented out for now */}
+              {/* <div className="relative">
                 <button
                   onClick={() => setOpenDropdown(openDropdown === 'price' ? null : 'price')}
                   className={`inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-all border ${
@@ -537,7 +537,7 @@ export default function CourseList() {
                     </motion.div>
                   )}
                 </AnimatePresence>
-              </div>
+              </div> */}
 
               {/* Sort Chip */}
               <div className="relative">
@@ -726,10 +726,11 @@ export default function CourseList() {
                     {/* Card Footer - Always visible with consistent border */}
                     <div className="flex items-center justify-between px-6 py-4 border-t border-slate-200 bg-white">
                       <div className="flex items-baseline gap-1">
-                        <IndianRupee className="w-5 h-5 text-slate-900 font-bold" />
+                        {/* Price Display - Commented out for now */}
+                        {/* <IndianRupee className="w-5 h-5 text-slate-900 font-bold" />
                         <span className="text-2xl font-bold text-slate-900">
                           {course.price.toLocaleString('en-IN')}
-                        </span>
+                        </span> */}
                       </div>
                       <motion.div
                         whileHover={{ x: 4 }}

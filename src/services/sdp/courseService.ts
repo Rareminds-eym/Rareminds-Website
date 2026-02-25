@@ -367,4 +367,319 @@ export const serviceHasCourses = async (serviceSlug: string): Promise<boolean> =
   );
 };
 
+// ============================================
+// CORPORATE TRAINING FUNCTIONS
+// ============================================
+
+// Utility: Convert course_category to slug format
+export const categoryToSlug = (category: string): string => {
+  return category
+    .toLowerCase()
+    .replace(/\s+/g, '-')
+    .replace(/[^a-z0-9-]/g, '');
+};
+
+// Utility: Convert slug back to course_category (for querying)
+export const slugToCategory = (slug: string): string => {
+  return slug
+    .split('-')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+};
+
+// Fetch unique corporate service categories (for Page 2)
+export const getCorporateServiceCategories = async () => {
+  try {
+    // Get distinct course_category values with their first course's data
+    const { data, error } = await supabase
+      .from('courses')
+      .select('course_category, subtitle, description, image_url, icon, color_gradient')
+      .eq('institution_type', 'corporate')
+      .eq('category', 'course')
+      .eq('is_active', true)
+      .order('course_category', { ascending: true })
+      .order('display_order', { ascending: true });
+
+    if (error) {
+      console.error('Error fetching corporate categories:', error);
+      return [];
+    }
+
+    // Group by course_category and take first record for each
+    const uniqueCategories = new Map();
+    (data || []).forEach(course => {
+      if (!uniqueCategories.has(course.course_category)) {
+        uniqueCategories.set(course.course_category, {
+          id: categoryToSlug(course.course_category),
+          slug: categoryToSlug(course.course_category),
+          name: course.course_category,
+          subtitle: course.subtitle || '',
+          description: course.description || '',
+          image: course.image_url || '/Corporate/Images/Training/service-header.webp',
+          icon: course.icon || 'BookOpen',
+          color: course.color_gradient || 'from-blue-600 to-purple-600'
+        });
+      }
+    });
+
+    return Array.from(uniqueCategories.values());
+  } catch (err) {
+    console.error('Exception fetching corporate categories:', err);
+    return [];
+  }
+};
+
+// Fetch corporate courses by category with pagination and filters (for Page 3)
+export const getCorporateCoursesByCategory = async (
+  categorySlug: string,
+  page: number = 0,
+  pageSize: number = COURSES_PER_PAGE,
+  searchTerm: string = '',
+  filters: {
+    durations?: string[];
+    modes?: string[];
+    levels?: string[];
+  } = {},
+  sortBy: string = 'newest'
+): Promise<{ courses: any[]; totalCount: number; hasMore: boolean }> => {
+  const from = page * pageSize;
+  const to = from + pageSize - 1;
+
+  // Convert slug back to category name for querying
+  const categoryName = slugToCategory(categorySlug);
+
+  console.log('📄 Fetching corporate courses - Category:', categoryName, 'Page:', page);
+
+  try {
+    const hasSearch = searchTerm && searchTerm.trim() !== '';
+    const trimmedSearch = hasSearch ? searchTerm.trim().toLowerCase() : '';
+
+    let query = supabase
+      .from('courses')
+      .select(`
+        id,
+        slug,
+        title,
+        subtitle,
+        description,
+        duration_hours,
+        mode,
+        level,
+        price,
+        currency,
+        course_category,
+        overview,
+        created_at
+      `, { count: 'exact' })
+      .eq('category', 'course')
+      .eq('institution_type', 'corporate')
+      .ilike('course_category', categoryName)
+      .eq('is_active', true);
+
+    if (hasSearch) {
+      const words = trimmedSearch.split(/\s+/).filter(w => w.length > 0);
+      const searchConditions = words.flatMap(word => {
+        const escaped = word.replace(/%/g, '\\%').replace(/_/g, '\\_');
+        return [
+          `title.ilike.*${escaped}*`,
+          `description.ilike.*${escaped}*`
+        ];
+      }).join(',');
+      query = query.or(searchConditions);
+    }
+
+    if (filters.durations && filters.durations.length > 0) {
+      query = query.in('duration_hours', filters.durations);
+    }
+
+    if (filters.modes && filters.modes.length > 0) {
+      query = query.in('mode', filters.modes);
+    }
+
+    if (filters.levels && filters.levels.length > 0) {
+      query = query.in('level', filters.levels);
+    }
+
+    // Apply sorting
+    switch (sortBy) {
+      case 'name-asc':
+        query = query.order('title', { ascending: true });
+        break;
+      case 'name-desc':
+        query = query.order('title', { ascending: false });
+        break;
+      case 'oldest':
+        query = query.order('created_at', { ascending: true });
+        break;
+      case 'newest':
+      default:
+        query = query.order('created_at', { ascending: false });
+        break;
+    }
+
+    const { data, error, count } = await query.range(from, to);
+
+    if (error) {
+      console.error('❌ Error fetching corporate courses:', error);
+      return { courses: [], totalCount: 0, hasMore: false };
+    }
+
+    let courses = (data || []).map((course: any) => ({
+      id: course.id,
+      slug: course.slug,
+      title: course.title,
+      overview: course.overview || course.description || '',
+      duration: course.duration_hours ? `${course.duration_hours} hours` : '0 hours',
+      level: course.level || 'Professional',
+      mode: course.mode || 'Online',
+      price: course.price || 0,
+      category: course.course_category,
+      modules: []
+    }));
+
+    // Apply relevance-based sorting when searching
+    if (hasSearch) {
+      const coursesWithScore = courses.map(course => {
+        const titleLower = course.title.toLowerCase();
+        const overviewLower = course.overview.toLowerCase();
+        let relevanceScore = 0;
+
+        // Exact title match (highest priority)
+        if (titleLower === trimmedSearch) {
+          relevanceScore += 1000;
+        }
+        // Title starts with search term
+        else if (titleLower.startsWith(trimmedSearch)) {
+          relevanceScore += 500;
+        }
+        // Title contains exact search term
+        else if (titleLower.includes(trimmedSearch)) {
+          relevanceScore += 300;
+        }
+
+        // Count matching words in title
+        const searchWords = trimmedSearch.split(/\s+/);
+        searchWords.forEach(word => {
+          if (titleLower.includes(word)) {
+            relevanceScore += 50;
+          }
+          if (overviewLower.includes(word)) {
+            relevanceScore += 10;
+          }
+        });
+
+        return { ...course, relevanceScore };
+      });
+
+      // Sort by relevance score (highest first), then by user's sort preference
+      coursesWithScore.sort((a, b) => {
+        if (b.relevanceScore !== a.relevanceScore) {
+          return b.relevanceScore - a.relevanceScore;
+        }
+        // If same relevance, apply user's sort
+        switch (sortBy) {
+          case 'name-asc':
+            return a.title.localeCompare(b.title);
+          case 'name-desc':
+            return b.title.localeCompare(a.title);
+          case 'oldest':
+            return 0; // Keep order
+          case 'newest':
+          default:
+            return 0; // Keep order
+        }
+      });
+
+      // Remove relevanceScore from final results
+      courses = coursesWithScore.map(({ relevanceScore, ...course }) => course);
+    }
+
+    const totalCount = count || 0;
+    const hasMore = to < totalCount - 1;
+
+    console.log('✅ Fetched:', courses.length, 'corporate courses. Total:', totalCount);
+
+    return { courses, totalCount, hasMore };
+  } catch (err) {
+    console.error('❌ Exception fetching corporate courses:', err);
+    return { courses: [], totalCount: 0, hasMore: false };
+  }
+};
+
+// Fetch single corporate course by slug (for Page 4)
+export const getCorporateCourseBySlug = async (slug: string) => {
+  try {
+    const { data, error } = await supabase
+      .from('courses')
+      .select('*')
+      .eq('category', 'course')
+      .eq('institution_type', 'corporate')
+      .eq('slug', slug)
+      .eq('is_active', true)
+      .single();
+
+    if (error) {
+      console.error('Error fetching corporate course:', error);
+      return null;
+    }
+
+    if (!data) return null;
+
+    // Map to expected format
+    return {
+      id: data.id,
+      slug: data.slug,
+      title: data.title,
+      overview: data.overview || data.description || '',
+      duration: data.duration_hours ? `${data.duration_hours} hours` : '0 hours',
+      level: data.level || 'Professional',
+      mode: data.mode || 'Online',
+      price: data.price || 0,
+      category: data.course_category,
+      whatWeCover: data.what_you_learn || [],
+      delivery: data.who_should_take || [],
+      modules: data.curriculum || [],
+      whyChoose: data.benefits ? data.benefits.join('. ') : ''
+    };
+  } catch (err) {
+    console.error('Exception fetching corporate course:', err);
+    return null;
+  }
+};
+
+// Fetch other courses in same category (for Page 4 sidebar)
+export const getOtherCorporateCourses = async (categorySlug: string, currentCourseId: string) => {
+  try {
+    const categoryName = slugToCategory(categorySlug);
+
+    const { data, error } = await supabase
+      .from('courses')
+      .select('id, slug, title, duration_hours, mode')
+      .eq('category', 'course')
+      .eq('institution_type', 'corporate')
+      .ilike('course_category', categoryName)
+      .neq('id', currentCourseId)
+      .eq('is_active', true)
+      .order('display_order', { ascending: true })
+      .limit(10);
+
+    if (error) {
+      console.error('Error fetching other corporate courses:', error);
+      return [];
+    }
+
+    return (data || []).map(course => ({
+      id: course.id,
+      slug: course.slug,
+      title: course.title,
+      duration: course.duration_hours ? `${course.duration_hours} hours` : '0 hours',
+      mode: course.mode || 'Online',
+      modules: []
+    }));
+  } catch (err) {
+    console.error('Exception fetching other corporate courses:', err);
+    return [];
+  }
+};
+
 
