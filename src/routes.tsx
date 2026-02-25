@@ -210,17 +210,22 @@ const router = createBrowserRouter([
         path: "/corporate/recruitment/services/:name",
         element: withSuspense(Service),
       },
+      // Corporate Training Routes
       {
         path: "/corporate/training",
-        element: withSuspense(CorporateTraining),
+        element: withSuspense(CorporateTraining), // Training landing page - NO redirect
+      },
+      {
+        path: "/corporate/training/services",
+        element: withSuspense(CorporateTrainingServicesPage), // Services listing page
       },
       {
         path: "/corporate/training/services/:serviceSlug",
-        element: withSuspense(CorporateCoursesPage),
+        element: withSuspense(CorporateCoursesPage), // Courses page for specific service
       },
       {
         path: "/corporate/training/services/:serviceSlug/course/:programId",
-        element: withSuspense(CorporateCourseDetailPage),
+        element: withSuspense(CorporateCourseDetailPage), // Individual course detail
       },
       {
         path: "/corporate/training/contact",

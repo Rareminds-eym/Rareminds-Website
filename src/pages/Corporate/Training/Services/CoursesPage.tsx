@@ -86,8 +86,7 @@ export default function CorporateCoursesPage() {
         if (selectedDurations.length > 0) {
           filters.durations = selectedDurations.map(d => d.replace(' hours', ''));
         }
-
-        if (selectedModes.length > 0) {
+      if (selectedModes.length > 0) {
           filters.modes = selectedModes;
         }
 
@@ -208,7 +207,7 @@ export default function CorporateCoursesPage() {
           <motion.button
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
-            onClick={() => navigate('/corporate/training/services')}
+            onClick={() => navigate(-1)}
             className="group flex items-center gap-2 text-slate-600 hover:text-blue-700 mb-8 transition-all font-medium"
           >
             <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />

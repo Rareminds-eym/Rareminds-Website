@@ -46,8 +46,7 @@ const LeadershipPrograms = () => {
   }, [location, programId]);
 
   const handleBack = () => {
-    navigate(`/corporate/training/services/${serviceSlug}`, { replace: true });
-
+    navigate(-1);
   };
 
   const handleClick = () => {
