@@ -1,50 +1,51 @@
 import { motion } from 'framer-motion';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, CheckCircle, Users, Target, Award, BookOpen } from 'lucide-react';
-import { services } from './serviceData';
+import { getCorporateCourseBySlug, getOtherCorporateCourses } from '@/services/sdp/courseService';
 import ErrorComponent from '@/components/ErrorComponent';
 import { Helmet } from 'react-helmet-async';
 import ExpandableText from '@/components/universities/sdp/shared/ExpandableText';
-
-// Utility function to calculate and format duration
-function calculateDuration(modules: any[]): string {
-  if (!modules || modules.length === 0) return '0 hours';
-  
-  // Sum up all module hours
-  const totalHours = modules.reduce((sum, module) => {
-    if (module.hours) {
-      // Extract number from strings like "4 hrs", "5 hrs"
-      const match = module.hours.match(/(\d+)/);
-      if (match) {
-        return sum + parseInt(match[1], 10);
-      }
-    }
-    return sum;
-  }, 0);
-
-  // If no hours found, estimate 2 hours per module
-  const hours = totalHours > 0 ? totalHours : modules.length * 2;
-
-  // Format duration
-  if (hours < 24) {
-    return `${hours} hours`;
-  } else if (hours < 168) { // Less than a week
-    const days = Math.ceil(hours / 8); // 8 hours per day
-    return `${days} ${days === 1 ? 'day' : 'days'}`;
-  } else {
-    const weeks = Math.ceil(hours / 40); // 40 hours per week
-    return `${weeks} ${weeks === 1 ? 'week' : 'weeks'}`;
-  }
-}
+import { useState, useEffect } from 'react';
 
 export default function CourseDetailPage() {
   const { serviceSlug, programId } = useParams<{ serviceSlug: string; programId: string }>();
   const navigate = useNavigate();
   
-  const service = services.find((s) => s.id === serviceSlug);
-  const program = service?.programs.find((p) => p.id === programId);
+  const [program, setProgram] = useState<any>(null);
+  const [otherPrograms, setOtherPrograms] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  if (!service || !program) {
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!programId || !serviceSlug) return;
+      
+      setLoading(true);
+      const courseData = await getCorporateCourseBySlug(programId);
+      setProgram(courseData);
+
+      if (courseData) {
+        const others = await getOtherCorporateCourses(serviceSlug, courseData.id);
+        setOtherPrograms(others);
+      }
+      
+      setLoading(false);
+    };
+    fetchData();
+  }, [programId, serviceSlug]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <motion.div
+          animate={{ rotate: 360 }}
+          transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+          className="w-16 h-16 border-4 border-blue-100 border-t-blue-700 rounded-full"
+        />
+      </div>
+    );
+  }
+
+  if (!program) {
     return (
       <ErrorComponent
         title="404 - Course Not Found"
@@ -53,13 +54,10 @@ export default function CourseDetailPage() {
     );
   }
 
-  // Get other programs in this service
-  const otherPrograms = service.programs.filter(p => p.id !== programId);
-
   return (
     <>
       <Helmet>
-        <title>{program.title} | {service.heroTitle} | Rareminds</title>
+        <title>{program.title} | Corporate Training | Rareminds</title>
         <meta name="description" content={program.overview} />
       </Helmet>
 
@@ -93,7 +91,7 @@ export default function CourseDetailPage() {
             >
               <span className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-md border border-white/20 rounded-full text-white text-sm font-semibold">
                 <div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse"></div>
-                {(program as any).category || service.heroTitle}
+                {program.category}
               </span>
             </motion.div>
 
@@ -115,7 +113,7 @@ export default function CourseDetailPage() {
               className="flex flex-wrap items-center gap-4 text-white/90"
             >
               <div className="flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-lg border border-white/20">
-                <span className="text-sm font-medium">{calculateDuration(program.modules || [])}</span>
+                <span className="text-sm font-medium">{program.duration}</span>
               </div>
               <div className="flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-lg border border-white/20">
                 <span className="text-sm font-medium">{program.modules?.length || 0} Modules</span>
@@ -317,7 +315,7 @@ export default function CourseDetailPage() {
                             initial={{ opacity: 0, x: 20 }}
                             animate={{ opacity: 1, x: 0 }}
                             transition={{ delay: 0.3 + index * 0.05 }}
-                            onClick={() => navigate(`/corporate/training/services/${serviceSlug}/course/${otherProgram.id}`)}
+                            onClick={() => navigate(`/corporate/training/services/${serviceSlug}/course/${otherProgram.slug}`)}
                             className="w-full text-left p-4 hover:bg-blue-50 transition-colors group"
                           >
                             <div className="flex gap-4">
@@ -335,10 +333,10 @@ export default function CourseDetailPage() {
                                 </h4>
                                 <div className="flex flex-wrap gap-2 mt-2">
                                   <span className="inline-flex items-center px-2 py-0.5 bg-slate-100 text-slate-600 text-xs rounded-md">
-                                    {otherProgram.modules?.length || 0} modules
+                                    {otherProgram.duration}
                                   </span>
                                   <span className="inline-flex items-center px-2 py-0.5 bg-slate-100 text-slate-600 text-xs rounded-md">
-                                    Online
+                                    {otherProgram.mode}
                                   </span>
                                 </div>
                               </div>
