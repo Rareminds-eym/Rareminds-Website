@@ -2,10 +2,12 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate, useParams } from 'react-router-dom';
 import { BookOpen, ArrowLeft, GraduationCap, Clock, Monitor, BarChart3, IndianRupee, X, ChevronDown, Check, Search, ArrowUpDown } from 'lucide-react';
 import { useState, useEffect, useMemo, useRef } from 'react';
-import { services } from './serviceData';
+import { getCorporateCoursesByCategory, slugToCategory } from '@/services/sdp/courseService';
 import ErrorComponent from '@/components/ErrorComponent';
 import { Helmet } from 'react-helmet-async';
 import ExpandableText from '@/components/universities/sdp/shared/ExpandableText';
+
+const COURSES_PER_PAGE = 15;
 
 // Debounce hook
 function useDebounce<T>(value: T, delay: number): T {
@@ -24,57 +26,11 @@ function useDebounce<T>(value: T, delay: number): T {
   return debouncedValue;
 }
 
-// Utility function to calculate and format duration
-function calculateDuration(modules: any[]): string {
-  if (!modules || modules.length === 0) return '0 hours';
-
-  // Sum up all module hours
-  const totalHours = modules.reduce((sum, module) => {
-    if (module.hours) {
-      // Extract number from strings like "4 hrs", "5 hrs"
-      const match = module.hours.match(/(\d+)/);
-      if (match) {
-        return sum + parseInt(match[1], 10);
-      }
-    }
-    return sum;
-  }, 0);
-
-  // If no hours found, estimate 2 hours per module
-  const hours = totalHours > 0 ? totalHours : modules.length * 2;
-
-  // Format duration
-  if (hours < 24) {
-    return `${hours} hours`;
-  } else if (hours < 168) { // Less than a week
-    const days = Math.ceil(hours / 8); // 8 hours per day
-    return `${days} ${days === 1 ? 'day' : 'days'}`;
-  } else {
-    const weeks = Math.ceil(hours / 40); // 40 hours per week
-    return `${weeks} ${weeks === 1 ? 'week' : 'weeks'}`;
-  }
-}
-
-// Transform program to course-like structure
-interface CourseProgram {
-  id: string;
-  title: string;
-  overview: string;
-  duration: string;
-  level: string;
-  mode: string;
-  price: number;
-  category: string;
-  modules: any[];
-}
-
 export default function CorporateCoursesPage() {
   const navigate = useNavigate();
   const { serviceSlug } = useParams<{ serviceSlug: string }>();
-
-  const service = services.find((s) => s.id === serviceSlug);
-
-  if (!service) {
+  
+  if (!serviceSlug) {
     return (
       <ErrorComponent
         title="404 - Service Not Found"
@@ -83,20 +39,10 @@ export default function CorporateCoursesPage() {
     );
   }
 
-
-  const allCourses: CourseProgram[] = service.programs.map(program => ({
-    id: program.id,
-    title: program.title,
-    overview: program.overview,
-    duration: calculateDuration(program.modules || []),
-    level: 'Professional',
-    mode: 'Online',
-    price: 0,
-    category: (program as any).category || service.heroTitle,
-    modules: program.modules || []
-  }));
-
-  const [courses, setCourses] = useState<CourseProgram[]>(allCourses);
+  const [courses, setCourses] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(0);
+  const [totalCount, setTotalCount] = useState(0);
 
   // Filter states
   const [searchTerm, setSearchTerm] = useState('');
@@ -105,13 +51,12 @@ export default function CorporateCoursesPage() {
   const [selectedModes, setSelectedModes] = useState<string[]>([]);
   const [selectedLevels, setSelectedLevels] = useState<string[]>([]);
   const [sortBy, setSortBy] = useState<string>('newest');
-
+  
   // UI states
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  const serviceName = service.heroTitle;
-  const totalCount = courses.length;
+  const serviceName = slugToCategory(serviceSlug);
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -124,66 +69,80 @@ export default function CorporateCoursesPage() {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  // Apply filters and search
+  // Fetch courses from Supabase
   useEffect(() => {
-    let filtered = [...allCourses];
+    let isMounted = true;
 
-    // Search filter
-    if (debouncedSearchTerm.trim()) {
-      const searchLower = debouncedSearchTerm.toLowerCase();
-      filtered = filtered.filter(course =>
-        course.title.toLowerCase().includes(searchLower) ||
-        course.overview.toLowerCase().includes(searchLower)
-      );
-    }
+    const fetchCourses = async () => {
+      setLoading(true);
+      
+      try {
+        const filters: {
+          durations?: string[];
+          modes?: string[];
+          levels?: string[];
+        } = {};
 
-    // Duration filter
-    if (selectedDurations.length > 0) {
-      filtered = filtered.filter(course =>
-        selectedDurations.includes(course.duration)
-      );
-    }
+        if (selectedDurations.length > 0) {
+          filters.durations = selectedDurations.map(d => d.replace(' hours', ''));
+        }
 
-    // Mode filter
-    if (selectedModes.length > 0) {
-      filtered = filtered.filter(course =>
-        selectedModes.includes(course.mode)
-      );
-    }
+        if (selectedModes.length > 0) {
+          filters.modes = selectedModes;
+        }
 
-    // Level filter
-    if (selectedLevels.length > 0) {
-      filtered = filtered.filter(course =>
-        selectedLevels.includes(course.level)
-      );
-    }
+        if (selectedLevels.length > 0) {
+          filters.levels = selectedLevels;
+        }
 
-    // Sorting
-    switch (sortBy) {
-      case 'name-asc':
-        filtered.sort((a, b) => a.title.localeCompare(b.title));
-        break;
-      case 'name-desc':
-        filtered.sort((a, b) => b.title.localeCompare(a.title));
-        break;
-      case 'newest':
-        // Keep original order
-        break;
-      case 'oldest':
-        filtered.reverse();
-        break;
-    }
+        const { courses: data, totalCount: count } = await getCorporateCoursesByCategory(
+          serviceSlug,
+          currentPage,
+          COURSES_PER_PAGE,
+          debouncedSearchTerm,
+          filters,
+          sortBy
+        );
+        
+        if (isMounted) {
+          setCourses(data);
+          setTotalCount(count);
+          setLoading(false);
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+      } catch (error: any) {
+        console.error('Error fetching courses:', error);
+        
+        if (isMounted) {
+          setCourses([]);
+          setTotalCount(0);
+          setLoading(false);
+        }
+      }
+    };
 
-    setCourses(filtered);
-  }, [debouncedSearchTerm, selectedDurations, selectedModes, selectedLevels, sortBy]);
+    fetchCourses();
 
-  // Extract unique filter options
+    return () => {
+      isMounted = false;
+    };
+  }, [
+    serviceSlug,
+    currentPage,
+    debouncedSearchTerm,
+    selectedDurations.join(','),
+    selectedModes.join(','),
+    selectedLevels.join(','),
+    sortBy
+  ]);
+
+  // Extract unique filter options from courses
   const filterOptions = useMemo(() => {
     const durations = new Set<string>();
     const modes = new Set<string>();
     const levels = new Set<string>();
-
-    allCourses.forEach(course => {
+    
+    courses.forEach(course => {
       if (course.duration) durations.add(course.duration);
       if (course.mode) modes.add(course.mode);
       if (course.level) levels.add(course.level);
@@ -194,7 +153,7 @@ export default function CorporateCoursesPage() {
       modes: Array.from(modes),
       levels: Array.from(levels)
     };
-  }, []);
+  }, [courses]);
 
   // Clear all filters
   const clearAllFilters = () => {
@@ -232,15 +191,15 @@ export default function CorporateCoursesPage() {
     setOpenDropdown(null);
   };
 
-  const handleCourseClick = (programId: string) => {
-    navigate(`/corporate/training/services/${serviceSlug}/course/${programId}`);
+  const handleCourseClick = (courseSlug: string) => {
+    navigate(`/corporate/training/services/${serviceSlug}/course/${courseSlug}`);
   };
 
   return (
     <>
       <Helmet>
-        <title>{service.meta_title}</title>
-        <meta name="description" content={service.meta_desc} />
+        <title>{serviceName} | Corporate Training | Rareminds</title>
+        <meta name="description" content={`Explore ${serviceName} training programs designed for corporate teams.`} />
       </Helmet>
 
       <div className="min-h-screen bg-gradient-to-br from-blue-50/30 via-slate-50 to-indigo-50/20 pt-20">
@@ -249,8 +208,7 @@ export default function CorporateCoursesPage() {
           <motion.button
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
-            onClick={() => navigate('/corporate/training/services', { replace: true })}
-
+            onClick={() => navigate('/corporate/training/services')}
             className="group flex items-center gap-2 text-slate-600 hover:text-blue-700 mb-8 transition-all font-medium"
           >
             <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
@@ -309,10 +267,11 @@ export default function CorporateCoursesPage() {
                 <div className="relative">
                   <button
                     onClick={() => setOpenDropdown(openDropdown === 'duration' ? null : 'duration')}
-                    className={`inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-all border ${selectedDurations.length > 0
+                    className={`inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-all border ${
+                      selectedDurations.length > 0
                         ? 'bg-blue-50 text-blue-700 border-blue-200'
                         : 'bg-white text-slate-600 border-slate-200 hover:border-slate-300'
-                      }`}
+                    }`}
                   >
                     <Clock className="w-3.5 h-3.5" />
                     <span className="flex items-center gap-1.5">
@@ -354,10 +313,11 @@ export default function CorporateCoursesPage() {
                 <div className="relative">
                   <button
                     onClick={() => setOpenDropdown(openDropdown === 'mode' ? null : 'mode')}
-                    className={`inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-all border ${selectedModes.length > 0
+                    className={`inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-all border ${
+                      selectedModes.length > 0
                         ? 'bg-blue-50 text-blue-700 border-blue-200'
                         : 'bg-white text-slate-600 border-slate-200 hover:border-slate-300'
-                      }`}
+                    }`}
                   >
                     <Monitor className="w-3.5 h-3.5" />
                     <span className="flex items-center gap-1.5">
@@ -399,10 +359,11 @@ export default function CorporateCoursesPage() {
                 <div className="relative">
                   <button
                     onClick={() => setOpenDropdown(openDropdown === 'level' ? null : 'level')}
-                    className={`inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-all border ${selectedLevels.length > 0
+                    className={`inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-all border ${
+                      selectedLevels.length > 0
                         ? 'bg-blue-50 text-blue-700 border-blue-200'
                         : 'bg-white text-slate-600 border-slate-200 hover:border-slate-300'
-                      }`}
+                    }`}
                   >
                     <BarChart3 className="w-3.5 h-3.5" />
                     <span className="flex items-center gap-1.5">
@@ -444,10 +405,11 @@ export default function CorporateCoursesPage() {
                 <div className="relative">
                   <button
                     onClick={() => setOpenDropdown(openDropdown === 'sort' ? null : 'sort')}
-                    className={`inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-all border ${sortBy !== 'newest'
+                    className={`inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-all border ${
+                      sortBy !== 'newest'
                         ? 'bg-blue-50 text-blue-700 border-blue-200'
                         : 'bg-white text-slate-600 border-slate-200 hover:border-slate-300'
-                      }`}
+                    }`}
                   >
                     <ArrowUpDown className="w-3.5 h-3.5" />
                     <span className="flex items-center gap-1.5">
@@ -507,7 +469,20 @@ export default function CorporateCoursesPage() {
           </motion.div>
 
           {/* Course Grid */}
-          {courses.length === 0 ? (
+          {loading ? (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="text-center py-20"
+            >
+              <motion.div
+                animate={{ rotate: 360 }}
+                transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                className="w-16 h-16 border-4 border-blue-100 border-t-blue-700 rounded-full mx-auto mb-4"
+              />
+              <p className="text-slate-600 font-medium">Loading courses...</p>
+            </motion.div>
+          ) : courses.length === 0 ? (
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -539,8 +514,9 @@ export default function CorporateCoursesPage() {
               </div>
             </motion.div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 items-stretch">
-              {courses.map((course, index) => (
+            <>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 items-stretch">
+                {courses.map((course, index) => (
                 <motion.div
                   key={course.id}
                   initial={{ opacity: 0, y: 20 }}
@@ -548,7 +524,7 @@ export default function CorporateCoursesPage() {
                   transition={{ duration: 0.4, delay: index * 0.05 }}
                   whileHover={{ y: -8 }}
                   className="group cursor-pointer h-full"
-                  onClick={() => handleCourseClick(course.id)}
+                  onClick={() => handleCourseClick(course.slug)}
                 >
                   <div className="relative bg-white rounded-2xl shadow-sm border border-slate-200/60 overflow-hidden h-full flex flex-col transition-all duration-300 hover:shadow-xl hover:shadow-blue-500/5 hover:border-blue-200">
                     {/* Card Body */}
@@ -621,6 +597,51 @@ export default function CorporateCoursesPage() {
                 </motion.div>
               ))}
             </div>
+
+            {/* Pagination */}
+            {totalCount > COURSES_PER_PAGE && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3 }}
+                className="mt-16 flex justify-center"
+              >
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => setCurrentPage(prev => Math.max(0, prev - 1))}
+                    disabled={currentPage === 0}
+                    className="px-4 py-2 rounded-lg border border-slate-300 bg-white text-slate-700 font-medium hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                  >
+                    Previous
+                  </button>
+                  
+                  <div className="flex items-center gap-1">
+                    {Array.from({ length: Math.ceil(totalCount / COURSES_PER_PAGE) }, (_, i) => (
+                      <button
+                        key={i}
+                        onClick={() => setCurrentPage(i)}
+                        className={`w-10 h-10 rounded-lg font-medium transition-all ${
+                          currentPage === i
+                            ? 'bg-blue-600 text-white'
+                            : 'bg-white border border-slate-300 text-slate-700 hover:bg-slate-50'
+                        }`}
+                      >
+                        {i + 1}
+                      </button>
+                    ))}
+                  </div>
+
+                  <button
+                    onClick={() => setCurrentPage(prev => Math.min(Math.ceil(totalCount / COURSES_PER_PAGE) - 1, prev + 1))}
+                    disabled={currentPage >= Math.ceil(totalCount / COURSES_PER_PAGE) - 1}
+                    className="px-4 py-2 rounded-lg border border-slate-300 bg-white text-slate-700 font-medium hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                  >
+                    Next
+                  </button>
+                </div>
+              </motion.div>
+            )}
+            </>
           )}
         </div>
       </div>
