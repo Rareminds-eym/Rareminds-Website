@@ -8,11 +8,17 @@ import {
   Building,
   ArrowRight,
   Sparkles,
+  BookOpen,
+  Download,
+  FileSpreadsheet,
 } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { getCorporateServiceCategories } from "@/services/sdp/courseService";
 
 type Service = {
   id: string;
+  slug: string;
   icon: React.ComponentType<{ className?: string }>;
   name: string;
   subtitle: string;
@@ -21,98 +27,18 @@ type Service = {
   color: string;
 };
 
-export const services = [
-  {
-    id: "leadership-management",
-    icon: Laptop,
-    name: "Leadership and Management Excellence",
-    subtitle: "From First-Time Managers to Future-Ready CXOs",
-    description:
-      "Your people are your strategy. Equip them to lead with vision, empathy, and agility. Top Picks: Emotional Intelligence | OKRs & Feedback | Coaching Culture",
-    image: "/Corporate/Images/Training/service-header.webp",
-    color: "from-blue-600 to-purple-600",
-  },
-  {
-    id: "communication-collaboration",
-    icon: Users2,
-    name: "Communication and Collaboration",
-    subtitle: "No More Death by Email or Cross-Team Chaos",
-    description:
-      "Empower your teams to communicate clearly, influence effectively, and work in sync—across silos and time zones. Top Picks: Influencing Without Authority | Cross-Cultural Collab | Executive Presence",
-    image: "/Corporate/Images/Training/service-header.webp",
-    color: "from-blue-600 to-purple-600",
-  },
-  {
-    id: "workplace-productivity",
-    icon: Sparkles,
-    name: "Workplace Productivity & Digital Fluency",
-    subtitle: "Get More Done—Smarter, Not Harder",
-    description:
-      "Time, tech, and tools—master them all. We build productivity hackers who can handle any workflow with finesse. Top Picks: AI Tools at Work | Time Ninja Bootcamp | Excel to Power BI Mastery",
-    image: "/Corporate/Images/Training/service-header.webp",
-    color: "from-blue-600 to-purple-600",
-  },
-  {
-    id: "tech-upskilling",
-    icon: Code,
-    name: "Tech Upskilling & Future Skills",
-    subtitle: "Train for Today. Thrive in Tomorrow.",
-    description:
-      "Future-proof your teams with hands-on tech skills. Perfect for IT, Digital, and the Tech-Curious. Top Picks: GenAI & Prompt Engineering | Cybersecurity 101 | Cloud Basics (AWS/Azure)",
-    image: "/Corporate/Images/Training/service-header.webp",
-    color: "from-blue-600 to-purple-600",
-  },
-  {
-    id: "behavioral-culture",
-    icon: ArrowRight,
-    name: "Behavioral & Organizational Culture",
-    subtitle: "Because Culture Eats Strategy for Breakfast",
-    description:
-      "Create a workplace people don’t want to leave. We’re talking inclusion, ownership, psychological safety—real, not performative. Top Picks: DEI&B | Feedback Culture | Remote-Ready Teams",
-    image: "/Corporate/Images/Training/service-header.webp",
-    color: "from-blue-600 to-purple-600",
-  },
-  {
-    id: "sales-marketing-customer",
-    icon: BadgeDollarSign,
-    name: "Sales, Marketing & Customer Centricity",
-    subtitle: "Revenue-Driving Skills. Retention-Winning Mindsets.",
-    description:
-      "From cold calls to customer hugs, build teams that connect, convert, and retain with purpose. Top Picks: Storytelling for CX | CRM Tools Mastery | Voice of Customer Loops",
-    image: "/Corporate/Images/Training/service-header.webp",
-    color: "from-blue-600 to-purple-600",
-  },
-  {
-    id: "hr-talent-development",
-    icon: UserCog,
-    name: "HR and Talent Development",
-    subtitle: "From Process Pushers to Culture Shapers",
-    description:
-      "HR deserves a seat at the strategy table. These modules upskill teams to drive performance and people growth. Top Picks: Talent Analytics | Learning Ecosystem Design | EX Strategy",
-    image: "/Corporate/Images/Training/service-header.webp",
-    color: "from-blue-600 to-purple-600",
-  },
-  {
-    id: "custom-corporate-academies",
-    icon: Building,
-    name: "Custom Corporate Academies",
-    subtitle: "Internal Academies Built Like Brands",
-    description:
-      "Go beyond one-size-fits-all. We help you build academies that scale, stick, and spark transformation across roles. Top Picks: Women in Leadership | Campus to Corporate | Digital Champs",
-    image: "/Corporate/Images/Training/service-header.webp",
-    color: "from-blue-600 to-purple-600",
-  },
-  {
-    id: "strategic-addons",
-    icon: ArrowRight,
-    name: "Strategic Add-Ons & Wrap-Arounds",
-    subtitle: "Make Training Measurable. Make Learning Stick.",
-    description:
-      "Boost impact with data, projects, multilingual access, and CXO coaching. These aren't extras—they're essentials. Includes: Pre/Post Assessments | Certification Dashboards | Executive Coaching",
-    image: "/Corporate/Images/Training/service-header.webp",
-    color: "from-blue-600 to-purple-600",
-  },
-];
+// Icon mapping
+const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
+  Laptop,
+  Code,
+  Users2,
+  BadgeDollarSign,
+  UserCog,
+  Building,
+  ArrowRight,
+  Sparkles,
+  BookOpen,
+};
 
 const animations = {
   card: {
@@ -142,9 +68,11 @@ const ServiceCard = ({
   service: Service;
   index: number;
 }) => {
+  const IconComponent = service.icon || BookOpen;
+
   return (
     <Link
-      to={`/corporate/training/services/${service.id}`}
+      to={`/corporate/training/services/${service.slug}`}
       className="block h-full no-underline"
     >
       <motion.div
@@ -184,9 +112,7 @@ const ServiceCard = ({
               <h3 className="text-sm sm:text-lg font-bold bg-gradient-to-r from-gray-800 to-gray-900 bg-clip-text text-transparent leading-tight">
                 {service.name}
               </h3>
-              {service.icon && (
-                <service.icon className="w-5 h-5 sm:w-7 sm:h-7 text-gray-800" />
-              )}
+              <IconComponent className="w-5 h-5 sm:w-7 sm:h-7 text-gray-800" />
             </div>
             {service.subtitle && (
               <p
@@ -213,6 +139,26 @@ const ServiceCard = ({
 };
 
 export default function Services() {
+  const [services, setServices] = useState<Service[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchServices = async () => {
+      setLoading(true);
+      const data = await getCorporateServiceCategories();
+      
+      // Map data to include icon components
+      const mappedServices = data.map((service: any) => ({
+        ...service,
+        icon: iconMap[service.icon] || BookOpen
+      }));
+      
+      setServices(mappedServices);
+      setLoading(false);
+    };
+    fetchServices();
+  }, []);
+
   return (
     <section className="py-8 sm:py-12 lg:py-16 relative overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50" />
@@ -249,11 +195,26 @@ export default function Services() {
           </motion.p>
         </motion.div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-10">
-          {services.map((service, index) => (
-            <ServiceCard key={service.id} service={service} index={index} />
-          ))}
-        </div>
+        {loading ? (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="text-center py-20"
+          >
+            <motion.div
+              animate={{ rotate: 360 }}
+              transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+              className="w-16 h-16 border-4 border-blue-100 border-t-blue-700 rounded-full mx-auto mb-4"
+            />
+            <p className="text-slate-600 font-medium">Loading services...</p>
+          </motion.div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-10">
+            {services.map((service, index) => (
+              <ServiceCard key={service.id} service={service} index={index} />
+            ))}
+          </div>
+        )}
 
         <motion.div
           initial={animations.container.initial}
@@ -261,26 +222,34 @@ export default function Services() {
           transition={{ duration: 0.8, delay: 0.5 }}
           className="flex justify-center items-center mt-8 sm:mt-12 relative"
         >
-          <motion.button
-            className="relative bg-[#222B33] text-white px-8 py-4 rounded-full min-w-[240px] sm:min-w-[300px]
-              font-semibold text-sm sm:text-base shadow-xl hover:shadow-2xl transition-all duration-300 
-              flex items-center justify-center gap-3"
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            onClick={() => {
-              const contactSection = document.getElementById("contact");
-              if (contactSection) {
-                contactSection.scrollIntoView({
-                  behavior: "smooth",
-                  block: "start",
-                });
-              }
-            }}
-            type="button"
-          >
-            <span>Make Your Career Recession-Proof</span>
-            <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 animate-pulse" />
-          </motion.button>
+          <div className="flex flex-wrap gap-4 justify-center">
+            <motion.button
+              type="button"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="button-primary py-3 px-6 flex items-center gap-2 rounded-full font-semibold text-sm sm:text-base shadow-xl hover:shadow-2xl transition-all duration-300"
+              onClick={() => {
+                // Add download course list functionality
+                console.log('Download Course List clicked');
+              }}
+            >
+              <Download className="w-4 h-4 sm:w-5 sm:h-5" />
+              <span>Download Course List</span>
+            </motion.button>
+            <motion.button
+              type="button"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="button-secondary py-3 px-6 flex items-center gap-2 rounded-full font-semibold text-sm sm:text-base shadow-xl hover:shadow-2xl transition-all duration-300"
+              onClick={() => {
+                // Add request blueprint functionality
+                console.log('Request Blueprint clicked');
+              }}
+            >
+              <FileSpreadsheet className="w-4 h-4 sm:w-5 sm:h-5" />
+              <span>Request Blueprint</span>
+            </motion.button>
+          </div>
         </motion.div>
       </div>
     </section>
