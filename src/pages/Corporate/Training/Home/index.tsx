@@ -127,13 +127,15 @@ const CorporateTraining: React.FC = () => {
                 <p className="text-slate-600 mb-6 leading-relaxed">
                   Professional training solutions designed for corporate workforce development
                 </p>
-                <motion.button
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  className="corporate-btn-1"
-                >
-                  Explore Programs
-                </motion.button>
+                <div className="flex justify-center">
+                  <motion.button
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    className="corporate-btn-1"
+                  >
+                    Explore Programs
+                  </motion.button>
+                </div>
               </div>
               <div className="h-2 bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" />
             </motion.div>
