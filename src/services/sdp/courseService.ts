@@ -524,7 +524,7 @@ export const getCorporateCoursesByCategory = async (
       return { courses: [], totalCount: 0, hasMore: false };
     }
 
-    const courses = (data || []).map((course: any) => ({
+    let courses = (data || []).map((course: any) => ({
       id: course.id,
       slug: course.slug,
       title: course.title,
@@ -536,6 +536,63 @@ export const getCorporateCoursesByCategory = async (
       category: course.course_category,
       modules: []
     }));
+
+    // Apply relevance-based sorting when searching
+    if (hasSearch) {
+      const coursesWithScore = courses.map(course => {
+        const titleLower = course.title.toLowerCase();
+        const overviewLower = course.overview.toLowerCase();
+        let relevanceScore = 0;
+
+        // Exact title match (highest priority)
+        if (titleLower === trimmedSearch) {
+          relevanceScore += 1000;
+        }
+        // Title starts with search term
+        else if (titleLower.startsWith(trimmedSearch)) {
+          relevanceScore += 500;
+        }
+        // Title contains exact search term
+        else if (titleLower.includes(trimmedSearch)) {
+          relevanceScore += 300;
+        }
+
+        // Count matching words in title
+        const searchWords = trimmedSearch.split(/\s+/);
+        searchWords.forEach(word => {
+          if (titleLower.includes(word)) {
+            relevanceScore += 50;
+          }
+          if (overviewLower.includes(word)) {
+            relevanceScore += 10;
+          }
+        });
+
+        return { ...course, relevanceScore };
+      });
+
+      // Sort by relevance score (highest first), then by user's sort preference
+      coursesWithScore.sort((a, b) => {
+        if (b.relevanceScore !== a.relevanceScore) {
+          return b.relevanceScore - a.relevanceScore;
+        }
+        // If same relevance, apply user's sort
+        switch (sortBy) {
+          case 'name-asc':
+            return a.title.localeCompare(b.title);
+          case 'name-desc':
+            return b.title.localeCompare(a.title);
+          case 'oldest':
+            return 0; // Keep order
+          case 'newest':
+          default:
+            return 0; // Keep order
+        }
+      });
+
+      // Remove relevanceScore from final results
+      courses = coursesWithScore.map(({ relevanceScore, ...course }) => course);
+    }
 
     const totalCount = count || 0;
     const hasMore = to < totalCount - 1;

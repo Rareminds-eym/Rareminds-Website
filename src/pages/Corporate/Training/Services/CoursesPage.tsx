@@ -1,6 +1,6 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate, useParams } from 'react-router-dom';
-import { BookOpen, ArrowLeft, GraduationCap, Clock, Monitor, BarChart3, IndianRupee, X, ChevronDown, Check, Search, ArrowUpDown } from 'lucide-react';
+import { BookOpen, ArrowLeft, GraduationCap, Clock, Monitor, BarChart3, X, ChevronDown, Check, Search, ArrowUpDown } from 'lucide-react';
 import { useState, useEffect, useMemo, useRef } from 'react';
 import { getCorporateCoursesByCategory, slugToCategory } from '@/services/sdp/courseService';
 import ErrorComponent from '@/components/ErrorComponent';
@@ -58,6 +58,13 @@ export default function CorporateCoursesPage() {
 
   const serviceName = slugToCategory(serviceSlug);
 
+  // Track filter signature to detect changes
+  const prevFilterSignatureRef = useRef('');
+  const filterSignature = useMemo(() => 
+    `${serviceSlug}|${debouncedSearchTerm}|${selectedDurations.join(',')}|${selectedModes.join(',')}|${selectedLevels.join(',')}|${sortBy}`,
+    [serviceSlug, debouncedSearchTerm, selectedDurations, selectedModes, selectedLevels, sortBy]
+  );
+
   // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -74,6 +81,17 @@ export default function CorporateCoursesPage() {
     let isMounted = true;
 
     const fetchCourses = async () => {
+      // Check if filters changed - if so, reset to page 0
+      const filtersChanged = prevFilterSignatureRef.current !== filterSignature;
+      const pageToFetch = filtersChanged ? 0 : currentPage;
+      
+      if (filtersChanged) {
+        prevFilterSignatureRef.current = filterSignature;
+        if (currentPage !== 0) {
+          setCurrentPage(0);
+        }
+      }
+
       setLoading(true);
       
       try {
@@ -96,7 +114,7 @@ export default function CorporateCoursesPage() {
 
         const { courses: data, totalCount: count } = await getCorporateCoursesByCategory(
           serviceSlug,
-          currentPage,
+          pageToFetch,
           COURSES_PER_PAGE,
           debouncedSearchTerm,
           filters,
@@ -132,7 +150,8 @@ export default function CorporateCoursesPage() {
     selectedDurations.join(','),
     selectedModes.join(','),
     selectedLevels.join(','),
-    sortBy
+    sortBy,
+    filterSignature
   ]);
 
   // Extract unique filter options from courses
