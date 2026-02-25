@@ -128,13 +128,11 @@ const CorporateTraining: React.FC = () => {
                   Professional training solutions designed for corporate workforce development
                 </p>
                 <motion.button
-                  whileHover={{ x: 4 }}
-                  className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-xl font-semibold shadow-md group-hover:bg-blue-700 group-hover:shadow-lg transition-all"
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="corporate-btn-1"
                 >
-                  <span>Explore Programs</span>
-                  <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                  </svg>
+                  Explore Programs
                 </motion.button>
               </div>
               <div className="h-2 bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" />
