@@ -30,10 +30,9 @@ export default function InstitutionTypeSelector() {
         </motion.div>
 
         {/* Institution Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+        <div className="flex justify-center max-w-5xl mx-auto">
           {institutionTypes.map((institution, index) => {
             const Icon = institution.icon;
-            const isSchool = institution.id === 'school';
 
             return (
               <motion.div
@@ -43,7 +42,7 @@ export default function InstitutionTypeSelector() {
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
                 onClick={() => navigate(institution.path)}
-                className="group cursor-pointer"
+                className="group cursor-pointer w-full max-w-md"
               >
                 <div className="bg-white rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden border border-slate-200 hover:border-blue-300 h-full flex flex-col">
 
@@ -52,9 +51,7 @@ export default function InstitutionTypeSelector() {
                     <motion.div
                       whileHover={{ scale: 1.05 }}
                       transition={{ duration: 0.3 }}
-                      className={`w-16 h-16 mx-auto ${
-                        isSchool ? 'bg-blue-600' : 'bg-indigo-600'
-                      } rounded-xl flex items-center justify-center shadow-sm`}
+                      className="w-16 h-16 mx-auto bg-indigo-600 rounded-xl flex items-center justify-center shadow-sm"
                     >
                       <Icon className="w-8 h-8 text-white" strokeWidth={2} />
                     </motion.div>

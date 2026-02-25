@@ -1,5 +1,5 @@
 // Institution-related services
-import { School, Building2, LucideIcon } from 'lucide-react';
+import { Building2, LucideIcon } from 'lucide-react';
 
 export interface InstitutionType {
   id: string;
@@ -15,16 +15,7 @@ export interface InstitutionType {
 // Get available institution types
 export const getInstitutionTypes = (): InstitutionType[] => {
   return [
-    {
-      id: 'school',
-      title: 'SCHOOL',
-      icon: School,
-      description: 'Comprehensive programs designed for school-level education',
-      path: '/universities/sdp/school/categories',
-      color: 'from-blue-600 to-indigo-600',
-      bgGradient: 'from-blue-50 to-indigo-50',
-      iconBg: 'from-blue-100 to-indigo-200'
-    },
+    
     {
       id: 'college',
       title: 'COLLEGE',
