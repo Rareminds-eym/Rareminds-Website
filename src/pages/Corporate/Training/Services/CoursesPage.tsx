@@ -27,7 +27,7 @@ function useDebounce<T>(value: T, delay: number): T {
 // Utility function to calculate and format duration
 function calculateDuration(modules: any[]): string {
   if (!modules || modules.length === 0) return '0 hours';
-  
+
   // Sum up all module hours
   const totalHours = modules.reduce((sum, module) => {
     if (module.hours) {
@@ -71,7 +71,7 @@ interface CourseProgram {
 export default function CorporateCoursesPage() {
   const navigate = useNavigate();
   const { serviceSlug } = useParams<{ serviceSlug: string }>();
-  
+
   const service = services.find((s) => s.id === serviceSlug);
 
   if (!service) {
@@ -83,7 +83,7 @@ export default function CorporateCoursesPage() {
     );
   }
 
- 
+
   const allCourses: CourseProgram[] = service.programs.map(program => ({
     id: program.id,
     title: program.title,
@@ -105,7 +105,7 @@ export default function CorporateCoursesPage() {
   const [selectedModes, setSelectedModes] = useState<string[]>([]);
   const [selectedLevels, setSelectedLevels] = useState<string[]>([]);
   const [sortBy, setSortBy] = useState<string>('newest');
-  
+
   // UI states
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -182,7 +182,7 @@ export default function CorporateCoursesPage() {
     const durations = new Set<string>();
     const modes = new Set<string>();
     const levels = new Set<string>();
-    
+
     allCourses.forEach(course => {
       if (course.duration) durations.add(course.duration);
       if (course.mode) modes.add(course.mode);
@@ -249,7 +249,7 @@ export default function CorporateCoursesPage() {
           <motion.button
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
-           onClick={() => navigate('/corporate/training/services', { replace: true })}
+            onClick={() => navigate('/corporate/training/services', { replace: true })}
 
             className="group flex items-center gap-2 text-slate-600 hover:text-blue-700 mb-8 transition-all font-medium"
           >
@@ -309,11 +309,10 @@ export default function CorporateCoursesPage() {
                 <div className="relative">
                   <button
                     onClick={() => setOpenDropdown(openDropdown === 'duration' ? null : 'duration')}
-                    className={`inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-all border ${
-                      selectedDurations.length > 0
+                    className={`inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-all border ${selectedDurations.length > 0
                         ? 'bg-blue-50 text-blue-700 border-blue-200'
                         : 'bg-white text-slate-600 border-slate-200 hover:border-slate-300'
-                    }`}
+                      }`}
                   >
                     <Clock className="w-3.5 h-3.5" />
                     <span className="flex items-center gap-1.5">
@@ -355,11 +354,10 @@ export default function CorporateCoursesPage() {
                 <div className="relative">
                   <button
                     onClick={() => setOpenDropdown(openDropdown === 'mode' ? null : 'mode')}
-                    className={`inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-all border ${
-                      selectedModes.length > 0
+                    className={`inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-all border ${selectedModes.length > 0
                         ? 'bg-blue-50 text-blue-700 border-blue-200'
                         : 'bg-white text-slate-600 border-slate-200 hover:border-slate-300'
-                    }`}
+                      }`}
                   >
                     <Monitor className="w-3.5 h-3.5" />
                     <span className="flex items-center gap-1.5">
@@ -401,11 +399,10 @@ export default function CorporateCoursesPage() {
                 <div className="relative">
                   <button
                     onClick={() => setOpenDropdown(openDropdown === 'level' ? null : 'level')}
-                    className={`inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-all border ${
-                      selectedLevels.length > 0
+                    className={`inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-all border ${selectedLevels.length > 0
                         ? 'bg-blue-50 text-blue-700 border-blue-200'
                         : 'bg-white text-slate-600 border-slate-200 hover:border-slate-300'
-                    }`}
+                      }`}
                   >
                     <BarChart3 className="w-3.5 h-3.5" />
                     <span className="flex items-center gap-1.5">
@@ -447,11 +444,10 @@ export default function CorporateCoursesPage() {
                 <div className="relative">
                   <button
                     onClick={() => setOpenDropdown(openDropdown === 'sort' ? null : 'sort')}
-                    className={`inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-all border ${
-                      sortBy !== 'newest'
+                    className={`inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-all border ${sortBy !== 'newest'
                         ? 'bg-blue-50 text-blue-700 border-blue-200'
                         : 'bg-white text-slate-600 border-slate-200 hover:border-slate-300'
-                    }`}
+                      }`}
                   >
                     <ArrowUpDown className="w-3.5 h-3.5" />
                     <span className="flex items-center gap-1.5">
