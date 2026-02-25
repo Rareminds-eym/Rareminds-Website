@@ -579,10 +579,11 @@ export default function CorporateCoursesPage() {
                     {/* Card Footer - Always visible with consistent border */}
                     <div className="flex items-center justify-between px-6 py-4 border-t border-slate-200 bg-white">
                       <div className="flex items-baseline gap-1">
-                        <IndianRupee className="w-5 h-5 text-slate-900 font-bold" />
+                        {/* Price Display - Commented out for now */}
+                        {/* <IndianRupee className="w-5 h-5 text-slate-900 font-bold" />
                         <span className="text-2xl font-bold text-slate-900">
                           {course.price.toLocaleString('en-IN')}
-                        </span>
+                        </span> */}
                       </div>
                       <motion.div
                         whileHover={{ x: 4 }}

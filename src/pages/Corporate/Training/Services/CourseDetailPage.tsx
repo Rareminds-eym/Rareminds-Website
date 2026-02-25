@@ -125,9 +125,10 @@ export default function CourseDetailPage() {
               <div className="flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-lg border border-white/20">
                 <span className="text-sm font-medium">Professional</span>
               </div>
-              <div className="flex items-center gap-2 px-4 py-2 bg-blue-600/90 backdrop-blur-sm rounded-lg border border-blue-500/50">
+              {/* Price Display - Commented out for now */}
+              {/* <div className="flex items-center gap-2 px-4 py-2 bg-blue-600/90 backdrop-blur-sm rounded-lg border border-blue-500/50">
                 <span className="text-sm font-bold">₹0</span>
-              </div>
+              </div> */}
             </motion.div>
           </div>
 

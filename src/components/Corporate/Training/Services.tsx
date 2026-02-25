@@ -9,6 +9,8 @@ import {
   ArrowRight,
   Sparkles,
   BookOpen,
+  Download,
+  FileSpreadsheet,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
@@ -220,26 +222,34 @@ export default function Services() {
           transition={{ duration: 0.8, delay: 0.5 }}
           className="flex justify-center items-center mt-8 sm:mt-12 relative"
         >
-          <motion.button
-            className="relative bg-[#222B33] text-white px-8 py-4 rounded-full min-w-[240px] sm:min-w-[300px]
-              font-semibold text-sm sm:text-base shadow-xl hover:shadow-2xl transition-all duration-300 
-              flex items-center justify-center gap-3"
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            onClick={() => {
-              const contactSection = document.getElementById("contact");
-              if (contactSection) {
-                contactSection.scrollIntoView({
-                  behavior: "smooth",
-                  block: "start",
-                });
-              }
-            }}
-            type="button"
-          >
-            <span>Make Your Career Recession-Proof</span>
-            <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 animate-pulse" />
-          </motion.button>
+          <div className="flex flex-wrap gap-4 justify-center">
+            <motion.button
+              type="button"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="button-primary py-3 px-6 flex items-center gap-2 rounded-full font-semibold text-sm sm:text-base shadow-xl hover:shadow-2xl transition-all duration-300"
+              onClick={() => {
+                // Add download course list functionality
+                console.log('Download Course List clicked');
+              }}
+            >
+              <Download className="w-4 h-4 sm:w-5 sm:h-5" />
+              <span>Download Course List</span>
+            </motion.button>
+            <motion.button
+              type="button"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="button-secondary py-3 px-6 flex items-center gap-2 rounded-full font-semibold text-sm sm:text-base shadow-xl hover:shadow-2xl transition-all duration-300"
+              onClick={() => {
+                // Add request blueprint functionality
+                console.log('Request Blueprint clicked');
+              }}
+            >
+              <FileSpreadsheet className="w-4 h-4 sm:w-5 sm:h-5" />
+              <span>Request Blueprint</span>
+            </motion.button>
+          </div>
         </motion.div>
       </div>
     </section>
