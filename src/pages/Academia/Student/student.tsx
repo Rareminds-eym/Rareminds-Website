@@ -46,6 +46,7 @@ import TestimonialVideoCarousel from "../../../components/Academy/Students/Stude
 import Hero from "../../../components/Academy/Students/Herobanner/Hero"
 import YouTubeFeed from '../../../components/Academy/Students/youtubelive'
 import CurrentBlogs from '../../../components/Academy/Students/Current_blogs'
+import ServicesSection from '../../../components/Academy/Students/ServicesSection'
 
 const Academy = ({ userType = "teacher" }: { userType?: "teacher" | "student" }) => {
   const [activeTab, setActiveTab] = useState<"teacher" | "student">("teacher");
@@ -195,6 +196,11 @@ const Academy = ({ userType = "teacher" }: { userType?: "teacher" | "student" })
 
       
      <Problem />   
+
+     {/* Services Section */}
+     <div className="min-h-auto relative z-10">
+       <ServicesSection />
+     </div>   
       
      
 
