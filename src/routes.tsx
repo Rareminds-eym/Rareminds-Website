@@ -78,6 +78,12 @@ const CaseStudy = lazy(() => import("./pages/Academia/Teacher/CaseStudy.tsx"));
 const Academy_Course = lazy(
   () => import("./pages/Academia/Teacher/CourseDetailed.tsx")
 );
+const StudentCoursesListingPage = lazy(
+  () => import("./pages/Academia/Student/StudentCoursesListingPage")
+);
+const StudentCourseDetailPage = lazy(
+  () => import("./pages/Academia/Student/StudentCourseDetailPage")
+);
 
 const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
 const Terms = lazy(() => import("./pages/Terms"));
@@ -326,6 +332,14 @@ const router = createBrowserRouter([
       {
         path: "/school/student",
         element: withSuspense(Student),
+      },
+      {
+        path: "/school/student/services/:serviceSlug/courses",
+        element: withSuspense(StudentCoursesListingPage),
+      },
+      {
+        path: "/school/student/course/:courseSlug",
+        element: withSuspense(StudentCourseDetailPage),
       },
       {
         path: "/school/teacher",
