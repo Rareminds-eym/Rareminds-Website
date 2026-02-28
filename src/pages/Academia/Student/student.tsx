@@ -121,6 +121,19 @@ const Academy = ({ userType = "teacher" }: { userType?: "teacher" | "student" })
        }
      }
    }, [location]);
+
+   // Scroll to services section if hash is present
+   useEffect(() => {
+     const hash = window.location.hash;
+     if (hash === '#services') {
+       const section = document.getElementById('services');
+       if (section) {
+         setTimeout(() => {
+           section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+         }, 500); // Increased timeout to ensure component is mounted
+       }
+     }
+   }, []);
    
    useEffect(() => {
      const hash = location.hash;

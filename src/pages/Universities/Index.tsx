@@ -22,10 +22,13 @@ const Universities: React.FC = () => {
    const location = useLocation();
 
   useEffect(() => {
-    if (location.hash === '#services') {
-      const target = document.getElementById('services-section');
+    const hash = location.hash;
+    if (hash === '#services' || hash === '#institution-selector') {
+      const target = document.getElementById('institution-selector');
       if (target) {
-        target.scrollIntoView({ behavior: 'smooth' });
+        setTimeout(() => {
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 500);
       }
     }
   }, [location]);
