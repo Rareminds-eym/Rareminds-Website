@@ -86,7 +86,7 @@ export default function ServicesSection() {
   };
   
   return (
-    <section className="py-16 relative overflow-hidden">
+    <section id="services" className="py-16 relative overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50" />
       <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50" />
 
