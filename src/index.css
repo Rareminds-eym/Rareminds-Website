@@ -18,6 +18,15 @@
   body {
     @apply overflow-x-hidden;
   }
+
+  /* Scroll offset for anchor links to account for fixed header */
+  #services {
+    scroll-margin-top: 100px;
+  }
+
+  #institution-selector {
+    scroll-margin-top: 100px;
+  }
 }
 
 /* Design tokens for consistent UI */

@@ -8,7 +8,7 @@ export default function InstitutionTypeSelector() {
   const institutionTypes = getInstitutionTypes();
 
   return (
-    <section className="py-16 bg-gradient-to-br from-blue-50/30 via-slate-50 to-indigo-50/20 relative overflow-hidden">
+    <section id="institution-selector" className="py-16 bg-gradient-to-br from-blue-50/30 via-slate-50 to-indigo-50/20 relative overflow-hidden">
       <div className="container mx-auto px-6 relative z-10">
 
         {/* Header */}
