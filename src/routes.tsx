@@ -85,6 +85,10 @@ const StudentCourseDetailPage = lazy(
   () => import("./pages/Academia/Student/StudentCourseDetailPage")
 );
 
+const SuccessStoriesDisplay = lazy(
+  () => import("./pages/Academia/SuccessStories/successstoriesdisplay")
+);
+
 const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
 const Terms = lazy(() => import("./pages/Terms"));
 const TDPPage = lazy(() => import("./pages/Academia/Teacher/TDPPage.tsx"));
@@ -412,6 +416,10 @@ const router = createBrowserRouter([
       {
         path: "/school/new-projects/:projectId",
         element: withSuspense(NewProjectDetail),
+      },
+      {
+        path: "/SuccessStories",
+        element: withSuspense(SuccessStoriesDisplay),
       },
     ],
   },
