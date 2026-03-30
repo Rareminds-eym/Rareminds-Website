@@ -1,27 +1,24 @@
 /// <reference types="vite/client" />
-import { createClient } from '@supabase/supabase-js';
-import { safeGetItem, safeSetItem, safeRemoveItem } from './localStorage';
+import { createClient } from '@supabase/supabase-js'
+import { safeGetItem, safeSetItem, safeRemoveItem } from './localStorage'
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'https://itvhjkgfafikpqmuunlh.supabase.co';
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV4YW1wbGUiLCJyb2xlIjoiYW5vbiIsImlhdCI6MTY0MTc2OTIwMCwiZXhwIjoxOTU3MzQ1MjAwfQ.placeholder';
+// ✅ Use ONLY env (no fallback)
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
 
-if (!import.meta.env.VITE_SUPABASE_URL || !import.meta.env.VITE_SUPABASE_ANON_KEY) {
-  console.warn('⚠️ Supabase configuration missing - using placeholder values. Some features may not work.');
+// ✅ Optional but better than console.warn
+if (!supabaseUrl || !supabaseAnonKey) {
+  throw new Error('Supabase environment variables are missing')
 }
 
-// Custom storage that handles localStorage errors gracefully
+// ✅ Keep safeStorage (no harm)
 const safeStorage = {
-  getItem: (key: string) => {
-    return safeGetItem(key);
-  },
-  setItem: (key: string, value: string) => {
-    safeSetItem(key, value);
-  },
-  removeItem: (key: string) => {
-    safeRemoveItem(key);
-  },
-};
+  getItem: (key: string) => safeGetItem(key),
+  setItem: (key: string, value: string) => safeSetItem(key, value),
+  removeItem: (key: string) => safeRemoveItem(key),
+}
 
+// ✅ Create client with auth config
 export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   auth: {
     storage: safeStorage,
@@ -29,4 +26,4 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
     persistSession: true,
     detectSessionInUrl: true,
   },
-});
+})

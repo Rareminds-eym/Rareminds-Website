@@ -1,4 +1,14 @@
 
+# Database configuration
+[db]
+port = 55432
+
+[api]
+port = 55001
+
+[studio]
+port = 55000
+
 [functions.send-recruitment-email]
 enabled = true
 verify_jwt = true
@@ -46,7 +56,7 @@ import_map = "./functions/verify-otp/deno.json"
 entrypoint = "./functions/verify-otp/index.ts"
 
 [functions.send-training-email]
-enabled = true
+enabled = false
 verify_jwt = true
 import_map = "./functions/send-training-email/deno.json"
 entrypoint = "./functions/send-training-email/index.ts"

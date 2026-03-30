@@ -30,6 +30,7 @@ CREATE TABLE programs (
     program_type TEXT,
     location TEXT,
     date DATE,
+    status TEXT, 
     image_url TEXT,
     banner_url TEXT,
     short_description TEXT,

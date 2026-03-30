@@ -217,7 +217,6 @@
 // };
 
 import React from 'react';
-import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/outline';
 
 interface PaginationProps {
   currentPage: number;
@@ -277,7 +276,9 @@ export const Pagination = ({ currentPage, totalPages, onPageChange }: Pagination
             : 'border-blue-400 text-blue-500 hover:bg-blue-50'
         }`}
       >
-        <ChevronLeftIcon className="w-4 h-4" />
+        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+        </svg>
         {/* Hide text on mobile, show on desktop */}
         <span className="hidden lg:inline">Previous</span>
       </button>
@@ -316,7 +317,9 @@ export const Pagination = ({ currentPage, totalPages, onPageChange }: Pagination
       >
         {/* Hide text on mobile, show on desktop */}
         <span className="hidden lg:inline">Next</span>
-        <ChevronRightIcon className="w-4 h-4" />
+        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+        </svg>
       </button>
 
     </div>
