@@ -1,5 +1,4 @@
 import { Workflow } from "lucide-react";
-import { StepNumberSvg, ConnectingSvg1, ConnectingSvg2, ConnectingSvg3 } from "../../../../components/svgs/passport";
 
 
 const step1 = "/passport/StepProcess/Step1.webp";
@@ -78,7 +77,11 @@ export default function WorkSection() {
         {/* SVG above Step 1 (only visible on md+) */}
         <div className="hidden md:grid grid-cols-2 items-start md:-ml-8 lg:mr-[20px] lg:-mb-20 xl:-mb-28 md:pt-8 lg:pt-16">
           <div className="flex justify-center">
-            <StepNumberSvg />
+            <img
+              src="/svgs/passport/step-number.svg"
+              alt="Step Number"
+              className="w-10 h-10 lg:w-12 lg:h-12"
+            />
           </div>
           <div />
         </div>
@@ -96,7 +99,11 @@ export default function WorkSection() {
           <div className="relative mx-auto md:w-[450px] lg:w-[550px] xl:w-[650px]">
             {/* Aspect ratio box */}
             <div style={{ paddingTop: `71%` }} />
-            <ConnectingSvg1 />
+            <img
+              src="/svgs/passport/connecting-1.svg"
+              alt="Connecting SVG 1"
+              className="absolute top-0 left-0 w-full h-full"
+            />
           </div>
         </div>
 
@@ -116,7 +123,11 @@ export default function WorkSection() {
           <div className="relative mx-auto md:w-[450px] lg:w-[550px] xl:w-[650px]">
             {/* Aspect ratio box */}
             <div style={{ paddingTop: `71%` }} />
-            <ConnectingSvg2 />
+            <img
+              src="/svgs/passport/connecting-2.svg"
+              alt="Connecting SVG 2"
+              className="absolute top-0 left-0 w-full h-full"
+            />
           </div>
         </div>
 
@@ -134,7 +145,11 @@ export default function WorkSection() {
           <div className="relative mx-auto md:w-[450px] lg:w-[550px] xl:w-[650px]">
             {/* Aspect ratio box */}
             <div style={{ paddingTop: `70%` }} />
-            <ConnectingSvg3 />
+            <img
+              src="/svgs/passport/connecting-3.svg"
+              alt="Connecting SVG 3"
+              className="absolute top-0 left-0 w-full h-full"
+            />
           </div>
         </div>
 
