@@ -100,6 +100,7 @@
 
 
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Pagination } from './Pagination';
 import { BuildingLibraryIcon, MapPinIcon, ClockIcon } from '@heroicons/react/24/outline';
 
@@ -245,16 +246,21 @@ export const ProjectsGrid = ({ projects, searchQuery, onClearSearch }: ProjectsG
                 </button>
               </div> */}
               <div className="mt-auto flex justify-center">
-  <button 
-    className={
-      project.id % 3 === 2 
-        ? "w-[139px] h-[27px] flex items-center justify-center border-2 border-blue-500 hover:bg-blue-50 text-blue-500 text-xs sm:text-sm font-semibold rounded-full transition-colors duration-200"
-        : "w-[139px] h-[27px] flex items-center justify-center bg-blue-500 hover:bg-blue-600 text-white text-xs sm:text-sm font-semibold rounded-full transition-colors duration-200"
-    }
-  >
-    View Details
-  </button>
-</div>
+                <Link 
+                  to={
+                    project.category === 'Naan Mudhalvan' 
+                      ? `/SuccessStories/naan-mudhalvan/${project.name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')}`
+                      : `/SuccessStories/${project.name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')}`
+                  }
+                  className={
+                    project.id % 3 === 2 
+                      ? "w-[139px] h-[27px] flex items-center justify-center border-2 border-blue-500 hover:bg-blue-50 text-blue-500 text-xs sm:text-sm font-semibold rounded-full transition-colors duration-200"
+                      : "w-[139px] h-[27px] flex items-center justify-center bg-blue-500 hover:bg-blue-600 text-white text-xs sm:text-sm font-semibold rounded-full transition-colors duration-200"
+                  }
+                >
+                  View Details
+                </Link>
+              </div>
 
             </div>
           </div>
