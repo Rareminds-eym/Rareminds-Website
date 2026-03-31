@@ -16,9 +16,15 @@ CREATE TYPE section_key_type AS ENUM (
     'approaches',
     'impact',
     'strategic_alignment',
-    'conclusion'
+    'conclusion',
+    'header',
+    'course_enrollment',
+    'programs',
+    'why',
+    'cloud_kitchen',
+    'agri_food',
+    'inventions'
 );
-
 -- =====================================================
 -- PROGRAMS TABLE (Main Metadata)
 -- =====================================================

@@ -11,7 +11,6 @@ if (!supabaseUrl || !supabaseAnonKey) {
   throw new Error('Supabase environment variables are missing')
 }
 
-// ✅ Keep safeStorage (no harm)
 const safeStorage = {
   getItem: (key: string) => safeGetItem(key),
   setItem: (key: string, value: string) => safeSetItem(key, value),

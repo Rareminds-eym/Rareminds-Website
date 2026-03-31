@@ -1,71 +1,7 @@
-// import React from 'react';
 
-// const categories = ['All', 'College', 'Government Body', 'Naan Mudhalvan', 'Organization', 'School'];
-// const names = ['All', 'Acharya', 'PES', 'VELS', 'Visvesvaraya Technological University', 'TNSDC', 'KSDC', 'Tripura', 'AICTE', 'BLDEA', 'Global International School', 'DSATM'];
-// const years = ['All', '2019', '2022', '2023', '2024', '2025'];
-// const locations = ['All', 'TamilNadu', 'Karnataka', 'Tripura', 'Pan India'];
-
-// interface FiltersProps {
-//   onFilterChange: (type: string, value: string) => void;
-// }
-
-// export const Filters = ({ onFilterChange }: FiltersProps) => {
-//   return (
-//     <div className="bg-white shadow-lg rounded-2xl p-8 mb-10 border border-gray-100">
-//       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-//         <div className="space-y-3">
-//           <label className="text-sm font-semibold text-gray-800 uppercase tracking-wide">Categories</label>
-//           <select
-//             onChange={(e) => onFilterChange('category', e.target.value)}
-//             className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 bg-white-50 text-gray-700 font-medium focus:border-blue-500 focus:ring-4 focus:ring-blue-100 focus:bg-white transition-all duration-200 appearance-none cursor-pointer hover:border-gray-300"
-//           >
-//             {categories.map((category) => (
-//               <option key={category} value={category}>{category}</option>
-//             ))}
-//           </select>
-//         </div>
-
-//         <div className="space-y-3">
-//           <label className="text-sm font-semibold text-gray-800 uppercase tracking-wide">Names</label>
-//           <select
-//             onChange={(e) => onFilterChange('name', e.target.value)}
-//             className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 bg-white-50 text-gray-700 font-medium focus:border-blue-500 focus:ring-4 focus:ring-blue-100 focus:bg-white transition-all duration-200 appearance-none cursor-pointer hover:border-gray-300"
-//           >
-//             {names.map((name) => (
-//               <option key={name} value={name}>{name}</option>
-//             ))}
-//           </select>
-//         </div>
-
-//         <div className="space-y-3">
-//           <label className="text-sm font-semibold text-gray-800 uppercase tracking-wide">Years</label>
-//           <select
-//             onChange={(e) => onFilterChange('year', e.target.value)}
-//             className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 bg-white-50 text-gray-700 font-medium focus:border-blue-500 focus:ring-4 focus:ring-blue-100 focus:bg-white transition-all duration-200 appearance-none cursor-pointer hover:border-gray-300"
-//           >
-//             {years.map((year) => (
-//               <option key={year} value={year}>{year}</option>
-//             ))}
-//           </select>
-//         </div>
-
-//         <div className="space-y-3">
-//           <label className="text-sm font-semibold text-gray-800 uppercase tracking-wide">Locations</label>
-//           <select
-//             onChange={(e) => onFilterChange('location', e.target.value)}
-//             className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 bg-white-50 text-gray-700 font-medium focus:border-blue-500 focus:ring-4 focus:ring-blue-100 focus:bg-white transition-all duration-200 appearance-none cursor-pointer hover:border-gray-300"
-//           >
-//             {locations.map((location) => (
-//               <option key={location} value={location}>{location}</option>
-//             ))}
-//           </select>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
 import { useState, useEffect } from 'react';
 import type { FilterState } from '../../../types/program';
+
 
 interface FilterOptions {
   categories: string[];

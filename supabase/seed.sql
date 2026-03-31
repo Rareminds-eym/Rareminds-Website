@@ -17,6 +17,7 @@ INSERT INTO programs (id, title, slug, program_type, location, date, status, ima
 (uuid_generate_v4(), 'Global International School', 'global-international-school', 'School', 'Karnataka', '2023-11-01', '', '/academy/Projects/school.png', 'Rareminds bridged gaps in traditional teacher training by delivering hands-on, NEP-aligned programs that equipped educators with practical skills, modern tools, and learner-centric strategies.', 16, true),
 (uuid_generate_v4(), 'DSATM', 'dsatm', 'College', 'Karnataka', '2019-10-01', '', '/academy/Projects/dsatm.png', 'Rareminds partnered with DSATM to deliver career-focused training that equipped students with technical and soft skills for professional success.', 17, true);
 
+<<<<<<< Updated upstream
 INSERT INTO program_sections (id, program_id, section_key, title, content, display_order)
 SELECT 
     uuid_generate_v4(),
@@ -27,3 +28,5 @@ SELECT
     1
 FROM programs p
 WHERE p.slug IN ('acharya', 'pes', 'bldea', 'naan-mudhalvan-2024', 'tripura', 'tnsdc-iti-spoken-english', 'tnsdc-schools', 'naan-mudhalvan-2023', 'naan-mudhalvan-4th-sem-2025', 'naan-mudhalvan-6th-sem-2025', 'vels', 'naan-mudhalvan-2025', 'aicte', 'ksdc', 'visvesvaraya-technological-university', 'global-international-school', 'dsatm');
+=======
+>>>>>>> Stashed changes

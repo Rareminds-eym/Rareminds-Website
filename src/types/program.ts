@@ -15,7 +15,7 @@ export interface Program {
   updated_at: string;
 }
 
-// Transformed Program type for UI components
+// Transformed Program type for UI components save
 export interface TransformedProgram {
   id: string;
   name: string;
@@ -52,7 +52,7 @@ export interface PaginationParams {
 // Paginated API response
 export interface PaginatedResponse {
   data: Program[] | null;
-  error: any;
+  error: string | Error | null; 
   totalCount: number;
   totalPages: number;
   currentPage: number;
