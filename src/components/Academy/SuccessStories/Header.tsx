@@ -14,10 +14,17 @@ export const Header = ({ searchQuery, onSearchChange }: HeaderProps) => {
 
   return (
     <div className="relative h-[690px] w-full overflow-hidden">
+      {/* Mobile Image */}
+      <img
+        src="/success_banner_mobile_390x844.png"
+        alt="Success Stories Banner"
+        className="lg:hidden w-full h-full object-cover object-center"
+      />
+      {/* Desktop Image */}
       <img
         src="/success_banner_rich_580.png"
         alt="Success Stories Banner"
-        className="w-full h-full object-cover object-center"
+        className="hidden lg:block w-full h-full object-cover object-center"
       />
       <div className="absolute inset-0">
         <div className="container mx-auto px-4 h-full flex flex-col justify-center items-center max-w-6xl">

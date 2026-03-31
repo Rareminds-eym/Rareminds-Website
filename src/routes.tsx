@@ -89,6 +89,14 @@ const SuccessStoriesDisplay = lazy(
   () => import("./pages/Academia/SuccessStories/successstoriesdisplay")
 );
 
+const SuccessStoryDetail = lazy(
+  () => import("./pages/Academia/SuccessStories/SuccessStoriesDetailedPage")
+);
+
+const NaanMudhalvanDetail = lazy(
+  () => import("./pages/Academia/SuccessStories/NaanMudhalvanDetailsPage")
+);
+
 const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
 const Terms = lazy(() => import("./pages/Terms"));
 const TDPPage = lazy(() => import("./pages/Academia/Teacher/TDPPage.tsx"));
@@ -420,6 +428,14 @@ const router = createBrowserRouter([
       {
         path: "/SuccessStories",
         element: withSuspense(SuccessStoriesDisplay),
+      },
+      {
+        path: "/SuccessStories/naan-mudhalvan/:name",
+        element: withSuspense(NaanMudhalvanDetail),
+      },
+      {
+        path: "/SuccessStories/:name",
+        element: withSuspense(SuccessStoryDetail),
       },
     ],
   },
