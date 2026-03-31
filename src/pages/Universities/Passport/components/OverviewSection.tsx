@@ -72,9 +72,9 @@ const OverviewSection = () => {
               <div className="flex-shrink-0 mt-1">
                 <item.Icon className="w-8 h-8 text-[#000000]" aria-hidden />
               </div>
-              <p className="text-base md:text-lg leading-relaxed text-gray-700">
+              <div className="text-base md:text-lg leading-relaxed text-gray-700">
                 {item.text}
-              </p>
+              </div>
             </div>
           ))}
         </div>
