@@ -8,7 +8,7 @@ const OverviewSection = () => {
         <>
           <strong>The Rareminds Skill Passport</strong> is a{" "}
           <strong>digital skill transcript</strong> that tracks, verifies, and
-          showcases every student’s academic, technical, and behavioral
+          showcases every student's academic, technical, and behavioral
           learning milestones. It provides institutions with a comprehensive,
           real-time view of how students evolve from learning to employability.
           Think of it as a <strong>digital passport of verified skills</strong>{" "}
@@ -23,8 +23,16 @@ const OverviewSection = () => {
         <>
           Universities face the challenge of bridging the gap between curriculum
           outcomes and industry expectations. While grades reflect knowledge,
-          they don’t always reveal real-world competency. The Rareminds Skill
-          Passport helps institutions measure what truly matters:
+          they don't always reveal real-world competency. The Rareminds Skill
+          Passport helps institutions measure what truly matters.
+        </>
+      ),
+    },
+    {
+      Icon: Award,
+      text: (
+        <>
+          <strong>Key Benefits:</strong>
           <ul className="list-disc ml-5 mt-2">
             <li>Skill Mastery Beyond Marks</li>
             <li>Competency Alignment to Industry Standards</li>
@@ -35,22 +43,15 @@ const OverviewSection = () => {
       ),
     },
     {
-      Icon: Award,
+      Icon: Briefcase,
       text: (
         <>
           With <strong>data-backed insights</strong>, academic leaders can make
           informed decisions, enhance accreditation outcomes, and strengthen
-          their institution’s placement success.
-        </>
-      ),
-    },
-    {
-      Icon: Briefcase,
-      text: (
-        <>
-          The Skill Passport empowers institutions to bridge the gap between
-          learning and employability, providing students and faculty a clear
-          roadmap of skills, milestones, and career readiness opportunities.
+          their institution's placement success. The Skill Passport empowers
+          institutions to bridge the gap between learning and employability,
+          providing students and faculty a clear roadmap of skills, milestones,
+          and career readiness opportunities.
         </>
       ),
     },

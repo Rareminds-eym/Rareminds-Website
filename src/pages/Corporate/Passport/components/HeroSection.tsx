@@ -4,27 +4,15 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
 import banner1 from "../../../../../public/passport/Home-page-banner_1.png";
 import banner2 from "../../../../../public/passport/Home-page-banner_2.png";
-import Banner3 from "../../../../../public/passport/Home-page-banner_3.png";
-import Banner4 from "../../../../../public/passport/Home-page-banner_4.png";
-import Banner5 from "../../../../../public/passport/Home-page-banner_5.png";
+import banner3 from "../../../../../public/passport/Home-page-banner_3.png";
+import banner4 from "../../../../../public/passport/Home-page-banner_4.png";
+import banner5 from "../../../../../public/passport/Home-page-banner_5.png";
 
 import mobileBanner1 from "../../../../../public/passport/Home-page-banner_mobile_1.png";
 import mobileBanner2 from "../../../../../public/passport/Home-page-banner_mobile_2.png";
 import mobileBanner3 from "../../../../../public/passport/Home-page-banner_mobile_3.png";
 import mobileBanner4 from "../../../../../public/passport/Home-page-banner_mobile_4.png";
 import mobileBanner5 from "../../../../../public/passport/Home-page-banner_mobile_5.png";
-
-// const banner1 = "/passport/Home-page-banner_1.png";
-// const banner2 = "/passport/Home-page-banner_2.png";
-// const Banner3 = "/passport/Home-page-banner_3.png";
-// const Banner4 = "/passport/Home-page-banner_4.png";
-// const Banner5 = "/passport/Home-page-banner_5.png";
-
-// const mobileBanner1 = "/passport/Home-page-banner_mobile_1.png";
-// const mobileBanner2 = "/passport/Home-page-banner_mobile_2.png";
-// const mobileBanner3 = "/passport/Home-page-banner_mobile_3.png";
-// const mobileBanner4 = "/passport/Home-page-banner_mobile_4.png";
-// const mobileBanner5 = "/passport/Home-page-banner_mobile_5.png";
 
 
 const desktopSlides = [
@@ -37,15 +25,15 @@ const desktopSlides = [
     heading: "Stop Guessing. Start Hiring Verified.",
   },
   {
-    image: Banner3,
+    image: banner3,
     heading: "AI Verifies. Not Guesses. Your Hiring Should Too.",
   },
   {
-    image: Banner4,
+    image: banner4,
     heading: "Smart Companies Don’t Hunt Talent — They Scan SkillPassports.",
   },
   {
-    image: Banner5,
+    image: banner5,
     heading: "Cut Hiring Time by 70%. Keep Every Bit of Quality.",
   }
 ];
@@ -134,34 +122,7 @@ const HeroSection = ({ onDemoClick }: { onDemoClick: () => void }) => {
     };
   }, [showForm, form]);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    setError(null);
-    try {
-      const { error } = await supabase.from('pdf_downloads').insert([{
-        ...form,
-        download_type: 'Resume Checklist'
-      }]);
-      if (error) {
-        setError('Failed to submit. Please try again.');
-        setSubmitted(false);
-      } else {
-        setSubmitted(true);
-        // Start download after successful submit
-        const link = document.createElement('a');
-        link.href = '/passport/pdf/Resume checklist.pdf';
-        link.download = 'Resume-Checklist.pdf';
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-      }
-    } catch (err) {
-      setError('Unexpected error. Please try again.');
-      setSubmitted(false);
-    }
-    setLoading(false);
-  };
+
 
   return (
   <section id="resume-checklist-download" className="relative w-auto min-h-[640px] md:min-h-[640px] overflow-hidden m-4 md:m-6 rounded-2xl shadow-sm bg-[#EDF2F9]">
