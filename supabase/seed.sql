@@ -1,0 +1,32 @@
+INSERT INTO programs (id, title, slug, program_type, location, date, status, image_url, short_description, display_order, is_active) VALUES
+(uuid_generate_v4(), 'Acharya', 'acharya', 'College', 'Karnataka', '2023-05-01', 'Completed', 'https://www.campusoption.com/images/articles/06_06_19_073632_acharya-institute-of-technology.jpg', 'Rareminds trained 700+ MBA, MCA, and Physiotherapy students in communication and placement skills, boosting interview confidence and job readiness.', 1, true),
+(uuid_generate_v4(), 'PES', 'pes', 'College', 'Karnataka', '2023-07-01', 'Active', '/academy/Projects/pes.png', 'The Rareminds Bootcamp at PES Engineering College, Mandya delivered a 45-hour hands-on web development program, transforming students into confident, industry-ready developers', 2, true),
+(uuid_generate_v4(), 'BLDEA', 'bldea', 'Organization', 'Karnataka', '2023-11-01', '', '/academy/Projects/BLDEA.png', 'Rareminds conducted a 3-day intensive program for 200+ BLDEA teachers, delivering hands-on, NEP-aligned training to strengthen pedagogy, mindset, and classroom effectiveness.', 3, true),
+(uuid_generate_v4(), 'Naan Mudhalvan 2024 Upskilling Program (Powered by Rareminds)', 'naan-mudhalvan-2024', 'Naan Mudhalvan', 'TamilNadu', '2024-07-01', 'Active', '/academy/Projects/nanmudhalvan.jpg', 'Rareminds partnered with TNSDC under Naan Mudhalvan to deliver project-based training in emerging technologies for Arts and Science students.', 4, true),
+(uuid_generate_v4(), 'Tripura', 'tripura', 'Government Body', 'Tripura', '2024-01-01', 'Completed', '/academy/Projects/tripura.png', 'Rareminds trained 200 overseas candidates via a CEO-led intensive, boosting interview confidence and global readiness in line with Tripura Skill Development Mission.', 5, true),
+(uuid_generate_v4(), 'TNSDC ITI (Spoken English)', 'tnsdc-iti-spoken-english', 'Government Body', 'TamilNadu', '2024-02-01', 'Completed', 'https://www.pkrarts.org/wp-content/uploads/2018/01/tnsdc.png', 'Rareminds partnered with TNSDC to train government hostel students in English, communication, and confidence.', 6, true),
+(uuid_generate_v4(), 'TNSDC Schools', 'tnsdc-schools', 'Government Body', 'TamilNadu', '2024-04-01', 'Completed', 'https://www.pkrarts.org/wp-content/uploads/2018/01/tnsdc.png', 'Rareminds delivered a 7-day training across 121 schools, empowering 1,974 students with employability skills.', 7, true),
+(uuid_generate_v4(), 'Naan Mudhalvan 2023 Upskilling Program (Powered by Rareminds)', 'naan-mudhalvan-2023', 'Naan Mudhalvan', 'TamilNadu', '2023-01-01', 'Completed', '/academy/Projects/nanmudhalvan.jpg', 'Rareminds partnered with TNSDC under Naan Mudhalvan to deliver project-based training in emerging technologies for Arts and Science students.', 8, true),
+(uuid_generate_v4(), 'Naan Mudhalvan 4th sem 2025 Upskilling Program (Powered by Rareminds)', 'naan-mudhalvan-4th-sem-2025', 'Naan Mudhalvan', 'TamilNadu', '2025-01-01', 'Active', '/academy/Projects/nanmudhalvan.jpg', 'Rareminds partnered with TNSDC under Naan Mudhalvan to deliver project-based training in emerging technologies for Arts and Science students.', 9, true),
+(uuid_generate_v4(), 'Naan Mudhalvan 6th sem 2025 Upskilling Program (Powered by Rareminds)', 'naan-mudhalvan-6th-sem-2025', 'Naan Mudhalvan', 'TamilNadu', '2025-01-01', 'Active', '/academy/Projects/nanmudhalvan.jpg', 'Rareminds partnered with TNSDC under Naan Mudhalvan to deliver project-based training in emerging technologies for Arts and Science students.', 10, true),
+(uuid_generate_v4(), 'VELS', 'vels', 'College', 'TamilNadu', '2025-03-01', 'Completed', '/academy/Projects/vels.png', 'Rareminds delivered project-based training at VELS University, bridging classroom learning with real-world skills for first-year students.', 11, true),
+(uuid_generate_v4(), 'Naan Mudhalvan 2025 Upskilling Program (Powered by Rareminds)', 'naan-mudhalvan-2025', 'Naan Mudhalvan', 'TamilNadu', '2025-07-01', 'Active', '/academy/Projects/nanmudhalvan.jpg', 'Rareminds partnered with TNSDC under Naan Mudhalvan to deliver project-based training in emerging technologies for Arts and Science students.', 12, true),
+(uuid_generate_v4(), 'AICTE', 'aicte', 'Government Body', 'Pan India', '2025-01-01', 'Completed', '/academy/Projects/aicte.png', 'Rareminds partnered with All India Council for Technical Education to deliver industry-focused, experiential programs that build job-ready skills and confidence', 13, true),
+(uuid_generate_v4(), 'KSDC', 'ksdc', 'Government Body', 'Karnataka', '2025-01-01', 'In Progress', '/academy/Projects/ksdc.png', 'Rareminds partnered with Karnataka Skill Development Corporation to deliver comprehensive skill development programs.', 14, true),
+(uuid_generate_v4(), 'Visvesvaraya Technological University', 'visvesvaraya-technological-university', 'College', 'Karnataka', '2025-01-01', 'Active', '/academy/Projects/vtu.png', 'Rareminds partnered with VTU to deliver technology-focused training programs for engineering students.', 15, true),
+(uuid_generate_v4(), 'Global International School', 'global-international-school', 'School', 'Karnataka', '2023-11-01', '', '/academy/Projects/school.png', 'Rareminds bridged gaps in traditional teacher training by delivering hands-on, NEP-aligned programs that equipped educators with practical skills, modern tools, and learner-centric strategies.', 16, true),
+(uuid_generate_v4(), 'DSATM', 'dsatm', 'College', 'Karnataka', '2019-10-01', '', '/academy/Projects/dsatm.png', 'Rareminds partnered with DSATM to deliver career-focused training that equipped students with technical and soft skills for professional success.', 17, true);
+
+<<<<<<< Updated upstream
+INSERT INTO program_sections (id, program_id, section_key, title, content, display_order)
+SELECT 
+    uuid_generate_v4(),
+    p.id,
+    'introduction',
+    'Introduction',
+    p.short_description,
+    1
+FROM programs p
+WHERE p.slug IN ('acharya', 'pes', 'bldea', 'naan-mudhalvan-2024', 'tripura', 'tnsdc-iti-spoken-english', 'tnsdc-schools', 'naan-mudhalvan-2023', 'naan-mudhalvan-4th-sem-2025', 'naan-mudhalvan-6th-sem-2025', 'vels', 'naan-mudhalvan-2025', 'aicte', 'ksdc', 'visvesvaraya-technological-university', 'global-international-school', 'dsatm');
+=======
+>>>>>>> Stashed changes
