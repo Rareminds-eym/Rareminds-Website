@@ -76,7 +76,7 @@ export default function WorkSection() {
           <div className="flex justify-center">
             <img
               src="/svgs/passport/step-number.svg"
-              alt="Step Number"
+              alt="Step 1 indicator"
               className="w-10 h-10 lg:w-12 lg:h-12"
             />
           </div>

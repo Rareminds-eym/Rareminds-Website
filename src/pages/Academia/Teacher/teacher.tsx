@@ -28,8 +28,6 @@ import CurrentBlogs from '../../../components/Academy/Teacher/Current_blogs'
 
       const contactRef = useRef<HTMLDivElement>(null);
       const logoRef = useRef<HTMLDivElement>(null);
-      
-      
 
     const scrollToContact = () => {
       contactRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -43,16 +41,11 @@ import CurrentBlogs from '../../../components/Academy/Teacher/Current_blogs'
       AOS.init({
 
       });
-
-
     }, [])
 
  useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
-
-
-
     
   const location = useLocation();
 

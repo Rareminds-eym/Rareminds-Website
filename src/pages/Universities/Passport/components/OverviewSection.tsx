@@ -69,9 +69,9 @@ const OverviewSection = () => {
         {/* Content Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 text-left">
           {points.map((item, idx) => (
-            <div key={`overview-point-${idx}`} className="flex items-start gap-5">
+            <div key={`overview-${item.Icon.name}-${idx}`} className="flex items-start gap-5">
               <div className="flex-shrink-0 mt-1">
-                <item.Icon className="w-8 h-8 text-black" aria-hidden="true" />
+                <item.Icon className="w-8 h-8 text-black" aria-hidden={true} />
               </div>
               <div className="text-base md:text-lg leading-relaxed text-gray-700">
                 {item.text}

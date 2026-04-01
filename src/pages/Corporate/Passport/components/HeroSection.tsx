@@ -128,11 +128,16 @@ const HeroSection = ({ onDemoClick }: { onDemoClick: () => void }) => {
     setSubmitted(false);
   };
 
+  const handleCloseForm = () => {
+    setShowForm(false);
+    setError(null);
+    setSubmitted(false);
+  };
+
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
-    setSubmitted(false); // Reset submitted state
     
     try {
       const { error } = await supabase.from('pdf_downloads').insert([{
@@ -142,16 +147,24 @@ const HeroSection = ({ onDemoClick }: { onDemoClick: () => void }) => {
       
       if (error) {
         setError('Failed to submit. Please try again.');
+        setLoading(false);
         return;
       }
 
-      // Form submission successful, now attempt download
+      // Form submission successful, now attempt download with timeout
       try {
-        // First check if file exists by attempting to fetch it
-        const response = await fetch('/passport/pdf/Resume checklist.pdf', { method: 'HEAD' });
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 5000);
+        
+        const response = await fetch('/passport/pdf/Resume checklist.pdf', { 
+          method: 'HEAD',
+          signal: controller.signal
+        });
+        
+        clearTimeout(timeoutId);
         
         if (!response.ok) {
-          throw new Error(`File not found (${response.status})`);
+          throw new Error(`File not available (${response.status})`);
         }
 
         // File exists, proceed with download
@@ -162,17 +175,25 @@ const HeroSection = ({ onDemoClick }: { onDemoClick: () => void }) => {
         link.click();
         document.body.removeChild(link);
         
-        // Only set submitted to true if both form submission AND download succeed
         setSubmitted(true);
+        setError(null);
         
       } catch (downloadError) {
-        // Download failed, but form was submitted successfully
-        setError('Form submitted successfully, but download failed. Please contact support or try downloading manually.');
-        // Don't set submitted to true since the complete flow failed
+        if (downloadError instanceof Error) {
+          if (downloadError.name === 'AbortError') {
+            setError('Form submitted successfully, but download timed out. Please try downloading manually.');
+          } else {
+            setError('Form submitted successfully, but download failed. Please contact support or try downloading manually.');
+          }
+        } else {
+          setError('Form submitted successfully, but download failed. Please contact support or try downloading manually.');
+        }
+        setSubmitted(false);
       }
       
     } catch (err) {
       setError('Unexpected error. Please try again.');
+      setSubmitted(false);
     } finally {
       setLoading(false);
     }
@@ -254,11 +275,7 @@ const HeroSection = ({ onDemoClick }: { onDemoClick: () => void }) => {
                 <form className="bg-white rounded-xl p-6 shadow-2xl max-w-2xl w-full relative max-h-[90vh] overflow-y-auto" autoComplete="off" onSubmit={handleFormSubmit}>
                 <button 
                   type="button" 
-                  onClick={() => {
-                    setShowForm(false);
-                    setError(null);
-                    setSubmitted(false);
-                  }}
+                  onClick={handleCloseForm}
                   className="absolute top-4 right-4 text-gray-600 hover:text-red-500 text-3xl font-bold focus:outline-none z-10"
                   aria-label="Close form"
                 >
