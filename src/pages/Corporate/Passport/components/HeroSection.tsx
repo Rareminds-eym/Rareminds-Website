@@ -1,4 +1,4 @@
-import { FaCalendarAlt, FaDownload } from "react-icons/fa";
+import { FaCalendarAlt, FaDownload, FaRedo } from "react-icons/fa";
 import { supabase } from "../../../../lib/supabase";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect, useRef } from "react";
@@ -77,6 +77,7 @@ const HeroSection = ({ onDemoClick }: { onDemoClick: () => void }) => {
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [downloadError, setDownloadError] = useState(false);
   // Detect screen size
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 768);
@@ -131,12 +132,14 @@ const HeroSection = ({ onDemoClick }: { onDemoClick: () => void }) => {
     setShowForm(true);
     setError(null);
     setSubmitted(false);
+    setDownloadError(false);
   };
 
   const handleCloseForm = () => {
     setShowForm(false);
     setError(null);
     setSubmitted(false);
+    setDownloadError(false);
   };
 
   const submitFormToDatabase = async (formData: typeof form) => {
@@ -146,7 +149,7 @@ const HeroSection = ({ onDemoClick }: { onDemoClick: () => void }) => {
     }]);
     
     if (error) {
-      throw new Error('Failed to submit form. Please try again.');
+      throw new Error('FORM_SUBMISSION_FAILED');
     }
   };
 
@@ -156,14 +159,16 @@ const HeroSection = ({ onDemoClick }: { onDemoClick: () => void }) => {
     
     try {
       const response = await fetch('/passport/pdf/Resume checklist.pdf', { 
-        method: 'HEAD',
+        method: 'GET',
         signal: controller.signal
       });
       
       clearTimeout(timeoutId);
       
-      if (!response.ok) {
-        throw new Error(`File not available (HTTP ${response.status})`);
+      if (response.status === 404) {
+        throw new Error('FILE_NOT_FOUND');
+      } else if (!response.ok) {
+        throw new Error('NETWORK_ERROR');
       }
 
       // File exists, proceed with download
@@ -179,39 +184,102 @@ const HeroSection = ({ onDemoClick }: { onDemoClick: () => void }) => {
       clearTimeout(timeoutId);
       if (error instanceof Error) {
         if (error.name === 'AbortError') {
-          throw new Error('Download request timed out. Please try again.');
+          throw new Error('DOWNLOAD_TIMEOUT');
         }
         throw error;
       }
-      throw new Error('Download failed. Please try again.');
+      throw new Error('DOWNLOAD_FAILED');
     }
   };
 
-  const handleFormSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleRetryDownload = async () => {
     setLoading(true);
     setError(null);
     
     try {
+      await attemptFileDownload();
+      setDownloadError(false);
+      setError(null);
+    } catch (err) {
+      if (err instanceof Error) {
+        switch (err.message) {
+          case 'FILE_NOT_FOUND':
+            setError('File is not available. Please contact support for assistance.');
+            break;
+          case 'DOWNLOAD_TIMEOUT':
+            setError('Download timed out. Please check your connection and try again.');
+            break;
+          case 'NETWORK_ERROR':
+            setError('Network error occurred. Please check your connection and try again.');
+            break;
+          default:
+            setError('Download failed. Please try the direct download link below or contact support.');
+        }
+      } else {
+        setError('Download failed. Please try the direct download link below or contact support.');
+      }
+      setDownloadError(true);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleDirectDownload = () => {
+    const link = document.createElement('a');
+    link.href = '/passport/pdf/Resume checklist.pdf';
+    link.download = 'Resume-Checklist.pdf';
+    link.target = '_blank';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+  const handleFormSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
+    setDownloadError(false);
+    
+    try {
       // Submit form to database
       await submitFormToDatabase(form);
+      setSubmitted(true);
       
       // Attempt file download
-      await attemptFileDownload();
-      
-      setSubmitted(true);
-      setError(null);
+      try {
+        await attemptFileDownload();
+        setError(null);
+        setDownloadError(false);
+      } catch (downloadErr) {
+        // Form was submitted successfully, but download failed
+        setDownloadError(true);
+        if (downloadErr instanceof Error) {
+          switch (downloadErr.message) {
+            case 'FILE_NOT_FOUND':
+              setError('Form submitted successfully! However, the file is temporarily unavailable. Use the options below to get your download.');
+              break;
+            case 'DOWNLOAD_TIMEOUT':
+              setError('Form submitted successfully! Download timed out. Use the options below to retry.');
+              break;
+            case 'NETWORK_ERROR':
+              setError('Form submitted successfully! Network error occurred. Use the options below to retry.');
+              break;
+            default:
+              setError('Form submitted successfully! Download failed. Use the options below to get your file.');
+          }
+        } else {
+          setError('Form submitted successfully! Download failed. Use the options below to get your file.');
+        }
+      }
       
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Unexpected error. Please try again.';
-      
-      if (errorMessage.includes('Failed to submit form')) {
-        setError(errorMessage);
+      if (err instanceof Error && err.message === 'FORM_SUBMISSION_FAILED') {
+        setError('Failed to submit form. Please try again.');
         setSubmitted(false);
+        setDownloadError(false);
       } else {
-        // Form was submitted successfully, but download failed
-        setError(`Form submitted successfully, but ${errorMessage.toLowerCase()}. Please contact support or try downloading manually.`);
+        setError('Unexpected error. Please try again.');
         setSubmitted(false);
+        setDownloadError(false);
       }
     } finally {
       setLoading(false);
@@ -331,13 +399,40 @@ const HeroSection = ({ onDemoClick }: { onDemoClick: () => void }) => {
                   <textarea name="message" value={form.message} onChange={handleChange} placeholder="Tell us about your hiring needs or challenges" className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E32A18] text-black bg-white resize-none" rows={3} />
                 </div>
                 {error && <p className="text-red-600 mb-2">{error}</p>}
-                {submitted && !error && <p className="text-green-600 mb-2">Thank you! Your download will start now.</p>}
+                {submitted && !error && !downloadError && <p className="text-green-600 mb-2">Thank you! Your download should start automatically.</p>}
+                
+                {/* Show retry options when form is submitted but download failed */}
+                {submitted && downloadError && (
+                  <div className="mb-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+                    <p className="text-yellow-800 mb-3 font-medium">Download Options:</p>
+                    <div className="flex flex-col sm:flex-row gap-2">
+                      <button
+                        type="button"
+                        onClick={handleRetryDownload}
+                        disabled={loading}
+                        className="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg font-medium text-white transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-50"
+                      >
+                        <FaRedo className={loading ? 'animate-spin' : ''} />
+                        {loading ? 'Retrying...' : 'Retry Download'}
+                      </button>
+                      <button
+                        type="button"
+                        onClick={handleDirectDownload}
+                        className="bg-green-600 hover:bg-green-700 px-4 py-2 rounded-lg font-medium text-white transition-all duration-300 flex items-center justify-center gap-2"
+                      >
+                        <FaDownload />
+                        Direct Download
+                      </button>
+                    </div>
+                  </div>
+                )}
+                
                 <button
                   type="submit"
-                  disabled={!isFormComplete || loading || submitted}
-                  className={`bg-[#E32A18] hover:bg-[#cc2515] px-7 py-3 rounded-lg font-semibold transition-all duration-300 text-white w-full mt-2 ${(!isFormComplete || loading || submitted) ? 'opacity-50 cursor-not-allowed' : ''}`}
+                  disabled={!isFormComplete || loading || (submitted && !downloadError)}
+                  className={`bg-[#E32A18] hover:bg-[#cc2515] px-7 py-3 rounded-lg font-semibold transition-all duration-300 text-white w-full mt-2 ${(!isFormComplete || loading || (submitted && !downloadError)) ? 'opacity-50 cursor-not-allowed' : ''}`}
                 >
-                  {loading ? 'Submitting...' : submitted ? 'Submitted' : 'Submit'}
+                  {loading ? 'Submitting...' : (submitted && !downloadError) ? 'Submitted' : 'Submit & Download'}
                 </button>
               </form>
               </div>
