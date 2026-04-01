@@ -2,6 +2,7 @@ import { FaCalendarAlt, FaDownload, FaRedo } from "react-icons/fa";
 import { supabase } from "../../../../lib/supabase";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect, useRef } from "react";
+
 const banner1 = "/passport/Home-page-banner_1.png";
 const banner2 = "/passport/Home-page-banner_2.png";
 const banner3 = "/passport/Home-page-banner_3.png";
@@ -14,11 +15,10 @@ const mobileBanner3 = "/passport/Home-page-banner_mobile_3.png";
 const mobileBanner4 = "/passport/Home-page-banner_mobile_4.png";
 const mobileBanner5 = "/passport/Home-page-banner_mobile_5.png";
 
-
 const desktopSlides = [
   {
     image: banner1,
-    heading: "Still Reading Resumes? You’re Already Behind",
+    heading: "Still Reading Resumes? You're Already Behind",
   },
   {
     image: banner2,
@@ -30,7 +30,7 @@ const desktopSlides = [
   },
   {
     image: banner4,
-    heading: "Smart Companies Don’t Hunt Talent — They Scan SkillPassports.",
+    heading: "Smart Companies Don't Hunt Talent — They Scan SkillPassports.",
   },
   {
     image: banner5,
@@ -41,7 +41,7 @@ const desktopSlides = [
 const mobileSlides = [
   {
     image: mobileBanner1,
-    heading: "Still Reading Resumes? You’re Already Behind",
+    heading: "Still Reading Resumes? You're Already Behind",
   },
   {
     image: mobileBanner2,
@@ -53,7 +53,7 @@ const mobileSlides = [
   },
   {
     image: mobileBanner4,
-    heading: "Smart Companies Don’t Hunt Talent. They Scan SkillPassports.",
+    heading: "Smart Companies Don't Hunt Talent. They Scan SkillPassports.",
   },
   {
     image: mobileBanner5,
@@ -78,7 +78,7 @@ const HeroSection = ({ onDemoClick }: { onDemoClick: () => void }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [downloadError, setDownloadError] = useState(false);
-  // Detect screen size
+
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 768);
     checkMobile();
@@ -88,26 +88,24 @@ const HeroSection = ({ onDemoClick }: { onDemoClick: () => void }) => {
 
   const slides = isMobile ? mobileSlides : desktopSlides;
 
-  // Auto fade every 5s
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrent((prev) => (prev + 1) % slides.length);
     }, 5000);
     return () => clearInterval(interval);
-  }, [slides]);
+  }, [slides.length]);
 
   const isFormComplete = Object.values(form).every((v) => v.trim() !== "");
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const newForm = { ...form, [e.target.name]: e.target.value };
     setForm(newForm);
-    // If any field is filled, clear the timeout so form stays open
     if (formTimeoutRef.current && Object.values(newForm).some((v) => v.trim() !== "")) {
       clearTimeout(formTimeoutRef.current);
       formTimeoutRef.current = null;
     }
   };
 
-  // Start timeout when form is opened
   useEffect(() => {
     if (showForm && Object.values(form).every((v) => v.trim() === "")) {
       const newTimeout = setTimeout(() => {
@@ -119,14 +117,13 @@ const HeroSection = ({ onDemoClick }: { onDemoClick: () => void }) => {
       formTimeoutRef.current = null;
     }
     
-    // Cleanup on unmount or dependency change
     return () => {
       if (formTimeoutRef.current) {
         clearTimeout(formTimeoutRef.current);
         formTimeoutRef.current = null;
       }
     };
-  }, [showForm, form]);
+  }, [showForm, form.name, form.company, form.email, form.phone, form.role, form.message]);
 
   const handleOpenForm = () => {
     setShowForm(true);
@@ -171,7 +168,6 @@ const HeroSection = ({ onDemoClick }: { onDemoClick: () => void }) => {
         throw new Error('NETWORK_ERROR');
       }
 
-      // File exists, proceed with download
       const link = document.createElement('a');
       link.href = '/passport/pdf/Resume checklist.pdf';
       link.download = 'Resume-Checklist.pdf';
@@ -182,10 +178,10 @@ const HeroSection = ({ onDemoClick }: { onDemoClick: () => void }) => {
       return true;
     } catch (error) {
       clearTimeout(timeoutId);
+      if (error instanceof Error && error.name === 'AbortError') {
+        throw new Error('DOWNLOAD_TIMEOUT');
+      }
       if (error instanceof Error) {
-        if (error.name === 'AbortError') {
-          throw new Error('DOWNLOAD_TIMEOUT');
-        }
         throw error;
       }
       throw new Error('DOWNLOAD_FAILED');
@@ -225,14 +221,19 @@ const HeroSection = ({ onDemoClick }: { onDemoClick: () => void }) => {
   };
 
   const handleDirectDownload = () => {
-    const link = document.createElement('a');
-    link.href = '/passport/pdf/Resume checklist.pdf';
-    link.download = 'Resume-Checklist.pdf';
-    link.target = '_blank';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    try {
+      const link = document.createElement('a');
+      link.href = '/passport/pdf/Resume checklist.pdf';
+      link.download = 'Resume-Checklist.pdf';
+      link.target = '_blank';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } catch (error) {
+      setError('Failed to initiate download. Please try again or contact support.');
+    }
   };
+
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -240,17 +241,14 @@ const HeroSection = ({ onDemoClick }: { onDemoClick: () => void }) => {
     setDownloadError(false);
     
     try {
-      // Submit form to database
       await submitFormToDatabase(form);
       setSubmitted(true);
       
-      // Attempt file download
       try {
         await attemptFileDownload();
         setError(null);
         setDownloadError(false);
       } catch (downloadErr) {
-        // Form was submitted successfully, but download failed
         setDownloadError(true);
         if (downloadErr instanceof Error) {
           switch (downloadErr.message) {
@@ -286,11 +284,8 @@ const HeroSection = ({ onDemoClick }: { onDemoClick: () => void }) => {
     }
   };
 
-
-
   return (
-  <section id="resume-checklist-download" className="relative w-auto min-h-[640px] md:min-h-[640px] overflow-hidden m-4 md:m-6 rounded-2xl shadow-sm bg-[#EDF2F9]">
-      {/* Fade Images */}
+    <section id="resume-checklist-download" className="relative w-auto min-h-[640px] md:min-h-[640px] overflow-hidden m-4 md:m-6 rounded-2xl shadow-sm bg-[#EDF2F9]">
       <div className="absolute inset-0 z-0">
         <AnimatePresence>
           <motion.img
@@ -307,7 +302,6 @@ const HeroSection = ({ onDemoClick }: { onDemoClick: () => void }) => {
         </AnimatePresence>
       </div>
 
-      {/* Content */}
       <div className="relative z-10 max-w-7xl mx-auto px-6 sm:px-10 py-10 sm:py-20 md:py-28">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
           <motion.div
@@ -316,11 +310,10 @@ const HeroSection = ({ onDemoClick }: { onDemoClick: () => void }) => {
             transition={{ duration: 1.2, ease: "easeInOut" }}
             className="text-white"
           >
-            {/* Fade Headings */}
             <AnimatePresence mode="wait">
               <motion.h1
                 key={slides[current].heading}
-                className={`text-3xl sm:text-4xl md:text-5xl lg:text-[50px] xl:text-6xl font-extrabold leading-tight mb-6 text-black`}
+                className="text-3xl sm:text-4xl md:text-5xl lg:text-[50px] xl:text-6xl font-extrabold leading-tight mb-6 text-black"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
@@ -335,14 +328,6 @@ const HeroSection = ({ onDemoClick }: { onDemoClick: () => void }) => {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4">
-              {/* 
-                Enquiry Button Flow:
-                1. onClick triggers onDemoClick prop from parent (Index.tsx)
-                2. Index.tsx passes setIsModalOpen(true) as onDemoClick
-                3. This opens the BookDemo modal component
-                4. BookDemo component uses Zoho Bookings: https://subashini-rareminds37.zohobookings.in/portal-embed#/rareminds
-                Location: src/components/Corporate/BookDemo.tsx
-              */}
               <button
                 onClick={onDemoClick}
                 className="bg-[#E32A18] hover:bg-[#cc2515] px-7 py-3 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center gap-2 shadow-lg text-white"
@@ -360,84 +345,87 @@ const HeroSection = ({ onDemoClick }: { onDemoClick: () => void }) => {
             {showForm && (
               <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
                 <form className="bg-white rounded-xl p-6 shadow-2xl max-w-2xl w-full relative max-h-[90vh] overflow-y-auto" autoComplete="off" onSubmit={handleFormSubmit}>
-                <button 
-                  type="button" 
-                  onClick={handleCloseForm}
-                  className="absolute top-4 right-4 text-gray-600 hover:text-red-500 text-3xl font-bold focus:outline-none z-10"
-                  aria-label="Close form"
-                >
-                  &times;
-                </button>
-                <div className="flex flex-col sm:flex-row gap-4 mb-4">
-                  <div className="flex-1">
-                    <label className="block text-gray-700 font-semibold mb-2">Your Name</label>
-                    <input type="text" name="name" value={form.name} onChange={handleChange} placeholder="Full Name" className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E32A18] text-black bg-white" />
-                  </div>
-                  <div className="flex-1">
-                    <label className="block text-gray-700 font-semibold mb-2">Company</label>
-                    <input type="text" name="company" value={form.company} onChange={handleChange} placeholder="Company Name" className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E32A18] text-black bg-white" />
-                  </div>
-                </div>
-                <div className="flex flex-col sm:flex-row gap-4 mb-4">
-                  <div className="flex-1">
-                    <label className="block text-gray-700 font-semibold mb-2">Email Address</label>
-                    <input type="email" name="email" value={form.email} onChange={handleChange} placeholder="name@company.com" className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E32A18] text-black bg-white" />
-                  </div>
-                  <div className="flex-1">
-                    <label className="block text-gray-700 font-semibold mb-2">Phone Number</label>
-                    <input type="tel" name="phone" value={form.phone} onChange={handleChange} placeholder="+91 98765 43210" className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E32A18] text-black bg-white" />
-                  </div>
-                </div>
-                <div className="flex flex-col sm:flex-row gap-4 mb-4">
-                  <div className="flex-1">
-                    <label className="block text-gray-700 font-semibold mb-2">Role to Hire</label>
-                    <input type="text" name="role" value={form.role} onChange={handleChange} placeholder="Job Title/Position" className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E32A18] text-black bg-white" />
-                  </div>
-                </div>
-                <div className="mb-4">
-                  <label className="block text-gray-700 font-semibold mb-2">Message</label>
-                  <textarea name="message" value={form.message} onChange={handleChange} placeholder="Tell us about your hiring needs or challenges" className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E32A18] text-black bg-white resize-none" rows={3} />
-                </div>
-                {error && <p className="text-red-600 mb-2">{error}</p>}
-                {submitted && !error && !downloadError && <p className="text-green-600 mb-2">Thank you! Your download should start automatically.</p>}
-                
-                {/* Show retry options when form is submitted but download failed */}
-                {submitted && downloadError && (
-                  <div className="mb-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
-                    <p className="text-yellow-800 mb-3 font-medium">Download Options:</p>
-                    <div className="flex flex-col sm:flex-row gap-2">
-                      <button
-                        type="button"
-                        onClick={handleRetryDownload}
-                        disabled={loading}
-                        className="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg font-medium text-white transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-50"
-                      >
-                        <FaRedo className={loading ? 'animate-spin' : ''} />
-                        {loading ? 'Retrying...' : 'Retry Download'}
-                      </button>
-                      <button
-                        type="button"
-                        onClick={handleDirectDownload}
-                        className="bg-green-600 hover:bg-green-700 px-4 py-2 rounded-lg font-medium text-white transition-all duration-300 flex items-center justify-center gap-2"
-                      >
-                        <FaDownload />
-                        Direct Download
-                      </button>
+                  <button 
+                    type="button" 
+                    onClick={handleCloseForm}
+                    className="absolute top-4 right-4 text-gray-600 hover:text-red-500 text-3xl font-bold focus:outline-none z-10"
+                    aria-label="Close form"
+                  >
+                    &times;
+                  </button>
+                  <div className="flex flex-col sm:flex-row gap-4 mb-4">
+                    <div className="flex-1">
+                      <label htmlFor="form-name" className="block text-gray-700 font-semibold mb-2">Your Name</label>
+                      <input id="form-name" type="text" name="name" value={form.name} onChange={handleChange} placeholder="Full Name" className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E32A18] text-black bg-white" />
+                    </div>
+                    <div className="flex-1">
+                      <label htmlFor="form-company" className="block text-gray-700 font-semibold mb-2">Company</label>
+                      <input id="form-company" type="text" name="company" value={form.company} onChange={handleChange} placeholder="Company Name" className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E32A18] text-black bg-white" />
                     </div>
                   </div>
-                )}
-                
-                <button
-                  type="submit"
-                  disabled={!isFormComplete || loading || (submitted && !downloadError)}
-                  className={`bg-[#E32A18] hover:bg-[#cc2515] px-7 py-3 rounded-lg font-semibold transition-all duration-300 text-white w-full mt-2 ${(!isFormComplete || loading || (submitted && !downloadError)) ? 'opacity-50 cursor-not-allowed' : ''}`}
-                >
-                  {loading ? 'Submitting...' : (submitted && !downloadError) ? 'Submitted' : 'Submit & Download'}
-                </button>
-              </form>
+                  <div className="flex flex-col sm:flex-row gap-4 mb-4">
+                    <div className="flex-1">
+                      <label htmlFor="form-email" className="block text-gray-700 font-semibold mb-2">Email Address</label>
+                      <input id="form-email" type="email" name="email" value={form.email} onChange={handleChange} placeholder="name@company.com" className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E32A18] text-black bg-white" />
+                    </div>
+                    <div className="flex-1">
+                      <label htmlFor="form-phone" className="block text-gray-700 font-semibold mb-2">Phone Number</label>
+                      <input id="form-phone" type="tel" name="phone" value={form.phone} onChange={handleChange} placeholder="+91 98765 43210" className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E32A18] text-black bg-white" />
+                    </div>
+                  </div>
+                  <div className="flex flex-col sm:flex-row gap-4 mb-4">
+                    <div className="flex-1">
+                      <label htmlFor="form-role" className="block text-gray-700 font-semibold mb-2">Role to Hire</label>
+                      <input id="form-role" type="text" name="role" value={form.role} onChange={handleChange} placeholder="Job Title/Position" className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E32A18] text-black bg-white" />
+                    </div>
+                  </div>
+                  <div className="mb-4">
+                    <label htmlFor="form-message" className="block text-gray-700 font-semibold mb-2">Message</label>
+                    <textarea id="form-message" name="message" value={form.message} onChange={handleChange} placeholder="Tell us about your hiring needs or challenges" className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E32A18] text-black bg-white resize-none" rows={3} />
+                  </div>
+                  {error && <p className="text-red-600 mb-2">{error}</p>}
+                  {submitted && !error && !downloadError && <p className="text-green-600 mb-2">Thank you! Your download should start automatically.</p>}
+                  
+                  {submitted && downloadError && (
+                    <div className="mb-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+                      <p className="text-yellow-800 mb-3 font-medium">Download Options:</p>
+                      <div className="flex flex-col sm:flex-row gap-2">
+                        <button
+                          type="button"
+                          onClick={handleRetryDownload}
+                          disabled={loading}
+                          className="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg font-medium text-white transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-50"
+                        >
+                          <FaRedo className={loading ? 'animate-spin' : ''} />
+                          {loading ? 'Retrying...' : 'Retry Download'}
+                        </button>
+                        <button
+                          type="button"
+                          onClick={handleDirectDownload}
+                          className="bg-green-600 hover:bg-green-700 px-4 py-2 rounded-lg font-medium text-white transition-all duration-300 flex items-center justify-center gap-2"
+                        >
+                          <FaDownload />
+                          Direct Download
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                  
+                  {(() => {
+                    const isSubmitDisabled = !isFormComplete || loading || (submitted && !downloadError);
+                    return (
+                      <button
+                        type="submit"
+                        disabled={isSubmitDisabled}
+                        className={`bg-[#E32A18] hover:bg-[#cc2515] px-7 py-3 rounded-lg font-semibold transition-all duration-300 text-white w-full mt-2 ${isSubmitDisabled ? 'opacity-50 cursor-not-allowed' : ''}`}
+                      >
+                        {loading ? 'Submitting...' : (submitted && !downloadError) ? 'Submitted' : 'Submit & Download'}
+                      </button>
+                    );
+                  })()}
+                </form>
               </div>
             )}
-            
           </motion.div>
         </div>
       </div>

@@ -64,18 +64,16 @@ const OverviewSection = () => {
   return (
     <section className="py-16 md:py-24 px-4 sm:px-6 lg:px-8 min-h-screen flex flex-col justify-center">
       <div className="max-w-7xl mx-auto text-center">
-        {/* Section Title */}
         <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-black">
           What is <span>Rareminds Skill Passport</span>?
         </h2>
         <div className="w-24 h-1 bg-[#E32A18] mx-auto mt-4 mb-16 rounded-full opacity-80" />
 
-        {/* Content Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 text-left">
           {points.map((item) => (
             <div key={item.id} className="flex items-start gap-5">
               <div className="flex-shrink-0 mt-1">
-                <item.Icon className="w-8 h-8" aria-hidden />
+                <item.Icon className="w-8 h-8" aria-hidden={true} />
               </div>
               <p className="text-base md:text-lg leading-relaxed text-gray-700">
                 {item.text}
