@@ -71,7 +71,7 @@ const OverviewSection = () => {
           {points.map((item, idx) => (
             <div key={idx} className="flex items-start gap-5">
               <div className="flex-shrink-0 mt-1">
-                <item.Icon className="w-8 h-8 text-[#000000]" aria-hidden />
+                <item.Icon className="w-8 h-8 text-[#000000]" aria-hidden="true" />
               </div>
               <div className="text-base md:text-lg leading-relaxed text-gray-700">
                 {item.text}

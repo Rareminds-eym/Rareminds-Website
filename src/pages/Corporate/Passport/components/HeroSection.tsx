@@ -122,6 +122,43 @@ const HeroSection = ({ onDemoClick }: { onDemoClick: () => void }) => {
     };
   }, [showForm, form]);
 
+  const handleFormSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
+    
+    try {
+      const { error } = await supabase.from('pdf_downloads').insert([{
+        ...form,
+        download_type: 'Resume Checklist'
+      }]);
+      
+      if (error) {
+        setError('Failed to submit. Please try again.');
+        setSubmitted(false);
+      } else {
+        setSubmitted(true);
+        // Start download after successful submit
+        try {
+          const link = document.createElement('a');
+          link.href = '/passport/pdf/Resume checklist.pdf';
+          link.download = 'Resume-Checklist.pdf';
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+        } catch (downloadError) {
+          console.error('Download failed:', downloadError);
+          setError('Download failed. Please try again or contact support.');
+        }
+      }
+    } catch (err) {
+      setError('Unexpected error. Please try again.');
+      setSubmitted(false);
+    }
+    
+    setLoading(false);
+  };
+
 
 
   return (
@@ -195,34 +232,7 @@ const HeroSection = ({ onDemoClick }: { onDemoClick: () => void }) => {
 
             {showForm && (
               <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-                <form className="bg-white rounded-xl p-6 shadow-2xl max-w-2xl w-full relative max-h-[90vh] overflow-y-auto" autoComplete="off" onSubmit={async (e) => {
-                e.preventDefault();
-                setLoading(true);
-                setError(null);
-                try {
-                  const { error } = await supabase.from('pdf_downloads').insert([{
-                    ...form,
-                    download_type: 'Resume Checklist'
-                  }]);
-                  if (error) {
-                    setError('Failed to submit. Please try again.');
-                    setSubmitted(false);
-                  } else {
-                    setSubmitted(true);
-                    // Start download after successful submit
-                    const link = document.createElement('a');
-                    link.href = '/passport/pdf/Resume checklist.pdf';
-                    link.download = 'Resume-Checklist.pdf';
-                    document.body.appendChild(link);
-                    link.click();
-                    document.body.removeChild(link);
-                  }
-                } catch (err) {
-                  setError('Unexpected error. Please try again.');
-                  setSubmitted(false);
-                }
-                setLoading(false);
-              }}>
+                <form className="bg-white rounded-xl p-6 shadow-2xl max-w-2xl w-full relative max-h-[90vh] overflow-y-auto" autoComplete="off" onSubmit={handleFormSubmit}>
                 <button 
                   type="button" 
                   onClick={() => setShowForm(false)}

@@ -1,55 +1,29 @@
-import { useState, useEffect } from "react";
-  import React, { useRef } from "react";
-  import AOS from 'aos';
-  import 'aos/dist/aos.css';
-  import { Link, useLocation } from 'react-router-dom';
-  import { Helmet } from "react-helmet-async";
-  import MainLayout from "../../../components/Academy/MainLayout";
-  import MethodCard from "../../../components/Academy/Teacher/MethodCard";
-  import MethodCardR from "../../../components/Academy/Students/MethodCard";
-  import { Card } from "@/components/ui/card";
-  import { Check } from "lucide-react";
-  import StudentCardR from "../../../components/Academy/Students/StudentCard";
-  import EducatorCard from "../../../components/Academy/Teacher/EducatorCard";
-  import { Book, Calendar, Circle, Users } from "lucide-react";
-  import StatsShowcase from "../../../components/Academy/Teacher/StatsShowcase";
-  import ProgramCard from "../../../components/Academy/Students/ProgramCard";
-  import Logos from "../../../components/Academy/Teacher/Logos";
-  import FacultyTransformation from "../../../components/Academy/Teacher/FacultyTransformation";
-  import Fdpcalender from "../../../components/Academy/Teacher/Fdpcalender";
-  import FAQ from "../../../components/Academy/Teacher/FAQ";
-  import FacultyForm from "../../../components/Academy/Teacher/FacultyForm";
-  import ResourcesPage from "../../../components/Academy/Teacher/ResourcesPage";
-  import ResourceDownloadForm from "../../../components/Academy/Teacher/ResourceDownloadForm";
-  // import Testimonials from "../../../components/Academy/Teacher/TestimonialSlider";
-  // import TestimonialsStudent from "./Students/Testimonials";
-  // import VideoCarousel from "./VideoCarousel";
-  import VideoCarousel from "../../../components/Academy/Teacher/VideoCarousel";
-  import FaqAndContact from "../../../components/Academy/Teacher/FaqAndContact";
-  import DownloadForm from "../../../components/Academy/Teacher/DownloadForm"
-  import Oldandnewmethod from "../../../components/Academy/Teacher/oldandnewmethod"
-  import Problem from "../../../components/Academy/Teacher/Problem"
-  import HeroBanner from '../../../components/Academy/Teacher/Herobanner/HeroBanner';
-  import { Toaster } from '../../../components/Academy/UI/toaster';
-  import EducationSection from '../../../components/Academy/Teacher/EducationSection';
-  import CourseCards from '../../../components/Academy/Teacher/CourseCards';
-  // import Testimonial from '../../../components/Academy/Teacher/TestimonialsCarousel'
-  import FAQChatbot from '../../../components/Academy/FAQChatbot'
-  import FDPButton from '../../../components/Academy/Teacher/FDPButton'
-  import DashboardSection from "../../../components/Academy/Teacher/DashboardSection";
-  import ContactSection from "../../../components/Academy/Contact/ContactSection"
-  import CorporateHeader from "../../../components/Header/AcademyHeader"
-  import FloatingActionMenu from '../../../components/Academy/StickyButton/StickyButton/FloatingAction'
-  import TestimonialViedoCarousel from '../../../components/Academy/Teacher/TestimonialCarouselVideo';
-  import Hero from '../../../components/Academy/Teacher/Herobanner/Hero'
-  import Services from './Cources'
-  import Testimonials from "../../../components/Academy/Teacher/Testimonials"
-import Viedo_cube from "../../../components/Academy/Teacher/Showcase_videos/viedo_Cube"
+import { useState, useEffect, useRef } from "react";
+import AOS from 'aos';
+import 'aos/dist/aos.css';
+import { useLocation } from 'react-router-dom';
+import { Helmet } from "react-helmet-async";
+import { Book, Calendar, Circle, Users } from "lucide-react";
+import StatsShowcase from "../../../components/Academy/Teacher/StatsShowcase";
+import Logos from "../../../components/Academy/Teacher/Logos";
+import FacultyTransformation from "../../../components/Academy/Teacher/FacultyTransformation";
+import Fdpcalender from "../../../components/Academy/Teacher/Fdpcalender";
+import ResourcesPage from "../../../components/Academy/Teacher/ResourcesPage";
+import Oldandnewmethod from "../../../components/Academy/Teacher/oldandnewmethod"
+import Problem from "../../../components/Academy/Teacher/Problem"
+import EducationSection from '../../../components/Academy/Teacher/EducationSection';
+import DashboardSection from "../../../components/Academy/Teacher/DashboardSection";
+import ContactSection from "../../../components/Academy/Contact/ContactSection"
+import CorporateHeader from "../../../components/Header/AcademyHeader"
+import FloatingActionMenu from '../../../components/Academy/StickyButton/StickyButton/FloatingAction'
+import TestimonialViedoCarousel from '../../../components/Academy/Teacher/TestimonialCarouselVideo';
+import Hero from '../../../components/Academy/Teacher/Herobanner/Hero'
+import Services from './Cources'
+import Testimonials from "../../../components/Academy/Teacher/Testimonials"
 import YouTubeFeed from '../../../components/Academy/Teacher/youtubelive'
 import CurrentBlogs from '../../../components/Academy/Teacher/Current_blogs'
 
-  const School = ({ userType = "teacher" }: { userType?: "teacher" | "student" }) => {
-  const [activeTab, setActiveTab] = useState<"teacher" | "student">("teacher");
+  const School = () => {
   const [isHeroBlurred, setIsHeroBlurred] = useState(false);
   const [blurPercent, setBlurPercent] = useState(0);
 
@@ -65,10 +39,6 @@ import CurrentBlogs from '../../../components/Academy/Teacher/Current_blogs'
     
     const scrollToLogo = () => {
       logoRef.current?.scrollIntoView({ behavior: "smooth" });
-    };
-
-    const scrollToFacultyTransformation = () => {
-      facultyTransformationRef.current?.scrollIntoView({ behavior: "smooth" });
     };
 
 
@@ -94,7 +64,7 @@ import CurrentBlogs from '../../../components/Academy/Teacher/Current_blogs'
 
 
     
-     const location = useLocation();
+  const location = useLocation();
 
   useEffect(() => {
     if (location.hash === '#course-cards-section') {
@@ -104,22 +74,6 @@ import CurrentBlogs from '../../../components/Academy/Teacher/Current_blogs'
       }
     }
   }, [location]);
-
-
-
-
-  
-useEffect(() => {
-  const hash = location.hash;
-  if (hash === '#course-cards-section') {
-    const section = document.getElementById('course-cards-section');
-    if (section) {
-      setTimeout(() => {
-        section.scrollIntoView({ behavior: 'smooth' });
-      }, 100);
-    }
-  }
-}, [location]);
 
 
 useEffect(() => {

@@ -114,8 +114,8 @@ const Programs = () => {
  <h2 className="text-xl absolute w-[250px] right-2 content-center   ">Welcome to India’s Most Trusted Student Skill Training Platform</h2>
 
     <img
-      src="/images/academy/text.svg"
-      alt="Icon"
+      src="/svgs/academy/teacher-text.svg"
+      alt="Teacher development process illustration"
       className="w-auto h-full object-contain"
     />
   </div>
@@ -139,8 +139,8 @@ const Programs = () => {
  <h2 className="text-xl absolute w-[250px] right-2 content-center   ">Spoken English & Public Speaking Bootcamps</h2>
 
     <img
-      src="/images/academy/text.svg"
-      alt="Icon"
+      src="/svgs/academy/teacher-text.svg"
+      alt="Teacher development process illustration"
       className="w-auto h-full object-contain"
     />
   </div>
@@ -165,8 +165,8 @@ const Programs = () => {
  <h2 className="text-xl absolute w-[250px] right-2 content-center   ">Career Counselling with Psychometric Assessments</h2>
 
     <img
-      src="/images/academy/text.svg"
-      alt="Icon"
+      src="/svgs/academy/teacher-text.svg"
+      alt="Teacher development process illustration"
       className="w-auto h-full object-contain"
     />
   </div>
@@ -188,8 +188,8 @@ const Programs = () => {
  <h2 className="text-xl absolute w-[250px] right-2 content-center   ">EEE Training: English, Employability, Entrepreneurship</h2>
 
     <img
-      src="/images/academy/text.svg"
-      alt="Icon"
+      src="/svgs/academy/teacher-text.svg"
+      alt="Teacher development process illustration"
       className="w-auto h-full object-contain"
     />
   </div>
@@ -212,8 +212,8 @@ const Programs = () => {
  <h2 className="text-xl absolute w-[250px] right-2 content-center   ">Confidence-Building & Mindset Programs</h2>
 
     <img
-      src="/images/academy/text.svg"
-      alt="Icon"
+      src="/svgs/academy/teacher-text.svg"
+      alt="Teacher development process illustration"
       className="w-auto h-full object-contain"
     />
   </div>
@@ -243,3 +243,5 @@ const Programs = () => {
 };
 
 export default Programs;
+
+
