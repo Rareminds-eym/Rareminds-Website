@@ -79,7 +79,7 @@ export default function WorkSection() {
           <div className="flex justify-center">
             <img
               src="/svgs/passport/step-number.svg"
-              alt="Step Number"
+              alt="Step 1 of 4 process indicator"
               className="w-10 h-10 lg:w-12 lg:h-12"
             />
           </div>
@@ -101,7 +101,7 @@ export default function WorkSection() {
             <div style={{ paddingTop: `71%` }} />
             <img
               src="/svgs/passport/connecting-1.svg"
-              alt="Connecting SVG 1"
+              alt="Connection line between Train & Assess and Capture & Validate steps"
               className="absolute top-0 left-0 w-full h-full"
             />
           </div>
@@ -125,7 +125,7 @@ export default function WorkSection() {
             <div style={{ paddingTop: `71%` }} />
             <img
               src="/svgs/passport/connecting-2.svg"
-              alt="Connecting SVG 2"
+              alt="Connection line between Capture & Validate and Issue The Skill Passport steps"
               className="absolute top-0 left-0 w-full h-full"
             />
           </div>
@@ -147,7 +147,7 @@ export default function WorkSection() {
             <div style={{ paddingTop: `70%` }} />
             <img
               src="/svgs/passport/connecting-3.svg"
-              alt="Connecting SVG 3"
+              alt="Connection line between Issue The Skill Passport and Analyze & Apply steps"
               className="absolute top-0 left-0 w-full h-full"
             />
           </div>

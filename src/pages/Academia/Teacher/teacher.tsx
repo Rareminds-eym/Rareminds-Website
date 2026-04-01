@@ -50,24 +50,14 @@ import CurrentBlogs from '../../../components/Academy/Teacher/Current_blogs'
   const location = useLocation();
 
   useEffect(() => {
-    if (location.hash === '#course-cards-section') {
-      const el = document.getElementById('course-cards-section');
-      if (el) {
-        el.scrollIntoView({ behavior: 'smooth' });
-      }
-    } else if (location.hash === '#contact-section') {
-      const section = document.getElementById('contact-section');
-      if (section) {
+    if (location.hash) {
+      const elementId = location.hash.replace('#', '');
+      const element = document.getElementById(elementId);
+      if (element) {
+        const timeout = elementId === 'course-cards-section' ? 0 : 100;
         setTimeout(() => {
-          section.scrollIntoView({ behavior: 'smooth' });
-        }, 100);
-      }
-    } else if (location.hash === '#scrollToFacultyTransformation') {
-      const section = document.getElementById('scrollToFacultyTransformation');
-      if (section) {
-        setTimeout(() => {
-          section.scrollIntoView({ behavior: 'smooth' });
-        }, 100);
+          element.scrollIntoView({ behavior: 'smooth' });
+        }, timeout);
       }
     }
   }, [location]);

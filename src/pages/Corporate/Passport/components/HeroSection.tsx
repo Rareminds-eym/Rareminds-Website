@@ -107,20 +107,24 @@ const HeroSection = ({ onDemoClick }: { onDemoClick: () => void }) => {
 
   // Start timeout when form is opened
   useEffect(() => {
+    let timeout: NodeJS.Timeout | null = null;
+    
     if (showForm && Object.values(form).every((v) => v.trim() === "")) {
-      if (formTimeout) clearTimeout(formTimeout);
-      const timeout = setTimeout(() => {
+      timeout = setTimeout(() => {
         setShowForm(false);
       }, 10000);
       setFormTimeout(timeout);
-    } else {
-      if (formTimeout) clearTimeout(formTimeout);
+    } else if (formTimeout) {
+      clearTimeout(formTimeout);
+      setFormTimeout(null);
     }
-    // Cleanup on unmount
+    
+    // Cleanup on unmount or dependency change
     return () => {
+      if (timeout) clearTimeout(timeout);
       if (formTimeout) clearTimeout(formTimeout);
     };
-  }, [showForm, form]);
+  }, [showForm, form, formTimeout]);
 
   const handleOpenForm = () => {
     setShowForm(true);
@@ -134,66 +138,80 @@ const HeroSection = ({ onDemoClick }: { onDemoClick: () => void }) => {
     setSubmitted(false);
   };
 
+  const submitFormToDatabase = async (formData: typeof form) => {
+    const { error } = await supabase.from('pdf_downloads').insert([{
+      ...formData,
+      download_type: 'Resume Checklist'
+    }]);
+    
+    if (error) {
+      throw new Error('Failed to submit form. Please try again.');
+    }
+  };
+
+  const attemptFileDownload = async () => {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 5000);
+    
+    try {
+      const response = await fetch('/passport/pdf/Resume checklist.pdf', { 
+        method: 'HEAD',
+        signal: controller.signal
+      });
+      
+      clearTimeout(timeoutId);
+      
+      if (!response.ok) {
+        throw new Error(`File not available (HTTP ${response.status})`);
+      }
+
+      // File exists, proceed with download
+      const link = document.createElement('a');
+      link.href = '/passport/pdf/Resume checklist.pdf';
+      link.download = 'Resume-Checklist.pdf';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      
+      return true;
+    } catch (error) {
+      clearTimeout(timeoutId);
+      if (error instanceof Error) {
+        if (error.name === 'AbortError') {
+          throw new Error('Download request timed out. Please try again.');
+        }
+        throw error;
+      }
+      throw new Error('Download failed. Please try again.');
+    }
+  };
+
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
     
     try {
-      const { error } = await supabase.from('pdf_downloads').insert([{
-        ...form,
-        download_type: 'Resume Checklist'
-      }]);
+      // Submit form to database
+      await submitFormToDatabase(form);
       
-      if (error) {
-        setError('Failed to submit. Please try again.');
-        setLoading(false);
-        return;
-      }
-
-      // Form submission successful, now attempt download with timeout
-      try {
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 5000);
-        
-        const response = await fetch('/passport/pdf/Resume checklist.pdf', { 
-          method: 'HEAD',
-          signal: controller.signal
-        });
-        
-        clearTimeout(timeoutId);
-        
-        if (!response.ok) {
-          throw new Error(`File not available (${response.status})`);
-        }
-
-        // File exists, proceed with download
-        const link = document.createElement('a');
-        link.href = '/passport/pdf/Resume checklist.pdf';
-        link.download = 'Resume-Checklist.pdf';
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        
-        setSubmitted(true);
-        setError(null);
-        
-      } catch (downloadError) {
-        if (downloadError instanceof Error) {
-          if (downloadError.name === 'AbortError') {
-            setError('Form submitted successfully, but download timed out. Please try downloading manually.');
-          } else {
-            setError('Form submitted successfully, but download failed. Please contact support or try downloading manually.');
-          }
-        } else {
-          setError('Form submitted successfully, but download failed. Please contact support or try downloading manually.');
-        }
-        setSubmitted(false);
-      }
+      // Attempt file download
+      await attemptFileDownload();
+      
+      setSubmitted(true);
+      setError(null);
       
     } catch (err) {
-      setError('Unexpected error. Please try again.');
-      setSubmitted(false);
+      const errorMessage = err instanceof Error ? err.message : 'Unexpected error. Please try again.';
+      
+      if (errorMessage.includes('Failed to submit form')) {
+        setError(errorMessage);
+        setSubmitted(false);
+      } else {
+        // Form was submitted successfully, but download failed
+        setError(`Form submitted successfully, but ${errorMessage.toLowerCase()} Please contact support or try downloading manually.`);
+        setSubmitted(false);
+      }
     } finally {
       setLoading(false);
     }

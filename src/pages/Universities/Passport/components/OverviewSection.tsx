@@ -3,6 +3,7 @@ import { Database, Layers, Award, Briefcase } from "lucide-react";
 const OverviewSection = () => {
   const points = [
     {
+      id: 'skill-passport-overview',
       Icon: Database,
       text: (
         <>
@@ -18,6 +19,7 @@ const OverviewSection = () => {
       ),
     },
     {
+      id: 'curriculum-gap-challenge',
       Icon: Layers,
       text: (
         <>
@@ -29,6 +31,7 @@ const OverviewSection = () => {
       ),
     },
     {
+      id: 'key-benefits',
       Icon: Award,
       text: (
         <>
@@ -43,6 +46,7 @@ const OverviewSection = () => {
       ),
     },
     {
+      id: 'data-backed-insights',
       Icon: Briefcase,
       text: (
         <>
@@ -68,10 +72,10 @@ const OverviewSection = () => {
 
         {/* Content Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 text-left">
-          {points.map((item, idx) => (
-            <div key={`overview-${item.Icon.name}-${idx}`} className="flex items-start gap-5">
+          {points.map((item) => (
+            <div key={item.id} className="flex items-start gap-5">
               <div className="flex-shrink-0 mt-1">
-                <item.Icon className="w-8 h-8 text-black" aria-hidden={true} />
+                <item.Icon className="w-8 h-8 text-black" aria-hidden />
               </div>
               <div className="text-base md:text-lg leading-relaxed text-gray-700">
                 {item.text}
