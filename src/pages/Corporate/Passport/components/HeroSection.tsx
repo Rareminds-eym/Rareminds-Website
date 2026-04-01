@@ -243,32 +243,6 @@ const HeroSection = ({ onDemoClick }: { onDemoClick: () => void }) => {
     try {
       await submitFormToDatabase(form);
       setSubmitted(true);
-      
-      try {
-        await attemptFileDownload();
-        setError(null);
-        setDownloadError(false);
-      } catch (downloadErr) {
-        setDownloadError(true);
-        if (downloadErr instanceof Error) {
-          switch (downloadErr.message) {
-            case 'FILE_NOT_FOUND':
-              setError('Form submitted successfully! However, the file is temporarily unavailable. Use the options below to get your download.');
-              break;
-            case 'DOWNLOAD_TIMEOUT':
-              setError('Form submitted successfully! Download timed out. Use the options below to retry.');
-              break;
-            case 'NETWORK_ERROR':
-              setError('Form submitted successfully! Network error occurred. Use the options below to retry.');
-              break;
-            default:
-              setError('Form submitted successfully! Download failed. Use the options below to get your file.');
-          }
-        } else {
-          setError('Form submitted successfully! Download failed. Use the options below to get your file.');
-        }
-      }
-      
     } catch (err) {
       if (err instanceof Error && err.message === 'FORM_SUBMISSION_FAILED') {
         setError('Failed to submit form. Please try again.');
@@ -278,6 +252,33 @@ const HeroSection = ({ onDemoClick }: { onDemoClick: () => void }) => {
         setError('Unexpected error. Please try again.');
         setSubmitted(false);
         setDownloadError(false);
+      }
+      setLoading(false);
+      return;
+    }
+
+    try {
+      await attemptFileDownload();
+      setError(null);
+      setDownloadError(false);
+    } catch (downloadErr) {
+      setDownloadError(true);
+      if (downloadErr instanceof Error) {
+        switch (downloadErr.message) {
+          case 'FILE_NOT_FOUND':
+            setError('Form submitted successfully! However, the file is temporarily unavailable. Use the options below to get your download.');
+            break;
+          case 'DOWNLOAD_TIMEOUT':
+            setError('Form submitted successfully! Download timed out. Use the options below to retry.');
+            break;
+          case 'NETWORK_ERROR':
+            setError('Form submitted successfully! Network error occurred. Use the options below to retry.');
+            break;
+          default:
+            setError('Form submitted successfully! Download failed. Use the options below to get your file.');
+        }
+      } else {
+        setError('Form submitted successfully! Download failed. Use the options below to get your file.');
       }
     } finally {
       setLoading(false);
@@ -356,32 +357,32 @@ const HeroSection = ({ onDemoClick }: { onDemoClick: () => void }) => {
                   <div className="flex flex-col sm:flex-row gap-4 mb-4">
                     <div className="flex-1">
                       <label htmlFor="form-name" className="block text-gray-700 font-semibold mb-2">Your Name</label>
-                      <input id="form-name" type="text" name="name" value={form.name} onChange={handleChange} placeholder="Full Name" className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E32A18] text-black bg-white" />
+                      <input id="form-name" type="text" name="name" value={form.name} onChange={handleChange} placeholder="Full Name" required className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E32A18] text-black bg-white" />
                     </div>
                     <div className="flex-1">
                       <label htmlFor="form-company" className="block text-gray-700 font-semibold mb-2">Company</label>
-                      <input id="form-company" type="text" name="company" value={form.company} onChange={handleChange} placeholder="Company Name" className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E32A18] text-black bg-white" />
+                      <input id="form-company" type="text" name="company" value={form.company} onChange={handleChange} placeholder="Company Name" required className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E32A18] text-black bg-white" />
                     </div>
                   </div>
                   <div className="flex flex-col sm:flex-row gap-4 mb-4">
                     <div className="flex-1">
                       <label htmlFor="form-email" className="block text-gray-700 font-semibold mb-2">Email Address</label>
-                      <input id="form-email" type="email" name="email" value={form.email} onChange={handleChange} placeholder="name@company.com" className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E32A18] text-black bg-white" />
+                      <input id="form-email" type="email" name="email" value={form.email} onChange={handleChange} placeholder="name@company.com" required className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E32A18] text-black bg-white" />
                     </div>
                     <div className="flex-1">
                       <label htmlFor="form-phone" className="block text-gray-700 font-semibold mb-2">Phone Number</label>
-                      <input id="form-phone" type="tel" name="phone" value={form.phone} onChange={handleChange} placeholder="+91 98765 43210" className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E32A18] text-black bg-white" />
+                      <input id="form-phone" type="tel" name="phone" value={form.phone} onChange={handleChange} placeholder="+91 98765 43210" required className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E32A18] text-black bg-white" />
                     </div>
                   </div>
                   <div className="flex flex-col sm:flex-row gap-4 mb-4">
                     <div className="flex-1">
                       <label htmlFor="form-role" className="block text-gray-700 font-semibold mb-2">Role to Hire</label>
-                      <input id="form-role" type="text" name="role" value={form.role} onChange={handleChange} placeholder="Job Title/Position" className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E32A18] text-black bg-white" />
+                      <input id="form-role" type="text" name="role" value={form.role} onChange={handleChange} placeholder="Job Title/Position" required className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E32A18] text-black bg-white" />
                     </div>
                   </div>
                   <div className="mb-4">
                     <label htmlFor="form-message" className="block text-gray-700 font-semibold mb-2">Message</label>
-                    <textarea id="form-message" name="message" value={form.message} onChange={handleChange} placeholder="Tell us about your hiring needs or challenges" className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E32A18] text-black bg-white resize-none" rows={3} />
+                    <textarea id="form-message" name="message" value={form.message} onChange={handleChange} placeholder="Tell us about your hiring needs or challenges" required className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E32A18] text-black bg-white resize-none" rows={3} />
                   </div>
                   {error && <p className="text-red-600 mb-2">{error}</p>}
                   {submitted && !error && !downloadError && <p className="text-green-600 mb-2">Thank you! Your download should start automatically.</p>}

@@ -49,7 +49,7 @@ const Programs = () => {
                   />
                 </div>
                 <div className="w-full h-[20%] bg-white flex justify-end items-center">
-                  <button className="px-6 py-2 bg-black hover:text-yellow-200 rounded-md text-white flex items-center justify-center">See More</button>
+                  <button type="button" className="px-6 py-2 bg-black hover:text-yellow-200 rounded-md text-white flex items-center justify-center">See More</button>
                 </div>
               </div>
             ))}
