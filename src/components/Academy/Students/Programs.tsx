@@ -42,7 +42,7 @@ const Programs = () => {
 {programData.map((program) => (
 <div key={`program-${program.id}`} className="w-80 h-80">
 <div className="w-full h-[80%] bg-white flex flex-col items-center justify-center relative">
-    <span className="text-lg font-semibold absolute left-11 top-12 text-white" aria-label={`Step ${program.id}`}>{program.id}</span>
+    <span className="text-lg font-semibold absolute left-11 top-12 text-white" role="doc-pagebreak" aria-label={`Step ${program.id}`}>{program.id}</span>
 
  <h2 className="text-xl absolute w-[250px] right-2 content-center">{program.title}</h2>
 

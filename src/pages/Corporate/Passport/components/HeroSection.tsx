@@ -1,7 +1,7 @@
 import { FaCalendarAlt, FaDownload } from "react-icons/fa";
 import { supabase } from "../../../../lib/supabase";
 import { motion, AnimatePresence } from "framer-motion";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 const banner1 = "/passport/Home-page-banner_1.png";
 const banner2 = "/passport/Home-page-banner_2.png";
 const banner3 = "/passport/Home-page-banner_3.png";
@@ -63,7 +63,7 @@ const mobileSlides = [
 
 const HeroSection = ({ onDemoClick }: { onDemoClick: () => void }) => {
   const [showForm, setShowForm] = useState(false);
-  const [formTimeout, setFormTimeout] = useState<NodeJS.Timeout | null>(null);
+  const formTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const [current, setCurrent] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
   const [form, setForm] = useState({
@@ -100,8 +100,9 @@ const HeroSection = ({ onDemoClick }: { onDemoClick: () => void }) => {
     const newForm = { ...form, [e.target.name]: e.target.value };
     setForm(newForm);
     // If any field is filled, clear the timeout so form stays open
-    if (formTimeout && Object.values(newForm).some((v) => v.trim() !== "")) {
-      clearTimeout(formTimeout);
+    if (formTimeoutRef.current && Object.values(newForm).some((v) => v.trim() !== "")) {
+      clearTimeout(formTimeoutRef.current);
+      formTimeoutRef.current = null;
     }
   };
 
@@ -111,15 +112,18 @@ const HeroSection = ({ onDemoClick }: { onDemoClick: () => void }) => {
       const newTimeout = setTimeout(() => {
         setShowForm(false);
       }, 10000);
-      setFormTimeout(newTimeout);
-    } else if (formTimeout) {
-      clearTimeout(formTimeout);
-      setFormTimeout(null);
+      formTimeoutRef.current = newTimeout;
+    } else if (formTimeoutRef.current) {
+      clearTimeout(formTimeoutRef.current);
+      formTimeoutRef.current = null;
     }
     
     // Cleanup on unmount or dependency change
     return () => {
-      if (formTimeout) clearTimeout(formTimeout);
+      if (formTimeoutRef.current) {
+        clearTimeout(formTimeoutRef.current);
+        formTimeoutRef.current = null;
+      }
     };
   }, [showForm, form]);
 
@@ -206,7 +210,7 @@ const HeroSection = ({ onDemoClick }: { onDemoClick: () => void }) => {
         setSubmitted(false);
       } else {
         // Form was submitted successfully, but download failed
-        setError(`Form submitted successfully, but ${errorMessage.toLowerCase()} Please contact support or try downloading manually.`);
+        setError(`Form submitted successfully, but ${errorMessage.toLowerCase()}. Please contact support or try downloading manually.`);
         setSubmitted(false);
       }
     } finally {

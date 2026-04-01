@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import { useLocation } from 'react-router-dom';
@@ -61,6 +61,14 @@ import CurrentBlogs from '../../../components/Academy/Teacher/Current_blogs'
       }
     }
   }, [location]);
+
+  const blurStyle = useMemo(() => ({
+    background: `linear-gradient(to top, rgba(255,255,255,${0.85 * (blurPercent / 100)}) 40%, rgba(255,255,255,${0.2 * (blurPercent / 100)}) 100%)`,
+    backdropFilter: `blur(${(18 * blurPercent) / 100}px)`,
+    WebkitBackdropFilter: `blur(${(18 * blurPercent) / 100}px)`,
+    zIndex: 20,
+    transition: 'background 0.2s, backdrop-filter 0.2s',
+  }), [blurPercent]);
 
     useEffect(() => {
       const handleScroll = () => {
@@ -131,13 +139,7 @@ import CurrentBlogs from '../../../components/Academy/Teacher/Current_blogs'
     {isHeroBlurred && (
       <div
         className="absolute bottom-0 left-0 w-full h-full pointer-events-none"
-        style={{
-          background: `linear-gradient(to top, rgba(255,255,255,${0.85 * (blurPercent / 100)}) 40%, rgba(255,255,255,${0.2 * (blurPercent / 100)}) 100%)`,
-          backdropFilter: `blur(${(18 * blurPercent) / 100}px)` ,
-          WebkitBackdropFilter: `blur(${(18 * blurPercent) / 100}px)` ,
-          zIndex: 20,
-          transition: 'background 0.2s, backdrop-filter 0.2s',
-        }}
+        style={blurStyle}
       />
     )}
   </div>
