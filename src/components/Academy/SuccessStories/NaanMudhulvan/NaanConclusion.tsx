@@ -1,6 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { ArrowRight } from "lucide-react";
 
 interface SectionData {
   title: string;
@@ -10,15 +11,22 @@ interface SectionData {
 interface ConclusionSectionProps {
   section: SectionData;
 }
-
+const isMobile = window.innerWidth < 768;
+const isTablet = window.innerWidth >= 768 && window.innerWidth < 1024;
 const styles: Record<string, React.CSSProperties> = {
   wrapper: {
     backgroundColor: '#ffffff',
     padding: '120px 0 140px 0',
     width: '100vw',
     marginLeft: 'calc(-50vw + 50%)',
-    marginTop: '-80px',
+    marginTop: '-100px',
     marginBottom: '-80px',
+    ...(isMobile && {
+    paddingTop: '68px',
+  }),
+   ...(isTablet && {
+    paddingTop: '40px',
+  }),
   },
   inner: {
     maxWidth: '1100px',
@@ -81,30 +89,6 @@ const scaleIn = {
   },
 };
 
-const rowContainer = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: { staggerChildren: 0.18, delayChildren: 0.1 },
-  },
-};
-
-const paragraphContainer = {
-  hidden: {},
-  visible: {
-    transition: { staggerChildren: 0.14, delayChildren: 0.2 },
-  },
-};
-
-const paragraphItem = {
-  hidden: { opacity: 0, y: 20 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.5, ease: 'easeOut' },
-  },
-};
-
 const ConclusionSection: React.FC<ConclusionSectionProps> = ({ section }) => {
   const [isMobile, setIsMobile] = useState(false);
   const [isTablet, setIsTablet] = useState(false);
@@ -130,17 +114,7 @@ const ConclusionSection: React.FC<ConclusionSectionProps> = ({ section }) => {
       return acc;
     }, []);
 
-  const leftColStyle: React.CSSProperties = isMobile
-    ? {
-        flex: '0 0 100%',
-        position: 'relative',
-        height: '220px',
-        display: 'flex',
-        alignItems: 'flex-end',
-        justifyContent: 'center',
-        paddingBottom: '10px',
-      }
-    : isTablet
+  const leftColStyle: React.CSSProperties = isTablet
     ? {
         flex: '0 0 100%',
         position: 'relative',
@@ -165,8 +139,8 @@ const ConclusionSection: React.FC<ConclusionSectionProps> = ({ section }) => {
     bottom: '0px',
     left: '50%',
     transform: 'translateX(-50%)',
-    width: isMobile ? '260px' : isTablet ? '420px' : '450px',
-    height: isMobile ? '210px' : isTablet ? '320px' : '350px',
+    width: isTablet ? '420px' : '450px',
+    height: isTablet ? '320px' : '350px',
     borderRadius: '215px',
     backgroundColor: '#e0eeff',
     zIndex: 0,
@@ -174,8 +148,8 @@ const ConclusionSection: React.FC<ConclusionSectionProps> = ({ section }) => {
 
   const imageStyle: React.CSSProperties = {
     width: '100%',
-    maxWidth: isMobile ? '240px' : isTablet ? '360px' : '400px',
-    height: isMobile ? '200px' : isTablet ? '300px' : '330px',
+    maxWidth: isTablet ? '360px' : '400px',
+    height: isTablet ? '300px' : '330px',
     objectFit: 'contain',
     position: 'relative',
     zIndex: 1,
@@ -191,27 +165,109 @@ const ConclusionSection: React.FC<ConclusionSectionProps> = ({ section }) => {
     marginTop: isMobile ? '20px' : '40px',
   };
 
-  const textCardStyle: React.CSSProperties = {
-    ...styles.textCard,
-    padding: isMobile ? '18px 20px' : '32px 36px',
-    minHeight: isMobile ? 'unset' : '280px',
-  };
-
-  const sectionTitleStyle: React.CSSProperties = {
-    fontSize: isMobile ? '0.85rem' : '1.2rem',
-    fontWeight: 700,
-    color: '#111',
-    marginBottom: isMobile ? '8px' : '14px',
-  };
-
   const paragraphStyle: React.CSSProperties = {
     fontSize: isMobile ? '0.72rem' : '0.9rem',
-    lineHeight: isMobile ? '1.4' : '1.5',
+    lineHeight: isMobile ? '1.6' : '1.5',
     color: '#333',
-    marginBottom: isMobile ? '8px' : '16px',
+    marginBottom: isMobile ? '10px' : '16px',
     textAlign: 'justify' as const,
+    wordSpacing: isMobile ? '-1.8px' : 'normal',
   };
 
+  // ── Mobile layout ──
+  if (isMobile) {
+    return (
+      <section style={styles.wrapper}>
+        <div style={styles.inner}>
+
+          <motion.h2
+            style={titleStyle}
+            variants={fadeUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.5 }}
+          >
+            {section.title}
+          </motion.h2>
+
+          <motion.div
+            style={{ ...styles.textCard, padding: '0px', overflow: 'hidden' }}
+            variants={scaleIn}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.15 }}
+          >
+            <div
+              style={{
+                position: 'relative',
+                width: '100%',
+                height: '220px',
+                display: 'flex',
+                alignItems: 'flex-end',
+                justifyContent: 'center',
+                overflow: 'hidden',
+                borderRadius: '12px 12px 0 0',
+              }}
+            >
+              <div
+                style={{
+                  position: 'absolute',
+                  bottom: '0px',
+                  left: '50%',
+                  transform: 'translateX(-50%)',
+                  width: '260px',
+                  height: '210px',
+                  borderRadius: '215px',
+                  backgroundColor: '#e0eeff',
+                  zIndex: 0,
+                }}
+              />
+              <motion.img
+                src={IMAGE_URL}
+                alt="Conclusion illustration"
+                style={{
+                  width: '100%',
+                  maxWidth: '240px',
+                  height: '200px',
+                  objectFit: 'contain',
+                  position: 'relative',
+                  zIndex: 1,
+                  marginTop: '20px',
+                }}
+                variants={scaleIn}
+                onError={(e) => {
+                  (e.target as HTMLImageElement).style.display = 'none';
+                }}
+              />
+            </div>
+
+            {/* Text + Button inside card */}
+            <div style={{ padding: '18px 20px' }}>
+              {paragraphs.length > 1 ? (
+                paragraphs.map((para, idx) => (
+                  <p key={idx} style={paragraphStyle}>
+                    {para.trim()}
+                  </p>
+                ))
+              ) : (
+                <p style={paragraphStyle}>{section.content}</p>
+              )}
+
+              {/* ── Download button inside card (mobile) ── */}
+              <div style={{ display: 'flex', justifyContent: 'center', marginTop: '16px', paddingBottom: '4px' }}>
+                <button className="bg-[#5BA4CF] hover:bg-[#4A93BE] text-white font-medium px-4 py-2 rounded-lg transition-colors duration-200 flex items-center gap-1 text-xs">
+                  Download case study <ArrowRight size={16} />
+                </button>
+              </div>
+            </div>
+          </motion.div>
+
+        </div>
+      </section>
+    );
+  }
+
+  // ── Desktop / Tablet layout ──
   return (
     <section style={styles.wrapper}>
       <div style={styles.inner}>
@@ -223,18 +279,18 @@ const ConclusionSection: React.FC<ConclusionSectionProps> = ({ section }) => {
           whileInView="visible"
           viewport={{ once: true, amount: 0.5 }}
         >
-          Conclusion
+          {section.title}
         </motion.h2>
 
-        <motion.div
-          style={styles.contentRow}
-          variants={rowContainer}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.15 }}
-        >
+        <div style={styles.contentRow}>
 
-          <motion.div style={leftColStyle} variants={fadeIn}>
+          <motion.div
+            style={leftColStyle}
+            variants={fadeIn}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.1 }}
+          >
             <div style={blueShapeStyle} />
             <div style={styles.illustrationWrapper}>
               <motion.img
@@ -242,6 +298,9 @@ const ConclusionSection: React.FC<ConclusionSectionProps> = ({ section }) => {
                 alt="Conclusion illustration"
                 style={imageStyle}
                 variants={scaleIn}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, amount: 0.1 }}
                 onError={(e) => {
                   (e.target as HTMLImageElement).style.display = 'none';
                 }}
@@ -249,38 +308,36 @@ const ConclusionSection: React.FC<ConclusionSectionProps> = ({ section }) => {
             </div>
           </motion.div>
 
-          <motion.div style={styles.rightCol} variants={fadeUp}>
-            <motion.div style={textCardStyle} variants={scaleIn}>
-              <motion.h3 style={sectionTitleStyle} variants={fadeUp}>
-                {section.title}
-              </motion.h3>
+          <motion.div
+            style={styles.rightCol}
+            variants={fadeUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.1 }}
+          >
+            {/* Card with button inside */}
+            <div style={{ ...styles.textCard, padding: '32px 36px', minHeight: '280px' }}>
+              {paragraphs.length > 1 ? (
+                paragraphs.map((para, idx) => (
+                  <p key={idx} style={paragraphStyle}>
+                    {para.trim()}
+                  </p>
+                ))
+              ) : (
+                <p style={paragraphStyle}>{section.content}</p>
+              )}
 
-              <motion.div
-                variants={paragraphContainer}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true, amount: 0.2 }}
-              >
-                {paragraphs.length > 1 ? (
-                  paragraphs.map((para, idx) => (
-                    <motion.p
-                      key={idx}
-                      style={paragraphStyle}
-                      variants={paragraphItem}
-                    >
-                      {para.trim()}
-                    </motion.p>
-                  ))
-                ) : (
-                  <motion.p style={paragraphStyle} variants={paragraphItem}>
-                    {section.content}
-                  </motion.p>
-                )}
-              </motion.div>
-            </motion.div>
+              {/* ── Download button inside card (desktop/tablet) ── */}
+              <div style={{ display: 'flex', justifyContent: 'flex-start', marginTop: '24px' }}>
+                <button className="bg-[#5BA4CF] hover:bg-[#4A93BE] text-white font-medium px-6 py-3 rounded-lg transition-colors duration-200 flex items-center gap-2">
+                  Download case study <ArrowRight size={16} />
+                </button>
+              </div>
+            </div>
+
           </motion.div>
 
-        </motion.div>
+        </div>
       </div>
     </section>
   );

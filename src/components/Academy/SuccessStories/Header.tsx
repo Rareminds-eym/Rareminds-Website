@@ -22,7 +22,7 @@ export const Header = ({ searchQuery, onSearchChange }: HeaderProps) => {
       />
       {/* Desktop Image */}
       <img
-        src="/success_banner_rich_580.png"
+        src="/Success Stories Banner copy.jpg"
         alt="Success Stories Banner"
         className="hidden lg:block w-full h-full object-cover object-center"
       />
