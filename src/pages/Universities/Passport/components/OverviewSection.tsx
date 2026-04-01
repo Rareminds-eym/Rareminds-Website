@@ -68,7 +68,7 @@ const OverviewSection = () => {
         <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-black">
           What is <span className="text-black">Rareminds Skill Passport</span>?
         </h2>
-        <div className="w-24 h-1 bg-red-600 mx-auto mt-4 mb-16 rounded-full opacity-80" />
+        <div className="w-24 h-1 bg-[#E32A18] mx-auto mt-4 mb-16 rounded-full opacity-80" />
 
         {/* Content Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 text-left">
@@ -77,9 +77,9 @@ const OverviewSection = () => {
               <div className="flex-shrink-0 mt-1">
                 <item.Icon className="w-8 h-8 text-black" aria-hidden />
               </div>
-              <div className="text-base md:text-lg leading-relaxed text-gray-700">
+              <p className="text-base md:text-lg leading-relaxed text-gray-700">
                 {item.text}
-              </div>
+              </p>
             </div>
           ))}
         </div>

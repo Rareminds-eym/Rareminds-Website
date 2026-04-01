@@ -107,13 +107,11 @@ const HeroSection = ({ onDemoClick }: { onDemoClick: () => void }) => {
 
   // Start timeout when form is opened
   useEffect(() => {
-    let timeout: NodeJS.Timeout | null = null;
-    
     if (showForm && Object.values(form).every((v) => v.trim() === "")) {
-      timeout = setTimeout(() => {
+      const newTimeout = setTimeout(() => {
         setShowForm(false);
       }, 10000);
-      setFormTimeout(timeout);
+      setFormTimeout(newTimeout);
     } else if (formTimeout) {
       clearTimeout(formTimeout);
       setFormTimeout(null);
@@ -121,10 +119,9 @@ const HeroSection = ({ onDemoClick }: { onDemoClick: () => void }) => {
     
     // Cleanup on unmount or dependency change
     return () => {
-      if (timeout) clearTimeout(timeout);
       if (formTimeout) clearTimeout(formTimeout);
     };
-  }, [showForm, form, formTimeout]);
+  }, [showForm, form]);
 
   const handleOpenForm = () => {
     setShowForm(true);
