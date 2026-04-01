@@ -61,17 +61,17 @@ const OverviewSection = () => {
     <section className="py-16 md:py-24 px-4 sm:px-6 lg:px-8 min-h-screen flex flex-col justify-center">
       <div className="max-w-7xl mx-auto text-center">
         {/* Section Title */}
-        <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-[#000000]">
-          What is <span className="text-[#000000]">Rareminds Skill Passport</span>?
+        <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-black">
+          What is <span className="text-black">Rareminds Skill Passport</span>?
         </h2>
-        <div className="w-24 h-1 bg-[#E32A18] mx-auto mt-4 mb-16 rounded-full opacity-80" />
+        <div className="w-24 h-1 bg-red-600 mx-auto mt-4 mb-16 rounded-full opacity-80" />
 
         {/* Content Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 text-left">
           {points.map((item, idx) => (
-            <div key={idx} className="flex items-start gap-5">
+            <div key={`overview-point-${idx}`} className="flex items-start gap-5">
               <div className="flex-shrink-0 mt-1">
-                <item.Icon className="w-8 h-8 text-[#000000]" aria-hidden="true" />
+                <item.Icon className="w-8 h-8 text-black" aria-hidden="true" />
               </div>
               <div className="text-base md:text-lg leading-relaxed text-gray-700">
                 {item.text}

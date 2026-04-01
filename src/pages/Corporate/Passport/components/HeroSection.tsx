@@ -122,10 +122,17 @@ const HeroSection = ({ onDemoClick }: { onDemoClick: () => void }) => {
     };
   }, [showForm, form]);
 
+  const handleOpenForm = () => {
+    setShowForm(true);
+    setError(null);
+    setSubmitted(false);
+  };
+
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
+    setSubmitted(false); // Reset submitted state
     
     try {
       const { error } = await supabase.from('pdf_downloads').insert([{
@@ -135,28 +142,40 @@ const HeroSection = ({ onDemoClick }: { onDemoClick: () => void }) => {
       
       if (error) {
         setError('Failed to submit. Please try again.');
-        setSubmitted(false);
-      } else {
-        setSubmitted(true);
-        // Start download after successful submit
-        try {
-          const link = document.createElement('a');
-          link.href = '/passport/pdf/Resume checklist.pdf';
-          link.download = 'Resume-Checklist.pdf';
-          document.body.appendChild(link);
-          link.click();
-          document.body.removeChild(link);
-        } catch (downloadError) {
-          console.error('Download failed:', downloadError);
-          setError('Download failed. Please try again or contact support.');
-        }
+        return;
       }
+
+      // Form submission successful, now attempt download
+      try {
+        // First check if file exists by attempting to fetch it
+        const response = await fetch('/passport/pdf/Resume checklist.pdf', { method: 'HEAD' });
+        
+        if (!response.ok) {
+          throw new Error(`File not found (${response.status})`);
+        }
+
+        // File exists, proceed with download
+        const link = document.createElement('a');
+        link.href = '/passport/pdf/Resume checklist.pdf';
+        link.download = 'Resume-Checklist.pdf';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        
+        // Only set submitted to true if both form submission AND download succeed
+        setSubmitted(true);
+        
+      } catch (downloadError) {
+        // Download failed, but form was submitted successfully
+        setError('Form submitted successfully, but download failed. Please contact support or try downloading manually.');
+        // Don't set submitted to true since the complete flow failed
+      }
+      
     } catch (err) {
       setError('Unexpected error. Please try again.');
-      setSubmitted(false);
+    } finally {
+      setLoading(false);
     }
-    
-    setLoading(false);
   };
 
 
@@ -223,7 +242,7 @@ const HeroSection = ({ onDemoClick }: { onDemoClick: () => void }) => {
                 <FaCalendarAlt /> Enquiry
               </button>
               <button
-                onClick={() => setShowForm(true)}
+                onClick={handleOpenForm}
                 className="bg-white hover:bg-gray-50 border-2 border-[#E32A18] text-[#E32A18] hover:text-[#cc2515] px-7 py-3 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center gap-2 shadow-lg"
               >
                 <FaDownload /> Download
@@ -235,7 +254,11 @@ const HeroSection = ({ onDemoClick }: { onDemoClick: () => void }) => {
                 <form className="bg-white rounded-xl p-6 shadow-2xl max-w-2xl w-full relative max-h-[90vh] overflow-y-auto" autoComplete="off" onSubmit={handleFormSubmit}>
                 <button 
                   type="button" 
-                  onClick={() => setShowForm(false)}
+                  onClick={() => {
+                    setShowForm(false);
+                    setError(null);
+                    setSubmitted(false);
+                  }}
                   className="absolute top-4 right-4 text-gray-600 hover:text-red-500 text-3xl font-bold focus:outline-none z-10"
                   aria-label="Close form"
                 >
@@ -272,7 +295,7 @@ const HeroSection = ({ onDemoClick }: { onDemoClick: () => void }) => {
                   <textarea name="message" value={form.message} onChange={handleChange} placeholder="Tell us about your hiring needs or challenges" className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E32A18] text-black bg-white resize-none" rows={3} />
                 </div>
                 {error && <p className="text-red-600 mb-2">{error}</p>}
-                {submitted && <p className="text-green-600 mb-2">Thank you! Your download will start now.</p>}
+                {submitted && !error && <p className="text-green-600 mb-2">Thank you! Your download will start now.</p>}
                 <button
                   type="submit"
                   disabled={!isFormComplete || loading || submitted}

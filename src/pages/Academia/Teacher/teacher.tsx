@@ -3,7 +3,6 @@ import AOS from 'aos';
 import 'aos/dist/aos.css';
 import { useLocation } from 'react-router-dom';
 import { Helmet } from "react-helmet-async";
-import { Book, Calendar, Circle, Users } from "lucide-react";
 import StatsShowcase from "../../../components/Academy/Teacher/StatsShowcase";
 import Logos from "../../../components/Academy/Teacher/Logos";
 import FacultyTransformation from "../../../components/Academy/Teacher/FacultyTransformation";
@@ -29,7 +28,6 @@ import CurrentBlogs from '../../../components/Academy/Teacher/Current_blogs'
 
       const contactRef = useRef<HTMLDivElement>(null);
       const logoRef = useRef<HTMLDivElement>(null);
-      const facultyTransformationRef = useRef<HTMLDivElement>(null);
       
       
 
@@ -40,14 +38,6 @@ import CurrentBlogs from '../../../components/Academy/Teacher/Current_blogs'
     const scrollToLogo = () => {
       logoRef.current?.scrollIntoView({ behavior: "smooth" });
     };
-
-
-    const stats = [
-      { icon: Book, value: "20,000+", label: "Teachers Trained" },
-      { icon: Users, value: "100+", label: "Schools Onboarded" },
-      { icon: Calendar, value: "250+", label: "Pilots Deployed" },
-      { icon: Circle, value: "92%", label: "Teachers Satisfaction Rate" },
-    ];
 
     useEffect(() => {
       AOS.init({
@@ -72,34 +62,22 @@ import CurrentBlogs from '../../../components/Academy/Teacher/Current_blogs'
       if (el) {
         el.scrollIntoView({ behavior: 'smooth' });
       }
+    } else if (location.hash === '#contact-section') {
+      const section = document.getElementById('contact-section');
+      if (section) {
+        setTimeout(() => {
+          section.scrollIntoView({ behavior: 'smooth' });
+        }, 100);
+      }
+    } else if (location.hash === '#scrollToFacultyTransformation') {
+      const section = document.getElementById('scrollToFacultyTransformation');
+      if (section) {
+        setTimeout(() => {
+          section.scrollIntoView({ behavior: 'smooth' });
+        }, 100);
+      }
     }
   }, [location]);
-
-
-useEffect(() => {
-  const hash = location.hash;
-  if (hash === '#contact-section') {
-    const section = document.getElementById('contact-section');
-    if (section) {
-      setTimeout(() => {
-        section.scrollIntoView({ behavior: 'smooth' });
-      }, 100);
-    }
-  }
-}, [location]);
-
-
-useEffect(() => {
-  const hash = location.hash;
-  if (hash === '#scrollToFacultyTransformation') {
-    const section = document.getElementById('scrollToFacultyTransformation');
-    if (section) {
-      setTimeout(() => {
-        section.scrollIntoView({ behavior: 'smooth' });
-      }, 100);
-    }
-  }
-}, [location]);
 
     useEffect(() => {
       const handleScroll = () => {
@@ -166,7 +144,7 @@ useEffect(() => {
 
           <div className="w-full fixed z-50">
   <div className="relative">
-    <Hero HeroToLogo={scrollToLogo} HeroToContact={scrollToContact} isBlurred={isHeroBlurred} />
+    <Hero HeroToLogo={scrollToLogo} HeroToContact={scrollToContact} />
     {isHeroBlurred && (
       <div
         className="absolute bottom-0 left-0 w-full h-full pointer-events-none"
@@ -269,10 +247,7 @@ useEffect(() => {
        
 
         <div className="min-h-screen flex items-center justify-center relative z-10 bg-white">
-          <StatsShowcase
-            title="We've Trained Over 20,000 Educators Across 100+ Institutions"
-            stats={stats}
-          />
+          <StatsShowcase />
         </div>
 
 
@@ -283,7 +258,7 @@ useEffect(() => {
 
 
      
-          <div ref={facultyTransformationRef} className="min-h-screen flex items-center justify-center relative z-10 bg-white" id="scrollToFacultyTransformation">
+          <div className="min-h-screen flex items-center justify-center relative z-10 bg-white" id="scrollToFacultyTransformation">
          <FacultyTransformation />
          </div>
           <div className="min-h-screen flex items-center justify-center relative z-10 bg-white">
