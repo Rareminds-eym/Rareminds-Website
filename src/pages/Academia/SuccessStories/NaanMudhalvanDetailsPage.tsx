@@ -1,5 +1,7 @@
 import { useParams, Link } from 'react-router-dom';
-import { projects } from '../../../components/Academy/SuccessStories/SuccessStorieslistings';
+import { useState, useEffect } from 'react';
+import { getProgramWithSections } from '../../../lib/api/programs';
+import type { ProgramWithTransformedSections } from '../../../types/program';
 import AcademyHeader from '../../../components/Header/AcademyHeader';
 import HeroSection from '../../../components/Academy/SuccessStories/NaanMudhulvan/HeroSection';
 import NaanIntroduction from '../../../components/Academy/SuccessStories/NaanMudhulvan/NaanIntroduction';
@@ -11,40 +13,71 @@ import NaanConclusion from '../../../components/Academy/SuccessStories/NaanMudhu
 
 function NaanMudhalvanDetailsPage() {
   const { name } = useParams<{ name: string }>();
-  
-  // Function to convert URL slug back to project name for matching
-  const urlToName = (urlSlug: string) => {
-    // Handle special cases for better matching
-    const specialCases: { [key: string]: string } = {
-      'naan-mudhalvan-2023-upskilling-program-powered-by-rareminds': 'Naan Mudhalvan 2023 Upskilling Program (Powered by Rareminds)',
-      'naan-mudhalvan-2024-upskilling-program-powered-by-rareminds': 'Naan Mudhalvan 2024 Upskilling Program (Powered by Rareminds)',
-      'naan-mudhalvan-4th-sem-2025-upskilling-program-powered-by-rareminds': 'Naan Mudhalvan 4th sem 2025 Upskilling Program (Powered by Rareminds)',
-      'naan-mudhalvan-6th-sem-2025-upskilling-program-powered-by-rareminds': 'Naan Mudhalvan 6th sem 2025 Upskilling Program (Powered by Rareminds)',
-      'naan-mudhalvan-2025-upskilling-program-powered-by-rareminds': 'Naan Mudhalvan 2025 Upskilling Program (Powered by Rareminds)'
-    };
-    
-    if (specialCases[urlSlug]) {
-      return specialCases[urlSlug];
-    }
-    
-    // For other projects, try to match by converting back
-    return urlSlug.split('-').map(word => 
-      word.charAt(0).toUpperCase() + word.slice(1)
-    ).join(' ');
-  };
-  
-  const project = projects.find(p => {
-    const projectSlug = p.name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
-    return projectSlug === name || p.name === urlToName(name || '');
-  });
+  const [project, setProject] = useState<ProgramWithTransformedSections | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  if (!project) {
+  useEffect(() => {
+    const fetchProject = async () => {
+      if (!name) {
+        setError('No project name provided');
+        setLoading(false);
+        return;
+      }
+
+      try {
+        setLoading(true);
+        
+        const { data, error: apiError } = await getProgramWithSections(name);
+        
+        if (apiError) {
+          console.error('❌ [NAAN MUDHALVAN] API Error:', apiError);
+          setError('Failed to load Naan Mudhalvan program data');
+          setProject(null);
+        } else if (data) {
+          setProject(data);
+          setError(null);
+        } else {
+          console.log('❌ [NAAN MUDHALVAN] No project found for slug:', name);
+          setError('Naan Mudhalvan program not found');
+          setProject(null);
+        }
+      } catch (err) {
+        setError('Failed to load Naan Mudhalvan program data');
+        setProject(null);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProject();
+  }, [name]);
+
+  // Loading state
+  if (loading) {
     return (
       <div className="min-h-screen bg-white">
         <AcademyHeader />
         <div className="container mx-auto px-4 pt-32 pb-8">
           <div className="text-center">
-            <h1 className="text-2xl font-bold text-gray-900 mb-4">Naan Mudhalvan Program Not Found</h1>
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+            <p className="text-gray-600">Loading Naan Mudhalvan program details...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Error state
+  if (error || !project) {
+    return (
+      <div className="min-h-screen bg-white">
+        <AcademyHeader />
+        <div className="container mx-auto px-4 pt-32 pb-8">
+          <div className="text-center">
+            <h1 className="text-2xl font-bold text-gray-900 mb-4">
+              {error || 'Naan Mudhalvan Program Not Found'}
+            </h1>
             <Link 
               to="/SuccessStories" 
               className="text-blue-600 hover:text-blue-800 font-medium"
@@ -57,6 +90,108 @@ function NaanMudhalvanDetailsPage() {
     );
   }
 
+  // Fix banner logic using exact logic as specified
+  const banner = 
+    project?.bannerUrl ||
+    (project as any)?.banner_url ||
+    project?.image_url ||
+    "/default-banner.png";
+
+  // Transform project data to match expected format for components
+  const transformedProject = {
+    // Required Project interface fields for HeroSection
+    id: project.id,
+    name: project.title,
+    description: project.short_description || '',
+    category: project.program_type,
+    status: project.status,
+    year: project.date ? new Date(project.date).getFullYear().toString() : '',
+    location: project.location,
+    technologies: [] as string[], // Default empty array
+    imageUrl: project.image_url,
+    bannerUrl: banner, // Use the fixed banner logic
+    timeline: project.date ? new Date(project.date).getFullYear().toString() : ''
+  };
+
+  // Transform sections for components that need specific formats
+  // ✅ Using API response directly: project.sections (already filtered by program_id)
+  const transformedSections = {
+    // For NaanIntroduction - expects { title: string; content: string }
+    introduction: project.sections?.introduction ? {
+      title: project.sections.introduction.title,
+      content: project.sections.introduction.content
+    } : null,
+
+    // For NaanAboutProgramme - expects AboutSection and CourseEnrollmentSection
+    about: project.sections?.about ? {
+      title: project.sections.about.title,
+      content: project.sections.about.content
+    } : null,
+
+    courseEnrollment: project.sections?.course_enrollment ? {
+      title: project.sections.course_enrollment.title,
+      content: project.sections.course_enrollment.content
+    } : null,
+
+    // For NaanImpactSection - expects { title: string; content: string }
+    impact: project.sections?.impact ? {
+      title: project.sections.impact.title,
+      content: project.sections.impact.content
+    } : null,
+
+    // For NaanStrategicAlignment - expects { title: string; description: string; content: ContentItem[] }
+    strategicAlignment: project.sections?.strategic_alignment ? {
+      title: project.sections.strategic_alignment.title,
+      description: (() => {
+        // Set appropriate description based on program slug
+        if (project.slug === 'naan-mudhalvan-2024') {
+          return 'This initiative directly advanced the mission of the Tamil Nadu Skill Development Corporation through:';
+        } else if (project.slug === 'naan-mudhalvan-2023') {
+          return 'This initiative directly contributed to the Tamil Nadu Skill Development Corporation\'s mission through:';
+        } else if (project.slug === 'naan-mudhalvan-6th-sem-2025') {
+          return 'The Rareminds–TNSDC collaboration under the Naan Mudhalvan initiative exemplifies impactful industry-academia synergy:';
+        } else if (project.slug === 'naan-mudhalvan-2025') {
+          return 'This initiative aligned seamlessly with TNSDC and Naan Mudhalvan objectives:';
+        } else if (project.slug === 'naan-mudhalvan-4th-sem-2025') {
+          return 'This initiative aligned seamlessly with TNSDC and Naan Mudhalvan objectives:';
+        }
+        return 'Strategic alignment with organizational goals:';
+      })(),
+      content: project.sections.strategic_alignment.content
+        .split(/\.\s+(?=[A-Z])/) // Split on ". " followed by capital letter (start of new section)
+        .filter(section => section.trim().length > 0)
+        .map((section) => {
+          const trimmed = section.trim();
+          // Look for pattern "Title: Description"
+          const colonIndex = trimmed.indexOf(':');
+          if (colonIndex > 0 && colonIndex < trimmed.length - 1) {
+            const title = trimmed.substring(0, colonIndex).trim();
+            let description = trimmed.substring(colonIndex + 1).trim();
+            
+            // Ensure description ends with period
+            if (!description.endsWith('.')) {
+              description += '.';
+            }
+            
+            return { title, description };
+          }
+          
+          // Fallback: return the whole section as description with generic title
+          return {
+            title: 'Strategic Goal',
+            description: trimmed.endsWith('.') ? trimmed : trimmed + '.'
+          };
+        })
+        .filter(item => item.title.length > 3 && item.description.length > 10) // Filter out invalid items
+    } : null,
+
+    // For NaanConclusion - expects { title: string; content: string }
+    conclusion: project.sections?.conclusion ? {
+      title: project.sections.conclusion.title,
+      content: project.sections.conclusion.content
+    } : null
+  };
+
   return (
     <div className="min-h-screen bg-white">
       <AcademyHeader />
@@ -67,43 +202,43 @@ function NaanMudhalvanDetailsPage() {
       </div>
 
       {/* Naan Mudhalvan Introduction Section */}
-      {project.sections && project.sections['introduction'] && (
-        <NaanIntroduction section={project.sections['introduction']} />
+      {transformedSections.introduction && (
+        <NaanIntroduction section={transformedSections.introduction} />
       )}
 
       {/* Naan Mudhalvan About Programme Section */}
-      {project.sections && project.sections['about'] && project.sections['course_enrollment'] && (
+      {transformedSections.about && transformedSections.courseEnrollment && (
         <NaanAboutProgramme 
-          aboutSection={project.sections['about']} 
-          courseEnrollmentSection={project.sections['course_enrollment']} 
+          aboutSection={transformedSections.about} 
+          courseEnrollmentSection={transformedSections.courseEnrollment} 
         />
       )}
 
       {/* Naan Mudhalvan Course Enrollment Section */}
-      {project.sections && project.sections['course_enrollment'] && (
+      {transformedSections.courseEnrollment && (
         <NaanCourseEnrollment 
-          courseEnrollmentSection={project.sections['course_enrollment']} 
+          courseEnrollmentSection={transformedSections.courseEnrollment} 
         />
       )}
 
       {/* Naan Mudhalvan Impact Section */}
-      {project.sections && project.sections['impact'] && (
+      {transformedSections.impact && (
         <NaanImpactSection 
-          impactSection={project.sections['impact']} 
+          impactSection={transformedSections.impact} 
         />
       )}
 
       {/* Naan Mudhalvan Strategic Alignment Section */}
-      {project.sections && project.sections['strategic_alignment'] && (
+      {transformedSections.strategicAlignment && (
         <NaanStrategicAlignment 
-          strategicAlignmentSection={project.sections['strategic_alignment']} 
+          strategicAlignmentSection={transformedSections.strategicAlignment} 
         />
       )}
 
       {/* Naan Mudhalvan Conclusion Section */}
-      {project.sections && project.sections['conclusion'] && (
+      {transformedSections.conclusion && (
         <NaanConclusion 
-          section={project.sections['conclusion']} 
+          section={transformedSections.conclusion} 
         />
       )}
 
@@ -111,11 +246,11 @@ function NaanMudhalvanDetailsPage() {
       <div className="">
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto">
-            {/* Detailed Sections for Naan Mudhalvan */}
+            {/* Detailed Sections for Naan Mudhalvan - Using API data only */}
             {project.sections && (
               <div className="space-y-16">
                 {Object.entries(project.sections).map(([key, section], index) => {
-                  // Skip introduction, about, course_enrollment, impact, strategic_alignment, and conclusion as they're handled by special components
+                  // Skip sections that are handled by special components
                   if (key === 'introduction' || key === 'about' || key === 'course_enrollment' || key === 'impact' || key === 'strategic_alignment' || key === 'conclusion') return null;
                   
                   return (

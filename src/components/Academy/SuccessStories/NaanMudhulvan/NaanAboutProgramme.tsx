@@ -117,6 +117,101 @@ const NaanAboutProgramme: React.FC<NaanAboutProgrammeProps> = ({
   aboutSection,
   courseEnrollmentSection,
 }) => {
+  // Check if this is Naan Mudhalvan 2025 that needs the specific 3 blue cards
+  const isNaanMudhalvan2025 = (
+    courseEnrollmentSection.content.includes('3,886 students') &&
+    courseEnrollmentSection.content.includes('5,049 students') &&
+    courseEnrollmentSection.content.includes('5,560 students')
+  );
+
+  console.log('🔍 [NaanAboutProgramme] Detection check:', {
+    isNaanMudhalvan2025,
+    courseEnrollmentContent: courseEnrollmentSection.content.substring(0, 200) + '...'
+  });
+
+  // Naan Mudhalvan 2025 specific data
+  const naanMudhalvan2025Programs = [
+    {
+      title: 'Medical Coding',
+      description: 'Professional medical coding certification program for healthcare industry.',
+      students: '3,886',
+      icon: <BatteryIcon />
+    },
+    {
+      title: 'Good Manufacturing Practices (GMP)',
+      description: 'Essential GMP training for pharmaceutical and food industries.',
+      students: '5,049',
+      icon: <WheatIcon />
+    },
+    {
+      title: 'Food Safety and Quality Management',
+      description: 'Comprehensive training program in food safety and quality management.',
+      students: '5,560',
+      icon: <FlaskIcon />
+    }
+  ];
+
+  // If this is Naan Mudhalvan 2025, render the specific 3 blue cards layout
+  if (isNaanMudhalvan2025) {
+    console.log('🎯 [NaanAboutProgramme] Rendering Naan Mudhalvan 2025 specific layout');
+    return (
+      <section className="bg-white mt-2 sm:-mt-12 md:mt-5 lg:-mt-32 pb-3 px-4 md:px-8 max-w-5xl mx-auto">
+        {/* Title */}
+        <motion.h2
+          className="text-center font-extrabold text-gray-900 mb-8 tracking-tight text-2xl md:text-4xl"
+          variants={fadeUp}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.3 }}
+          custom={0}
+        >
+          {aboutSection.title}
+        </motion.h2>
+
+        {/* Description */}
+        <motion.div
+          className="max-w-3xl mx-auto mb-12 border border-gray-200 rounded-2xl px-6 py-6 md:px-8 md:py-8"
+          variants={fadeUp}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.3 }}
+          custom={0.15}
+        >
+          <p className="text-gray-700 font-normal leading-relaxed md:leading-relaxed text-sm md:text-base text-justify md:text-left">
+            {aboutSection.content}
+          </p>
+        </motion.div>
+
+        {/* Three Blue Cards Layout */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {naanMudhalvan2025Programs.map((program, index) => (
+            <motion.div
+              key={index}
+              className="text-white p-6 rounded-2xl shadow-md"
+              style={{ backgroundColor: index === 0 ? '#4a90d9' : index === 1 ? '#6aaee8' : '#8ec0f0' }}
+              variants={scaleIn}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.2 }}
+              custom={0.2 + index * 0.1}
+            >
+              <div className="mb-4">
+                <div className="w-10 h-10 bg-white bg-opacity-20 rounded-xl flex items-center justify-center mb-4">
+                  {program.icon}
+                </div>
+                <h3 className="text-lg font-bold mb-2">{program.title}</h3>
+                <p className="text-blue-100 text-sm mb-4">
+                  {program.description}
+                </p>
+              </div>
+              <div className="text-3xl font-bold mb-1">{program.students}</div>
+              <div className="text-blue-100 text-sm">Students</div>
+            </motion.div>
+          ))}
+        </div>
+      </section>
+    );
+  }
   const parseCoursesFromAbout = (content: string) => {
     const regex = /([A-Z][^,.:]+(?:Management|Systems|Preservation|Production|Coding|Analysis)[^,.:]*)/ ;
     const courseMatches = content.match(new RegExp(regex.source, "g"));

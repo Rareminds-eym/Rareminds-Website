@@ -13,9 +13,170 @@ interface AboutProgramSectionProps {
     }>;
   };
   technologies: string[];
+  // Add program data to help with detection
+  programData?: {
+    slug?: string;
+    sections?: { [key: string]: { title: string; content: string } };
+  };
 }
 
-function AboutProgramSection({ section, technologies }: AboutProgramSectionProps) {
+function AboutProgramSection({ section, technologies, programData }: AboutProgramSectionProps) {
+  // Naan Mudhalvan 2025 program data - MOVED TO TOP to fix initialization error
+  const naanMudhalvanPrograms = [
+    {
+      title: 'Medical Coding',
+      description: 'Professional medical coding certification program for healthcare industry.',
+      students: '3,886',
+      icon: '💻'
+    },
+    {
+      title: 'Good Manufacturing Practices (GMP)',
+      description: 'Essential GMP training for pharmaceutical and food industries.',
+      students: '5,049',
+      icon: '⚙️'
+    },
+    {
+      title: 'Food Safety and Quality Management',
+      description: 'Comprehensive training program in food safety and quality management.',
+      students: '5,560',
+      icon: '🎓'
+    }
+  ];
+
+  // Debug logging to understand the data structure
+  console.log('🔍 [AboutProgramSection] Debug info:', {
+    sectionTitle: section.title,
+    sectionContentLength: section.content.length,
+    sectionContent: section.content,
+    currentURL: typeof window !== 'undefined' ? window.location.pathname : 'SSR',
+    technologies: technologies,
+    programSlug: programData?.slug,
+    programSections: programData?.sections ? Object.keys(programData.sections) : []
+  });
+
+  // Check if this is a Naan Mudhalvan 2025 program that needs blue cards
+  const isNaanMudhalvan = (
+    // Check if URL contains naan-mudhalvan-2025 specifically
+    (typeof window !== 'undefined' && window.location.pathname.includes('naan-mudhalvan-2025')) ||
+    // Check if program slug is naan-mudhalvan-2025
+    (programData?.slug === 'naan-mudhalvan-2025') ||
+    // Check if there's a course_enrollment section with the specific numbers
+    (programData?.sections?.course_enrollment && (
+      programData.sections.course_enrollment.content.includes('3,886 students') ||
+      programData.sections.course_enrollment.content.includes('5,049 students') ||
+      programData.sections.course_enrollment.content.includes('5,560 students')
+    )) ||
+    // Fallback: Check if section content contains the specific enrollment numbers for Naan Mudhalvan 2025
+    (section.content.some(item => 
+       item.description && (
+         item.description.includes('3,886 students') || 
+         item.description.includes('5,049 students') || 
+         item.description.includes('5,560 students')
+       )
+     ))
+  );
+
+  console.log('🔍 [AboutProgramSection] Detection result:', {
+    isNaanMudhalvan: isNaanMudhalvan,
+    urlCheck: typeof window !== 'undefined' ? window.location.pathname.includes('naan-mudhalvan-2025') : false,
+    slugCheck: programData?.slug === 'naan-mudhalvan-2025',
+    courseEnrollmentCheck: programData?.sections?.course_enrollment ? (
+      programData.sections.course_enrollment.content.includes('3,886 students') ||
+      programData.sections.course_enrollment.content.includes('5,049 students') ||
+      programData.sections.course_enrollment.content.includes('5,560 students')
+    ) : false,
+    courseEnrollmentContent: programData?.sections?.course_enrollment?.content?.substring(0, 200) + '...',
+    contentCheck: section.content.some(item => 
+       item.description && (
+         item.description.includes('3,886 students') || 
+         item.description.includes('5,049 students') || 
+         item.description.includes('5,560 students')
+       )
+     )
+  });
+
+  // Get technology tags based on program type
+  const getTechnologies = (cardIndex: number, cardTitle: string) => {
+    if (cardTitle === 'Industrial Metaverse') {
+      return ['Industrial Metaverse', 'VR'];
+    }
+    if (cardTitle === 'Web Full Stack Development') {
+      return ['AI', 'MERN Stack'];
+    }
+    // Default: split technologies between cards
+    if (cardIndex === 0) {
+      return technologies.slice(0, Math.ceil(technologies.length / 2));
+    }
+    return technologies.slice(Math.ceil(technologies.length / 2));
+  };
+
+  // Render Naan Mudhalvan blue cards layout
+  if (isNaanMudhalvan) {
+    console.log('🎯 [AboutProgramSection] Rendering Naan Mudhalvan blue cards layout');
+    console.log('🎯 [AboutProgramSection] Programs to render:', naanMudhalvanPrograms);
+    return (
+      <div className="py-16 -mt-10" style={{ background: '#ffffff', width: '100vw', marginLeft: 'calc(-50vw + 50%)', minHeight: '100%' }}>
+        {/* Title */}
+        <motion.h2
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+          viewport={{ once: true }}
+          className="text-3xl md:text-5xl font-bold text-gray-900 mb-8 md:mb-16 text-center"
+        >
+          {section.title}
+        </motion.h2>
+
+        {/* Description */}
+        <div className="w-full px-8 mb-12">
+          <div className="max-w-4xl mx-auto">
+            <p className="text-gray-600 text-center leading-relaxed">
+              Through this collaboration, Rareminds delivered five specialized 45-hour experiential 
+              training programs to undergraduate students during the Odd Semester (5th) of the 
+              2025–2026 academic year. These mandatory programs provided immersive, hands-on learning 
+              experiences in the following sectors: Good Manufacturing Practices, Medical Coding, 
+              Food Safety and Quality Management. The courses blended in-person classes with LMS-based 
+              support, enabling students to work on real-time simulations, projects, and practical 
+              applications from day one.
+            </p>
+          </div>
+        </div>
+
+        {/* Three Blue Cards */}
+        <div className="w-full px-8">
+          <div className="max-w-6xl mx-auto">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {naanMudhalvanPrograms.map((program, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 40 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, ease: "easeOut", delay: 0.2 + index * 0.1 }}
+                  viewport={{ once: true }}
+                  className={`text-white p-6 rounded-2xl ${
+                    index === 0 ? 'bg-blue-400' : index === 1 ? 'bg-blue-500' : 'bg-blue-600'
+                  }`}
+                >
+                  <div className="mb-4">
+                    <div className="w-10 h-10 bg-white bg-opacity-20 rounded-xl flex items-center justify-center mb-4">
+                      <span className="text-white text-lg">{program.icon}</span>
+                    </div>
+                    <h3 className="text-lg font-bold mb-2">{program.title}</h3>
+                    <p className="text-blue-100 text-sm mb-4">
+                      {program.description}
+                    </p>
+                  </div>
+                  <div className="text-3xl font-bold mb-1">{program.students}</div>
+                  <div className="text-blue-100 text-sm">Students</div>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="py-16 -mt-10" style={{ background: '#ffffff', width: '100vw', marginLeft: 'calc(-50vw + 50%)', minHeight: '100%' }}>
 
@@ -81,7 +242,7 @@ function AboutProgramSection({ section, technologies }: AboutProgramSectionProps
                   viewport={{ once: true }}
                   className="flex flex-wrap gap-2 mb-4"
                 >
-                  {technologies.slice(0, Math.ceil(technologies.length / 2)).map((tech, index) => (
+                  {getTechnologies(0, section.content[0]?.title || '').map((tech, index) => (
                     <motion.span
                       key={index}
                       initial={{ opacity: 0, scale: 0.85 }}
@@ -156,7 +317,7 @@ function AboutProgramSection({ section, technologies }: AboutProgramSectionProps
                   viewport={{ once: true }}
                   className="flex flex-wrap gap-2 mb-4"
                 >
-                  {technologies.slice(Math.ceil(technologies.length / 2)).map((tech, index) => (
+                  {getTechnologies(1, section.content[1]?.title || '').map((tech, index) => (
                     <motion.span
                       key={index}
                       initial={{ opacity: 0, scale: 0.85 }}

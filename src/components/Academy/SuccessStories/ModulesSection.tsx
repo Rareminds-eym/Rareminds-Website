@@ -19,6 +19,7 @@ interface ModulesSectionProps {
 }
 
 const ModulesSection: React.FC<ModulesSectionProps> = ({ modules, approaches, projectName, intervention }) => {
+  // Default handling for all programs (Tripura now uses dedicated layout)
   const modulesList = modules.content.split('. ').filter(item => item.trim().length > 0);
   const approachesList = approaches.content.split('. ').filter(item => item.trim().length > 0);
 

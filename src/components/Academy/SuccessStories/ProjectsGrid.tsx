@@ -61,7 +61,7 @@ export const ProjectsGrid = ({
               <h3 className="text-sm sm:text-lg font-bold text-gray-900 text-center mb-3 min-h-[3.5rem] flex items-center justify-center">
                 {project.name}
               </h3>
-
+              
               {/* Logo + Description Row */}
               <div className="flex items-start gap-4 mb-3 h-24 sm:h-32">
                 {/* Logo */}
@@ -130,8 +130,8 @@ export const ProjectsGrid = ({
                 <Link 
                   to={
                     project.category === 'Naan Mudhalvan' 
-                      ? `/SuccessStories/naan-mudhalvan/${project.name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')}`
-                      : `/SuccessStories/${project.name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')}`
+                      ? `/SuccessStories/naan-mudhalvan/${project.slug}`
+                      : `/SuccessStories/${project.slug}`
                   }
                   className={
                     project.id % 3 === 2 
@@ -142,7 +142,6 @@ export const ProjectsGrid = ({
                   View Details
                 </Link>
               </div>
-
             </div>
           </div>
         ))}
@@ -182,4 +181,3 @@ export const ProjectsGrid = ({
     </>
   );
 };
-
