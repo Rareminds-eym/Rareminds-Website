@@ -16,7 +16,7 @@ export interface Program {
   updated_at: string;
 }
 
-// Transformed Program type for UI components save
+// Transformed Program type for UI components
 export interface TransformedProgram {
   id: string;
   name: string;
@@ -71,6 +71,11 @@ export interface ProgramWithSections extends Program {
 export interface TransformedSection {
   title: string;
   content: string;
+  videoUrl?: Array<{
+    item1?: string;
+    item2?: string;
+    item3?: string;
+  }>; // Optional video URLs for MediaGallery
 }
 
 // Special section for AboutProgramSection (array format)

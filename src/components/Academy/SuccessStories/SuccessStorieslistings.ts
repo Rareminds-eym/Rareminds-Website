@@ -44,7 +44,7 @@ export const projects = [
     }
   },
    {
-   id: '2',
+   id: '2',//save
     name: 'PES',
     description: 'The Rareminds Bootcamp at PES Engineering College, Mandya delivered a 45-hour hands-on web development program, transforming students into confident, industry-ready developers',
     category: 'College',

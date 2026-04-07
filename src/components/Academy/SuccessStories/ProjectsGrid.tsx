@@ -13,7 +13,7 @@ interface ProjectsGridProps {
 }
 
 export const ProjectsGrid = ({ 
-  projects, 
+  projects = [], // Default to empty array
   onClearSearch, 
   currentPage, 
   totalPages, 
@@ -49,7 +49,7 @@ export const ProjectsGrid = ({
     <>
       {/* Projects Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-4 gap-y-8 md:gap-x-6 md:gap-y-16">
-        {projects.map((project) => (
+        {(projects || []).map((project) => (
           <div
             key={project.id}
             className="bg-white rounded-xl border border-gray-400 shadow-sm overflow-hidden flex flex-col h-full transition-shadow hover:shadow-md"
@@ -59,7 +59,7 @@ export const ProjectsGrid = ({
 
               {/* Centered Title */}
               <h3 className="text-sm sm:text-lg font-bold text-gray-900 text-center mb-3 min-h-[3.5rem] flex items-center justify-center">
-                {project.name}
+                {project.name || ''}
               </h3>
               
               {/* Logo + Description Row */}
@@ -67,8 +67,8 @@ export const ProjectsGrid = ({
                 {/* Logo */}
                 <div className="w-20 h-20 sm:w-32 sm:h-32 flex-shrink-0 flex items-center justify-center">
                   <img
-                    src={project.imageUrl}
-                    alt={project.name}
+                    src={project.imageUrl || ''}
+                    alt={project.name || ''}
                     className="w-full h-full object-contain"
                   />
                 </div>
@@ -78,9 +78,9 @@ export const ProjectsGrid = ({
                     <p className={`text-gray-900 font-normal text-xs sm:text-sm leading-relaxed sm:leading-relaxed ${
                       expandedCards.has(project.id) ? '' : 'line-clamp-4'
                     }`}>
-                      {project.description}
+                      {project.description || ''}
                     </p>
-                    {project.description.length > 150 && (
+                    {(project.description || '').length > 150 && (
                       <button
                         onClick={() => toggleExpanded(project.id)}
                         className="text-blue-500 text-xs mt-1 hover:text-blue-700 transition-colors"
@@ -103,7 +103,7 @@ export const ProjectsGrid = ({
                   <svg className="w-3 h-3 sm:w-4 sm:h-4 flex-shrink-0 mt-0.5 sm:mt-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-4m-5 0H9m0 0H5m0 0h4M9 21v-4a2 2 0 012-2h2a2 2 0 012 2v4" />
                   </svg>
-                  <span className="text-xs sm:text-sm leading-tight font-normal text-gray-900 text-center sm:text-left break-words sm:truncate">{project.category}</span>
+                  <span className="text-xs sm:text-sm leading-tight font-normal text-gray-900 text-center sm:text-left break-words sm:truncate">{project.category || ''}</span>
                 </div>
 
                 {/* Location */}
@@ -112,7 +112,7 @@ export const ProjectsGrid = ({
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                   </svg>
-                  <span className="text-xs sm:text-sm leading-tight font-normal text-gray-900 text-center sm:text-left break-words sm:truncate">{project.location}</span>
+                  <span className="text-xs sm:text-sm leading-tight font-normal text-gray-900 text-center sm:text-left break-words sm:truncate">{project.location || ''}</span>
                 </div>
 
                 {/* Timeline */}
@@ -120,7 +120,7 @@ export const ProjectsGrid = ({
                   <svg className="w-3 h-3 sm:w-4 sm:h-4 flex-shrink-0 mt-0.5 sm:mt-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
-                  <span className="text-xs sm:text-sm leading-tight font-normal text-gray-900 text-center sm:text-left break-words sm:truncate">{project.timeline}</span>
+                  <span className="text-xs sm:text-sm leading-tight font-normal text-gray-900 text-center sm:text-left break-words sm:truncate">{project.timeline || ''}</span>
                 </div>
 
               </div>
@@ -134,7 +134,7 @@ export const ProjectsGrid = ({
                       : `/SuccessStories/${project.slug}`
                   }
                   className={
-                    project.id % 3 === 2 
+                    parseInt(project.id) % 3 === 2 
                       ? "w-[139px] h-[27px] flex items-center justify-center border-2 border-blue-500 hover:bg-blue-50 text-blue-500 text-xs sm:text-sm font-semibold rounded-full transition-colors duration-200"
                       : "w-[139px] h-[27px] flex items-center justify-center bg-blue-500 hover:bg-blue-600 text-white text-xs sm:text-sm font-semibold rounded-full transition-colors duration-200"
                   }

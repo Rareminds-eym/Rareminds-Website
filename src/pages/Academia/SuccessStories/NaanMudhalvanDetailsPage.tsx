@@ -10,6 +10,7 @@ import NaanCourseEnrollment from '../../../components/Academy/SuccessStories/Naa
 import NaanImpactSection from '../../../components/Academy/SuccessStories/NaanMudhulvan/NaanImpactSection';
 import NaanStrategicAlignment from '../../../components/Academy/SuccessStories/NaanMudhulvan/NaanStrategicAlignment';
 import NaanConclusion from '../../../components/Academy/SuccessStories/NaanMudhulvan/NaanConclusion';
+import MediaGallery from '../../../components/Academy/SuccessStories/MediaGallery';
 
 function NaanMudhalvanDetailsPage() {
   const { name } = useParams<{ name: string }>();
@@ -214,6 +215,18 @@ function NaanMudhalvanDetailsPage() {
         />
       )}
 
+      {/* Video Section - After About section */}
+      {project.sections && (project.sections['video'] as any)?.videoUrl && (project.sections['video'] as any)?.videoUrl.length > 0 && (
+        <div className="py-16 bg-white">
+          <div className="container mx-auto px-4">
+            <MediaGallery
+              media={(project.sections['video'] as any).videoUrl}
+              title={(project.sections['video'] as any)?.title || 'Program Videos'}
+            />
+          </div>
+        </div>
+      )}
+
       {/* Naan Mudhalvan Course Enrollment Section */}
       {transformedSections.courseEnrollment && (
         <NaanCourseEnrollment 
@@ -249,42 +262,88 @@ function NaanMudhalvanDetailsPage() {
             {/* Detailed Sections for Naan Mudhalvan - Using API data only */}
             {project.sections && (
               <div className="space-y-16">
-                {Object.entries(project.sections).map(([key, section], index) => {
-                  // Skip sections that are handled by special components
-                  if (key === 'introduction' || key === 'about' || key === 'course_enrollment' || key === 'impact' || key === 'strategic_alignment' || key === 'conclusion') return null;
+                {(() => {
+                  const entries = Object.entries(project.sections || {});
+                  const renderableEntries = entries.filter(([key]) => 
+                    key !== 'video' &&
+                    key !== 'introduction' && 
+                    key !== 'about' && 
+                    key !== 'course_enrollment' && 
+                    key !== 'impact' && 
+                    key !== 'strategic_alignment' && 
+                    key !== 'conclusion'
+                  );
                   
                   return (
-                    <div key={key} className="relative">
-                      {/* Section Number */}
-                      <div className="absolute -left-4 top-0 w-12 h-12 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold text-lg shadow-lg">
-                        {index - 2}
-                      </div>
-                      
-                      <div className={`ml-12 ${(index - 3) % 2 === 0 ? 'bg-white' : 'bg-blue-50'} rounded-2xl p-10 shadow-sm`}>
-                        <h2 className="text-3xl font-bold text-gray-900 mb-8">
-                          {section.title}
-                        </h2>
-                        <div className="prose prose-lg max-w-none text-gray-700 leading-relaxed">
-                          {section.content.split('. ').map((sentence: string, sentenceIndex: number) => {
-                            const trimmedSentence = sentence.trim();
-                            if (!trimmedSentence) return null;
-                            
-                            return (
-                              <p key={sentenceIndex} className="mb-6 text-lg leading-relaxed">
-                                {trimmedSentence && !trimmedSentence.endsWith('.') ? trimmedSentence + '.' : trimmedSentence}
-                              </p>
-                            );
-                          })}
+                    <>
+                      {/* First 2 sections */}
+                      {renderableEntries.slice(0, 2).map(([key, section], index) => (
+                        <div key={key} className="relative">
+                          {/* Section Number */}
+                          <div className="absolute -left-4 top-0 w-12 h-12 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold text-lg shadow-lg">
+                            {index + 1}
+                          </div>
+                          
+                          <div className={`ml-12 ${index % 2 === 0 ? 'bg-white' : 'bg-blue-50'} rounded-2xl p-10 shadow-sm`}>
+                            <h2 className="text-3xl font-bold text-gray-900 mb-8">
+                              {section.title}
+                            </h2>
+                            <div className="prose prose-lg max-w-none text-gray-700 leading-relaxed">
+                              {section.content.split('. ').map((sentence: string, sentenceIndex: number) => {
+                                const trimmedSentence = sentence.trim();
+                                if (!trimmedSentence) return null;
+                                
+                                return (
+                                  <p key={sentenceIndex} className="mb-6 text-lg leading-relaxed">
+                                    {trimmedSentence && !trimmedSentence.endsWith('.') ? trimmedSentence + '.' : trimmedSentence}
+                                  </p>
+                                );
+                              })}
+                            </div>
+                          </div>
                         </div>
-                      </div>
-                    </div>
+                      ))}
+
+                      {/* Video Section - Always 3rd */}
+                      {/* Note: This will not render for Naan Mudhalvan as renderableEntries is empty */}
+
+                      {/* Remaining sections */}
+                      {renderableEntries.slice(2).map(([key, section], index) => (
+                        <div key={key} className="relative">
+                          {/* Section Number */}
+                          <div className="absolute -left-4 top-0 w-12 h-12 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold text-lg shadow-lg">
+                            {index + 4}
+                          </div>
+                          
+                          <div className={`ml-12 ${(index + 3) % 2 === 0 ? 'bg-white' : 'bg-blue-50'} rounded-2xl p-10 shadow-sm`}>
+                            <h2 className="text-3xl font-bold text-gray-900 mb-8">
+                              {section.title}
+                            </h2>
+                            <div className="prose prose-lg max-w-none text-gray-700 leading-relaxed">
+                              {section.content.split('. ').map((sentence: string, sentenceIndex: number) => {
+                                const trimmedSentence = sentence.trim();
+                                if (!trimmedSentence) return null;
+                                
+                                return (
+                                  <p key={sentenceIndex} className="mb-6 text-lg leading-relaxed">
+                                    {trimmedSentence && !trimmedSentence.endsWith('.') ? trimmedSentence + '.' : trimmedSentence}
+                                  </p>
+                                );
+                              })}
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </>
                   );
-                })}
+                })()}
               </div>
             )}
           </div>
         </div>
       </div>
+
+
     </div>
   );
 }

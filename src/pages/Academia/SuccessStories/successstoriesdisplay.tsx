@@ -59,7 +59,7 @@ function SuccessStoriesDisplay() {
           setTotalPages(response.totalPages);
           setTotalCount(response.totalCount);
           setError(null);
-        } else { //save
+        } else {
           setPrograms([]);
           setTotalPages(0);
           setTotalCount(0);

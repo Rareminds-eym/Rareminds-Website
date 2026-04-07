@@ -14,6 +14,7 @@ import ImpactSection from "../../../components/Academy/SuccessStories/ImpactSect
 import StratageticSection from "../../../components/Academy/SuccessStories/StratageticSection";
 import ConclusionSection from "../../../components/Academy/SuccessStories/ConclusionSection";
 import DSATMAboutSection from '../../../components/Academy/SuccessStories/DSATMAboutSection';
+import MediaGallery from '../../../components/Academy/SuccessStories/MediaGallery';
 function SuccessStoriesDetailedPage() {
   const { name } = useParams<{ name: string }>();
   const [project, setProject] = useState<ProgramWithTransformedSections | null>(null);
@@ -176,99 +177,216 @@ function SuccessStoriesDetailedPage() {
 
           {transformedProject.sections && (
             <div className="space-y-0">
-              {Object.entries(transformedProject.sections).map(([key, section]) => {
-                // Skip these sections as they're handled above
-                if (key === 'introduction' || key === 'header' || key === 'modules' || key === 'approaches' || key === 'inventions' || key === 'programs') return null;
-                
-                // Use AboutProgramSection for 'about' section (original UI design)
-                if (key === 'about') {
-                  // Use the specially formatted aboutSection if available
-                  if (transformedProject.aboutSection) {
-                    // Use DSATMAboutSection for DSATM to get the three-column layout
-                    if (transformedProject.slug === 'dsatm') {
-                      return (
-                        <DSATMAboutSection 
-                          key={key}
-                          section={transformedProject.aboutSection}
-                        />
-                      );
-                    } else {
-                      // Use regular AboutProgramSection for other programs
-                      return (
-                        <AboutProgramSection 
-                          key={key}
-                          section={transformedProject.aboutSection}
-                          technologies={transformedProject.technologies || []}
-                          programData={{
-                            slug: transformedProject.slug,
-                            sections: transformedProject.sections
-                          }}
-                        />
-                      );
-                    }
-                  }
-                  
-                  // Fallback to regular section (shouldn't happen with our transformation)
-                  return (
-                    <div key={key} className="bg-white rounded-lg shadow-sm p-8 mb-12">
-                      <h2 className="text-2xl font-bold text-gray-900 mb-6">
-                        {section.title}
-                      </h2>
-                      <p className="text-gray-700 leading-relaxed">
-                        {section.content}
-                      </p>
-                    </div>
-                  );
-                }
-                
-                // ImpactSection for 'impact' - using API data directly
-                if (key === 'impact') {
-                  return (
-                    <ImpactSection
-                      key={key}
-                      section={section}
-                    />
-                  );
-                }
-                
-                // StrategicSection for 'strategic_alignment' - using API data directly
-                if (key === 'strategic_alignment') {
-                  return (
-                    <StratageticSection
-                      key={key}
-                      section={section}
-                    />
-                  );
-                }
-                
-                // ConclusionSection for 'conclusion' - using API data directly
-                if (key === 'conclusion') {
-                  return (
-                    <ConclusionSection
-                      key={key}
-                      section={section}
-                    />
-                  );
-                }
+              {(() => {
+                const entries = Object.entries(transformedProject.sections).filter(([key]) => key !== 'video');
                 
                 // Default section rendering - using API data directly
                 return (
-                  <div key={key} className="bg-white rounded-lg shadow-sm p-8 mb-12">
-                    <h2 className="text-2xl font-bold text-gray-900 mb-6">
-                      {section.title}
-                    </h2>
-                    <div className="prose prose-lg max-w-none text-gray-700 leading-relaxed">
-                      {section.content.split('. ').map((sentence: string, index: number) => (
-                        <p key={index} className="mb-4">
-                          {sentence.trim() && !sentence.endsWith('.') ? sentence + '.' : sentence}
-                        </p>
-                      ))}
-                    </div>
-                  </div>
+                  <>
+                    {/* First 2 sections */}
+                    {entries.slice(0, 2).map(([key, section]) => {
+                      // Skip these sections as they're handled above
+                      if (key === 'introduction' || key === 'header' || key === 'modules' || key === 'approaches' || key === 'inventions' || key === 'programs') return null;
+                      
+                      // Use AboutProgramSection for 'about' section (original UI design)
+                      if (key === 'about') {
+                        // Use the specially formatted aboutSection if available
+                        if (transformedProject.aboutSection) {
+                          // Use DSATMAboutSection for DSATM to get the three-column layout
+                          if (transformedProject.slug === 'dsatm') {
+                            return (
+                              <DSATMAboutSection 
+                                key={key}
+                                section={transformedProject.aboutSection}
+                              />
+                            );
+                          } else {
+                            // Use regular AboutProgramSection for other programs
+                            return (
+                              <AboutProgramSection 
+                                key={key}
+                                section={transformedProject.aboutSection}
+                                technologies={transformedProject.technologies || []}
+                                programData={{
+                                  slug: transformedProject.slug,
+                                  sections: transformedProject.sections
+                                }}
+                              />
+                            );
+                          }
+                        }
+                        
+                        // Fallback to regular section (shouldn't happen with our transformation)
+                        return (
+                          <div key={key} className="bg-white rounded-lg shadow-sm p-8 mb-12">
+                            <h2 className="text-2xl font-bold text-gray-900 mb-6">
+                              {section.title}
+                            </h2>
+                            <p className="text-gray-700 leading-relaxed">
+                              {section.content}
+                            </p>
+                          </div>
+                        );
+                      }
+                      
+                      // ImpactSection for 'impact' - using API data directly
+                      if (key === 'impact') {
+                        return (
+                          <ImpactSection
+                            key={key}
+                            section={section}
+                          />
+                        );
+                      }
+                      
+                      // StrategicSection for 'strategic_alignment' - using API data directly
+                      if (key === 'strategic_alignment') {
+                        return (
+                          <StratageticSection
+                            key={key}
+                            section={section}
+                          />
+                        );
+                      }
+                      
+                      // ConclusionSection for 'conclusion' - using API data directly
+                      if (key === 'conclusion') {
+                        return (
+                          <ConclusionSection
+                            key={key}
+                            section={section}
+                          />
+                        );
+                      }
+                      
+                      // Default section rendering - using API data directly
+                      return (
+                        <div key={key} className="bg-white rounded-lg shadow-sm p-8 mb-12">
+                          <h2 className="text-2xl font-bold text-gray-900 mb-6">
+                            {section.title}
+                          </h2>
+                          <div className="prose prose-lg max-w-none text-gray-700 leading-relaxed">
+                            {section.content.split('. ').map((sentence: string, index: number) => (
+                              <p key={index} className="mb-4">
+                                {sentence.trim() && !sentence.endsWith('.') ? sentence + '.' : sentence}
+                              </p>
+                            ))}
+                          </div>
+                        </div>
+                      );
+                    })}
+
+                    {/* Video Section - Always 3rd */}
+                    {transformedProject.sections && (transformedProject.sections['video'] as any)?.videoUrl && (transformedProject.sections['video'] as any)?.videoUrl.length > 0 && (
+                      <div className="py-16 bg-white">
+                        <div className="container mx-auto px-4">
+                          <MediaGallery
+                            media={(transformedProject.sections['video'] as any).videoUrl}
+                            title={(transformedProject.sections['video'] as any).title || 'Program Videos'}
+                          />
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Remaining sections */}
+                    {entries.slice(2).map(([key, section]) => {
+                      // Skip these sections as they're handled above
+                      if (key === 'introduction' || key === 'header' || key === 'modules' || key === 'approaches' || key === 'inventions' || key === 'programs') return null;
+                      
+                      // Use AboutProgramSection for 'about' section (original UI design)
+                      if (key === 'about') {
+                        // Use the specially formatted aboutSection if available
+                        if (transformedProject.aboutSection) {
+                          // Use DSATMAboutSection for DSATM to get the three-column layout
+                          if (transformedProject.slug === 'dsatm') {
+                            return (
+                              <DSATMAboutSection 
+                                key={key}
+                                section={transformedProject.aboutSection}
+                              />
+                            );
+                          } else {
+                            // Use regular AboutProgramSection for other programs
+                            return (
+                              <AboutProgramSection 
+                                key={key}
+                                section={transformedProject.aboutSection}
+                                technologies={transformedProject.technologies || []}
+                                programData={{
+                                  slug: transformedProject.slug,
+                                  sections: transformedProject.sections
+                                }}
+                              />
+                            );
+                          }
+                        }
+                        
+                        // Fallback to regular section (shouldn't happen with our transformation)
+                        return (
+                          <div key={key} className="bg-white rounded-lg shadow-sm p-8 mb-12">
+                            <h2 className="text-2xl font-bold text-gray-900 mb-6">
+                              {section.title}
+                            </h2>
+                            <p className="text-gray-700 leading-relaxed">
+                              {section.content}
+                            </p>
+                          </div>
+                        );
+                      }
+                      
+                      // ImpactSection for 'impact' - using API data directly
+                      if (key === 'impact') {
+                        return (
+                          <ImpactSection
+                            key={key}
+                            section={section}
+                          />
+                        );
+                      }
+                      
+                      // StrategicSection for 'strategic_alignment' - using API data directly
+                      if (key === 'strategic_alignment') {
+                        return (
+                          <StratageticSection
+                            key={key}
+                            section={section}
+                          />
+                        );
+                      }
+                      
+                      // ConclusionSection for 'conclusion' - using API data directly
+                      if (key === 'conclusion') {
+                        return (
+                          <ConclusionSection
+                            key={key}
+                            section={section}
+                          />
+                        );
+                      }
+                      
+                      // Default section rendering - using API data directly
+                      return (
+                        <div key={key} className="bg-white rounded-lg shadow-sm p-8 mb-12">
+                          <h2 className="text-2xl font-bold text-gray-900 mb-6">
+                            {section.title}
+                          </h2>
+                          <div className="prose prose-lg max-w-none text-gray-700 leading-relaxed">
+                            {section.content.split('. ').map((sentence: string, index: number) => (
+                              <p key={index} className="mb-4">
+                                {sentence.trim() && !sentence.endsWith('.') ? sentence + '.' : sentence}
+                              </p>
+                            ))}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </>
                 );
-              })}
+              })()}
             </div>
           )}
+
+
         </div>
       </div>
     </div>
