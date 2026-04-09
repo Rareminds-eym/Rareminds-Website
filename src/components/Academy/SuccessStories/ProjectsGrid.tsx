@@ -1,4 +1,3 @@
-import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Pagination } from './Pagination';
 import type { TransformedProgram } from '../../../types/program';
@@ -20,36 +19,12 @@ export const ProjectsGrid = ({
   totalCount, 
   onPageChange 
 }: ProjectsGridProps) => {
-  const [expandedCards, setExpandedCards] = useState<Set<string>>(new Set());
-
-  const toggleExpanded = (projectId: string) => {
-    const newExpanded = new Set(expandedCards);
-    if (newExpanded.has(projectId)) {
-      newExpanded.delete(projectId);
-    } else {
-      newExpanded.add(projectId);
-    }
-    setExpandedCards(newExpanded);
-  };
-
-  // Auto-collapse on scroll for mobile only
-  useEffect(() => {
-    const handleScroll = () => {
-      // Only on mobile (screen width < 640px) and if there are expanded cards
-      if (window.innerWidth < 640 && expandedCards.size > 0) {
-        setExpandedCards(new Set());
-      }
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [expandedCards]);
 
   return (
     <>
       {/* Projects Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-4 gap-y-8 md:gap-x-6 md:gap-y-16">
-        {(projects || []).map((project) => (
+        {(projects || []).map((project, index) => (
           <div
             key={project.id}
             className="bg-white rounded-xl border border-gray-400 shadow-sm overflow-hidden flex flex-col h-full transition-shadow hover:shadow-md"
@@ -75,18 +50,20 @@ export const ProjectsGrid = ({
                 {/* Description */}
                 <div className="flex-1 h-full flex items-start">
                   <div className="w-full">
-                    <p className={`text-gray-900 font-normal text-xs sm:text-sm leading-relaxed sm:leading-relaxed ${
-                      expandedCards.has(project.id) ? '' : 'line-clamp-4'
-                    }`}>
+                    <p className="text-gray-900 font-normal text-xs sm:text-sm leading-relaxed sm:leading-relaxed line-clamp-4">
                       {project.description || ''}
                     </p>
-                    {(project.description || '').length > 150 && (
-                      <button
-                        onClick={() => toggleExpanded(project.id)}
-                        className="text-blue-500 text-xs mt-1 hover:text-blue-700 transition-colors"
+                    {(project.description || '').length > 100 && (
+                      <Link
+                        to={
+                          project.category === 'Naan Mudhalvan' 
+                            ? `/SuccessStories/naan-mudhalvan/${project.slug}`
+                            : `/SuccessStories/${project.slug}`
+                        }
+                        className="text-blue-500 text-xs mt-1 hover:text-blue-700 transition-colors inline-block"
                       >
-                        {expandedCards.has(project.id) ? 'Show less' : 'Show more...'}
-                      </button>
+                        Show more...
+                      </Link>
                     )}
                   </div>
                 </div>
@@ -134,7 +111,7 @@ export const ProjectsGrid = ({
                       : `/SuccessStories/${project.slug}`
                   }
                   className={
-                    parseInt(project.id) % 3 === 2 
+                    index % 3 === 1 
                       ? "w-[139px] h-[27px] flex items-center justify-center border-2 border-blue-500 hover:bg-blue-50 text-blue-500 text-xs sm:text-sm font-semibold rounded-full transition-colors duration-200"
                       : "w-[139px] h-[27px] flex items-center justify-center bg-blue-500 hover:bg-blue-600 text-white text-xs sm:text-sm font-semibold rounded-full transition-colors duration-200"
                   }

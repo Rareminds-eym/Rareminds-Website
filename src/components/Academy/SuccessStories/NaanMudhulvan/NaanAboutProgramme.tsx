@@ -212,59 +212,26 @@ const NaanAboutProgramme: React.FC<NaanAboutProgrammeProps> = ({
       </section>
     );
   }
-  const parseCoursesFromAbout = (content: string) => {
-    const regex = /([A-Z][^,.:]+(?:Management|Systems|Preservation|Production|Coding|Analysis)[^,.:]*)/ ;
-    const courseMatches = content.match(new RegExp(regex.source, "g"));
-    return courseMatches || [];
-  };
-
   const parseEnrollmentData = (content: string) => {
-    const courses: { [key: string]: number } = {};
-    const matchRegex = /([^.]+) - Total: ([\d,]+) students/g;
-    const matches = content.match(matchRegex);
-    if (matches) {
-      matches.forEach((match) => {
-        const parts = match.match(/([^-]+) - Total: ([\d,]+) students/);
-        if (parts && parts[1] && parts[2]) {
-          const courseName = parts[1].trim();
-          const studentCount = parseInt(parts[2].replace(/,/g, ""));
-          courses[courseName] = studentCount;
-        }
-      });
+    const courses: { name: string; count: number }[] = [];
+    // Match pattern: "Course Name - Total: X,XXX students" or "Course Name (Nth Semester) - Total: X,XXX students"
+    const matchRegex = /([^.\n]+?)\s*(?:\([^)]*\))?\s*-\s*Total:\s*([\d,]+)\s*students/gi;
+    let match;
+    while ((match = matchRegex.exec(content)) !== null) {
+      const name = match[1].trim().replace(/^\d+\.\s*/, ''); // remove leading "1. " numbering
+      const count = parseInt(match[2].replace(/,/g, ''));
+      if (name && count > 0) {
+        courses.push({ name, count });
+      }
     }
     return courses;
   };
 
-  const coursesFromAbout = parseCoursesFromAbout(aboutSection.content);
-  const enrollmentData = parseEnrollmentData(courseEnrollmentSection.content);
-
-  const matchedCourses = coursesFromAbout.map((courseName) => {
-    let matchedCount = 0;
-    let matchedKey = "";
-    Object.keys(enrollmentData).forEach((enrollmentKey) => {
-      if (
-        enrollmentKey.includes(courseName) ||
-        courseName.includes(enrollmentKey.split(" ")[0])
-      ) {
-        matchedCount = enrollmentData[enrollmentKey];
-        matchedKey = enrollmentKey;
-      }
-    });
-    return { name: courseName, count: matchedCount, enrollmentKey: matchedKey };
-  });
-
-  const finalCourses =
-    matchedCourses.length > 0
-      ? matchedCourses
-      : Object.keys(enrollmentData).map((key) => ({
-          name: key,
-          count: enrollmentData[key],
-          enrollmentKey: key,
-        }));
+  const finalCourses = parseEnrollmentData(courseEnrollmentSection.content);
 
   const mainCourse = finalCourses.reduce(
     (max, course) => (course.count > max.count ? course : max),
-    finalCourses[0] || { name: "", count: 0, enrollmentKey: "" }
+    finalCourses[0] || { name: "", count: 0 }
   );
 
   const otherCourses = finalCourses.filter(
@@ -287,7 +254,7 @@ const NaanAboutProgramme: React.FC<NaanAboutProgrammeProps> = ({
   const isMobile = window.innerWidth < 768;
 
   return (
-    <section className="bg-white mt-2 sm:-mt-12 md:mt-5 lg:-mt-32 pb-3 px-4 md:px-8 max-w-5xl mx-auto">
+    <section className="bg-white mt-2 sm:-mt-12 md:mt-5 lg:-mt-32 pb-5 px-4 md:px-8 max-w-5xl mx-auto">
 
       {/* Title */}
       <motion.h2
@@ -375,62 +342,77 @@ const NaanAboutProgramme: React.FC<NaanAboutProgrammeProps> = ({
 
           {/* Desktop: Original layout */}
           <div className="hidden md:flex flex-col gap-4" style={{ flex: "1 1 0" }}>
-            {/* Top row */}
-            {otherCourses.length >= 2 && (
-              <div className="flex gap-4" style={{ flex: "1 1 0" }}>
-                {otherCourses.slice(0, 2).map((course, index) => (
-                  <motion.div
-                    key={course.name}
-                    className="rounded-2xl p-5 flex flex-col flex-1 shadow-md"
-                    style={{ backgroundColor: getBackgroundColor(index + 1) }}
-                    variants={fadeUp}
-                    initial="hidden"
-                    whileInView="visible"
-                    viewport={{ once: true, amount: 0.2 }}
-                    custom={0.3 + index * 0.15}
-                  >
-                    <div className="mb-3">{getIcon(course.name)}</div>
-                    <h3 className="text-white font-bold text-base mb-3">{course.name}</h3>
-                    <p className="text-white font-bold text-3xl tracking-tight">
-                      {course.count.toLocaleString()}
-                    </p>
-                    <p className="text-blue-100 text-xs mt-0.5">Students</p>
-                  </motion.div>
-                ))}
-              </div>
-            )}
-
-            {/* Bottom row */}
-            {otherCourses.length >= 3 && (
+            {otherCourses.length === 0 ? null : otherCourses.length === 1 ? (
+              /* Only 1 other course — show as single full-width card */
               <motion.div
-                className="rounded-2xl p-5 flex flex-row items-center justify-between shadow-md"
-                style={{
-                  height: "42%",
-                  flexShrink: 0,
-                  backgroundColor: getBackgroundColor(3),
-                }}
-                variants={fadeIn}
+                key={otherCourses[0].name}
+                className="rounded-2xl p-5 flex flex-col flex-1 shadow-md"
+                style={{ backgroundColor: getBackgroundColor(1) }}
+                variants={fadeUp}
                 initial="hidden"
                 whileInView="visible"
                 viewport={{ once: true, amount: 0.2 }}
-                custom={0.55}
+                custom={0.3}
               >
-                <div>
-                  <div className="mb-2">{getIcon(otherCourses[2].name)}</div>
-                  <h3 className="text-white font-bold text-base">
-                    {otherCourses[2].name}
-                  </h3>
-                  <p className="text-blue-100 text-xs leading-relaxed mt-1">
-                    Specialized training in {otherCourses[2].name.toLowerCase()}.
-                  </p>
-                </div>
-                <div className="text-right ml-6 flex-shrink-0">
-                  <p className="text-white font-bold text-3xl tracking-tight">
-                    {otherCourses[2].count.toLocaleString()}
-                  </p>
-                  <p className="text-blue-100 text-xs mt-0.5">Students Enrolled</p>
-                </div>
+                <div className="mb-3">{getIcon(otherCourses[0].name)}</div>
+                <h3 className="text-white font-bold text-base mb-3">{otherCourses[0].name}</h3>
+                <p className="text-white font-bold text-3xl tracking-tight">
+                  {otherCourses[0].count.toLocaleString()}
+                </p>
+                <p className="text-blue-100 text-xs mt-0.5">Students</p>
               </motion.div>
+            ) : (
+              <>
+                {/* Top row - first 2 */}
+                <div className="flex gap-4" style={{ flex: "1 1 0" }}>
+                  {otherCourses.slice(0, 2).map((course, index) => (
+                    <motion.div
+                      key={course.name}
+                      className="rounded-2xl p-5 flex flex-col flex-1 shadow-md"
+                      style={{ backgroundColor: getBackgroundColor(index + 1) }}
+                      variants={fadeUp}
+                      initial="hidden"
+                      whileInView="visible"
+                      viewport={{ once: true, amount: 0.2 }}
+                      custom={0.3 + index * 0.15}
+                    >
+                      <div className="mb-3">{getIcon(course.name)}</div>
+                      <h3 className="text-white font-bold text-base mb-3">{course.name}</h3>
+                      <p className="text-white font-bold text-3xl tracking-tight">
+                        {course.count.toLocaleString()}
+                      </p>
+                      <p className="text-blue-100 text-xs mt-0.5">Students</p>
+                    </motion.div>
+                  ))}
+                </div>
+
+                {/* Bottom row - 3rd course if exists */}
+                {otherCourses.length >= 3 && (
+                  <motion.div
+                    className="rounded-2xl p-10 flex flex-row items-center justify-between shadow-md"
+                    style={{ height: "42%", flexShrink: 0, backgroundColor: getBackgroundColor(3) }}
+                    variants={fadeIn}
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true, amount: 0.2 }}
+                    custom={0.55}
+                  >
+                    <div>
+                      <div className="mb-2">{getIcon(otherCourses[2].name)}</div>
+                      <h3 className="text-white font-bold text-base">{otherCourses[2].name}</h3>
+                      <p className="text-blue-100 text-xs leading-relaxed mt-1">
+                        Specialized training in {otherCourses[2].name.toLowerCase()}.
+                      </p>
+                    </div>
+                    <div className="text-right ml-6 flex-shrink-0">
+                      <p className="text-white font-bold text-3xl tracking-tight">
+                        {otherCourses[2].count.toLocaleString()}
+                      </p>
+                      <p className="text-blue-100 text-xs mt-0.5">Students Enrolled</p>
+                    </div>
+                  </motion.div>
+                )}
+              </>
             )}
           </div>
         </div>

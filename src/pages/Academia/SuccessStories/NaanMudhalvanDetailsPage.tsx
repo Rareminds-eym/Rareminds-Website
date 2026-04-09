@@ -217,14 +217,11 @@ function NaanMudhalvanDetailsPage() {
 
       {/* Video Section - After About section */}
       {project.sections && (project.sections['video'] as any)?.videoUrl && (project.sections['video'] as any)?.videoUrl.length > 0 && (
-        <div className="py-16 bg-white">
-          <div className="container mx-auto px-4">
-            <MediaGallery
-              media={(project.sections['video'] as any).videoUrl}
-              title={(project.sections['video'] as any)?.title || 'Program Videos'}
-            />
-          </div>
-        </div>
+        <MediaGallery
+          media={(project.sections['video'] as any).videoUrl}
+          title={(project.sections['video'] as any)?.title || 'Program Videos'}
+          compact={true}
+        />
       )}
 
       {/* Naan Mudhalvan Course Enrollment Section */}

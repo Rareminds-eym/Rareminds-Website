@@ -211,9 +211,10 @@ export default function KeyOutcomesSection({ section }: KeyOutcomesSectionProps)
                   {inView ? (
                     <CountUp
                       start={0}
-                      end={parseInt(item.value.replace(/[^0-9]/g, ''))}
+                      end={parseFloat(item.value.replace(/[^0-9.]/g, ''))}
                       duration={2}
                       separator=","
+                      decimals={item.value.includes('.') ? 2 : 0}
                       suffix={item.value.includes('%') ? '%' : item.value.includes('+') ? '+' : ''}
                     />
                   ) : (

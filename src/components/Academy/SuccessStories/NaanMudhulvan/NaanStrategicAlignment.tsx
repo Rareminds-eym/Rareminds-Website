@@ -233,7 +233,7 @@ const NaanStrategicAlignment: React.FC<NaanStrategicAlignmentProps> = ({
   const tabBottomIconPct = [38, 82];
 
   return (
-    <div className="bg-white flex items-center justify-center pt-2 pb-24 px-4 mt-16 md:mt-16 lg:-mt-10">
+    <div className="bg-white flex items-center justify-center pt-2 pb-24 px-4 mt-16 md:mt-16 lg:mt-16 xl:mt-0">
       <div className="flex flex-col items-center w-full" style={{ maxWidth: 860 }}>
 
         {/* Title */}

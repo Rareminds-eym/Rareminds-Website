@@ -1,6 +1,9 @@
+
+
+
 "use client";
 
-import React, { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Play } from "lucide-react";
 
@@ -13,6 +16,7 @@ interface MediaItem {
 interface MediaGalleryProps {
   media: MediaItem[];
   title?: string;
+  compact?: boolean;
 }
 
 const isVideo = (url?: string): boolean => {
@@ -29,9 +33,9 @@ const getMediaUrl = (item: MediaItem): string => {
   return item.item1 || item.item2 || item.item3 || "";
 };
 
-const ITEM_GAP = 10; // px gap between thumbnails
+const ITEM_GAP = 10;
 
-export const MediaGallery = ({ media, title = "Media Gallery" }: MediaGalleryProps) => {
+export const MediaGallery = ({ media, title = "Media Gallery", compact = false }: MediaGalleryProps) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const scrollInnerRef = useRef<HTMLDivElement>(null);
@@ -43,20 +47,17 @@ export const MediaGallery = ({ media, title = "Media Gallery" }: MediaGalleryPro
   const selectedUrl = getMediaUrl(selectedMedia);
   const isSelectedVideo = isVideo(selectedUrl);
 
-  // Measure left panel height → make sidebar exactly the same height
   useEffect(() => {
     const updateHeights = () => {
       if (leftPanelRef.current) {
         const h = leftPanelRef.current.getBoundingClientRect().height;
         setSidebarHeight(h);
-        // Show 3 items in the visible window; compute each item's height to fill it
         const visibleCount = 3;
         const computed = Math.floor((h - ITEM_GAP * (visibleCount - 1)) / visibleCount);
         setItemHeight(computed > 80 ? computed : 80);
       }
     };
 
-    // Wait for layout paint then measure
     const rafId = requestAnimationFrame(updateHeights);
     window.addEventListener("resize", updateHeights);
     return () => {
@@ -65,7 +66,6 @@ export const MediaGallery = ({ media, title = "Media Gallery" }: MediaGalleryPro
     };
   }, []);
 
-  // Set CSS variable for seamless scroll animation
   useEffect(() => {
     if (scrollInnerRef.current && media.length > 0 && itemHeight > 0) {
       const totalHeight = media.length * (itemHeight + ITEM_GAP);
@@ -73,19 +73,28 @@ export const MediaGallery = ({ media, title = "Media Gallery" }: MediaGalleryPro
     }
   }, [media, itemHeight]);
 
+  useEffect(() => {
+    const el = document.getElementById("mobile-scroll-inner");
+    if (el && media.length > 0) {
+      // Each item is 110px wide + 12px gap (gap-3)
+      const totalWidth = media.length * (110 + 12);
+      el.style.setProperty("--scroll-width", `${totalWidth}px`);
+    }
+  }, [media]);
+
   if (!media || media.length === 0) return null;
 
   return (
-    <div className="w-full bg-white pt-6 pb-0 px-4 md:px-8">
+    <div className={`w-screen relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] bg-white ${compact ? 'pt-10 pb-6 mt-1 md:mt-2' : 'pt-16 pb-28 -mt-32 md:-mt-24 mb-2 md:mb-5'} md:pt-20 md:pb-24 pt-6 pb-6 px-4 md:px-8`}>
       <div className="max-w-7xl mx-auto">
 
         {/* Title */}
-        <h2 className="text-3xl font-bold text-gray-900 mb-6 mt-2 text-center">{title}</h2>
+        <h2 className={`font-bold text-gray-900 text-center ${compact ? 'text-2xl md:text-4xl mb-8 mt-2' : 'text-3xl md:text-5xl mb-6 mt-2'} md:mb-12 md:-mt-10`}>{title}</h2>
 
-        {/* Gallery row — flex so both children share the same row */}
-        <div className="flex gap-10 items-start max-w-5xl mx-auto">
+        {/* ── DESKTOP LAYOUT (md and above) ── */}
+        <div className="hidden md:flex gap-10 items-start max-w-5xl mx-auto">
 
-          {/* ── LEFT: Main player ── */}
+          {/* LEFT: Main player */}
           <div ref={leftPanelRef} className="flex-1 min-w-0" style={{ maxWidth: "68%" }}>
             <div
               className="relative w-full aspect-video bg-gray-900 rounded-lg shadow-sm overflow-hidden cursor-pointer group"
@@ -115,7 +124,7 @@ export const MediaGallery = ({ media, title = "Media Gallery" }: MediaGalleryPro
             </div>
           </div>
 
-          {/* ── RIGHT: Thumbnail sidebar ── exact same height as left panel */}
+          {/* RIGHT: Thumbnail sidebar */}
           <div
             className="flex-shrink-0 overflow-hidden rounded-lg"
             style={{
@@ -140,7 +149,6 @@ export const MediaGallery = ({ media, title = "Media Gallery" }: MediaGalleryPro
                   className="scroll-inner flex flex-col"
                   style={{ gap: `${ITEM_GAP}px` }}
                 >
-                  {/* Original set + duplicate for seamless infinite loop */}
                   {[...media, ...media].map((item, index) => {
                     const itemUrl = getMediaUrl(item);
                     const itemIsVideo = isVideo(itemUrl);
@@ -183,6 +191,99 @@ export const MediaGallery = ({ media, title = "Media Gallery" }: MediaGalleryPro
                 </div>
               </div>
             )}
+          </div>
+        </div>
+
+        {/* ── MOBILE LAYOUT (below md) ── */}
+        <div className="flex md:hidden flex-col items-center gap-4">
+
+          {/* Main player — reduced width & height, centered */}
+          <div className="w-[85%] max-w-sm">
+            <div
+              className="relative w-full aspect-video bg-gray-900 rounded-lg shadow-sm overflow-hidden cursor-pointer group"
+              onClick={() => !isSelectedVideo && setIsModalOpen(true)}
+            >
+              {isSelectedVideo ? (
+                <video
+                  key={selectedUrl}
+                  src={selectedUrl}
+                  className="w-full h-full object-cover"
+                  controls
+                />
+              ) : (
+                <>
+                  <img
+                    src={selectedUrl}
+                    alt="Selected media"
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-black/10 group-hover:bg-black/25 transition-colors flex items-center justify-center opacity-0 group-hover:opacity-100">
+                    <span className="text-white text-sm font-medium bg-black/50 px-3 py-1 rounded-full">
+                      Click to expand
+                    </span>
+                  </div>
+                </>
+              )}
+            </div>
+          </div>
+
+          {/* Horizontal auto-scrolling thumbnails */}
+          <div
+            className="w-full overflow-hidden px-4"
+            onTouchStart={() => {
+              const el = document.getElementById("mobile-scroll-inner");
+              if (el) el.style.animationPlayState = "paused";
+            }}
+            onTouchEnd={() => {
+              const el = document.getElementById("mobile-scroll-inner");
+              if (el) el.style.animationPlayState = "running";
+            }}
+          >
+            <div
+              id="mobile-scroll-inner"
+              className="mobile-scroll-inner flex gap-3"
+              style={{ width: "max-content" }}
+            >
+              {[...media, ...media].map((item, index) => {
+                const itemUrl = getMediaUrl(item);
+                const itemIsVideo = isVideo(itemUrl);
+                const actualIndex = index % media.length;
+                const isActive = actualIndex === selectedIndex;
+
+                return (
+                  <button
+                    key={index}
+                    onClick={() => setSelectedIndex(actualIndex)}
+                    className={`relative flex-shrink-0 rounded-lg overflow-hidden transition-all ${
+                      isActive
+                        ? "ring-2 ring-blue-500"
+                        : "ring-1 ring-gray-200"
+                    }`}
+                    style={{ width: "110px", height: "72px" }}
+                  >
+                    {itemIsVideo ? (
+                      <>
+                        <video
+                          src={itemUrl}
+                          className="w-full h-full object-cover"
+                          muted
+                          preload="metadata"
+                        />
+                        <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
+                          <Play className="w-5 h-5 text-white fill-white drop-shadow-md" />
+                        </div>
+                      </>
+                    ) : (
+                      <img
+                        src={itemUrl}
+                        alt={`Media ${actualIndex + 1}`}
+                        className="w-full h-full object-cover"
+                      />
+                    )}
+                  </button>
+                );
+              })}
+            </div>
           </div>
         </div>
       </div>
@@ -238,6 +339,15 @@ export const MediaGallery = ({ media, title = "Media Gallery" }: MediaGalleryPro
         .scroll-inner {
           animation: scrollVertical 25s linear infinite;
         }
+        @keyframes scrollHorizontal {
+          0%   { transform: translateX(0); }
+          100% { transform: translateX(calc(-1 * var(--scroll-width, 0px))); }
+        }
+        .mobile-scroll-inner {
+          animation: scrollHorizontal 20s linear infinite;
+        }
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
+        .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
       `}</style>
     </div>
   );

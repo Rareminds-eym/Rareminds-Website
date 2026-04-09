@@ -164,9 +164,9 @@ const DSATMAboutSection: React.FC<DSATMAboutSectionProps> = ({ section }) => {
         width: '100vw',
         marginLeft: 'calc(-50vw + 50%)',
         backgroundColor: '#ffffff',
-        padding: '48px 24px', // Increased back up
-        marginTop: '-35px',
-        marginBottom: '0',
+        padding: '52px 24px', // Increased back up
+        marginTop: isMobile ? '-90px' : '-35px',  
+        marginBottom: '0px',
       }}
     >
       {/* Title */}

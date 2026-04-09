@@ -46,44 +46,61 @@ const ArcNotch: React.FC = () => (
 const NaanImpactSection: React.FC<NaanImpactSectionProps> = ({ impactSection }) => {
   const parseImpactData = (content: string): ImpactCard[] => {
     const cards: ImpactCard[] = [];
+    const sentences = content.split(/[.!?]+/).map(s => s.trim()).filter(s => s.length > 0);
     
-    const studentsMatch = content.match(/(\d+,?\d*)\s+students.*trained/i);
+    // Card 1: Students trained
+    const studentsMatch = content.match(/(\d+,?\d*)\s+students/i);
     if (studentsMatch) {
       cards.push({
         title: `${studentsMatch[1]} students trained`,
-        description: "Through structured, mentor-led sessions across various universities in Tamil Nadu.",
+        description: sentences[0],
         icon: <Users className="w-5 h-5 text-blue-500" />
       });
     }
     
-    if (content.includes("completed comprehensive final projects")) {
+    // Card 2: Project completion
+    if (content.includes("project")) {
+      const projectSentence = sentences.find(s => s.toLowerCase().includes("project"));
       cards.push({
         title: "100% project completion",
-        description: "All participants completed comprehensive final projects, demonstrating practical application of their learning.",
+        description: projectSentence || "All participants completed comprehensive final projects.",
         icon: <CheckCircle className="w-5 h-5 text-blue-500" />
       });
     }
     
-    if (content.includes("hackathons") && content.includes("innovation")) {
+    // Card 3: Hackathon engagement - look for percentage before "student participation" or "hackathon"
+    const hackathonMatch = content.match(/(\d+)\s*%\+?\s+student\s+participation\s+in\s+mandatory\s+hackathon/i);
+    if (hackathonMatch || content.includes("hackathon")) {
+      const hackathonSentence = sentences.find(s => s.toLowerCase().includes("hackathon"));
+      const percentage = hackathonMatch ? hackathonMatch[1] : null;
       cards.push({
-        title: "High hackathon engagement",
-        description: "Mandatory hackathons foster innovation, critical thinking, and collaborative problem-solving.",
+        title: percentage ? `${percentage}%+ hackathon engagement` : "High hackathon engagement",
+        description: hackathonSentence || "Mandatory hackathons foster innovation and collaborative problem-solving.",
         icon: <Lightbulb className="w-5 h-5 text-blue-500" />
       });
     }
     
-    if (content.includes("employability") || content.includes("placement")) {
+    // Card 4: Employability/Placement
+    const placementMatch = content.match(/(\d+)\s*%\s+placement/i);
+    if (placementMatch || content.includes("employability") || content.includes("placement")) {
+      const placementSentence = sentences.find(s => 
+        s.toLowerCase().includes("placement") || 
+        s.toLowerCase().includes("employability") ||
+        s.toLowerCase().includes("internship")
+      );
       cards.push({
-        title: "Strengthened employability",
-        description: "Integrated placement, internship, hackathon support initiatives.",
+        title: placementMatch ? `${placementMatch[1]}% placement conversion` : "Strengthened employability",
+        description: placementSentence || "Integrated placement, internship, and hackathon support initiatives.",
         icon: <Building2 className="w-5 h-5 text-blue-500" />
       });
     }
     
-    if (content.includes("institutional feedback") || content.includes("TNSDC")) {
+    // Card 5: Institutional feedback
+    const feedbackSentence = sentences.find(s => s.toLowerCase().includes("feedback") || s.toLowerCase().includes("tnsdc"));
+    if (feedbackSentence) {
       cards.push({
         title: "Positive institutional feedback",
-        description: "TNSDC and partner universities highlighted increased student engagement, curiosity, and application-based learning.",
+        description: feedbackSentence,
         icon: <MessageSquare className="w-5 h-5 text-blue-500" />
       });
     }
@@ -94,7 +111,7 @@ const NaanImpactSection: React.FC<NaanImpactSectionProps> = ({ impactSection }) 
   const impactCards = parseImpactData(impactSection.content);
 
   return (
-    <div className="min-h-screen bg-white py-3 px-6">
+    <div className="min-h-screen bg-white py-3 px-6 -mt-5 md:mt-16">
       {/* Title */}
       <h1 className="text-2xl md:text-4xl font-bold text-center text-gray-900 mb-16">
         {impactSection.title}

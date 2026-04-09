@@ -18,13 +18,13 @@ export const Header = ({ searchQuery, onSearchChange }: HeaderProps) => {
       <img
         src="/success_banner_mobile_390x844.png"
         alt="Success Stories Banner"
-        className="lg:hidden w-full h-full object-cover object-center"
+        className="md:hidden w-full h-full object-cover object-center"
       />
-      {/* Desktop Image */}
+      {/* Desktop & Tablet Image */}
       <img
         src="/Success Stories Banner copy.jpg"
         alt="Success Stories Banner"
-        className="hidden lg:block w-full h-full object-cover object-center"
+        className="hidden md:block w-full h-full object-cover object-center"
       />
       <div className="absolute inset-0">
         <div className="container mx-auto px-4 h-full flex flex-col justify-center items-center max-w-6xl">
@@ -43,7 +43,7 @@ export const Header = ({ searchQuery, onSearchChange }: HeaderProps) => {
                     type="text"
                     value={searchQuery}
                     onChange={(e) => onSearchChange(e.target.value)}
-                    placeholder="Search Projects................"
+                    placeholder="Search Projects"
                     className="w-full px-4 py-3 pr-20 rounded-lg bg-white border border-gray-200 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent shadow-sm"
                   />
                   {searchQuery && (

@@ -1,4 +1,6 @@
 
+
+
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight } from "lucide-react";
@@ -11,23 +13,8 @@ interface SectionData {
 interface ConclusionSectionProps {
   section: SectionData;
 }
-const isMobile = window.innerWidth < 768;
-const isTablet = window.innerWidth >= 768 && window.innerWidth < 1024;
+
 const styles: Record<string, React.CSSProperties> = {
-  wrapper: {
-    backgroundColor: '#ffffff',
-    padding: '120px 0 140px 0',
-    width: '100vw',
-    marginLeft: 'calc(-50vw + 50%)',
-    marginTop: '-100px',
-    marginBottom: '-80px',
-    ...(isMobile && {
-    paddingTop: '68px',
-  }),
-   ...(isTablet && {
-    paddingTop: '40px',
-  }),
-  },
   inner: {
     maxWidth: '1100px',
     margin: '0 auto',
@@ -92,17 +79,39 @@ const scaleIn = {
 const ConclusionSection: React.FC<ConclusionSectionProps> = ({ section }) => {
   const [isMobile, setIsMobile] = useState(false);
   const [isTablet, setIsTablet] = useState(false);
-
+  const [isDesktop, setIsDesktop] = useState(false);
   useEffect(() => {
     const check = () => {
       const w = window.innerWidth;
       setIsMobile(w < 768);
-      setIsTablet(w >= 768 && w <= 1024);
+      setIsTablet(w >= 768 && w < 1280);
+      setIsDesktop(w >= 1280);
     };
     check();
     window.addEventListener('resize', check);
     return () => window.removeEventListener('resize', check);
   }, []);
+
+  // ✅ wrapperStyle inside component so isMobile/isTablet state works correctly
+  const wrapperStyle: React.CSSProperties = {
+    backgroundColor: '#ffffff',
+    padding: '120px 0 140px 0',
+    width: '100vw',
+    marginLeft: 'calc(-50vw + 50%)',
+    marginBottom: '-20px',
+    ...(isDesktop && {
+  marginTop: '-100px',
+}),
+    ...(isMobile && {
+      paddingTop: '10px',
+      paddingBottom: '45px',
+      marginTop: '-55px',
+    }),
+    ...(isTablet && {
+      paddingTop: '10px',
+    }),
+
+  };
 
   const paragraphs: string[] = section.content
     .split(/(?<=\.)\s+(?=[A-Z])/)
@@ -154,6 +163,7 @@ const ConclusionSection: React.FC<ConclusionSectionProps> = ({ section }) => {
     position: 'relative',
     zIndex: 1,
     marginTop: '40px',
+    filter: 'drop-shadow(0 10px 6px rgba(0, 0, 0, 0.1))',
   };
 
   const titleStyle: React.CSSProperties = {
@@ -174,102 +184,115 @@ const ConclusionSection: React.FC<ConclusionSectionProps> = ({ section }) => {
     wordSpacing: isMobile ? '-1.8px' : 'normal',
   };
 
-  // ── Mobile layout ──
+
   if (isMobile) {
-    return (
-      <section style={styles.wrapper}>
-        <div style={styles.inner}>
+  return (
+    <section style={wrapperStyle}>
+      <div style={styles.inner}>
 
-          <motion.h2
-            style={titleStyle}
-            variants={fadeUp}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.5 }}
-          >
-            {section.title}
-          </motion.h2>
+        <motion.h2
+          style={titleStyle}
+          variants={fadeUp}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.5 }}
+        >
+          {section.title}
+        </motion.h2>
 
-          <motion.div
-            style={{ ...styles.textCard, padding: '0px', overflow: 'hidden' }}
-            variants={scaleIn}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.15 }}
+        <motion.div
+          style={{ ...styles.textCard, padding: '0px', overflow: 'visible' }}
+          variants={scaleIn}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.15 }}
+        >
+          <div
+            style={{
+              position: 'relative',
+              width: '100%',
+              height: '220px',
+              display: 'flex',
+              alignItems: 'flex-end',
+              justifyContent: 'center',
+              overflow: 'hidden',
+              borderRadius: '12px 12px 0 0',
+            }}
           >
             <div
               style={{
-                position: 'relative',
-                width: '100%',
-                height: '220px',
-                display: 'flex',
-                alignItems: 'flex-end',
-                justifyContent: 'center',
-                overflow: 'hidden',
-                borderRadius: '12px 12px 0 0',
+                position: 'absolute',
+                bottom: '0px',
+                left: '50%',
+                transform: 'translateX(-50%)',
+                width: '260px',
+                height: '210px',
+                borderRadius: '215px',
+                backgroundColor: '#e0eeff',
+                zIndex: 0,
               }}
-            >
-              <div
-                style={{
-                  position: 'absolute',
-                  bottom: '0px',
-                  left: '50%',
-                  transform: 'translateX(-50%)',
-                  width: '260px',
-                  height: '210px',
-                  borderRadius: '215px',
-                  backgroundColor: '#e0eeff',
-                  zIndex: 0,
-                }}
-              />
-              <motion.img
-                src={IMAGE_URL}
-                alt="Conclusion illustration"
-                style={{
-                  width: '100%',
-                  maxWidth: '240px',
-                  height: '200px',
-                  objectFit: 'contain',
-                  position: 'relative',
-                  zIndex: 1,
-                  marginTop: '20px',
-                }}
-                variants={scaleIn}
-                onError={(e) => {
-                  (e.target as HTMLImageElement).style.display = 'none';
-                }}
-              />
+            />
+
+            <motion.img
+              src={IMAGE_URL}
+              alt="Conclusion illustration"
+              style={{
+                width: '100%',
+                maxWidth: '240px',
+                height: '200px',
+                objectFit: 'contain',
+                position: 'relative',
+                zIndex: 1,
+                marginTop: '20px',
+              }}
+              variants={scaleIn}
+              onError={(e) => {
+                (e.target as HTMLImageElement).style.display = 'none';
+              }}
+            />
+          </div>
+
+          <div style={{ padding: '18px 20px', position: 'relative' }}>
+            <div
+              style={{
+                position: 'absolute',
+                top: '-16px',
+                left: '16px',
+                width: '28px',
+                height: '28px',
+                borderRadius: '8px',
+                backgroundColor: '#3B82F6',
+                zIndex: 3,
+                filter: 'drop-shadow(0 4px 6px rgba(59, 130, 246, 0.35))',
+              }}
+            />
+
+            {paragraphs.length > 1 ? (
+              paragraphs.map((para, idx) => (
+                <p key={idx} style={paragraphStyle}>
+                  {para.trim()}
+                </p>
+              ))
+            ) : (
+              <p style={paragraphStyle}>{section.content}</p>
+            )}
+
+            <div style={{ display: 'flex', justifyContent: 'center', marginTop: '16px', paddingBottom: '4px' }}>
+              <button className="bg-[#5BA4CF] hover:bg-[#4A93BE] text-white font-medium px-4 py-2 rounded-lg transition-colors duration-200 flex items-center gap-1 text-xs">
+                Download case study <ArrowRight size={16} />
+              </button>
             </div>
 
-            {/* Text + Button inside card */}
-            <div style={{ padding: '18px 20px' }}>
-              {paragraphs.length > 1 ? (
-                paragraphs.map((para, idx) => (
-                  <p key={idx} style={paragraphStyle}>
-                    {para.trim()}
-                  </p>
-                ))
-              ) : (
-                <p style={paragraphStyle}>{section.content}</p>
-              )}
+          </div>
+        </motion.div>
 
-              {/* ── Download button inside card (mobile) ── */}
-              <div style={{ display: 'flex', justifyContent: 'center', marginTop: '16px', paddingBottom: '4px' }}>
-                <button className="bg-[#5BA4CF] hover:bg-[#4A93BE] text-white font-medium px-4 py-2 rounded-lg transition-colors duration-200 flex items-center gap-1 text-xs">
-                  Download case study <ArrowRight size={16} />
-                </button>
-              </div>
-            </div>
-          </motion.div>
-
-        </div>
-      </section>
-    );
-  }
-
+      </div>
+    </section>
+  );
+}
   // ── Desktop / Tablet layout ──
   return (
-    <section style={styles.wrapper}>
+    <section style={wrapperStyle}>
       <div style={styles.inner}>
 
         <motion.h2
@@ -291,6 +314,23 @@ const ConclusionSection: React.FC<ConclusionSectionProps> = ({ section }) => {
             whileInView="visible"
             viewport={{ once: true, amount: 0.1 }}
           >
+            {/* ✅ Blue decorative box - bottom left of image */}
+            <div style={{
+              position: 'absolute',
+              bottom: '-55px',
+              left: '22px',
+              width: '45px',
+              height: '45px',
+              borderRadius: '12px',
+              backgroundColor: '#3B82F6',
+              zIndex: 2,
+              filter: 'drop-shadow(0 8px 10px rgba(79, 62, 236, 0.25))',
+              ...(isTablet && {
+      bottom: '-38px',
+              left: 'calc(50% - 195px)',
+    }),
+            }} />
+
             <div style={blueShapeStyle} />
             <div style={styles.illustrationWrapper}>
               <motion.img
@@ -329,7 +369,7 @@ const ConclusionSection: React.FC<ConclusionSectionProps> = ({ section }) => {
 
               {/* ── Download button inside card (desktop/tablet) ── */}
               <div style={{ display: 'flex', justifyContent: 'flex-start', marginTop: '24px' }}>
-                <button className="bg-[#5BA4CF] hover:bg-[#4A93BE] text-white font-medium px-6 py-3 rounded-lg transition-colors duration-200 flex items-center gap-2">
+                <button className="bg-[#5BA4CF] hover:bg-[#4A93BE] text-white text-xs font-medium px-3 py-3 rounded-lg transition-colors duration-200 flex items-center gap-1">
                   Download case study <ArrowRight size={16} />
                 </button>
               </div>
