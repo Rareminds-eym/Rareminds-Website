@@ -1,3 +1,4 @@
+
 import { useParams, Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { getProgramWithSections } from '../../../lib/api/programs';
@@ -14,6 +15,18 @@ import ImpactSection from "../../../components/Academy/SuccessStories/ImpactSect
 import StratageticSection from "../../../components/Academy/SuccessStories/StratageticSection";
 import ConclusionSection from "../../../components/Academy/SuccessStories/ConclusionSection";
 import DSATMAboutSection from '../../../components/Academy/SuccessStories/DSATMAboutSection';
+import MediaGallery from '../../../components/Academy/SuccessStories/MediaGallery';
+import ComingSoonSection from '../../../components/Academy/SuccessStories/ComingSoonSection';
+
+// Programs that show coming soon
+const COMING_SOON_SLUGS = ['vtu', 'aicte', 'ksdc', 'visvesvaraya-technological-university', 'visvesvaraya', 'vtu-karnataka'];
+
+// Sections that should ALWAYS appear after the video — never in the first 2 slots
+const ALWAYS_AFTER_VIDEO_KEYS = ['impact', 'strategic_alignment', 'conclusion'];
+
+// Sections handled individually above the dynamic block
+const HANDLED_ABOVE_KEYS = ['introduction', 'header', 'modules', 'approaches', 'inventions', 'programs'];
+
 function SuccessStoriesDetailedPage() {
   const { name } = useParams<{ name: string }>();
   const [project, setProject] = useState<ProgramWithTransformedSections | null>(null);
@@ -30,19 +43,16 @@ function SuccessStoriesDetailedPage() {
 
       try {
         setLoading(true);
-        console.log('🔄 Fetching project data for URL param name:', name);
         
         const { data, error: apiError } = await getProgramWithSections(name);
         
         if (apiError) {
-          console.error('❌ [COMPONENT] API Error:', apiError);
           setError('Failed to load project data');
           setProject(null);
         } else if (data) {
           setProject(data);
           setError(null);
         } else {
-          console.log('❌ [COMPONENT] No project found for slug:', name);
           setError('Project not found');
           setProject(null);
         }
@@ -98,23 +108,87 @@ function SuccessStoriesDetailedPage() {
   // Transform project data to match the expected format for components
   const transformedProject = {
     ...project,
-    name: project.title, // Map title to name for compatibility
+    name: project.title,
     imageUrl: project.image_url,
     bannerUrl: project.bannerUrl || project.image_url
   };
 
-  // Debug logging to see actual slug values
-  console.log('🔍 [ROUTING DEBUG] Project slug:', transformedProject.slug);
-  console.log('🔍 [ROUTING DEBUG] Project title:', transformedProject.title);
-  console.log('🔍 [ROUTING DEBUG] Project name:', transformedProject.name);
+  // Check if this is a coming soon program
   
-  // **USE GENERIC LAYOUT FOR ALL PROGRAMS**
-  // All programs now use the unified generic layout
+  if (COMING_SOON_SLUGS.includes(project.slug.toLowerCase())) {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <AcademyHeader />
+        <ComingSoonSection programName={project.title} />
+      </div>
+    );
+  }
 
-  // **GENERIC LAYOUT FOR ALL PROGRAMS**
+
+  // Helper: render a section by key
+  const renderSection = (key: string, section: any) => {
+    // Skip sections handled above the dynamic block
+    if (HANDLED_ABOVE_KEYS.includes(key)) return null;
+
+    if (key === 'about') {
+      if (transformedProject.aboutSection) {
+        if (transformedProject.slug === 'dsatm') {
+          return (
+            <DSATMAboutSection
+              key={key}
+              section={transformedProject.aboutSection}
+            />
+          );
+        }
+        return (
+          <AboutProgramSection
+            key={key}
+            section={transformedProject.aboutSection}
+            technologies={transformedProject.technologies || []}
+            programData={{
+              slug: transformedProject.slug,
+              sections: transformedProject.sections
+            }}
+          />
+        );
+      }
+      return (
+        <div key={key} className="bg-white rounded-lg shadow-sm p-8 mb-12">
+          <h2 className="text-2xl font-bold text-gray-900 mb-6">{section.title}</h2>
+          <p className="text-gray-700 leading-relaxed">{section.content}</p>
+        </div>
+      );
+    }
+
+    if (key === 'impact') {
+      return <ImpactSection key={key} section={section} />;
+    }
+
+    if (key === 'strategic_alignment') {
+      return <StratageticSection key={key} section={section} />;
+    }
+
+    if (key === 'conclusion') {
+      return <ConclusionSection key={key} section={section} />;
+    }
+
+    // Default section rendering
+    return (
+      <div key={key} className="bg-white rounded-lg shadow-sm p-8 mb-12">
+        <h2 className="text-2xl font-bold text-gray-900 mb-6">{section.title}</h2>
+        <div className="prose prose-lg max-w-none text-gray-700 leading-relaxed">
+          {section.content.split('. ').map((sentence: string, index: number) => (
+            <p key={index} className="mb-4">
+              {sentence.trim() && !sentence.endsWith('.') ? sentence + '.' : sentence}
+            </p>
+          ))}
+        </div>
+      </div>
+    );
+  };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-white">
       <AcademyHeader />
       
       {/* Hero Section */}
@@ -122,14 +196,12 @@ function SuccessStoriesDetailedPage() {
 
       {/* Header Section - Full Width */}
       {transformedProject.sections?.header && (
-        <HeaderSection 
-          section={transformedProject.sections.header}
-        />
+        <HeaderSection section={transformedProject.sections.header} />
       )}
 
       {/* Introduction Section - Full Width */}
       {transformedProject.sections?.introduction && (
-        <IntroductionSection 
+        <IntroductionSection
           title={transformedProject.sections.introduction.title}
           content={transformedProject.sections.introduction.content}
         />
@@ -138,9 +210,8 @@ function SuccessStoriesDetailedPage() {
       {/* Modules Section - Full Width */}
       {transformedProject.sections?.modules && transformedProject.sections?.approaches && (
         <>
-          {/* Use DSATMAboutSection for Tripura to get the three-column layout */}
           {transformedProject.slug === 'tripura' ? (
-            <DSATMAboutSection 
+            <DSATMAboutSection
               section={{
                 title: "Program Details & Training Modules",
                 content: [
@@ -149,7 +220,7 @@ function SuccessStoriesDetailedPage() {
                     description: transformedProject.sections.programs?.content || ""
                   },
                   {
-                    title: "Modules Covered", 
+                    title: "Modules Covered",
                     description: transformedProject.sections.modules.content
                   },
                   {
@@ -160,7 +231,7 @@ function SuccessStoriesDetailedPage() {
               }}
             />
           ) : (
-            <ModulesSection 
+            <ModulesSection
               modules={transformedProject.sections.modules}
               approaches={transformedProject.sections.approaches}
               projectName={transformedProject.name}
@@ -173,100 +244,53 @@ function SuccessStoriesDetailedPage() {
       {/* Remaining Content Sections */}
       <div className="container mx-auto px-4 py-16">
         <div className="max-w-4xl mx-auto">
-
           {transformedProject.sections && (
             <div className="space-y-0">
-              {Object.entries(transformedProject.sections).map(([key, section]) => {
-                // Skip these sections as they're handled above
-                if (key === 'introduction' || key === 'header' || key === 'modules' || key === 'approaches' || key === 'inventions' || key === 'programs') return null;
-                
-                // Use AboutProgramSection for 'about' section (original UI design)
-                if (key === 'about') {
-                  // Use the specially formatted aboutSection if available
-                  if (transformedProject.aboutSection) {
-                    // Use DSATMAboutSection for DSATM to get the three-column layout
-                    if (transformedProject.slug === 'dsatm') {
-                      return (
-                        <DSATMAboutSection 
-                          key={key}
-                          section={transformedProject.aboutSection}
-                        />
-                      );
-                    } else {
-                      // Use regular AboutProgramSection for other programs
-                      return (
-                        <AboutProgramSection 
-                          key={key}
-                          section={transformedProject.aboutSection}
-                          technologies={transformedProject.technologies || []}
-                          programData={{
-                            slug: transformedProject.slug,
-                            sections: transformedProject.sections
-                          }}
-                        />
-                      );
-                    }
-                  }
-                  
-                  // Fallback to regular section (shouldn't happen with our transformation)
-                  return (
-                    <div key={key} className="bg-white rounded-lg shadow-sm p-8 mb-12">
-                      <h2 className="text-2xl font-bold text-gray-900 mb-6">
-                        {section.title}
-                      </h2>
-                      <p className="text-gray-700 leading-relaxed">
-                        {section.content}
-                      </p>
-                    </div>
-                  );
-                }
-                
-                // ImpactSection for 'impact' - using API data directly
-                if (key === 'impact') {
-                  return (
-                    <ImpactSection
-                      key={key}
-                      section={section}
-                    />
-                  );
-                }
-                
-                // StrategicSection for 'strategic_alignment' - using API data directly
-                if (key === 'strategic_alignment') {
-                  return (
-                    <StratageticSection
-                      key={key}
-                      section={section}
-                    />
-                  );
-                }
-                
-                // ConclusionSection for 'conclusion' - using API data directly
-                if (key === 'conclusion') {
-                  return (
-                    <ConclusionSection
-                      key={key}
-                      section={section}
-                    />
-                  );
-                }
-                
-                // Default section rendering - using API data directly
-                return (
-                  <div key={key} className="bg-white rounded-lg shadow-sm p-8 mb-12">
-                    <h2 className="text-2xl font-bold text-gray-900 mb-6">
-                      {section.title}
-                    </h2>
-                    <div className="prose prose-lg max-w-none text-gray-700 leading-relaxed">
-                      {section.content.split('. ').map((sentence: string, index: number) => (
-                        <p key={index} className="mb-4">
-                          {sentence.trim() && !sentence.endsWith('.') ? sentence + '.' : sentence}
-                        </p>
-                      ))}
-                    </div>
-                  </div>
+              {(() => {
+                const entries = Object.entries(transformedProject.sections).filter(([key]) => key !== 'video');
+
+                // Define the correct section order
+                const sectionOrder = [
+                  'introduction', 'header', 'about', 'modules', 'approaches',
+                  'inventions', 'programs', 'course_enrollment',
+                  'impact', 'strategic_alignment', 'conclusion'
+                ];
+
+                // Sort entries by the defined order
+                const sortedEntries = entries.sort((a, b) => {
+                  const indexA = sectionOrder.indexOf(a[0]);
+                  const indexB = sectionOrder.indexOf(b[0]);
+                  return (indexA === -1 ? 999 : indexA) - (indexB === -1 ? 999 : indexB);
+                });
+
+                // Split into: before-video sections and always-after-video sections
+                const beforeVideoEntries = sortedEntries.filter(
+                  ([key]) => !HANDLED_ABOVE_KEYS.includes(key) && !ALWAYS_AFTER_VIDEO_KEYS.includes(key)
                 );
-              })}
+
+                const afterVideoEntries = sortedEntries.filter(
+                  ([key]) => ALWAYS_AFTER_VIDEO_KEYS.includes(key)
+                );
+
+                return (
+                  <>
+                    {/* Sections before video (e.g. about, course_enrollment) */}
+                    {beforeVideoEntries.map(([key, section]) => renderSection(key, section))}
+
+                    {/* Video Section - Always after before-video sections */}
+                    {transformedProject.sections && (transformedProject.sections['video'] as any)?.videoUrl &&
+                      (transformedProject.sections['video'] as any)?.videoUrl.length > 0 && (
+                        <MediaGallery
+                          media={(transformedProject.sections['video'] as any).videoUrl}
+                          title={(transformedProject.sections['video'] as any).title || 'Program Videos'}
+                        />
+                    )}
+
+                    {/* Sections always after video: impact → strategic_alignment → conclusion */}
+                    {afterVideoEntries.map(([key, section]) => renderSection(key, section))}
+                  </>
+                );
+              })()}
             </div>
           )}
         </div>

@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 
+
 interface SectionData {
   title: string;
   content: string;
@@ -14,12 +15,12 @@ interface ConclusionSectionProps {
 
 const styles: Record<string, React.CSSProperties> = {
   wrapper: {
-    backgroundColor: '#ffffff62',
+    backgroundColor: '#ffffff',
     padding: '60px 0',
     width: '100vw',
     marginLeft: 'calc(-50vw + 50%)',
-    marginTop: '-80px',
-    marginBottom: '-80px',
+    marginTop: '-50px',
+    marginBottom: '-50px',
   },
   inner: {
     maxWidth: '1100px',
@@ -185,11 +186,12 @@ const ConclusionSection: React.FC<ConclusionSectionProps> = ({ section }) => {
   const imageStyle: React.CSSProperties = {
     width: '100%',
     maxWidth: isMobile ? '240px' : isTablet ? '360px' : '400px',
-    height: isMobile ? '200px' : isTablet ? '300px' : '330px',
+    height: isMobile ? '200px' : isTablet ? '300px' : '320px',
     objectFit: 'contain',
     position: 'relative',
     zIndex: 1,
-    marginTop: '40px',
+    marginTop:  isMobile ? '25px' : isTablet ? '30px' : '5px',
+    filter: 'drop-shadow(0 10px 6px rgba(0, 0, 0, 0.3))',
   };
 
   const titleStyle: React.CSSProperties = {
@@ -204,6 +206,7 @@ const ConclusionSection: React.FC<ConclusionSectionProps> = ({ section }) => {
     ...styles.textCard,
     padding: isMobile ? '18px 20px' : '32px 36px',
     minHeight: isMobile ? 'unset' : '280px',
+    position: 'relative',
   };
 
   const sectionTitleStyle: React.CSSProperties = {
@@ -248,6 +251,21 @@ const ConclusionSection: React.FC<ConclusionSectionProps> = ({ section }) => {
           {/* ── Left column ───────────────────────────────────────── */}
           <motion.div style={leftColStyle} variants={fadeIn}>
 
+            {/* Decorative blue box - bottom left of image */}
+            {!isMobile && (
+              <div style={{
+                position: 'absolute',
+                bottom: '-30px',
+                left: isTablet ? 'calc(50% - 195px)' : '28px',
+                width: '45px',
+                height: '45px',
+                borderRadius: '12px',
+                backgroundColor: '#3B82F6',
+                zIndex: 2,
+                filter: 'drop-shadow(0 8px 10px rgba(79, 62, 236, 0.25))',
+              }} />
+            )}
+
             {/* Blob */}
             <div style={blueShapeStyle} />
 
@@ -271,13 +289,20 @@ const ConclusionSection: React.FC<ConclusionSectionProps> = ({ section }) => {
               style={textCardStyle}
               variants={scaleIn}
             >
-              {/* Card title */}
-              <motion.h3
-                style={sectionTitleStyle}
-                variants={fadeUp}
-              >
-                {section.title}
-              </motion.h3>
+              {/* Decorative blue box - mobile top-left of card */}
+              {isMobile && (
+                <div style={{
+                  position: 'absolute',
+                  top: '-16px',
+                  left: '16px',
+                  width: '28px',
+                  height: '28px',
+                  borderRadius: '8px',
+                  backgroundColor: '#3B82F6',
+                  zIndex: 3,
+                  filter: 'drop-shadow(0 4px 6px rgba(59, 130, 246, 0.35))',
+                }} />
+              )}
 
               {/* Paragraphs with stagger */}
               <motion.div

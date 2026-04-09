@@ -10,7 +10,7 @@ interface IntroductionSectionProps {
 
 function IntroductionSection({ title, content }: IntroductionSectionProps) {
   return (
-    <div className="w-full bg-gray-50 py-16">
+    <div className="w-full bg-white py-16">
       <div className="w-full px-4 sm:px-8 lg:px-32">
         <div className="grid lg:grid-cols-2 gap-20 items-center">
 
@@ -21,7 +21,9 @@ function IntroductionSection({ title, content }: IntroductionSectionProps) {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, ease: "easeOut" }}
               viewport={{ once: true }}
-              className="text-3xl md:text-5xl font-bold text-gray-900 mb-8 text-center"
+              className={`text-3xl md:text-5xl font-bold text-gray-900 mb-2 md:mb-8 ${
+                title.trim().split(/\s+/).length === 1 ? 'text-center' : 'text-center md:text-left leading-relaxed'
+              }`}
             >
               {title}
             </motion.h2>
@@ -31,7 +33,7 @@ function IntroductionSection({ title, content }: IntroductionSectionProps) {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, ease: "easeOut", delay: 0.2 }}
               viewport={{ once: true }}
-              className="text-base text-gray-600 leading-relaxed"
+              className="text-sm md:text-base text-gray-600 leading-relaxed text-justify md:text-left"
             >
               {content}
             </motion.p>

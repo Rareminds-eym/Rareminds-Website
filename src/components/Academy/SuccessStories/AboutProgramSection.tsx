@@ -319,6 +319,7 @@ function AboutProgramSection({ section, technologies, programData }: AboutProgra
                 >
                   {getTechnologies(1, section.content[1]?.title || '').map((tech, index) => (
                     <motion.span
+                    
                       key={index}
                       initial={{ opacity: 0, scale: 0.85 }}
                       whileInView={{ opacity: 1, scale: 1 }}

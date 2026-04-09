@@ -32,7 +32,7 @@ const ModulesSection: React.FC<ModulesSectionProps> = ({ modules, approaches, pr
   }, []);
 
   return (
-    <div className="bg-white py-8 md:py-16 mt-2">
+    <div className="bg-white py-8 md:py-16 -mt-8">
       <h2 className="text-3xl md:text-5xl font-bold text-gray-900 mb-6 md:mb-10 text-center">
         Modules Covered & Approaches
       </h2>
