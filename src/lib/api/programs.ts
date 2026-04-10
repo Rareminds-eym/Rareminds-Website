@@ -20,7 +20,7 @@ interface PaginationParams {
 
 interface PaginatedResponse {
   data: Program[] | null;
-  error: any;
+  error: Error | null;
   totalCount: number;
   totalPages: number;
   currentPage: number;
@@ -76,17 +76,8 @@ export async function getPrograms(params: PaginationParams = {}): Promise<Pagina
     const { data, error, count } = await query
       .order('display_order', { ascending: true })
       .range(offset, offset + limit - 1);
-
-    console.log('📊 Supabase response:', { 
-      dataCount: data?.length, 
-      totalCount: count,
-      error: error,
-      page,
-      limit
-    });
     
     if (error) {
-      console.error('❌ Supabase error:', error);
       throw error;
     }
 
@@ -103,10 +94,10 @@ export async function getPrograms(params: PaginationParams = {}): Promise<Pagina
       hasPrevPage: page > 1
     };
   } catch (error) {
-    console.error('💥 API function error:', error);
+    const typedError = error instanceof Error ? error : new Error(String(error));
     return { 
       data: null, 
-      error,
+      error: typedError,
       totalCount: 0,
       totalPages: 0,
       currentPage: 1,
@@ -144,7 +135,6 @@ export async function getProgramFilterOptions(): Promise<{
 
     return { categories, names, years, locations };
   } catch (error) {
-    console.error('Error fetching filter options:', error);
     return { categories: ['All'], names: ['All'], years: ['All'], locations: ['All'] };
   }
 }
@@ -203,7 +193,7 @@ function parseStructuredContent(content: string): { title: string; description: 
 // New function to get program with sections by slug
 export async function getProgramWithSections(slug: string): Promise<{
   data: ProgramWithTransformedSections | null;
-  error: any;
+  error: Error | null;
 }> {
   try {
     // First, get the program
@@ -215,7 +205,6 @@ export async function getProgramWithSections(slug: string): Promise<{
       .single();
 
     if (programError) {
-      console.error('❌ [API] Error fetching program:', programError);
       throw programError;
     }
 
@@ -303,7 +292,8 @@ export async function getProgramWithSections(slug: string): Promise<{
     }
 
     return { data: programWithSections, error: null };
-  } catch (error: any) {
-    return { data: null, error };
+  } catch (error) {
+    const typedError = error instanceof Error ? error : new Error(String(error));
+    return { data: null, error: typedError };
   }
 }

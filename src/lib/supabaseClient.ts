@@ -2,17 +2,11 @@
 import { createClient } from '@supabase/supabase-js';
 import { safeGetItem, safeSetItem, safeRemoveItem } from './localStorage';
 
-// const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'https://itvhjkgfafikpqmuunlh.supabase.co';
-// const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV4YW1wbGUiLCJyb2xlIjoiYW5vbiIsImlhdCI6MTY0MTc2OTIwMCwiZXhwIjoxOTU3MzQ1MjAwfQ.placeholder';
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
-
-// if (!import.meta.env.VITE_SUPABASE_URL || !import.meta.env.VITE_SUPABASE_ANON_KEY) {
-//   console.warn('⚠️ Supabase configuration missing - using placeholder values. Some features may not work.');
-// }
 if (!supabaseUrl || !supabaseAnonKey) {
-  throw new Error('Supabase environment variables are missing')
+  throw new Error('Supabase environment variables are missing. Database features will be unavailable.');
 }
 // Custom storage that handles localStorage errors gracefully
 const safeStorage = {
