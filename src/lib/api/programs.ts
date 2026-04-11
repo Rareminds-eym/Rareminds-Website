@@ -1,31 +1,9 @@
-import { supabase } from '../supabaseClient';
-import type { Program, ProgramWithTransformedSections, AboutSection, TransformedSection } from '../../types/program';
+import { supabase } from '@/lib/supabaseClient';
+import type { Program, ProgramWithTransformedSections, AboutSection, TransformedSection, PaginationParams, PaginatedResponse } from '@/types/program';
 
 // Sanitize search input to prevent PostgREST filter injection
 function sanitizeSearchInput(input: string): string {
   return input.replace(/[%_\\,().]/g, '\\$&');
-}
-
-interface PaginationParams {
-  page?: number;
-  limit?: number;
-  search?: string;
-  filters?: {
-    category?: string;
-    name?: string;
-    year?: string;
-    location?: string;
-  };
-}
-
-interface PaginatedResponse {
-  data: Program[] | null;
-  error: Error | null;
-  totalCount: number;
-  totalPages: number;
-  currentPage: number;
-  hasNextPage: boolean;
-  hasPrevPage: boolean;
 }
 
 export async function getPrograms(params: PaginationParams = {}): Promise<PaginatedResponse> {
@@ -69,7 +47,11 @@ export async function getPrograms(params: PaginationParams = {}): Promise<Pagina
 
     // Apply year filter
     if (filters.year && filters.year !== 'All') {
-      query = query.gte('date', `${filters.year}-01-01`).lt('date', `${parseInt(filters.year) + 1}-01-01`);
+      // query = query.gte('date', `${filters.year}-01-01`).lt('date', `${parseInt(filters.year) + 1}-01-01`);
+      const parsedYear = parseInt(filters.year);
+if (!isNaN(parsedYear)) {
+  query = query.gte('date', `${parsedYear}-01-01`).lt('date', `${parsedYear + 1}-01-01`);
+}
     }
 
     // Apply pagination and ordering
@@ -131,7 +113,8 @@ export async function getProgramFilterOptions(): Promise<{
         return new Date(p.date).getFullYear().toString();
       }
       return null;
-    }).filter(Boolean) as string[]))].sort();
+    // }).filter(Boolean) as string[]))].sort();
+  }).filter((year): year is string => year !== null) || []))].sort();
 
     return { categories, names, years, locations };
   } catch (error) {
@@ -139,54 +122,50 @@ export async function getProgramFilterOptions(): Promise<{
   }
 }
 
+function isSectionHeader(line: string): boolean {
+  const colonIndex = line.indexOf(':');
+  if (colonIndex <= 0) return false;
+
+  const candidate = line.substring(0, colonIndex).trim();
+  if (!candidate) return false;
+
+  const words = candidate.split(/\s+/);
+
+  if (words.length > 6) return false;
+
+  if (/[.!?]$/.test(candidate)) return false;
+
+  return words.every(word => /^[A-Z]/.test(word));
+}
+
 // Helper function to parse structured content from database text
 function parseStructuredContent(content: string): { title: string; description: string; }[] {
   if (!content) return [];
-  
+
   const lines = content.split('\n').map(l => l.trim()).filter(Boolean);
   const sections: { title: string; description: string; }[] = [];
   let current: { title: string; description: string[] } | null = null;
-  
+
   for (const line of lines) {
-    const colonIndex = line.indexOf(':');
-    const isHeader = colonIndex > 0 && (
-      line.includes('Students') || 
-      line.includes('Staff') || 
-      line.includes('Development') ||
-      line.includes('Bootcamp') ||
-      line.includes('Approach') ||
-      line.includes('Assessment') ||
-      line.includes('Metaverse') ||
-      line.includes('Stack')
-    );
-    
-    if (isHeader) {
+    if (isSectionHeader(line)) {
       if (current) {
-        sections.push({
-          title: current.title,
-          description: current.description.join(' ')
-        });
+        sections.push({ title: current.title, description: current.description.join(' ') });
       }
-      
+
+      const colonIndex = line.indexOf(':');
       const title = line.substring(0, colonIndex).trim();
       const restOfLine = line.substring(colonIndex + 1).trim();
-      
-      current = {
-        title: title,
-        description: restOfLine ? [restOfLine] : []
-      };
+
+      current = { title, description: restOfLine ? [restOfLine] : [] };
     } else if (current) {
       current.description.push(line);
     }
   }
-  
+
   if (current) {
-    sections.push({
-      title: current.title,
-      description: current.description.join(' ')
-    });
+    sections.push({ title: current.title, description: current.description.join(' ') });
   }
-  
+
   return sections;
 }
 
@@ -211,12 +190,12 @@ export async function getProgramWithSections(slug: string): Promise<{
     if (!program) {
       return { data: null, error: new Error('Program not found') };
     }
-
+    const programId = program.id as string;
     // Then, get the sections for this program
     const { data: sections, error: sectionsError } = await supabase
       .from('program_sections')
       .select('*')
-      .eq('program_id', program.id)
+      .eq('program_id', programId)
       .order('display_order', { ascending: true });
 
     if (sectionsError) {
@@ -227,7 +206,8 @@ export async function getProgramWithSections(slug: string): Promise<{
     const transformedSections: { [key: string]: TransformedSection } = {};
     let aboutSection: AboutSection | undefined;
     
-    sections?.forEach((section) => {
+    // sections?.forEach((section) => {
+    (sections || []).forEach((section) => {
       // Store regular sections
       transformedSections[section.section_key] = {
         title: section.title || '',
@@ -248,6 +228,25 @@ export async function getProgramWithSections(slug: string): Promise<{
           ]
         };
       }
+
+      // Parse video section JSON content from DB
+      if (section.section_key === 'video') {
+        try {
+          const parsed = JSON.parse(section.content || '[]');
+          const videoUrl = parsed.flatMap((obj: { item1?: string; item2?: string; item3?: string }) =>
+            [obj.item1, obj.item2, obj.item3]
+              .filter(Boolean)
+              .map(url => ({ item1: url }))
+          );
+          transformedSections['video'] = {
+            title: section.title || 'Program Videos',
+            content: section.content || '',
+            videoUrl
+          };
+        } catch {
+          delete transformedSections['video'];
+        }
+      }
     });
 
     // Create the final program object with transformed sections
@@ -265,31 +264,6 @@ export async function getProgramWithSections(slug: string): Promise<{
       technologies: [],
       imageUrl: program.image_url
     };
-
-    // Add video section data for all programs
-    if (!transformedSections['video']) {
-      transformedSections['video'] = {
-        title: 'Program Videos',
-        content: 'Explore our comprehensive training programs through these video testimonials showcasing student experiences, program highlights, and real-world applications of the skills learned.',
-        videoUrl: [
-          {
-            item1: '/video1.mp4',
-            item2: '/video2.mp4',
-            item3: '/video3.mp4',
-          },
-          {
-            item1: 'https://media.istockphoto.com/id/1752533608/video/high-five-business-people-and-teamwork-with-collaboration-and-celebration-in-a-office-with.jpg?s=640x640&k=20&c=JpFXT5qRc3TcAJae4yzXBTqos-sw5X2yTBseiM6o-qk=',
-            item2: 'https://media.istockphoto.com/id/1473240473/video/high-five-team-building-and-business-men-in-office-building-for-partnership-goals-and-success.jpg?s=640x640&k=20&c=kYe2nLg23mmIlErv1vcuL5ZvrTS_3difGB-5IUcaijQ=',
-            item3: 'https://media.istockphoto.com/id/612853934/photo/shared-vision-shared-success.jpg?s=612x612&w=0&k=20&c=CDAgRN1WdaARc5Q0CFnLac4-flGkeZjycG3R1IMrz54=',
-          },
-          {
-            item1: '/video3.mp4',
-            item2: '/video3.mp4',
-            item3: '/video3.mp4',
-          },
-        ]
-      };
-    }
 
     return { data: programWithSections, error: null };
   } catch (error) {

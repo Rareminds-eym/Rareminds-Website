@@ -6,8 +6,8 @@ const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
 if (!supabaseUrl || !supabaseAnonKey) {
-  throw new Error('Supabase environment variables are missing. Database features will be unavailable.');
-}
+  console.warn('⚠️ Supabase configuration missing - using placeholder values. Some features may not work.');
+  }
 // Custom storage that handles localStorage errors gracefully
 const safeStorage = {
   getItem: (key: string) => {

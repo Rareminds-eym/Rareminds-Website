@@ -8,7 +8,7 @@ export interface Program {
   date: string;
   status: string;
   image_url: string;
-  banner_url?: string; // Optional banner URL field
+  banner_url: string; // Optional banner URL field
   short_description: string;
   display_order: number;
   is_active: boolean;
@@ -109,13 +109,14 @@ export interface ProgramWithTransformedSections extends Program {
   aboutSection?: AboutSection; // Special handling for about section
   enhancedSections?: { [key: string]: EnhancedSection }; // For special components
   technologies?: string[];
-  bannerUrl?: string;
+  bannerUrl: string;
   // Legacy compatibility fields for Naan Mudhalvan components
   name?: string;
   description?: string;
   category?: string;
   year?: string;
   timeline?: string;
+  imageUrl?: string;
 }
 
 // Paginated API response

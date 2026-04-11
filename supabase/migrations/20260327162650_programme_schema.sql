@@ -23,7 +23,8 @@ CREATE TYPE section_key_type AS ENUM (
     'why',
     'cloud_kitchen',
     'agri_food',
-    'inventions'
+    'inventions',
+    'video'
 );
 -- =====================================================
 -- PROGRAMS TABLE (Main Metadata)
@@ -33,13 +34,13 @@ CREATE TABLE programs (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     title TEXT NOT NULL,
     slug TEXT UNIQUE NOT NULL,
-    program_type TEXT,
-    location TEXT,
-    date DATE,
-    status TEXT, 
-    image_url TEXT,
-    banner_url TEXT,
-    short_description TEXT,
+    program_type TEXT NOT NULL,
+    location TEXT NOT NULL,
+    date DATE NOT NULL,
+    status TEXT NOT NULL, 
+    image_url TEXT NOT NULL,
+    banner_url TEXT NOT NULL,
+    short_description TEXT NOT NULL,
     display_order INTEGER DEFAULT 0,
     is_active BOOLEAN DEFAULT true,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
@@ -103,3 +104,4 @@ ON program_sections(program_id, display_order);
 COMMENT ON TABLE programs IS 'Stores program metadata and basic information';
 COMMENT ON TABLE program_sections IS 'Stores section-wise content for each program';
 COMMENT ON COLUMN program_sections.section_key IS 'Predefined section types controlled via ENUM';
+COMMENT ON COLUMN programs.date IS 'Program start date in YYYY-MM-DD format. For multi-month programs, this represents the beginning of the engagement period, not the end date.';
