@@ -1,6 +1,3 @@
-
-"use client";
-
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
 import {
@@ -167,7 +164,7 @@ export default function KeyOutcomesSection({ section }: KeyOutcomesSectionProps)
 
             return (
               <motion.div
-                key={i}
+                key={`stat-${item.value}-${item.label}`}
                 variants={variant}
                 initial="hidden"
                 whileInView="visible"
@@ -216,7 +213,7 @@ export default function KeyOutcomesSection({ section }: KeyOutcomesSectionProps)
                   {hasMounted && inView ? (
                     <CountUp
                       start={0}
-                      end={parseFloat(item.value.replace(/[^0-9.]/g, ''))}
+                      end={Math.max(0, parseFloat(item.value.replace(/[^0-9.]/g, '')) || 0)}
                       duration={2}
                       separator=","
                       decimals={item.value.includes('.') ? 2 : 0}
@@ -269,7 +266,7 @@ export default function KeyOutcomesSection({ section }: KeyOutcomesSectionProps)
 
             return (
               <motion.div
-                key={i}
+                key={`pill-${i}-${pill.text.slice(0, 20)}`}
                 variants={fadeUpVariant}
                 initial="hidden"
                 whileInView="visible"

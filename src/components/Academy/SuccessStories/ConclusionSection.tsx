@@ -102,28 +102,9 @@ const paragraphItem: Variants = {
 // ─────────────────────────────────────────────────────────────────────────────
 
 const ConclusionSection: React.FC<ConclusionSectionProps> = ({ section }) => {
-  const [isMobile, setIsMobile] = useState(false);
-  const [isTablet, setIsTablet] = useState(false);
+  const isMobile = useMediaQuery('(max-width: 767px)');
+  const isTablet = useMediaQuery('(min-width: 768px) and (max-width: 1024px)');
   const [imgError, setImgError] = useState(false);
-
-  useEffect(() => {
-    let timeoutId: ReturnType<typeof setTimeout>;
-    const check = () => {
-      const w = window.innerWidth;
-      setIsMobile(w < 768);
-      setIsTablet(w >= 768 && w <= 1024);
-    };
-    const debouncedCheck = () => {
-      clearTimeout(timeoutId);
-      timeoutId = setTimeout(check, 150);
-    };
-    check();
-    window.addEventListener('resize', debouncedCheck);
-    return () => {
-      window.removeEventListener('resize', debouncedCheck);
-      clearTimeout(timeoutId);
-    };
-  }, []);
 
   const paragraphs: string[] = section.content
     .replace(/\.\s+(?=[A-Z])/g, '.|||').split('|||').filter(Boolean)
@@ -318,7 +299,7 @@ const ConclusionSection: React.FC<ConclusionSectionProps> = ({ section }) => {
                 {paragraphs.length > 1 ? (
                   paragraphs.map((para, idx) => (
                     <motion.p
-                      key={idx}
+                      key={`para-${idx}-${para.slice(0, 20)}`}
                       style={paragraphStyle}
                       variants={paragraphItem}
                     >

@@ -1,4 +1,5 @@
 import React from "react";
+import { useMediaQuery } from '../../../hooks/useMediaQuery';
 
 interface BulletItem {
   label?: string;
@@ -34,22 +35,7 @@ const SECTION_BASE_STYLE = {
 } as const;
 
 const DSATMAboutSection: React.FC<DSATMAboutSectionProps> = ({ section }) => {
-  const [isMobile, setIsMobile] = React.useState(false);
-
-  React.useEffect(() => {
-    let timeoutId: ReturnType<typeof setTimeout>;
-    const check = () => setIsMobile(window.innerWidth < 768);
-    const debouncedCheck = () => {
-      clearTimeout(timeoutId);
-      timeoutId = setTimeout(check, 150);
-    };
-    check();
-    window.addEventListener("resize", debouncedCheck);
-    return () => {
-      window.removeEventListener("resize", debouncedCheck);
-      clearTimeout(timeoutId);
-    };
-  }, []);
+  const isMobile = useMediaQuery('(max-width: 767px)');
 
   const cards: CardData[] = section.content.map((item) => {
     const getInitial = (title: string) => {

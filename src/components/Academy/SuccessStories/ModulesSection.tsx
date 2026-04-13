@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react';
 import { BookOpen, Target } from 'lucide-react';
+import { useMediaQuery } from '../../../hooks/useMediaQuery';
 
 interface ModulesSectionProps {
   modules: {
@@ -25,21 +26,7 @@ const ModulesSection: React.FC<ModulesSectionProps> = ({ modules, approaches, pr
   const modulesList = splitSentences(modules.content);
   const approachesList = splitSentences(approaches.content);
 
-  const [isMobile, setIsMobile] = React.useState(false);
-  React.useEffect(() => {
-    let timeoutId: ReturnType<typeof setTimeout>;
-    const check = () => setIsMobile(window.innerWidth < 768);
-    const debouncedCheck = () => {
-      clearTimeout(timeoutId);
-      timeoutId = setTimeout(check, 150);
-    };
-    check();
-    window.addEventListener('resize', debouncedCheck);
-    return () => {
-      window.removeEventListener('resize', debouncedCheck);
-      clearTimeout(timeoutId);
-    };
-  }, []);
+  const isMobile = useMediaQuery('(max-width: 767px)');
 
   const gridStyle = useMemo(() => ({
     display: 'grid',

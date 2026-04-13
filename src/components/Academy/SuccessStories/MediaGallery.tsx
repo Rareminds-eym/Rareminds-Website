@@ -101,7 +101,7 @@ export const MediaGallery = ({ media, title = "Media Gallery", compact = false }
         <div className="hidden md:flex gap-10 items-start max-w-5xl mx-auto">
 
           {/* LEFT: Main player */}
-          <div ref={leftPanelRef} className="flex-1 min-w-0" style={{ maxWidth: "68%" }}>
+          <div ref={leftPanelRef} className="flex-1 min-w-0 max-w-[68%]">
             <div
               className="relative w-full aspect-video bg-gray-900 rounded-lg shadow-sm overflow-hidden cursor-pointer group"
               onClick={() => !isSelectedVideo && setIsModalOpen(true)}
@@ -132,9 +132,8 @@ export const MediaGallery = ({ media, title = "Media Gallery", compact = false }
 
           {/* RIGHT: Thumbnail sidebar */}
           <div
-            className="flex-shrink-0 overflow-hidden rounded-lg"
+            className="flex-shrink-0 overflow-hidden rounded-lg w-[220px]"
             style={{
-              width: "220px",
               height: sidebarHeight > 0 ? `${sidebarHeight}px` : "auto",
             }}
           >
@@ -261,12 +260,11 @@ export const MediaGallery = ({ media, title = "Media Gallery", compact = false }
                   <button
                     key={`${loopRound}-${actualIndex}`}
                     onClick={() => setSelectedIndex(actualIndex)}
-                    className={`relative flex-shrink-0 rounded-lg overflow-hidden transition-all ${
+                    className={`relative flex-shrink-0 rounded-lg overflow-hidden transition-all w-[110px] h-[72px] ${
                       isActive
                         ? "ring-2 ring-blue-500"
                         : "ring-1 ring-gray-200"
                     }`}
-                    style={{ width: "110px", height: "72px" }}
                   >
                     {itemIsVideo ? (
                       <>

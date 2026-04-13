@@ -31,7 +31,7 @@ interface AboutProgramSectionProps {
     }>;
   };
   technologies: string[];
-  // Add program data to help with detection
+ 
   programData?: {
     slug?: string;
     sections?: { [key: string]: { title: string; content: string } };
@@ -39,12 +39,10 @@ interface AboutProgramSectionProps {
 }
 
 function AboutProgramSection({ section, technologies, programData }: AboutProgramSectionProps) {
-  // Debug logging to understand the data structure
-
-  // Check if this is a Naan Mudhalvan 2025 program that needs blue cards
+ 
   const isNaanMudhalvan = programData?.slug === 'naan-mudhalvan-2025';
 
-  // Get technology tags based on program type
+ 
   const getTechnologies = (cardIndex: number, cardTitle: string) => {
     if (cardTitle === 'Industrial Metaverse') {
       return ['Industrial Metaverse', 'VR'];
@@ -52,14 +50,14 @@ function AboutProgramSection({ section, technologies, programData }: AboutProgra
     if (cardTitle === 'Web Full Stack Development') {
       return ['AI', 'MERN Stack'];
     }
-    // Default: split technologies between cards
+   
     if (cardIndex === 0) {
       return technologies.slice(0, Math.ceil(technologies.length / 2));
     }
     return technologies.slice(Math.ceil(technologies.length / 2));
   };
 
-  // Render Naan Mudhalvan blue cards layout
+
   if (isNaanMudhalvan) {
     return (
       <div className="py-16 -mt-10 w-screen bg-white min-h-full -ml-[calc(50vw-50%)]">
@@ -95,7 +93,7 @@ function AboutProgramSection({ section, technologies, programData }: AboutProgra
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {NAAN_MUDHALVAN_PROGRAMS.map((program, index) => (
                 <motion.div
-                  key={index}
+                  key={program.title}
                   initial={{ opacity: 0, y: 40 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, ease: "easeOut", delay: 0.2 + index * 0.1 }}
@@ -191,7 +189,7 @@ function AboutProgramSection({ section, technologies, programData }: AboutProgra
                 >
                   {getTechnologies(0, section.content[0]?.title || '').map((tech, index) => (
                     <motion.span
-                      key={index}
+                      key={tech}
                       initial={{ opacity: 0, scale: 0.85 }}
                       whileInView={{ opacity: 1, scale: 1 }}
                       transition={{ duration: 0.3, delay: 0.55 + index * 0.07 }}
@@ -267,7 +265,7 @@ function AboutProgramSection({ section, technologies, programData }: AboutProgra
                   {getTechnologies(1, section.content[1]?.title || '').map((tech, index) => (
                     <motion.span
                     
-                      key={index}
+                      key={tech}
                       initial={{ opacity: 0, scale: 0.85 }}
                       whileInView={{ opacity: 1, scale: 1 }}
                       transition={{ duration: 0.3, delay: 0.6 + index * 0.07 }}
