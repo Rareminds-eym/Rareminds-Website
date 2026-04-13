@@ -3,6 +3,12 @@ import { Monitor, Code } from 'lucide-react';
 
 const NAAN_MUDHALVAN_SLUG = 'naan-mudhalvan-2025';
 
+// Technology mappings for specific card titles
+const TECHNOLOGY_MAPPINGS: Record<string, string[]> = {
+  'Industrial Metaverse': ['Industrial Metaverse', 'VR'],
+  'Web Full Stack Development': ['AI', 'MERN Stack'],
+} as const;
+
 interface AboutProgramSectionProps {
   section: {
     title: string;
@@ -24,14 +30,13 @@ function AboutProgramSection({ section, technologies, programData }: AboutProgra
   const isNaanMudhalvan = programData?.slug === NAAN_MUDHALVAN_SLUG;
 
  
-  const getTechnologies = (cardIndex: number, cardTitle: string) => {
-    if (cardTitle === 'Industrial Metaverse') {
-      return ['Industrial Metaverse', 'VR'];
-    }
-    if (cardTitle === 'Web Full Stack Development') {
-      return ['AI', 'MERN Stack'];
+  const getTechnologies = (cardIndex: number, cardTitle: string): string[] => {
+    // Check if there's a specific mapping for this card title
+    if (cardTitle in TECHNOLOGY_MAPPINGS) {
+      return TECHNOLOGY_MAPPINGS[cardTitle];
     }
    
+    // Default: split technologies array between cards
     if (cardIndex === 0) {
       return technologies.slice(0, Math.ceil(technologies.length / 2));
     }
@@ -235,7 +240,6 @@ function AboutProgramSection({ section, technologies, programData }: AboutProgra
                 >
                   {getTechnologies(1, section.content[1]?.title || '').map((tech, index) => (
                     <motion.span
-                    
                       key={tech}
                       initial={{ opacity: 0, scale: 0.85 }}
                       whileInView={{ opacity: 1, scale: 1 }}

@@ -71,14 +71,14 @@ export const MediaGallery = ({ media, title = "Media Gallery", compact = false }
       cancelAnimationFrame(rafId);
       window.removeEventListener("resize", updateHeights);
     };
-  }, []);
+  }, [leftPanelRef]);
 
   useEffect(() => {
     if (scrollInnerRef.current && media.length > 0 && itemHeight > 0) {
       const totalHeight = media.length * (itemHeight + ITEM_GAP);
       scrollInnerRef.current.style.setProperty("--scroll-height", `${totalHeight}px`);
     }
-  }, [media, itemHeight]);
+  }, [media.length, itemHeight]);
 
   useEffect(() => {
     if (mobileScrollRef.current && media.length > 0) {
@@ -336,26 +336,6 @@ export const MediaGallery = ({ media, title = "Media Gallery", compact = false }
           </motion.div>
         )}
       </AnimatePresence>
-
-      {/* Scroll animation */}
-      <style>{`
-        @keyframes scrollVertical {
-          0%   { transform: translateY(0); }
-          100% { transform: translateY(calc(-1 * var(--scroll-height, 0px))); }
-        }
-        .scroll-inner {
-          animation: scrollVertical 25s linear infinite;
-        }
-        @keyframes scrollHorizontal {
-          0%   { transform: translateX(0); }
-          100% { transform: translateX(calc(-1 * var(--scroll-width, 0px))); }
-        }
-        .mobile-scroll-inner {
-          animation: scrollHorizontal 20s linear infinite;
-        }
-        .scrollbar-hide::-webkit-scrollbar { display: none; }
-        .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
-      `}</style>
     </div>
   );
 };

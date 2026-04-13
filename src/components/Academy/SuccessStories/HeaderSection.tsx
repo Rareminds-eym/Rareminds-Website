@@ -17,10 +17,10 @@ const HeaderSection: React.FC<HeaderSectionProps> = ({ section }) => {
     <section className="bg-gray-50 py-20 w-screen -ml-[calc(50vw-50%)] mt-0 mb-0">
       <div className="max-w-[1100px] mx-auto px-6 text-center">
         {/* Main Title */}
-        <h1 className="text-[2.5rem] font-bold text-[#111] mb-6 tracking-[-0.5px] leading-[1.2]">{section.title}</h1>
+        <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 tracking-tight leading-tight">{section.title}</h1>
         
         {/* Content */}
-        <div className="max-w-[800px] mx-auto text-base leading-[1.7] text-[#444] text-left">
+        <div className="max-w-[800px] mx-auto text-base leading-relaxed text-gray-700 text-left">
           {paragraphs.length > 1 ? (
             paragraphs.map((para, idx) => (
               <p key={`para-${idx}`} className="mb-5">

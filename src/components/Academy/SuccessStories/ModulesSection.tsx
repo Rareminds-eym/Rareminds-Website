@@ -63,7 +63,7 @@ const ModulesSection: React.FC<ModulesSectionProps> = ({ modules, approaches, pr
                   clipPath: 'polygon(8% 6%, 100% 0%, 100% 100%, 8% 94%)',
                 }}
               />
-              <div className="relative z-10 ml-6" style={{ maxWidth: '200%' }}>
+              <div className="relative z-10 ml-6 max-w-[200%]">
                 <div className="w-12 h-12 bg-blue-500 rounded-2xl flex items-center justify-center mb-6">
                   <BookOpen className="w-6 h-6 text-white" />
                 </div>
@@ -91,7 +91,7 @@ const ModulesSection: React.FC<ModulesSectionProps> = ({ modules, approaches, pr
                   clipPath: 'polygon(0% 0%, 92% 6%, 92% 94%, 0% 100%)',
                 }}
               />
-              <div className="relative z-10" style={{ maxWidth: '250%' }}>
+              <div className="relative z-10 max-w-[250%]">
                 <div className="w-12 h-12 bg-blue-500 rounded-2xl flex items-center justify-center mb-6">
                   <Target className="w-6 h-6 text-white" />
                 </div>

@@ -13,6 +13,12 @@ const DEFAULT_IMAGES: [string, string, string] = [
 ];
 
 function IntroductionSection({ title, content, images }: IntroductionSectionProps) {
+  // Determine if title is single word for centering
+  const isSingleWord = title.trim().split(/\s+/).length === 1;
+  const titleClassName = `text-3xl md:text-5xl font-bold text-gray-900 mb-2 md:mb-8 ${
+    isSingleWord ? 'text-center' : 'text-center md:text-left leading-relaxed'
+  }`;
+
   return (
     <div className="w-full bg-white py-16">
       <div className="w-full px-4 sm:px-8 lg:px-32">
@@ -25,9 +31,7 @@ function IntroductionSection({ title, content, images }: IntroductionSectionProp
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, ease: "easeOut" }}
               viewport={{ once: true }}
-              className={`text-3xl md:text-5xl font-bold text-gray-900 mb-2 md:mb-8 ${
-                title.trim().split(/\s+/).length === 1 ? 'text-center' : 'text-center md:text-left leading-relaxed'
-              }`}
+              className={titleClassName}
             >
               {title}
             </motion.h2>

@@ -1,11 +1,6 @@
 import React from "react";
 import { useMediaQuery } from '../../../hooks/useMediaQuery';
-
-interface BulletItem {
-  id: string;
-  label?: string;
-  text: string;
-}
+import { parseDescription, getInitialFromTitle, type BulletItem } from '../../../utils/textParsing';
 
 interface CardData {
   initial: string;
@@ -28,125 +23,8 @@ const DSATMAboutSection: React.FC<DSATMAboutSectionProps> = ({ section }) => {
   const isMobile = useMediaQuery('(max-width: 767px)');
 
   const cards: CardData[] = section.content.map((item, index) => {
-    const getInitial = (title: string) => {
-      if (title.includes('MBA')) return 'M';
-      if (title.includes('Non-Teaching')) return 'N';
-      if (title.includes('Civil')) return 'C';
-      return title.charAt(0).toUpperCase();
-    };
-
-    const parseDescription = (description: string, title: string, cardIndex: number): BulletItem[] => {
-      // Special handling for Tripura - group related items instead of splitting everything
-      if (title.includes('Program Delivery') || title.includes('Modules Covered') || title.includes('Multiple Approaches')) {
-        
-        // For Modules Covered, we want to group items by main categories
-        if (title.includes('Modules Covered')) {
-          // Split the content into two main groups: Interview Skills and Cross-cultural Communication
-          const content = description.trim();
-          
-          // Find the start of Cross-cultural Communication section
-          const crossCulturalStart = content.indexOf('Cross-cultural Communication:');
-          
-          if (crossCulturalStart > -1) {
-            // Split into two parts
-            const interviewSkillsPart = content.substring(0, crossCulturalStart).trim();
-            const crossCulturalPart = content.substring(crossCulturalStart).trim();
-            
-            const result = [];
-            
-            // Add Interview Skills section (remove trailing period if exists)
-            if (interviewSkillsPart) {
-              let cleanInterviewSkills = interviewSkillsPart.replace(/\.\s*$/, '');
-              if (!cleanInterviewSkills.endsWith('.')) {
-                cleanInterviewSkills += '.';
-              }
-              result.push({
-                id: `${cardIndex}-interview-0`,
-                text: cleanInterviewSkills
-              });
-            }
-            
-            // Add Cross-cultural Communication section
-            if (crossCulturalPart) {
-              let cleanCrossCultural = crossCulturalPart.trim();
-              if (!cleanCrossCultural.endsWith('.')) {
-                cleanCrossCultural += '.';
-              }
-              result.push({
-                id: `${cardIndex}-crosscultural-0`,
-                text: cleanCrossCultural
-              });
-            }
-            
-            return result;
-          }
-          
-          // If no Cross-cultural Communication found, fall back to original splitting
-          const sentences = description.split('. ').filter(s => s.trim().length > 0);
-          return sentences.map((sentence, idx) => ({
-            id: `${cardIndex}-s-${idx}`,
-            text: sentence.trim().endsWith('.') ? sentence.trim() : sentence.trim() + '.'
-          }));
-        }
-        
-        // For other sections, use normal splitting
-        const sentences = description.split('. ').filter(s => s.trim().length > 0);
-        
-        // Fix the "Dr. Subhashini" issue by rejoining split names
-        const fixedSentences = [];
-        for (let i = 0; i < sentences.length; i++) {
-          const current = sentences[i];
-          const next = sentences[i + 1];
-          
-          // If current ends with "Dr" and next starts with a name, combine them
-          if (current.trim().endsWith('Dr') && next && next.match(/^[A-Z][a-z]/)) {
-            fixedSentences.push(current + '. ' + next);
-            i++; // Skip the next sentence since we combined it
-          } else {
-            fixedSentences.push(current);
-          }
-        }
-        
-        return fixedSentences.map((sentence, fIdx) => {
-          let trimmed = sentence.trim();
-          if (!trimmed.endsWith('.')) {
-            trimmed += '.';
-          }
-          return { id: `${cardIndex}-f-${fIdx}`, text: trimmed };
-        });
-      }
-      
-      // Original DSATM parsing logic for complex content
-      const sentences = description.split(/\.\s+/).filter(s => s.trim().length > 0);
-      return sentences.map((sentence, sIdx) => {
-        const trimmed = sentence.trim();
-        const colonIndex = trimmed.indexOf(':');
-        if (colonIndex > 0 && colonIndex < 50) {
-          return {
-            id: `${cardIndex}-colon-${sIdx}`,
-            label: trimmed.substring(0, colonIndex + 1),
-            text: trimmed.substring(colonIndex + 1).trim()
-          };
-        } else {
-          const match = trimmed.match(/^([^(]+)\s*(\([^)]+\))\s*[–-]\s*(.+)$/);
-          if (match) {
-            return {
-              id: `${cardIndex}-match-${sIdx}`,
-              label: `${match[1].trim()} ${match[2]}`,
-              text: match[3].trim()
-            };
-          } else {
-            return {
-              id: `${cardIndex}-else-${sIdx}`,
-              text: trimmed.endsWith('.') ? trimmed : trimmed + '.'
-            };
-          }
-        }
-      });
-    };
-
     return {
-      initial: getInitial(item.title),
+      initial: getInitialFromTitle(item.title),
       title: item.title,
       subtitle: item.title.includes('Civil') ? "3-Day Experiential Workshop · 4th & 6th Semester" : undefined,
       items: parseDescription(item.description, item.title, index)
@@ -155,11 +33,9 @@ const DSATMAboutSection: React.FC<DSATMAboutSectionProps> = ({ section }) => {
 
   return (
     <section
-      className="w-screen -ml-[calc(50vw-50%)] bg-white px-6 py-[52px]"
-      style={{
-        marginTop: isMobile ? '-90px' : '-35px',
-        marginBottom: 0,
-      }}
+      className={`w-screen -ml-[calc(50vw-50%)] bg-white px-6 py-[52px] mb-0 ${
+        isMobile ? '-mt-[90px]' : '-mt-[35px]'
+      }`}
     >
       {/* Title */}
       <h2 className="text-3xl md:text-4xl font-extrabold text-center text-gray-900 mb-4"> {/* Increased back */}
@@ -195,7 +71,7 @@ const DSATMAboutSection: React.FC<DSATMAboutSectionProps> = ({ section }) => {
 
             {/* Bullet Items */}
             <ul className="space-y-1"> {/* Increased spacing */}
-              {card.items.map((item: BulletItem, i: number) => (
+              {card.items.map((item: BulletItem) => (
                 <li key={item.id} className="flex items-start gap-2 text-gray-700 text-sm leading-relaxed"> {/* Increased gap, text size, and line height */}
                   <span className="mt-1.5 w-2 h-2 rounded-full bg-blue-400 flex-shrink-0" />
                   <span>
