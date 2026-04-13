@@ -72,7 +72,7 @@ const ModulesSection: React.FC<ModulesSectionProps> = ({ modules, approaches, pr
                 </h3>
                 <ul className="space-y-2">
                   {modulesList.map((item, index) => (
-                    {/* eslint-disable-next-line react/no-array-index-key */}
+                    // eslint-disable-next-line react/no-array-index-key
                     <li key={`module-${index}`} className="text-sm text-gray-600 leading-relaxed flex items-start">
                       <span className="w-1.5 h-1.5 bg-blue-500 rounded-full mt-2 mr-3 flex-shrink-0"></span>
                       <span>{item.trim().replace(/\.$/, '')}</span>
@@ -100,7 +100,7 @@ const ModulesSection: React.FC<ModulesSectionProps> = ({ modules, approaches, pr
                 </h3>
                 <ul className="space-y-2">
                   {approachesList.map((item, index) => (
-                    {/* eslint-disable-next-line react/no-array-index-key */}
+                    // eslint-disable-next-line react/no-array-index-key
                     <li key={`approach-${index}`} className="text-sm text-gray-600 leading-relaxed flex items-start">
                       <span className="w-1.5 h-1.5 bg-blue-500 rounded-full mt-2 mr-3 flex-shrink-0"></span>
                       <span>{item.trim().replace(/\.$/, '')}</span>

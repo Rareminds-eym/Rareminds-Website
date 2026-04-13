@@ -24,13 +24,6 @@ interface DSATMAboutSectionProps {
   };
 }
 
-const SECTION_BASE_STYLE = {
-  width: '100vw',
-  marginLeft: 'calc(-50vw + 50%)',
-  backgroundColor: '#ffffff',
-  padding: '52px 24px',
-} as const;
-
 const DSATMAboutSection: React.FC<DSATMAboutSectionProps> = ({ section }) => {
   const isMobile = useMediaQuery('(max-width: 767px)');
 
@@ -68,7 +61,7 @@ const DSATMAboutSection: React.FC<DSATMAboutSectionProps> = ({ section }) => {
                 cleanInterviewSkills += '.';
               }
               result.push({
-                id: `${cardIndex}-interview-${cleanInterviewSkills.slice(0, 10)}`,
+                id: `${cardIndex}-interview-0`,
                 text: cleanInterviewSkills
               });
             }
@@ -80,7 +73,7 @@ const DSATMAboutSection: React.FC<DSATMAboutSectionProps> = ({ section }) => {
                 cleanCrossCultural += '.';
               }
               result.push({
-                id: `${cardIndex}-crosscultural-${cleanCrossCultural.slice(0, 10)}`,
+                id: `${cardIndex}-crosscultural-0`,
                 text: cleanCrossCultural
               });
             }

@@ -208,7 +208,10 @@ export default function KeyOutcomesSection({ section }: KeyOutcomesSectionProps)
                   {inView ? (
                     <CountUp
                       start={0}
-                      end={Math.max(0, parseFloat(item.value.replace(/[^0-9.]/g, '')) || 0)}
+                      end={(() => {
+                        const parsed = parseFloat(item.value.replace(/[^0-9.]/g, ''));
+                        return Math.max(0, isNaN(parsed) ? 0 : parsed);
+                      })()}
                       duration={2}
                       separator=","
                       decimals={item.value.includes('.') ? 2 : 0}
