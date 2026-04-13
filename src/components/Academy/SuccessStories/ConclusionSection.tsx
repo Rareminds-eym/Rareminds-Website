@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { motion, Variants } from 'framer-motion';
+import { useMediaQuery } from '../../../hooks/useMediaQuery';
 
 
 interface SectionData {
