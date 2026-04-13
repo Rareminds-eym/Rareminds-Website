@@ -2,6 +2,7 @@ import React from "react";
 import { useMediaQuery } from '../../../hooks/useMediaQuery';
 
 interface BulletItem {
+  id: string;
   label?: string;
   text: string;
 }
@@ -37,7 +38,7 @@ const SECTION_BASE_STYLE = {
 const DSATMAboutSection: React.FC<DSATMAboutSectionProps> = ({ section }) => {
   const isMobile = useMediaQuery('(max-width: 767px)');
 
-  const cards: CardData[] = section.content.map((item) => {
+  const cards: CardData[] = section.content.map((item, index) => {
     const getInitial = (title: string) => {
       if (title.includes('MBA')) return 'M';
       if (title.includes('Non-Teaching')) return 'N';
@@ -45,7 +46,7 @@ const DSATMAboutSection: React.FC<DSATMAboutSectionProps> = ({ section }) => {
       return title.charAt(0).toUpperCase();
     };
 
-    const parseDescription = (description: string, title: string): BulletItem[] => {
+    const parseDescription = (description: string, title: string, cardIndex: number): BulletItem[] => {
       // Special handling for Tripura - group related items instead of splitting everything
       if (title.includes('Program Delivery') || title.includes('Modules Covered') || title.includes('Multiple Approaches')) {
         
@@ -71,6 +72,7 @@ const DSATMAboutSection: React.FC<DSATMAboutSectionProps> = ({ section }) => {
                 cleanInterviewSkills += '.';
               }
               result.push({
+                id: `${cardIndex}-interview-${cleanInterviewSkills.slice(0, 10)}`,
                 text: cleanInterviewSkills
               });
             }
@@ -82,6 +84,7 @@ const DSATMAboutSection: React.FC<DSATMAboutSectionProps> = ({ section }) => {
                 cleanCrossCultural += '.';
               }
               result.push({
+                id: `${cardIndex}-crosscultural-${cleanCrossCultural.slice(0, 10)}`,
                 text: cleanCrossCultural
               });
             }
@@ -91,7 +94,8 @@ const DSATMAboutSection: React.FC<DSATMAboutSectionProps> = ({ section }) => {
           
           // If no Cross-cultural Communication found, fall back to original splitting
           const sentences = description.split('. ').filter(s => s.trim().length > 0);
-          return sentences.map(sentence => ({
+          return sentences.map((sentence, idx) => ({
+            id: `${cardIndex}-s-${idx}`,
             text: sentence.trim().endsWith('.') ? sentence.trim() : sentence.trim() + '.'
           }));
         }
@@ -114,22 +118,23 @@ const DSATMAboutSection: React.FC<DSATMAboutSectionProps> = ({ section }) => {
           }
         }
         
-        return fixedSentences.map(sentence => {
+        return fixedSentences.map((sentence, fIdx) => {
           let trimmed = sentence.trim();
           if (!trimmed.endsWith('.')) {
             trimmed += '.';
           }
-          return { text: trimmed };
+          return { id: `${cardIndex}-f-${fIdx}`, text: trimmed };
         });
       }
       
       // Original DSATM parsing logic for complex content
       const sentences = description.split(/\.\s+/).filter(s => s.trim().length > 0);
-      return sentences.map(sentence => {
+      return sentences.map((sentence, sIdx) => {
         const trimmed = sentence.trim();
         const colonIndex = trimmed.indexOf(':');
         if (colonIndex > 0 && colonIndex < 50) {
           return {
+            id: `${cardIndex}-colon-${sIdx}`,
             label: trimmed.substring(0, colonIndex + 1),
             text: trimmed.substring(colonIndex + 1).trim()
           };
@@ -137,11 +142,13 @@ const DSATMAboutSection: React.FC<DSATMAboutSectionProps> = ({ section }) => {
           const match = trimmed.match(/^([^(]+)\s*(\([^)]+\))\s*[–-]\s*(.+)$/);
           if (match) {
             return {
+              id: `${cardIndex}-match-${sIdx}`,
               label: `${match[1].trim()} ${match[2]}`,
               text: match[3].trim()
             };
           } else {
             return {
+              id: `${cardIndex}-else-${sIdx}`,
               text: trimmed.endsWith('.') ? trimmed : trimmed + '.'
             };
           }
@@ -153,7 +160,7 @@ const DSATMAboutSection: React.FC<DSATMAboutSectionProps> = ({ section }) => {
       initial: getInitial(item.title),
       title: item.title,
       subtitle: item.title.includes('Civil') ? "3-Day Experiential Workshop · 4th & 6th Semester" : undefined,
-      items: parseDescription(item.description, item.title)
+      items: parseDescription(item.description, item.title, index)
     };
   });
 
@@ -207,7 +214,7 @@ const DSATMAboutSection: React.FC<DSATMAboutSectionProps> = ({ section }) => {
             {/* Bullet Items */}
             <ul className="space-y-1"> {/* Increased spacing */}
               {card.items.map((item: BulletItem, i: number) => (
-                <li key={`${card.title}-item-${i}`} className="flex items-start gap-2 text-gray-700 text-sm leading-relaxed"> {/* Increased gap, text size, and line height */}
+                <li key={item.id} className="flex items-start gap-2 text-gray-700 text-sm leading-relaxed"> {/* Increased gap, text size, and line height */}
                   <span className="mt-1.5 w-2 h-2 rounded-full bg-blue-400 flex-shrink-0" />
                   <span>
                     {item.label && (

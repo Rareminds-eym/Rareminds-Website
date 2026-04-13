@@ -78,7 +78,7 @@ const ModulesSection: React.FC<ModulesSectionProps> = ({ modules, approaches, pr
                 </h3>
                 <ul className="space-y-2">
                   {modulesList.map((item, index) => (
-                    <li key={`module-${index}-${item.slice(0, 15)}`} className="text-sm text-gray-600 leading-relaxed flex items-start">
+                    <li key={`module-${item.trim().replace(/\s+/g, '-')}`} className="text-sm text-gray-600 leading-relaxed flex items-start">
                       <span className="w-1.5 h-1.5 bg-blue-500 rounded-full mt-2 mr-3 flex-shrink-0"></span>
                       <span>{item.trim().replace(/\.$/, '')}</span>
                     </li>
@@ -105,7 +105,7 @@ const ModulesSection: React.FC<ModulesSectionProps> = ({ modules, approaches, pr
                 </h3>
                 <ul className="space-y-2">
                   {approachesList.map((item, index) => (
-                    <li key={`approach-${index}-${item.slice(0, 15)}`} className="text-sm text-gray-600 leading-relaxed flex items-start">
+                    <li key={`approach-${item.trim().replace(/\s+/g, '-')}`} className="text-sm text-gray-600 leading-relaxed flex items-start">
                       <span className="w-1.5 h-1.5 bg-blue-500 rounded-full mt-2 mr-3 flex-shrink-0"></span>
                       <span>{item.trim().replace(/\.$/, '')}</span>
                     </li>
