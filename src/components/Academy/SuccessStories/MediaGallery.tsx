@@ -50,8 +50,8 @@ export const MediaGallery = ({ media, title = "Media Gallery", compact = false }
   const [sidebarHeight, setSidebarHeight] = useState(0);
   const [itemHeight, setItemHeight] = useState(140);
 
-  const selectedMedia = media[selectedIndex];
-  const selectedUrl = getMediaUrl(selectedMedia);
+  const selectedMedia = media[selectedIndex] || media[0];
+  const selectedUrl = selectedMedia ? getMediaUrl(selectedMedia) : '';
   const isSelectedVideo = isVideo(selectedUrl);
 
   useEffect(() => {
@@ -71,7 +71,7 @@ export const MediaGallery = ({ media, title = "Media Gallery", compact = false }
       cancelAnimationFrame(rafId);
       window.removeEventListener("resize", updateHeights);
     };
-  }, [leftPanelRef]);
+  }, []);
 
   useEffect(() => {
     if (scrollInnerRef.current && media.length > 0 && itemHeight > 0) {
