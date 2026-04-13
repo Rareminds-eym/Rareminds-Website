@@ -1,27 +1,6 @@
 import { motion } from "framer-motion";
 import { Monitor, Code } from 'lucide-react';
 
-const NAAN_MUDHALVAN_PROGRAMS = [
-  {
-    title: 'Medical Coding',
-    description: 'Professional medical coding certification program for healthcare industry.',
-    students: '3,886',
-    icon: '💻'
-  },
-  {
-    title: 'Good Manufacturing Practices (GMP)',
-    description: 'Essential GMP training for pharmaceutical and food industries.',
-    students: '5,049',
-    icon: '⚙️'
-  },
-  {
-    title: 'Food Safety and Quality Management',
-    description: 'Comprehensive training program in food safety and quality management.',
-    students: '5,560',
-    icon: '🎓'
-  }
-];
-
 interface AboutProgramSectionProps {
   section: {
     title: string;
@@ -76,13 +55,7 @@ function AboutProgramSection({ section, technologies, programData }: AboutProgra
         <div className="w-full px-8 mb-12">
           <div className="max-w-4xl mx-auto">
             <p className="text-gray-600 text-center leading-relaxed">
-              Through this collaboration, Rareminds delivered five specialized 45-hour experiential 
-              training programs to undergraduate students during the Odd Semester (5th) of the 
-              2025–2026 academic year. These mandatory programs provided immersive, hands-on learning 
-              experiences in the following sectors: Good Manufacturing Practices, Medical Coding, 
-              Food Safety and Quality Management. The courses blended in-person classes with LMS-based 
-              support, enabling students to work on real-time simulations, projects, and practical 
-              applications from day one.
+              {programData?.sections?.about?.content || ''}
             </p>
           </div>
         </div>
@@ -91,9 +64,9 @@ function AboutProgramSection({ section, technologies, programData }: AboutProgra
         <div className="w-full px-8">
           <div className="max-w-6xl mx-auto">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {NAAN_MUDHALVAN_PROGRAMS.map((program, index) => (
+              {section.content.map((program, index) => (
                 <motion.div
-                  key={program.title}
+                  key={`program-${index}`}
                   initial={{ opacity: 0, y: 40 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, ease: "easeOut", delay: 0.2 + index * 0.1 }}
@@ -103,16 +76,11 @@ function AboutProgramSection({ section, technologies, programData }: AboutProgra
                   }`}
                 >
                   <div className="mb-4">
-                    <div className="w-10 h-10 bg-white bg-opacity-20 rounded-xl flex items-center justify-center mb-4">
-                      <span className="text-white text-lg">{program.icon}</span>
-                    </div>
                     <h3 className="text-lg font-bold mb-2">{program.title}</h3>
                     <p className="text-blue-100 text-sm mb-4">
                       {program.description}
                     </p>
                   </div>
-                  <div className="text-3xl font-bold mb-1">{program.students}</div>
-                  <div className="text-blue-100 text-sm">Students</div>
                 </motion.div>
               ))}
             </div>

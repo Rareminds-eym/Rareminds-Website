@@ -1,5 +1,4 @@
 import { motion } from "framer-motion";
-import { useState, useEffect } from "react";
 import {
   UsersIcon,
   CodeBracketIcon,
@@ -129,10 +128,6 @@ export default function KeyOutcomesSection({ section }: KeyOutcomesSectionProps)
     triggerOnce: true,
   });
 
-  const [hasMounted, setHasMounted] = useState(false);
-
-  useEffect(() => setHasMounted(true), []);
-
   return (
     <div className="mb-12" ref={ref}>
 
@@ -210,7 +205,7 @@ export default function KeyOutcomesSection({ section }: KeyOutcomesSectionProps)
                   className="ko-sora font-extrabold mb-2 tracking-tight"
                   style={{ fontSize: "2.5rem", color: "#000000" }}
                 >
-                  {hasMounted && inView ? (
+                  {inView ? (
                     <CountUp
                       start={0}
                       end={Math.max(0, parseFloat(item.value.replace(/[^0-9.]/g, '')) || 0)}
