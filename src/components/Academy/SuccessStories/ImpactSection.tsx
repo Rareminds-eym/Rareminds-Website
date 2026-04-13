@@ -119,7 +119,7 @@ const slideRightVariant = {
   }),
 };
 
-export default function KeyOutcomesSection({ section }: KeyOutcomesSectionProps) {
+export default function KeyOutcomesSection({ section }: KeyOutcomesSectionProps): JSX.Element {
   const { stats, pills } = parseImpactContent(section.content);
   const hasStats = stats.length > 0;
 
