@@ -261,7 +261,7 @@ export default function KeyOutcomesSection({ section }: KeyOutcomesSectionProps)
 
             return (
               <motion.div
-                key={`pill-${i}-${pill.text.slice(0, 20)}`}
+                key={`pill-${i}`}
                 variants={fadeUpVariant}
                 initial="hidden"
                 whileInView="visible"

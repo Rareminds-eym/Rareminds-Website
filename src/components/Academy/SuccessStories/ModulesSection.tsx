@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import { BookOpen, Target } from 'lucide-react';
 import { useMediaQuery } from '../../../hooks/useMediaQuery';
 
@@ -28,12 +28,6 @@ const ModulesSection: React.FC<ModulesSectionProps> = ({ modules, approaches, pr
 
   const isMobile = useMediaQuery('(max-width: 767px)');
 
-  const gridStyle = useMemo(() => ({
-    display: 'grid',
-    gridTemplateColumns: isMobile ? '1fr' : 'repeat(2, 1fr)',
-    gap: '32px',
-  }), [isMobile]);
-
   return (
     <div className="bg-white py-8 md:py-16 -mt-8">
       <h2 className="text-3xl md:text-5xl font-bold text-gray-900 mb-6 md:mb-10 text-center">
@@ -57,7 +51,7 @@ const ModulesSection: React.FC<ModulesSectionProps> = ({ modules, approaches, pr
         <div className="max-w-5xl mx-auto">
 
           <div
-            style={gridStyle}
+            className={`grid ${isMobile ? 'grid-cols-1' : 'grid-cols-2'} gap-8`}
           >
 
             {/* LEFT CARD — Modules Covered */}

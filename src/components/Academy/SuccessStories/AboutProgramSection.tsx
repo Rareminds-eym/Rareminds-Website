@@ -1,6 +1,8 @@
 import { motion } from "framer-motion";
 import { Monitor, Code } from 'lucide-react';
 
+const NAAN_MUDHALVAN_SLUG = 'naan-mudhalvan-2025';
+
 interface AboutProgramSectionProps {
   section: {
     title: string;
@@ -19,7 +21,7 @@ interface AboutProgramSectionProps {
 
 function AboutProgramSection({ section, technologies, programData }: AboutProgramSectionProps) {
  
-  const isNaanMudhalvan = programData?.slug === 'naan-mudhalvan-2025';
+  const isNaanMudhalvan = programData?.slug === NAAN_MUDHALVAN_SLUG;
 
  
   const getTechnologies = (cardIndex: number, cardTitle: string) => {
@@ -64,6 +66,7 @@ function AboutProgramSection({ section, technologies, programData }: AboutProgra
         <div className="w-full px-8">
           <div className="max-w-6xl mx-auto">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {/* index used for staggered animation delay and conditional styling */}
               {section.content.map((program, index) => (
                 <motion.div
                   key={`program-${index}`}

@@ -24,10 +24,6 @@ interface DSATMAboutSectionProps {
   };
 }
 
-const cardStyle: React.CSSProperties = {
-  borderRadius: "15px 15px 80px 15px",
-};
-
 const SECTION_BASE_STYLE = {
   width: '100vw',
   marginLeft: 'calc(-50vw + 50%)',
@@ -166,8 +162,8 @@ const DSATMAboutSection: React.FC<DSATMAboutSectionProps> = ({ section }) => {
 
   return (
     <section
+      className="w-screen -ml-[calc(50vw-50%)] bg-white px-6 py-[52px]"
       style={{
-        ...SECTION_BASE_STYLE,
         marginTop: isMobile ? '-90px' : '-35px',
         marginBottom: 0,
       }}
@@ -182,19 +178,12 @@ const DSATMAboutSection: React.FC<DSATMAboutSectionProps> = ({ section }) => {
 
       {/* Cards Grid — 3 cols desktop, 1 col mobile */}
       <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: isMobile ? "1fr" : "repeat(3, 1fr)",
-          gap: "20px", // Increased gap between cards
-          maxWidth: "1200px",
-          margin: "0 auto"
-        }}
+        className={`grid ${isMobile ? 'grid-cols-1' : 'grid-cols-3'} gap-5 max-w-[1200px] mx-auto`}
       >
-        {cards.map((card: CardData) => (
+        {cards.map((card: CardData, idx: number) => (
           <div
-            key={card.title}
-            className="border border-teal-200 p-5" // Increased padding
-            style={{ ...cardStyle, backgroundColor: '#F3FEF9' }}
+            key={`card-${idx}-${card.initial}`}
+            className="border border-teal-200 p-5 rounded-[15px_15px_80px_15px] bg-[#F3FEF9]"
           >
             {/* Header */}
             <div className="flex items-center gap-3 mb-3"> {/* Increased gap and margin */}

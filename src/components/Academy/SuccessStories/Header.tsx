@@ -55,7 +55,7 @@ export const Header = ({ searchQuery, onSearchChange }: HeaderProps) => {
                       <X className="w-5 h-5" />
                     </button>
                   )}
-                 <Search className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" aria-hidden="true" />
+                  <Search className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" aria-hidden="true" />
                 </div>
               </div>
             </div>

@@ -181,7 +181,6 @@ const ConclusionSection: React.FC<ConclusionSectionProps> = ({ section }) => {
   };
 
   const textCardStyle: React.CSSProperties = {
-    ...styles.textCard,
     padding: isMobile ? '18px 20px' : '32px 36px',
     minHeight: isMobile ? 'unset' : '280px',
     position: 'relative',
@@ -197,7 +196,7 @@ const ConclusionSection: React.FC<ConclusionSectionProps> = ({ section }) => {
 
   return (
     <section className="w-screen bg-white py-[60px] -mt-[50px] -mb-[50px] -ml-[calc(50vw-50%)]">
-      <div style={styles.inner}>
+      <div className="max-w-[1100px] mx-auto px-6">
 
         {/* ── Title fade-up ─────────────────────────────────────── */}
         <motion.h2
@@ -270,8 +269,9 @@ const ConclusionSection: React.FC<ConclusionSectionProps> = ({ section }) => {
           </motion.div>
 
           {/* ── Right column / card ───────────────────────────────── */}
-          <motion.div style={styles.rightCol} variants={fadeUp}>
+          <motion.div className="flex-1 min-w-[300px]" variants={fadeUp}>
             <motion.div
+              className="bg-white rounded-xl shadow-[8px_8px_20px_rgba(0,0,0,0.12)] border border-[#e8ecf3]"
               style={textCardStyle}
               variants={scaleIn}
             >
