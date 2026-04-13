@@ -154,7 +154,7 @@ const ConclusionSection: React.FC<ConclusionSectionProps> = ({ section }) => {
                   style={{ filter: 'drop-shadow(0 10px 6px rgba(0, 0, 0, 0.3))' }}
                   variants={scaleIn}
                   onError={() => {
-                    console.error('Failed to load conclusion illustration image');
+                    // Image load failed - fallback to placeholder
                     setImgError(true);
                   }}
                 />
