@@ -20,9 +20,6 @@ CREATE TYPE section_key_type AS ENUM (
     'header',
     'course_enrollment',
     'programs',
-    'why',
-    'cloud_kitchen',
-    'agri_food',
     'inventions',
     'video'
 );

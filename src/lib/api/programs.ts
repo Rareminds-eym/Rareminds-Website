@@ -47,11 +47,10 @@ export async function getPrograms(params: PaginationParams = {}): Promise<Pagina
 
     // Apply year filter
     if (filters.year && filters.year !== 'All') {
-      // query = query.gte('date', `${filters.year}-01-01`).lt('date', `${parseInt(filters.year) + 1}-01-01`);
       const parsedYear = parseInt(filters.year);
-if (!isNaN(parsedYear)) {
-  query = query.gte('date', `${parsedYear}-01-01`).lt('date', `${parsedYear + 1}-01-01`);
-}
+      if (!isNaN(parsedYear)) {
+        query = query.gte('date', `${parsedYear}-01-01`).lt('date', `${parsedYear + 1}-01-01`);
+      }
     }
 
     // Apply pagination and ordering
@@ -67,7 +66,7 @@ if (!isNaN(parsedYear)) {
     const totalPages = Math.ceil(totalCount / limit);
     
     return { 
-      data: data as Program[], 
+      data: (data ?? []) as Program[], 
       error: null,
       totalCount,
       totalPages,
@@ -113,8 +112,7 @@ export async function getProgramFilterOptions(): Promise<{
         return new Date(p.date).getFullYear().toString();
       }
       return null;
-    // }).filter(Boolean) as string[]))].sort();
-  }).filter((year): year is string => year !== null) || []))].sort();
+    }).filter((year): year is string => year !== null) || []))].sort();
 
     return { categories, names, years, locations };
   } catch (error) {
@@ -190,7 +188,7 @@ export async function getProgramWithSections(slug: string): Promise<{
     if (!program) {
       return { data: null, error: new Error('Program not found') };
     }
-    const programId = program.id as string;
+    const programId = program.id;
     // Then, get the sections for this program
     const { data: sections, error: sectionsError } = await supabase
       .from('program_sections')
@@ -206,7 +204,6 @@ export async function getProgramWithSections(slug: string): Promise<{
     const transformedSections: { [key: string]: TransformedSection } = {};
     let aboutSection: AboutSection | undefined;
     
-    // sections?.forEach((section) => {
     (sections || []).forEach((section) => {
       // Store regular sections
       transformedSections[section.section_key] = {
@@ -229,23 +226,17 @@ export async function getProgramWithSections(slug: string): Promise<{
         };
       }
 
-      // Parse video section JSON content from DB
+      // Parse video section - comma-separated URLs stored as plain text
       if (section.section_key === 'video') {
-        try {
-          const parsed = JSON.parse(section.content || '[]');
-          const videoUrl = parsed.flatMap((obj: { item1?: string; item2?: string; item3?: string }) =>
-            [obj.item1, obj.item2, obj.item3]
-              .filter(Boolean)
-              .map(url => ({ item1: url }))
-          );
-          transformedSections['video'] = {
-            title: section.title || 'Program Videos',
-            content: section.content || '',
-            videoUrl
-          };
-        } catch {
-          delete transformedSections['video'];
-        }
+        const videoUrl = (section.content || '')
+          .split(',')
+          .filter(Boolean)
+          .map((url: string) => ({ item1: url.trim() }));
+        transformedSections['video'] = {
+          title: section.title || 'Program Videos',
+          content: section.content || '',
+          videoUrl
+        };
       }
     });
 

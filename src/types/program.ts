@@ -1,4 +1,5 @@
-// Database Program type (matches Supabase schema)
+// Database Program type (matches Supabase schema exactly — uses snake_case to mirror DB column names.
+// Transformation to camelCase happens in TransformedProgram for UI components.)
 export interface Program {
   id: string;
   title: string;
@@ -8,7 +9,7 @@ export interface Program {
   date: string;
   status: string;
   image_url: string;
-  banner_url: string; // Optional banner URL field
+  banner_url: string; 
   short_description: string;
   display_order: number;
   is_active: boolean;
@@ -16,7 +17,7 @@ export interface Program {
   updated_at: string;
 }
 
-// Transformed Program type for UI components
+// Transformed Program type for UI components (camelCase convention for React/TypeScript frontend)
 export interface TransformedProgram {
   id: string;
   name: string;
@@ -111,12 +112,12 @@ export interface ProgramWithTransformedSections extends Program {
   technologies?: string[];
   bannerUrl: string;
   // Legacy compatibility fields for Naan Mudhalvan components
-  name?: string;
-  description?: string;
-  category?: string;
-  year?: string;
-  timeline?: string;
-  imageUrl?: string;
+  name: string;
+  description: string;
+  category: string;
+  year: string;
+  timeline: string;
+  imageUrl: string;
 }
 
 // Paginated API response

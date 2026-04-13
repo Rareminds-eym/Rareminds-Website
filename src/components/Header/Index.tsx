@@ -84,7 +84,7 @@ const Index: React.FC<HeaderProps> = ({ navbarOpen, setNavbarOpen }) => {
                                 <Link to="/blogs" onClick={handleLinkClick} className="text-2xl font-medium hover:text-blue-300">Blogs</Link>
                                 <Link to="/gallery" onClick={handleLinkClick} className="text-2xl font-medium hover:text-blue-300">Gallery</Link>
                                 <Link to="/contact" onClick={handleLinkClick} className="text-2xl font-medium hover:text-blue-300">Contact us</Link>
-                                <Link to="/success-stories" onClick={handleLinkClick} className="text-2xl font-medium hover:text-blue-300">SuccessStories</Link>
+                                <Link to="/success-stories" onClick={handleLinkClick} className="text-2xl font-medium hover:text-blue-300">Success stories</Link>
                             </div>
                         </div>
                     </div>
