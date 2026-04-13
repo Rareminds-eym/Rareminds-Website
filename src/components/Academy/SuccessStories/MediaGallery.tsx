@@ -179,6 +179,7 @@ export const MediaGallery = ({ media, title = "Media Gallery", compact = false }
                               className="w-full h-full object-cover"
                               muted
                               preload="metadata"
+                              aria-label={`Video thumbnail ${actualIndex + 1}`}
                             />
                             <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
                               <Play className="w-7 h-7 text-white fill-white drop-shadow-md" />
@@ -273,6 +274,7 @@ export const MediaGallery = ({ media, title = "Media Gallery", compact = false }
                           className="w-full h-full object-cover"
                           muted
                           preload="metadata"
+                          aria-label={`Video thumbnail ${actualIndex + 1}`}
                         />
                         <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
                           <Play className="w-5 h-5 text-white fill-white drop-shadow-md" />
