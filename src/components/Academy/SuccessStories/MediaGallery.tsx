@@ -1,8 +1,3 @@
-
-
-
-"use client";
-
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Play } from "lucide-react";
@@ -51,7 +46,7 @@ export const MediaGallery = ({ media, title = "Media Gallery", compact = false }
   const [isModalOpen, setIsModalOpen] = useState(false);
   const scrollInnerRef = useRef<HTMLDivElement>(null);
   const leftPanelRef = useRef<HTMLDivElement>(null);
- const mobileScrollRef = useRef<HTMLDivElement>(null);
+  const mobileScrollRef = useRef<HTMLDivElement>(null);
   const [sidebarHeight, setSidebarHeight] = useState(0);
   const [itemHeight, setItemHeight] = useState(140);
 

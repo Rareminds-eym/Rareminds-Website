@@ -1,5 +1,3 @@
-
-
 import React from "react";
 
 interface BulletItem {
@@ -28,14 +26,29 @@ const cardStyle: React.CSSProperties = {
   borderRadius: "15px 15px 80px 15px",
 };
 
+const SECTION_BASE_STYLE = {
+  width: '100vw',
+  marginLeft: 'calc(-50vw + 50%)',
+  backgroundColor: '#ffffff',
+  padding: '52px 24px',
+} as const;
+
 const DSATMAboutSection: React.FC<DSATMAboutSectionProps> = ({ section }) => {
   const [isMobile, setIsMobile] = React.useState(false);
 
   React.useEffect(() => {
+    let timeoutId: ReturnType<typeof setTimeout>;
     const check = () => setIsMobile(window.innerWidth < 768);
+    const debouncedCheck = () => {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(check, 150);
+    };
     check();
-    window.addEventListener("resize", check);
-    return () => window.removeEventListener("resize", check);
+    window.addEventListener("resize", debouncedCheck);
+    return () => {
+      window.removeEventListener("resize", debouncedCheck);
+      clearTimeout(timeoutId);
+    };
   }, []);
 
   const cards: CardData[] = section.content.map((item) => {
@@ -161,12 +174,9 @@ const DSATMAboutSection: React.FC<DSATMAboutSectionProps> = ({ section }) => {
   return (
     <section
       style={{
-        width: '100vw',
-        marginLeft: 'calc(-50vw + 50%)',
-        backgroundColor: '#ffffff',
-        padding: '52px 24px', // Increased back up
-        marginTop: isMobile ? '-90px' : '-35px',  
-        marginBottom: '0px',
+        ...SECTION_BASE_STYLE,
+        marginTop: isMobile ? '-90px' : '-35px',
+        marginBottom: 0,
       }}
     >
       {/* Title */}
@@ -187,9 +197,9 @@ const DSATMAboutSection: React.FC<DSATMAboutSectionProps> = ({ section }) => {
           margin: "0 auto"
         }}
       >
-        {cards.map((card: CardData, index: number) => (
+        {cards.map((card: CardData) => (
           <div
-            key={index}
+            key={card.title}
             className="border border-teal-200 p-5" // Increased padding
             style={{ ...cardStyle, backgroundColor: '#F3FEF9' }}
           >
@@ -211,7 +221,7 @@ const DSATMAboutSection: React.FC<DSATMAboutSectionProps> = ({ section }) => {
             {/* Bullet Items */}
             <ul className="space-y-1"> {/* Increased spacing */}
               {card.items.map((item: BulletItem, i: number) => (
-                <li key={i} className="flex items-start gap-2 text-gray-700 text-sm leading-relaxed"> {/* Increased gap, text size, and line height */}
+                <li key={`${card.title}-item-${i}`} className="flex items-start gap-2 text-gray-700 text-sm leading-relaxed"> {/* Increased gap, text size, and line height */}
                   <span className="mt-1.5 w-2 h-2 rounded-full bg-blue-400 flex-shrink-0" />
                   <span>
                     {item.label && (

@@ -61,7 +61,7 @@ const HeaderSection: React.FC<HeaderSectionProps> = ({ section }) => {
         <div style={styles.content}>
           {paragraphs.length > 1 ? (
             paragraphs.map((para, idx) => (
-              <p key={idx} style={styles.paragraph}>
+              <p key={`para-${idx}-${para.slice(0, 20)}`} style={styles.paragraph}>
                 {para.trim()}
               </p>
             ))

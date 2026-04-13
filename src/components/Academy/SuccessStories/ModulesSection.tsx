@@ -1,5 +1,4 @@
-
-import React from 'react';
+import React, { useMemo } from 'react';
 import { BookOpen, Target } from 'lucide-react';
 
 interface ModulesSectionProps {
@@ -28,11 +27,25 @@ const ModulesSection: React.FC<ModulesSectionProps> = ({ modules, approaches, pr
 
   const [isMobile, setIsMobile] = React.useState(false);
   React.useEffect(() => {
+    let timeoutId: ReturnType<typeof setTimeout>;
     const check = () => setIsMobile(window.innerWidth < 768);
+    const debouncedCheck = () => {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(check, 150);
+    };
     check();
-    window.addEventListener('resize', check);
-    return () => window.removeEventListener('resize', check);
+    window.addEventListener('resize', debouncedCheck);
+    return () => {
+      window.removeEventListener('resize', debouncedCheck);
+      clearTimeout(timeoutId);
+    };
   }, []);
+
+  const gridStyle = useMemo(() => ({
+    display: 'grid',
+    gridTemplateColumns: isMobile ? '1fr' : 'repeat(2, 1fr)',
+    gap: '32px',
+  }), [isMobile]);
 
   return (
     <div className="bg-white py-8 md:py-16 -mt-8">
@@ -57,11 +70,7 @@ const ModulesSection: React.FC<ModulesSectionProps> = ({ modules, approaches, pr
         <div className="max-w-5xl mx-auto">
 
           <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: isMobile ? '1fr' : 'repeat(2, 1fr)', // ← only change
-              gap: '32px',
-            }}
+            style={gridStyle}
           >
 
             {/* LEFT CARD — Modules Covered */}
@@ -82,7 +91,7 @@ const ModulesSection: React.FC<ModulesSectionProps> = ({ modules, approaches, pr
                 </h3>
                 <ul className="space-y-2">
                   {modulesList.map((item, index) => (
-                    <li key={index} className="text-sm text-gray-600 leading-relaxed flex items-start">
+                    <li key={`module-${index}-${item.slice(0, 15)}`} className="text-sm text-gray-600 leading-relaxed flex items-start">
                       <span className="w-1.5 h-1.5 bg-blue-500 rounded-full mt-2 mr-3 flex-shrink-0"></span>
                       <span>{item.trim().replace(/\.$/, '')}</span>
                     </li>
@@ -109,7 +118,7 @@ const ModulesSection: React.FC<ModulesSectionProps> = ({ modules, approaches, pr
                 </h3>
                 <ul className="space-y-2">
                   {approachesList.map((item, index) => (
-                    <li key={index} className="text-sm text-gray-600 leading-relaxed flex items-start">
+                    <li key={`approach-${index}-${item.slice(0, 15)}`} className="text-sm text-gray-600 leading-relaxed flex items-start">
                       <span className="w-1.5 h-1.5 bg-blue-500 rounded-full mt-2 mr-3 flex-shrink-0"></span>
                       <span>{item.trim().replace(/\.$/, '')}</span>
                     </li>

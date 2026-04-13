@@ -1,6 +1,3 @@
-
-"use client";
-
 import { motion } from "framer-motion";
 import { Monitor, Code } from 'lucide-react';
 
@@ -65,7 +62,7 @@ function AboutProgramSection({ section, technologies, programData }: AboutProgra
   // Render Naan Mudhalvan blue cards layout
   if (isNaanMudhalvan) {
     return (
-      <div className="py-16 -mt-10" style={{ background: '#ffffff', width: '100vw', marginLeft: 'calc(-50vw + 50%)', minHeight: '100%' }}>
+      <div className="py-16 -mt-10 w-screen bg-white min-h-full -ml-[calc(50vw-50%)]">
         {/* Title */}
         <motion.h2
           initial={{ opacity: 0, y: 24 }}
@@ -128,7 +125,7 @@ function AboutProgramSection({ section, technologies, programData }: AboutProgra
   }
 
   return (
-    <div className="py-16 -mt-10" style={{ background: '#ffffff', width: '100vw', marginLeft: 'calc(-50vw + 50%)', minHeight: '100%' }}>
+    <div className="py-16 -mt-10 w-screen bg-white min-h-full -ml-[calc(50vw-50%)]">
 
       {/* Title */}
       <motion.h2

@@ -1,5 +1,3 @@
-
-
 import React, { useState, useEffect } from 'react';
 import { motion, Variants } from 'framer-motion';
 
@@ -14,14 +12,6 @@ interface ConclusionSectionProps {
 }
 
 const styles: Record<string, React.CSSProperties> = {
-  wrapper: {
-    backgroundColor: '#ffffff',
-    padding: '60px 0',
-    width: '100vw',
-    marginLeft: 'calc(-50vw + 50%)',
-    marginTop: '-50px',
-    marginBottom: '-50px',
-  },
   inner: {
     maxWidth: '1100px',
     margin: '0 auto',
@@ -117,14 +107,22 @@ const ConclusionSection: React.FC<ConclusionSectionProps> = ({ section }) => {
   const [imgError, setImgError] = useState(false);
 
   useEffect(() => {
+    let timeoutId: ReturnType<typeof setTimeout>;
     const check = () => {
       const w = window.innerWidth;
       setIsMobile(w < 768);
       setIsTablet(w >= 768 && w <= 1024);
     };
+    const debouncedCheck = () => {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(check, 150);
+    };
     check();
-    window.addEventListener('resize', check);
-    return () => window.removeEventListener('resize', check);
+    window.addEventListener('resize', debouncedCheck);
+    return () => {
+      window.removeEventListener('resize', debouncedCheck);
+      clearTimeout(timeoutId);
+    };
   }, []);
 
   const paragraphs: string[] = section.content
@@ -207,13 +205,6 @@ const ConclusionSection: React.FC<ConclusionSectionProps> = ({ section }) => {
     position: 'relative',
   };
 
-  const sectionTitleStyle: React.CSSProperties = {
-    fontSize: isMobile ? '0.85rem' : '1.2rem',
-    fontWeight: 700,
-    color: '#111',
-    marginBottom: isMobile ? '8px' : '14px',
-  };
-
   const paragraphStyle: React.CSSProperties = {
     fontSize: isMobile ? '0.72rem' : '1rem',
     lineHeight: isMobile ? '1.4' : '1.5',
@@ -223,7 +214,7 @@ const ConclusionSection: React.FC<ConclusionSectionProps> = ({ section }) => {
   };
 
   return (
-    <section style={styles.wrapper}>
+    <section className="w-screen bg-white py-[60px] -mt-[50px] -mb-[50px] -ml-[calc(50vw-50%)]">
       <div style={styles.inner}>
 
         {/* ── Title fade-up ─────────────────────────────────────── */}
