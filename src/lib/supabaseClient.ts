@@ -2,10 +2,14 @@
 import { createClient } from '@supabase/supabase-js';
 import { safeGetItem, safeSetItem, safeRemoveItem } from './localStorage';
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL ?? '';
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY ?? '';
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
-export const isSupabaseConfigured = Boolean(supabaseUrl && supabaseAnonKey);
+if (!supabaseUrl || !supabaseAnonKey) {
+  throw new Error('Missing Supabase environment variables: VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY are required.');
+}
+
+export const isSupabaseConfigured = true;
 // Custom storage that handles localStorage errors gracefully
 const safeStorage = {
   getItem: (key: string) => {
@@ -19,7 +23,7 @@ const safeStorage = {
   },
 };
 
-export const supabase = createClient(supabaseUrl ?? '', supabaseAnonKey ?? '', {
+export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   auth: {
     storage: safeStorage,
     autoRefreshToken: true,

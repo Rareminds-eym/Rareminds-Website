@@ -55,7 +55,7 @@ export interface PaginationParams {
 export interface ProgramSection {
   id: string;
   program_id: string;
-  section_key: string;
+  section_key: SectionKey;
   title: string;
   content: string;
   display_order: number;
@@ -73,9 +73,7 @@ export interface TransformedSection {
   title: string;
   content: string;
   videoUrl?: Array<{
-    item1?: string;
-    item2?: string;
-    item3?: string;
+    url: string;
   }>; // Optional video URLs for MediaGallery
 }
 
@@ -90,7 +88,7 @@ export type AboutSection = StructuredSection;
 export type EnhancedSection = StructuredSection;
 
 // Legacy Project interface for Naan Mudhalvan components compatibility
-// Extends Transformedis again tProgram to avoid field duplication
+// Extends TransformedProgram to avoid field duplication
 export interface LegacyProject extends TransformedProgram {
   year: string;
   technologies: string[];
@@ -102,7 +100,7 @@ export interface LegacyProject extends TransformedProgram {
 // Currently mixes snake_case DB fields (from Program) with camelCase legacy fields
 // for Naan Mudhalvan component compatibility.
 export interface ProgramWithTransformedSections extends Program {
-  sections: { [key: string]: TransformedSection };
+  sections: Partial<Record<SectionKey, TransformedSection>>;
   aboutSection?: AboutSection; // Special handling for about section
   enhancedSections?: { [key: string]: EnhancedSection }; // For special components
   technologies?: string[];
@@ -142,3 +140,6 @@ export const SECTION_KEYS = {
   PROGRAM_DELIVERY: 'program_delivery',
   INTERVENTION: 'intervention',
 } as const;
+
+// Derived type from SECTION_KEYS — ensures section_key values are always valid
+export type SectionKey = typeof SECTION_KEYS[keyof typeof SECTION_KEYS];

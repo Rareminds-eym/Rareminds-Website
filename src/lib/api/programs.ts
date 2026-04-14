@@ -8,7 +8,7 @@ const DEFAULT_OVERVIEW_TITLE = 'Program Overview';
 
 // Sanitize search input to prevent PostgREST filter injection
 function sanitizeSearchInput(input: string): string {
-  const specialChars = ['%', '_', '\\', ',', '(', ')', '.'];
+  const specialChars = ['%', '_', '\\', ',', '(', ')', '.', ':', '&', '|'];
   return specialChars.reduce((str, char) => str.split(char).join('\\' + char), input);
 }
 
@@ -32,8 +32,11 @@ export async function getPrograms(params: PaginationParams = {}): Promise<Pagina
 
     // Apply search filter
     if (search) {
-      const sanitized = sanitizeSearchInput(search);
-      query = query.or(`title.ilike.%${sanitized}%,short_description.ilike.%${sanitized}%,program_type.ilike.%${sanitized}%,location.ilike.%${sanitized}%`);
+      const trimmed = search.trim().slice(0, 100);
+      if (trimmed) {
+        const sanitized = sanitizeSearchInput(trimmed);
+        query = query.or(`title.ilike.%${sanitized}%,short_description.ilike.%${sanitized}%,program_type.ilike.%${sanitized}%,location.ilike.%${sanitized}%`);
+      }
     }
 
     // Apply category filter
@@ -54,7 +57,7 @@ export async function getPrograms(params: PaginationParams = {}): Promise<Pagina
     // Apply year filter
     if (filters.year && filters.year !== 'All') {
       const parsedYear = parseInt(filters.year);
-      if (!isNaN(parsedYear)) {
+      if (!isNaN(parsedYear) && parsedYear >= 2000 && parsedYear <= 2100) {
         query = query.gte('date', `${parsedYear}-01-01`).lt('date', `${parsedYear + 1}-01-01`);
       }
     }
@@ -118,7 +121,7 @@ export async function getProgramFilterOptions(): Promise<{
         return new Date(p.date).getFullYear().toString();
       }
       return null;
-    }).filter((year): year is string => year !== null) || []))].sort();
+    }).filter((year): year is string => year !== null) || []))].sort((a, b) => Number(a) - Number(b));
 
     return { categories, names, years, locations };
   } catch (error) {
@@ -237,7 +240,7 @@ export async function getProgramWithSections(slug: string): Promise<{
         const videoUrl = (section.content || '')
           .split(',')
           .filter(Boolean)
-          .map((url: string) => ({ item1: url.trim() }));
+          .map((url: string) => ({ url: url.trim() }));
         transformedSections[SK.VIDEO] = {
           title: section.title || DEFAULT_VIDEO_TITLE,
           content: section.content || '',
