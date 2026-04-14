@@ -1,6 +1,7 @@
 import React from 'react';
 import { BookOpen, Target } from 'lucide-react';
 import { useMediaQuery } from '../../../hooks/useMediaQuery';
+import { splitIntoSentences } from '../../../utils/textParsing';
 
 interface ModulesSectionProps {
   modules: {
@@ -18,13 +19,10 @@ interface ModulesSectionProps {
   };
 }
 
-const splitSentences = (text: string): string[] =>
-  text.replace(/([^A-Z(]).\s+(?=[A-Z])/g, '$1.|||').split('|||').filter(s => s.trim().length > 0);
-
 const ModulesSection: React.FC<ModulesSectionProps> = ({ modules, approaches, projectName, intervention }) => {
   // Default handling for all programs (Tripura now uses dedicated layout)
-  const modulesList = splitSentences(modules.content);
-  const approachesList = splitSentences(approaches.content);
+  const modulesList = splitIntoSentences(modules.content);
+  const approachesList = splitIntoSentences(approaches.content);
 
   const isMobile = useMediaQuery('(max-width: 767px)');
 
@@ -72,7 +70,7 @@ const ModulesSection: React.FC<ModulesSectionProps> = ({ modules, approaches, pr
                 </h3>
                 <ul className="space-y-2">
                   {modulesList.map((item, index) => (
-                    <li key={`module-${index}-${item.slice(0, 30).replace(/\s+/g, '-')}`} className="text-sm text-gray-600 leading-relaxed flex items-start">
+                    <li key={`module-${item.slice(0, 30).replace(/\s+/g, '-')}-${index}`} className="text-sm text-gray-600 leading-relaxed flex items-start">
                       <span className="w-1.5 h-1.5 bg-blue-500 rounded-full mt-2 mr-3 flex-shrink-0"></span>
                       <span>{item.trim().replace(/\.$/, '')}</span>
                     </li>
@@ -99,7 +97,7 @@ const ModulesSection: React.FC<ModulesSectionProps> = ({ modules, approaches, pr
                 </h3>
                 <ul className="space-y-2">
                   {approachesList.map((item, index) => (
-                    <li key={`approach-${index}-${item.slice(0, 30).replace(/\s+/g, '-')}`} className="text-sm text-gray-600 leading-relaxed flex items-start">
+                    <li key={`approach-${item.slice(0, 30).replace(/\s+/g, '-')}-${index}`} className="text-sm text-gray-600 leading-relaxed flex items-start">
                       <span className="w-1.5 h-1.5 bg-blue-500 rounded-full mt-2 mr-3 flex-shrink-0"></span>
                       <span>{item.trim().replace(/\.$/, '')}</span>
                     </li>

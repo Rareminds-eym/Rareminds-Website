@@ -2,6 +2,11 @@
  * Text parsing utilities for Success Stories components
  */
 
+// Constants for special labels
+const CROSS_CULTURAL_LABEL = 'Cross-cultural Communication:';
+const ABBREVIATIONS = ['Dr', 'Mr', 'Mrs', 'Ms', 'Prof'];
+const MAX_LABEL_LENGTH = 50;
+
 /**
  * Splits text into sentences using a regex pattern.
  * Handles edge cases like "Dr." and other abbreviations.
@@ -27,7 +32,7 @@ export const splitIntoParagraphs = (text: string): string[] => {
   
   return sentences.reduce((acc: string[], sentence: string, i: number, arr: string[]) => {
     if (i % 2 === 0) {
-      const combined = arr[i + 1] ? sentence + ' ' + arr[i + 1] : sentence;
+      const combined = i + 1 < arr.length ? sentence + ' ' + arr[i + 1] : sentence;
       acc.push(combined);
     }
     return acc;
@@ -77,7 +82,7 @@ export const parseDescription = (
     // For Modules Covered, group items by main categories
     if (title.includes(SPECIAL_SECTIONS.MODULES_COVERED)) {
       const content = description.trim();
-      const crossCulturalStart = content.indexOf('Cross-cultural Communication:');
+      const crossCulturalStart = content.indexOf(CROSS_CULTURAL_LABEL);
 
       if (crossCulturalStart > -1) {
         const interviewSkillsPart = content.substring(0, crossCulturalStart).trim();
@@ -126,7 +131,7 @@ export const parseDescription = (
       const current = sentences[i];
       const next = sentences[i + 1];
 
-      if (current.trim().endsWith('Dr') && next && next.match(/^[A-Z][a-z]/)) {
+      if (ABBREVIATIONS.some(abbr => current.trim().endsWith(abbr)) && next && next.match(/^[A-Z][a-z]/)) {
         fixedSentences.push(current + '. ' + next);
         i++; // Skip the next sentence since we combined it
       } else {
@@ -148,7 +153,7 @@ export const parseDescription = (
   return sentences.map((sentence, sIdx) => {
     const trimmed = sentence.trim();
     const colonIndex = trimmed.indexOf(':');
-    if (colonIndex > 0 && colonIndex < 50) {
+    if (colonIndex > 0 && colonIndex < MAX_LABEL_LENGTH) {
       return {
         id: `${cardIndex}-colon-${sIdx}`,
         label: trimmed.substring(0, colonIndex + 1),

@@ -1,5 +1,3 @@
-import { color } from "framer-motion";
-
 /** @type {import('tailwindcss').Config} */
 export default {
   content: [
@@ -148,7 +146,7 @@ export default {
     },
   },
   plugins: [
-    function ({ addUtilities }) {
+    function ({ addUtilities }: { addUtilities: (utilities: Record<string, any>) => void }) {
       addUtilities({
         '.transform-style-3d': {
           transformStyle: 'preserve-3d',
