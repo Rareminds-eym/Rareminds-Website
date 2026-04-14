@@ -1,9 +1,15 @@
 import { supabase } from '@/lib/supabaseClient';
 import type { Program, ProgramWithTransformedSections, AboutSection, TransformedSection, PaginationParams, PaginatedResponse } from '@/types/program';
+import { SECTION_KEYS as SK } from '@/types/program';
+
+const DEFAULT_ABOUT_TITLE = 'About the Program';
+const DEFAULT_VIDEO_TITLE = 'Program Videos';
+const DEFAULT_OVERVIEW_TITLE = 'Program Overview';
 
 // Sanitize search input to prevent PostgREST filter injection
 function sanitizeSearchInput(input: string): string {
-  return input.replace(/[%_\\,().]/g, '\\$&');
+  const specialChars = ['%', '_', '\\', ',', '(', ')', '.'];
+  return specialChars.reduce((str, char) => str.split(char).join('\\' + char), input);
 }
 
 export async function getPrograms(params: PaginationParams = {}): Promise<PaginatedResponse> {
@@ -188,12 +194,12 @@ export async function getProgramWithSections(slug: string): Promise<{
     if (!program) {
       return { data: null, error: new Error('Program not found') };
     }
-    const programId = program.id;
+
     // Then, get the sections for this program
     const { data: sections, error: sectionsError } = await supabase
       .from('program_sections')
       .select('*')
-      .eq('program_id', programId)
+      .eq('program_id', program.id)
       .order('display_order', { ascending: true });
 
     if (sectionsError) {
@@ -212,14 +218,14 @@ export async function getProgramWithSections(slug: string): Promise<{
       };
       
       // Special transformation for AboutProgramSection (expects array format)
-      if (section.section_key === 'about') {
+      if (section.section_key === SK.ABOUT) {
         const parsedContent = parseStructuredContent(section.content || '');
         
         aboutSection = {
-          title: section.title || 'About the Program',
+          title: section.title || DEFAULT_ABOUT_TITLE,
           content: parsedContent.length > 0 ? parsedContent : [
             {
-              title: 'Program Overview',
+              title: DEFAULT_OVERVIEW_TITLE,
               description: section.content || ''
             }
           ]
@@ -227,13 +233,13 @@ export async function getProgramWithSections(slug: string): Promise<{
       }
 
       // Parse video section - comma-separated URLs stored as plain text
-      if (section.section_key === 'video') {
+      if (section.section_key === SK.VIDEO) {
         const videoUrl = (section.content || '')
           .split(',')
           .filter(Boolean)
           .map((url: string) => ({ item1: url.trim() }));
-        transformedSections['video'] = {
-          title: section.title || 'Program Videos',
+        transformedSections[SK.VIDEO] = {
+          title: section.title || DEFAULT_VIDEO_TITLE,
           content: section.content || '',
           videoUrl
         };
@@ -262,3 +268,4 @@ export async function getProgramWithSections(slug: string): Promise<{
     return { data: null, error: typedError };
   }
 }
+

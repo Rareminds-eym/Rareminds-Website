@@ -19,8 +19,8 @@ CREATE TYPE section_key_type AS ENUM (
     'conclusion',
     'header',
     'course_enrollment',
-    'programs',
-    'inventions',
+    'program_delivery',
+    'intervention',
     'video'
 );
 -- =====================================================
@@ -34,7 +34,7 @@ CREATE TABLE programs (
     program_type TEXT NOT NULL,
     location TEXT NOT NULL,
     date DATE NOT NULL,
-    status TEXT NOT NULL, 
+    status TEXT NOT NULL CHECK (status IN ('Active', 'Completed', 'In Progress')),
     image_url TEXT NOT NULL,
     banner_url TEXT NOT NULL,
     short_description TEXT NOT NULL,
@@ -52,7 +52,7 @@ CREATE TABLE program_sections (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     program_id UUID NOT NULL REFERENCES programs(id) ON DELETE CASCADE,
     section_key section_key_type NOT NULL,
-    title TEXT,
+    title TEXT NOT NULL,
     content TEXT,
     display_order INTEGER DEFAULT 0,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),

@@ -90,21 +90,17 @@ export type AboutSection = StructuredSection;
 export type EnhancedSection = StructuredSection;
 
 // Legacy Project interface for Naan Mudhalvan components compatibility
-export interface LegacyProject {
-  id: string;
-  name: string;
-  description: string;
-  category: string;
-  status: string;
+// Extends Transformedis again tProgram to avoid field duplication
+export interface LegacyProject extends TransformedProgram {
   year: string;
-  location: string;
   technologies: string[];
-  imageUrl: string;
   bannerUrl: string;
-  timeline: string;
 }
 
 // Program with transformed sections (matches current detail page expectations)
+// TODO: Refactor to separate DB shape from UI shape after all component PRs are merged.
+// Currently mixes snake_case DB fields (from Program) with camelCase legacy fields
+// for Naan Mudhalvan component compatibility.
 export interface ProgramWithTransformedSections extends Program {
   sections: { [key: string]: TransformedSection };
   aboutSection?: AboutSection; // Special handling for about section
@@ -130,3 +126,19 @@ export interface PaginatedResponse {
   hasNextPage: boolean;
   hasPrevPage: boolean;
 }
+
+// Section key constants — avoids magic strings in API and component code
+export const SECTION_KEYS = {
+  ABOUT: 'about',
+  VIDEO: 'video',
+  INTRODUCTION: 'introduction',
+  HEADER: 'header',
+  MODULES: 'modules',
+  APPROACHES: 'approaches',
+  IMPACT: 'impact',
+  STRATEGIC_ALIGNMENT: 'strategic_alignment',
+  CONCLUSION: 'conclusion',
+  COURSE_ENROLLMENT: 'course_enrollment',
+  PROGRAM_DELIVERY: 'program_delivery',
+  INTERVENTION: 'intervention',
+} as const;
