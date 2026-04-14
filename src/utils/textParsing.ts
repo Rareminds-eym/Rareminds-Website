@@ -30,9 +30,9 @@ export const splitIntoSentences = (text: string): string[] => {
 export const splitIntoParagraphs = (text: string): string[] => {
   const sentences = splitIntoSentences(text);
   
-  return sentences.reduce((acc: string[], sentence: string, i: number, arr: string[]) => {
+  return sentences.reduce((acc: string[], sentence: string, i: number) => {
     if (i % 2 === 0) {
-      const combined = i + 1 < arr.length ? sentence + ' ' + arr[i + 1] : sentence;
+      const combined = i + 1 < sentences.length ? sentence + ' ' + sentences[i + 1] : sentence;
       acc.push(combined);
     }
     return acc;

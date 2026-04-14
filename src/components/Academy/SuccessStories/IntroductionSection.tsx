@@ -13,11 +13,7 @@ const DEFAULT_IMAGES: [string, string, string] = [
 ];
 
 function IntroductionSection({ title, content, images }: IntroductionSectionProps) {
-  // Determine if title is single word for centering
-  const isSingleWord = title.trim().split(/\s+/).length === 1;
-  const titleClassName = `text-3xl md:text-5xl font-bold text-gray-900 mb-2 md:mb-8 ${
-    isSingleWord ? 'text-center' : 'text-center md:text-left leading-relaxed'
-  }`;
+  const titleClassName = 'text-3xl md:text-5xl font-bold text-gray-900 mb-2 md:mb-8 text-center md:text-left leading-relaxed';
 
   return (
     <div className="w-full bg-white py-16">
