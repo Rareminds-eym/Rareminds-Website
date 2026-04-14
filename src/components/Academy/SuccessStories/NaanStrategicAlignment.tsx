@@ -210,7 +210,7 @@ const ICONS_MOBILE = [
 // Desktop layout constants
 const CARD_HEIGHT = 160;
 const LINE_Y = 240;
-const ICON_R = 19;
+const ICON_RADIUS = 19; // Icon circle radius in pixels
 
 const NaanStrategicAlignment: React.FC<NaanStrategicAlignmentProps> = ({
   strategicAlignmentSection,
@@ -222,7 +222,7 @@ const NaanStrategicAlignment: React.FC<NaanStrategicAlignmentProps> = ({
 
   const topPositions = [0, 410];
   const bottomPositions = [200, 570];
-  const topVLineHeight = LINE_Y - CARD_HEIGHT - ICON_R;
+  const topVLineHeight = LINE_Y - CARD_HEIGHT - ICON_RADIUS;
 
   // ── Tablet % positions (mirroring desktop layout proportionally) ──
   // Top icons sit under center of top cards: left card ~28%, right card ~72%
@@ -307,7 +307,7 @@ const NaanStrategicAlignment: React.FC<NaanStrategicAlignmentProps> = ({
           {/* Top cards */}
           {topCards.map((card, i) => (
             <div
-              key={card.title}
+              key={`top-card-${i}`}
               className="absolute flex flex-col items-center"
               style={{ left: topPositions[i], top: -20 }}
             >
@@ -350,9 +350,9 @@ const NaanStrategicAlignment: React.FC<NaanStrategicAlignmentProps> = ({
           {/* Bottom cards */}
           {bottomCards.map((card, i) => (
             <div
-              key={card.title}
+              key={`bottom-card-${i}`}
               className="absolute flex flex-col items-center"
-              style={{ left: bottomPositions[i], top: LINE_Y - ICON_R }}
+              style={{ left: bottomPositions[i], top: LINE_Y - ICON_RADIUS }}
             >
               <motion.div
                 style={{ marginTop: "23px" }}

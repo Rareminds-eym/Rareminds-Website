@@ -310,7 +310,7 @@ const NaanAboutProgramme: React.FC<NaanAboutProgrammeProps> = ({
           <div className="md:hidden grid grid-cols-2 gap-4">
             {finalCourses.map((course, index) => (
               <motion.div
-                key={course.name}
+                key={`course-${index}-${course.name}`}
                 className="rounded-2xl p-4 flex flex-col shadow-md"
                 style={{ backgroundColor: getBackgroundColor(index) }}
                 variants={fadeUp}
@@ -356,7 +356,7 @@ const NaanAboutProgramme: React.FC<NaanAboutProgrammeProps> = ({
                 <div className="flex gap-4" style={{ flex: "1 1 0" }}>
                   {otherCourses.slice(0, 2).map((course, index) => (
                     <motion.div
-                      key={course.name}
+                      key={`other-course-${index}-${course.name}`}
                       className="rounded-2xl p-5 flex flex-col flex-1 shadow-md"
                       style={{ backgroundColor: getBackgroundColor(index + 1) }}
                       variants={fadeUp}

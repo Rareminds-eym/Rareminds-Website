@@ -59,21 +59,29 @@ const featureItem = {
 };
 // ────────────────────────────────────────────────────────────────────
 
-const NaanIntroduction: React.FC<NaanIntroductionProps> = ({ section }) => {
-  const paragraphs = section.content
+/**
+ * Splits content into two balanced paragraphs by sentence boundaries
+ * @param content - The text content to split
+ * @returns Array of two paragraphs (or fewer if content is short)
+ */
+const splitContentIntoParagraphs = (content: string): string[] => {
+  return content
     .split(". ")
     .reduce((acc: string[], sentence: string, index: number, array: string[]) => {
       const trimmedSentence = sentence.trim();
       if (!trimmedSentence) return acc;
 
       if (index === 0) {
+        // First sentence starts the first paragraph
         acc.push(trimmedSentence + (trimmedSentence.endsWith(".") ? "" : "."));
       } else if (index < Math.ceil(array.length / 2)) {
+        // First half of sentences go to first paragraph
         if (acc[0]) {
           acc[0] +=
             " " + trimmedSentence + (trimmedSentence.endsWith(".") ? "" : ".");
         }
       } else {
+        // Second half of sentences go to second paragraph
         if (!acc[1]) acc[1] = "";
         acc[1] +=
           (acc[1] ? " " : "") +
@@ -83,6 +91,10 @@ const NaanIntroduction: React.FC<NaanIntroductionProps> = ({ section }) => {
 
       return acc;
     }, []);
+};
+
+const NaanIntroduction: React.FC<NaanIntroductionProps> = ({ section }) => {
+  const paragraphs = splitContentIntoParagraphs(section.content);
 
   return (
     <div className="min-h-screen bg-white -mt-16 md:-mt-5 pb-4 px-4 md:px-8 flex flex-col items-center">
