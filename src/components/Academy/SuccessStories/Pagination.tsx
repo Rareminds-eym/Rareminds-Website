@@ -1,4 +1,7 @@
 import React from 'react';
+
+const ELLIPSIS = '....' as const;
+
 interface PaginationProps {
   currentPage: number;
   totalPages: number;
@@ -31,7 +34,7 @@ export const Pagination = ({ currentPage, totalPages, onPageChange }: Pagination
       }
 
       if (currentPage < totalPages - 3) {
-        pages.push('....');
+        pages.push(ELLIPSIS);
       }
 
       if (totalPages > 1) {
@@ -57,7 +60,7 @@ export const Pagination = ({ currentPage, totalPages, onPageChange }: Pagination
             : 'border-blue-400 text-blue-500 hover:bg-blue-50'
         }`}
       >
-        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
         </svg>
         {/* Hide text on mobile, show on desktop */}
@@ -67,8 +70,8 @@ export const Pagination = ({ currentPage, totalPages, onPageChange }: Pagination
       {/* Page Numbers Container */}
       <div className="flex items-center border-2 border-blue-300 rounded-full px-3 py-1.5 gap-1">
         {visiblePages.map((page, index) => (
-          <React.Fragment key={index}>
-            {page === '....' ? (
+          <React.Fragment key={`page-${page}-${index}`}>
+            {page === ELLIPSIS ? (
               <span className="px-2 py-1 text-gray-500 text-sm tracking-widest">. . . .</span>
             ) : (
               <button
@@ -98,7 +101,7 @@ export const Pagination = ({ currentPage, totalPages, onPageChange }: Pagination
       >
         {/* Hide text on mobile, show on desktop */}
         <span className="hidden lg:inline">Next</span>
-        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
         </svg>
       </button>

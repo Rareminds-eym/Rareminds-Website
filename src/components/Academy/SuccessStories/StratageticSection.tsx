@@ -42,6 +42,12 @@ const parseContent = (content: string): ParsedItem[] => {
     }
   }
 
+  /**
+   * Matches patterns like "Title: description" or "Title - description"
+   * Group 1: Title (starts with capital, 2-50 chars, no colons/dashes)
+   * Group 2: Description (everything after separator until period)
+   * Separators: : – - (colon, en-dash, hyphen)
+   */
   const colonPattern = /([A-Z][^:.–\-]{2,50})(?:[:–\-])\s*([^.]+\.?)/g;
   let match;
   const matches: ParsedItem[] = [];
@@ -226,6 +232,7 @@ const StrategicAlignmentSection: React.FC<StrategicAlignmentSectionProps> = ({ s
 
   const [isMobile, setIsMobile] = React.useState(false);
   React.useEffect(() => {
+    if (typeof window === 'undefined') return;
     const check = () => setIsMobile(window.innerWidth < 768);
     check();
     window.addEventListener("resize", check);

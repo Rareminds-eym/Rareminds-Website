@@ -90,25 +90,7 @@ const ConclusionSection: React.FC<ConclusionSectionProps> = ({ section }) => {
   }, []);
 
   // ✅ wrapperStyle inside component so isMobile/isTablet state works correctly
-  const wrapperStyle: React.CSSProperties = {
-    backgroundColor: '#ffffff',
-    padding: '120px 0 140px 0',
-    width: '100vw',
-    marginLeft: 'calc(-50vw + 50%)',
-    marginBottom: '-20px',
-    ...(isDesktop && {
-  marginTop: '-100px',
-}),
-    ...(isMobile && {
-      paddingTop: '10px',
-      paddingBottom: '45px',
-      marginTop: '-55px',
-    }),
-    ...(isTablet && {
-      paddingTop: '10px',
-    }),
-
-  };
+  // Removed - now using className with conditional Tailwind classes
 
   const paragraphs: string[] = section.content
     .split(/(?<=\.)\s+(?=[A-Z])/)
@@ -178,13 +160,17 @@ const ConclusionSection: React.FC<ConclusionSectionProps> = ({ section }) => {
     color: '#333',
     marginBottom: isMobile ? '10px' : '16px',
     textAlign: 'justify' as const,
-    wordSpacing: isMobile ? '-1.8px' : 'normal',
   };
 
 
   if (isMobile) {
   return (
-    <section style={wrapperStyle}>
+    <section className={`
+      bg-white py-[120px] pb-[140px] w-screen -ml-[calc(50vw-50%)] -mb-5
+      ${isDesktop ? '-mt-[100px]' : ''}
+      ${isMobile ? 'py-2.5 pb-[45px] -mt-[55px]' : ''}
+      ${isTablet ? 'pt-2.5' : ''}
+    `}>
       <div style={styles.inner}>
 
         <motion.h2
@@ -287,9 +273,13 @@ const ConclusionSection: React.FC<ConclusionSectionProps> = ({ section }) => {
     </section>
   );
 }
-  // ── Desktop / Tablet layout ──
   return (
-    <section style={wrapperStyle}>
+    <section className={`
+      bg-white py-[120px] pb-[140px] w-screen -ml-[calc(50vw-50%)] -mb-5
+      ${isDesktop ? '-mt-[100px]' : ''}
+      ${isMobile ? 'py-2.5 pb-[45px] -mt-[55px]' : ''}
+      ${isTablet ? 'pt-2.5' : ''}
+    `}>
       <div style={styles.inner}>
 
         <motion.h2

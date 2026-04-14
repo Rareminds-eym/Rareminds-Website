@@ -124,7 +124,7 @@ const NaanImpactSection: React.FC<NaanImpactSectionProps> = ({ impactSection }) 
         <div className="hidden xl:grid xl:grid-cols-3 gap-6 mb-16">
           {impactCards.slice(0, 3).map((card, index) => (
             <div
-              key={index}
+              key={card.title}
               className="bg-white rounded-2xl border-2 border-gray-300 p-5 shadow-sm relative"  // p-8 → p-5
             >
               <ArcNotch />
@@ -145,7 +145,7 @@ const NaanImpactSection: React.FC<NaanImpactSectionProps> = ({ impactSection }) 
         <div className="hidden xl:grid xl:grid-cols-2 gap-6 max-w-4xl mx-auto">
           {impactCards.slice(3, 5).map((card, index) => (
             <div
-              key={index + 3}
+              key={card.title}
               className="bg-white rounded-2xl border-2 border-gray-300 p-5 shadow-sm relative"  // p-8 → p-5
             >
               <ArcNotch />
@@ -168,7 +168,7 @@ const NaanImpactSection: React.FC<NaanImpactSectionProps> = ({ impactSection }) 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-16 md:gap-x-6 md:gap-y-16 mb-16">
             {impactCards.slice(0, 4).map((card, index) => (
               <div
-                key={index}
+                key={card.title}
                 className="bg-white rounded-2xl border-2 border-gray-300 p-4 md:p-8 shadow-sm relative"
               >
                 <ArcNotch />

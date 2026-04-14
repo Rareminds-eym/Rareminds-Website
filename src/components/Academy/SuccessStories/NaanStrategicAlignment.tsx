@@ -96,7 +96,7 @@ const Card: React.FC<CardProps> = ({ title, description }) => (
     >
       {title}
     </h3>
-    <p className="text-gray-600 text-sm leading normal">
+    <p className="text-gray-600 text-sm leading-normal">
       {description}
     </p>
   </div>
@@ -219,7 +219,6 @@ const NaanStrategicAlignment: React.FC<NaanStrategicAlignmentProps> = ({
 
   const topCards = content.slice(0, 2);
   const bottomCards = content.slice(2, 4);
-  const allCards = content.slice(0, 4);
 
   const topPositions = [0, 410];
   const bottomPositions = [200, 570];
@@ -308,7 +307,7 @@ const NaanStrategicAlignment: React.FC<NaanStrategicAlignmentProps> = ({
           {/* Top cards */}
           {topCards.map((card, i) => (
             <div
-              key={i}
+              key={card.title}
               className="absolute flex flex-col items-center"
               style={{ left: topPositions[i], top: -20 }}
             >
@@ -351,7 +350,7 @@ const NaanStrategicAlignment: React.FC<NaanStrategicAlignmentProps> = ({
           {/* Bottom cards */}
           {bottomCards.map((card, i) => (
             <div
-              key={i + 2}
+              key={card.title}
               className="absolute flex flex-col items-center"
               style={{ left: bottomPositions[i], top: LINE_Y - ICON_R }}
             >
@@ -465,7 +464,7 @@ const NaanStrategicAlignment: React.FC<NaanStrategicAlignmentProps> = ({
               const leftPct = tabTopIconPct[i];
               return (
                 <div
-                  key={i}
+                  key={card.title}
                   style={{
                     position: "absolute",
                     top: 30,
@@ -647,9 +646,9 @@ const NaanStrategicAlignment: React.FC<NaanStrategicAlignmentProps> = ({
 
           {/* Cards column */}
           <div className="flex flex-col w-full" style={{ gap: 20 }}>
-            {allCards.map((card, i) => (
+            {content.slice(0, 4).map((card, i) => (
               <motion.div
-                key={i}
+                key={card.title}
                 className="flex flex-row items-center"
                 style={{ position: "relative" }}
                 variants={fadeUp}

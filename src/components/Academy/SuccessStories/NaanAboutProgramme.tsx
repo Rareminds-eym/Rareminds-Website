@@ -124,11 +124,6 @@ const NaanAboutProgramme: React.FC<NaanAboutProgrammeProps> = ({
     courseEnrollmentSection.content.includes('5,560 students')
   );
 
-  console.log('🔍 [NaanAboutProgramme] Detection check:', {
-    isNaanMudhalvan2025,
-    courseEnrollmentContent: courseEnrollmentSection.content.substring(0, 200) + '...'
-  });
-
   // Naan Mudhalvan 2025 specific data
   const naanMudhalvan2025Programs = [
     {
@@ -153,7 +148,6 @@ const NaanAboutProgramme: React.FC<NaanAboutProgrammeProps> = ({
 
   // If this is Naan Mudhalvan 2025, render the specific 3 blue cards layout
   if (isNaanMudhalvan2025) {
-    console.log('🎯 [NaanAboutProgramme] Rendering Naan Mudhalvan 2025 specific layout');
     return (
       <section className="bg-white mt-2 sm:-mt-12 md:mt-5 lg:-mt-32 pb-3 px-4 md:px-8 max-w-5xl mx-auto">
         {/* Title */}
@@ -186,7 +180,7 @@ const NaanAboutProgramme: React.FC<NaanAboutProgrammeProps> = ({
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {naanMudhalvan2025Programs.map((program, index) => (
             <motion.div
-              key={index}
+              key={program.title}
               className="text-white p-6 rounded-2xl shadow-md"
               style={{ backgroundColor: index === 0 ? '#4a90d9' : index === 1 ? '#6aaee8' : '#8ec0f0' }}
               variants={scaleIn}
@@ -251,7 +245,15 @@ const NaanAboutProgramme: React.FC<NaanAboutProgrammeProps> = ({
     const colors = ["#4a90d9", "#6aaee8", "#8ec0f0", "#7ab8ec"];
     return colors[index % colors.length];
   };
-  const isMobile = window.innerWidth < 768;
+  
+  const [isMobile, setIsMobile] = React.useState(false);
+
+  React.useEffect(() => {
+    setIsMobile(window.innerWidth < 768);
+    const handleResize = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   return (
     <section className="bg-white mt-2 sm:-mt-12 md:mt-5 lg:-mt-32 pb-5 px-4 md:px-8 max-w-5xl mx-auto">
@@ -277,17 +279,13 @@ const NaanAboutProgramme: React.FC<NaanAboutProgrammeProps> = ({
         viewport={{ once: true, amount: 0.3 }}
         custom={0.15}
       >
-        <p className="text-gray-700 font-normal leading-relaxed md:leading-relaxed text-sm md:text-base text-justify md:text-left"
-        style={{
-    wordSpacing: isMobile ? '-1.9px' : 'normal',
-          }}
-        >
+        <p className="text-gray-700 font-normal leading-relaxed md:leading-relaxed text-sm md:text-base text-justify md:text-left">
           {aboutSection.content}
         </p>
       </motion.div>
 
       {/* Cards Layout - Mobile: 2 cols, Desktop: Original layout */}
-      <div className="flex flex-col md:flex-row gap-4 md:gap-4" style={{ minHeight: "auto"}}>
+      <div className="flex flex-col md:flex-row gap-4 md:gap-4">
 
         {/* LEFT: Main Course Card - Hidden on mobile, visible on desktop */}
         {mainCourse.name && (

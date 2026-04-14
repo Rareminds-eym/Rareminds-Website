@@ -323,7 +323,7 @@ const NaanCourseEnrollment: React.FC<NaanCourseEnrollmentProps> = ({
           const isLastOdd = courses.length % 2 !== 0 && index === courses.length - 1;
           return (
             <div
-              key={index}
+              key={course.title}
               style={{
                 gridColumn: isLastOdd ? "1 / -1" : undefined,
                 maxWidth: isLastOdd && !isMobile ? "calc(50% - 12px)" : undefined, // ✅ skip on mobile

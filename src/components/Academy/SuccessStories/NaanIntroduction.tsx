@@ -102,7 +102,6 @@ const NaanIntroduction: React.FC<NaanIntroductionProps> = ({ section }) => {
       {/* Card — fade in */}
       <motion.div
         className="w-full max-w-4xl border border-gray-200 rounded-2xl px-4 md:px-12 py-6 md:py-10"
-        style={{ borderRadius: "16px" }}
         variants={fadeIn}
         initial="hidden"
         whileInView="visible"
@@ -112,7 +111,7 @@ const NaanIntroduction: React.FC<NaanIntroductionProps> = ({ section }) => {
         {/* Dynamic Paragraphs */}
         {paragraphs.map((paragraph, index) => (
           <motion.p
-            key={index}
+            key={`para-${index}-${paragraph.slice(0, 30).replace(/\s+/g, '-')}`}
             className="font-normal text-sm md:text-base text-gray-800 leading-normal md:leading-relaxed mb-6 text-justify"
             variants={fadeUp}
             initial="hidden"
@@ -144,7 +143,7 @@ const NaanIntroduction: React.FC<NaanIntroductionProps> = ({ section }) => {
         >
           {features.map((feature, index) => (
             <motion.div
-              key={index}
+              key={feature.title}
               className="flex flex-col items-center gap-1 md:gap-2"
               variants={featureItem}
             >
@@ -155,24 +154,19 @@ const NaanIntroduction: React.FC<NaanIntroductionProps> = ({ section }) => {
                 fill="none"
                 stroke="currentColor"
                 strokeWidth="1.5"
+                aria-hidden="true"
               >
                 <circle cx="12" cy="12" r="9" />
                 <path strokeLinecap="round" strokeLinejoin="round" d="M8.5 12.5l2.5 2.5 4.5-5" />
               </svg>
 
               {/* Title — tiny on mobile, normal on desktop */}
-              <p
-                className="font-medium text-gray-800 leading-tight text-center"
-                style={{ fontSize: "clamp(7px, 2vw, 12px)" }}
-              >
+              <p className="font-medium text-gray-800 leading-tight text-center text-[length:clamp(7px,2vw,12px)]">
                 {feature.title}
               </p>
 
               {/* Subtitle — tiny on mobile, normal on desktop */}
-              <p
-                className="font-normal text-gray-500 leading-tight text-center"
-                style={{ fontSize: "clamp(6px, 1.8vw, 11px)" }}
-              >
+              <p className="font-normal text-gray-500 leading-tight text-center text-[length:clamp(6px,1.8vw,11px)]">
                 {feature.subtitle}
               </p>
             </motion.div>
