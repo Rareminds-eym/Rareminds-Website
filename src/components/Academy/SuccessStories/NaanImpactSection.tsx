@@ -186,20 +186,22 @@ const NaanImpactSection: React.FC<NaanImpactSectionProps> = ({ impactSection }) 
           </div>
 
           {/* 5th card centered */}
-          <div className="flex justify-center">
-            <div className="bg-white rounded-2xl border-2 border-gray-300 p-4 md:p-8 shadow-sm relative w-full md:w-1/2">
-              <ArcNotch />
-              <div className="absolute -top-6 left-1/2 transform -translate-x-1/2">
-                <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center shadow-sm">
-                  {impactCards[4]?.icon}
+          {impactCards.length > 4 && (
+            <div className="flex justify-center">
+              <div className="bg-white rounded-2xl border-2 border-gray-300 p-4 md:p-8 shadow-sm relative w-full md:w-1/2">
+                <ArcNotch />
+                <div className="absolute -top-6 left-1/2 transform -translate-x-1/2">
+                  <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center shadow-sm">
+                    {impactCards[4].icon}
+                  </div>
+                </div>
+                <div className="pt-6 text-center">
+                  <h3 className="text-lg font-semibold text-gray-900 mb-4">{impactCards[4].title}</h3>
+                  <p className="text-xs md:text-sm text-gray-600 leading-relaxed">{impactCards[4].description}</p>
                 </div>
               </div>
-              <div className="pt-6 text-center">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">{impactCards[4]?.title}</h3>
-                <p className="text-xs md:text-sm text-gray-600 leading-relaxed">{impactCards[4]?.description}</p>
-              </div>
             </div>
-          </div>
+          )}
         </div>
 
       </div>

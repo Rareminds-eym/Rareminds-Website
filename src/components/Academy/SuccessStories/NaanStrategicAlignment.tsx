@@ -524,7 +524,7 @@ const NaanStrategicAlignment: React.FC<NaanStrategicAlignmentProps> = ({
               const leftPct = tabBottomIconPct[i];
               return (
                 <div
-                  key={i + 2}
+                  key={`bottom-card-tablet-${i}`}
                   style={{
                     position: "absolute",
                     top: 203,

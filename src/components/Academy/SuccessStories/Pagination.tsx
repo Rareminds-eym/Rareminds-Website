@@ -21,7 +21,7 @@ export const Pagination = ({ currentPage, totalPages, onPageChange }: Pagination
       pages.push(1);
 
       if (currentPage > 4) {
-        pages.push('...');
+        pages.push(ELLIPSIS);
       }
 
       const start = Math.max(2, currentPage - 1);
@@ -54,6 +54,7 @@ export const Pagination = ({ currentPage, totalPages, onPageChange }: Pagination
       <button
         onClick={() => onPageChange(currentPage - 1)}
         disabled={currentPage === 1}
+        aria-label="Go to previous page"
         className={`flex items-center gap-2 px-3 lg:px-5 py-2.5 rounded-full border-2 text-sm font-semibold transition-colors ${
           currentPage === 1
             ? 'border-gray-200 text-gray-400 cursor-not-allowed'
@@ -75,7 +76,7 @@ export const Pagination = ({ currentPage, totalPages, onPageChange }: Pagination
               <span className="px-2 py-1 text-gray-500 text-sm tracking-widest">. . . .</span>
             ) : (
               <button
-                onClick={() => onPageChange(page as number)}
+                onClick={() => typeof page === 'number' && onPageChange(page)}
                 className={`w-9 h-9 rounded-full flex items-center justify-center text-sm font-medium transition-colors ${
                   currentPage === page
                     ? 'bg-blue-500 text-white'
@@ -93,6 +94,7 @@ export const Pagination = ({ currentPage, totalPages, onPageChange }: Pagination
       <button
         onClick={() => onPageChange(currentPage + 1)}
         disabled={currentPage === totalPages}
+        aria-label="Go to next page"
         className={`flex items-center gap-2 px-3 lg:px-5 py-2.5 rounded-full border-2 text-sm font-semibold transition-colors ${
           currentPage === totalPages
             ? 'border-gray-200 text-gray-400 cursor-not-allowed'

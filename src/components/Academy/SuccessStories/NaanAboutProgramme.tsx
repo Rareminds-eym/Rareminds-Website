@@ -245,15 +245,6 @@ const NaanAboutProgramme: React.FC<NaanAboutProgrammeProps> = ({
     const colors = ["#4a90d9", "#6aaee8", "#8ec0f0", "#7ab8ec"];
     return colors[index % colors.length];
   };
-  
-  const [isMobile, setIsMobile] = React.useState(false);
-
-  React.useEffect(() => {
-    setIsMobile(window.innerWidth < 768);
-    const handleResize = () => setIsMobile(window.innerWidth < 768);
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
 
   return (
     <section className="bg-white mt-2 sm:-mt-12 md:mt-5 lg:-mt-32 pb-5 px-4 md:px-8 max-w-5xl mx-auto">

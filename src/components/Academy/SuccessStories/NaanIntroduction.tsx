@@ -111,7 +111,7 @@ const NaanIntroduction: React.FC<NaanIntroductionProps> = ({ section }) => {
         {/* Dynamic Paragraphs */}
         {paragraphs.map((paragraph, index) => (
           <motion.p
-            key={`para-${index}-${paragraph.slice(0, 30).replace(/\s+/g, '-')}`}
+            key={`para-${index}`}
             className="font-normal text-sm md:text-base text-gray-800 leading-normal md:leading-relaxed mb-6 text-justify"
             variants={fadeUp}
             initial="hidden"
