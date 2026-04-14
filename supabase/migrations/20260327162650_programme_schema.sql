@@ -35,6 +35,14 @@ CREATE TABLE programs (
     location TEXT NOT NULL,
     date DATE NOT NULL,
     status TEXT NOT NULL CHECK (status IN ('Active', 'Completed', 'In Progress')),
+    CONSTRAINT check_program_type CHECK (program_type IN (
+        'College',
+        'University',
+        'Organization',
+        'Naan Mudhalvan',
+        'Government Body',
+        'School'
+    )),
     image_url TEXT NOT NULL,
     banner_url TEXT NOT NULL,
     short_description TEXT NOT NULL,

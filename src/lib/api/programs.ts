@@ -1,14 +1,12 @@
 import { supabase } from '@/lib/supabaseClient';
-import type { Program, ProgramWithTransformedSections, AboutSection, TransformedSection, PaginationParams, PaginatedResponse } from '@/types/program';
-import { SECTION_KEYS as SK } from '@/types/program';
+import type { Program, ProgramSection, ProgramWithTransformedSections, AboutSection, TransformedSection, PaginationParams, PaginatedResponse } from '@/types/program';
+import { SECTION_KEYS as SK, SECTION_DEFAULTS as SD } from '@/types/program';
 
-const DEFAULT_ABOUT_TITLE = 'About the Program';
-const DEFAULT_VIDEO_TITLE = 'Program Videos';
-const DEFAULT_OVERVIEW_TITLE = 'Program Overview';
 
 // Sanitize search input to prevent PostgREST filter injection
 function sanitizeSearchInput(input: string): string {
-  const specialChars = ['%', '_', '\\', ',', '(', ')', '.', ':', '&', '|'];
+  // Backslash must be escaped first to avoid double-escaping
+  const specialChars = ['\\', '%', '_', ',', '(', ')', '.', ':', '&', '|', '*', '~', '!', '"', "'", '{', '}', '[', ']', '<', '>', '='];
   return specialChars.reduce((str, char) => str.split(char).join('\\' + char), input);
 }
 
@@ -57,7 +55,8 @@ export async function getPrograms(params: PaginationParams = {}): Promise<Pagina
     // Apply year filter
     if (filters.year && filters.year !== 'All') {
       const parsedYear = parseInt(filters.year);
-      if (!isNaN(parsedYear) && parsedYear >= 2000 && parsedYear <= 2100) {
+      const currentYear = new Date().getFullYear();
+      if (!isNaN(parsedYear) && parsedYear >= 2000 && parsedYear <= currentYear + 1) {
         query = query.gte('date', `${parsedYear}-01-01`).lt('date', `${parsedYear + 1}-01-01`);
       }
     }
@@ -146,7 +145,7 @@ function isSectionHeader(line: string): boolean {
 }
 
 // Helper function to parse structured content from database text
-function parseStructuredContent(content: string): { title: string; description: string; }[] {
+function parseStructuredContent(content: string | null | undefined): { title: string; description: string; }[] {
   if (!content) return [];
 
   const lines = content.split('\n').map(l => l.trim()).filter(Boolean);
@@ -213,7 +212,10 @@ export async function getProgramWithSections(slug: string): Promise<{
     const transformedSections: { [key: string]: TransformedSection } = {};
     let aboutSection: AboutSection | undefined;
     
-    (sections || []).forEach((section) => {
+    ((sections || []) as ProgramSection[]).forEach((section) => {
+      // Null safety guard — skip malformed or incomplete section items
+      if (!section || !section.section_key) return;
+
       // Store regular sections
       transformedSections[section.section_key] = {
         title: section.title || '',
@@ -225,10 +227,10 @@ export async function getProgramWithSections(slug: string): Promise<{
         const parsedContent = parseStructuredContent(section.content || '');
         
         aboutSection = {
-          title: section.title || DEFAULT_ABOUT_TITLE,
+          title: section.title || SD.ABOUT_TITLE,
           content: parsedContent.length > 0 ? parsedContent : [
             {
-              title: DEFAULT_OVERVIEW_TITLE,
+              title: SD.OVERVIEW_TITLE,
               description: section.content || ''
             }
           ]
@@ -242,7 +244,7 @@ export async function getProgramWithSections(slug: string): Promise<{
           .filter(Boolean)
           .map((url: string) => ({ url: url.trim() }));
         transformedSections[SK.VIDEO] = {
-          title: section.title || DEFAULT_VIDEO_TITLE,
+          title: section.title || SD.VIDEO_TITLE,
           content: section.content || '',
           videoUrl
         };
@@ -250,6 +252,8 @@ export async function getProgramWithSections(slug: string): Promise<{
     });
 
     // Create the final program object with transformed sections
+    const programYear = program.date ? new Date(program.date).getFullYear().toString() : '';
+
     const programWithSections: ProgramWithTransformedSections = {
       ...program,
       sections: transformedSections,
@@ -259,8 +263,8 @@ export async function getProgramWithSections(slug: string): Promise<{
       name: program.title,
       description: program.short_description,
       category: program.program_type,
-      year: program.date ? new Date(program.date).getFullYear().toString() : '',
-      timeline: program.date ? new Date(program.date).getFullYear().toString() : '',
+      year: programYear,
+      timeline: programYear,
       technologies: [],
       imageUrl: program.image_url
     };
@@ -271,4 +275,5 @@ export async function getProgramWithSections(slug: string): Promise<{
     return { data: null, error: typedError };
   }
 }
+
 

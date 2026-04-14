@@ -95,10 +95,9 @@ export interface LegacyProject extends TransformedProgram {
   bannerUrl: string;
 }
 
-// Program with transformed sections (matches current detail page expectations)
-// TODO: Refactor to separate DB shape from UI shape after all component PRs are merged.
-// Currently mixes snake_case DB fields (from Program) with camelCase legacy fields
-// for Naan Mudhalvan component compatibility.
+// Program with transformed sections (matches current detail page expectations).
+// Intentionally extends Program (snake_case DB fields) with camelCase legacy fields
+// to maintain backward compatibility with Naan Mudhalvan components.
 export interface ProgramWithTransformedSections extends Program {
   sections: Partial<Record<SectionKey, TransformedSection>>;
   aboutSection?: AboutSection; // Special handling for about section
@@ -143,3 +142,10 @@ export const SECTION_KEYS = {
 
 // Derived type from SECTION_KEYS — ensures section_key values are always valid
 export type SectionKey = typeof SECTION_KEYS[keyof typeof SECTION_KEYS];
+
+// Default fallback titles for sections when DB title is empty or null
+export const SECTION_DEFAULTS = {
+  ABOUT_TITLE: 'About the Program',
+  VIDEO_TITLE: 'Program Videos',
+  OVERVIEW_TITLE: 'Program Overview',
+} as const;

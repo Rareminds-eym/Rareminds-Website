@@ -1,8 +1,23 @@
+\set ON_ERROR_STOP on
+
 -- =====================================================
 -- PROGRAMS SEED DATA (Generated from Frontend Source)
 -- =====================================================
 -- This file contains program and section data extracted from SuccessStorieslistings.ts
 -- Frontend data is the source of truth for content
+--
+-- SCHEMA CONSTRAINTS (defined in 20260327162650_programme_schema.sql):
+-- programs table:
+--   - id: UUID PRIMARY KEY, auto-generated via uuid_generate_v4() (requires uuid-ossp extension)
+--   - title, slug, program_type, location, date, status, image_url, banner_url, short_description are NOT NULL
+--   - slug is UNIQUE (upsert via ON CONFLICT (slug) DO UPDATE to keep seed as source of truth)
+--   - status must be one of: 'Active', 'Completed', 'In Progress'
+--   - program_type must be one of: 'College', 'University', 'Organization', 'Naan Mudhalvan', 'Government Body', 'School'
+-- program_sections table:
+--   - id: UUID PRIMARY KEY, auto-generated via uuid_generate_v4()
+--   - program_id: UUID FOREIGN KEY references programs(id) ON DELETE CASCADE
+--   - program_id, section_key, title are NOT NULL
+--   - (program_id, section_key) is UNIQUE (upsert via ON CONFLICT (program_id, section_key) DO UPDATE to keep seed as source of truth)
 
 BEGIN;
 -- All 17 programs in a single INSERT for consistency
@@ -27,11 +42,68 @@ INSERT INTO programs (id, title, slug, program_type, location, date, status, ima
 (uuid_generate_v4(), 'AICTE', 'aicte', 'Government Body', 'Pan India', '2025-01-01', 'Completed', 'https://fastly.picsum.photos/id/10/2500/1667.jpg?hmac=J04WWC_ebchx3WwzbM-Z4_KC_LeLBWr5LZMaAkWkF68', 'https://fastly.picsum.photos/id/20/3670/2462.jpg?hmac=CmQ0ln-k5ZqkdtLvVO23LjVAEabZQx2wOaT4pyeG10I', 'Rareminds partnered with All India Council for Technical Education to deliver industry-focused, experiential programs that build job-ready skills and confidence', 15, true),
 (uuid_generate_v4(), 'KSDC', 'ksdc', 'Government Body', 'Karnataka', '2025-01-01', 'In Progress', 'https://fastly.picsum.photos/id/10/2500/1667.jpg?hmac=J04WWC_ebchx3WwzbM-Z4_KC_LeLBWr5LZMaAkWkF68', 'https://fastly.picsum.photos/id/20/3670/2462.jpg?hmac=CmQ0ln-k5ZqkdtLvVO23LjVAEabZQx2wOaT4pyeG10I', 'Rareminds collaborates with Karnataka Skill Development Corporation to deliver comprehensive skill development programs that enhance employability and bridge the skill gap in Karnataka.', 16, true),
 (uuid_generate_v4(), 'Global International School', 'global-international-school', 'School', 'Karnataka', '2023-11-01', 'Completed', 'https://fastly.picsum.photos/id/10/2500/1667.jpg?hmac=J04WWC_ebchx3WwzbM-Z4_KC_LeLBWr5LZMaAkWkF68', 'https://fastly.picsum.photos/id/20/3670/2462.jpg?hmac=CmQ0ln-k5ZqkdtLvVO23LjVAEabZQx2wOaT4pyeG10I', 'Rareminds bridged gaps in traditional teacher training by delivering hands-on, NEP-aligned programs that equipped educators with practical skills, modern tools, and learner-centric strategies.', 17, true)
-ON CONFLICT (slug) DO NOTHING;
+ON CONFLICT (slug) DO UPDATE SET
+  title = EXCLUDED.title,
+  program_type = EXCLUDED.program_type,
+  location = EXCLUDED.location,
+  date = EXCLUDED.date,
+  status = EXCLUDED.status,
+  image_url = EXCLUDED.image_url,
+  banner_url = EXCLUDED.banner_url,
+  short_description = EXCLUDED.short_description,
+  display_order = EXCLUDED.display_order,
+  is_active = EXCLUDED.is_active,
+  updated_at = NOW();
 
 -- =====================================================
 -- PROGRAM SECTIONS SEED DATA (COLLEGE CATEGORY ONLY)
 -- =====================================================
+
+-- Validate all required program slugs exist before inserting sections
+DO $$ BEGIN
+  IF NOT EXISTS (SELECT 1 FROM programs WHERE slug = 'acharya') THEN
+    RAISE EXCEPTION 'Program with slug acharya not found';
+  END IF;
+  IF NOT EXISTS (SELECT 1 FROM programs WHERE slug = 'pes') THEN
+    RAISE EXCEPTION 'Program with slug pes not found';
+  END IF;
+  IF NOT EXISTS (SELECT 1 FROM programs WHERE slug = 'vels') THEN
+    RAISE EXCEPTION 'Program with slug vels not found';
+  END IF;
+  IF NOT EXISTS (SELECT 1 FROM programs WHERE slug = 'dsatm') THEN
+    RAISE EXCEPTION 'Program with slug dsatm not found';
+  END IF;
+  IF NOT EXISTS (SELECT 1 FROM programs WHERE slug = 'bldea') THEN
+    RAISE EXCEPTION 'Program with slug bldea not found';
+  END IF;
+  IF NOT EXISTS (SELECT 1 FROM programs WHERE slug = 'naan-mudhalvan-2024') THEN
+    RAISE EXCEPTION 'Program with slug naan-mudhalvan-2024 not found';
+  END IF;
+  IF NOT EXISTS (SELECT 1 FROM programs WHERE slug = 'naan-mudhalvan-2023') THEN
+    RAISE EXCEPTION 'Program with slug naan-mudhalvan-2023 not found';
+  END IF;
+  IF NOT EXISTS (SELECT 1 FROM programs WHERE slug = 'naan-mudhalvan-4th-sem-2025') THEN
+    RAISE EXCEPTION 'Program with slug naan-mudhalvan-4th-sem-2025 not found';
+  END IF;
+  IF NOT EXISTS (SELECT 1 FROM programs WHERE slug = 'naan-mudhalvan-6th-sem-2025') THEN
+    RAISE EXCEPTION 'Program with slug naan-mudhalvan-6th-sem-2025 not found';
+  END IF;
+  IF NOT EXISTS (SELECT 1 FROM programs WHERE slug = 'naan-mudhalvan-2025') THEN
+    RAISE EXCEPTION 'Program with slug naan-mudhalvan-2025 not found';
+  END IF;
+  IF NOT EXISTS (SELECT 1 FROM programs WHERE slug = 'tripura') THEN
+    RAISE EXCEPTION 'Program with slug tripura not found';
+  END IF;
+  IF NOT EXISTS (SELECT 1 FROM programs WHERE slug = 'tnsdc-iti-spoken-english') THEN
+    RAISE EXCEPTION 'Program with slug tnsdc-iti-spoken-english not found';
+  END IF;
+  IF NOT EXISTS (SELECT 1 FROM programs WHERE slug = 'tnsdc-schools') THEN
+    RAISE EXCEPTION 'Program with slug tnsdc-schools not found';
+  END IF;
+  IF NOT EXISTS (SELECT 1 FROM programs WHERE slug = 'global-international-school') THEN
+    RAISE EXCEPTION 'Program with slug global-international-school not found';
+  END IF;
+END $$;
 
 -- Insert program sections for Acharya (College)
 INSERT INTO program_sections (program_id, section_key, title, content) VALUES
@@ -43,7 +115,10 @@ INSERT INTO program_sections (program_id, section_key, title, content) VALUES
 ((SELECT id FROM programs WHERE slug = 'acharya'), 'strategic_alignment', 'Strategic Alignment with Acharya''s Vision', 'This initiative aligned seamlessly with Acharya Institute''s goals of: Enhancing Industry Readiness Among Graduates. Elevating Communication as a Core Career Skill. Enabling Seamless Transition from Classroom to Corporate. Strengthening Placement Outcomes through Holistic Training.'),
 ((SELECT id FROM programs WHERE slug = 'acharya'), 'video', 'Program Videos', 'https://www.pexels.com/download/video/4625286/,https://www.pexels.com/download/video/4625286/,https://www.pexels.com/download/video/4625286/'),
 ((SELECT id FROM programs WHERE slug = 'acharya'), 'conclusion', 'Crafting Communicators, Not Just Candidates', 'At Acharya Institute, Rareminds went beyond basic communication training. We helped students shape their voice, articulate their value, and enter the professional world with poise and purpose. The impact was clear: sharper skills, stronger confidence, and a generation ready to make their mark.')
-ON CONFLICT (program_id, section_key) DO NOTHING;
+ON CONFLICT (program_id, section_key) DO UPDATE SET
+  title = EXCLUDED.title,
+  content = EXCLUDED.content,
+  updated_at = NOW();
 -- Insert program sections for PES (College)
 INSERT INTO program_sections (program_id, section_key, title, content) VALUES
 ((SELECT id FROM programs WHERE slug = 'pes'), 'introduction', 'Introduction', 'The Rareminds Bootcamp at PES Engineering College, Mandya, contributed to transform aspiring engineers into confident, industry-ready developers. Through an intensive, 45-hour Web Development Bootcamp, we bridged the classroom-to-career gap with a hands-on, real-world coding experience that left students skilled, motivated, and ready for the digital future.'),
@@ -54,7 +129,10 @@ Learning Approach: Designed around active problem-solving, teamwork, and real-ti
 ((SELECT id FROM programs WHERE slug = 'pes'), 'strategic_alignment', 'Strategic Alignment with PES College Goals', 'This initiative reinforced PES Engineering College''s commitment to: Skill-Based, Industry-Ready Learning. NAAC and NIRF Enhancement through Outcome-Focused Programs. Innovation and Startup Culture among Students. Improved Placement Readiness with Practical Tech Exposure. NEP 2020 Alignment through experiential, future-focused education.'),
 ((SELECT id FROM programs WHERE slug = 'pes'), 'video', 'Program Videos', 'https://www.pexels.com/download/video/4625286/,https://www.pexels.com/download/video/4625286/,https://www.pexels.com/download/video/4625286/'),
 ((SELECT id FROM programs WHERE slug = 'pes'), 'conclusion', 'Turning Coders into Creators', 'At PES Engineering College, Rareminds didn''t just teach programming — we built a culture of innovation, confidence, and readiness. By empowering students to develop real solutions, communicate effectively, and collaborate as tech professionals, we helped transform the campus into a launchpad for tomorrow''s digital leaders.')
-ON CONFLICT (program_id, section_key) DO NOTHING;
+ON CONFLICT (program_id, section_key) DO UPDATE SET
+  title = EXCLUDED.title,
+  content = EXCLUDED.content,
+  updated_at = NOW();
 -- Insert program sections for VELS (College)
 INSERT INTO program_sections (program_id, section_key, title, content) VALUES
 ((SELECT id FROM programs WHERE slug = 'vels'), 'introduction', 'Introduction', 'Rareminds training programs at VELS University to reshape technical education for first-year students, delivering high-impact, project-based training in emerging technologies. The initiative successfully bridged classroom learning with real-world application, equipping students with future-ready skills and confidence for the evolving digital workplace.'),
@@ -65,7 +143,10 @@ Web Full Stack Development: Two 45-hour experiential training programs were deli
 ((SELECT id FROM programs WHERE slug = 'vels'), 'strategic_alignment', 'Strategic Alignment with VELS University Goals', 'This initiative supported key institutional objectives such as: NAAC & NIRF enhancement through experiential learning and tech integration. Improved employability outcomes via skill-based, industry-aligned content. Curriculum innovation, aligned with NEP 2020 and industry expectations. Higher student engagement contributes to improved retention and satisfaction.'),
 ((SELECT id FROM programs WHERE slug = 'vels'), 'video', 'Program Videos', 'https://www.pexels.com/download/video/4625286/,https://www.pexels.com/download/video/4625286/,https://www.pexels.com/download/video/4625286/'),
 ((SELECT id FROM programs WHERE slug = 'vels'), 'conclusion', 'Conclusion', 'This successful collaboration with VELS University demonstrated Rareminds'' ability to deliver measurable outcomes, transform student learning, and align with institutional goals. By turning classrooms into innovation labs, we empowered students to become creators, not just consumers of technology.')
-ON CONFLICT (program_id, section_key) DO NOTHING;
+ON CONFLICT (program_id, section_key) DO UPDATE SET
+  title = EXCLUDED.title,
+  content = EXCLUDED.content,
+  updated_at = NOW();
 -- Insert program sections for DSATM (College)
 INSERT INTO program_sections (program_id, section_key, title, content) VALUES
 ((SELECT id FROM programs WHERE slug = 'dsatm'), 'introduction', 'The Real-World Leap: How DSATM Students Gained a Competitive Edge', 'Rareminds has been a long-standing training partner for DSATM, driving student employability through curated, career-oriented workshops. By integrating both technical and soft skill components, these programs empowered engineering and management students with practical tools to thrive in professional settings.'),
@@ -78,7 +159,10 @@ Civil Engineering Students: Day 1: Surveying & geospatial analysis using Total S
 ((SELECT id FROM programs WHERE slug = 'dsatm'), 'strategic_alignment', 'Strategic Alignment with DSATM Goals', 'This engagement supported DSATM''s mission to: Enhance student employability through skill-based learning. Encourage interdisciplinary exposure and industry linkage. Build digital and workplace readiness across academic and administrative stakeholders. Foster a continuous learning culture in both student and staff communities.'),
 ((SELECT id FROM programs WHERE slug = 'dsatm'), 'video', 'Program Videos', 'https://www.pexels.com/download/video/4625286/,https://www.pexels.com/download/video/4625286/,https://www.pexels.com/download/video/4625286/'),
 ((SELECT id FROM programs WHERE slug = 'dsatm'), 'conclusion', 'Conclusion', 'Rareminds'' collaboration with DSATM highlights how focused, practical training can drive institutional growth, individual confidence, and long-term career success. By delivering real-world learning across multiple touchpoints, this partnership continues to shape a more future-ready, skilled campus ecosystem.')
-ON CONFLICT (program_id, section_key) DO NOTHING;
+ON CONFLICT (program_id, section_key) DO UPDATE SET
+  title = EXCLUDED.title,
+  content = EXCLUDED.content,
+  updated_at = NOW();
 -- Note: Visvesvaraya Technological University has no sections in frontend data, so no program_sections entries are added for it.
 -- =====================================================
 -- BLDEA PROGRAM SECTIONS
@@ -93,7 +177,10 @@ INSERT INTO program_sections (program_id, section_key, title, content) VALUES
 ((SELECT id FROM programs WHERE slug = 'bldea'), 'strategic_alignment', 'Strategic Alignment with BLDEA Goals', 'This initiative directly supported BLDEA''s commitment to: NEP 2020 Integration in Teaching Practice. Structured Professional Development for Staff. Improved Student Engagement through Active Methodologies. Internal Leadership Capacity through Peer Mentoring Models. Outcome-Based Approaches in Academic Delivery.'),
 ((SELECT id FROM programs WHERE slug = 'bldea'), 'video', 'Program Videos', 'https://www.pexels.com/download/video/4625286/,https://www.pexels.com/download/video/4625286/,https://www.pexels.com/download/video/4625286/'),
 ((SELECT id FROM programs WHERE slug = 'bldea'), 'conclusion', 'Turning Teachers into Changemakers', 'At BLDEA Schools, Rareminds didn''t just train teachers—we helped shift the culture of classrooms. By building both confidence and capability, our approach enabled teachers to become reflective practitioners who lead learning with clarity, care, and consistency. Together, we laid the foundation for a sustainable teaching excellence model rooted in purpose, pedagogy, and practice.')
-ON CONFLICT (program_id, section_key) DO NOTHING;
+ON CONFLICT (program_id, section_key) DO UPDATE SET
+  title = EXCLUDED.title,
+  content = EXCLUDED.content,
+  updated_at = NOW();
 -- =====================================================
 -- NAAN MUDHALVAN CATEGORY PROGRAM SECTIONS
 -- =====================================================
@@ -113,7 +200,10 @@ Student Engagement & Retention: Project-based methodologies significantly improv
 Workforce Readiness: The initiative helped create a skilled talent pipeline in critical sectors supporting Tamil Nadu economic and industrial development.'),
 ((SELECT id FROM programs WHERE slug = 'naan-mudhalvan-2024'), 'video', 'Program Videos', 'https://www.pexels.com/download/video/4625286/,https://www.pexels.com/download/video/4625286/,https://www.pexels.com/download/video/4625286/'),
 ((SELECT id FROM programs WHERE slug = 'naan-mudhalvan-2024'), 'conclusion', 'Conclusion', 'The collaboration between Rareminds and TNSDC''s Naan Mudhalvan program stands as a model for impactful public–private partnerships in higher education. By turning traditional classrooms into hubs of innovation and applied learning, Rareminds empowered thousands of students to transition from passive learners to confident, industry-ready contributors across agriculture, food technology, and EV sectors. This partnership demonstrates how purposeful education reform can drive future-ready outcomes at scale.')
-ON CONFLICT (program_id, section_key) DO NOTHING;
+ON CONFLICT (program_id, section_key) DO UPDATE SET
+  title = EXCLUDED.title,
+  content = EXCLUDED.content,
+  updated_at = NOW();
 -- Insert program sections for Naan Mudhalvan 2023
 INSERT INTO program_sections (program_id, section_key, title, content) VALUES
 ((SELECT id FROM programs WHERE slug = 'naan-mudhalvan-2023'), 'introduction', 'Introduction', 'Rareminds proudly partnered with the Tamil Nadu Skill Development Corporation (TNSDC) under the Naan Mudhalvan flagship program to significantly enhance the technical education landscape for Arts and Science students across Tamil Nadu. This initiative focused on delivering high-impact, project-based training in critical emerging technologies, effectively bridging traditional classroom learning with practical, real-world applications. The collaboration equipped students with future-ready skills and the confidence essential for success in the evolving digital and industrial workforce.'),
@@ -129,7 +219,10 @@ Student Engagement & Retention: Project-based learning significantly increased s
 Workforce Readiness: The program nurtured a talent pipeline in sectors critical to Tamil Nadu socio-economic development.'),
 ((SELECT id FROM programs WHERE slug = 'naan-mudhalvan-2023'), 'video', 'Program Videos', 'https://www.pexels.com/download/video/4625286/,https://www.pexels.com/download/video/4625286/,https://www.pexels.com/download/video/4625286/'),
 ((SELECT id FROM programs WHERE slug = 'naan-mudhalvan-2023'), 'conclusion', 'Conclusion', 'The successful collaboration between Rareminds and the TNSDC''s Naan Mudhalvan program demonstrated Rareminds'' proven capacity to deliver measurable impact, reimagine classroom learning, and align with both institutional and governmental priorities. By turning classrooms into active innovation spaces, Rareminds empowered thousands of students to transition from passive learners to confident contributors in the fields of technology, agriculture, and sustainability. This initiative remains a shining example of how public-private partnerships can reshape education for a future-ready India.')
-ON CONFLICT (program_id, section_key) DO NOTHING;
+ON CONFLICT (program_id, section_key) DO UPDATE SET
+  title = EXCLUDED.title,
+  content = EXCLUDED.content,
+  updated_at = NOW();
 
 -- Insert program sections for Naan Mudhalvan 4th sem 2025
 INSERT INTO program_sections (program_id, section_key, title, content) VALUES
@@ -146,7 +239,10 @@ Student Engagement: Strengthened participation through experiential learning.
 Workforce Readiness: Built a pipeline of skilled graduates.'),
 ((SELECT id FROM programs WHERE slug = 'naan-mudhalvan-4th-sem-2025'), 'video', 'Program Videos', 'https://www.pexels.com/download/video/4625286/,https://www.pexels.com/download/video/4625286/,https://www.pexels.com/download/video/4625286/'),
 ((SELECT id FROM programs WHERE slug = 'naan-mudhalvan-4th-sem-2025'), 'conclusion', 'Conclusion', 'The Rareminds–TNSDC collaboration under the Naan Mudhalvan initiative demonstrates strong industry-academia synergy. By combining innovation, hands-on learning, and outcome-driven delivery, Rareminds enabled thousands of students to transition into confident, future-ready professionals.')
-ON CONFLICT (program_id, section_key) DO NOTHING;
+ON CONFLICT (program_id, section_key) DO UPDATE SET
+  title = EXCLUDED.title,
+  content = EXCLUDED.content,
+  updated_at = NOW();
 -- Insert program sections for Naan Mudhalvan 6th sem 2025
 INSERT INTO program_sections (program_id, section_key, title, content) VALUES
 ((SELECT id FROM programs WHERE slug = 'naan-mudhalvan-6th-sem-2025'), 'introduction', 'Introduction', 'Rareminds partnered with the Tamil Nadu Skill Development Corporation (TNSDC) under the "Naan Mudhalvan" flagship initiative to enhance technical education for Arts and Science students across Tamil Nadu. The program focused on delivering project-based training in emerging technologies, bridging academic learning with practical industry application.'),
@@ -160,7 +256,10 @@ Student Transformation: Helped thousands of students transition from passive lea
 Scalable Impact: This program stands as a scalable model for education transformation and skill empowerment across India.'),
 ((SELECT id FROM programs WHERE slug = 'naan-mudhalvan-6th-sem-2025'), 'video', 'Program Videos', 'https://www.pexels.com/download/video/4625286/,https://www.pexels.com/download/video/4625286/,https://www.pexels.com/download/video/4625286/'),
 ((SELECT id FROM programs WHERE slug = 'naan-mudhalvan-6th-sem-2025'), 'conclusion', 'Conclusion', 'The Rareminds–TNSDC collaboration under the Naan Mudhalvan initiative highlights the effectiveness of large-scale, outcome-driven training. By equipping students with practical skills and industry exposure, the program strengthened workforce readiness and created a scalable model for education transformation.')
-ON CONFLICT (program_id, section_key) DO NOTHING;
+ON CONFLICT (program_id, section_key) DO UPDATE SET
+  title = EXCLUDED.title,
+  content = EXCLUDED.content,
+  updated_at = NOW();
 -- Insert program sections for Naan Mudhalvan 2025
 INSERT INTO program_sections (program_id, section_key, title, content) VALUES
 ((SELECT id FROM programs WHERE slug = 'naan-mudhalvan-2025'), 'introduction', 'Introduction', 'Rareminds proudly partnered with the Tamil Nadu Skill Development Corporation (TNSDC) under the "Naan Mudhalvan" flagship initiative to transform technical education for Arts and Science students across Tamil Nadu. This program focused on delivering high-impact, project-based training in critical emerging technologies—bridging classroom theory with real-world practice. The partnership empowered students with future-ready skills, practical exposure, and the confidence to meet the demands of an evolving digital and industrial workforce.'),
@@ -176,7 +275,10 @@ Student Engagement: Elevate learning interest through experiential pedagogy.
 Workforce Readiness: Create a pipeline of skilled graduates prepared for high-demand industries.'),
 ((SELECT id FROM programs WHERE slug = 'naan-mudhalvan-2025'), 'video', 'Program Videos', 'https://www.pexels.com/download/video/4625286/,https://www.pexels.com/download/video/4625286/,https://www.pexels.com/download/video/4625286/'),
 ((SELECT id FROM programs WHERE slug = 'naan-mudhalvan-2025'), 'conclusion', 'Conclusion', 'The Rareminds–TNSDC collaboration under the Naan Mudhalvan initiative exemplifies impactful industry-academia synergy. By integrating innovation, hands-on learning, and outcome-driven models, Rareminds helped thousands of students transition from passive learners to future-ready professionals. This program stands as a scalable model for education transformation and skill empowerment across India.')
-ON CONFLICT (program_id, section_key) DO NOTHING;
+ON CONFLICT (program_id, section_key) DO UPDATE SET
+  title = EXCLUDED.title,
+  content = EXCLUDED.content,
+  updated_at = NOW();
 -- =====================================================
 -- GOVERNMENT BODY CATEGORY PROGRAMS
 -- =====================================================
@@ -197,7 +299,10 @@ INSERT INTO program_sections (program_id, section_key, title, content) VALUES
 ((SELECT id FROM programs WHERE slug = 'tripura'), 'strategic_alignment', 'Strategic Alignment with TSDC Goals', 'This initiative directly supported TSDC''s mission to strengthen global employability for regional youth, bridge skill gaps through targeted communication and interview training, prepare candidates for diverse cultural and professional environments, and enhance placement success rates through practical readiness.'),
 ((SELECT id FROM programs WHERE slug = 'tripura'), 'video', 'Program Videos', 'https://www.pexels.com/download/video/4625286/,https://www.pexels.com/download/video/4625286/,https://www.pexels.com/download/video/4625286/'),
 ((SELECT id FROM programs WHERE slug = 'tripura'), 'conclusion', 'Turning Aspirants into Global Professionals', 'Through this focused intervention, Rareminds — under the direct leadership and facilitation of CEO Dr. Subhashini — empowered Tripura''s overseas placement aspirants with the tools, confidence, and global readiness essential for success. The program served not only as a skill-building platform but also as a mindset transformation, directly contributing to TSDC''s vision of creating globally competitive talent.')
-ON CONFLICT (program_id, section_key) DO NOTHING;
+ON CONFLICT (program_id, section_key) DO UPDATE SET
+  title = EXCLUDED.title,
+  content = EXCLUDED.content,
+  updated_at = NOW();
 -- Insert program sections for TNSDC ITI (Spoken English)
 INSERT INTO program_sections (program_id, section_key, title, content) VALUES
 ((SELECT id FROM programs WHERE slug = 'tnsdc-iti-spoken-english'), 'introduction', 'Introduction', 'Rareminds partnered with Tamil Nadu Skill Development Corporation (TNSDC) to improve English and personality development among students in government welfare hostels. This was hands-on training that equipped students with critical communication skills and confidence for their future academic and professional life.'),
@@ -208,7 +313,10 @@ Learning & Assessment: The curriculum used open-source documentary movies for li
 ((SELECT id FROM programs WHERE slug = 'tnsdc-iti-spoken-english'), 'strategic_alignment', 'Strategic Alignment with TNSDC & Government Goals', 'The initiative supported TNSDC and the Government of Tamil Nadu''s key objectives: Empowering underprivileged students by training life and communication skills in Tribal, ADW, BC, MBC, DNC, and Minority welfare hostels. Better job prospects and social integration by building students'' confidence and communication skills, which will lead to better future opportunities. Cambridge University Press ensures accountability and quality assurance through independent standardized assessments to measure learning outcomes. Practical English for daily use and future opportunities, not just academic proficiency.'),
 ((SELECT id FROM programs WHERE slug = 'tnsdc-iti-spoken-english'), 'video', 'Program Videos', 'https://www.pexels.com/download/video/4625286/,https://www.pexels.com/download/video/4625286/,https://www.pexels.com/download/video/4625286/'),
 ((SELECT id FROM programs WHERE slug = 'tnsdc-iti-spoken-english'), 'conclusion', 'Building Lasting Confidence', 'Rareminds delivers measurable impact in English communication and personality development across diverse learner groups. By aligning with the government''s student empowerment goals, Rareminds focuses on practical, confidence-building interventions grounded in the CEFR framework, ensuring structured and outcome-driven progress. While rote learning has its place in foundational skill-building, Rareminds integrates it with real-world communication strategies to foster both accuracy and fluency. Students gain the ability to apply language meaningfully—in interviews, group settings, and digital communication. The program is adaptable, culturally relevant, and designed to support lifelong language confidence across regions and learner levels.')
-ON CONFLICT (program_id, section_key) DO NOTHING;
+ON CONFLICT (program_id, section_key) DO UPDATE SET
+  title = EXCLUDED.title,
+  content = EXCLUDED.content,
+  updated_at = NOW();
 
 -- Insert program sections for TNSDC Schools
 INSERT INTO program_sections (program_id, section_key, title, content) VALUES
@@ -239,7 +347,10 @@ INSERT INTO program_sections (program_id, section_key, title, content) VALUES
 'conclusion', 
 'Conclusion', 
 'This successful GHSS project underscores Rareminds'' dedication to delivering high-quality, large-scale vocational training in collaboration with government bodies. By empowering nearly 2,000 students with practical knowledge and entrepreneurial insights, we are actively shaping a more skilled, confident, and future-ready generation.')
-ON CONFLICT (program_id, section_key) DO NOTHING;
+ON CONFLICT (program_id, section_key) DO UPDATE SET
+  title = EXCLUDED.title,
+  content = EXCLUDED.content,
+  updated_at = NOW();
 
 -- Note: AICTE and KSDC have no sections in frontend data, so no program_sections entries are added for them.
 
@@ -259,7 +370,10 @@ INSERT INTO program_sections (program_id, section_key, title, content) VALUES
 ((SELECT id FROM programs WHERE slug = 'global-international-school'), 'strategic_alignment', 'Strategic Alignment with Global International School Goals', 'This initiative directly supported the school''s goals around: Teacher Capacity Building and NEP Integration. Rapid Upskilling with Practical Teaching Tools. Personalized Classroom Innovation Initiatives. Enhanced Student Engagement and Retention.'),
 ((SELECT id FROM programs WHERE slug = 'global-international-school'), 'video', 'Program Videos', 'https://www.pexels.com/download/video/4625286/,https://www.pexels.com/download/video/4625286/,https://www.pexels.com/download/video/4625286/'),
 ((SELECT id FROM programs WHERE slug = 'global-international-school'), 'conclusion', 'Conclusion: Turning Educators into Enablers', 'At Global International School, Rareminds supported teachers to go beyond delivery. By equipping them with modern strategies, tech tools, and learner-focused frameworks, we helped lay the groundwork for classrooms that are engaging, inclusive, and impact-driven. It was more than training—it was a catalyst for everyday transformation.')
-ON CONFLICT (program_id, section_key) DO NOTHING;
+ON CONFLICT (program_id, section_key) DO UPDATE SET
+  title = EXCLUDED.title,
+  content = EXCLUDED.content,
+  updated_at = NOW();
 
 -- =====================================================
 -- END OF SEED FILE
@@ -267,10 +381,10 @@ ON CONFLICT (program_id, section_key) DO NOTHING;
 -- Total Programs: 17
 -- Total Categories: College, University, Naan Mudhalvan, Government Body, School
 -- =====================================================
--- =====================================================
--- VERIFICATION
--- =====================================================
-
-SELECT COUNT(*) AS total_programs FROM programs;
 
 COMMIT;
+
+
+
+
+
