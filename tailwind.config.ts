@@ -12,6 +12,10 @@ export default {
       padding: '1rem',
     },
     extend: {
+      width: {
+        'sidebar': '220px',
+        'thumb': '110px',
+      },
       fontFamily: {
         sans: ['Poppins', 'sans-serif'],
       },

@@ -132,7 +132,7 @@ export const MediaGallery = ({ media, title = "Media Gallery", compact = false }
 
           {/* RIGHT: Thumbnail sidebar */}
           <div
-            className="flex-shrink-0 overflow-hidden rounded-lg w-[220px]"
+            className="flex-shrink-0 overflow-hidden rounded-lg w-sidebar"
             style={{
               height: sidebarHeight > 0 ? `${sidebarHeight}px` : "auto",
             }}
@@ -261,7 +261,7 @@ export const MediaGallery = ({ media, title = "Media Gallery", compact = false }
                   <button
                     key={`mobile-${loopRound}-${actualIndex}-${getMediaUrl(item)}`}
                     onClick={() => setSelectedIndex(actualIndex)}
-                    className={`relative flex-shrink-0 rounded-lg overflow-hidden transition-all w-[110px] h-[72px] ${
+                    className={`relative flex-shrink-0 rounded-lg overflow-hidden transition-all w-thumb h-[72px] ${
                       isActive
                         ? "ring-2 ring-blue-500"
                         : "ring-1 ring-gray-200"
