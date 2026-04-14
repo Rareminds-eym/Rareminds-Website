@@ -199,7 +199,7 @@ const ConclusionSection: React.FC<ConclusionSectionProps> = ({ section }) => {
                 {paragraphs.length > 1 ? (
                   paragraphs.map((para, idx) => (
                     <motion.p
-                      key={`para-${idx}-${para.slice(0, 20)}`}
+                      key={`para-${idx}-${para.slice(0, 50).replace(/\s+/g, '-')}`}
                       className={`text-gray-800 text-justify ${
                         isMobile ? 'text-[0.72rem] leading-[1.4] mb-2' : 'text-base leading-normal mb-4'
                       }`}

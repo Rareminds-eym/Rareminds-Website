@@ -163,7 +163,7 @@ export const MediaGallery = ({ media, title = "Media Gallery", compact = false }
 
                     return (
                       <button
-                        key={`${loopRound}-${actualIndex}`}
+                        key={`desktop-${loopRound}-${actualIndex}-${getMediaUrl(item)}`}
                         onClick={() => setSelectedIndex(actualIndex)}
                         className={`relative w-full rounded-lg overflow-hidden flex-shrink-0 transition-all ${
                           isActive
@@ -259,7 +259,7 @@ export const MediaGallery = ({ media, title = "Media Gallery", compact = false }
 
                 return (
                   <button
-                    key={`${loopRound}-${actualIndex}`}
+                    key={`mobile-${loopRound}-${actualIndex}-${getMediaUrl(item)}`}
                     onClick={() => setSelectedIndex(actualIndex)}
                     className={`relative flex-shrink-0 rounded-lg overflow-hidden transition-all w-[110px] h-[72px] ${
                       isActive

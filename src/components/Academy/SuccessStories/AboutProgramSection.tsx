@@ -1,8 +1,6 @@
 import { motion } from "framer-motion";
 import { Monitor, Code } from 'lucide-react';
 
-const NAAN_MUDHALVAN_SLUG = 'naan-mudhalvan-2025';
-
 // Technology mappings for specific card titles
 const TECHNOLOGY_MAPPINGS: Record<string, string[]> = {
   'Industrial Metaverse': ['Industrial Metaverse', 'VR'],
@@ -176,7 +174,7 @@ function AboutProgramSection({ section, technologies, programData }: AboutProgra
                 >
                   {getTechnologies(0, section.content[0]?.title || '').map((tech, index) => (
                     <motion.span
-                      key={tech}
+                      key={`tech-left-${index}-${tech}`}
                       initial={{ opacity: 0, scale: 0.85 }}
                       whileInView={{ opacity: 1, scale: 1 }}
                       transition={{ duration: 0.3, delay: 0.55 + index * 0.07 }}
@@ -251,7 +249,7 @@ function AboutProgramSection({ section, technologies, programData }: AboutProgra
                 >
                   {getTechnologies(1, section.content[1]?.title || '').map((tech, index) => (
                     <motion.span
-                      key={tech}
+                      key={`tech-right-${index}-${tech}`}
                       initial={{ opacity: 0, scale: 0.85 }}
                       whileInView={{ opacity: 1, scale: 1 }}
                       transition={{ duration: 0.3, delay: 0.6 + index * 0.07 }}
