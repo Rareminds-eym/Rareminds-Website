@@ -15,6 +15,8 @@ interface AboutProgramSectionProps {
     content: Array<{
       title: string;
       description: string;
+      students?: string;
+      icon?: string;
     }>;
   };
   technologies: string[];
@@ -27,7 +29,7 @@ interface AboutProgramSectionProps {
 
 function AboutProgramSection({ section, technologies, programData }: AboutProgramSectionProps) {
  
-  const isNaanMudhalvan = programData?.slug === NAAN_MUDHALVAN_SLUG;
+  const isNaanMudhalvan = programData?.slug?.includes('naan-mudhalvan') ?? false;
 
  
   const getTechnologies = (cardIndex: number, cardTitle: string): string[] => {
@@ -62,7 +64,7 @@ function AboutProgramSection({ section, technologies, programData }: AboutProgra
         <div className="w-full px-8 mb-12">
           <div className="max-w-4xl mx-auto">
             <p className="text-gray-600 text-center leading-relaxed">
-              {programData?.sections?.about?.content || ''}
+              {programData?.sections?.about?.content || section.content[0]?.description || ''}
             </p>
           </div>
         </div>
@@ -84,10 +86,19 @@ function AboutProgramSection({ section, technologies, programData }: AboutProgra
                   }`}
                 >
                   <div className="mb-4">
+                    {program.icon && (
+                      <div className="text-3xl mb-3">{program.icon}</div>
+                    )}
                     <h3 className="text-lg font-bold mb-2">{program.title}</h3>
                     <p className="text-blue-100 text-sm mb-4">
                       {program.description}
                     </p>
+                    {program.students && (
+                      <div className="mt-4">
+                        <div className="text-3xl font-bold">{program.students}</div>
+                        <div className="text-blue-100 text-sm">Students</div>
+                      </div>
+                    )}
                   </div>
                 </motion.div>
               ))}

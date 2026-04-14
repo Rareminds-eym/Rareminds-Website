@@ -14,8 +14,24 @@ import {
 import CountUp from 'react-countup';
 import { useInView } from 'react-intersection-observer';
 
-const statIcons = [UsersIcon, CodeBracketIcon, StarIcon, ArrowTrendingUpIcon, ChartBarIcon, RocketLaunchIcon, AcademicCapIcon, CheckCircleIcon];
-const pillIcons = [LightBulbIcon, ChatBubbleLeftRightIcon, AcademicCapIcon, CheckCircleIcon];
+const statIcons = [
+  UsersIcon, 
+  CodeBracketIcon, 
+  StarIcon, 
+  ArrowTrendingUpIcon, 
+  ChartBarIcon, 
+  RocketLaunchIcon, 
+  AcademicCapIcon, 
+  CheckCircleIcon
+];
+
+const pillIcons = [
+  LightBulbIcon, 
+  ChatBubbleLeftRightIcon, 
+  AcademicCapIcon, 
+  CheckCircleIcon
+];
+
 const radiusPattern = ["50px 15px 50px 15px", "15px 50px 15px 50px"];
 
 function parseImpactContent(content: string): {
@@ -31,16 +47,15 @@ function parseImpactContent(content: string): {
   const pills: { text: string }[] = [];
 
   const statRegex = /\b(\d+(?:,\d{3})*(?:\.\d+)?[%+]?)\b/;
-
   const stopWords = new Set([
     "of","in","the","a","an","and","or","to","for","with","that","this",
     "their","they","them","were","was","are","is","by","on","at","from",
     "through","across","via","into","as","its","it","who","which","where",
     "when","how","all","both","each","every","any","over","under","per",
     "have","has","had","been","being","be","more","than","least","up",
-    "participants","students","reported","demonstrated","achieved",
-    "completed","expressed","showed","observed","noted","said",
-    "highlighted","stated","indicated","trained","improved","built",
+    "participants","students","reported","demonstrated","achieved","completed",
+    "expressed","showed","observed","noted","said","highlighted","stated",
+    "indicated","trained","improved","built",
   ]);
 
   for (const sentence of sentences) {
@@ -52,6 +67,7 @@ function parseImpactContent(content: string): {
           const numberWithSymbol = sentence.match(new RegExp(`\\b${value}[%+]`));
           if (numberWithSymbol) value = numberWithSymbol[0];
         }
+
         const words = sentence
           .replace(/[^a-zA-Z0-9\s]/g, " ")
           .split(/\s+/)
@@ -59,11 +75,17 @@ function parseImpactContent(content: string): {
             const lower = w.toLowerCase();
             return w.length > 2 && !stopWords.has(lower) && !/\d/.test(w);
           });
+
         const label = words
           .slice(0, 3)
           .map((w) => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase())
           .join(" ");
-        stats.push({ value, label: label || "Key Metric", desc: sentence.replace(/\.$/, "") });
+
+        stats.push({ 
+          value, 
+          label: label || "Key Metric", 
+          desc: sentence.replace(/\.$/, "") 
+        });
         continue;
       }
     }
@@ -130,7 +152,6 @@ export default function KeyOutcomesSection({ section }: KeyOutcomesSectionProps)
 
   return (
     <div className="mb-12" ref={ref}>
-
       {/* Section Title */}
       <motion.h2
         variants={fadeUpVariant}
@@ -145,11 +166,13 @@ export default function KeyOutcomesSection({ section }: KeyOutcomesSectionProps)
 
       {/* Stat Cards */}
       {hasStats && (
-        <div className={`grid gap-8 mb-8 ${
-          stats.length === 1
-            ? 'grid-cols-1 justify-items-center'
-            : 'grid-cols-1 sm:grid-cols-2'
-        }`}>
+        <div
+          className={`grid gap-8 mb-8 ${
+            stats.length === 1
+              ? 'grid-cols-1 justify-items-center'
+              : 'grid-cols-1 sm:grid-cols-2'
+          }`}
+        >
           {stats.map((item, i) => {
             const Icon = statIcons[i % statIcons.length];
             const radius = radiusPattern[i % 2];
@@ -159,7 +182,8 @@ export default function KeyOutcomesSection({ section }: KeyOutcomesSectionProps)
 
             return (
               <motion.div
-                key={`stat-${item.value}-${item.label}`}
+                // FIX #2: Include index in key to prevent duplicates
+                key={`stat-${i}-${item.value}-${item.label}`}
                 variants={variant}
                 initial="hidden"
                 whileInView="visible"
@@ -192,7 +216,14 @@ export default function KeyOutcomesSection({ section }: KeyOutcomesSectionProps)
                     zIndex: 10,
                   }}
                 >
-                  <Icon style={{ width: "20px", height: "20px", color: "#3b82f6", strokeWidth: 1.8 }} />
+                  <Icon 
+                    style={{ 
+                      width: "20px", 
+                      height: "20px", 
+                      color: "#3b82f6", 
+                      strokeWidth: 1.8 
+                    }} 
+                  />
                 </motion.div>
 
                 {/* Stat value */}
@@ -209,13 +240,21 @@ export default function KeyOutcomesSection({ section }: KeyOutcomesSectionProps)
                     <CountUp
                       start={0}
                       end={(() => {
-                        const parsed = parseFloat(item.value.replace(/[^0-9.]/g, ''));
-                        return Math.max(0, isNaN(parsed) ? 0 : parsed);
+                        // FIX #1: Preserve negative numbers, keep minus sign in regex
+                        const parsed = parseFloat(item.value.replace(/[^0-9.-]/g, ''));
+                        // Only return 0 if NaN, don't clamp negative values
+                        return isNaN(parsed) ? 0 : parsed;
                       })()}
                       duration={2}
                       separator=","
                       decimals={item.value.includes('.') ? 2 : 0}
-                      suffix={item.value.includes('%') ? '%' : item.value.includes('+') ? '+' : ''}
+                      suffix={
+                        item.value.includes('%') 
+                          ? '%' 
+                          : item.value.includes('+') 
+                          ? '+' 
+                          : ''
+                      }
                     />
                   ) : (
                     <span>{item.value}</span>
@@ -254,12 +293,17 @@ export default function KeyOutcomesSection({ section }: KeyOutcomesSectionProps)
 
       {/* Pill Cards */}
       {pills.length > 0 && (
-        <div className={`grid gap-5 ${
-          stats.length === 1 ? 'mt-8' : 'mt-16'
-        } grid-cols-1 sm:grid-cols-2`}>
+        <div
+          className={`grid gap-5 ${
+            stats.length === 1 ? 'mt-8' : 'mt-16'
+          } grid-cols-1 sm:grid-cols-2`}
+        >
           {pills.map((pill, i) => {
             const Icon = pillIcons[i % pillIcons.length];
-            const isLastOdd = pills.length % 2 === 1 && i === pills.length - 1 && pills.length > 1;
+            const isLastOdd = 
+              pills.length % 2 === 1 && 
+              i === pills.length - 1 && 
+              pills.length > 1;
             const delay = 0.2 + (hasStats ? stats.length * 0.12 : 0) + i * 0.1;
 
             return (
@@ -293,9 +337,15 @@ export default function KeyOutcomesSection({ section }: KeyOutcomesSectionProps)
                     boxShadow: "0 1px 4px rgba(0,0,0,0.08)",
                   }}
                 >
-                  <Icon style={{ width: "16px", height: "16px", color: "#3b82f6", strokeWidth: 1.8 }} />
+                  <Icon 
+                    style={{ 
+                      width: "16px", 
+                      height: "16px", 
+                      color: "#3b82f6", 
+                      strokeWidth: 1.8 
+                    }} 
+                  />
                 </motion.div>
-
                 <motion.p
                   variants={fadeUpVariant}
                   initial="hidden"
