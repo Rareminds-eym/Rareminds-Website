@@ -14,7 +14,7 @@
 -- content JSONB shapes (enforced by CHECK constraints):
 --   text    → { "text": "..." }
 --   cards   → { "items": [ { "title": "...", "description": "..." }, ... ] }
---   stats   → { "items": [ { "icon": "...", "value": "...", "label": "..." }, ... ] }
+--   stats   → { "items": [ { "value": "...", "label": "..." }, ... ] }
 --   courses → { "courses": [ { "title": "...", "universities": [ ... ] }, ... ] }
 --
 -- DECISIONS:
@@ -278,8 +278,8 @@ JOIN (VALUES
      1),
     ('about', 'cards', 'About the Program', NULL,
      '{"items": [
-         {"title": "Web Development Bootcamp", "description": "From July 24th to 29th, 2023, Rareminds delivered a comprehensive Web Development Bootcamp focused on Full Stack skills. The program immersed students in practical learning, from HTML, CSS, and JavaScript to React, backend integration, APIs, and deployment techniques.", "tags": ["HTML", "CSS", "JavaScript", "React"]},
-         {"title": "Hands-On Learning", "description": "Designed around active problem-solving, teamwork, and real-time feedback, this initiative gave students the tools to think like developers and build like professionals.", "tags": ["Problem Solving", "Teamwork", "Real-time Feedback"]}
+         {"title": "Web Development Bootcamp", "description": "From July 24th to 29th, 2023, Rareminds delivered a comprehensive Web Development Bootcamp focused on Full Stack skills. The program immersed students in practical learning, from HTML, CSS, and JavaScript to React, backend integration, APIs, and deployment techniques."},
+         {"title": "Hands-On Learning", "description": "Designed around active problem-solving, teamwork, and real-time feedback, this initiative gave students the tools to think like developers and build like professionals."}
      ]}',
      2),
     ('impact', 'text', 'Key Outcomes & Impact', NULL,
@@ -324,8 +324,8 @@ JOIN (VALUES
      1),
     ('about', 'cards', 'About the Program', NULL,
      '{"items": [
-         {"title": "Industrial Metaverse", "description": "Immersive learning using Virtual Reality and AI-powered simulation to help students experience industrial environments, solve real engineering problems, and understand future workplace scenario all from a classroom.", "tags": ["VR", "AI", "Simulation"]},
-         {"title": "Web Full Stack Development", "description": "A rigorous, project-based MERN stack program where students coded, built, and deployed real-world web applications, gaining hands-on experience with modern tools and workflows used by top tech companies.", "tags": ["MongoDB", "Express", "React", "Node.js"]}
+         {"title": "Industrial Metaverse", "description": "Immersive learning using Virtual Reality and AI-powered simulation to help students experience industrial environments, solve real engineering problems, and understand future workplace scenario all from a classroom."},
+         {"title": "Web Full Stack Development", "description": "A rigorous, project-based MERN stack program where students coded, built, and deployed real-world web applications, gaining hands-on experience with modern tools and workflows used by top tech companies."}
      ]}',
      2),
     ('impact', 'text', 'Key Outcomes & Impact', NULL,
@@ -369,9 +369,9 @@ JOIN (VALUES
      1),
     ('about', 'cards', 'About the Program', NULL,
      '{"items": [
-         {"title": "MBA Students", "description": "5-Day Advanced Excel Workshop (Sept–Oct 2019), focused on business analytics and reporting.", "tags": ["Excel", "Analytics", "Reporting"]},
-         {"title": "Non-Teaching Staff", "description": "MS Office & Email Etiquette (Feb 2019) – 3-day session on digital tools and workplace communication. Advanced Excel, Time Management & Personal Branding via Social Media (July 2019) – 3-day program for productivity and professional presence.", "tags": ["MS Office", "Communication", "Time Management"]},
-         {"title": "Civil Engineering Students", "description": "Day 1 – Surveying & geospatial analysis using Total Station & GIS. Day 2 – Construction Project Management tools (PERT, CPM, EVM). Day 3 – BIM, Risk Management, and digital modeling. 60 students participated.", "tags": ["GIS", "Project Management", "BIM"]}
+         {"title": "MBA Students", "description": "5-Day Advanced Excel Workshop (Sept–Oct 2019), focused on business analytics and reporting."},
+         {"title": "Non-Teaching Staff", "description": "MS Office & Email Etiquette (Feb 2019) – 3-day session on digital tools and workplace communication. Advanced Excel, Time Management & Personal Branding via Social Media (July 2019) – 3-day program for productivity and professional presence."},
+         {"title": "Civil Engineering Students", "description": "Day 1 – Surveying & geospatial analysis using Total Station & GIS. Day 2 – Construction Project Management tools (PERT, CPM, EVM). Day 3 – BIM, Risk Management, and digital modeling. 60 students participated."}
      ]}',
      2),
     ('impact', 'stats', 'Key Outcomes & Impact', NULL,
@@ -529,7 +529,7 @@ JOIN (VALUES
      5),
     ('conclusion', 'text', 'Conclusion',
      'https://www.pexels.com/download/video/4625286/,https://www.pexels.com/download/video/4625286/,https://www.pexels.com/download/video/4625286/',
-     '{"text": "The collaboration between Rareminds and TNSDC''s Naan Mudhalvan program stands as a model for impactful public–private partnerships in higher education. By turning traditional classrooms into hubs of innovation and applied learning, Rareminds empowered thousands of students to transition from passive learners to confident, industry-ready contributors across agriculture, food technology, and EV sectors."}',
+     '{"text": "The collaboration between Rareminds and TNSDC''s Naan Mudhalvan program stands as a model for impactful public–private partnerships in higher education. By turning traditional classrooms into hubs of innovation and applied learning, Rareminds empowered thousands of students to transition from passive learners to confident, industry-ready contributors across agriculture, food technology, and healthcare sectors."}',
      6)
 ) AS s(section_key, content_type, title, preamble, content, display_order)
 ON (p.slug = 'naan-mudhalvan-2024')
@@ -849,9 +849,9 @@ JOIN (VALUES
      1),
     ('about', 'cards', 'About the Program', NULL,
      '{"items": [
-         {"title": "Program Structure", "description": "Total Training Hours: 10 hours. Schedule: 2 hours/day across 5 days. Participants Trained: 200 candidates in two batches of 100.", "tags": ["10 Hours", "5 Days", "200 Candidates"]},
-         {"title": "Participant Profile", "description": "ITI graduates, diploma holders, graduates, postgraduates, and young professionals preparing for overseas placement opportunities.", "tags": ["ITI", "Diploma", "Graduates"]},
-         {"title": "Expert Training", "description": "Program delivered by Dr. Subhashini, CEO of Rareminds, bringing extensive industry experience and leadership in skill development.", "tags": ["CEO-Led", "Expert Training"]}
+         {"title": "Program Structure", "description": "Total Training Hours: 10 hours. Schedule: 2 hours/day across 5 days. Participants Trained: 200 candidates in two batches of 100."},
+         {"title": "Participant Profile", "description": "ITI graduates, diploma holders, graduates, postgraduates, and young professionals preparing for overseas placement opportunities."},
+         {"title": "Expert Training", "description": "Program delivered by Dr. Subhashini, CEO of Rareminds, bringing extensive industry experience and leadership in skill development."}
      ]}',
      2),
     ('modules', 'cards', 'Modules Covered', NULL,
@@ -915,9 +915,9 @@ JOIN (VALUES
      1),
     ('about', 'cards', 'About the Program', NULL,
      '{"items": [
-         {"title": "Target Audience", "description": "Full English and Personality Development program offered to 2nd and 3rd year students in Tribal, ADW, BC, MBC, DNC, and Minorities Welfare Department Hostels.", "tags": ["Government Hostels", "2nd & 3rd Year"]},
-         {"title": "Curriculum Approach", "description": "The curriculum used open-source documentary movies for listening/speaking practice, English newspapers for reading/writing, and dedicated workbooks for structured assessments.", "tags": ["Documentary Movies", "Newspapers", "Workbooks"]},
-         {"title": "Assessment & Certification", "description": "Cambridge University administered pre- and post-training exams to monitor student progress and track improvement on the CEFR scale.", "tags": ["Cambridge", "CEFR", "Pre-Post Assessment"]}
+         {"title": "Target Audience", "description": "Full English and Personality Development program offered to 2nd and 3rd year students in Tribal, ADW, BC, MBC, DNC, and Minorities Welfare Department Hostels."},
+         {"title": "Curriculum Approach", "description": "The curriculum used open-source documentary movies for listening/speaking practice, English newspapers for reading/writing, and dedicated workbooks for structured assessments."},
+         {"title": "Assessment & Certification", "description": "Cambridge University administered pre- and post-training exams to monitor student progress and track improvement on the CEFR scale."}
      ]}',
      2),
     ('impact', 'stats', 'Key Outcomes & Impact', NULL,
@@ -969,8 +969,8 @@ JOIN (VALUES
      1),
     ('about', 'cards', 'About the Program', NULL,
      '{"items": [
-         {"title": "Cloud Kitchen Operations", "description": "This stream gave students a comprehensive understanding of the burgeoning cloud kitchen industry, equipping them with the knowledge to launch and manage their own food ventures. Five Villupuram schools successfully implemented this program, training 76 aspiring food entrepreneurs.", "tags": ["Cloud Kitchen", "Entrepreneurship", "76 Students"]},
-         {"title": "Agri-Food Processing & Preservation", "description": "This comprehensive 40-hour curriculum equipped students with vital knowledge of the agri-food industry, focusing on practical ways to enhance food value, improve safety standards, and extend shelf life. Implemented in 116 schools, 1,570 students gained practical skills. Activities included canning, bottling, pickling, fermentation, drying, and freezing techniques. Students were introduced to food safety principles, hygiene practices, HACCP basics, and quality control measures.", "tags": ["Food Processing", "HACCP", "1,570 Students"]}
+         {"title": "Cloud Kitchen Operations", "description": "This stream gave students a comprehensive understanding of the burgeoning cloud kitchen industry, equipping them with the knowledge to launch and manage their own food ventures. Five Villupuram schools successfully implemented this program, training 76 aspiring food entrepreneurs."},
+         {"title": "Agri-Food Processing & Preservation", "description": "This comprehensive 40-hour curriculum equipped students with vital knowledge of the agri-food industry, focusing on practical ways to enhance food value, improve safety standards, and extend shelf life. Implemented in 116 schools, 1,570 students gained practical skills. Activities included canning, bottling, pickling, fermentation, drying, and freezing techniques. Students were introduced to food safety principles, hygiene practices, HACCP basics, and quality control measures."}
      ]}',
      2),
     ('impact', 'stats', 'Key Outcomes & Impact', NULL,
@@ -1024,8 +1024,8 @@ JOIN (VALUES
      1),
     ('about', 'cards', 'About the Program', NULL,
      '{"items": [
-         {"title": "Program Overview", "description": "In November 2023, Rareminds conducted a 2-day intensive capacity-building program for 40 teachers at Global International School.", "tags": ["2 Days", "40 Teachers", "November 2023"]},
-         {"title": "Expert-Led Training", "description": "Led by 3 expert master trainers, the sessions blended foundational understanding with practical application, ensuring teachers gained both theoretical knowledge and hands-on skills.", "tags": ["3 Master Trainers", "Practical Application"]}
+         {"title": "Program Overview", "description": "In November 2023, Rareminds conducted a 2-day intensive capacity-building program for 40 teachers at Global International School."},
+         {"title": "Expert-Led Training", "description": "Led by 3 expert master trainers, the sessions blended foundational understanding with practical application, ensuring teachers gained both theoretical knowledge and hands-on skills."}
      ]}',
      2),
     ('modules', 'cards', 'Modules Covered', NULL,
@@ -1090,3 +1090,4 @@ ON CONFLICT (program_id, section_key) DO UPDATE SET
 -- =====================================================
 
 COMMIT;
+

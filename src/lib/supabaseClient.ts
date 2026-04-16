@@ -15,7 +15,7 @@ if (!supabaseUrl || !supabaseAnonKey) {
  
 // Guard against malformed URL
 if (!supabaseUrl.startsWith('https://') && !supabaseUrl.startsWith('http://')) {
-  throw new Error(VITE_SUPABASE_URL looks malformed: "${supabaseUrl}");
+   throw new Error(`VITE_SUPABASE_URL looks malformed: "${supabaseUrl}"`);
 }
 
 

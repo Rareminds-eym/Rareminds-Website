@@ -93,7 +93,7 @@ export interface Program {
   date: string;
   status: string;
   image_url: string;
-  banner_url: string;
+  banner_url: string | null;
   short_description: string;
   display_order: number;
   is_active: boolean;
@@ -212,3 +212,4 @@ export interface PaginatedResponse {
   hasNextPage: boolean;
   hasPrevPage: boolean;
 }
+

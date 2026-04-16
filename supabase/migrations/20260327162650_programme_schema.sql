@@ -44,7 +44,7 @@ CREATE TABLE programs (
     date              DATE        NOT NULL,
     status            TEXT        NOT NULL CHECK (status IN ('Active', 'Completed', 'In Progress')),
     image_url         TEXT        NOT NULL,
-    banner_url        TEXT        NOT NULL,
+    banner_url        TEXT,
     short_description TEXT        NOT NULL,
     display_order     INTEGER     DEFAULT 0,
     is_active         BOOLEAN     DEFAULT true,
@@ -218,6 +218,10 @@ CREATE INDEX idx_program_sections_display
 -- GIN index enables fast querying inside JSONB content
 CREATE INDEX idx_program_sections_content_gin
     ON program_sections USING GIN (content);
+
+-- Index on is_active for efficient filtering of active programs
+CREATE INDEX idx_programs_is_active
+    ON programs(is_active);
 
 -- =====================================================
 -- COMMENTS

@@ -15,6 +15,14 @@ import type {
 import { SECTION_KEYS as SK, SECTION_DEFAULTS as SD } from '@/types/program';
 
 // =====================================================
+// Constants
+// =====================================================
+
+// FIX: Extracted magic numbers to named constants for clarity and maintainability
+const DEFAULT_PAGE_LIMIT = 6;
+const MAX_SEARCH_LENGTH = 100;
+
+// =====================================================
 // Type Guards (for JSONB content)
 // =====================================================
 
@@ -91,7 +99,7 @@ export async function getPrograms(params: PaginationParams = {}): Promise<Pagina
   try {
     const {
       page = 1,
-      limit = 6,
+      limit = DEFAULT_PAGE_LIMIT, // FIX: was magic number 6
       search = '',
       filters = {}
     } = params;
@@ -108,9 +116,10 @@ export async function getPrograms(params: PaginationParams = {}): Promise<Pagina
 
     // Apply search filter with sanitization
     if (search) {
-      const trimmed = search.trim().slice(0, 100);
+      const trimmed = search.trim().slice(0, MAX_SEARCH_LENGTH); // FIX: was magic number 100
       if (trimmed) {
         const sanitized = sanitizeSearchInput(trimmed);
+        // Use .or() with proper escaping to search across multiple columns
         query = query.or(
           `title.ilike.%${sanitized}%,short_description.ilike.%${sanitized}%,program_type.ilike.%${sanitized}%,location.ilike.%${sanitized}%`
         );
@@ -187,7 +196,8 @@ export async function getProgramFilterOptions(): Promise<{
     const { data, error } = await supabase
       .from('programs')
       .select('title, program_type, location, date')
-      .eq('is_active', true);
+      .eq('is_active', true)
+      .limit(1000);
 
     if (error) throw error;
 
@@ -207,7 +217,9 @@ export async function getProgramFilterOptions(): Promise<{
     ].sort((a, b) => (a === 'All' ? -1 : b === 'All' ? 1 : Number(a) - Number(b)));
 
     return { categories, names, years, locations };
-  } catch {
+  } catch (error) {
+    // FIX: was silently swallowing errors — now logged for visibility in production
+    console.error('getProgramFilterOptions failed:', error);
     return { categories: ['All'], names: ['All'], years: ['All'], locations: ['All'] };
   }
 }
@@ -217,10 +229,15 @@ export async function getProgramWithSections(slug: string): Promise<{
   error: Error | null;
 }> {
   try {
+    // Validate slug parameter
+    if (!slug || typeof slug !== 'string' || slug.length > 200 || !/^[a-z0-9-]+$/.test(slug)) {
+      return { data: null, error: new Error('Invalid slug') };
+    }
+
     // Fetch the program
     const { data: program, error: programError } = await supabase
       .from('programs')
-      .select('*')
+      .select('id, title, slug, program_type, location, date, status, image_url, banner_url, short_description, display_order, is_active, created_at, updated_at')
       .eq('slug', slug)
       .eq('is_active', true)
       .single();
@@ -279,7 +296,10 @@ export async function getProgramWithSections(slug: string): Promise<{
         }
       }
 
-      // Parse video section — comma-separated URLs stored as plain text in preamble
+      // Parse video section — comma-separated URLs stored as plain text in preamble.
+      // FIX: Use || (not ??) intentionally: an empty string preamble is also useless,
+      // so fall through to content.text in that case too. filter(Boolean) downstream
+      // ensures a blank rawUrls string produces an empty array, not [''].
       if (section.section_key === SK.VIDEO) {
         const rawUrls = section.preamble || (isTextContent(section.content) ? section.content.text : '');
         const videoUrl = rawUrls

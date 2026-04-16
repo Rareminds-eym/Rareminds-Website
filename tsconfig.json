@@ -19,7 +19,6 @@
     "paths": {
       "@/*": ["./src/*"]
     }
-  }, //save
-  "include": ["src"],
-  
+  },
+  "include": ["src"]
 }
