@@ -161,8 +161,6 @@ RETURNS JSONB AS $$
     )
     FROM jsonb_array_elements(courses) AS course;
 $$ LANGUAGE sql IMMUTABLE;
-END;
-$$ LANGUAGE plpgsql;
 
 -- Trigger function: auto-assigns UUIDs to JSONB items before INSERT or UPDATE
 -- Handles cards, stats (flat items array) and courses (nested universities)
