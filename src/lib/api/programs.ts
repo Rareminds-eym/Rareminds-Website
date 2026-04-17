@@ -150,7 +150,7 @@ export async function getPrograms(params: PaginationParams = {}): Promise<Pagina
 
     // Apply year filter with validation
     if (filters.year && filters.year !== 'All') {
-      const parsedYear = parseInt(filters.year);
+      const parsedYear = parseInt(filters.year, 10);
       const currentYear = new Date().getFullYear();
       if (!isNaN(parsedYear) && parsedYear >= 2000 && parsedYear <= currentYear + 1) {
         query = query
