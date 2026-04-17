@@ -2,6 +2,7 @@ import { supabase } from '@/lib/supabaseClient';
 import type {
   Program,
   ProgramSection,
+  ProgramQueryResult,
   ProgramWithTransformedSections,
   AboutSection,
   TransformedSection,
@@ -152,7 +153,7 @@ export async function getPrograms(params: PaginationParams = {}): Promise<Pagina
     if (filters.year && filters.year !== 'All') {
       const parsedYear = parseInt(filters.year, 10);
       const currentYear = new Date().getFullYear();
-      if (!isNaN(parsedYear) && parsedYear >= 2000 && parsedYear <= currentYear + 1) {
+      if (!Number.isNaN(parsedYear) && parsedYear >= 2000 && parsedYear <= currentYear + 1) {
         query = query
           .gte('date', `${parsedYear}-01-01`)
           .lt('date', `${parsedYear + 1}-01-01`);
@@ -257,7 +258,7 @@ export async function getProgramWithSections(slug: string): Promise<{
       return { data: null, error: new Error('Program not found') };
     }
 
-    const program = result as any;
+    const program = result as ProgramQueryResult;
     const sections = (program.program_sections || []) as ProgramSection[];
 
     const transformedSections: Partial<Record<SectionKey, TransformedSection>> = {};

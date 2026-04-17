@@ -162,6 +162,11 @@ export interface ProgramWithSections extends Program {
   sections: ProgramSection[];
 }
 
+// Typed shape of the Supabase nested query response in getProgramWithSections
+export interface ProgramQueryResult extends Program {
+  program_sections: ProgramSection[];
+}
+
 // Transformed section for UI
 export interface TransformedSection {
   title: string;
