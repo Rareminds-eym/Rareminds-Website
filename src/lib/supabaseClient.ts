@@ -1,12 +1,11 @@
-
 /// <reference types="vite/client" />
 import { createClient, type SupportedStorage } from '@supabase/supabase-js';
 import { safeGetItem, safeSetItem, safeRemoveItem } from './localStorage';
- 
+
 // Read environment variables
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
- 
+
 // Safe storage for browser environments.
 // Falls back to undefined (Supabase uses in-memory) in non-browser environments.
 const safeStorage: SupportedStorage | undefined =
@@ -17,7 +16,7 @@ const safeStorage: SupportedStorage | undefined =
         removeItem: (key) => safeRemoveItem(key),
       }
     : undefined;
- 
+
 // Wrapping validation and client creation in a function ensures throws happen
 // inside a callable context, allowing React error boundaries to catch
 // misconfiguration errors instead of causing a blank white screen.
@@ -28,14 +27,12 @@ function createSupabaseClient() {
       'Missing Supabase env vars. Please set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in your .env file'
     );
   }
- 
+
   // Guard against malformed URL
   if (!supabaseUrl.startsWith('https://') && !supabaseUrl.startsWith('http://')) {
- 
-throw new Error(`VITE_SUPABASE_URL looks malformed: "${supabaseUrl}"`);
-            
+    throw new Error(`VITE_SUPABASE_URL looks malformed: "${supabaseUrl}"`);
   }
- 
+
   return createClient(supabaseUrl, supabaseAnonKey, {
     auth: {
       storage: safeStorage,
@@ -45,6 +42,8 @@ throw new Error(`VITE_SUPABASE_URL looks malformed: "${supabaseUrl}"`);
     },
   });
 }
- 
-// Create and export Supabase client
+
+// Create and export Supabase client.
+// Errors thrown here (missing/malformed env vars) will propagate to the nearest
+// React error boundary rather than crashing the entire module silently.
 export const supabase = createSupabaseClient();
