@@ -1,5 +1,6 @@
 import React from 'react';
 import { BookOpen, Target } from 'lucide-react';
+import { useIsMobile } from '../../../hooks/useIsMobile';
 
 interface ContentItem {
   title: string;
@@ -22,14 +23,7 @@ interface ModulesSectionProps {
 }
 
 const ModulesSection: React.FC<ModulesSectionProps> = ({ modules, approaches, intervention }) => {
-  const [isMobile, setIsMobile] = React.useState(false);
-
-  React.useEffect(() => {
-    const check = () => setIsMobile(window.innerWidth < 768);
-    check();
-    window.addEventListener('resize', check);
-    return () => window.removeEventListener('resize', check);
-  }, []);
+  const isMobile = useIsMobile();
 
   return (
     <div className="bg-white py-8 md:py-16 -mt-8">
@@ -73,8 +67,8 @@ const ModulesSection: React.FC<ModulesSectionProps> = ({ modules, approaches, in
                 </div>
                 <h3 className="text-xl font-bold text-gray-900 mb-4">{modules.title}</h3>
                 <ul className="space-y-2">
-                  {modules.items.map((item, index) => (
-                    <li key={index} className="text-sm text-gray-600 leading-relaxed flex items-start">
+                  {modules.items.map((item) => (
+                    <li key={item.title} className="text-sm text-gray-600 leading-relaxed flex items-start">
                       <span className="w-1.5 h-1.5 bg-blue-500 rounded-full mt-2 mr-3 flex-shrink-0" />
                       <span>{item.title}{item.description ? ` — ${item.description}` : ''}</span>
                     </li>
@@ -98,8 +92,8 @@ const ModulesSection: React.FC<ModulesSectionProps> = ({ modules, approaches, in
                 </div>
                 <h3 className="text-xl font-bold text-gray-900 mb-4">{approaches.title}</h3>
                 <ul className="space-y-2">
-                  {approaches.items.map((item, index) => (
-                    <li key={index} className="text-sm text-gray-600 leading-relaxed flex items-start">
+                  {approaches.items.map((item) => (
+                    <li key={item.title} className="text-sm text-gray-600 leading-relaxed flex items-start">
                       <span className="w-1.5 h-1.5 bg-blue-500 rounded-full mt-2 mr-3 flex-shrink-0" />
                       <span>{item.title}{item.description ? ` — ${item.description}` : ''}</span>
                     </li>

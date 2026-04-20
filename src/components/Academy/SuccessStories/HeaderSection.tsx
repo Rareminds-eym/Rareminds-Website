@@ -9,6 +9,7 @@ interface HeaderSectionProps {
   section: SectionData;
 }
 
+// Move styles outside component for better performance - created once, reused forever
 const styles: Record<string, React.CSSProperties> = {
   wrapper: {
     backgroundColor: '#f8f9fa',
@@ -60,8 +61,8 @@ const HeaderSection: React.FC<HeaderSectionProps> = ({ section }) => {
         {/* Content */}
         <div style={styles.content}>
           {paragraphs.length > 1 ? (
-            paragraphs.map((para, idx) => (
-              <p key={idx} style={styles.paragraph}>
+            paragraphs.map((para) => (
+              <p key={para.trim().substring(0, 50)} style={styles.paragraph}>
                 {para.trim()}
               </p>
             ))

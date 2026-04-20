@@ -1,4 +1,5 @@
 import React from "react";
+import { useIsMobile } from "../../../hooks/useIsMobile";
 
 interface BulletItem {
   label?: string;
@@ -64,14 +65,7 @@ function parseDescription(description: string): BulletItem[] {
 }
 
 const DSATMAboutSection: React.FC<DSATMAboutSectionProps> = ({ section }) => {
-  const [isMobile, setIsMobile] = React.useState(false);
-
-  React.useEffect(() => {
-    const check = () => setIsMobile(window.innerWidth < 768);
-    check();
-    window.addEventListener("resize", check);
-    return () => window.removeEventListener("resize", check);
-  }, []);
+  const isMobile = useIsMobile();
 
   const cards: CardData[] = section.content.map((item) => ({
     initial: item.title?.trim()?.charAt(0)?.toUpperCase() || "?",
@@ -116,9 +110,9 @@ const DSATMAboutSection: React.FC<DSATMAboutSectionProps> = ({ section }) => {
           margin: "0 auto",
         }}
       >
-        {cards.map((card, index) => (
+        {cards.map((card) => (
           <div
-            key={index}
+            key={card.title}
             className="border border-teal-200 p-5"
             style={{ ...cardStyle, backgroundColor: "#F3FEF9" }}
           >
@@ -137,9 +131,9 @@ const DSATMAboutSection: React.FC<DSATMAboutSectionProps> = ({ section }) => {
 
             {/* Bullet Items */}
             <ul className="space-y-1">
-              {card.items.map((item, i) => (
+              {card.items.map((item) => (
                 <li
-                  key={i}
+                  key={item.text}
                   className="flex items-start gap-2 text-gray-700 text-sm leading-relaxed"
                 >
                   <span className="mt-1.5 w-2 h-2 rounded-full bg-blue-400 flex-shrink-0" />

@@ -4,7 +4,6 @@ import { Monitor, Code } from "lucide-react";
 interface ContentItem {
   title: string;
   description: string;
-  tags?: string[];
 }
 
 interface AboutProgramSectionProps {
@@ -12,7 +11,6 @@ interface AboutProgramSectionProps {
     title: string;
     content: ContentItem[];
   };
-  technologies?: string[];
 }
 
 const CARD_ICONS = [Monitor, Code];
@@ -30,19 +28,11 @@ const CARD_STYLES = [
   },
 ];
 
-function AboutProgramSection({ section, technologies = [] }: AboutProgramSectionProps) {
+function AboutProgramSection({ section }: AboutProgramSectionProps) {
   const items = section.content;
 
   return (
-    <div
-      className="py-16 -mt-10"
-      style={{
-        background: "#ffffff",
-        width: "100vw",
-        marginLeft: "calc(-50vw + 50%)",
-        minHeight: "100%",
-      }}
-    >
+    <div className="py-16 -mt-10 bg-white min-h-full w-screen -ml-[calc(50vw-50%)]">
       {/* Title */}
       <motion.h2
         initial={{ opacity: 0, y: 24 }}
@@ -62,20 +52,13 @@ function AboutProgramSection({ section, technologies = [] }: AboutProgramSection
             }`}
           >
             {items.map((item, index) => {
+              // Cycle through card styles and icons for visual variety
               const style = CARD_STYLES[index % CARD_STYLES.length];
               const Icon = CARD_ICONS[index % CARD_ICONS.length];
 
-              // Tags: prefer item.tags, fall back to splitting technologies between cards
-              const tags: string[] =
-                item.tags && item.tags.length > 0
-                  ? item.tags
-                  : index === 0
-                  ? technologies.slice(0, Math.ceil(technologies.length / 2))
-                  : technologies.slice(Math.ceil(technologies.length / 2));
-
               return (
                 <motion.div
-                  key={index}
+                  key={item.title}
                   initial={{ opacity: 0, x: index % 2 === 0 ? -40 : 40 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   transition={{
@@ -126,33 +109,6 @@ function AboutProgramSection({ section, technologies = [] }: AboutProgramSection
                     >
                       {item.title}
                     </motion.h3>
-
-                    {/* Tags */}
-                    {tags.length > 0 && (
-                      <motion.div
-                        initial={{ opacity: 0 }}
-                        whileInView={{ opacity: 1 }}
-                        transition={{ duration: 0.5, delay: 0.55 + index * 0.1 }}
-                        viewport={{ once: true }}
-                        className="flex flex-wrap gap-2 mb-4"
-                      >
-                        {tags.map((tag, ti) => (
-                          <motion.span
-                            key={ti}
-                            initial={{ opacity: 0, scale: 0.85 }}
-                            whileInView={{ opacity: 1, scale: 1 }}
-                            transition={{
-                              duration: 0.3,
-                              delay: 0.55 + index * 0.1 + ti * 0.07,
-                            }}
-                            viewport={{ once: true }}
-                            className="px-2 py-1 md:px-3 bg-white text-blue-700 border border-gray-200 text-xs rounded-lg"
-                          >
-                            {tag}
-                          </motion.span>
-                        ))}
-                      </motion.div>
-                    )}
 
                     {/* Description */}
                     <motion.p
