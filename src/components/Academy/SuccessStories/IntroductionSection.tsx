@@ -1,6 +1,6 @@
 
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useState, useCallback } from "react";
 
 interface ImageItem {
   id: string;
@@ -15,22 +15,18 @@ interface IntroductionSectionProps {
 }
 
 function IntroductionSection({ title, content, images = [] }: IntroductionSectionProps) {
-  const [failedImages, setFailedImages] = useState<Set<string>>(new Set());
+  const [failedImages, setFailedImages] = useState<string[]>([]);
 
-  const handleImageError = (imageUrl: string) => {
-    setFailedImages(prev => {
-      const newSet = new Set(prev);
-      newSet.add(imageUrl);
-      return newSet;
-    });
-  };
+  const handleImageError = useCallback((imageUrl: string) => {
+  setFailedImages(prev => [...prev, imageUrl]);
+}, []);
 
   // Extract title className logic for better readability
   const getTitleClasses = () => {
     const baseClasses = 'text-3xl md:text-5xl font-bold text-gray-900 mb-2 md:mb-8';
     const isOneWord = title.trim().split(/\s+/).length === 1;
     const hasImages = images.length > 0;
-    
+
     if (isOneWord) return `${baseClasses} text-center`;
     if (hasImages) return `${baseClasses} text-center md:text-left leading-relaxed`;
     return `${baseClasses} text-center leading-relaxed`;
@@ -58,9 +54,8 @@ function IntroductionSection({ title, content, images = [] }: IntroductionSectio
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, ease: "easeOut", delay: 0.2 }}
               viewport={{ once: true }}
-              className={`text-sm md:text-base text-gray-600 leading-relaxed ${
-                images.length > 0 ? 'text-justify md:text-left' : 'text-center'
-              }`}
+              className={`text-sm md:text-base text-gray-600 leading-relaxed ${images.length > 0 ? 'text-justify md:text-left' : 'text-center'
+                }`}
             >
               {content}
             </motion.p>
@@ -70,31 +65,31 @@ function IntroductionSection({ title, content, images = [] }: IntroductionSectio
           {images.length > 0 && (
             <div className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
-                {images.slice(0, 2).map((image, index) => {
-  if (failedImages.has(image.url)) return null; 
-
-  return (
-    <motion.div
-      key={image.id}
-      initial={{ opacity: 0, scale: 0.95 }}
-      whileInView={{ opacity: 1, scale: 1 }}
-      transition={{ duration: 0.5, ease: "easeOut", delay: 0.1 + index * 0.1 }}
-      viewport={{ once: true }}
-      className="rounded-xl overflow-hidden"
-    >
-      <img
-        src={image.url}
-        alt={image.alt || `Training Session ${index + 1}`}
-        className="w-full h-48 object-cover"
-        onError={() => handleImageError(image.url)}
-      />
-    </motion.div>
-  );
-})}
+                {images.slice(0, 2)
+                  .filter(image => !failedImages.includes(image.url))
+                  .map((image, index) => {
+                    return (
+                      <motion.div
+                        key={image.id}
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        whileInView={{ opacity: 1, scale: 1 }}
+                        transition={{ duration: 0.5, ease: "easeOut", delay: 0.1 + index * 0.1 }}
+                        viewport={{ once: true }}
+                        className="rounded-xl overflow-hidden"
+                      >
+                        <img
+                          src={image.url}
+                          alt={image.alt || `Training Session ${index + 1}`}
+                          className="w-full h-48 object-cover"
+                          onError={() => handleImageError(image.url)}
+                        />
+                      </motion.div>
+                    );
+                  })}
 
               </div>
 
-              {images[2] && !failedImages.has(images[2].url) && (
+              {images[2] && !failedImages.includes(images[2].url) && (
                 <motion.div
                   initial={{ opacity: 0, scale: 0.95 }}
                   whileInView={{ opacity: 1, scale: 1 }}

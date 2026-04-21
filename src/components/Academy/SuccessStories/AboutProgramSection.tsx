@@ -20,7 +20,7 @@ function AboutProgramSection({ section }: AboutProgramSectionProps) {
   const items = section.content;
 
   return (
-    <div className="py-16 -mt-10 bg-white min-h-full w-screen -ml-[calc(50vw-50%)]">
+    <div className="py-16 -mt-10 bg-white min-h-full w-screen -ml-breakout">
       {/* Title */}
       <motion.h2
         initial={{ opacity: 0, y: 24 }}
@@ -66,7 +66,7 @@ function AboutProgramSection({ section }: AboutProgramSectionProps) {
                     }`}
                   />
                   <div
-                    className={`relative z-10 max-w-2x ${
+                    className={`relative z-10 max-w-200p ${
                       isEven ? "ml-2 md:ml-6" : "ml-0 md:-ml-3"
                     }`}
                   >

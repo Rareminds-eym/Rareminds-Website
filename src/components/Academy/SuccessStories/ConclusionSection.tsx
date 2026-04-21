@@ -155,7 +155,7 @@ const ConclusionSection: React.FC<ConclusionSectionProps> = ({ section }) => {
   };
 
   return (
-    <section className="bg-white py-16 w-screen -ml-[calc(50vw-50%)] -mt-12 -mb-12">
+    <section className="bg-white py-16 w-screen -ml-breakout -mt-12 -mb-12">
       <div className="max-w-5xl mx-auto px-6">
 
         {/* ── Title fade-up ─────────────────────────────────────── */}

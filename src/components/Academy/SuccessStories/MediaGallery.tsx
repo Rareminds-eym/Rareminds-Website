@@ -85,7 +85,7 @@ export const MediaGallery = ({ media, title = "Media Gallery", compact = false }
   if (!media || media.length === 0) return null;
 
   return (
-    <div className={`w-screen relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] bg-white ${compact ? 'pt-10 pb-6 mt-1 md:mt-2' : 'pt-16 pb-28 -mt-32 md:-mt-24 mb-2 md:mb-5'} md:pt-20 md:pb-24 pt-6 pb-6 px-4 md:px-8`}>
+    <div className={`w-screen relative -ml-[50vw] -mr-[50vw] bg-white ${compact ? 'pt-10 pb-6 mt-1 md:mt-2' : 'pt-16 pb-28 -mt-32 md:-mt-24 mb-2 md:mb-5'} md:pt-20 md:pb-24 pt-6 pb-6 px-4 md:px-8`}>
       <div className="max-w-7xl mx-auto">
 
         {/* Title */}

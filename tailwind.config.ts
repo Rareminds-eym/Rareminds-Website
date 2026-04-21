@@ -75,17 +75,17 @@ export default {
         'stat-2': '15px 50px 15px 50px',  // Stat card pattern 2
       },
       maxWidth: {
-        '2x': '200%',     // 2x width for card content
-        '2.5x': '250%',   // 2.5x width for card content
-        '195': '48.75rem', // 780px for timeline
-        '68p': '68%',     // Main player max width
+        '200p': '200%',     // 200 percent width
+        '250p': '250%',     // 250 percent width  
+        '195': '48.75rem',  // 780px for timeline
+        '68p': '68%',       // 68 percent width
       },
       fontSize: {
-        '2xs': '0.75rem',   // 12px
-        'xs-plus': '0.82rem', // ~13px
-        'sm-plus': '0.92rem', // ~15px
-        'base-plus': '1.05rem', // ~17px
-        '2.9xl': '2.9rem',    // Custom large title
+        '2xs': '0.75rem',   // 12px - standard Tailwind
+        'xs': '0.82rem',    // ~13px - override standard xs
+        'sm': '0.92rem',    // ~15px - override standard sm  
+        'lg': '1.05rem',    // ~17px - override standard lg
+        '3xl': '2.9rem',    // Custom large title - override standard 3xl
       },
       boxShadow: {
         'timeline': '0 2px 8px rgba(90,160,220,0.15)',
@@ -214,6 +214,9 @@ export default {
         },
         '.card-shape-right': {
           'clip-path': 'polygon(0% 0%, 92% 6%, 92% 94%, 0% 100%)',
+        },
+        '.-ml-breakout': {
+          marginLeft: 'calc(-50vw + 50%)',
         }
       });
     },

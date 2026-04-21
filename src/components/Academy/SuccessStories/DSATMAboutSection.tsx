@@ -83,7 +83,7 @@ const DSATMAboutSection: React.FC<DSATMAboutSectionProps> = ({ section }) => {
   };
 
   return (
-    <section className="bg-white w-screen -ml-[calc(50vw-50%)] px-6 py-13 mb-0 -mt-22.5 md:-mt-8.75">
+    <section className="bg-white w-screen -ml-breakout px-6 py-13 mb-0 -mt-22.5 md:-mt-8.75">
       {/* Title */}
       <h2 className="text-3xl md:text-5xl font-extrabold text-center text-gray-900 mb-12">
         {section.title}

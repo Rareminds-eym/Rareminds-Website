@@ -47,7 +47,7 @@ const ModulesSection: React.FC<ModulesSectionProps> = ({ modules, approaches, in
             {/* LEFT CARD — Modules Covered */}
             <div className="relative p-10">
               <div className="absolute inset-0 bg-blue-25 card-shape-left" />
-              <div className="relative z-10 ml-6 max-w-2x">
+              <div className="relative z-10 ml-6 max-w-200p">
                 <div className="w-12 h-12 bg-blue-500 rounded-2xl flex items-center justify-center mb-6">
                   <BookOpen className="w-6 h-6 text-white" />
                 </div>
@@ -66,7 +66,7 @@ const ModulesSection: React.FC<ModulesSectionProps> = ({ modules, approaches, in
             {/* RIGHT CARD — Multiple Approaches */}
             <div className="relative p-10">
               <div className="absolute inset-0 bg-blue-25 card-shape-right" />
-              <div className="relative z-10 max-w-2.5x">
+              <div className="relative z-10 max-w-250p">
                 <div className="w-12 h-12 bg-blue-500 rounded-2xl flex items-center justify-center mb-6">
                   <Target className="w-6 h-6 text-white" />
                 </div>

@@ -94,13 +94,13 @@ const StrategicAlignmentSection: React.FC<StrategicAlignmentSectionProps> = ({ s
 
   // Convert all styles to Tailwind utility functions
   const getWrapperClasses = () => 
-    "bg-white py-12.5 px-8 shadow-section mb-12.5 mt-12.5 w-screen -ml-[calc(50vw-50%)]";
+    "bg-white py-12.5 px-8 shadow-section mb-12.5 mt-12.5 w-screen -ml-breakout";
 
   const getSectionTitleClasses = () => 
     "font-black text-gray-850 text-center mb-13 tracking-tight";
 
   const getTimelineClasses = () => 
-    "relative flex flex-col gap-7 w-full max-w-195 mx-auto";
+    "relative flex flex-col gap-7 w-full max-w-[780px] mx-auto";
 
   const getVerticalLineClasses = () => 
     "absolute left-4 top-0 bottom-0 w-3 bg-blue-timeline rounded-t-md z-0 origin-top";
@@ -121,10 +121,10 @@ const StrategicAlignmentSection: React.FC<StrategicAlignmentSectionProps> = ({ s
     "h-0.5 rounded-sm bg-blue-500 mb-2.5 origin-left w-5 md:w-8";
 
   const getCardTitleClasses = () => 
-    "font-bold text-gray-850 mb-1 text-xs-plus md:text-base-plus";
+    "font-bold text-gray-850 mb-1 text-xs md:text-lg";
 
   const getCardTextClasses = () => 
-    "text-gray-650 leading-relaxed m-0 text-2xs md:text-sm-plus";
+    "text-gray-650 leading-relaxed m-0 text-2xs md:text-sm";
 
   const getCardClasses = (index: number) => {
     const basePadding = "py-2.5 px-3.5 md:py-5.5 md:px-7";
@@ -137,7 +137,7 @@ const StrategicAlignmentSection: React.FC<StrategicAlignmentSectionProps> = ({ s
     }
   };
 
-  const getTitleFontSize = () => "text-3xl md:text-2.9xl";
+  const getTitleFontSize = () => "text-3xl md:text-3xl";
 
   return (
     <motion.div
