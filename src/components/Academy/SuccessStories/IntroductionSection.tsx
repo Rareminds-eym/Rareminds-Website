@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { useState } from "react";
 
 interface ImageItem {
-  id?: string;
+  id: string;
   url: string;
   alt?: string;
 }
@@ -18,7 +18,7 @@ function IntroductionSection({ title, content, images = [] }: IntroductionSectio
   const [failedImages, setFailedImages] = useState<Set<string>>(new Set());
 
   const handleImageError = (imageUrl: string) => {
-    setFailedImages(prev => new Set([...prev, imageUrl]));
+    setFailedImages(prev => new Set(prev).add(imageUrl));
   };
 
   // Extract title className logic for better readability
@@ -71,7 +71,7 @@ function IntroductionSection({ title, content, images = [] }: IntroductionSectio
 
   return (
     <motion.div
-      key={image.url}
+      key={image.id}
       initial={{ opacity: 0, scale: 0.95 }}
       whileInView={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.5, ease: "easeOut", delay: 0.1 + index * 0.1 }}

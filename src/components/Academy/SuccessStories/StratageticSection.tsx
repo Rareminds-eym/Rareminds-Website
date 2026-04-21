@@ -89,147 +89,54 @@ const cardVariant = {
 
 // ─────────────────────────────────────────────────────────────────────────
 
-const styles: Record<string, React.CSSProperties> = {
-  wrapper: {
-    background: "#ffffff",
-    padding: "48px 32px",
-    boxShadow: "0 2px 12px rgba(0,0,0,0.05)",
-    marginBottom: "48px",
-    marginTop: "48px",
-    width: "100vw",
-    marginLeft: "calc(-50vw + 50%)",
-  },
-  sectionTitle: {
-    fontWeight: 900,
-    color: "#0f1c2e",
-    textAlign: "center",
-    marginBottom: "52px",
-    letterSpacing: "-0.3px",
-  },
-  timeline: {
-    position: "relative",
-    display: "flex",
-    flexDirection: "column",
-    gap: "28px",
-    width: "100%",
-    maxWidth: "780px",
-    margin: "0 auto",
-  },
-  verticalLine: {
-    position: "absolute",
-    left: "15px",
-    top: 0,
-    bottom: 0,
-    width: "12px",
-    background: "#D2E8FE",
-    borderTopLeftRadius: "6px",
-    borderTopRightRadius: "6px",
-    zIndex: 0,
-    transformOrigin: "top",
-  },
-  iconWrap: {
-    position: "relative",
-    zIndex: 1,
-    flexShrink: 0,
-    borderRadius: "50%",
-    background: "#ffffff",
-    border: "2px solid #DBEAFE",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    boxShadow: "0 2px 8px rgba(90,160,220,0.15)",
-    marginLeft: "16px",
-    marginTop: "-50px",
-  },
-  innerCircle: {
-    position: "absolute",
-    borderRadius: "50%",
-    background: "#F0F8FF",
-    zIndex: -1,
-  },
-  connector: {
-    flexShrink: 0,
-    height: "2px",
-    background: "#DBEAFE",
-    marginTop: "-50px",
-    marginLeft: "2px",
-    transformOrigin: "left",
-  },
-  cardAccent: {
-    height: "3px",
-    borderRadius: "2px",
-    background: "#3b82f6",
-    marginBottom: "10px",
-    transformOrigin: "left",
-  },
-};
-
 const StrategicAlignmentSection: React.FC<StrategicAlignmentSectionProps> = ({ section }) => {
-  const [isMobile, setIsMobile] = React.useState(false);
 
-  React.useEffect(() => {
-    const check = () => setIsMobile(window.innerWidth < 768);
-    check();
-    window.addEventListener("resize", check);
-    return () => window.removeEventListener("resize", check);
-  }, []);
+  // Convert all styles to Tailwind utility functions
+  const getWrapperClasses = () => 
+    "bg-white py-[48px] px-[32px] shadow-[0_2px_12px_rgba(0,0,0,0.05)] mb-[48px] mt-[48px] w-screen -ml-[calc(50vw-50%)]";
 
-  const iconStyle: React.CSSProperties = {
-    width: isMobile ? "14px" : "20px",
-    height: isMobile ? "14px" : "20px",
-    color: "#5BA8D8",
-    strokeWidth: 1.6,
-    position: "relative",
-    zIndex: 2,
+  const getSectionTitleClasses = () => 
+    "font-black text-[#0f1c2e] text-center mb-[52px] tracking-[-0.3px]";
+
+  const getTimelineClasses = () => 
+    "relative flex flex-col gap-[28px] w-full max-w-[780px] mx-auto";
+
+  const getVerticalLineClasses = () => 
+    "absolute left-[15px] top-0 bottom-0 w-[12px] bg-[#D2E8FE] rounded-t-[6px] z-0 origin-top";
+
+  const getIconClasses = () => 
+    "text-[#5BA8D8] relative z-[2] w-[14px] h-[14px] md:w-[20px] md:h-[20px] stroke-[1.6]";
+
+  const getIconWrapClasses = () => 
+    "relative z-[1] flex-shrink-0 rounded-full bg-white border-2 border-[#DBEAFE] flex items-center justify-center shadow-[0_2px_8px_rgba(90,160,220,0.15)] ml-[16px] -mt-[50px] w-[28px] h-[28px] md:w-[40px] md:h-[40px]";
+
+  const getInnerCircleClasses = () => 
+    "absolute rounded-full bg-[#F0F8FF] -z-[1] w-[20px] h-[20px] md:w-[28px] md:h-[28px]";
+
+  const getConnectorClasses = () => 
+    "flex-shrink-0 h-[2px] bg-[#DBEAFE] -mt-[50px] ml-[2px] origin-left w-[10px] md:w-[24px]";
+
+  const getCardAccentClasses = () => 
+    "h-[3px] rounded-[2px] bg-[#3b82f6] mb-[10px] origin-left w-[20px] md:w-[32px]";
+
+  const getCardTitleClasses = () => 
+    "font-bold text-[#0f1c2e] mb-[4px] text-[0.82rem] md:text-[1.05rem]";
+
+  const getCardTextClasses = () => 
+    "text-[#5a6a7e] leading-[1.55] m-0 text-[0.75rem] md:text-[0.92rem]";
+
+  const getCardClasses = (index: number) => {
+    const basePadding = "p-[10px_14px] md:p-[22px_28px]";
+    const baseClasses = `flex-1 rounded-[14px] ${basePadding} shadow-[0_2px_10px_rgba(0,0,0,0.05)] relative overflow-hidden cursor-pointer`;
+    
+    if (index % 2 === 0) {
+      return `${baseClasses} border border-[rgba(72,187,120,0.25)] bg-[#F5F9FF]`;
+    } else {
+      return `${baseClasses} border border-[rgba(72,187,120,0.1)] bg-[#F2FFF9]`;
+    }
   };
 
-  const iconWrapStyle: React.CSSProperties = {
-    ...styles.iconWrap,
-    width: isMobile ? "28px" : "40px",
-    height: isMobile ? "28px" : "40px",
-  };
-
-  const innerCircleStyle: React.CSSProperties = {
-    ...styles.innerCircle,
-    width: isMobile ? "20px" : "28px",
-    height: isMobile ? "20px" : "28px",
-  };
-
-  const connectorStyle: React.CSSProperties = {
-    ...styles.connector,
-    width: isMobile ? "10px" : "24px",
-  };
-
-  const cardAccentStyle: React.CSSProperties = {
-    ...styles.cardAccent,
-    width: isMobile ? "20px" : "32px",
-  };
-
-  const cardTitleStyle: React.CSSProperties = {
-    fontSize: isMobile ? "0.82rem" : "1.05rem",
-    fontWeight: 700,
-    color: "#0f1c2e",
-    marginBottom: "4px",
-  };
-
-  const cardTextStyle: React.CSSProperties = {
-    fontSize: isMobile ? "0.75rem" : "0.92rem",
-    color: "#5a6a7e",
-    lineHeight: 1.55,
-    margin: 0,
-  };
-
-  const getCardStyle = (index: number): React.CSSProperties => ({
-    flex: 1,
-    borderRadius: "14px",
-    padding: isMobile ? "10px 14px" : "22px 28px",
-    boxShadow: "0 2px 10px rgba(0,0,0,0.05)",
-    border: `1px solid ${index % 2 === 0 ? "rgba(72,187,120,0.25)" : "rgba(72,187,120,0.1)"}`,
-    background: index % 2 === 0 ? "#F5F9FF" : "#F2FFF9",
-    position: "relative" as const,
-    overflow: "hidden",
-    cursor: "pointer",
-  });
+  const getTitleFontSize = () => "text-[1.875rem] md:text-[2.9rem]";
 
   return (
     <motion.div
@@ -237,25 +144,25 @@ const StrategicAlignmentSection: React.FC<StrategicAlignmentSectionProps> = ({ s
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true }}
-      style={styles.wrapper}
+      className={getWrapperClasses()}
     >
       <motion.h2
         variants={titleVariant}
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true }}
-        style={{ ...styles.sectionTitle, fontSize: isMobile ? "1.875rem" : "2.9rem" }}
+        className={`${getSectionTitleClasses()} ${getTitleFontSize()}`}
       >
         {section.title}
       </motion.h2>
 
-      <div style={styles.timeline}>
+      <div className={getTimelineClasses()}>
         <motion.div
           variants={verticalLineVariant}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
-          style={styles.verticalLine}
+          className={getVerticalLineClasses()}
         />
 
         {section.content.map((item, index) => {
@@ -271,7 +178,7 @@ const StrategicAlignmentSection: React.FC<StrategicAlignmentSectionProps> = ({ s
               whileInView="visible"
               custom={baseDelay}
               viewport={{ once: true }}
-              style={{ display: "flex", alignItems: "center", gap: 0, position: "relative" }}
+              className="flex items-center gap-0 relative"
             >
               <motion.div
                 variants={scaleInVariant}
@@ -279,10 +186,10 @@ const StrategicAlignmentSection: React.FC<StrategicAlignmentSectionProps> = ({ s
                 whileInView="visible"
                 custom={baseDelay + 0.3}
                 viewport={{ once: true }}
-                style={iconWrapStyle}
+                className={getIconWrapClasses()}
               >
-                <div style={innerCircleStyle} />
-                <IconComponent style={iconStyle} />
+                <div className={getInnerCircleClasses()} />
+                <IconComponent className={getIconClasses()} />
               </motion.div>
 
               <motion.div
@@ -291,7 +198,7 @@ const StrategicAlignmentSection: React.FC<StrategicAlignmentSectionProps> = ({ s
                 whileInView="visible"
                 custom={baseDelay + 0.5}
                 viewport={{ once: true }}
-                style={connectorStyle}
+                className={getConnectorClasses()}
               />
 
               <motion.div
@@ -301,7 +208,7 @@ const StrategicAlignmentSection: React.FC<StrategicAlignmentSectionProps> = ({ s
                 custom={baseDelay + 0.2}
                 viewport={{ once: true }}
                 whileHover={{ scale: 1.02, boxShadow: "0 8px 25px rgba(0,0,0,0.12)", transition: { duration: 0.2 } }}
-                style={getCardStyle(index)}
+                className={getCardClasses(index)}
               >
                 <motion.div
                   variants={scaleXVariant}
@@ -309,7 +216,7 @@ const StrategicAlignmentSection: React.FC<StrategicAlignmentSectionProps> = ({ s
                   whileInView="visible"
                   custom={baseDelay + 0.4}
                   viewport={{ once: true }}
-                  style={cardAccentStyle}
+                  className={getCardAccentClasses()}
                 />
                 <motion.h3
                   variants={fadeInVariant}
@@ -317,7 +224,7 @@ const StrategicAlignmentSection: React.FC<StrategicAlignmentSectionProps> = ({ s
                   whileInView="visible"
                   custom={baseDelay + 0.6}
                   viewport={{ once: true }}
-                  style={cardTitleStyle}
+                  className={getCardTitleClasses()}
                 >
                   {item.title}
                 </motion.h3>
@@ -327,7 +234,7 @@ const StrategicAlignmentSection: React.FC<StrategicAlignmentSectionProps> = ({ s
                   whileInView="visible"
                   custom={baseDelay + 0.7}
                   viewport={{ once: true }}
-                  style={cardTextStyle}
+                  className={getCardTextClasses()}
                 >
                   {item.description}
                 </motion.p>

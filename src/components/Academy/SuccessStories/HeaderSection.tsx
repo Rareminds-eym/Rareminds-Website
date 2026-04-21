@@ -9,43 +9,6 @@ interface HeaderSectionProps {
   section: SectionData;
 }
 
-// Move styles outside component for better performance - created once, reused forever
-const styles: Record<string, React.CSSProperties> = {
-  wrapper: {
-    backgroundColor: '#f8f9fa',
-    padding: '80px 0',
-    width: '100vw',
-    marginLeft: 'calc(-50vw + 50%)',
-    marginTop: '0',
-    marginBottom: '0',
-  },
-  inner: {
-    maxWidth: '1100px',
-    margin: '0 auto',
-    padding: '0 24px',
-    textAlign: 'center' as const,
-  },
-  title: {
-    fontSize: '2.5rem',
-    fontWeight: 700,
-    color: '#111',
-    marginBottom: '24px',
-    letterSpacing: '-0.5px',
-    lineHeight: '1.2',
-  },
-  content: {
-    maxWidth: '800px',
-    margin: '0 auto',
-    fontSize: '1rem',
-    lineHeight: '1.7',
-    color: '#444',
-    textAlign: 'left' as const,
-  },
-  paragraph: {
-    marginBottom: '20px',
-  },
-};
-
 const HeaderSection: React.FC<HeaderSectionProps> = ({ section }) => {
   // Split content into paragraphs by line breaks or double spaces
   const paragraphs = section.content
@@ -53,21 +16,22 @@ const HeaderSection: React.FC<HeaderSectionProps> = ({ section }) => {
     .filter(para => para.trim().length > 0);
 
   return (
-    <section style={styles.wrapper}>
-      <div style={styles.inner}>
+    <section className="bg-[#f8f9fa] py-[80px] w-screen -ml-[calc(50vw-50%)] mt-0 mb-0">
+      <div className="max-w-[1100px] mx-auto px-[24px] text-center">
         {/* Main Title */}
-        <h1 style={styles.title}>{section.title}</h1>
+        <h1 className="text-[2.5rem] font-bold text-[#111] mb-[24px] tracking-[-0.5px] leading-[1.2]">{section.title}</h1>
         
         {/* Content */}
-        <div style={styles.content}>
+        <div className="max-w-[800px] mx-auto text-[1rem] leading-[1.7] text-[#444] text-left">
           {paragraphs.length > 1 ? (
-            paragraphs.map((para) => (
-              <p key={para.trim().substring(0, 50)} style={styles.paragraph}>
+            // ✅ This is correct for static paragraph lists
+            paragraphs.map((para, index) => (
+              <p key={index} className="mb-[20px]">
                 {para.trim()}
               </p>
             ))
           ) : (
-            <p style={styles.paragraph}>{section.content.trim()}</p>
+            <p className="mb-[20px]">{section.content.trim()}</p>
           )}
         </div>
       </div>

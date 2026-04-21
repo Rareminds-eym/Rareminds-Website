@@ -58,6 +58,9 @@ export default {
         'morph': 'morph 8s ease-in-out infinite',
         'pulse-glow': 'pulse-glow 3s ease-in-out infinite',
         'drift': 'drift 10s ease-in-out infinite',
+        'scroll-vertical':   'scrollVertical 25s linear infinite',
+        'scroll-horizontal': 'scrollHorizontal 20s linear infinite',
+
       },
       keyframes: {
         float: {
@@ -135,6 +138,14 @@ export default {
       },
       transitionTimingFunction: {
         'scroll-pause': 'cubic-bezier(0.4, 0, 0.2, 1)',
+      },
+      scrollVertical: {
+        '0%':   { transform: 'translateY(0)' },
+        '100%': { transform: 'translateY(calc(-1 * var(--scroll-height, 0px)))' },
+      },
+      scrollHorizontal: {
+        '0%':   { transform: 'translateX(0)' },
+        '100%': { transform: 'translateX(calc(-1 * var(--scroll-width, 0px)))' },
       },
     },
   },

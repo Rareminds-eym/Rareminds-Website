@@ -1,5 +1,4 @@
 import React from "react";
-import { useIsMobile } from "../../../hooks/useIsMobile";
 
 interface BulletItem {
   label?: string;
@@ -7,6 +6,7 @@ interface BulletItem {
 }
 
 interface CardData {
+  id: string;   
   initial: string;
   title: string;
   subtitle?: string;
@@ -14,6 +14,7 @@ interface CardData {
 }
 
 interface ContentItem {
+  id: string;
   title: string;
   description: string;
   tags?: string[];
@@ -26,10 +27,6 @@ interface DSATMAboutSectionProps {
     content: ContentItem[];
   };
 }
-
-const cardStyle: React.CSSProperties = {
-  borderRadius: "15px 15px 80px 15px",
-};
 
 // Split a description string into bullet items.
 // Handles "Label: text" and "Name (detail) – text" patterns.
@@ -65,9 +62,8 @@ function parseDescription(description: string): BulletItem[] {
 }
 
 const DSATMAboutSection: React.FC<DSATMAboutSectionProps> = ({ section }) => {
-  const isMobile = useIsMobile();
-
   const cards: CardData[] = section.content.map((item) => ({
+    id: item.id, 
     initial: item.title?.trim()?.charAt(0)?.toUpperCase() || "?",
     title: item.title,
     // First tag (if any) is used as the card subtitle
@@ -77,17 +73,17 @@ const DSATMAboutSection: React.FC<DSATMAboutSectionProps> = ({ section }) => {
 
   const cols = Math.min(cards.length, 3);
 
+  // Generate grid classes based on number of cards (responsive with Tailwind)
+  const getGridClasses = () => {
+    const baseClasses = "grid gap-5 max-w-[1200px] mx-auto";
+    // Mobile: always 1 column, Desktop: dynamic based on card count
+    if (cols === 1) return `${baseClasses} grid-cols-1`;
+    if (cols === 2) return `${baseClasses} grid-cols-1 md:grid-cols-2`;
+    return `${baseClasses} grid-cols-1 md:grid-cols-3`;
+  };
+
   return (
-    <section
-      style={{
-        width: "100vw",
-        marginLeft: "calc(-50vw + 50%)",
-        backgroundColor: "#ffffff",
-        padding: "52px 24px",
-        marginTop: isMobile ? "-90px" : "-35px",
-        marginBottom: "0px",
-      }}
-    >
+    <section className="bg-white w-screen -ml-[calc(50vw-50%)] px-6 py-[52px] mb-0 -mt-[90px] md:-mt-[35px]">
       {/* Title */}
       <h2 className="text-3xl md:text-5xl font-extrabold text-center text-gray-900 mb-12">
         {section.title}
@@ -101,20 +97,11 @@ const DSATMAboutSection: React.FC<DSATMAboutSectionProps> = ({ section }) => {
       )}
 
       {/* Cards Grid */}
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: isMobile ? "1fr" : `repeat(${cols}, 1fr)`,
-          gap: "20px",
-          maxWidth: "1200px",
-          margin: "0 auto",
-        }}
-      >
+      <div className={getGridClasses()}>
         {cards.map((card) => (
           <div
-            key={card.title}
-            className="border border-teal-200 p-5"
-            style={{ ...cardStyle, backgroundColor: "#F3FEF9" }}
+            key={card.id}
+            className="border border-teal-200 p-5 bg-[#F3FEF9] rounded-[15px_15px_80px_15px]"
           >
             {/* Header */}
             <div className="flex items-center gap-3 mb-3">
@@ -131,9 +118,9 @@ const DSATMAboutSection: React.FC<DSATMAboutSectionProps> = ({ section }) => {
 
             {/* Bullet Items */}
             <ul className="space-y-1">
-              {card.items.map((item) => (
+              {card.items.map((item,itemIndex) => (
                 <li
-                  key={item.text}
+                  key={`bullet-${itemIndex}`}
                   className="flex items-start gap-2 text-gray-700 text-sm leading-relaxed"
                 >
                   <span className="mt-1.5 w-2 h-2 rounded-full bg-blue-400 flex-shrink-0" />

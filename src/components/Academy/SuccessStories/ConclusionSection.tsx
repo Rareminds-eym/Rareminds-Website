@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 
 interface ImageItem {
-  id?: string;
+  id: string;
   url: string;
 }
 
@@ -17,47 +17,6 @@ interface SectionData {
 interface ConclusionSectionProps {
   section: SectionData;
 }
-
-const styles: Record<string, React.CSSProperties> = {
-  wrapper: {
-    backgroundColor: '#ffffff',
-    padding: '60px 0',
-    width: '100vw',
-    marginLeft: 'calc(-50vw + 50%)',
-    marginTop: '-50px',
-    marginBottom: '-50px',
-  },
-  inner: {
-    maxWidth: '1100px',
-    margin: '0 auto',
-    padding: '0 24px',
-  },
-  contentRow: {
-    display: 'flex',
-    gap: '40px',
-    alignItems: 'center',
-    flexWrap: 'wrap' as const,
-  },
-  illustrationWrapper: {
-    position: 'relative' as const,
-    zIndex: 1,
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: '100%',
-    height: '100%',
-  },
-  rightCol: {
-    flex: 1,
-    minWidth: '300px',
-  },
-  textCard: {
-    backgroundColor: '#fff',
-    borderRadius: '12px',
-    boxShadow: '8px 8px 20px rgba(0,0,0,0.12)',
-    border: '1px solid #e8ecf3',
-  },
-};
 
 const ConclusionSection: React.FC<ConclusionSectionProps> = ({ section }) => {
   const [isMobile, setIsMobile] = useState(false);
@@ -78,17 +37,10 @@ const ConclusionSection: React.FC<ConclusionSectionProps> = ({ section }) => {
     return () => window.removeEventListener('resize', check);
   }, []);
 
-  const paragraphs: string[] = section.content
-    .split(/\.\s+/)
-    .filter(sentence => sentence.trim().length > 0)
-    .map(sentence => sentence.trim() + (sentence.endsWith('.') ? '' : '.'))
-    .reduce((acc: string[], sentence: string, i: number, arr: string[]) => {
-      if (i % 2 === 0) {
-        const combined = arr[i + 1] ? sentence + ' ' + arr[i + 1] : sentence;
-        acc.push(combined);
-      }
-      return acc;
-    }, []);
+  // Simple paragraph processing - just split by double newlines or use content as-is
+  const paragraphs: string[] = section.content.includes('\n\n') 
+    ? section.content.split('\n\n').map(p => p.trim()).filter(p => p.length > 0)
+    : [section.content];
 
   // ── Animation Variants ──────────────────────────────────────────────────────
 
@@ -139,91 +91,72 @@ const ConclusionSection: React.FC<ConclusionSectionProps> = ({ section }) => {
     },
   };
 
-  // ── Responsive Styles ──────────────────────────────────────────────────────
-
-  const leftColStyle: React.CSSProperties = isMobile
-    ? {
-        flex: '0 0 100%',
-        position: 'relative',
-        height: '220px',
-        display: 'flex',
-        alignItems: 'flex-end',
-        justifyContent: 'center',
-        paddingBottom: '10px',
-      }
-    : isTablet
-    ? {
-        flex: '0 0 100%',
-        position: 'relative',
-        height: '320px',
-        display: 'flex',
-        alignItems: 'flex-end',
-        justifyContent: 'center',
-        paddingBottom: '20px',
-      }
-    : {
-        flex: '0 0 480px',
-        position: 'relative',
-        height: '320px',
-        display: 'flex',
-        alignItems: 'flex-end',
-        justifyContent: 'center',
-        paddingBottom: '20px',
-      };
-
-  const blueShapeStyle: React.CSSProperties = {
-    position: 'absolute',
-    bottom: '0px',
-    left: '50%',
-    transform: 'translateX(-50%)',
-    width: isMobile ? '260px' : isTablet ? '420px' : '450px',
-    height: isMobile ? '210px' : isTablet ? '320px' : '350px',
-    borderRadius: '215px',
-    backgroundColor: '#e0eeff',
-    zIndex: 0,
+  // Convert all styles to Tailwind classes
+  const getLeftColClasses = () => {
+    if (isMobile) {
+      return "flex-[0_0_100%] relative h-[220px] flex items-end justify-center pb-[10px]";
+    } else if (isTablet) {
+      return "flex-[0_0_100%] relative h-[320px] flex items-end justify-center pb-[20px]";
+    } else {
+      return "flex-[0_0_480px] relative h-[320px] flex items-end justify-center pb-[20px]";
+    }
   };
 
-  const imageStyle: React.CSSProperties = {
-    width: '100%',
-    maxWidth: isMobile ? '240px' : isTablet ? '360px' : '400px',
-    height: isMobile ? '200px' : isTablet ? '300px' : '320px',
-    objectFit: 'contain',
-    position: 'relative',
-    zIndex: 1,
-    marginTop:  isMobile ? '25px' : isTablet ? '30px' : '5px',
-    filter: 'drop-shadow(0 10px 6px rgba(0, 0, 0, 0.3))',
+  const getBlueShapeClasses = () => {
+    const baseClasses = "absolute bottom-0 left-1/2 -translate-x-1/2 rounded-[215px] bg-[#e0eeff] z-0";
+    if (isMobile) {
+      return `${baseClasses} w-[260px] h-[210px]`;
+    } else if (isTablet) {
+      return `${baseClasses} w-[420px] h-[320px]`;
+    } else {
+      return `${baseClasses} w-[450px] h-[350px]`;
+    }
   };
 
-  const titleStyle: React.CSSProperties = {
-    textAlign: 'center',
-    fontSize: isMobile ? '1.875rem' : '3rem',
-    fontWeight: 700,
-    color: '#111',
-    marginBottom: isMobile ? '16px' : '60px',
+  const getImageClasses = () => {
+    const baseClasses = "w-full object-contain relative z-[1] drop-shadow-[0_10px_6px_rgba(0,0,0,0.3)]";
+    if (isMobile) {
+      return `${baseClasses} max-w-[240px] h-[200px] mt-[25px]`;
+    } else if (isTablet) {
+      return `${baseClasses} max-w-[360px] h-[300px] mt-[30px]`;
+    } else {
+      return `${baseClasses} max-w-[400px] h-[320px] mt-[5px]`;
+    }
   };
 
-  const textCardStyle: React.CSSProperties = {
-    ...styles.textCard,
-    padding: isMobile ? '18px 20px' : '32px 36px',
-    minHeight: isMobile ? 'unset' : '280px',
-    position: 'relative',
+  const getTitleClasses = () => {
+    const baseClasses = "text-center font-bold text-[#111]";
+    if (isMobile) {
+      return `${baseClasses} text-[1.875rem] mb-[16px]`;
+    } else {
+      return `${baseClasses} text-[3rem] mb-[60px]`;
+    }
   };
 
-  const paragraphStyle: React.CSSProperties = {
-    fontSize: isMobile ? '0.72rem' : '1rem',
-    lineHeight: isMobile ? '1.4' : '1.5',
-    color: '#333',
-    marginBottom: isMobile ? '8px' : '16px',
-    textAlign: 'justify' as const,
+  const getParagraphClasses = () => {
+    const baseClasses = "text-[#333] text-justify";
+    if (isMobile) {
+      return `${baseClasses} text-[0.72rem] leading-[1.4] mb-[8px]`;
+    } else {
+      return `${baseClasses} text-[1rem] leading-[1.5] mb-[16px]`;
+    }
+  };
+
+  // Convert textCard styles to Tailwind classes
+  const getTextCardClasses = () => {
+    const baseClasses = "bg-white rounded-[12px] shadow-[8px_8px_20px_rgba(0,0,0,0.12)] border border-[#e8ecf3] relative";
+    const paddingClasses = isMobile ? "p-[18px_20px]" : "p-[32px_36px]";
+    const heightClasses = isMobile ? "" : "min-h-[280px]";
+    return `${baseClasses} ${paddingClasses} ${heightClasses}`.trim();
   };
 
   return (
-    <section style={styles.wrapper}>
-      <div style={styles.inner}>
+    <section className="bg-white py-[60px] w-screen -ml-[calc(50vw-50%)] -mt-[50px] -mb-[50px]">
+      <div className="max-w-[1100px] mx-auto px-[24px]">
 
         {/* ── Title fade-up ─────────────────────────────────────── */}
         <motion.h2
-          style={titleStyle}
+          className={getTitleClasses()}
           variants={fadeUp}
           initial="hidden"
           whileInView="visible"
@@ -234,7 +167,7 @@ const ConclusionSection: React.FC<ConclusionSectionProps> = ({ section }) => {
 
         {/* ── Row stagger container ─────────────────────────────── */}
         <motion.div
-          style={styles.contentRow}
+          className="flex gap-[40px] items-center flex-wrap"
           variants={rowContainer}
           initial="hidden"
           whileInView="visible"
@@ -242,33 +175,23 @@ const ConclusionSection: React.FC<ConclusionSectionProps> = ({ section }) => {
         >
 
           {/* ── Left column ───────────────────────────────────────── */}
-          <motion.div style={leftColStyle} variants={fadeIn}>
+          <motion.div className={getLeftColClasses()} variants={fadeIn}>
 
             {/* Decorative blue box - bottom left of image */}
             {!isMobile && (
-              <div style={{
-                position: 'absolute',
-                bottom: '-30px',
-                left: isTablet ? 'calc(50% - 195px)' : '28px',
-                width: '45px',
-                height: '45px',
-                borderRadius: '12px',
-                backgroundColor: '#3B82F6',
-                zIndex: 2,
-                filter: 'drop-shadow(0 8px 10px rgba(79, 62, 236, 0.25))',
-              }} />
+              <div className={`absolute -bottom-[30px] ${isTablet ? 'left-[calc(50%-195px)]' : 'left-[28px]'} w-[45px] h-[45px] rounded-[12px] bg-[#3B82F6] z-[2] drop-shadow-[0_8px_10px_rgba(79,62,236,0.25)]`} />
             )}
 
             {/* Blob */}
-            <div style={blueShapeStyle} />
+            <div className={getBlueShapeClasses()} />
 
             {/* Illustration */}
-            <div style={styles.illustrationWrapper}>
+            <div className="relative z-[1] flex justify-center items-center w-full h-full">
               {imageUrl && !imageError && (
                 <motion.img
                   src={imageUrl}
                   alt="Conclusion illustration"
-                  style={imageStyle}
+                  className={getImageClasses()}
                   variants={scaleIn}
                   onError={() => setImageError(true)}
                 />
@@ -277,24 +200,14 @@ const ConclusionSection: React.FC<ConclusionSectionProps> = ({ section }) => {
           </motion.div>
 
           {/* ── Right column / card ───────────────────────────────── */}
-          <motion.div style={styles.rightCol} variants={fadeUp}>
+          <motion.div className="flex-1 min-w-[300px]" variants={fadeUp}>
             <motion.div
-              style={textCardStyle}
+              className={getTextCardClasses()}
               variants={scaleIn}
             >
               {/* Decorative blue box - mobile top-left of card */}
               {isMobile && (
-                <div style={{
-                  position: 'absolute',
-                  top: '-16px',
-                  left: '16px',
-                  width: '28px',
-                  height: '28px',
-                  borderRadius: '8px',
-                  backgroundColor: '#3B82F6',
-                  zIndex: 3,
-                  filter: 'drop-shadow(0 4px 6px rgba(59, 130, 246, 0.35))',
-                }} />
+                <div className="absolute -top-[16px] left-[16px] w-[28px] h-[28px] rounded-[8px] bg-[#3B82F6] z-[3] drop-shadow-[0_4px_6px_rgba(59,130,246,0.35)]" />
               )}
 
               {/* Paragraphs with stagger */}
@@ -308,14 +221,14 @@ const ConclusionSection: React.FC<ConclusionSectionProps> = ({ section }) => {
                   paragraphs.map((para, idx) => (
                     <motion.p
                       key={idx}
-                      style={paragraphStyle}
+                      className={getParagraphClasses()}
                       variants={paragraphItem}
                     >
                       {para.trim()}
                     </motion.p>
                   ))
                 ) : (
-                  <motion.p style={paragraphStyle} variants={paragraphItem}>
+                  <motion.p className={getParagraphClasses()} variants={paragraphItem}>
                     {section.content}
                   </motion.p>
                 )}

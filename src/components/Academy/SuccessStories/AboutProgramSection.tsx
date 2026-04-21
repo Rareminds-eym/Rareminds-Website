@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { Monitor, Code } from "lucide-react";
 
 interface ContentItem {
+  id: string;
   title: string;
   description: string;
 }
@@ -14,19 +15,6 @@ interface AboutProgramSectionProps {
 }
 
 const CARD_ICONS = [Monitor, Code];
-
-const CARD_STYLES = [
-  {
-    bg: "#F5F9FF",
-    clipPath: "polygon(8% 6%, 100% 0%, 100% 100%, 8% 94%)",
-    innerClass: "ml-2 md:ml-6",
-  },
-  {
-    bg: "#F3FEF9",
-    clipPath: "polygon(0% 0%, 92% 6%, 92% 94%, 0% 100%)",
-    innerClass: "ml-0 md:-ml-3",
-  },
-];
 
 function AboutProgramSection({ section }: AboutProgramSectionProps) {
   const items = section.content;
@@ -53,12 +41,12 @@ function AboutProgramSection({ section }: AboutProgramSectionProps) {
           >
             {items.map((item, index) => {
               // Cycle through card styles and icons for visual variety
-              const style = CARD_STYLES[index % CARD_STYLES.length];
               const Icon = CARD_ICONS[index % CARD_ICONS.length];
+              const isEven = index % 2 === 0;
 
               return (
                 <motion.div
-                  key={item.title}
+                  key={item.id}
                   initial={{ opacity: 0, x: index % 2 === 0 ? -40 : 40 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   transition={{
@@ -69,16 +57,18 @@ function AboutProgramSection({ section }: AboutProgramSectionProps) {
                   viewport={{ once: true }}
                   className="relative p-8 md:p-10"
                 >
+                  {/* Background with clip-path - alternating styles */}
                   <div
-                    className="absolute inset-0"
-                    style={{
-                      background: style.bg,
-                      clipPath: style.clipPath,
-                    }}
+                    className={`absolute inset-0 ${
+                      isEven 
+                        ? "bg-[#F5F9FF] [clip-path:polygon(8%_6%,100%_0%,100%_100%,8%_94%)]"
+                        : "bg-[#F3FEF9] [clip-path:polygon(0%_0%,92%_6%,92%_94%,0%_100%)]"
+                    }`}
                   />
                   <div
-                    className={`relative z-10 ${style.innerClass}`}
-                    style={{ maxWidth: "200%" }}
+                    className={`relative z-10 max-w-[200%] ${
+                      isEven ? "ml-2 md:ml-6" : "ml-0 md:-ml-3"
+                    }`}
                   >
                     {/* Icon */}
                     <motion.div

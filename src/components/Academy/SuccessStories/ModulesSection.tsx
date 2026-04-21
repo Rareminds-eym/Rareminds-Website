@@ -1,8 +1,8 @@
 import React from 'react';
 import { BookOpen, Target } from 'lucide-react';
-import { useIsMobile } from '../../../hooks/useIsMobile';
 
 interface ContentItem {
+  id: string;
   title: string;
   description: string;
 }
@@ -23,8 +23,6 @@ interface ModulesSectionProps {
 }
 
 const ModulesSection: React.FC<ModulesSectionProps> = ({ modules, approaches, intervention }) => {
-  const isMobile = useIsMobile();
-
   return (
     <div className="bg-white py-8 md:py-16 -mt-8">
       <h2 className="text-3xl md:text-5xl font-bold text-gray-900 mb-6 md:mb-10 text-center">
@@ -45,13 +43,7 @@ const ModulesSection: React.FC<ModulesSectionProps> = ({ modules, approaches, in
 
       <div className="container mx-auto px-4">
         <div className="max-w-5xl mx-auto">
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: isMobile ? '1fr' : 'repeat(2, 1fr)',
-              gap: '32px',
-            }}
-          >
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {/* LEFT CARD — Modules Covered */}
             <div className="relative p-10">
               <div
@@ -68,7 +60,7 @@ const ModulesSection: React.FC<ModulesSectionProps> = ({ modules, approaches, in
                 <h3 className="text-xl font-bold text-gray-900 mb-4">{modules.title}</h3>
                 <ul className="space-y-2">
                   {modules.items.map((item) => (
-                    <li key={item.title} className="text-sm text-gray-600 leading-relaxed flex items-start">
+                    <li key={item.id} className="text-sm text-gray-600 leading-relaxed flex items-start">
                       <span className="w-1.5 h-1.5 bg-blue-500 rounded-full mt-2 mr-3 flex-shrink-0" />
                       <span>{item.title}{item.description ? ` — ${item.description}` : ''}</span>
                     </li>
@@ -93,7 +85,7 @@ const ModulesSection: React.FC<ModulesSectionProps> = ({ modules, approaches, in
                 <h3 className="text-xl font-bold text-gray-900 mb-4">{approaches.title}</h3>
                 <ul className="space-y-2">
                   {approaches.items.map((item) => (
-                    <li key={item.title} className="text-sm text-gray-600 leading-relaxed flex items-start">
+                    <li key={item.id} className="text-sm text-gray-600 leading-relaxed flex items-start">
                       <span className="w-1.5 h-1.5 bg-blue-500 rounded-full mt-2 mr-3 flex-shrink-0" />
                       <span>{item.title}{item.description ? ` — ${item.description}` : ''}</span>
                     </li>

@@ -88,7 +88,7 @@ export default function KeyOutcomesSection({ section }: KeyOutcomesSectionProps)
         initial="hidden"
         whileInView="visible"
         custom={0}
-        viewport={{ once: true, threshold: 0.3 }}
+        viewport={{ once: true, amount: 0.3 }}
         className="ko-sora text-3xl md:text-5xl font-bold text-gray-900 mb-12 mt-8 text-center"
       >
         {section.title}
@@ -109,6 +109,11 @@ export default function KeyOutcomesSection({ section }: KeyOutcomesSectionProps)
             const numericVal = parseFloat(numericStr);
             const suffix = item.value.includes("%") ? "%" : item.value.includes("+") ? "+" : "";
 
+            // Generate border radius class based on pattern
+            const borderRadiusClass = radius === "50px 15px 50px 15px" 
+              ? "rounded-[50px_15px_50px_15px]" 
+              : "rounded-[15px_50px_15px_50px]";
+
             return (
               <motion.div
                 key={i}
@@ -116,12 +121,11 @@ export default function KeyOutcomesSection({ section }: KeyOutcomesSectionProps)
                 initial="hidden"
                 whileInView="visible"
                 custom={delay}
-                viewport={{ once: true, threshold: 0.3 }}
+                viewport={{ once: true, amount: 0.3 }}
                 whileHover={{ scale: 1.02, transition: { duration: 0.2 } }}
-                className={`ko-card relative border border-blue-100 shadow-sm p-8 ${
+                className={`ko-card relative border border-blue-100 shadow-sm p-8 bg-[#F5F9FF] ${borderRadiusClass} ${
                   stats.length === 1 ? "max-w-md w-full" : ""
                 }`}
-                style={{ borderRadius: radius, backgroundColor: "#F5F9FF" }}
               >
                 {/* Icon badge */}
                 <motion.div
@@ -129,17 +133,10 @@ export default function KeyOutcomesSection({ section }: KeyOutcomesSectionProps)
                   initial="hidden"
                   whileInView="visible"
                   custom={delay + 0.2}
-                  viewport={{ once: true, threshold: 0.3 }}
-                  className="absolute flex items-center justify-center rounded-full"
-                  style={{
-                    top: "-18px", right: "28px",
-                    width: "42px", height: "42px",
-                    backgroundColor: "#dbeafe",
-                    border: "1.5px solid #bfdbfe",
-                    zIndex: 10,
-                  }}
+                  viewport={{ once: true, amount: 0.3 }}
+                  className="absolute flex items-center justify-center rounded-full -top-[18px] right-[28px] w-[42px] h-[42px] bg-blue-100 border-[1.5px] border-blue-200 z-10"
                 >
-                  <Icon style={{ width: "20px", height: "20px", color: "#3b82f6", strokeWidth: 1.8 }} />
+                  <Icon className="text-blue-500 w-5 h-5" style={{ strokeWidth: 1.8 }} />
                 </motion.div>
 
                 {/* Value */}
@@ -148,9 +145,8 @@ export default function KeyOutcomesSection({ section }: KeyOutcomesSectionProps)
                   initial="hidden"
                   whileInView="visible"
                   custom={delay + 0.1}
-                  viewport={{ once: true, threshold: 0.3 }}
-                  className="ko-sora font-extrabold mb-2 tracking-tight"
-                  style={{ fontSize: "2.5rem", color: "#000000" }}
+                  viewport={{ once: true, amount: 0.3 }}
+                  className="ko-sora font-extrabold mb-2 tracking-tight text-black text-[2.5rem]"
                 >
                   {inView ? (
                     <CountUp
@@ -170,7 +166,7 @@ export default function KeyOutcomesSection({ section }: KeyOutcomesSectionProps)
                   initial="hidden"
                   whileInView="visible"
                   custom={delay + 0.15}
-                  viewport={{ once: true, threshold: 0.3 }}
+                  viewport={{ once: true, amount: 0.3 }}
                   className="font-bold text-base mb-1 text-gray-900"
                 >
                   {item.label}
@@ -196,27 +192,21 @@ export default function KeyOutcomesSection({ section }: KeyOutcomesSectionProps)
                 initial="hidden"
                 whileInView="visible"
                 custom={delay}
-                viewport={{ once: true, threshold: 0.3 }}
+                viewport={{ once: true, amount: 0.3 }}
                 whileHover={{ scale: 1.02, transition: { duration: 0.2 } }}
-                className={`flex items-start gap-4 border border-blue-100 px-7 py-5 ${
+                className={`flex items-start gap-4 border border-blue-100 px-7 py-5 bg-[#F5F9FF] rounded-full ${
                   isLastOdd ? "sm:col-span-2 sm:max-w-md sm:mx-auto" : ""
                 }`}
-                style={{ backgroundColor: "#F5F9FF", borderRadius: "999px" }}
               >
                 <motion.div
                   variants={scaleInVariant}
                   initial="hidden"
                   whileInView="visible"
                   custom={delay + 0.15}
-                  viewport={{ once: true, threshold: 0.3 }}
-                  className="flex-shrink-0 flex items-center justify-center rounded-full mt-0.5"
-                  style={{
-                    width: "36px", height: "36px",
-                    backgroundColor: "rgba(255,255,255,0.7)",
-                    boxShadow: "0 1px 4px rgba(0,0,0,0.08)",
-                  }}
+                  viewport={{ once: true, amount: 0.3 }}
+                  className="flex-shrink-0 flex items-center justify-center rounded-full mt-0.5 w-[36px] h-[36px] bg-white/70 shadow-sm"
                 >
-                  <Icon style={{ width: "16px", height: "16px", color: "#3b82f6", strokeWidth: 1.8 }} />
+                  <Icon className="text-blue-500 w-4 h-4" style={{ strokeWidth: 1.8 }} />
                 </motion.div>
 
                 <motion.p
@@ -224,7 +214,7 @@ export default function KeyOutcomesSection({ section }: KeyOutcomesSectionProps)
                   initial="hidden"
                   whileInView="visible"
                   custom={delay + 0.1}
-                  viewport={{ once: true, threshold: 0.3 }}
+                  viewport={{ once: true, amount: 0.3 }}
                   className="text-xs md:text-sm leading-relaxed text-gray-700"
                 >
                   {pill.label}
