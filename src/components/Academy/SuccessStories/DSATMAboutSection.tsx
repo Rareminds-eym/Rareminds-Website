@@ -75,7 +75,7 @@ const DSATMAboutSection: React.FC<DSATMAboutSectionProps> = ({ section }) => {
 
   // Generate grid classes based on number of cards (responsive with Tailwind)
   const getGridClasses = () => {
-    const baseClasses = "grid gap-5 max-w-[1200px] mx-auto";
+    const baseClasses = "grid gap-5 max-w-6xl mx-auto";
     // Mobile: always 1 column, Desktop: dynamic based on card count
     if (cols === 1) return `${baseClasses} grid-cols-1`;
     if (cols === 2) return `${baseClasses} grid-cols-1 md:grid-cols-2`;
@@ -83,7 +83,7 @@ const DSATMAboutSection: React.FC<DSATMAboutSectionProps> = ({ section }) => {
   };
 
   return (
-    <section className="bg-white w-screen -ml-[calc(50vw-50%)] px-6 py-[52px] mb-0 -mt-[90px] md:-mt-[35px]">
+    <section className="bg-white w-screen -ml-[calc(50vw-50%)] px-6 py-13 mb-0 -mt-22.5 md:-mt-8.75">
       {/* Title */}
       <h2 className="text-3xl md:text-5xl font-extrabold text-center text-gray-900 mb-12">
         {section.title}
@@ -101,7 +101,7 @@ const DSATMAboutSection: React.FC<DSATMAboutSectionProps> = ({ section }) => {
         {cards.map((card) => (
           <div
             key={card.id}
-            className="border border-teal-200 p-5 bg-[#F3FEF9] rounded-[15px_15px_80px_15px]"
+            className="border border-teal-200 p-5 bg-green-50 rounded-[15px_15px_80px_15px]"
           >
             {/* Header */}
             <div className="flex items-center gap-3 mb-3">
@@ -118,9 +118,9 @@ const DSATMAboutSection: React.FC<DSATMAboutSectionProps> = ({ section }) => {
 
             {/* Bullet Items */}
             <ul className="space-y-1">
-              {card.items.map((item,itemIndex) => (
+              {card.items.map((item) => (
                 <li
-                  key={`bullet-${itemIndex}`}
+                  key={`${card.id}-${item.text.trim().slice(0, 30)}`}
                   className="flex items-start gap-2 text-gray-700 text-sm leading-relaxed"
                 >
                   <span className="mt-1.5 w-2 h-2 rounded-full bg-blue-400 flex-shrink-0" />

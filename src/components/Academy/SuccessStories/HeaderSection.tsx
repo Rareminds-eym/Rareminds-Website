@@ -16,22 +16,21 @@ const HeaderSection: React.FC<HeaderSectionProps> = ({ section }) => {
     .filter(para => para.trim().length > 0);
 
   return (
-    <section className="bg-[#f8f9fa] py-[80px] w-screen -ml-[calc(50vw-50%)] mt-0 mb-0">
-      <div className="max-w-[1100px] mx-auto px-[24px] text-center">
+    <section className="bg-gray-50 py-20 w-screen -ml-[calc(50vw-50%)] mt-0 mb-0">
+      <div className="max-w-5xl mx-auto px-6 text-center">
         {/* Main Title */}
-        <h1 className="text-[2.5rem] font-bold text-[#111] mb-[24px] tracking-[-0.5px] leading-[1.2]">{section.title}</h1>
+        <h1 className="text-4xl font-bold text-gray-900 mb-6 tracking-tight leading-tight">{section.title}</h1>
         
         {/* Content */}
-        <div className="max-w-[800px] mx-auto text-[1rem] leading-[1.7] text-[#444] text-left">
+        <div className="max-w-3xl mx-auto text-base leading-relaxed text-gray-600 text-left">
           {paragraphs.length > 1 ? (
-            // ✅ This is correct for static paragraph lists
-            paragraphs.map((para, index) => (
-              <p key={index} className="mb-[20px]">
-                {para.trim()}
-              </p>
+            paragraphs.map((para) => (
+              <p key={para.trim().slice(0, 40)} className="mb-5">
+      {para.trim()}
+    </p>
             ))
           ) : (
-            <p className="mb-[20px]">{section.content.trim()}</p>
+            <p className="mb-5">{section.content.trim()}</p>
           )}
         </div>
       </div>

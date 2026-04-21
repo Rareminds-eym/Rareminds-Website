@@ -11,6 +11,7 @@ import {
 const icons = [BriefcaseIcon, LightBulbIcon, UsersIcon, CheckCircleIcon, StarIcon];
 
 interface StrategicItem {
+  id: string; 
   title: string;
   description: string;
 }
@@ -93,50 +94,50 @@ const StrategicAlignmentSection: React.FC<StrategicAlignmentSectionProps> = ({ s
 
   // Convert all styles to Tailwind utility functions
   const getWrapperClasses = () => 
-    "bg-white py-[48px] px-[32px] shadow-[0_2px_12px_rgba(0,0,0,0.05)] mb-[48px] mt-[48px] w-screen -ml-[calc(50vw-50%)]";
+    "bg-white py-12.5 px-8 shadow-section mb-12.5 mt-12.5 w-screen -ml-[calc(50vw-50%)]";
 
   const getSectionTitleClasses = () => 
-    "font-black text-[#0f1c2e] text-center mb-[52px] tracking-[-0.3px]";
+    "font-black text-gray-850 text-center mb-13 tracking-tight";
 
   const getTimelineClasses = () => 
-    "relative flex flex-col gap-[28px] w-full max-w-[780px] mx-auto";
+    "relative flex flex-col gap-7 w-full max-w-195 mx-auto";
 
   const getVerticalLineClasses = () => 
-    "absolute left-[15px] top-0 bottom-0 w-[12px] bg-[#D2E8FE] rounded-t-[6px] z-0 origin-top";
+    "absolute left-4 top-0 bottom-0 w-3 bg-blue-timeline rounded-t-md z-0 origin-top";
 
   const getIconClasses = () => 
-    "text-[#5BA8D8] relative z-[2] w-[14px] h-[14px] md:w-[20px] md:h-[20px] stroke-[1.6]";
+    "text-blue-icon relative z-[2] w-3.5 h-3.5 md:w-5 md:h-5 stroke-2";
 
   const getIconWrapClasses = () => 
-    "relative z-[1] flex-shrink-0 rounded-full bg-white border-2 border-[#DBEAFE] flex items-center justify-center shadow-[0_2px_8px_rgba(90,160,220,0.15)] ml-[16px] -mt-[50px] w-[28px] h-[28px] md:w-[40px] md:h-[40px]";
+    "relative z-[1] flex-shrink-0 rounded-full bg-white border-2 border-blue-border flex items-center justify-center shadow-timeline ml-4 -mt-12.5 w-7 h-7 md:w-10 md:h-10";
 
   const getInnerCircleClasses = () => 
-    "absolute rounded-full bg-[#F0F8FF] -z-[1] w-[20px] h-[20px] md:w-[28px] md:h-[28px]";
+    "absolute rounded-full bg-blue-bg -z-[1] w-5 h-5 md:w-7 md:h-7";
 
   const getConnectorClasses = () => 
-    "flex-shrink-0 h-[2px] bg-[#DBEAFE] -mt-[50px] ml-[2px] origin-left w-[10px] md:w-[24px]";
+    "flex-shrink-0 h-0.5 bg-blue-border -mt-12.5 ml-0.5 origin-left w-2.5 md:w-6";
 
   const getCardAccentClasses = () => 
-    "h-[3px] rounded-[2px] bg-[#3b82f6] mb-[10px] origin-left w-[20px] md:w-[32px]";
+    "h-0.5 rounded-sm bg-blue-500 mb-2.5 origin-left w-5 md:w-8";
 
   const getCardTitleClasses = () => 
-    "font-bold text-[#0f1c2e] mb-[4px] text-[0.82rem] md:text-[1.05rem]";
+    "font-bold text-gray-850 mb-1 text-xs-plus md:text-base-plus";
 
   const getCardTextClasses = () => 
-    "text-[#5a6a7e] leading-[1.55] m-0 text-[0.75rem] md:text-[0.92rem]";
+    "text-gray-650 leading-relaxed m-0 text-2xs md:text-sm-plus";
 
   const getCardClasses = (index: number) => {
-    const basePadding = "p-[10px_14px] md:p-[22px_28px]";
-    const baseClasses = `flex-1 rounded-[14px] ${basePadding} shadow-[0_2px_10px_rgba(0,0,0,0.05)] relative overflow-hidden cursor-pointer`;
+    const basePadding = "py-2.5 px-3.5 md:py-5.5 md:px-7";
+    const baseClasses = `flex-1 rounded-xl ${basePadding} shadow-card relative overflow-hidden cursor-pointer min-h-24 md:min-h-32`;
     
     if (index % 2 === 0) {
-      return `${baseClasses} border border-[rgba(72,187,120,0.25)] bg-[#F5F9FF]`;
+      return `${baseClasses} border border-green-500/25 bg-green-25`;
     } else {
-      return `${baseClasses} border border-[rgba(72,187,120,0.1)] bg-[#F2FFF9]`;
+      return `${baseClasses} border border-green-500/10 bg-green-50`;
     }
   };
 
-  const getTitleFontSize = () => "text-[1.875rem] md:text-[2.9rem]";
+  const getTitleFontSize = () => "text-3xl md:text-2.9xl";
 
   return (
     <motion.div
@@ -172,7 +173,7 @@ const StrategicAlignmentSection: React.FC<StrategicAlignmentSectionProps> = ({ s
 
           return (
             <motion.div
-              key={index}
+              key={item.id}
               variants={rowVariant}
               initial="hidden"
               whileInView="visible"

@@ -31,6 +31,10 @@ const getMediaUrl = (item: MediaItem): string => {
 
 const ITEM_GAP = 10;
 
+// Mobile scroll constants
+const MOBILE_ITEM_WIDTH = 110; // px - width of each media item on mobile
+const MOBILE_ITEM_GAP = 12;    // px - spacing between items on mobile
+
 export const MediaGallery = ({ media, title = "Media Gallery", compact = false }: MediaGalleryProps) => {
   const uid = useId();
   const mobileScrollId = `mobile-scroll-inner-${uid.replace(/:/g, "")}`;
@@ -73,7 +77,7 @@ export const MediaGallery = ({ media, title = "Media Gallery", compact = false }
   useEffect(() => {
     const el = document.getElementById(mobileScrollId);
     if (el && media.length > 0) {
-      const totalWidth = media.length * (110 + 12);
+      const totalWidth = media.length * (MOBILE_ITEM_WIDTH + MOBILE_ITEM_GAP);
       el.style.setProperty("--scroll-width", `${totalWidth}px`);
     }
   }, [media, mobileScrollId]);
@@ -91,7 +95,7 @@ export const MediaGallery = ({ media, title = "Media Gallery", compact = false }
         <div className="hidden md:flex gap-10 items-start max-w-5xl mx-auto">
 
           {/* LEFT: Main player */}
-          <div ref={leftPanelRef} className="flex-1 min-w-0" style={{ maxWidth: "68%" }}>
+          <div ref={leftPanelRef} className="flex-1 min-w-0 max-w-68p">
             <div
               className="relative w-full aspect-video bg-gray-900 rounded-lg shadow-sm overflow-hidden cursor-pointer group"
               onClick={() => !isSelectedVideo && setIsModalOpen(true)}
@@ -111,8 +115,8 @@ export const MediaGallery = ({ media, title = "Media Gallery", compact = false }
 
           {/* RIGHT: Thumbnail sidebar */}
           <div
-            className="flex-shrink-0 overflow-hidden rounded-lg"
-            style={{ width: "220px", height: sidebarHeight > 0 ? `${sidebarHeight}px` : "auto" }}
+            className="flex-shrink-0 overflow-hidden rounded-lg w-55"
+            style={{ height: sidebarHeight > 0 ? `${sidebarHeight}px` : "auto" }}
           >
             {sidebarHeight > 0 && (
               <div
@@ -129,17 +133,18 @@ export const MediaGallery = ({ media, title = "Media Gallery", compact = false }
                 <div
                   ref={scrollInnerRef}
                   className="flex flex-col animate-scroll-vertical"
-                  style={{ gap: `${ITEM_GAP}px` }}
+                  style={{ gap: "0.625rem" }}
                 >
                   {[...media, ...media].map((item, index) => {
                     const itemUrl = getMediaUrl(item);
                     const itemIsVideo = isVideo(itemUrl);
                     const actualIndex = index % media.length;
                     const isActive = actualIndex === selectedIndex;
+                    const isDuplicate = index >= media.length;
 
                     return (
                       <button
-                        key={index}
+                        key={`desktop-${itemUrl}-${isDuplicate ? 'dup' : 'orig'}`}
                         onClick={() => setSelectedIndex(actualIndex)}
                         className={`relative w-full rounded-lg overflow-hidden flex-shrink-0 transition-all ${
                           isActive
@@ -209,15 +214,16 @@ export const MediaGallery = ({ media, title = "Media Gallery", compact = false }
                 const itemIsVideo = isVideo(itemUrl);
                 const actualIndex = index % media.length;
                 const isActive = actualIndex === selectedIndex;
+                const isDuplicate = index >= media.length;
 
                 return (
                   <button
-                    key={index}
+                    key={`mobile-${itemUrl}-${isDuplicate ? 'dup' : 'orig'}`}
                     onClick={() => setSelectedIndex(actualIndex)}
                     className={`relative flex-shrink-0 rounded-lg overflow-hidden transition-all ${
                       isActive ? "ring-2 ring-blue-500" : "ring-1 ring-gray-200"
                     }`}
-                    style={{ width: "110px", height: "72px" }}
+                    style={{ width: `${MOBILE_ITEM_WIDTH}px`, height: "4.5rem" }}
                   >
                     {itemIsVideo ? (
                       <>

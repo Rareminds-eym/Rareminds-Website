@@ -61,12 +61,12 @@ function AboutProgramSection({ section }: AboutProgramSectionProps) {
                   <div
                     className={`absolute inset-0 ${
                       isEven 
-                        ? "bg-[#F5F9FF] [clip-path:polygon(8%_6%,100%_0%,100%_100%,8%_94%)]"
-                        : "bg-[#F3FEF9] [clip-path:polygon(0%_0%,92%_6%,92%_94%,0%_100%)]"
+                        ? "bg-green-25 card-shape-left"
+                        : "bg-green-50 card-shape-right"
                     }`}
                   />
                   <div
-                    className={`relative z-10 max-w-[200%] ${
+                    className={`relative z-10 max-w-2x ${
                       isEven ? "ml-2 md:ml-6" : "ml-0 md:-ml-3"
                     }`}
                   >

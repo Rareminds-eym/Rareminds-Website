@@ -22,6 +22,7 @@ const pillIcons = [LightBulbIcon, ChatBubbleLeftRightIcon, AcademicCapIcon, Chec
 const radiusPattern = ["50px 15px 50px 15px", "15px 50px 15px 50px"];
 
 interface StatItem {
+  id: string;
   value: string;
   label: string;
 }
@@ -82,7 +83,7 @@ export default function KeyOutcomesSection({ section }: KeyOutcomesSectionProps)
   const hasStats = stats.length > 0;
 
   return (
-    <div className="mb-12" ref={ref}>
+    <div className="mb-12 pb-16" ref={ref}>
       <motion.h2
         variants={fadeUpVariant}
         initial="hidden"
@@ -96,7 +97,7 @@ export default function KeyOutcomesSection({ section }: KeyOutcomesSectionProps)
 
       {/* Stat Cards */}
       {hasStats && (
-        <div className={`grid gap-8 mb-8 ${
+        <div className={`grid gap-8 mb-8 px-4 ${
           stats.length === 1 ? "grid-cols-1 justify-items-center" : "grid-cols-1 sm:grid-cols-2"
         }`}>
           {stats.map((item, i) => {
@@ -111,19 +112,19 @@ export default function KeyOutcomesSection({ section }: KeyOutcomesSectionProps)
 
             // Generate border radius class based on pattern
             const borderRadiusClass = radius === "50px 15px 50px 15px" 
-              ? "rounded-[50px_15px_50px_15px]" 
-              : "rounded-[15px_50px_15px_50px]";
+              ? "rounded-stat-1" 
+              : "rounded-stat-2";
 
             return (
               <motion.div
-                key={i}
+                key={item.id}
                 variants={variant}
                 initial="hidden"
                 whileInView="visible"
                 custom={delay}
                 viewport={{ once: true, amount: 0.3 }}
                 whileHover={{ scale: 1.02, transition: { duration: 0.2 } }}
-                className={`ko-card relative border border-blue-100 shadow-sm p-8 bg-[#F5F9FF] ${borderRadiusClass} ${
+                className={`ko-card relative border border-blue-100 shadow-sm p-8 bg-green-25 ${borderRadiusClass} ${
                   stats.length === 1 ? "max-w-md w-full" : ""
                 }`}
               >
@@ -134,7 +135,7 @@ export default function KeyOutcomesSection({ section }: KeyOutcomesSectionProps)
                   whileInView="visible"
                   custom={delay + 0.2}
                   viewport={{ once: true, amount: 0.3 }}
-                  className="absolute flex items-center justify-center rounded-full -top-[18px] right-[28px] w-[42px] h-[42px] bg-blue-100 border-[1.5px] border-blue-200 z-10"
+                  className="absolute flex items-center justify-center rounded-full -top-4.5 right-7 w-10 h-10 bg-blue-100 border border-blue-200 z-10"
                 >
                   <Icon className="text-blue-500 w-5 h-5" style={{ strokeWidth: 1.8 }} />
                 </motion.div>
@@ -146,7 +147,7 @@ export default function KeyOutcomesSection({ section }: KeyOutcomesSectionProps)
                   whileInView="visible"
                   custom={delay + 0.1}
                   viewport={{ once: true, amount: 0.3 }}
-                  className="ko-sora font-extrabold mb-2 tracking-tight text-black text-[2.5rem]"
+                  className="ko-sora font-extrabold mb-2 tracking-tight text-black text-4xl"
                 >
                   {inView ? (
                     <CountUp
@@ -179,7 +180,7 @@ export default function KeyOutcomesSection({ section }: KeyOutcomesSectionProps)
 
       {/* Pill Cards — for non-numeric items (↑, ✓, etc.) */}
       {pills.length > 0 && (
-        <div className={`grid gap-5 ${hasStats ? "mt-16" : "mt-0"} grid-cols-1 sm:grid-cols-2`}>
+        <div className={`grid gap-5 ${hasStats ? "mt-16" : "mt-0"} grid-cols-1 sm:grid-cols-2 px-4`}>
           {pills.map((pill, i) => {
             const Icon = pillIcons[i % pillIcons.length];
             const isLastOdd = pills.length % 2 === 1 && i === pills.length - 1 && pills.length > 1;
@@ -187,14 +188,14 @@ export default function KeyOutcomesSection({ section }: KeyOutcomesSectionProps)
 
             return (
               <motion.div
-                key={i}
+                key={pill.id}
                 variants={fadeUpVariant}
                 initial="hidden"
                 whileInView="visible"
                 custom={delay}
                 viewport={{ once: true, amount: 0.3 }}
                 whileHover={{ scale: 1.02, transition: { duration: 0.2 } }}
-                className={`flex items-start gap-4 border border-blue-100 px-7 py-5 bg-[#F5F9FF] rounded-full ${
+                className={`flex items-start gap-4 border border-blue-100 px-7 py-5 bg-green-25 rounded-full ${
                   isLastOdd ? "sm:col-span-2 sm:max-w-md sm:mx-auto" : ""
                 }`}
               >
@@ -204,7 +205,7 @@ export default function KeyOutcomesSection({ section }: KeyOutcomesSectionProps)
                   whileInView="visible"
                   custom={delay + 0.15}
                   viewport={{ once: true, amount: 0.3 }}
-                  className="flex-shrink-0 flex items-center justify-center rounded-full mt-0.5 w-[36px] h-[36px] bg-white/70 shadow-sm"
+                  className="flex-shrink-0 flex items-center justify-center rounded-full mt-0.5 w-9 h-9 bg-white/70 shadow-sm"
                 >
                   <Icon className="text-blue-500 w-4 h-4" style={{ strokeWidth: 1.8 }} />
                 </motion.div>

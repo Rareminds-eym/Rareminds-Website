@@ -15,6 +15,18 @@ export default {
       fontFamily: {
         sans: ['Poppins', 'sans-serif'],
       },
+      spacing: {
+        '12.5': '3rem',    // 48px
+        '13': '3.25rem',   // 52px  
+        '15': '3.75rem',   // 60px
+        '17': '4.25rem',   // 68px
+        '18': '4.5rem',    // 72px
+        '22': '5.5rem',    // 88px
+        '22.5': '5.625rem', // 90px - for negative margins
+        '8.75': '2.1875rem', // 35px - for negative margins
+        '55': '13.75rem',   // 220px - sidebar width
+        '2.5': '0.625rem',  // 10px - item gap
+      },
       colors: {
         primary: {
           50: '#eff6ff',
@@ -34,6 +46,21 @@ export default {
           800: '#991b1b',
           900: '#7f1d1d',
         },
+        blue: {
+          25: '#EFF6FF',  // Custom light blue for cards
+          timeline: '#D2E8FE',  // Timeline background
+          icon: '#5BA8D8',      // Icon color
+          border: '#DBEAFE',    // Border color
+          bg: '#F0F8FF',        // Background color
+        },
+        gray: {
+          850: '#0f1c2e',      // Dark text
+          650: '#5a6a7e',      // Medium text
+        },
+        green: {
+          25: '#F5F9FF',       // Light blue-green card bg
+          50: '#F2FFF9',       // Light green card bg
+        },
         corporate: {
           primary: "#107DFE",
           secondary: "#04DEBF",
@@ -42,6 +69,28 @@ export default {
           purple: "#4F2D91",
           yellow: "#F4B128"
         },
+      },
+      borderRadius: {
+        'stat-1': '50px 15px 50px 15px',  // Stat card pattern 1
+        'stat-2': '15px 50px 15px 50px',  // Stat card pattern 2
+      },
+      maxWidth: {
+        '2x': '200%',     // 2x width for card content
+        '2.5x': '250%',   // 2.5x width for card content
+        '195': '48.75rem', // 780px for timeline
+        '68p': '68%',     // Main player max width
+      },
+      fontSize: {
+        '2xs': '0.75rem',   // 12px
+        'xs-plus': '0.82rem', // ~13px
+        'sm-plus': '0.92rem', // ~15px
+        'base-plus': '1.05rem', // ~17px
+        '2.9xl': '2.9rem',    // Custom large title
+      },
+      boxShadow: {
+        'timeline': '0 2px 8px rgba(90,160,220,0.15)',
+        'card': '0 2px 10px rgba(0,0,0,0.05)',
+        'section': '0 2px 12px rgba(0,0,0,0.05)',
       },
       animation: {
         float: 'float 6s ease-in-out infinite',
@@ -125,6 +174,14 @@ export default {
           '0%': { transform: 'translateY(-50%)' },
           '100%': { transform: 'translateY(0)' },
         },
+        scrollVertical: {
+          '0%':   { transform: 'translateY(0)' },
+          '100%': { transform: 'translateY(calc(-1 * var(--scroll-height, 0px)))' },
+        },
+        scrollHorizontal: {
+          '0%':   { transform: 'translateX(0)' },
+          '100%': { transform: 'translateX(calc(-1 * var(--scroll-width, 0px)))' },
+        },
       },
       transformOrigin: {
         '3d': 'preserve-3d',
@@ -139,14 +196,6 @@ export default {
       transitionTimingFunction: {
         'scroll-pause': 'cubic-bezier(0.4, 0, 0.2, 1)',
       },
-      scrollVertical: {
-        '0%':   { transform: 'translateY(0)' },
-        '100%': { transform: 'translateY(calc(-1 * var(--scroll-height, 0px)))' },
-      },
-      scrollHorizontal: {
-        '0%':   { transform: 'translateX(0)' },
-        '100%': { transform: 'translateX(calc(-1 * var(--scroll-width, 0px)))' },
-      },
     },
   },
   variants: {
@@ -160,6 +209,12 @@ export default {
         '.transform-style-3d': {
           transformStyle: 'preserve-3d',
         },
+        '.card-shape-left': {
+          'clip-path': 'polygon(8% 6%, 100% 0%, 100% 100%, 8% 94%)',
+        },
+        '.card-shape-right': {
+          'clip-path': 'polygon(0% 0%, 92% 6%, 92% 94%, 0% 100%)',
+        }
       });
     },
   ],

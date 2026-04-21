@@ -18,7 +18,11 @@ function IntroductionSection({ title, content, images = [] }: IntroductionSectio
   const [failedImages, setFailedImages] = useState<Set<string>>(new Set());
 
   const handleImageError = (imageUrl: string) => {
-    setFailedImages(prev => new Set(prev).add(imageUrl));
+    setFailedImages(prev => {
+      const newSet = new Set(prev);
+      newSet.add(imageUrl);
+      return newSet;
+    });
   };
 
   // Extract title className logic for better readability
@@ -67,7 +71,7 @@ function IntroductionSection({ title, content, images = [] }: IntroductionSectio
             <div className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 {images.slice(0, 2).map((image, index) => {
-  if (failedImages.has(image.url)) return null;  // ✅ null is safe, false is not
+  if (failedImages.has(image.url)) return null; 
 
   return (
     <motion.div
