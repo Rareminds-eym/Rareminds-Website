@@ -1,6 +1,6 @@
 
 import { motion } from "framer-motion";
-import { useState, useCallback } from "react";
+import { useState, useCallback, useMemo } from "react";
 
 interface ImageItem {
   id: string;
@@ -20,17 +20,17 @@ function IntroductionSection({ title, content, images = [] }: IntroductionSectio
   const handleImageError = useCallback((imageUrl: string) => {
     setFailedImages(prev => [...prev, imageUrl]);
   }, []);
-
+  
   // Extract title className logic for better readability
-  const getTitleClasses = () => {
-    const baseClasses = 'text-3xl md:text-5xl font-bold text-gray-900 mb-2 md:mb-8';
-    const isOneWord = title.trim().split(/\s+/).length === 1;
-    const hasImages = images.length > 0;
+  const getTitleClasses = useMemo(() => {
+  const baseClasses = 'text-3xl md:text-5xl font-bold text-gray-900 mb-2 md:mb-8';
+  const isOneWord = title.trim().split(/\s+/).length === 1;
+  const hasImages = images.length > 0;
 
-    if (isOneWord) return `${baseClasses} text-center`;
-    if (hasImages) return `${baseClasses} text-center md:text-left leading-relaxed`;
-    return `${baseClasses} text-center leading-relaxed`;
-  };
+  if (isOneWord) return `${baseClasses} text-center`;
+  if (hasImages) return `${baseClasses} text-center md:text-left leading-relaxed`;
+  return `${baseClasses} text-center leading-relaxed`;
+}, [title, images.length]);
 
   return (
     <div className="w-full bg-white py-16">
@@ -44,7 +44,7 @@ function IntroductionSection({ title, content, images = [] }: IntroductionSectio
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, ease: "easeOut" }}
               viewport={{ once: true }}
-              className={getTitleClasses()}
+              className={getTitleClasses}
             >
               {title}
             </motion.h2>
@@ -89,7 +89,7 @@ function IntroductionSection({ title, content, images = [] }: IntroductionSectio
 
               </div>
 
-              {images.length > 2 && !failedImages.includes(images[2].url) && (
+              {images.length > 2 && images[2] && !failedImages.includes(images[2].url) && (
                 <motion.div
                   initial={{ opacity: 0, scale: 0.95 }}
                   whileInView={{ opacity: 1, scale: 1 }}

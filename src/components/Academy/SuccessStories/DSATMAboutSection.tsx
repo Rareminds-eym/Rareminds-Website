@@ -84,8 +84,7 @@ const DSATMAboutSection: React.FC<DSATMAboutSectionProps> = ({ section }) => {
 
   return (
     <section 
-      className="bg-white w-screen px-6 py-12 mb-0 -mt-20 md:-mt-8"
-      style={{ marginLeft: 'calc(-50vw + 50%)' }}
+      className="bg-white w-screen px-6 py-12 mb-0 -mt-20 md:-mt-8 -ml-breakout"
     >
       {/* Title */}
       <h2 className="text-3xl md:text-5xl font-extrabold text-center text-gray-900 mb-12">
@@ -121,9 +120,9 @@ const DSATMAboutSection: React.FC<DSATMAboutSectionProps> = ({ section }) => {
 
             {/* Bullet Items */}
             <ul className="space-y-1">
-              {card.items.map((item) => (
+              {card.items.map((item, index) => (
                 <li
-                  key={`${card.id}-${item.text.trim().slice(0, 30)}`}
+                  key={`${card.id}-${index}`}
                   className="flex items-start gap-2 text-gray-700 text-sm leading-relaxed"
                 >
                   <span className="mt-1.5 w-2 h-2 rounded-full bg-blue-400 flex-shrink-0" />

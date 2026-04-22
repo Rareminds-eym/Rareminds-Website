@@ -41,10 +41,7 @@ const ConclusionSection: React.FC<ConclusionSectionProps> = ({ section }) => {
     return () => window.removeEventListener('resize', check);
   }, []);
 
-  // Simple paragraph processing - just split by double newlines or use content as-is
-  const paragraphs: string[] = section.content.includes('\n\n') 
-    ? section.content.split('\n\n').map(p => p.trim()).filter(p => p.length > 0)
-    : [section.content];
+  
 
   // ── Animation Variants ──────────────────────────────────────────────────────
 
@@ -156,8 +153,7 @@ const ConclusionSection: React.FC<ConclusionSectionProps> = ({ section }) => {
 
   return (
     <section 
-      className="bg-white py-16 w-screen -mt-12 -mb-12"
-      style={{ marginLeft: 'calc(-50vw + 50%)' }}
+      className="bg-white py-16 w-screen -mt-12 -mb-12 -ml-breakout"
     >
       <div className="max-w-5xl mx-auto px-6">
 
@@ -224,21 +220,9 @@ const ConclusionSection: React.FC<ConclusionSectionProps> = ({ section }) => {
                 whileInView="visible"
                 viewport={{ once: true, amount: 0.2 }}
               >
-                {paragraphs.length > 1 ? (
-                  paragraphs.map((para) => (
-                    <motion.p
-                      key={para.trim().slice(0, 40)}
-                      className={getParagraphClasses()}
-                      variants={paragraphItem}
-                    >
-                      {para.trim()}
-                    </motion.p>
-                  ))
-                ) : (
                   <motion.p className={getParagraphClasses()} variants={paragraphItem}>
                     {section.content}
                   </motion.p>
-                )}
               </motion.div>
             </motion.div>
           </motion.div>

@@ -94,7 +94,7 @@ const StrategicAlignmentSection: React.FC<StrategicAlignmentSectionProps> = ({ s
 
   // Convert all styles to Tailwind utility functions
   const getWrapperClasses = () => 
-    "bg-white py-12 px-8 shadow-lg mb-12 mt-12 w-screen";
+    "bg-white py-12 px-8 shadow-lg mb-12 mt-12 w-screen -ml-breakout";
 
   const getSectionTitleClasses = () => 
     "font-black text-gray-800 text-center mb-12 tracking-tight";
@@ -137,7 +137,7 @@ const StrategicAlignmentSection: React.FC<StrategicAlignmentSectionProps> = ({ s
     }
   };
 
-  const getTitleFontSize = () => "text-3xl md:text-3xl";
+  const getTitleFontSize = () => "text-2xl md:text-3xl";
 
   return (
     <motion.div

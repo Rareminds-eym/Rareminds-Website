@@ -16,18 +16,7 @@ export default {
         sans: ['Poppins', 'sans-serif'],
       },
       spacing: {
-        '12.5': '3rem',    // 48px
-        '13': '3.25rem',   // 52px  
-        '15': '3.75rem',   // 60px
-        '17': '4.25rem',   // 68px
-        '18': '4.5rem',    // 72px
-        '22': '5.5rem',    // 88px
-        '22.5': '5.625rem', // 90px - for negative margins
-        '8.75': '2.1875rem', // 35px - for negative margins
-        '55': '13.75rem',   // 220px - sidebar width
-        '105': '26.25rem',  // 420px - blue shape tablet width
-        '112.5': '28.125rem', // 450px - blue shape desktop width
-        '87.5': '21.875rem',  // 350px - blue shape desktop height
+        '18': '4.5rem',    // 72px - MediaGallery mobile thumbnail height
       },
       colors: {
         primary: {
@@ -49,19 +38,19 @@ export default {
           900: '#7f1d1d',
         },
         blue: {
-          25: '#EFF6FF',  // Custom light blue for cards
-          timeline: '#D2E8FE',  // Timeline background
-          icon: '#5BA8D8',      // Icon color
-          border: '#DBEAFE',    // Border color
-          bg: '#F0F8FF',        // Background color
+          card_light: '#EFF6FF',     // Custom light blue for cards
+          timeline_bg: '#D2E8FE',    // Timeline background
+          icon_primary: '#5BA8D8',   // Icon color
+          border_light: '#DBEAFE',   // Border color
+          bg_light: '#F0F8FF',       // Background color
         },
         gray: {
           850: '#0f1c2e',      // Dark text
           650: '#5a6a7e',      // Medium text
         },
         green: {
-          25: '#F5F9FF',       // Light blue-green card bg
-          50: '#F2FFF9',       // Light green card bg
+          card_light: '#F5F9FF',     // Light blue-green card bg
+          bg_light: '#F2FFF9',       // Light green card bg
         },
         corporate: {
           primary: "#107DFE",
@@ -79,16 +68,13 @@ export default {
         'card-asymmetric': '15px 15px 80px 15px', // Asymmetric card shape
       },
       maxWidth: {
-        '195': '48.75rem',  // 780px for timeline
-        '90': '22.5rem',    // 360px for image tablet width
+        // No custom maxWidth values needed - all replaced with standard classes
       },
       fontSize: {
         '3xl': '2.9rem',    // Custom large title - override standard 3xl
       },
       boxShadow: {
-        'timeline': '0 2px 8px rgba(90,160,220,0.15)',
-        'card': '0 2px 10px rgba(0,0,0,0.05)',
-        'section': '0 2px 12px rgba(0,0,0,0.05)',
+        // No custom shadows needed - all replaced with standard classes
       },
       animation: {
         float: 'float 6s ease-in-out infinite',
@@ -105,8 +91,8 @@ export default {
         'morph': 'morph 8s ease-in-out infinite',
         'pulse-glow': 'pulse-glow 3s ease-in-out infinite',
         'drift': 'drift 10s ease-in-out infinite',
-        'scroll-vertical':   'scrollVertical 25s linear infinite',
-        'scroll-horizontal': 'scrollHorizontal 20s linear infinite',
+        'scroll-vertical':   'scroll-vertical 25s linear infinite',
+        'scroll-horizontal': 'scroll-horizontal 20s linear infinite',
 
       },
       keyframes: {
