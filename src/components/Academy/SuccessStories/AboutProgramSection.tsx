@@ -20,7 +20,10 @@ function AboutProgramSection({ section }: AboutProgramSectionProps) {
   const items = section.content;
 
   return (
-    <div className="py-16 -mt-10 bg-white min-h-full w-screen -ml-breakout">
+    <div 
+      className="py-16 -mt-10 bg-white min-h-full w-screen"
+      style={{ marginLeft: 'calc(-50vw + 50%)' }}
+    >
       {/* Title */}
       <motion.h2
         initial={{ opacity: 0, y: 24 }}
@@ -61,12 +64,12 @@ function AboutProgramSection({ section }: AboutProgramSectionProps) {
                   <div
                     className={`absolute inset-0 ${
                       isEven 
-                        ? "bg-green-25 card-shape-left"
-                        : "bg-green-50 card-shape-right"
+                        ? "bg-green-50 card-shape-left"
+                        : "bg-green-100 card-shape-right"
                     }`}
                   />
                   <div
-                    className={`relative z-10 max-w-200p ${
+                    className={`relative z-10 max-w-none ${
                       isEven ? "ml-2 md:ml-6" : "ml-0 md:-ml-3"
                     }`}
                   >

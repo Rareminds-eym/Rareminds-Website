@@ -90,7 +90,7 @@ export default function KeyOutcomesSection({ section }: KeyOutcomesSectionProps)
         whileInView="visible"
         custom={0}
         viewport={{ once: true, amount: 0.3 }}
-        className="ko-sora text-3xl md:text-5xl font-bold text-gray-900 mb-12 mt-8 text-center"
+        className="text-3xl md:text-5xl font-bold text-gray-900 mb-12 mt-8 text-center"
       >
         {section.title}
       </motion.h2>
@@ -124,7 +124,7 @@ export default function KeyOutcomesSection({ section }: KeyOutcomesSectionProps)
                 custom={delay}
                 viewport={{ once: true, amount: 0.3 }}
                 whileHover={{ scale: 1.02, transition: { duration: 0.2 } }}
-                className={`ko-card relative border border-blue-100 shadow-sm p-8 bg-green-25 ${borderRadiusClass} ${
+                className={`relative border border-blue-100 shadow-sm p-8 bg-green-50 ${borderRadiusClass} ${
                   stats.length === 1 ? "max-w-md w-full" : ""
                 }`}
               >
@@ -135,7 +135,7 @@ export default function KeyOutcomesSection({ section }: KeyOutcomesSectionProps)
                   whileInView="visible"
                   custom={delay + 0.2}
                   viewport={{ once: true, amount: 0.3 }}
-                  className="absolute flex items-center justify-center rounded-full -top-4.5 right-7 w-10 h-10 bg-blue-100 border border-blue-200 z-10"
+                  className="absolute flex items-center justify-center rounded-full -top-5 right-7 w-10 h-10 bg-blue-100 border border-blue-200 z-10"
                 >
                   <Icon className="text-blue-500 w-5 h-5" style={{ strokeWidth: 1.8 }} />
                 </motion.div>

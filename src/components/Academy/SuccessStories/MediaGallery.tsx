@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { X, Play } from "lucide-react";
 
 interface MediaItem {
+  id: string;
   item1?: string;
   item2?: string;
   item3?: string;
@@ -85,7 +86,7 @@ export const MediaGallery = ({ media, title = "Media Gallery", compact = false }
   if (!media || media.length === 0) return null;
 
   return (
-    <div className={`w-screen relative -ml-[50vw] -mr-[50vw] bg-white ${compact ? 'pt-10 pb-6 mt-1 md:mt-2' : 'pt-16 pb-28 -mt-32 md:-mt-24 mb-2 md:mb-5'} md:pt-20 md:pb-24 pt-6 pb-6 px-4 md:px-8`}>
+    <div className={`w-screen relative bg-white ${compact ? 'pt-10 pb-6 mt-1 md:mt-2' : 'pt-16 pb-28 -mt-32 md:-mt-24 mb-2 md:mb-5'} md:pt-20 md:pb-24 pt-6 pb-6 px-4 md:px-8`} style={{ marginLeft: 'calc(-50vw + 50%)', marginRight: 'calc(-50vw + 50%)' }}>
       <div className="max-w-7xl mx-auto">
 
         {/* Title */}
@@ -95,7 +96,7 @@ export const MediaGallery = ({ media, title = "Media Gallery", compact = false }
         <div className="hidden md:flex gap-10 items-start max-w-5xl mx-auto">
 
           {/* LEFT: Main player */}
-          <div ref={leftPanelRef} className="flex-1 min-w-0 max-w-68p">
+          <div ref={leftPanelRef} className="flex-1 min-w-0 max-w-4xl">
             <div
               className="relative w-full aspect-video bg-gray-900 rounded-lg shadow-sm overflow-hidden cursor-pointer group"
               onClick={() => !isSelectedVideo && setIsModalOpen(true)}
@@ -115,7 +116,7 @@ export const MediaGallery = ({ media, title = "Media Gallery", compact = false }
 
           {/* RIGHT: Thumbnail sidebar */}
           <div
-            className="flex-shrink-0 overflow-hidden rounded-lg w-55"
+            className="flex-shrink-0 overflow-hidden rounded-lg w-56"
             style={{ height: sidebarHeight > 0 ? `${sidebarHeight}px` : "auto" }}
           >
             {sidebarHeight > 0 && (
@@ -132,8 +133,7 @@ export const MediaGallery = ({ media, title = "Media Gallery", compact = false }
               >
                 <div
                   ref={scrollInnerRef}
-                  className="flex flex-col animate-scroll-vertical"
-                  style={{ gap: "0.625rem" }}
+                  className="flex flex-col animate-scroll-vertical gap-2.5"
                 >
                   {[...media, ...media].map((item, index) => {
                     const itemUrl = getMediaUrl(item);
@@ -144,7 +144,7 @@ export const MediaGallery = ({ media, title = "Media Gallery", compact = false }
 
                     return (
                       <button
-                        key={`desktop-${itemUrl}-${isDuplicate ? 'dup' : 'orig'}`}
+                        key={`desktop-${item.id}-${isDuplicate ? 'dup' : 'orig'}`}
                         onClick={() => setSelectedIndex(actualIndex)}
                         className={`relative w-full rounded-lg overflow-hidden flex-shrink-0 transition-all ${
                           isActive
@@ -218,12 +218,12 @@ export const MediaGallery = ({ media, title = "Media Gallery", compact = false }
 
                 return (
                   <button
-                    key={`mobile-${itemUrl}-${isDuplicate ? 'dup' : 'orig'}`}
+                    key={`mobile-${item.id}-${isDuplicate ? 'dup' : 'orig'}`}
                     onClick={() => setSelectedIndex(actualIndex)}
-                    className={`relative flex-shrink-0 rounded-lg overflow-hidden transition-all ${
+                    className={`relative flex-shrink-0 rounded-lg overflow-hidden transition-all h-18 ${
                       isActive ? "ring-2 ring-blue-500" : "ring-1 ring-gray-200"
                     }`}
-                    style={{ width: `${MOBILE_ITEM_WIDTH}px`, height: "4.5rem" }}
+                    style={{ width: `${MOBILE_ITEM_WIDTH}px` }}
                   >
                     {itemIsVideo ? (
                       <>

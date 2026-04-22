@@ -83,7 +83,10 @@ const DSATMAboutSection: React.FC<DSATMAboutSectionProps> = ({ section }) => {
   };
 
   return (
-    <section className="bg-white w-screen -ml-breakout px-6 py-13 mb-0 -mt-22.5 md:-mt-8.75">
+    <section 
+      className="bg-white w-screen px-6 py-12 mb-0 -mt-20 md:-mt-8"
+      style={{ marginLeft: 'calc(-50vw + 50%)' }}
+    >
       {/* Title */}
       <h2 className="text-3xl md:text-5xl font-extrabold text-center text-gray-900 mb-12">
         {section.title}
@@ -101,7 +104,7 @@ const DSATMAboutSection: React.FC<DSATMAboutSectionProps> = ({ section }) => {
         {cards.map((card) => (
           <div
             key={card.id}
-            className="border border-teal-200 p-5 bg-green-50 rounded-[15px_15px_80px_15px]"
+            className="border border-teal-200 p-5 bg-green-50 rounded-card-asymmetric"
           >
             {/* Header */}
             <div className="flex items-center gap-3 mb-3">

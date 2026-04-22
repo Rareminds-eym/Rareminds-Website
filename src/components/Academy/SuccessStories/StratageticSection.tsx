@@ -94,46 +94,46 @@ const StrategicAlignmentSection: React.FC<StrategicAlignmentSectionProps> = ({ s
 
   // Convert all styles to Tailwind utility functions
   const getWrapperClasses = () => 
-    "bg-white py-12.5 px-8 shadow-section mb-12.5 mt-12.5 w-screen -ml-breakout";
+    "bg-white py-12 px-8 shadow-lg mb-12 mt-12 w-screen";
 
   const getSectionTitleClasses = () => 
-    "font-black text-gray-850 text-center mb-13 tracking-tight";
+    "font-black text-gray-800 text-center mb-12 tracking-tight";
 
   const getTimelineClasses = () => 
-    "relative flex flex-col gap-7 w-full max-w-[780px] mx-auto";
+    "relative flex flex-col gap-7 w-full max-w-3xl mx-auto";
 
   const getVerticalLineClasses = () => 
-    "absolute left-4 top-0 bottom-0 w-3 bg-blue-timeline rounded-t-md z-0 origin-top";
+    "absolute left-4 top-0 bottom-0 w-3 bg-blue-200 rounded-t-md z-0 origin-top";
 
   const getIconClasses = () => 
-    "text-blue-icon relative z-[2] w-3.5 h-3.5 md:w-5 md:h-5 stroke-2";
+    "text-blue-500 relative z-10 w-4 h-4 md:w-5 md:h-5 stroke-2";
 
   const getIconWrapClasses = () => 
-    "relative z-[1] flex-shrink-0 rounded-full bg-white border-2 border-blue-border flex items-center justify-center shadow-timeline ml-4 -mt-12.5 w-7 h-7 md:w-10 md:h-10";
+    "relative z-10 flex-shrink-0 rounded-full bg-white border-2 border-blue-300 flex items-center justify-center shadow-lg ml-4 -mt-12 w-7 h-7 md:w-10 md:h-10";
 
   const getInnerCircleClasses = () => 
-    "absolute rounded-full bg-blue-bg -z-[1] w-5 h-5 md:w-7 md:h-7";
+    "absolute rounded-full bg-blue-100 -z-10 w-5 h-5 md:w-7 md:h-7";
 
   const getConnectorClasses = () => 
-    "flex-shrink-0 h-0.5 bg-blue-border -mt-12.5 ml-0.5 origin-left w-2.5 md:w-6";
+    "flex-shrink-0 h-px bg-blue-300 -mt-12 ml-1 origin-left w-3 md:w-6";
 
   const getCardAccentClasses = () => 
-    "h-0.5 rounded-sm bg-blue-500 mb-2.5 origin-left w-5 md:w-8";
+    "h-px rounded-sm bg-blue-500 mb-3 origin-left w-5 md:w-8";
 
   const getCardTitleClasses = () => 
-    "font-bold text-gray-850 mb-1 text-xs md:text-lg";
+    "font-bold text-gray-800 mb-1 text-xs md:text-lg";
 
   const getCardTextClasses = () => 
-    "text-gray-650 leading-relaxed m-0 text-2xs md:text-sm";
+    "text-gray-600 leading-relaxed m-0 text-xs md:text-sm";
 
   const getCardClasses = (index: number) => {
-    const basePadding = "py-2.5 px-3.5 md:py-5.5 md:px-7";
-    const baseClasses = `flex-1 rounded-xl ${basePadding} shadow-card relative overflow-hidden cursor-pointer min-h-24 md:min-h-32`;
+    const basePadding = "py-3 px-4 md:py-6 md:px-7";
+    const baseClasses = `flex-1 rounded-xl ${basePadding} shadow-md relative overflow-hidden cursor-pointer min-h-24 md:min-h-32`;
     
     if (index % 2 === 0) {
-      return `${baseClasses} border border-green-500/25 bg-green-25`;
+      return `${baseClasses} border border-green-200 bg-green-50`;
     } else {
-      return `${baseClasses} border border-green-500/10 bg-green-50`;
+      return `${baseClasses} border border-green-100 bg-green-50`;
     }
   };
 
@@ -146,6 +146,7 @@ const StrategicAlignmentSection: React.FC<StrategicAlignmentSectionProps> = ({ s
       whileInView="visible"
       viewport={{ once: true }}
       className={getWrapperClasses()}
+      style={{ marginLeft: 'calc(-50vw + 50%)' }}
     >
       <motion.h2
         variants={titleVariant}

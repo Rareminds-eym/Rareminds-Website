@@ -18,8 +18,8 @@ function IntroductionSection({ title, content, images = [] }: IntroductionSectio
   const [failedImages, setFailedImages] = useState<string[]>([]);
 
   const handleImageError = useCallback((imageUrl: string) => {
-  setFailedImages(prev => [...prev, imageUrl]);
-}, []);
+    setFailedImages(prev => [...prev, imageUrl]);
+  }, []);
 
   // Extract title className logic for better readability
   const getTitleClasses = () => {
@@ -89,7 +89,7 @@ function IntroductionSection({ title, content, images = [] }: IntroductionSectio
 
               </div>
 
-              {images[2] && !failedImages.includes(images[2].url) && (
+              {images.length > 2 && !failedImages.includes(images[2].url) && (
                 <motion.div
                   initial={{ opacity: 0, scale: 0.95 }}
                   whileInView={{ opacity: 1, scale: 1 }}

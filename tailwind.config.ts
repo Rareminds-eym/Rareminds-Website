@@ -25,7 +25,9 @@ export default {
         '22.5': '5.625rem', // 90px - for negative margins
         '8.75': '2.1875rem', // 35px - for negative margins
         '55': '13.75rem',   // 220px - sidebar width
-        '2.5': '0.625rem',  // 10px - item gap
+        '105': '26.25rem',  // 420px - blue shape tablet width
+        '112.5': '28.125rem', // 450px - blue shape desktop width
+        '87.5': '21.875rem',  // 350px - blue shape desktop height
       },
       colors: {
         primary: {
@@ -73,18 +75,14 @@ export default {
       borderRadius: {
         'stat-1': '50px 15px 50px 15px',  // Stat card pattern 1
         'stat-2': '15px 50px 15px 50px',  // Stat card pattern 2
+        'blue-shape': '215px',            // Blue decorative shape
+        'card-asymmetric': '15px 15px 80px 15px', // Asymmetric card shape
       },
       maxWidth: {
-        '200p': '200%',     // 200 percent width
-        '250p': '250%',     // 250 percent width  
         '195': '48.75rem',  // 780px for timeline
-        '68p': '68%',       // 68 percent width
+        '90': '22.5rem',    // 360px for image tablet width
       },
       fontSize: {
-        '2xs': '0.75rem',   // 12px - standard Tailwind
-        'xs': '0.82rem',    // ~13px - override standard xs
-        'sm': '0.92rem',    // ~15px - override standard sm  
-        'lg': '1.05rem',    // ~17px - override standard lg
         '3xl': '2.9rem',    // Custom large title - override standard 3xl
       },
       boxShadow: {

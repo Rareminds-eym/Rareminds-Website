@@ -11,7 +11,10 @@ interface HeaderSectionProps {
 
 const HeaderSection: React.FC<HeaderSectionProps> = ({ section }) => {
   return (
-    <section className="bg-gray-50 py-20 w-screen -ml-breakout mt-0 mb-0">
+    <section 
+      className="bg-gray-50 py-20 w-screen mt-0 mb-0"
+      style={{ marginLeft: 'calc(-50vw + 50%)' }}
+    >
       <div className="max-w-5xl mx-auto px-6 text-center">
         {/* Main Title */}
         <h1 className="text-4xl font-bold text-gray-900 mb-6 tracking-tight leading-tight">{section.title}</h1>

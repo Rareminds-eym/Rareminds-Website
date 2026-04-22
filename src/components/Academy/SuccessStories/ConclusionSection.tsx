@@ -98,31 +98,31 @@ const ConclusionSection: React.FC<ConclusionSectionProps> = ({ section }) => {
   // Convert all styles to Tailwind classes
   const getLeftColClasses = () => {
     if (isMobile) {
-      return "flex-[0_0_100%] relative h-56 flex items-end justify-center pb-2.5";
+      return "flex-none w-full relative h-56 flex items-end justify-center pb-2.5";
     } else if (isTablet) {
-      return "flex-[0_0_100%] relative h-80 flex items-end justify-center pb-5";
+      return "flex-none w-full relative h-80 flex items-end justify-center pb-5";
     } else {
       return "flex-[0_0_480px] relative h-80 flex items-end justify-center pb-5";
     }
   };
 
   const getBlueShapeClasses = () => {
-    const baseClasses = "absolute bottom-0 left-1/2 -translate-x-1/2 rounded-[215px] bg-blue-50 z-0";
+    const baseClasses = "absolute bottom-0 left-1/2 -translate-x-1/2 rounded-blue-shape bg-blue-50 z-0";
     if (isMobile) {
       return `${baseClasses} w-64 h-52`;
     } else if (isTablet) {
-      return `${baseClasses} w-[420px] h-80`;
+      return `${baseClasses} w-96 h-80`;
     } else {
-      return `${baseClasses} w-[450px] h-[350px]`;
+      return `${baseClasses} w-96 h-80`;
     }
   };
 
   const getImageClasses = () => {
-    const baseClasses = "w-full object-contain relative z-[1] drop-shadow-[0_10px_6px_rgba(0,0,0,0.3)]";
+    const baseClasses = "w-full object-contain relative z-10 drop-shadow-lg";
     if (isMobile) {
       return `${baseClasses} max-w-60 h-48 mt-6`;
     } else if (isTablet) {
-      return `${baseClasses} max-w-[360px] h-72 mt-8`;
+      return `${baseClasses} max-w-80 h-72 mt-8`;
     } else {
       return `${baseClasses} max-w-96 h-80 mt-1`;
     }
@@ -148,14 +148,17 @@ const ConclusionSection: React.FC<ConclusionSectionProps> = ({ section }) => {
 
   // Convert textCard styles to Tailwind classes
   const getTextCardClasses = () => {
-    const baseClasses = "bg-white rounded-xl shadow-[8px_8px_20px_rgba(0,0,0,0.12)] border border-gray-200 relative";
-    const paddingClasses = isMobile ? "p-[18px_20px]" : "p-[32px_36px]";
+    const baseClasses = "bg-white rounded-xl shadow-lg border border-gray-200 relative";
+    const paddingClasses = isMobile ? "p-5" : "p-8";
     const heightClasses = isMobile ? "" : "min-h-72";
     return `${baseClasses} ${paddingClasses} ${heightClasses}`.trim();
   };
 
   return (
-    <section className="bg-white py-16 w-screen -ml-breakout -mt-12 -mb-12">
+    <section 
+      className="bg-white py-16 w-screen -mt-12 -mb-12"
+      style={{ marginLeft: 'calc(-50vw + 50%)' }}
+    >
       <div className="max-w-5xl mx-auto px-6">
 
         {/* ── Title fade-up ─────────────────────────────────────── */}
@@ -183,14 +186,14 @@ const ConclusionSection: React.FC<ConclusionSectionProps> = ({ section }) => {
 
             {/* Decorative blue box - bottom left of image */}
             {!isMobile && (
-              <div className={`absolute -bottom-8 ${isTablet ? 'left-[calc(50%-195px)]' : 'left-7'} w-11 h-11 rounded-xl bg-blue-500 z-[2] drop-shadow-[0_8px_10px_rgba(79,62,236,0.25)]`} />
+              <div className={`absolute -bottom-8 ${isTablet ? 'left-[calc(50%-195px)]' : 'left-7'} w-11 h-11 rounded-xl bg-blue-500 z-20 drop-shadow-lg`} />
             )}
 
             {/* Blob */}
             <div className={getBlueShapeClasses()} />
 
             {/* Illustration */}
-            <div className="relative z-[1] flex justify-center items-center w-full h-full">
+            <div className="relative z-10 flex justify-center items-center w-full h-full">
               {imageUrl && !imageError && (
                 <motion.img
                   src={imageUrl}
@@ -211,7 +214,7 @@ const ConclusionSection: React.FC<ConclusionSectionProps> = ({ section }) => {
             >
               {/* Decorative blue box - mobile top-left of card */}
               {isMobile && (
-                <div className="absolute -top-4 left-4 w-7 h-7 rounded-lg bg-blue-500 z-[3] drop-shadow-[0_4px_6px_rgba(59,130,246,0.35)]" />
+                <div className="absolute -top-4 left-4 w-7 h-7 rounded-lg bg-blue-500 z-30 drop-shadow-lg" />
               )}
 
               {/* Paragraphs with stagger */}
