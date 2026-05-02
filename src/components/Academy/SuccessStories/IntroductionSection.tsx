@@ -1,6 +1,10 @@
 import { motion } from "framer-motion";
 import { useState, useCallback, useMemo } from "react";
 
+// Constants
+const WHITESPACE_PATTERN = /\s+/;
+const BASE_CLASSES = 'text-3xl md:text-5xl font-bold text-gray-900 mb-2 md:mb-8';
+
 interface ImageItem {
   id: string;
   url: string;
@@ -26,18 +30,16 @@ function IntroductionSection({ title, content, images = [] }: IntroductionSectio
   }, []);
 
   // Constants
-  const WHITESPACE_PATTERN = /\s+/;
 
   // Extract title className logic for better readability
-  const baseClasses = 'text-3xl md:text-5xl font-bold text-gray-900 mb-2 md:mb-8';
   const isOneWord = title.trim().split(WHITESPACE_PATTERN).length === 1;
   const hasImages = images.length > 0;
 
   const titleClasses = useMemo(() => {
-    if (isOneWord) return `${baseClasses} text-center`;
-    if (hasImages) return `${baseClasses} text-center md:text-left leading-relaxed`;
-    return `${baseClasses} text-center leading-relaxed`;
-  }, [isOneWord, hasImages, baseClasses]);
+    if (isOneWord) return `${BASE_CLASSES} text-center`;
+    if (hasImages) return `${BASE_CLASSES} text-center md:text-left leading-relaxed`;
+    return `${BASE_CLASSES} text-center leading-relaxed`;
+  }, [isOneWord, hasImages]);
 
   return (
     <div className="w-full bg-white py-16">

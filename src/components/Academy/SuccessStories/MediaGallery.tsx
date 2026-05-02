@@ -203,8 +203,7 @@ export const MediaGallery = ({ media, title = "Media Gallery", compact = false }
           >
             <div
               ref={mobileScrollRef}
-              className="flex gap-3 animate-scroll-horizontal"
-              style={{ width: "max-content" }}
+              className="flex gap-3 animate-scroll-horizontal w-max-content"
             >
               {[...media, ...media].map((item, index) => {
                 const itemUrl = getMediaUrl(item);

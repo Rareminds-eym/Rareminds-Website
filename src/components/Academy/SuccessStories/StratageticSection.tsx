@@ -91,40 +91,6 @@ const cardVariant = {
 
 const StrategicAlignmentSection = ({ section }: StrategicAlignmentSectionProps): JSX.Element => {
 
-  // Convert all styles to Tailwind utility functions
-  const getWrapperClasses = () => 
-    "bg-white py-12 px-8 shadow-lg mb-12 mt-12 w-screen -ml-breakout";
-
-  const getSectionTitleClasses = () => 
-    "font-black text-gray-800 text-center mb-12 tracking-tight text-2xl md:text-3xl";
-
-  const getTimelineClasses = () => 
-    "relative flex flex-col gap-7 w-full max-w-3xl mx-auto";
-
-  const getVerticalLineClasses = () => 
-    "absolute left-4 top-0 bottom-0 w-3 bg-blue-200 rounded-t-md z-0 origin-top";
-
-  const getIconClasses = () => 
-    "text-blue-500 relative z-10 w-4 h-4 md:w-5 md:h-5 stroke-2";
-
-  const getIconWrapClasses = () => 
-    "relative z-10 flex-shrink-0 rounded-full bg-white border-2 border-blue-300 flex items-center justify-center shadow-lg ml-4 -mt-12 w-7 h-7 md:w-10 md:h-10";
-
-  const getInnerCircleClasses = () => 
-    "absolute rounded-full bg-blue-100 -z-10 w-5 h-5 md:w-7 md:h-7";
-
-  const getConnectorClasses = () => 
-    "flex-shrink-0 h-px bg-blue-300 -mt-12 ml-1 origin-left w-3 md:w-6";
-
-  const getCardAccentClasses = () => 
-    "h-px rounded-sm bg-blue-500 mb-3 origin-left w-5 md:w-8";
-
-  const getCardTitleClasses = () => 
-    "font-bold text-gray-800 mb-1 text-xs md:text-lg";
-
-  const getCardTextClasses = () => 
-    "text-gray-600 leading-relaxed m-0 text-xs md:text-sm";
-
   const getCardClasses = (index: number) => {
     const basePadding = "py-3 px-4 md:py-6 md:px-7";
     const baseClasses = `flex-1 rounded-xl ${basePadding} shadow-md relative overflow-hidden cursor-pointer min-h-24 md:min-h-32`;
@@ -142,25 +108,25 @@ const StrategicAlignmentSection = ({ section }: StrategicAlignmentSectionProps):
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true }}
-      className={getWrapperClasses()}
+      className="bg-white py-12 px-8 shadow-lg mb-12 mt-12 w-screen -ml-breakout"
     >
       <motion.h2
         variants={titleVariant}
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true }}
-        className={getSectionTitleClasses()}
+        className="font-black text-gray-800 text-center mb-12 tracking-tight text-2xl md:text-3xl"
       >
         {section.title}
       </motion.h2>
 
-      <div className={getTimelineClasses()}>
+      <div className="relative flex flex-col gap-7 w-full max-w-3xl mx-auto">
         <motion.div
           variants={verticalLineVariant}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
-          className={getVerticalLineClasses()}
+          className="absolute left-4 top-0 bottom-0 w-3 bg-blue-200 rounded-t-md z-0 origin-top"
         />
 
         {section.content.map((item, index) => {
@@ -184,10 +150,10 @@ const StrategicAlignmentSection = ({ section }: StrategicAlignmentSectionProps):
                 whileInView="visible"
                 custom={baseDelay + 0.3}
                 viewport={{ once: true }}
-                className={getIconWrapClasses()}
+                className="relative z-10 flex-shrink-0 rounded-full bg-white border-2 border-blue-300 flex items-center justify-center shadow-lg ml-4 -mt-12 w-7 h-7 md:w-10 md:h-10"
               >
-                <div className={getInnerCircleClasses()} />
-                <IconComponent className={getIconClasses()} />
+                <div className="absolute rounded-full bg-blue-100 -z-10 w-5 h-5 md:w-7 md:h-7" />
+                <IconComponent className="text-blue-500 relative z-10 w-4 h-4 md:w-5 md:h-5 stroke-2" />
               </motion.div>
 
               <motion.div
@@ -196,7 +162,7 @@ const StrategicAlignmentSection = ({ section }: StrategicAlignmentSectionProps):
                 whileInView="visible"
                 custom={baseDelay + 0.5}
                 viewport={{ once: true }}
-                className={getConnectorClasses()}
+                className="flex-shrink-0 h-px bg-blue-300 -mt-12 ml-1 origin-left w-3 md:w-6"
               />
 
               <motion.div
@@ -214,7 +180,7 @@ const StrategicAlignmentSection = ({ section }: StrategicAlignmentSectionProps):
                   whileInView="visible"
                   custom={baseDelay + 0.4}
                   viewport={{ once: true }}
-                  className={getCardAccentClasses()}
+                  className="h-px rounded-sm bg-blue-500 mb-3 origin-left w-5 md:w-8"
                 />
                 <motion.h3
                   variants={fadeInVariant}
@@ -222,7 +188,7 @@ const StrategicAlignmentSection = ({ section }: StrategicAlignmentSectionProps):
                   whileInView="visible"
                   custom={baseDelay + 0.6}
                   viewport={{ once: true }}
-                  className={getCardTitleClasses()}
+                  className="font-bold text-gray-800 mb-1 text-xs md:text-lg"
                 >
                   {item.title}
                 </motion.h3>
@@ -232,7 +198,7 @@ const StrategicAlignmentSection = ({ section }: StrategicAlignmentSectionProps):
                   whileInView="visible"
                   custom={baseDelay + 0.7}
                   viewport={{ once: true }}
-                  className={getCardTextClasses()}
+                  className="text-gray-600 leading-relaxed m-0 text-xs md:text-sm"
                 >
                   {item.description}
                 </motion.p>

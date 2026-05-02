@@ -38,19 +38,19 @@ export default {
           900: '#7f1d1d',
         },
         blue: {
-          'card-light': '#EFF6FF',     // Custom light blue for cards
+          'card-bg': '#EFF6FF',        // Blue card background
           'timeline-bg': '#D2E8FE',    // Timeline background
           'icon-primary': '#5BA8D8',   // Icon color
           'border-light': '#DBEAFE',   // Border color
-          'bg-light': '#F0F8FF',       // Background color
+          'light-bg': '#F0F8FF',       // Blue light background
         },
         gray: {
           850: '#0f1c2e',      // Dark text
           650: '#5a6a7e',      // Medium text
         },
         green: {
-          'card-light': '#F5F9FF',     // Light blue-green card bg
-          'bg-light': '#F2FFF9',       // Light green card bg
+          'soft-bg': '#F5F9FF',        // Green soft background (blue-green tint)
+          'accent-bg': '#F2FFF9',      // Green accent background
         },
         corporate: {
           primary: "#107DFE",
@@ -69,15 +69,13 @@ export default {
       },
       width: {
         'mobile-player': '85%',   // Mobile media player width - 85% provides optimal viewing on mobile while maintaining responsive margins
+        'max-content': 'max-content',  // Width based on content size - useful for horizontal scrolling animations
       },
       left: {
-        'center-offset': 'calc(50% - 195px)',  // Center positioning with 195px offset for decorative elements
+        'center-offset': 'calc(50% - 195px)',  // Centers decorative elements on tablet screens - 195px accounts for half the typical content width (390px) to align with content edge
       },
       flex: {
         'image-column': '0 0 480px',  // Fixed flex item for image column in desktop layout
-      },
-      fontSize: {
-        'hero-title': '2.9rem',    // Custom large title size for hero sections and success stories (2.9rem instead of standard 3xl 2.25rem)
       },
       animation: {
         float: 'float 6s ease-in-out infinite',

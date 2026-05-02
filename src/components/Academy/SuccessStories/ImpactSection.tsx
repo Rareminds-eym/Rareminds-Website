@@ -19,7 +19,7 @@ const statIcons = [
   ChartBarIcon, RocketLaunchIcon, AcademicCapIcon, CheckCircleIcon,
 ];
 const pillIcons = [LightBulbIcon, ChatBubbleLeftRightIcon, AcademicCapIcon, CheckCircleIcon];
-const radiusPattern = ["50px 15px 50px 15px", "15px 50px 15px 50px"];
+
 interface StatItem {
   id: string;
   value: string;
@@ -101,7 +101,6 @@ export default function KeyOutcomesSection({ section }: KeyOutcomesSectionProps)
         }`}>
           {stats.map((item, i) => {
             const Icon = statIcons[i % statIcons.length];
-            const radius = radiusPattern[i % 2];
             const variant = i % 2 === 0 ? slideLeftVariant : slideRightVariant;
             const delay = 0.15 + i * 0.12;
 
@@ -110,9 +109,7 @@ export default function KeyOutcomesSection({ section }: KeyOutcomesSectionProps)
             const suffix = item.value.includes("%") ? "%" : item.value.includes("+") ? "+" : "";
 
             // Generate border radius class based on pattern
-            const borderRadiusClass = radius === "50px 15px 50px 15px" 
-              ? "rounded-stat-1" 
-              : "rounded-stat-2";
+            const borderRadiusClass = i % 2 === 0 ? "rounded-stat-1" : "rounded-stat-2";
 
             return (
               <motion.div
