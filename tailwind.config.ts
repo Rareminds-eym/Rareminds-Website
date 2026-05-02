@@ -68,10 +68,10 @@ export default {
         'card-asymmetric': '15px 15px 80px 15px', // Asymmetric card shape
       },
       width: {
-        'mobile-player': '85%',   // Mobile media player width
+        'mobile-player': '85%',   // Mobile media player width - 85% provides optimal viewing on mobile while maintaining responsive margins
       },
       fontSize: {
-        '3xl': '2.9rem',    // Custom large title - override standard 3xl
+        '3xl': '2.9rem',    // Override standard 3xl (2.25rem → 2.9rem) for enhanced visual impact in hero titles and success stories
       },
       animation: {
         float: 'float 6s ease-in-out infinite',
@@ -155,11 +155,11 @@ export default {
           '0%': { transform: 'translateY(-50%)' },
           '100%': { transform: 'translateY(0)' },
         },
-        scrollVertical: {
+        'scroll-vertical': {
           '0%':   { transform: 'translateY(0)' },
           '100%': { transform: 'translateY(calc(-1 * var(--scroll-height, 0px)))' },
         },
-        scrollHorizontal: {
+        'scroll-horizontal': {
           '0%':   { transform: 'translateX(0)' },
           '100%': { transform: 'translateX(calc(-1 * var(--scroll-width, 0px)))' },
         },

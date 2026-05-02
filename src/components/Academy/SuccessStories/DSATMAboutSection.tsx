@@ -1,5 +1,3 @@
-import React from "react";
-
 interface BulletItem {
   label?: string;
   text: string;
@@ -61,7 +59,7 @@ function parseDescription(description: string): BulletItem[] {
   });
 }
 
-const DSATMAboutSection: React.FC<DSATMAboutSectionProps> = ({ section }) => {
+const DSATMAboutSection = ({ section }: DSATMAboutSectionProps): JSX.Element => {
   const cards: CardData[] = section.content.map((item) => ({
     id: item.id, 
     initial: item.title?.trim()?.charAt(0)?.toUpperCase() || "?",
@@ -103,7 +101,7 @@ const DSATMAboutSection: React.FC<DSATMAboutSectionProps> = ({ section }) => {
         {cards.map((card) => (
           <div
             key={card.id}
-            className="border border-teal-200 p-5 bg-green-50 rounded-card-asymmetric"
+            className="border border-teal-200 p-5 bg-green-50 card-asymmetric"
           >
             {/* Header */}
             <div className="flex items-center gap-3 mb-3">

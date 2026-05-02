@@ -1,4 +1,3 @@
-import React from "react";
 import { motion } from "framer-motion";
 import {
   BriefcaseIcon,
@@ -90,7 +89,7 @@ const cardVariant = {
 
 // ─────────────────────────────────────────────────────────────────────────
 
-const StrategicAlignmentSection: React.FC<StrategicAlignmentSectionProps> = ({ section }) => {
+const StrategicAlignmentSection = ({ section }: StrategicAlignmentSectionProps): JSX.Element => {
 
   // Convert all styles to Tailwind utility functions
   const getWrapperClasses = () => 

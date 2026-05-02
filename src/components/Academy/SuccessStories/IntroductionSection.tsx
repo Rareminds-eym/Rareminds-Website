@@ -28,14 +28,16 @@ function IntroductionSection({ title, content, images = [] }: IntroductionSectio
 
   // Extract title className logic for better readability
   const baseClasses = 'text-3xl md:text-5xl font-bold text-gray-900 mb-2 md:mb-8';
-const isOneWord = title.trim().split(/\s+/).length === 1;
-const hasImages = images.length > 0;
+  const isOneWord = title.trim().split(/\s+/).length === 1;
+  const hasImages = images.length > 0;
 
-const titleClasses = isOneWord
-  ? `${baseClasses} text-center`
-  : hasImages
-    ? `${baseClasses} text-center md:text-left leading-relaxed`
-    : `${baseClasses} text-center leading-relaxed`;
+  const getTitleClasses = () => {
+    if (isOneWord) return `${baseClasses} text-center`;
+    if (hasImages) return `${baseClasses} text-center md:text-left leading-relaxed`;
+    return `${baseClasses} text-center leading-relaxed`;
+  };
+
+  const titleClasses = getTitleClasses();
 
   return (
     <div className="w-full bg-white py-16">

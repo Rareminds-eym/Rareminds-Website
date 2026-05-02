@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 
 // Tailwind breakpoint constants
@@ -22,7 +22,7 @@ interface ConclusionSectionProps {
   section: SectionData;
 }
 
-const ConclusionSection: React.FC<ConclusionSectionProps> = ({ section }) => {
+const ConclusionSection = ({ section }: ConclusionSectionProps): JSX.Element => {
   const [isMobile, setIsMobile] = useState(false);
   const [isTablet, setIsTablet] = useState(false);
   const [imageError, setImageError] = useState(false);

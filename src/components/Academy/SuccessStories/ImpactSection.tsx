@@ -75,7 +75,7 @@ function isStatItem(value: string): boolean {
   return numeric.length > 0 && !isNaN(parseFloat(numeric));
 }
 
-export default function KeyOutcomesSection({ section }: KeyOutcomesSectionProps) {
+export default function KeyOutcomesSection({ section }: KeyOutcomesSectionProps): JSX.Element {
   const { ref, inView } = useInView({ threshold: 0.3, triggerOnce: true });
 
   const stats = section.items.filter(item => isStatItem(item.value));
@@ -112,8 +112,8 @@ export default function KeyOutcomesSection({ section }: KeyOutcomesSectionProps)
 
             // Generate border radius class based on pattern
             const borderRadiusClass = radius === "50px 15px 50px 15px" 
-              ? "rounded-stat-1" 
-              : "rounded-stat-2";
+              ? "stat-1" 
+              : "stat-2";
 
             return (
               <motion.div

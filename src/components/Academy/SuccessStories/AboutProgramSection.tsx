@@ -16,7 +16,7 @@ interface AboutProgramSectionProps {
 
 const CARD_ICONS = [Monitor, Code];
 
-function AboutProgramSection({ section }: AboutProgramSectionProps) {
+function AboutProgramSection({ section }: AboutProgramSectionProps): JSX.Element {
   const items = section.content;
 
   return (
