@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useId } from "react";
+import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Play } from "lucide-react";
 
@@ -37,12 +37,11 @@ const MOBILE_ITEM_WIDTH = 110; // px - width of each media item on mobile
 const MOBILE_ITEM_GAP = 12;    // px - spacing between items on mobile
 
 export const MediaGallery = ({ media, title = "Media Gallery", compact = false }: MediaGalleryProps) => {
-  const uid = useId();
-  const mobileScrollId = `mobile-scroll-inner-${uid.replace(/:/g, "")}`;
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const scrollInnerRef = useRef<HTMLDivElement>(null);
   const leftPanelRef = useRef<HTMLDivElement>(null);
+  const mobileScrollRef = useRef<HTMLDivElement>(null);
   const [sidebarHeight, setSidebarHeight] = useState(0);
   const [itemHeight, setItemHeight] = useState(140);
 
@@ -76,12 +75,11 @@ export const MediaGallery = ({ media, title = "Media Gallery", compact = false }
   }, [media, itemHeight]);
 
   useEffect(() => {
-    const el = document.getElementById(mobileScrollId);
-    if (el && media.length > 0) {
+    if (mobileScrollRef.current && media.length > 0) {
       const totalWidth = media.length * (MOBILE_ITEM_WIDTH + MOBILE_ITEM_GAP);
-      el.style.setProperty("--scroll-width", `${totalWidth}px`);
+      mobileScrollRef.current.style.setProperty("--scroll-width", `${totalWidth}px`);
     }
-  }, [media, mobileScrollId]);
+  }, [media]);
 
   if (!media || media.length === 0) return null;
 
@@ -140,11 +138,10 @@ export const MediaGallery = ({ media, title = "Media Gallery", compact = false }
                     const itemIsVideo = isVideo(itemUrl);
                     const actualIndex = index % media.length;
                     const isActive = actualIndex === selectedIndex;
-                    const isDuplicate = index >= media.length;
 
                     return (
                       <button
-                        key={`desktop-${item.id}-${isDuplicate ? 'dup' : 'orig'}`}
+                        key={`desktop-${item.id}-${index}`}
                         onClick={() => setSelectedIndex(actualIndex)}
                         className={`relative w-full rounded-lg overflow-hidden flex-shrink-0 transition-all ${
                           isActive
@@ -196,16 +193,16 @@ export const MediaGallery = ({ media, title = "Media Gallery", compact = false }
           <div
             className="w-full overflow-hidden px-4"
             onTouchStart={() => {
-              const el = document.getElementById(mobileScrollId);
-              if (el) el.style.animationPlayState = "paused";
+              if (mobileScrollRef.current) 
+                mobileScrollRef.current.style.animationPlayState = "paused";
             }}
             onTouchEnd={() => {
-              const el = document.getElementById(mobileScrollId);
-              if (el) el.style.animationPlayState = "running";
+              if (mobileScrollRef.current) 
+                mobileScrollRef.current.style.animationPlayState = "running";
             }}
           >
             <div
-              id={mobileScrollId}
+              ref={mobileScrollRef}
               className="flex gap-3 animate-scroll-horizontal"
               style={{ width: "max-content" }}
             >
@@ -214,11 +211,10 @@ export const MediaGallery = ({ media, title = "Media Gallery", compact = false }
                 const itemIsVideo = isVideo(itemUrl);
                 const actualIndex = index % media.length;
                 const isActive = actualIndex === selectedIndex;
-                const isDuplicate = index >= media.length;
 
                 return (
                   <button
-                    key={`mobile-${item.id}-${isDuplicate ? 'dup' : 'orig'}`}
+                    key={`mobile-${item.id}-${index}`}
                     onClick={() => setSelectedIndex(actualIndex)}
                     className={`relative flex-shrink-0 rounded-lg overflow-hidden transition-all h-18 ${
                       isActive ? "ring-2 ring-blue-500" : "ring-1 ring-gray-200"

@@ -147,7 +147,7 @@ export default function KeyOutcomesSection({ section }: KeyOutcomesSectionProps)
                   whileInView="visible"
                   custom={delay + 0.1}
                   viewport={{ once: true, amount: 0.3 }}
-                  className="ko-sora font-extrabold mb-2 tracking-tight text-black text-4xl"
+                  className="font-extrabold mb-2 tracking-tight text-black text-4xl"
                 >
                   {inView ? (
                     <CountUp
