@@ -143,7 +143,6 @@ const StrategicAlignmentSection = ({ section }: StrategicAlignmentSectionProps):
       whileInView="visible"
       viewport={{ once: true }}
       className={getWrapperClasses()}
-      style={{ marginLeft: 'calc(-50vw + 50%)' }}
     >
       <motion.h2
         variants={titleVariant}

@@ -21,8 +21,7 @@ function AboutProgramSection({ section }: AboutProgramSectionProps): JSX.Element
 
   return (
     <div 
-      className="py-16 -mt-10 bg-white min-h-full w-screen"
-      style={{ marginLeft: 'calc(-50vw + 50%)' }}
+      className="py-16 -mt-10 bg-white min-h-full w-screen -ml-breakout"
     >
       {/* Title */}
       <motion.h2

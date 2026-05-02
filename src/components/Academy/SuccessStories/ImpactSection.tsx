@@ -20,7 +20,6 @@ const statIcons = [
 ];
 const pillIcons = [LightBulbIcon, ChatBubbleLeftRightIcon, AcademicCapIcon, CheckCircleIcon];
 const radiusPattern = ["50px 15px 50px 15px", "15px 50px 15px 50px"];
-
 interface StatItem {
   id: string;
   value: string;
@@ -112,8 +111,8 @@ export default function KeyOutcomesSection({ section }: KeyOutcomesSectionProps)
 
             // Generate border radius class based on pattern
             const borderRadiusClass = radius === "50px 15px 50px 15px" 
-              ? "stat-1" 
-              : "stat-2";
+              ? "rounded-stat-1" 
+              : "rounded-stat-2";
 
             return (
               <motion.div

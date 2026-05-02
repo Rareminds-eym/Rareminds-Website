@@ -38,19 +38,19 @@ export default {
           900: '#7f1d1d',
         },
         blue: {
-          card_light: '#EFF6FF',     // Custom light blue for cards
-          timeline_bg: '#D2E8FE',    // Timeline background
-          icon_primary: '#5BA8D8',   // Icon color
-          border_light: '#DBEAFE',   // Border color
-          bg_light: '#F0F8FF',       // Background color
+          'card-light': '#EFF6FF',     // Custom light blue for cards
+          'timeline-bg': '#D2E8FE',    // Timeline background
+          'icon-primary': '#5BA8D8',   // Icon color
+          'border-light': '#DBEAFE',   // Border color
+          'bg-light': '#F0F8FF',       // Background color
         },
         gray: {
           850: '#0f1c2e',      // Dark text
           650: '#5a6a7e',      // Medium text
         },
         green: {
-          card_light: '#F5F9FF',     // Light blue-green card bg
-          bg_light: '#F2FFF9',       // Light green card bg
+          'card-light': '#F5F9FF',     // Light blue-green card bg
+          'bg-light': '#F2FFF9',       // Light green card bg
         },
         corporate: {
           primary: "#107DFE",
@@ -70,8 +70,14 @@ export default {
       width: {
         'mobile-player': '85%',   // Mobile media player width - 85% provides optimal viewing on mobile while maintaining responsive margins
       },
+      left: {
+        'center-offset': 'calc(50% - 195px)',  // Center positioning with 195px offset for decorative elements
+      },
+      flex: {
+        'image-column': '0 0 480px',  // Fixed flex item for image column in desktop layout
+      },
       fontSize: {
-        '3xl': '2.9rem',    // Override standard 3xl (2.25rem → 2.9rem) for enhanced visual impact in hero titles and success stories
+        'hero-title': '2.9rem',    // Custom large title size for hero sections and success stories (2.9rem instead of standard 3xl 2.25rem)
       },
       animation: {
         float: 'float 6s ease-in-out infinite',
@@ -90,7 +96,6 @@ export default {
         'drift': 'drift 10s ease-in-out infinite',
         'scroll-vertical':   'scroll-vertical 25s linear infinite',
         'scroll-horizontal': 'scroll-horizontal 20s linear infinite',
-
       },
       keyframes: {
         float: {

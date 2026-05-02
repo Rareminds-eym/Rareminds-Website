@@ -1,6 +1,5 @@
-
 import { motion } from "framer-motion";
-import { useState, useCallback } from "react";
+import { useState, useCallback, useMemo } from "react";
 
 interface ImageItem {
   id: string;
@@ -15,7 +14,7 @@ interface IntroductionSectionProps {
 }
 
 function IntroductionSection({ title, content, images = [] }: IntroductionSectionProps) {
-  const [failedImages, setFailedImages] = useState<Set<string>>(new Set());
+  const [failedImages, setFailedImages] = useState<Set<string>>(() => new Set());
 
   const handleImageError = useCallback((imageUrl: string) => {
     setFailedImages(prev => {
@@ -26,18 +25,19 @@ function IntroductionSection({ title, content, images = [] }: IntroductionSectio
     });
   }, []);
 
+  // Constants
+  const WHITESPACE_PATTERN = /\s+/;
+
   // Extract title className logic for better readability
   const baseClasses = 'text-3xl md:text-5xl font-bold text-gray-900 mb-2 md:mb-8';
-  const isOneWord = title.trim().split(/\s+/).length === 1;
+  const isOneWord = title.trim().split(WHITESPACE_PATTERN).length === 1;
   const hasImages = images.length > 0;
 
-  const getTitleClasses = () => {
+  const titleClasses = useMemo(() => {
     if (isOneWord) return `${baseClasses} text-center`;
     if (hasImages) return `${baseClasses} text-center md:text-left leading-relaxed`;
     return `${baseClasses} text-center leading-relaxed`;
-  };
-
-  const titleClasses = getTitleClasses();
+  }, [isOneWord, hasImages, baseClasses]);
 
   return (
     <div className="w-full bg-white py-16">

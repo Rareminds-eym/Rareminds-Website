@@ -216,7 +216,7 @@ export const MediaGallery = ({ media, title = "Media Gallery", compact = false }
                   <button
                     key={`mobile-${item.id}-${index}`}
                     onClick={() => setSelectedIndex(actualIndex)}
-                    className={`relative flex-shrink-0 rounded-lg overflow-hidden transition-all h-18 ${
+                    className={`relative flex-shrink-0 rounded-lg overflow-hidden transition-all h-20 ${
                       isActive ? "ring-2 ring-blue-500" : "ring-1 ring-gray-200"
                     }`}
                     style={{ width: `${MOBILE_ITEM_WIDTH}px` }}

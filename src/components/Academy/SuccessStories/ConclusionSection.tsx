@@ -99,7 +99,7 @@ const ConclusionSection = ({ section }: ConclusionSectionProps): JSX.Element => 
     } else if (isTablet) {
       return "flex-none w-full relative h-80 flex items-end justify-center pb-5";
     } else {
-      return "flex-[0_0_480px] relative h-80 flex items-end justify-center pb-5";
+      return "flex-image-column relative h-80 flex items-end justify-center pb-5";
     }
   };
 
@@ -182,7 +182,7 @@ const ConclusionSection = ({ section }: ConclusionSectionProps): JSX.Element => 
 
             {/* Decorative blue box - bottom left of image */}
             {!isMobile && (
-              <div className={`absolute -bottom-8 ${isTablet ? 'left-[calc(50%-195px)]' : 'left-7'} w-11 h-11 rounded-xl bg-blue-500 z-20 drop-shadow-lg`} />
+              <div className={`absolute -bottom-8 ${isTablet ? 'center-offset' : 'left-7'} w-11 h-11 rounded-xl bg-blue-500 z-20 drop-shadow-lg`} />
             )}
 
             {/* Blob */}
@@ -203,7 +203,7 @@ const ConclusionSection = ({ section }: ConclusionSectionProps): JSX.Element => 
           </motion.div>
 
           {/* ── Right column / card ───────────────────────────────── */}
-          <motion.div className="flex-1 min-w-72" variants={fadeUp}>
+          <motion.div className="flex-1 min-w-80" variants={fadeUp}>
             <motion.div
               className={getTextCardClasses()}
               variants={scaleIn}

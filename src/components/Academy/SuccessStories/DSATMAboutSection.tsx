@@ -101,7 +101,7 @@ const DSATMAboutSection = ({ section }: DSATMAboutSectionProps): JSX.Element => 
         {cards.map((card) => (
           <div
             key={card.id}
-            className="border border-teal-200 p-5 bg-green-50 card-asymmetric"
+            className="border border-teal-200 p-5 bg-green-50 rounded-card-asymmetric"
           >
             {/* Header */}
             <div className="flex items-center gap-3 mb-3">
