@@ -1,5 +1,3 @@
-import React from 'react';
-
 interface SectionData {
   title: string;
   content: string;
@@ -9,7 +7,7 @@ interface HeaderSectionProps {
   section: SectionData;
 }
 
-const HeaderSection: React.FC<HeaderSectionProps> = ({ section }) => {
+const HeaderSection = ({ section }: HeaderSectionProps): JSX.Element => {
   return (
     <section 
       className="bg-gray-50 py-20 w-screen mt-0 mb-0 -ml-breakout"

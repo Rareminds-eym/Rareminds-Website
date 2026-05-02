@@ -1,6 +1,6 @@
 
 import { motion } from "framer-motion";
-import { useState, useCallback, useMemo } from "react";
+import { useState, useCallback } from "react";
 
 interface ImageItem {
   id: string;
@@ -18,24 +18,24 @@ function IntroductionSection({ title, content, images = [] }: IntroductionSectio
   const [failedImages, setFailedImages] = useState<Set<string>>(new Set());
 
   const handleImageError = useCallback((imageUrl: string) => {
-  setFailedImages(prev => {
-  if (prev.has(imageUrl)) return prev;
-  const next = new Set(prev);
-  next.add(imageUrl);
-  return next;
-});
-}, []);
+    setFailedImages(prev => {
+      if (prev.has(imageUrl)) return prev;
+      const next = new Set(prev);
+      next.add(imageUrl);
+      return next;
+    });
+  }, []);
 
   // Extract title className logic for better readability
-  const getTitleClasses = useMemo(() => {
-    const baseClasses = 'text-3xl md:text-5xl font-bold text-gray-900 mb-2 md:mb-8';
-    const isOneWord = title.trim().split(/\s+/).length === 1;
-    const hasImages = images.length > 0;
+  const baseClasses = 'text-3xl md:text-5xl font-bold text-gray-900 mb-2 md:mb-8';
+const isOneWord = title.trim().split(/\s+/).length === 1;
+const hasImages = images.length > 0;
 
-    if (isOneWord) return `${baseClasses} text-center`;
-    if (hasImages) return `${baseClasses} text-center md:text-left leading-relaxed`;
-    return `${baseClasses} text-center leading-relaxed`;
-  }, [title, images]);
+const titleClasses = isOneWord
+  ? `${baseClasses} text-center`
+  : hasImages
+    ? `${baseClasses} text-center md:text-left leading-relaxed`
+    : `${baseClasses} text-center leading-relaxed`;
 
   return (
     <div className="w-full bg-white py-16">
@@ -49,7 +49,7 @@ function IntroductionSection({ title, content, images = [] }: IntroductionSectio
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, ease: "easeOut" }}
               viewport={{ once: true }}
-              className={getTitleClasses}
+              className={titleClasses}
             >
               {title}
             </motion.h2>
@@ -90,7 +90,6 @@ function IntroductionSection({ title, content, images = [] }: IntroductionSectio
                     </motion.div>
                   );
                 })}
-
               </div>
 
               {images.length > 2 && images[2] && !failedImages.has(images[2].url) && (

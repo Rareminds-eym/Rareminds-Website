@@ -195,7 +195,7 @@ export default function KeyOutcomesSection({ section }: KeyOutcomesSectionProps)
                 custom={delay}
                 viewport={{ once: true, amount: 0.3 }}
                 whileHover={{ scale: 1.02, transition: { duration: 0.2 } }}
-                className={`flex items-start gap-4 border border-blue-100 px-7 py-5 bg-green-25 rounded-full ${
+                className={`flex items-start gap-4 border border-blue-100 px-7 py-5 bg-green-50 rounded-full ${
                   isLastOdd ? "sm:col-span-2 sm:max-w-md sm:mx-auto" : ""
                 }`}
               >

@@ -97,7 +97,7 @@ const StrategicAlignmentSection: React.FC<StrategicAlignmentSectionProps> = ({ s
     "bg-white py-12 px-8 shadow-lg mb-12 mt-12 w-screen -ml-breakout";
 
   const getSectionTitleClasses = () => 
-    "font-black text-gray-800 text-center mb-12 tracking-tight";
+    "font-black text-gray-800 text-center mb-12 tracking-tight text-2xl md:text-3xl";
 
   const getTimelineClasses = () => 
     "relative flex flex-col gap-7 w-full max-w-3xl mx-auto";
@@ -137,8 +137,6 @@ const StrategicAlignmentSection: React.FC<StrategicAlignmentSectionProps> = ({ s
     }
   };
 
-  const getTitleFontSize = () => "text-2xl md:text-3xl";
-
   return (
     <motion.div
       variants={wrapperVariant}
@@ -153,7 +151,7 @@ const StrategicAlignmentSection: React.FC<StrategicAlignmentSectionProps> = ({ s
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true }}
-        className={`${getSectionTitleClasses()} ${getTitleFontSize()}`}
+        className={getSectionTitleClasses()}
       >
         {section.title}
       </motion.h2>

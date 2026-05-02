@@ -67,14 +67,11 @@ export default {
         'blue-shape': '215px',            // Blue decorative shape
         'card-asymmetric': '15px 15px 80px 15px', // Asymmetric card shape
       },
-      maxWidth: {
-        // No custom maxWidth values needed - all replaced with standard classes
+      width: {
+        'mobile-player': '85%',   // Mobile media player width
       },
       fontSize: {
         '3xl': '2.9rem',    // Custom large title - override standard 3xl
-      },
-      boxShadow: {
-        // No custom shadows needed - all replaced with standard classes
       },
       animation: {
         float: 'float 6s ease-in-out infinite',
