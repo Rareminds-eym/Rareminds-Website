@@ -39,13 +39,23 @@ function IntroductionSection({ title, content, images = [] }: IntroductionSectio
     return `${BASE_CLASSES} text-center leading-relaxed`;
   }, [isOneWord, hasImages]);
 
+  const gridClasses = useMemo(() => 
+    `grid gap-20 items-center ${hasImages ? 'lg:grid-cols-2' : 'lg:grid-cols-1'}`, 
+    [hasImages]
+  );
+
+  const contentClasses = useMemo(() => 
+    hasImages ? 'pl-0 lg:pl-8' : 'text-center max-w-4xl mx-auto', 
+    [hasImages]
+  );
+
   return (
     <div className="w-full bg-white py-16">
       <div className="w-full px-4 sm:px-8 lg:px-32">
-        <div className={`grid gap-20 items-center ${images.length > 0 ? 'lg:grid-cols-2' : 'lg:grid-cols-1'}`}>
+        <div className={gridClasses}>
 
           {/* Left side - Content */}
-          <div className={`${images.length > 0 ? 'pl-0 lg:pl-8' : 'text-center max-w-4xl mx-auto'}`}>
+          <div className={contentClasses}>
             <motion.h2
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}

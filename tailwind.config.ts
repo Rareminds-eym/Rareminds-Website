@@ -16,7 +16,7 @@ export default {
         sans: ['Poppins', 'sans-serif'],
       },
       spacing: {
-        '18': '4.5rem',    // 72px - MediaGallery mobile thumbnail height
+        'gallery-thumb': '4.5rem',    // 72px - MediaGallery mobile thumbnail height
       },
       colors: {
         primary: {
@@ -42,7 +42,7 @@ export default {
           'timeline-bg': '#D2E8FE',    // Timeline background
           'icon-primary': '#5BA8D8',   // Icon color
           'border-light': '#DBEAFE',   // Border color
-          'light-bg': '#F0F8FF',       // Blue light background
+          'section-bg': '#F0F8FF',       // Blue light background
         },
         gray: {
           850: '#0f1c2e',      // Dark text
@@ -62,23 +62,23 @@ export default {
         },
       },
       borderRadius: {
-        'stat-1': '50px 15px 50px 15px',  // Stat card pattern 1
-        'stat-2': '15px 50px 15px 50px',  // Stat card pattern 2
-        'blue-shape': '215px',            // Blue decorative shape
-        'card-asymmetric': '15px 15px 80px 15px', // Asymmetric card shape
+        'stat-1': '50px 15px 50px 15px',  // Custom asymmetric design - requires precise pixel values for visual balance
+        'stat-2': '15px 50px 15px 50px',  // Alternating asymmetric pattern - matches design system requirements
+        'blue-shape': '215px',            // Large decorative radius - specific to design mockup specifications
+        'card-asymmetric': '15px 15px 80px 15px', // Unique card shape - designer-specified values for brand identity
       },
       strokeWidth: {
         'icon': '1.8',  // Icon stroke width for better visual consistency
       },
       width: {
-        'mobile-player': '85%',   // Mobile media player width - 85% provides optimal viewing on mobile while maintaining responsive margins
-        'max-content': 'max-content',  // Width based on content size - useful for horizontal scrolling animations
+        'mobile-player': '85%',   // Mobile media player width - 85% intentionally chosen for optimal mobile viewing (not spacing scale) to maintain responsive margins while maximizing content area
+        'max-content': 'max-content',  // Width based on content size - CSS intrinsic value required for horizontal scrolling animations
       },
       left: {
-        'center-offset': 'calc(50% - 195px)',  // Centers decorative elements on tablet screens - 195px accounts for half the typical content width (390px) to align with content edge
+        'center-offset': 'calc(50% - 195px)',  // Centers decorative elements on tablet screens - 195px is half of standard content width (390px) for precise alignment with content boundaries
       },
       flex: {
-        'image-column': '0 0 480px',  // Fixed flex item for image column in desktop layout
+        'image-column': '0 0 480px',  // Fixed flex item for image column in desktop layout - 480px is design-specified width for optimal image display and content balance
       },
       animation: {
         float: 'float 6s ease-in-out infinite',
