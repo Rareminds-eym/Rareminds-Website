@@ -67,6 +67,9 @@ export default {
         'blue-shape': '215px',            // Blue decorative shape
         'card-asymmetric': '15px 15px 80px 15px', // Asymmetric card shape
       },
+      strokeWidth: {
+        'icon': '1.8',  // Icon stroke width for better visual consistency
+      },
       width: {
         'mobile-player': '85%',   // Mobile media player width - 85% provides optimal viewing on mobile while maintaining responsive margins
         'max-content': 'max-content',  // Width based on content size - useful for horizontal scrolling animations
@@ -199,7 +202,7 @@ export default {
         '.card-shape-right': {
           'clip-path': 'polygon(0% 0%, 92% 6%, 92% 94%, 0% 100%)',
         },
-        '.-ml-breakout': {
+        '-ml-breakout': {
           marginLeft: 'calc(-50vw + 50%)',
         }
       });

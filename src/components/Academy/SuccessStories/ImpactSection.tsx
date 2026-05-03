@@ -133,7 +133,7 @@ export default function KeyOutcomesSection({ section }: KeyOutcomesSectionProps)
                   viewport={{ once: true, amount: 0.3 }}
                   className="absolute flex items-center justify-center rounded-full -top-5 right-7 w-10 h-10 bg-blue-100 border border-blue-200 z-10"
                 >
-                  <Icon className="text-blue-500 w-5 h-5" style={{ strokeWidth: 1.8 }} />
+                  <Icon className="text-blue-500 w-5 h-5 stroke-icon" />
                 </motion.div>
 
                 {/* Value */}
@@ -203,7 +203,7 @@ export default function KeyOutcomesSection({ section }: KeyOutcomesSectionProps)
                   viewport={{ once: true, amount: 0.3 }}
                   className="flex-shrink-0 flex items-center justify-center rounded-full mt-0.5 w-9 h-9 bg-white/70 shadow-sm"
                 >
-                  <Icon className="text-blue-500 w-4 h-4" style={{ strokeWidth: 1.8 }} />
+                  <Icon className="text-blue-500 w-4 h-4 stroke-icon" />
                 </motion.div>
 
                 <motion.p

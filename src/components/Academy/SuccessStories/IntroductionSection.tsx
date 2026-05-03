@@ -29,8 +29,6 @@ function IntroductionSection({ title, content, images = [] }: IntroductionSectio
     });
   }, []);
 
-  // Constants
-
   // Extract title className logic for better readability
   const isOneWord = title.trim().split(WHITESPACE_PATTERN).length === 1;
   const hasImages = images.length > 0;
