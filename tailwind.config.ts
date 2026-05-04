@@ -15,6 +15,9 @@ export default {
       fontFamily: {
         sans: ['Poppins', 'sans-serif'],
       },
+      spacing: {
+        'gallery-thumb': '4.5rem',    // 72px - MediaGallery mobile thumbnail height
+      },
       colors: {
         primary: {
           50: '#eff6ff',
@@ -34,6 +37,21 @@ export default {
           800: '#991b1b',
           900: '#7f1d1d',
         },
+        blue: {
+          'card-bg': '#EFF6FF',        // Blue card background
+          'timeline-bg': '#D2E8FE',    // Timeline background
+          'icon-primary': '#5BA8D8',   // Icon color
+          'border-light': '#DBEAFE',   // Border color
+          'section-bg': '#F0F8FF',       // Blue light background
+        },
+        gray: {
+          850: '#0f1c2e',      // Dark text
+          650: '#5a6a7e',      // Medium text
+        },
+        green: {
+          'soft-bg': '#F5F9FF',        // Green soft background (blue-green tint)
+          'accent-bg': '#F2FFF9',      // Green accent background
+        },
         corporate: {
           primary: "#107DFE",
           secondary: "#04DEBF",
@@ -42,6 +60,25 @@ export default {
           purple: "#4F2D91",
           yellow: "#F4B128"
         },
+      },
+      borderRadius: {
+        'stat-1': '50px 15px 50px 15px',  // Custom asymmetric design - requires precise pixel values for visual balance
+        'stat-2': '15px 50px 15px 50px',  // Alternating asymmetric pattern - matches design system requirements
+        'blue-shape': '215px',            // Large decorative radius - specific to design mockup specifications
+        'card-asymmetric': '15px 15px 80px 15px', // Unique card shape - designer-specified values for brand identity
+      },
+      strokeWidth: {
+        'icon': '1.8',  // Icon stroke width for better visual consistency
+      },
+      width: {
+        'mobile-player': '85%',   // Mobile media player width - 85% intentionally chosen for optimal mobile viewing (not spacing scale) to maintain responsive margins while maximizing content area
+        'max-content': 'max-content',  // Width based on content size - CSS intrinsic value required for horizontal scrolling animations
+      },
+      left: {
+        'center-offset': 'calc(50% - 195px)',  // Centers decorative elements on tablet screens - 195px is half of standard content width (390px) for precise alignment with content boundaries
+      },
+      flex: {
+        'image-column': '0 0 480px',  // Fixed flex item for image column in desktop layout - 480px is design-specified width for optimal image display and content balance
       },
       animation: {
         float: 'float 6s ease-in-out infinite',
@@ -58,6 +95,8 @@ export default {
         'morph': 'morph 8s ease-in-out infinite',
         'pulse-glow': 'pulse-glow 3s ease-in-out infinite',
         'drift': 'drift 10s ease-in-out infinite',
+        'scroll-vertical':   'scroll-vertical 25s linear infinite',
+        'scroll-horizontal': 'scroll-horizontal 20s linear infinite',
       },
       keyframes: {
         float: {
@@ -122,6 +161,14 @@ export default {
           '0%': { transform: 'translateY(-50%)' },
           '100%': { transform: 'translateY(0)' },
         },
+        'scroll-vertical': {
+          '0%':   { transform: 'translateY(0)' },
+          '100%': { transform: 'translateY(calc(-1 * var(--scroll-height, 0px)))' },
+        },
+        'scroll-horizontal': {
+          '0%':   { transform: 'translateX(0)' },
+          '100%': { transform: 'translateX(calc(-1 * var(--scroll-width, 0px)))' },
+        },
       },
       transformOrigin: {
         '3d': 'preserve-3d',
@@ -149,6 +196,17 @@ export default {
         '.transform-style-3d': {
           transformStyle: 'preserve-3d',
         },
+        '.card-shape-left': {
+          'clip-path': 'polygon(8% 6%, 100% 0%, 100% 100%, 8% 94%)',
+        },
+        '.card-shape-right': {
+          'clip-path': 'polygon(0% 0%, 92% 6%, 92% 94%, 0% 100%)',
+        },
+        '.breakout': {                             
+        marginLeft: 'calc(-50vw + 50%)',
+        marginRight: 'calc(-50vw + 50%)',
+        width: '100vw', 
+        }
       });
     },
   ],
