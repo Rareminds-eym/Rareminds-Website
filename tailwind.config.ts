@@ -17,6 +17,121 @@ export default {
       },
       spacing: {
         'gallery-thumb': '4.5rem',    // 72px - MediaGallery mobile thumbnail height
+        // NaanStrategicAlignment component dimensions
+        'icon-lg': '38px',            // Desktop icon circle width/height
+        'icon-md': '34px',            // Tablet icon circle width/height  
+        'icon-sm': '28px',            // Mobile icon box width/height
+        'card-padding-lg': '18px',    // Desktop card padding
+        'card-padding-md': '12px',    // Tablet card padding
+        'card-padding-sm': '14px',    // Mobile card padding Y
+        'card-width': '270px',        // Desktop card width
+        'card-height': '180px',       // Desktop card height
+        'card-min-height': '140px',   // Tablet card minHeight
+        'content-max': '520px',       // Description maxWidth
+        'section-max': '860px',       // Section container maxWidth
+        'desktop-width': '810px',     // Desktop layout width
+        'desktop-height': '460px',    // Desktop layout height
+        // NaanStrategicAlignment spacing with semantic names
+        'branch-height': '2px',       // Mobile timeline branch height
+        'dot-offset': '4px',          // Mobile dot positioning offset
+        'dot-size': '10px',           // Mobile dot size and positioning
+        'branch-width': '12px',       // Mobile timeline branch width
+        'spine-offset': '15px',       // Mobile spine positioning
+        'icon-offset-sm': '17px',     // Tablet icon negative margin
+        'card-gap': '20px',           // Mobile card gap, tablet icon positive margin
+        'icon-offset-lg': '22px',     // Desktop icon negative margin
+        'icon-margin': '23px',        // Desktop icon positive margin
+        'mobile-container': '340px',  // Mobile container max width
+        'tablet-height': '480px',     // Tablet layout height
+        // Layout positioning values
+        'vline-sm': '36px',           // Small vertical line height
+        'vline-lg': '44px',           // Large vertical line height
+        'tablet-dot-top': '214px',    // Tablet dot top position
+        'tablet-line-top': '220px',   // Tablet line top position
+        'hline-height': '3px',        // Horizontal line height
+        // Pre-calculated positioning (LINE_Y = 240)
+        'desktop-dot-top': '235px',   // Desktop dot top position (LINE_Y - 5)
+        'desktop-card-top': '221px',  // Desktop card top position (LINE_Y - ICON_R)
+        'timeline-center': '240px',   // Timeline center line position (LINE_Y)
+        // Array-based positioning
+        'pos-start': '0px',           // Starting position
+        'pos-end': '410px',           // End position
+        'pos-left': '200px',          // Left bottom position
+        'pos-right': '570px',         // Right bottom position
+        // Negative positioning
+        'neg-offset': '6px',          // Negative positioning offset
+        // Additional positioning values
+        'card-top-offset': '-20px',   // Desktop card top offset
+        'tablet-card-top': '30px',    // Tablet card top position
+        'tablet-icon-top': '203px',   // Tablet icon top position
+        'tablet-card-width': '200px', // Tablet card container width
+        // NaanAboutProgramme component dimensions
+        'main-card-width': '46%',     // Main course card width
+        'bottom-card-height': '42%',  // Bottom course card height
+        // NaanConclusion component dimensions
+        'conclusion-container': '1100px',  // Container max width
+        'conclusion-shape-sm': '420px',    // Tablet blue shape width
+        'conclusion-shape-lg': '450px',    // Desktop blue shape width
+        'conclusion-shape-h-sm': '320px',  // Tablet blue shape height
+        'conclusion-shape-h-lg': '350px',  // Desktop blue shape height
+        'conclusion-img-sm': '360px',      // Tablet image max width
+        'conclusion-img-lg': '400px',      // Desktop image max width
+        'conclusion-img-h-sm': '300px',    // Tablet image height
+        'conclusion-img-h-lg': '330px',    // Desktop image height
+        'conclusion-mobile-shape': '260px', // Mobile blue shape width
+        'conclusion-mobile-img': '240px',   // Mobile image max width
+        'conclusion-mobile-h': '210px',     // Mobile blue shape height
+        'conclusion-mobile-img-h': '200px', // Mobile image height
+        'conclusion-mobile-container': '220px', // Mobile container height
+        'conclusion-flex-base': '480px',    // Desktop flex basis
+        // NaanCourseEnrollment component dimensions
+        'course-card-min': '420px',        // Grid minmax minimum width
+        'course-scroll-height': '144px',   // University list max height
+        'course-row-height': '40px',       // University row min height
+        'course-last-odd-width': 'calc(50% - 12px)', // Last odd item max width
+      },
+      fontSize: {
+        '2xs': '11px',        // TabletCard description
+        'xs-plus': '13px',    // MobileCard title  
+        '2xs-plus': '11.5px', // MobileCard description
+        // NaanCourseEnrollment responsive font sizes
+        'course-title': 'clamp(13px, 3.5vw, 18px)',     // Course card title
+        'course-count': 'clamp(13px, 3.5vw, 18px)',     // Total count
+        'course-uni-name': 'clamp(11px, 3vw, 14px)',    // University name
+        'course-uni-count': 'clamp(11px, 3vw, 14px)',   // University count
+      },
+      lineHeight: {
+        'tight-plus': '1.35', // Card titles
+      },
+      letterSpacing: {
+        'course-tight': '-1.9px',    // Mobile word spacing for course descriptions
+        'conclusion-tight': '-1.8px', // NaanConclusion mobile word spacing
+      },
+      padding: {
+        // NaanCourseEnrollment responsive padding
+        'course-card': 'clamp(14px, 4vw, 32px)',        // Card padding
+        'course-row': '6px clamp(6px, 2vw, 12px)',      // University row padding
+      },
+      transformOrigin: {
+        'top-center': 'top center',   // Animation transform origin
+        'left-center': 'left center', // Line growth origin
+        '3d': 'preserve-3d',          // Existing 3D transform origin (DO NOT REMOVE)
+      },
+      boxShadow: {
+        'conclusion-card': '8px 8px 20px rgba(0,0,0,0.12)', // NaanConclusion card shadow
+      },
+      gridTemplateColumns: {
+        'course-auto-fit': 'repeat(auto-fit, minmax(min(100%, 420px), 1fr))', // NaanCourseEnrollment grid
+      },
+      borderWidth: {
+        '1.5': '1.5px',  // Card border width from NaanStrategicAlignment
+      },
+      ringWidth: {
+        'icon-outline': '3px',     // Icon outline ring (Lines 139, 155)
+      },
+      ringOffsetWidth: {
+        'icon-offset': '2px',      // Icon outline offset (Lines 139, 155)
+        'icon-offset-sm': '1px',   // Mobile icon outline offset (Line 625)
       },
       colors: {
         primary: {
@@ -27,6 +142,9 @@ export default {
           700: '#1d4ed8',
           800: '#1e40af',
           900: '#1e3a8a',
+        },
+        teal: {
+          custom: '#3BA3C7',  // TEAL constant from NaanStrategicAlignment
         },
         secondary: {
           50: '#fef2f2',
@@ -43,6 +161,19 @@ export default {
           'icon-primary': '#5BA8D8',   // Icon color
           'border-light': '#DBEAFE',   // Border color
           'section-bg': '#F0F8FF',       // Blue light background
+          // Course card colors from BG_COLORS array
+          'course-1': '#4a90d9',       // Primary course card
+          'course-2': '#6aaee8',       // Secondary course card
+          'course-3': '#8ec0f0',       // Tertiary course card
+          'course-4': '#7ab8ec',       // Quaternary course card
+          // NaanConclusion colors
+          'conclusion-bg': '#e0eeff',  // Blue decorative background
+          'conclusion-btn': '#5BA4CF', // Button background color
+          'conclusion-btn-hover': '#4A93BE', // Button hover color
+          // NaanCourseEnrollment colors
+          'course-icon-bg': '#EDF5FF', // Course card icon background
+          'course-row-bg': '#EDF5FF',  // University row background
+          'course-scrollbar': '#BFDBFE', // Scrollbar color
         },
         gray: {
           850: '#0f1c2e',      // Dark text
@@ -170,9 +301,6 @@ export default {
           '100%': { transform: 'translateX(calc(-1 * var(--scroll-width, 0px)))' },
         },
       },
-      transformOrigin: {
-        '3d': 'preserve-3d',
-      },
       backgroundImage: {
         "hero-gradient":
           "linear-gradient(179.38deg, rgba(194, 251, 255, 0.203) 8.57%, rgba(255, 99, 99, 0.077) 57.93%, rgba(160, 248, 184, 0.182) 113.51%)",
@@ -202,11 +330,15 @@ export default {
         '.card-shape-right': {
           'clip-path': 'polygon(0% 0%, 92% 6%, 92% 94%, 0% 100%)',
         },
-        '.breakout': {                             
-        marginLeft: 'calc(-50vw + 50%)',
-        marginRight: 'calc(-50vw + 50%)',
-        width: '100vw', 
-        }
+        '.breakout': {
+          marginLeft: 'calc(-50vw + 50%)',
+          marginRight: 'calc(-50vw + 50%)',
+          width: '100vw',
+        },
+        '.course-scrollbar': {
+          'scrollbar-width': 'thin',
+          'scrollbar-color': '#BFDBFE transparent',
+        },
       });
     },
   ],
