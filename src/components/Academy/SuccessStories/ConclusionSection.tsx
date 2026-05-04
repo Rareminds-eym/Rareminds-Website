@@ -121,7 +121,7 @@ const ConclusionSection = ({ section }: ConclusionSectionProps): JSX.Element => 
     } else if (isTablet) {
       return `${baseClasses} max-w-80 h-72 mt-8`;
     } else {
-      return `${baseClasses} max-w-96 h-80 mt-1`;
+      return `${baseClasses} max-w-80 h-72 mt-1`;
     }
   };
 
@@ -153,7 +153,7 @@ const ConclusionSection = ({ section }: ConclusionSectionProps): JSX.Element => 
 
   return (
     <section 
-      className="bg-white py-16 w-screen -mt-12 -mb-12 -ml-breakout"
+      className="bg-white py-16 w-screen -mt-12 -mb-12 breakout"
     >
       <div className="max-w-5xl mx-auto px-6">
 

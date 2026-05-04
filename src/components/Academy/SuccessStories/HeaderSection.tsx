@@ -10,7 +10,7 @@ interface HeaderSectionProps {
 const HeaderSection = ({ section }: HeaderSectionProps): JSX.Element => {
   return (
     <section 
-      className="bg-gray-50 py-20 w-screen mt-0 mb-0 -ml-breakout"
+      className="bg-gray-50 py-20 w-screen mt-0 mb-0 breakout"
     >
       <div className="max-w-5xl mx-auto px-6 text-center">
         {/* Main Title */}

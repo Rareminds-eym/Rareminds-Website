@@ -202,8 +202,10 @@ export default {
         '.card-shape-right': {
           'clip-path': 'polygon(0% 0%, 92% 6%, 92% 94%, 0% 100%)',
         },
-        '-ml-breakout': {
-          marginLeft: 'calc(-50vw + 50%)',
+        '.breakout': {                             
+        marginLeft: 'calc(-50vw + 50%)',
+        marginRight: 'calc(-50vw + 50%)',
+        width: '100vw', 
         }
       });
     },

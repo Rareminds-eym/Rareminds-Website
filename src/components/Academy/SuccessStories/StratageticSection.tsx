@@ -108,7 +108,7 @@ const StrategicAlignmentSection = ({ section }: StrategicAlignmentSectionProps):
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true }}
-      className="bg-white py-12 px-8 shadow-lg mb-12 mt-12 w-screen -ml-breakout"
+      className="bg-white py-12 px-8 shadow-lg mb-12 mt-12 w-screen breakout"
     >
       <motion.h2
         variants={titleVariant}

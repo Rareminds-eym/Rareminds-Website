@@ -21,7 +21,7 @@ function AboutProgramSection({ section }: AboutProgramSectionProps): JSX.Element
 
   return (
     <div 
-      className="py-16 -mt-10 bg-white min-h-full w-screen -ml-breakout"
+      className="py-16 -mt-10 bg-white min-h-full w-screen breakout"
     >
       {/* Title */}
       <motion.h2

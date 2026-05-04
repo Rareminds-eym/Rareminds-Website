@@ -82,7 +82,7 @@ const DSATMAboutSection = ({ section }: DSATMAboutSectionProps): JSX.Element => 
 
   return (
     <section 
-      className="bg-white w-screen px-6 py-12 mb-0 -mt-20 md:-mt-8 -ml-breakout"
+      className="bg-white w-screen px-6 py-12 mb-0 -mt-20 md:-mt-8 breakout"
     >
       {/* Title */}
       <h2 className="text-3xl md:text-5xl font-extrabold text-center text-gray-900 mb-12">
