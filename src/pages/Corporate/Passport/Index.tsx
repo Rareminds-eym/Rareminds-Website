@@ -19,11 +19,11 @@ const Passport = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const seoData = {
-    title: "Skill Passport for Corporates | Build Agile, Global-Ready Teams | Rareminds",
+    title: "Skill Passport for Corporates | Build Agile, Global-Ready Teams | Rareminds Pvt. Ltd.",
     description:
-      "Use Skill Passport by Rareminds to assess, benchmark, and upskill your workforce. Build leadership and compliance-ready teams for global expansion.",
+      "Use Skill Passport by Rareminds Pvt. Ltd. to assess, benchmark, and upskill your workforce. Build leadership and compliance-ready teams for global expansion.",
     keywords:
-      "Skill Passport, Rareminds, corporate training, leadership development, workforce readiness, HR analytics, employee upskilling, talent mapping, global teams, talent development",
+      "Skill Passport, Rareminds Pvt. Ltd., corporate training, leadership development, workforce readiness, HR analytics, employee upskilling, talent mapping, global teams, talent development",
     canonicalUrl: "https://rareminds.in/skill-passport/corporates"
   };
 
