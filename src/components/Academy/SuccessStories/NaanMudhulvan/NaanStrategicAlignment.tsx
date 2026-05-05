@@ -121,7 +121,7 @@ const TabletCard = ({ title, description }: CardProps): JSX.Element => (
     <h3 className="font-bold text-center text-gray-900 mb-2 text-xs leading-tight-plus whitespace-pre-line">
       {title}
     </h3>
-    <p className="text-gray-600 text-2xs leading-normal">
+    <p className="text-gray-600 text-xs leading-normal">
       {description}
     </p>
   </div>
@@ -130,10 +130,10 @@ const TabletCard = ({ title, description }: CardProps): JSX.Element => (
 // ── Mobile Card ─────────────────────────────────────────────────────
 const MobileCard = ({ title, description }: CardProps): JSX.Element => (
   <div className="bg-white rounded-xl flex flex-col w-full border-1.5 border-teal-custom px-card-padding-sm py-card-padding-md">
-    <h3 className="font-bold text-gray-900 mb-1 text-xs-plus leading-tight-plus">
+    <h3 className="font-bold text-gray-900 mb-1 text-sm leading-tight-plus">
       {title}
     </h3>
-    <p className="text-gray-600 text-2xs-plus leading-normal">
+    <p className="text-gray-600 text-xs leading-normal">
       {description}
     </p>
   </div>

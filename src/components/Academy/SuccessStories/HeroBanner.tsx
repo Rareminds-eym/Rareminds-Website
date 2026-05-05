@@ -53,7 +53,7 @@ function HeroBanner({ project }: HeroBannerProps) {
       
       <img
         src={bannerUrl}
-        alt={project.name || project.title}
+        alt={project.name || project.title || 'Success story banner image'}
         className="block w-full object-cover md:aspect-[1666/720]"
       />
     </div>

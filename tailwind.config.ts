@@ -82,6 +82,8 @@ export default {
         'blue-box-tablet-bottom': '-38px',  // Tablet blue box bottom position
         'blue-box-desktop-bottom': '-55px', // Desktop blue box bottom position  
         'blue-box-desktop-left': '22px',    // Desktop blue box left position
+        // Card minimum heights
+        'Naancard-min-height': '280px',         // NaanConclusion card minimum height
         // NaanCourseEnrollment component dimensions
         'course-card-min': '420px',        // Grid minmax minimum width
         'course-scroll-height': '144px',   // University list max height
@@ -89,9 +91,6 @@ export default {
         'course-last-odd-width': 'calc(50% - 12px)', // Last odd item max width
       },
       fontSize: {
-        '2xs': '11px',        // TabletCard description
-        'xs-plus': '13px',    // MobileCard title  
-        '2xs-plus': '11.5px', // MobileCard description
         // NaanCourseEnrollment responsive font sizes
         'course-title': 'clamp(13px, 3.5vw, 18px)',     // Course card title
         'course-count': 'clamp(13px, 3.5vw, 18px)',     // Total count

@@ -9,8 +9,8 @@ interface PaginationProps {
 }
 
 export const Pagination = ({ currentPage, totalPages, onPageChange }: PaginationProps) => {
-  const getVisiblePages = () => {
-    const pages = [];
+  const getVisiblePages = (): (number | 'ellipsis-start' | 'ellipsis-end')[] => {
+    const pages: (number | 'ellipsis-start' | 'ellipsis-end')[] = [];
     const maxVisible = 7;
 
     if (totalPages <= maxVisible) {
@@ -21,7 +21,7 @@ export const Pagination = ({ currentPage, totalPages, onPageChange }: Pagination
       pages.push(1);
 
       if (currentPage > 4) {
-        pages.push('...');
+        pages.push('ellipsis-start');
       }
 
       const start = Math.max(2, currentPage - 1);
@@ -34,7 +34,7 @@ export const Pagination = ({ currentPage, totalPages, onPageChange }: Pagination
       }
 
       if (currentPage < totalPages - 3) {
-        pages.push('....');
+        pages.push('ellipsis-end');
       }
 
       if (totalPages > 1) {
@@ -71,15 +71,11 @@ export const Pagination = ({ currentPage, totalPages, onPageChange }: Pagination
       <div className="flex items-center border-2 border-blue-300 rounded-full px-3 py-1.5 gap-1">
         {visiblePages.map((page) => (
           <React.Fragment key={page}>
-            {page === '....' ? (
+            {page === 'ellipsis-start' || page === 'ellipsis-end' ? (
               <span className="px-2 py-1 text-gray-500 text-sm tracking-widest">. . . .</span>
             ) : (
               <button
-                onClick={() => {
-                  if (typeof page === 'number') {
-                    onPageChange(page);
-                  }
-                }}
+                onClick={() => onPageChange(page)}
                 className={`w-9 h-9 rounded-full flex items-center justify-center text-sm font-medium transition-colors ${
                   currentPage === page
                     ? 'bg-blue-500 text-white'

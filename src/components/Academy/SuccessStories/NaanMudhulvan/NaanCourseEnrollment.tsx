@@ -209,7 +209,7 @@ function NaanCourseEnrollment({
 }: NaanCourseEnrollmentProps): JSX.Element {
   // ✅ ONLY FIX: track window width to detect mobile
   const [isMobile, setIsMobile] = React.useState(
-    typeof window !== "undefined" ? window.innerWidth < MOBILE_BREAKPOINT : false
+    window.innerWidth < MOBILE_BREAKPOINT
   );
 
   /**

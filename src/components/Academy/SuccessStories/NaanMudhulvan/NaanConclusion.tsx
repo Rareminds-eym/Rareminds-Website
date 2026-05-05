@@ -11,20 +11,6 @@ const BREAKPOINTS = {
   DESKTOP_MIN: 1280,
 } as const;
 
-// Mobile layout dimensions
-const MOBILE_LAYOUT = {
-  IMAGE_CONTAINER_HEIGHT: 48, // h-48 = 192px / 4 = 48
-  BLUE_SHAPE_WIDTH: 48,       // w-48 = 192px / 4 = 48  
-  BLUE_SHAPE_HEIGHT: 40,      // h-40 = 160px / 4 = 40
-  IMAGE_MAX_WIDTH: 44,        // max-w-44 = 176px / 4 = 44
-  IMAGE_HEIGHT: 36,           // h-36 = 144px / 4 = 36
-} as const;
-
-// Desktop/Tablet layout dimensions  
-const DESKTOP_LAYOUT = {
-  CARD_MIN_HEIGHT: 280,       // min-h-[280px]
-} as const;
-
 interface ImageItem {
   id: string;
   url: string;
@@ -103,8 +89,7 @@ function ConclusionSection({ section }: ConclusionSectionProps): JSX.Element {
         <div className="max-w-conclusion-container mx-auto px-6">
 
           <motion.h2
-            className={`text-center font-bold text-gray-900 mb-10 mt-5 ${isMobile ? 'text-3xl' : 'text-4xl'
-              }`}
+            className="text-center font-bold text-gray-900 mb-10 mt-5 text-3xl"
             variants={fadeUp}
             initial="hidden"
             whileInView="visible"
@@ -120,14 +105,14 @@ function ConclusionSection({ section }: ConclusionSectionProps): JSX.Element {
             whileInView="visible"
             viewport={{ once: true, amount: 0.15 }}
           >
-            <div className={`relative w-full h-${MOBILE_LAYOUT.IMAGE_CONTAINER_HEIGHT} flex items-end justify-center overflow-hidden rounded-t-xl`}>
-              <div className={`absolute bottom-0 left-1/2 -translate-x-1/2 w-${MOBILE_LAYOUT.BLUE_SHAPE_WIDTH} h-${MOBILE_LAYOUT.BLUE_SHAPE_HEIGHT} rounded-blue-shape bg-blue-conclusion-bg z-0`} />
+            <div className="relative w-full h-48 flex items-end justify-center overflow-hidden rounded-t-xl">
+              <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-48 h-40 rounded-blue-shape bg-blue-conclusion-bg z-0" />
 
               {imageUrl && (
                 <motion.img
                   src={imageUrl}
                   alt="Conclusion illustration"
-                  className={`w-full max-w-${MOBILE_LAYOUT.IMAGE_MAX_WIDTH} h-${MOBILE_LAYOUT.IMAGE_HEIGHT} object-contain relative z-10 mt-3`}
+                  className="w-full max-w-44 h-36 object-contain relative z-10 mt-3"
                   variants={scaleIn}
                   onError={(e) => {
                     // Hide image if it fails to load
@@ -141,8 +126,7 @@ function ConclusionSection({ section }: ConclusionSectionProps): JSX.Element {
             <div className="p-4 px-5 relative pt-6">
               <div className="absolute -top-2 left-4 w-6 h-6 rounded-lg bg-blue-600 z-30 drop-shadow-[0_4px_6px_rgba(59,130,246,0.35)]" />
 
-              <p className={`text-gray-900 mb-2.5 text-justify ${isMobile ? 'text-sm leading-relaxed' : 'text-sm leading-normal'
-                }`}>
+              <p className="text-gray-900 mb-2.5 text-justify text-sm leading-relaxed">
                 {section.content}
               </p>
 
@@ -166,8 +150,7 @@ function ConclusionSection({ section }: ConclusionSectionProps): JSX.Element {
       <div className="max-w-conclusion-container mx-auto px-6">
 
         <motion.h2
-          className={`text-center font-bold text-gray-900 mb-20 mt-10 ${isMobile ? 'text-3xl' : 'text-4xl'
-            }`}
+          className="text-center font-bold text-gray-900 mb-20 mt-10 text-4xl"
           variants={fadeUp}
           initial="hidden"
           whileInView="visible"
@@ -230,9 +213,8 @@ function ConclusionSection({ section }: ConclusionSectionProps): JSX.Element {
             viewport={{ once: true, amount: 0.1 }}
           >
             {/* Card with button inside */}
-            <div className={`bg-white rounded-xl shadow-conclusion-card border border-gray-200 p-8 px-9 min-h-[${DESKTOP_LAYOUT.CARD_MIN_HEIGHT}px]`}>
-              <p className={`text-gray-700 mb-4 text-justify font-normal ${isMobile ? 'text-sm leading-relaxed' : 'text-sm leading-normal'
-                }`}>
+            <div className="bg-white rounded-xl shadow-conclusion-card border border-gray-200 p-8 px-9 min-h-Naancard-min-height">
+              <p className="text-gray-700 mb-4 text-justify font-normal text-sm leading-normal">
                 {section.content}
               </p>
 

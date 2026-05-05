@@ -77,7 +77,7 @@ function HeroSection({ project }: HeroSectionProps) {
         
         <img 
           src={banner} 
-          alt={project?.name || project?.title || "banner"} 
+          alt={project?.name || project?.title || "Program banner image"} 
           className="w-full h-auto object-cover object-center"
         />
       </div>
