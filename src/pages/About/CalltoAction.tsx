@@ -49,7 +49,7 @@ const CollaborateSection: React.FC = () => {
 
       {/* Description */}
       <p className="text-lg text-gray-700 max-w-4xl mx-auto leading-relaxed mb-10 px-4">
-        Join hands with Rareminds Pvt. Ltd. to create impact — whether you’re a university, corporate, or government partner.{" "}
+        Join hands with Rareminds to create impact — whether you’re a university, corporate, or government partner.{" "}
         <br className="hidden md:block" />
         Let’s make skills the new currency of growth.
       </p>
