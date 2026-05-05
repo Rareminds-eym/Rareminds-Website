@@ -69,13 +69,17 @@ export const Pagination = ({ currentPage, totalPages, onPageChange }: Pagination
 
       {/* Page Numbers Container */}
       <div className="flex items-center border-2 border-blue-300 rounded-full px-3 py-1.5 gap-1">
-        {visiblePages.map((page, index) => (
-          <React.Fragment key={index}>
+        {visiblePages.map((page) => (
+          <React.Fragment key={page}>
             {page === '....' ? (
               <span className="px-2 py-1 text-gray-500 text-sm tracking-widest">. . . .</span>
             ) : (
               <button
-                onClick={() => onPageChange(page as number)}
+                onClick={() => {
+                  if (typeof page === 'number') {
+                    onPageChange(page);
+                  }
+                }}
                 className={`w-9 h-9 rounded-full flex items-center justify-center text-sm font-medium transition-colors ${
                   currentPage === page
                     ? 'bg-blue-500 text-white'

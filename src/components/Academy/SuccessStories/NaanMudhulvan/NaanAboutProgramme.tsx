@@ -1,6 +1,6 @@
 
 import { motion } from "framer-motion";
-import { BookOpen, Code, BarChart3, Globe, Settings } from "lucide-react";
+import { BookOpen, Code, BarChart3, Globe, Settings, type LucideIcon } from "lucide-react";
 
 // ── Types ────────────────────────────────────────────────────────────────────
 
@@ -32,14 +32,17 @@ interface NaanAboutProgrammeProps {
   courseEnrollmentSection: CourseEnrollmentSection;
 }
 
-// Generic icon selection based on course index - uses React Icons
-function getCourseIcon(index: number) {
-  const icons = [BookOpen, Code, BarChart3, Globe, Settings];
-  const IconComponent = icons[index % icons.length];
+// Production-level icon selection with predictable behavior
+function getCourseIcon(index: number): JSX.Element {
+  const clampedIndex = Math.min(Math.max(0, index), COURSE_ICONS.length - 1);
+  const IconComponent = COURSE_ICONS[clampedIndex];
   return <IconComponent className="w-6 h-6 text-white opacity-80" />;
 }
 
 // ── Constants ────────────────────────────────────────────────────────────────
+
+// Production-level icon array with type safety and immutability
+const COURSE_ICONS = [BookOpen, Code, BarChart3, Globe, Settings] as const satisfies readonly LucideIcon[];
 
 // Course card background colors mapped to Tailwind classes
 const COURSE_BG_CLASSES = [
@@ -47,7 +50,7 @@ const COURSE_BG_CLASSES = [
   "bg-blue-course-2", // #6aaee8  
   "bg-blue-course-3", // #8ec0f0
   "bg-blue-course-4", // #7ab8ec
-];
+] as const;
 
 // ── Animation Variants ───────────────────────────────────────────────────────
 
@@ -82,11 +85,14 @@ function NaanAboutProgramme({
   courseEnrollmentSection,
 }: NaanAboutProgrammeProps): JSX.Element {
 
-  const courses = courseEnrollmentSection.courses;
-  const mainCourse = courses.reduce(
-    (max, c) => (c.total > max.total ? c : max),
-    courses[0] ?? { title: "", total: 0, universities: [] }
-  );
+  /**
+   * Safe course processing with proper empty array handling
+   * Production-level implementation that prevents runtime errors
+   */
+  const courses = courseEnrollmentSection.courses || [];
+  const mainCourse = courses.length > 0 
+    ? courses.reduce((max, c) => (c.total > max.total ? c : max))
+    : { title: "", total: 0, universities: [] };
   const otherCourses = courses.filter((c) => c.title !== mainCourse.title);
 
   return (

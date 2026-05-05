@@ -11,6 +11,11 @@ import {
   Building2
 } from "lucide-react";
 
+// ── Constants ────────────────────────────────────────────────────────────────
+
+// Responsive breakpoint for mobile layout
+const MOBILE_BREAKPOINT = 840; // pixels
+
 interface University {
   id: string;
   name: string;
@@ -204,14 +209,26 @@ function NaanCourseEnrollment({
 }: NaanCourseEnrollmentProps): JSX.Element {
   // ✅ ONLY FIX: track window width to detect mobile
   const [isMobile, setIsMobile] = React.useState(
-    typeof window !== "undefined" ? window.innerWidth < 840 : false
+    typeof window !== "undefined" ? window.innerWidth < MOBILE_BREAKPOINT : false
   );
 
+  /**
+   * Handle mobile breakpoint detection for responsive layout
+   * Production-level implementation with proper cleanup
+   */
   React.useEffect(() => {
-    const handleResize = () => setIsMobile(window.innerWidth < 840);
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < MOBILE_BREAKPOINT);
+    };
+
+    // Add event listener
     window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
+
+    // Cleanup function
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []); // Empty dependency array is correct - we only want to set up the listener once
 
   const getIcon = (name: string) => {
     const n = name.toLowerCase();
@@ -223,8 +240,12 @@ function NaanCourseEnrollment({
     return <GraduationCap className="w-5 h-5 text-blue-500" />;
   };
 
-  const courses: Course[] = courseEnrollmentSection.courses.map((c) => ({
-    id: c.id!,
+  /**
+   * Transform course data with safe ID handling
+   * Production-level implementation that prevents runtime errors
+   */
+  const courses: Course[] = courseEnrollmentSection.courses.map((c, index) => ({
+    id: c.id || `course-${index}`, // Safe fallback for missing IDs
     title: c.title,
     totalStudents: c.total,
     universities: c.universities,

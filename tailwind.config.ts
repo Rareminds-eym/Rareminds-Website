@@ -32,10 +32,6 @@ export default {
         'desktop-width': '810px',     // Desktop layout width
         'desktop-height': '460px',    // Desktop layout height
         // NaanStrategicAlignment spacing with semantic names
-        'branch-height': '2px',       // Mobile timeline branch height
-        'dot-offset': '4px',          // Mobile dot positioning offset
-        'dot-size': '10px',           // Mobile dot size and positioning
-        'branch-width': '12px',       // Mobile timeline branch width
         'spine-offset': '15px',       // Mobile spine positioning
         'icon-offset-sm': '17px',     // Tablet icon negative margin
         'card-gap': '20px',           // Mobile card gap, tablet icon positive margin
@@ -44,8 +40,6 @@ export default {
         'mobile-container': '340px',  // Mobile container max width
         'tablet-height': '480px',     // Tablet layout height
         // Layout positioning values
-        'vline-sm': '36px',           // Small vertical line height
-        'vline-lg': '44px',           // Large vertical line height
         'tablet-dot-top': '214px',    // Tablet dot top position
         'tablet-line-top': '220px',   // Tablet line top position
         'hline-height': '3px',        // Horizontal line height
@@ -84,6 +78,10 @@ export default {
         'conclusion-mobile-img-h': '200px', // Mobile image height
         'conclusion-mobile-container': '220px', // Mobile container height
         'conclusion-flex-base': '480px',    // Desktop flex basis
+        // Blue decorative box positioning values
+        'blue-box-tablet-bottom': '-38px',  // Tablet blue box bottom position
+        'blue-box-desktop-bottom': '-55px', // Desktop blue box bottom position  
+        'blue-box-desktop-left': '22px',    // Desktop blue box left position
         // NaanCourseEnrollment component dimensions
         'course-card-min': '420px',        // Grid minmax minimum width
         'course-scroll-height': '144px',   // University list max height
@@ -119,6 +117,9 @@ export default {
       },
       boxShadow: {
         'conclusion-card': '8px 8px 20px rgba(0,0,0,0.12)', // NaanConclusion card shadow
+      },
+      dropShadow: {
+        'blue-box': '0 8px 10px rgba(79,62,236,0.25)',
       },
       gridTemplateColumns: {
         'course-auto-fit': 'repeat(auto-fit, minmax(min(100%, 420px), 1fr))', // NaanCourseEnrollment grid
@@ -210,6 +211,7 @@ export default {
       },
       flex: {
         'image-column': '0 0 480px',  // Fixed flex item for image column in desktop layout - 480px is design-specified width for optimal image display and content balance
+        'image-column-tablet': '0 0 100%',  // Full-width flex item for image column in tablet layout - 100% ensures image spans entire container width on smaller screens},
       },
       animation: {
         float: 'float 6s ease-in-out infinite',
@@ -226,7 +228,7 @@ export default {
         'morph': 'morph 8s ease-in-out infinite',
         'pulse-glow': 'pulse-glow 3s ease-in-out infinite',
         'drift': 'drift 10s ease-in-out infinite',
-        'scroll-vertical':   'scroll-vertical 25s linear infinite',
+        'scroll-vertical': 'scroll-vertical 25s linear infinite',
         'scroll-horizontal': 'scroll-horizontal 20s linear infinite',
       },
       keyframes: {
@@ -236,20 +238,20 @@ export default {
           '66%': { transform: 'translateY(-5px) rotate(-3deg)' },
         },
         morph: {
-          '0%, 100%': { 
+          '0%, 100%': {
             borderRadius: '60% 40% 30% 70% / 60% 30% 70% 40%',
             transform: 'scale(1) rotate(0deg)'
           },
-          '50%': { 
+          '50%': {
             borderRadius: '30% 60% 70% 40% / 50% 60% 30% 60%',
             transform: 'scale(1.1) rotate(180deg)'
           },
         },
         'pulse-glow': {
-          '0%, 100%': { 
+          '0%, 100%': {
             boxShadow: '0 0 5px rgba(59, 130, 246, 0.5), 0 0 10px rgba(59, 130, 246, 0.3)'
           },
-          '50%': { 
+          '50%': {
             boxShadow: '0 0 10px rgba(59, 130, 246, 0.8), 0 0 20px rgba(59, 130, 246, 0.6), 0 0 30px rgba(59, 130, 246, 0.4)'
           },
         },
@@ -293,11 +295,11 @@ export default {
           '100%': { transform: 'translateY(0)' },
         },
         'scroll-vertical': {
-          '0%':   { transform: 'translateY(0)' },
+          '0%': { transform: 'translateY(0)' },
           '100%': { transform: 'translateY(calc(-1 * var(--scroll-height, 0px)))' },
         },
         'scroll-horizontal': {
-          '0%':   { transform: 'translateX(0)' },
+          '0%': { transform: 'translateX(0)' },
           '100%': { transform: 'translateX(calc(-1 * var(--scroll-width, 0px)))' },
         },
       },

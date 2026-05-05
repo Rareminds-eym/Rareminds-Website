@@ -12,12 +12,26 @@ function HeroBanner({ project }: HeroBannerProps) {
   const navigate = useNavigate();
   const [isMobile, setIsMobile] = useState(false);
 
+  /**
+   * Handle mobile breakpoint detection for responsive UI
+   * Production-level implementation with guaranteed cleanup
+   */
   useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth < 768);
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
+    const handleMobileCheck = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    // Set initial value
+    handleMobileCheck();
+
+    // Add event listener
+    window.addEventListener('resize', handleMobileCheck);
+
+    // Cleanup function - guaranteed to remove the exact same function reference
+    return () => {
+      window.removeEventListener('resize', handleMobileCheck);
+    };
+  }, []); // Empty dependency array is correct - we only want to set up the listener once
   
   // Implement proper banner URL fallback logic
   const bannerUrl = project.bannerUrl || project.imageUrl || '/academy/Projects/default-banner.jpg';

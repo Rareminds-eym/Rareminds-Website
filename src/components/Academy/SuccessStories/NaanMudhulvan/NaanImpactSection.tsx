@@ -1,6 +1,16 @@
 
 import { Users, CheckCircle, Lightbulb, Building2, MessageSquare, Star } from "lucide-react";
 
+// ── Constants ────────────────────────────────────────────────────────────────
+
+// SVG Arc dimensions for decorative notch
+const ARC_DIMENSIONS = {
+  WIDTH: 60,
+  HEIGHT: 35,
+  VIEWBOX_WIDTH: 70,
+  VIEWBOX_HEIGHT: 35,
+} as const;
+
 interface StatItem {
   id: string; 
   value: string;
@@ -23,12 +33,12 @@ const ICONS = [Users, CheckCircle, Lightbulb, Building2, MessageSquare, Star];
 const ArcNotch = (): JSX.Element => (
   <svg
     className="absolute left-1/2 -translate-x-1/2 overflow-visible pointer-events-none -top-9 stroke-gray-300"
-    width="60"
-    height="35"
-    viewBox="0 0 70 35"
+    width={ARC_DIMENSIONS.WIDTH}
+    height={ARC_DIMENSIONS.HEIGHT}
+    viewBox={`0 0 ${ARC_DIMENSIONS.VIEWBOX_WIDTH} ${ARC_DIMENSIONS.VIEWBOX_HEIGHT}`}
     xmlns="http://www.w3.org/2000/svg"
   >
-    <path d="M0,35 A35,35 0 0,1 70,35" fill="none" strokeWidth="1" />
+    <path d={`M0,${ARC_DIMENSIONS.VIEWBOX_HEIGHT} A${ARC_DIMENSIONS.VIEWBOX_HEIGHT / 2},${ARC_DIMENSIONS.VIEWBOX_HEIGHT / 2} 0 0,1 ${ARC_DIMENSIONS.VIEWBOX_WIDTH},${ARC_DIMENSIONS.VIEWBOX_HEIGHT}`} fill="none" strokeWidth="1" />
   </svg>
 );
 

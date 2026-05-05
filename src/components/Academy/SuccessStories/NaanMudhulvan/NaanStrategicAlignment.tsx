@@ -23,6 +23,36 @@ interface CardProps {
   description: string;
 }
 
+// ── Layout Constants ────────────────────────────────────────────────
+
+// Desktop layout positioning (in pixels)
+const DESKTOP_LAYOUT = {
+  // Card positions from left edge
+  TOP_CARD_POSITIONS: [0, 410] as const,
+  BOTTOM_CARD_POSITIONS: [200, 570] as const,
+  
+  // Timeline positioning
+  LINE_Y: 240,
+  ICON_RADIUS: 19,
+  
+  // Vertical line calculations
+  CARD_TOP_OFFSET: 160, // Distance from top cards to timeline
+} as const;
+
+// Tablet layout positioning (in percentages)
+const TABLET_LAYOUT = {
+  // Icon center positions as percentages from left
+  TOP_ICON_POSITIONS: [18, 64] as const,
+  BOTTOM_ICON_POSITIONS: [38, 82] as const,
+} as const;
+
+// Icon dimensions for different screen sizes
+const ICON_SIZES = {
+  DESKTOP: { SIZE: 16, STROKE_WIDTH: 1.8 },
+  TABLET: { SIZE: 15, STROKE_WIDTH: 1.8 },
+  MOBILE: { SIZE: 13, STROKE_WIDTH: 1.8 },
+} as const;
+
 // ── Animation Variants ──────────────────────────────────────────────
 const fadeUp = {
   hidden: { opacity: 0, y: 20 },
@@ -87,7 +117,7 @@ const Card = ({ title, description }: CardProps): JSX.Element => (
 
 // ── Tablet Card ─────────────────────────────────────────────────────
 const TabletCard = ({ title, description }: CardProps): JSX.Element => (
-  <div className="bg-white rounded-xl flex flex-col w-full min-h-card-min-height border-1.5 border-teal-custom p-card-padding-md shrink-0">
+  <div className="bg-white rounded-xl flex flex-col w-full min-h-card-min-height border-1.5 border-teal-custom p-3 shrink-0">
     <h3 className="font-bold text-center text-gray-900 mb-2 text-xs leading-tight-plus whitespace-pre-line">
       {title}
     </h3>
@@ -122,29 +152,25 @@ const TabletIconCircle = ({ children }: { children: React.ReactNode }): JSX.Elem
 );
 
 const ICONS = [
-  <Briefcase size={16} strokeWidth={1.8} />,
-  <Users size={16} strokeWidth={1.8} />,
-  <Lightbulb size={16} strokeWidth={1.8} />,
-  <GraduationCap size={16} strokeWidth={1.8} />,
+  <Briefcase size={ICON_SIZES.DESKTOP.SIZE} strokeWidth={ICON_SIZES.DESKTOP.STROKE_WIDTH} />,
+  <Users size={ICON_SIZES.DESKTOP.SIZE} strokeWidth={ICON_SIZES.DESKTOP.STROKE_WIDTH} />,
+  <Lightbulb size={ICON_SIZES.DESKTOP.SIZE} strokeWidth={ICON_SIZES.DESKTOP.STROKE_WIDTH} />,
+  <GraduationCap size={ICON_SIZES.DESKTOP.SIZE} strokeWidth={ICON_SIZES.DESKTOP.STROKE_WIDTH} />,
 ];
 
 const ICONS_TABLET = [
-  <Briefcase size={15} strokeWidth={1.8} />,
-  <Users size={15} strokeWidth={1.8} />,
-  <Lightbulb size={15} strokeWidth={1.8} />,
-  <GraduationCap size={15} strokeWidth={1.8} />,
+  <Briefcase size={ICON_SIZES.TABLET.SIZE} strokeWidth={ICON_SIZES.TABLET.STROKE_WIDTH} />,
+  <Users size={ICON_SIZES.TABLET.SIZE} strokeWidth={ICON_SIZES.TABLET.STROKE_WIDTH} />,
+  <Lightbulb size={ICON_SIZES.TABLET.SIZE} strokeWidth={ICON_SIZES.TABLET.STROKE_WIDTH} />,
+  <GraduationCap size={ICON_SIZES.TABLET.SIZE} strokeWidth={ICON_SIZES.TABLET.STROKE_WIDTH} />,
 ];
 
 const ICONS_MOBILE = [
-  <Briefcase size={13} strokeWidth={1.8} />,
-  <Users size={13} strokeWidth={1.8} />,
-  <Lightbulb size={13} strokeWidth={1.8} />,
-  <GraduationCap size={13} strokeWidth={1.8} />,
+  <Briefcase size={ICON_SIZES.MOBILE.SIZE} strokeWidth={ICON_SIZES.MOBILE.STROKE_WIDTH} />,
+  <Users size={ICON_SIZES.MOBILE.SIZE} strokeWidth={ICON_SIZES.MOBILE.STROKE_WIDTH} />,
+  <Lightbulb size={ICON_SIZES.MOBILE.SIZE} strokeWidth={ICON_SIZES.MOBILE.STROKE_WIDTH} />,
+  <GraduationCap size={ICON_SIZES.MOBILE.SIZE} strokeWidth={ICON_SIZES.MOBILE.STROKE_WIDTH} />,
 ];
-
-// Desktop layout constants
-const LINE_Y = 240;
-const ICON_R = 19;
 
 function NaanStrategicAlignment({
   strategicAlignmentSection,
@@ -155,15 +181,7 @@ function NaanStrategicAlignment({
   const bottomCards = content.slice(2, 4);
   const allCards = content.slice(0, 4);
 
-  const topPositions = [0, 410];
-  const bottomPositions = [200, 570];
-  const topVLineHeight = LINE_Y - 160 - ICON_R;
-
-  // ── Tablet % positions (mirroring desktop layout proportionally) ──
-  // Top icons sit under center of top cards: left card ~28%, right card ~72%
-  const tabTopIconPct = [18, 64];
-  // Bottom icons sit above center of bottom cards: ~43% and ~72%  
-  const tabBottomIconPct = [38, 82];
+  const topVLineHeight = DESKTOP_LAYOUT.LINE_Y - DESKTOP_LAYOUT.CARD_TOP_OFFSET - DESKTOP_LAYOUT.ICON_RADIUS;
 
   return (
     <div className="bg-white flex items-center justify-center pt-2 pb-24 px-4 mt-16 md:mt-16 lg:mt-16 xl:mt-0">
@@ -209,7 +227,7 @@ function NaanStrategicAlignment({
 
           {/* Left dot */}
           <motion.div
-            className="absolute rounded-full w-branch-width h-branch-width bg-teal-custom z-[5] top-desktop-dot-top -left-neg-offset"
+            className="absolute rounded-full w-3 h-3 bg-teal-custom z-[5] top-desktop-dot-top -left-neg-offset"
             variants={fadeIn}
             initial="hidden"
             whileInView="visible"
@@ -218,7 +236,7 @@ function NaanStrategicAlignment({
           />
           {/* Right dot */}
           <motion.div
-            className="absolute rounded-full w-branch-width h-branch-width bg-teal-custom z-[5] top-desktop-dot-top -right-neg-offset"
+            className="absolute rounded-full w-3 h-3 bg-teal-custom z-[5] top-desktop-dot-top -right-neg-offset"
             variants={fadeIn}
             initial="hidden"
             whileInView="visible"
@@ -231,7 +249,7 @@ function NaanStrategicAlignment({
             <div
               key={card.id}
               className="absolute flex flex-col items-center top-card-top-offset"
-              style={{ left: topPositions[i] }}
+              style={{ left: DESKTOP_LAYOUT.TOP_CARD_POSITIONS[i] }}
             >
               <motion.div
                 variants={fadeDown}
@@ -243,7 +261,7 @@ function NaanStrategicAlignment({
                 <Card title={card.title} description={card.description} />
               </motion.div>
               <motion.div
-                className="w-branch-height bg-teal-custom shrink-0 origin-top-center"
+                className="w-0.5 bg-teal-custom shrink-0 origin-top-center"
                 style={{
                   height: topVLineHeight,
                 }}
@@ -271,7 +289,7 @@ function NaanStrategicAlignment({
             <div
               key={card.id}
               className="absolute flex flex-col items-center top-desktop-card-top"
-              style={{ left: bottomPositions[i] }}
+              style={{ left: DESKTOP_LAYOUT.BOTTOM_CARD_POSITIONS[i] }}
             >
               <motion.div
                 className="mt-icon-margin"
@@ -284,7 +302,7 @@ function NaanStrategicAlignment({
                 <IconCircle>{ICONS[i + 2]}</IconCircle>
               </motion.div>
               <motion.div
-                className="w-branch-height h-vline-lg bg-teal-custom shrink-0 origin-top-center"
+                className="w-0.5 h-11 bg-teal-custom shrink-0 origin-top-center"
                 variants={vlineGrowDown}
                 initial="hidden"
                 whileInView="visible"
@@ -326,7 +344,7 @@ function NaanStrategicAlignment({
 
 {/* Left endpoint dot */}
 <motion.div
-  className="absolute top-tablet-dot-top left-dot-size w-branch-width h-branch-width rounded-full bg-teal-custom z-[5]"
+  className="absolute top-tablet-dot-top left-2.5 w-3 h-3 rounded-full bg-teal-custom z-[5]"
   variants={fadeIn}
   initial="hidden"
   whileInView="visible"
@@ -336,7 +354,7 @@ function NaanStrategicAlignment({
 
 {/* Right endpoint dot */}
 <motion.div
-  className="absolute top-tablet-dot-top right-dot-size w-branch-width h-branch-width rounded-full bg-teal-custom z-[5]"
+  className="absolute top-tablet-dot-top right-2.5 w-3 h-3 rounded-full bg-teal-custom z-[5]"
   variants={fadeIn}
   initial="hidden"
   whileInView="visible"
@@ -346,7 +364,7 @@ function NaanStrategicAlignment({
 
             {/* ── TOP CARDS with vertical lines + icons dropping to line ── */}
             {topCards.map((card, i) => {
-              const leftPct = tabTopIconPct[i];
+              const leftPct = TABLET_LAYOUT.TOP_ICON_POSITIONS[i];
               return (
                 <div
                   key={card.id}
@@ -369,7 +387,7 @@ function NaanStrategicAlignment({
 
                   {/* Vertical line down */}
                   <motion.div
-                    className="w-branch-height h-vline-sm bg-teal-custom shrink-0 origin-top-center"
+                    className="w-0.5 h-9 bg-teal-custom shrink-0 origin-top-center"
                     variants={vlineGrowDown}
                     initial="hidden"
                     whileInView="visible"
@@ -394,7 +412,7 @@ function NaanStrategicAlignment({
 
             {/* ── BOTTOM CARDS with icons rising from line + vertical lines ── */}
             {bottomCards.map((card, i) => {
-              const leftPct = tabBottomIconPct[i];
+              const leftPct = TABLET_LAYOUT.BOTTOM_ICON_POSITIONS[i];
               return (
                 <div
                   key={card.id}
@@ -405,7 +423,7 @@ function NaanStrategicAlignment({
                 >
                   {/* Icon */}
                   <motion.div
-                    className="mt-card-gap z-10"
+                    className="mt-5 z-10"
                     variants={iconPop}
                     initial="hidden"
                     whileInView="visible"
@@ -417,7 +435,7 @@ function NaanStrategicAlignment({
 
                   {/* Vertical line down */}
                   <motion.div
-                    className="w-branch-height h-vline-sm bg-teal-custom shrink-0 origin-top-center"
+                    className="w-0.5 h-9 bg-teal-custom shrink-0 origin-top-center"
                     variants={vlineGrowDown}
                     initial="hidden"
                     whileInView="visible"
@@ -445,11 +463,11 @@ function NaanStrategicAlignment({
 
         {/* ── MOBILE LAYOUT (below md) ─────────────────────────────────── */}
         <div
-          className="flex md:hidden w-full max-w-mobile-container relative pl-dot-offset"
+          className="flex md:hidden w-full max-w-mobile-container relative pl-1"
         >
           {/* Long vertical spine */}
           <motion.div
-            className="absolute left-dot-offset top-spine-offset bottom-spine-offset w-branch-height bg-teal-custom z-[1] origin-top-center"
+            className="absolute left-1 top-spine-offset bottom-spine-offset w-0.5 bg-teal-custom z-[1] origin-top-center"
             variants={vlineGrowDown}
             initial="hidden"
             whileInView="visible"
@@ -459,7 +477,7 @@ function NaanStrategicAlignment({
 
           {/* Top dot */}
           <motion.div
-            className="absolute rounded-full w-dot-size h-dot-size bg-teal-custom z-[2] left-dot-offset top-dot-size"
+            className="absolute rounded-full w-2.5 h-2.5 bg-teal-custom z-[2] left-1 top-2.5"
             variants={fadeIn}
             initial="hidden"
             whileInView="visible"
@@ -469,7 +487,7 @@ function NaanStrategicAlignment({
 
           {/* Bottom dot */}
           <motion.div
-            className="absolute rounded-full w-dot-size h-dot-size bg-teal-custom z-[2] left-dot-offset bottom-dot-size"
+            className="absolute rounded-full w-2.5 h-2.5 bg-teal-custom z-[2] left-1 bottom-2.5"
             variants={fadeIn}
             initial="hidden"
             whileInView="visible"
@@ -478,7 +496,7 @@ function NaanStrategicAlignment({
           />
 
           {/* Cards column */}
-          <div className="flex flex-col w-full gap-card-gap">
+          <div className="flex flex-col w-full gap-5">
             {allCards.map((card, i) => (
               <motion.div
                 key={card.id}
@@ -491,7 +509,7 @@ function NaanStrategicAlignment({
               >
                 {/* Short branch */}
                 <motion.div
-                  className="w-branch-width h-branch-height bg-teal-custom shrink-0 origin-left-center"
+                  className="w-3 h-0.5 bg-teal-custom shrink-0 origin-left-center"
                   variants={{
                     hidden: { scaleX: 0, opacity: 0 },
                     visible: (d) => ({
@@ -521,7 +539,7 @@ function NaanStrategicAlignment({
 
                 {/* Card */}
                 <motion.div
-                  className="flex-1 ml-dot-offset"
+                  className="flex-1 ml-1"
                   variants={fadeUp}
                   initial="hidden"
                   whileInView="visible"

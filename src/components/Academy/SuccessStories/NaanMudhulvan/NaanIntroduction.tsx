@@ -48,7 +48,7 @@ function NaanIntroduction({ section }: NaanIntroductionProps): JSX.Element {
 
       {/* Card — fade in */}
       <motion.div
-        className="w-full max-w-4xl border border-gray-200 rounded-2xl px-4 md:px-12 py-6 md:py-10 rounded-2xl"
+        className="w-full max-w-4xl border border-gray-200 rounded-2xl px-4 md:px-12 py-6 md:py-10"
         variants={fadeIn}
         initial="hidden"
         whileInView="visible"
