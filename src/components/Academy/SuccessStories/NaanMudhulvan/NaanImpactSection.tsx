@@ -49,7 +49,6 @@ function NaanImpactSection({ impactSection }: NaanImpactSectionProps): JSX.Eleme
     const Icon = ICONS[index % ICONS.length];
     return (
       <div
-        key={item.id}
         className={`bg-white rounded-2xl border-2 border-gray-300 shadow-sm relative ${sizeClass}`}
       >
         <ArcNotch />
@@ -81,18 +80,30 @@ function NaanImpactSection({ impactSection }: NaanImpactSectionProps): JSX.Eleme
 
         {/* Desktop (xl+): top 3 + bottom 2 */}
         <div className="hidden xl:grid xl:grid-cols-3 gap-6 mb-16">
-          {topItems.map((item, i) => renderCard(item, i, "p-5"))}
+          {topItems.map((item, i) => (
+            <div key={item.id}>
+              {renderCard(item, i, "p-5")}
+            </div>
+          ))}
         </div>
         {bottomItems.length > 0 && (
           <div className="hidden xl:grid xl:grid-cols-2 gap-6 max-w-4xl mx-auto">
-            {bottomItems.map((item, i) => renderCard(item, i + 3, "p-5"))}
+            {bottomItems.map((item, i) => (
+              <div key={item.id}>
+                {renderCard(item, i + 3, "p-5")}
+              </div>
+            ))}
           </div>
         )}
 
         {/* Mobile/tablet (below xl): 2-col grid + centered 5th */}
         <div className="xl:hidden">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-16 md:gap-x-6 md:gap-y-16 mb-16">
-            {mobileFirst4.map((item, i) => renderCard(item, i, "p-4 md:p-8"))}
+            {mobileFirst4.map((item, i) => (
+              <div key={item.id}>
+                {renderCard(item, i, "p-4 md:p-8")}
+              </div>
+            ))}
           </div>
           {mobileFifth && (
             <div className="flex justify-center">

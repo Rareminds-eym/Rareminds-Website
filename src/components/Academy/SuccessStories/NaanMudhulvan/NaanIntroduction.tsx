@@ -14,7 +14,7 @@ interface NaanIntroductionProps {
 // ── Animation Variants ──────────────────────────────────────────────
 const fadeUp = {
   hidden: { opacity: 0, y: 30 },
-  visible: (delay = 0) => ({
+  visible: (delay: number = 0) => ({
     opacity: 1,
     y: 0,
     transition: { duration: 0.6, ease: "easeOut" as const, delay },
@@ -23,7 +23,7 @@ const fadeUp = {
 
 const fadeIn = {
   hidden: { opacity: 0 },
-  visible: (delay = 0) => ({
+  visible: (delay: number = 0) => ({
     opacity: 1,
     transition: { duration: 0.6, ease: "easeOut" as const, delay },
   }),

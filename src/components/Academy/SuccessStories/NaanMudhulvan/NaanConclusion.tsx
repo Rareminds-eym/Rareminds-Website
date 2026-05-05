@@ -27,9 +27,14 @@ interface ConclusionSectionProps {
 }
 
 function ConclusionSection({ section }: ConclusionSectionProps): JSX.Element {
-  const [isMobile, setIsMobile] = useState(false);
-  const [isTablet, setIsTablet] = useState(false);
-  const [isDesktop, setIsDesktop] = useState(false);
+  const [deviceType, setDeviceType] = useState<'mobile' | 'tablet' | 'desktop'>('desktop');
+  const [mobileImageError, setMobileImageError] = useState(false);
+  const [desktopImageError, setDesktopImageError] = useState(false);
+
+  // Derived state for cleaner conditionals
+  const isMobile = deviceType === 'mobile';
+  const isTablet = deviceType === 'tablet';
+  const isDesktop = deviceType === 'desktop';
 
   // Only use dynamic image from database - no fallback
   const imageUrl = section.image?.url;
@@ -65,9 +70,13 @@ function ConclusionSection({ section }: ConclusionSectionProps): JSX.Element {
   useEffect(() => {
     const handleResize = () => {
       const width = window.innerWidth;
-      setIsMobile(width < BREAKPOINTS.MOBILE_MAX);
-      setIsTablet(width >= BREAKPOINTS.MOBILE_MAX && width < BREAKPOINTS.DESKTOP_MIN);
-      setIsDesktop(width >= BREAKPOINTS.DESKTOP_MIN);
+      if (width < BREAKPOINTS.MOBILE_MAX) {
+        setDeviceType('mobile');
+      } else if (width < BREAKPOINTS.DESKTOP_MIN) {
+        setDeviceType('tablet');
+      } else {
+        setDeviceType('desktop');
+      }
     };
 
     // Set initial values
@@ -108,17 +117,13 @@ function ConclusionSection({ section }: ConclusionSectionProps): JSX.Element {
             <div className="relative w-full h-48 flex items-end justify-center overflow-hidden rounded-t-xl">
               <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-48 h-40 rounded-blue-shape bg-blue-conclusion-bg z-0" />
 
-              {imageUrl && (
+              {imageUrl && !mobileImageError && (
                 <motion.img
                   src={imageUrl}
                   alt="Conclusion illustration"
                   className="w-full max-w-conclusion-mobile-img-compact h-36 object-contain relative z-10 mt-3"
                   variants={scaleIn}
-                  onError={(e) => {
-                    // Hide image if it fails to load
-                    const target = e.target as HTMLImageElement;
-                    target.style.display = 'none';
-                  }}
+                  onError={() => setMobileImageError(true)}
                 />
               )}
             </div>
@@ -183,7 +188,7 @@ function ConclusionSection({ section }: ConclusionSectionProps): JSX.Element {
               }`} />
 
             <div className="relative z-10 flex justify-center items-center w-full h-full">
-              {imageUrl && (
+              {imageUrl && !desktopImageError && (
                 <motion.img
                   src={imageUrl}
                   alt="Conclusion illustration"
@@ -195,11 +200,7 @@ function ConclusionSection({ section }: ConclusionSectionProps): JSX.Element {
                   initial="hidden"
                   whileInView="visible"
                   viewport={{ once: true, amount: 0.1 }}
-                  onError={(e) => {
-                    // Hide image if it fails to load
-                    const target = e.target as HTMLImageElement;
-                    target.style.display = 'none';
-                  }}
+                  onError={() => setDesktopImageError(true)}
                 />
               )}
             </div>

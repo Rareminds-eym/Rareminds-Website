@@ -69,8 +69,8 @@ export const Pagination = ({ currentPage, totalPages, onPageChange }: Pagination
 
       {/* Page Numbers Container */}
       <div className="flex items-center border-2 border-blue-300 rounded-full px-3 py-1.5 gap-1">
-        {visiblePages.map((page) => (
-          <React.Fragment key={page}>
+        {visiblePages.map((page, index) => (
+          <React.Fragment key={`${page}-${index}`}>
             {page === 'ellipsis-start' || page === 'ellipsis-end' ? (
               <span className="px-2 py-1 text-gray-500 text-sm tracking-widest">. . . .</span>
             ) : (
