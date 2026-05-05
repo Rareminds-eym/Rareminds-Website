@@ -17,6 +17,139 @@ export default {
       },
       spacing: {
         'gallery-thumb': '4.5rem',    // 72px - MediaGallery mobile thumbnail height
+        // NaanStrategicAlignment component dimensions
+        'icon-lg': '38px',            // Desktop icon circle width/height
+        'icon-md': '34px',            // Tablet icon circle width/height  
+        'icon-sm': '28px',            // Mobile icon box width/height
+        'card-padding-lg': '18px',    // Desktop card padding
+        'card-padding-md': '12px',    // Tablet card padding
+        'card-padding-sm': '14px',    // Mobile card padding Y
+        'card-width': '270px',        // Desktop card width
+        'card-height': '180px',       // Desktop card height
+        'card-min-height': '140px',   // Tablet card minHeight
+        'content-max': '520px',       // Description maxWidth
+        'section-max': '860px',       // Section container maxWidth
+        'desktop-width': '810px',     // Desktop layout width
+        'desktop-height': '460px',    // Desktop layout height
+        // NaanStrategicAlignment spacing with semantic names
+        'spine-offset': '15px',       // Mobile spine positioning
+        'icon-offset-sm': '17px',     // Tablet icon negative margin
+        'card-gap': '20px',           // Mobile card gap, tablet icon positive margin
+        'icon-offset-lg': '22px',     // Desktop icon negative margin
+        'icon-margin': '23px',        // Desktop icon positive margin
+        'mobile-container': '340px',  // Mobile container max width
+        'tablet-height': '480px',     // Tablet layout height
+        // Layout positioning values
+        'tablet-dot-top': '214px',    // Tablet dot top position
+        'tablet-line-top': '220px',   // Tablet line top position
+        'hline-height': '3px',        // Horizontal line height
+        // Pre-calculated positioning (LINE_Y = 240)
+        'desktop-dot-top': '235px',   // Desktop dot top position (LINE_Y - 5)
+        'desktop-card-top': '221px',  // Desktop card top position (LINE_Y - ICON_R)
+        'timeline-center': '240px',   // Timeline center line position (LINE_Y)
+        // Array-based positioning
+        'pos-start': '0px',           // Starting position
+        'pos-end': '410px',           // End position
+        'pos-left': '200px',          // Left bottom position
+        'pos-right': '570px',         // Right bottom position
+        // Negative positioning
+        'neg-offset': '6px',          // Negative positioning offset
+        // Additional positioning values
+        'card-top-offset': '-20px',   // Desktop card top offset
+        'tablet-card-top': '30px',    // Tablet card top position
+        'tablet-icon-top': '203px',   // Tablet icon top position
+        'tablet-card-width': '200px', // Tablet card container width
+        // NaanAboutProgramme component dimensions
+        'main-card-width': '46%',     // Main course card width
+        'bottom-card-height': '42%',  // Bottom course card height
+        // NaanConclusion component dimensions
+        'conclusion-container': '1100px',  // Container max width
+        'conclusion-shape-sm': '420px',    // Tablet blue shape width
+        'conclusion-shape-lg': '450px',    // Desktop blue shape width
+        'conclusion-shape-h-sm': '320px',  // Tablet blue shape height
+        'conclusion-shape-h-lg': '350px',  // Desktop blue shape height
+        'conclusion-img-sm': '360px',      // Tablet image max width
+        'conclusion-img-lg': '400px',      // Desktop image max width
+        'conclusion-img-h-sm': '300px',    // Tablet image height
+        'conclusion-img-h-lg': '330px',    // Desktop image height
+        'conclusion-mobile-shape': '260px', // Mobile blue shape width
+        'conclusion-mobile-img': '240px',   // Mobile image max width
+        'conclusion-mobile-img-compact': '176px', // Mobile image max width (compact layout) to prevent overflow
+        'conclusion-mobile-h': '210px',     // Mobile blue shape height
+        'conclusion-mobile-img-h': '200px', // Mobile image height
+        'conclusion-mobile-container': '220px', // Mobile container height
+        'conclusion-flex-base': '480px',    // Desktop flex basis
+        // Blue decorative box positioning values
+        'blue-box-tablet-bottom': '-38px',  // Tablet blue box bottom position
+        'blue-box-desktop-bottom': '-55px', // Desktop blue box bottom position  
+        'blue-box-desktop-left': '22px',    // Desktop blue box left position
+        // Card minimum heights
+        'Naancard-min-height': '280px',         // NaanConclusion card minimum height
+        // NaanCourseEnrollment component dimensions
+        'course-card-min': '420px',        // Grid minmax minimum width
+        'course-scroll-height': '144px',   // University list max height
+        'course-row-height': '40px',       // University row min height
+        'course-last-odd-width': 'calc(50% - 12px)', // Last odd item max width
+        // NaanConclusion component dimensions
+        'conclusion-content-min': '300px',   // Minimum width for conclusion content card to prevent cramping
+      },
+      fontSize: {
+        // NaanCourseEnrollment responsive font sizes
+        'course-title': 'clamp(13px, 3.5vw, 18px)',     // Course card title
+        'course-count': 'clamp(13px, 3.5vw, 18px)',     // Total count
+        'course-uni-name': 'clamp(11px, 3vw, 14px)',    // University name
+        'course-uni-count': 'clamp(11px, 3vw, 14px)',   // University count
+      },
+      lineHeight: {
+        'tight-plus': '1.35', // Card titles
+      },
+      letterSpacing: {
+        'course-tight': '-1.9px',    // Mobile word spacing for course descriptions
+        'conclusion-tight': '-1.8px', // NaanConclusion mobile word spacing
+      },
+      padding: {
+        // NaanCourseEnrollment responsive padding
+        'course-card': 'clamp(14px, 4vw, 32px)',        // Card padding
+        'course-row': '6px clamp(6px, 2vw, 12px)',      // University row padding
+      },
+      transformOrigin: {
+        'top-center': 'top center',   // Animation transform origin
+        'left-center': 'left center', // Line growth origin
+        '3d': 'preserve-3d',          // Existing 3D transform origin (DO NOT REMOVE)
+      },
+      boxShadow: {
+        'conclusion-card': '8px 8px 20px rgba(0,0,0,0.12)', // NaanConclusion card shadow
+      },
+      dropShadow: {
+        'blue-box': '0 8px 10px rgba(79,62,236,0.25)',
+        'conclusion-decorator': '0 4px 6px rgba(59,130,246,0.35)', // Blue decorative box shadow in conclusion mobile layout
+        'conclusion-image': '0 10px 6px rgba(0,0,0,0.1)', // Image drop shadow in conclusion desktop/tablet layout
+      },
+      gridTemplateColumns: {
+        // Responsive grid for course cards with intelligent sizing
+        // - auto-fit: Creates as many columns as fit
+        // - minmax(min(100%, 420px), 1fr): Each column is at least 420px but never wider than container
+        // - min(100%, 420px): Prevents columns from being wider than container on small screens
+        // - 1fr: Allows columns to grow equally when there's extra space
+        'course-auto-fit': 'repeat(auto-fit, minmax(min(100%, 420px), 1fr))',
+      },
+      borderWidth: {
+        '1.5': '1.5px',  // Card border width from NaanStrategicAlignment
+      },
+      ringWidth: {
+        'icon-outline': '3px',     // Icon outline ring (Lines 139, 155)
+      },
+      ringOffsetWidth: {
+        'icon-offset': '2px',      // Icon outline offset (Lines 139, 155)
+        'icon-offset-sm': '1px',   // Mobile icon outline offset (Line 625)
+      },
+      aspectRatio: {
+        'banner': '1666/720', // Hero banner aspect ratio for desktop layout
+      },
+      zIndex: {
+        'timeline-line': '1',    // Timeline horizontal/vertical lines - behind dots and icons
+        'timeline-dot': '2',     // Timeline dots - above lines, below endpoint dots  
+        'timeline-endpoint': '5', // Timeline endpoint dots - above all timeline elements
       },
       colors: {
         primary: {
@@ -27,6 +160,9 @@ export default {
           700: '#1d4ed8',
           800: '#1e40af',
           900: '#1e3a8a',
+        },
+        teal: {
+          custom: '#3BA3C7',  // TEAL constant from NaanStrategicAlignment
         },
         secondary: {
           50: '#fef2f2',
@@ -43,6 +179,19 @@ export default {
           'icon-primary': '#5BA8D8',   // Icon color
           'border-light': '#DBEAFE',   // Border color
           'section-bg': '#F0F8FF',       // Blue light background
+          // Course card colors from BG_COLORS array
+          'course-1': '#4a90d9',       // Primary course card
+          'course-2': '#6aaee8',       // Secondary course card
+          'course-3': '#8ec0f0',       // Tertiary course card
+          'course-4': '#7ab8ec',       // Quaternary course card
+          // NaanConclusion colors
+          'conclusion-bg': '#e0eeff',  // Blue decorative background
+          'conclusion-btn': '#5BA4CF', // Button background color
+          'conclusion-btn-hover': '#4A93BE', // Button hover color
+          // NaanCourseEnrollment colors
+          'course-icon-bg': '#EDF5FF', // Course card icon background
+          'course-row-bg': '#EDF5FF',  // University row background
+          'course-scrollbar': '#BFDBFE', // Scrollbar color
         },
         gray: {
           850: '#0f1c2e',      // Dark text
@@ -79,6 +228,7 @@ export default {
       },
       flex: {
         'image-column': '0 0 480px',  // Fixed flex item for image column in desktop layout - 480px is design-specified width for optimal image display and content balance
+        'image-column-tablet': '0 0 100%',  // Full-width flex item for image column in tablet layout - 100% ensures image spans entire container width on smaller screens},
       },
       animation: {
         float: 'float 6s ease-in-out infinite',
@@ -95,7 +245,7 @@ export default {
         'morph': 'morph 8s ease-in-out infinite',
         'pulse-glow': 'pulse-glow 3s ease-in-out infinite',
         'drift': 'drift 10s ease-in-out infinite',
-        'scroll-vertical':   'scroll-vertical 25s linear infinite',
+        'scroll-vertical': 'scroll-vertical 25s linear infinite',
         'scroll-horizontal': 'scroll-horizontal 20s linear infinite',
       },
       keyframes: {
@@ -105,20 +255,20 @@ export default {
           '66%': { transform: 'translateY(-5px) rotate(-3deg)' },
         },
         morph: {
-          '0%, 100%': { 
+          '0%, 100%': {
             borderRadius: '60% 40% 30% 70% / 60% 30% 70% 40%',
             transform: 'scale(1) rotate(0deg)'
           },
-          '50%': { 
+          '50%': {
             borderRadius: '30% 60% 70% 40% / 50% 60% 30% 60%',
             transform: 'scale(1.1) rotate(180deg)'
           },
         },
         'pulse-glow': {
-          '0%, 100%': { 
+          '0%, 100%': {
             boxShadow: '0 0 5px rgba(59, 130, 246, 0.5), 0 0 10px rgba(59, 130, 246, 0.3)'
           },
-          '50%': { 
+          '50%': {
             boxShadow: '0 0 10px rgba(59, 130, 246, 0.8), 0 0 20px rgba(59, 130, 246, 0.6), 0 0 30px rgba(59, 130, 246, 0.4)'
           },
         },
@@ -162,16 +312,13 @@ export default {
           '100%': { transform: 'translateY(0)' },
         },
         'scroll-vertical': {
-          '0%':   { transform: 'translateY(0)' },
+          '0%': { transform: 'translateY(0)' },
           '100%': { transform: 'translateY(calc(-1 * var(--scroll-height, 0px)))' },
         },
         'scroll-horizontal': {
-          '0%':   { transform: 'translateX(0)' },
+          '0%': { transform: 'translateX(0)' },
           '100%': { transform: 'translateX(calc(-1 * var(--scroll-width, 0px)))' },
         },
-      },
-      transformOrigin: {
-        '3d': 'preserve-3d',
       },
       backgroundImage: {
         "hero-gradient":
@@ -202,11 +349,15 @@ export default {
         '.card-shape-right': {
           'clip-path': 'polygon(0% 0%, 92% 6%, 92% 94%, 0% 100%)',
         },
-        '.breakout': {                             
-        marginLeft: 'calc(-50vw + 50%)',
-        marginRight: 'calc(-50vw + 50%)',
-        width: '100vw', 
-        }
+        '.breakout': {
+          marginLeft: 'calc(-50vw + 50%)',
+          marginRight: 'calc(-50vw + 50%)',
+          width: '100vw',
+        },
+        '.course-scrollbar': {
+          'scrollbar-width': 'thin',
+          'scrollbar-color': '#BFDBFE transparent',
+        },
       });
     },
   ],
