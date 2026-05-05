@@ -4,10 +4,6 @@ import placeholderBanner from '/academy/Projects/nanmudhalvan.jpg';
 import type { ProgramWithTransformedSections } from '../../../../types/program';
 
 // ── Constants ────────────────────────────────────────────────────────────────
-
-// Placeholder image for missing banners
-const PLACEHOLDER_IMAGE = placeholderBanner;
-
 interface HeroSectionProps {
   project: ProgramWithTransformedSections;
 }
@@ -42,6 +38,7 @@ function HeroSection({ project }: HeroSectionProps) {
       <div className="w-full overflow-hidden relative">
         {/* Back Button */}
         <button
+          type="button"
           onClick={() => navigate('/success-stories')}
           className="absolute left-4 z-10 flex items-center bg-blue-600 hover:bg-blue-700 text-white rounded-full transition-all shadow-md hover:shadow-lg font-medium top-2 px-2 py-1 text-xs gap-1 md:top-10 md:px-5 md:py-2 md:gap-2"
         >

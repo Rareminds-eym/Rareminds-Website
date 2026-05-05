@@ -136,7 +136,7 @@ function ConclusionSection({ section }: ConclusionSectionProps): JSX.Element {
               </p>
 
               <div className="flex justify-center mt-4 pb-1">
-                <button className="bg-blue-conclusion-btn hover:bg-blue-conclusion-btn-hover text-white font-medium px-4 py-2 rounded-lg transition-colors duration-200 flex items-center gap-1 text-xs">
+                <button type="button" className="bg-blue-conclusion-btn hover:bg-blue-conclusion-btn-hover text-white font-medium px-4 py-2 rounded-lg transition-colors duration-200 flex items-center gap-1 text-xs">
                   Download case study <ArrowRight size={16} />
                 </button>
               </div>
@@ -221,7 +221,7 @@ function ConclusionSection({ section }: ConclusionSectionProps): JSX.Element {
 
               {/* ── Download button inside card (desktop/tablet) ── */}
               <div className="flex justify-start mt-6">
-                <button className="bg-blue-conclusion-btn hover:bg-blue-conclusion-btn-hover text-white text-xs font-medium px-3 py-3 rounded-lg transition-colors duration-200 flex items-center gap-1">
+                <button type="button" className="bg-blue-conclusion-btn hover:bg-blue-conclusion-btn-hover text-white text-xs font-medium px-3 py-3 rounded-lg transition-colors duration-200 flex items-center gap-1">
                   Download case study <ArrowRight size={16} />
                 </button>
               </div>

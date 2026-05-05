@@ -13,6 +13,7 @@ function ComingSoonSection({ programName }: ComingSoonSectionProps) {
       {/* Back Button */}
       <div className="container mx-auto px-4 pt-8">
         <button
+          type="button"
           onClick={() => navigate('/success-stories')}
           className="flex items-center gap-2 bg-white text-gray-900 px-4 py-2 rounded-lg transition-all shadow-md hover:shadow-lg hover:bg-gray-50"
         >
@@ -37,6 +38,7 @@ function ComingSoonSection({ programName }: ComingSoonSectionProps) {
           </p>
           
           <button
+            type="button"
             onClick={() => navigate('/success-stories')}
             className="bg-blue-600 text-white px-8 py-3 rounded-lg hover:bg-blue-700 transition-colors font-medium"
           >
