@@ -115,31 +115,31 @@ const communicationPersonalityModules = [
 /// ✅ Updated Meta Content Configuration
 const metaContent = {
   'Teacher Development Programs (TDP)': {
-    title: "Teacher Development Programs | NEP Training for Educators | Rareminds",
+    title: "Teacher Development Programs | NEP Training for Educators | Rareminds Pvt. Ltd.",
     description: "Empower educators with NEP-aligned programs in ranking readiness, innovation cells, and peer-learning teacher communities."
   },
   'communication-personality': {
-    title: "Communication & Personality Development for Teachers | Rareminds",
+    title: "Communication & Personality Development for Teachers | Rareminds Pvt. Ltd.",
     description: "Boost classroom delivery with training in educator fluency, management strategies, and effective parent-teacher communication."
   },
   'mental-health-counseling': {
-    title: "Mental Health & Counseling Training for Teachers | Rareminds",
+    title: "Mental Health & Counseling Training for Teachers | Rareminds Pvt. Ltd.",
     description: "Equip teachers with tools to support at-risk students through empathy, peer counseling, and safe learning environments."
   },
   'domain-specific-certification': {
-    title: "Domain-Specific Certification for Teachers | Industry-Aligned Training | Rareminds",
+    title: "Domain-Specific Certification for Teachers | Industry-Aligned Training | Rareminds Pvt. Ltd.",
     description: "Offer cutting-edge, industry-certified training with sector exposure and hands-on collaboration in high-demand domains."
   },
   'leadership-career-growth': {
-    title: "Leadership & Career Growth for Academic Leaders | Rareminds",
+    title: "Leadership & Career Growth for Academic Leaders | Rareminds Pvt. Ltd.",
     description: "Advance academic leadership through training for HODs and principals, with a focus on excellence and professional growth."
   },
   'institutional-value-added': {
-    title: "Institutional Value-Added Services | School System Strengthening | Rareminds",
+    title: "Institutional Value-Added Services | School System Strengthening | Rareminds Pvt. Ltd.",
     description: "Strengthen school systems with structured audits, ranking support, and teacher-led club development for continuous improvement."
   },
   default: {
-    title: "Bilingual NEP 2020-Aligned School Programs | Rareminds School Services",
+    title: "Bilingual NEP 2020-Aligned School Programs | Rareminds Pvt. Ltd. School Services",
     description: "Bilingual, NEP 2020-aligned school programs that strengthen communication, digital skills, and career paths designed for practical, classroom-ready impact."
   }
 };

@@ -216,7 +216,7 @@ export default function CorporateCoursesPage() {
   return (
     <>
       <Helmet>
-        <title>{serviceName} | Corporate Training | Rareminds</title>
+        <title>{serviceName} | Corporate Training | Rareminds Pvt. Ltd.</title>
         <meta name="description" content={`Explore ${serviceName} training programs designed for corporate teams.`} />
       </Helmet>
 
