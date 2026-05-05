@@ -35,20 +35,20 @@ const CourseDetailedPage = () => {
   // Meta content configuration for different courses
   const metaContent = {
     'spoken-english-bootcamp': {
-      title: "Spoken English & Public Speaking Bootcamps | Rareminds Student Programs",
-      description: "Build real-world communication skills with Rareminds' spoken English and public speaking bootcamps, designed to boost fluency, confidence, and student engagement."
+      title: "Spoken English & Public Speaking Bootcamps | Rareminds Pvt. Ltd. Student Programs",
+      description: "Build real-world communication skills with Rareminds Pvt. Ltd.'s spoken English and public speaking bootcamps, designed to boost fluency, confidence, and student engagement."
     },
     'career-counselling-psychometric': {
-      title: "Career Toolkit for Students | Stream Selection & Career Clarity | Rareminds",
-      description: "Help students gain career clarity with Rareminds' Career Toolkit: a structured, project-based program for stream selection, skill mapping, and confident career decisions."
+      title: "Career Toolkit for Students | Stream Selection & Career Clarity | Rareminds Pvt. Ltd.",
+      description: "Help students gain career clarity with Rareminds Pvt. Ltd.'s Career Toolkit: a structured, project-based program for stream selection, skill mapping, and confident career decisions."
     },
     '3e-program-bootcamp': {
-      title: "3E Program: English, Employability & Entrepreneurship | Future-Ready Students | Rareminds",
-      description: "Equip students with future-ready skills through Rareminds' 3E Program, blending communication, workplace readiness, and entrepreneurship in one integrated bootcamp."
+      title: "3E Program: English, Employability & Entrepreneurship | Future-Ready Students | Rareminds Pvt. Ltd.",
+      description: "Equip students with future-ready skills through Rareminds Pvt. Ltd.'s 3E Program, blending communication, workplace readiness, and entrepreneurship in one integrated bootcamp."
     },
     default: {
-      title: "Student Programs | NEP-Aligned Learning | Rareminds",
-      description: "Build real-world skills from school. Rareminds offers NEP-aligned student programs in communication, digital fluency, and career readiness for kindergarten to Grade 12."
+      title: "Student Programs | NEP-Aligned Learning | Rareminds Pvt. Ltd.",
+      description: "Build real-world skills from school. Rareminds Pvt. Ltd. offers NEP-aligned student programs in communication, digital fluency, and career readiness for kindergarten to Grade 12."
     }
   };
 
