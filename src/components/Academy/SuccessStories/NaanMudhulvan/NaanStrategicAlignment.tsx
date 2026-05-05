@@ -217,7 +217,7 @@ function NaanStrategicAlignment({
         >
           {/* Horizontal line */}
           <motion.div
-            className="absolute top-timeline-center left-0 right-0 h-hline-height bg-teal-custom z-[1] origin-left-center"
+            className="absolute top-timeline-center left-0 right-0 h-hline-height bg-teal-custom z-timeline-line origin-left-center"
             variants={lineGrow}
             initial="hidden"
             whileInView="visible"
@@ -227,7 +227,7 @@ function NaanStrategicAlignment({
 
           {/* Left dot */}
           <motion.div
-            className="absolute rounded-full w-3 h-3 bg-teal-custom z-[5] top-desktop-dot-top -left-neg-offset"
+            className="absolute rounded-full w-3 h-3 bg-teal-custom z-timeline-endpoint top-desktop-dot-top -left-neg-offset"
             variants={fadeIn}
             initial="hidden"
             whileInView="visible"
@@ -236,7 +236,7 @@ function NaanStrategicAlignment({
           />
           {/* Right dot */}
           <motion.div
-            className="absolute rounded-full w-3 h-3 bg-teal-custom z-[5] top-desktop-dot-top -right-neg-offset"
+            className="absolute rounded-full w-3 h-3 bg-teal-custom z-timeline-endpoint top-desktop-dot-top -right-neg-offset"
             variants={fadeIn}
             initial="hidden"
             whileInView="visible"
@@ -334,7 +334,7 @@ function NaanStrategicAlignment({
           >
 {/* ── Horizontal line: equal padding both sides ── */}
 <motion.div
-  className="absolute top-tablet-line-top left-4 right-4 h-hline-height bg-teal-custom z-[1] origin-left-center"
+  className="absolute top-tablet-line-top left-4 right-4 h-hline-height bg-teal-custom z-timeline-line origin-left-center"
   variants={lineGrow}
   initial="hidden"
   whileInView="visible"
@@ -344,7 +344,7 @@ function NaanStrategicAlignment({
 
 {/* Left endpoint dot */}
 <motion.div
-  className="absolute top-tablet-dot-top left-2.5 w-3 h-3 rounded-full bg-teal-custom z-[5]"
+  className="absolute top-tablet-dot-top left-2.5 w-3 h-3 rounded-full bg-teal-custom z-timeline-endpoint"
   variants={fadeIn}
   initial="hidden"
   whileInView="visible"
@@ -354,7 +354,7 @@ function NaanStrategicAlignment({
 
 {/* Right endpoint dot */}
 <motion.div
-  className="absolute top-tablet-dot-top right-2.5 w-3 h-3 rounded-full bg-teal-custom z-[5]"
+  className="absolute top-tablet-dot-top right-2.5 w-3 h-3 rounded-full bg-teal-custom z-timeline-endpoint"
   variants={fadeIn}
   initial="hidden"
   whileInView="visible"
@@ -467,7 +467,7 @@ function NaanStrategicAlignment({
         >
           {/* Long vertical spine */}
           <motion.div
-            className="absolute left-1 top-spine-offset bottom-spine-offset w-0.5 bg-teal-custom z-[1] origin-top-center"
+            className="absolute left-1 top-spine-offset bottom-spine-offset w-0.5 bg-teal-custom z-timeline-line origin-top-center"
             variants={vlineGrowDown}
             initial="hidden"
             whileInView="visible"
@@ -477,7 +477,7 @@ function NaanStrategicAlignment({
 
           {/* Top dot */}
           <motion.div
-            className="absolute rounded-full w-2.5 h-2.5 bg-teal-custom z-[2] left-1 top-2.5"
+            className="absolute rounded-full w-2.5 h-2.5 bg-teal-custom z-timeline-dot left-1 top-2.5"
             variants={fadeIn}
             initial="hidden"
             whileInView="visible"
@@ -487,7 +487,7 @@ function NaanStrategicAlignment({
 
           {/* Bottom dot */}
           <motion.div
-            className="absolute rounded-full w-2.5 h-2.5 bg-teal-custom z-[2] left-1 bottom-2.5"
+            className="absolute rounded-full w-2.5 h-2.5 bg-teal-custom z-timeline-dot left-1 bottom-2.5"
             variants={fadeIn}
             initial="hidden"
             whileInView="visible"
@@ -530,7 +530,7 @@ function NaanStrategicAlignment({
                   whileInView="visible"
                   viewport={{ once: true }}
                   custom={0.4 + i * 0.15}
-                  className="shrink-0 z-[2]"
+                  className="shrink-0 z-timeline-dot"
                 >
                   <div className="flex items-center justify-center w-icon-sm h-icon-sm rounded-lg bg-sky-100 text-teal-custom ring-2 ring-white ring-offset-icon-offset-sm">
                     {ICONS_MOBILE[i]}

@@ -1,12 +1,16 @@
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 import { useState, useEffect } from 'react';
+import { PLACEHOLDER_BANNER_IMAGE } from '../../../../constants/images';
 import type { ProgramWithTransformedSections } from '../../../../types/program';
 
 // ── Constants ────────────────────────────────────────────────────────────────
 
 // Mobile breakpoint for responsive layout
 const MOBILE_BREAKPOINT = 768; // pixels
+
+// Placeholder image for missing banners
+const PLACEHOLDER_IMAGE = PLACEHOLDER_BANNER_IMAGE;
 
 interface HeroSectionProps {
   project: ProgramWithTransformedSections;
@@ -52,8 +56,8 @@ function HeroSection({ project }: HeroSectionProps) {
       return projectData.imageUrl;
     }
     
-    // Tertiary: Use default banner
-    return "/default-banner.png";
+    // Tertiary: Use placeholder image
+    return PLACEHOLDER_IMAGE;
   };
   
   const banner = getBannerUrl(project);

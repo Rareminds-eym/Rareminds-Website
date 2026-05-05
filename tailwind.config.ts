@@ -74,6 +74,7 @@ export default {
         'conclusion-img-h-lg': '330px',    // Desktop image height
         'conclusion-mobile-shape': '260px', // Mobile blue shape width
         'conclusion-mobile-img': '240px',   // Mobile image max width
+        'conclusion-mobile-img-compact': '176px', // Mobile image max width (compact layout) to prevent overflow
         'conclusion-mobile-h': '210px',     // Mobile blue shape height
         'conclusion-mobile-img-h': '200px', // Mobile image height
         'conclusion-mobile-container': '220px', // Mobile container height
@@ -89,6 +90,8 @@ export default {
         'course-scroll-height': '144px',   // University list max height
         'course-row-height': '40px',       // University row min height
         'course-last-odd-width': 'calc(50% - 12px)', // Last odd item max width
+        // NaanConclusion component dimensions
+        'conclusion-content-min': '300px',   // Minimum width for conclusion content card to prevent cramping
       },
       fontSize: {
         // NaanCourseEnrollment responsive font sizes
@@ -119,9 +122,16 @@ export default {
       },
       dropShadow: {
         'blue-box': '0 8px 10px rgba(79,62,236,0.25)',
+        'conclusion-decorator': '0 4px 6px rgba(59,130,246,0.35)', // Blue decorative box shadow in conclusion mobile layout
+        'conclusion-image': '0 10px 6px rgba(0,0,0,0.1)', // Image drop shadow in conclusion desktop/tablet layout
       },
       gridTemplateColumns: {
-        'course-auto-fit': 'repeat(auto-fit, minmax(min(100%, 420px), 1fr))', // NaanCourseEnrollment grid
+        // Responsive grid for course cards with intelligent sizing
+        // - auto-fit: Creates as many columns as fit
+        // - minmax(min(100%, 420px), 1fr): Each column is at least 420px but never wider than container
+        // - min(100%, 420px): Prevents columns from being wider than container on small screens
+        // - 1fr: Allows columns to grow equally when there's extra space
+        'course-auto-fit': 'repeat(auto-fit, minmax(min(100%, 420px), 1fr))',
       },
       borderWidth: {
         '1.5': '1.5px',  // Card border width from NaanStrategicAlignment
@@ -132,6 +142,14 @@ export default {
       ringOffsetWidth: {
         'icon-offset': '2px',      // Icon outline offset (Lines 139, 155)
         'icon-offset-sm': '1px',   // Mobile icon outline offset (Line 625)
+      },
+      aspectRatio: {
+        'banner': '1666/720', // Hero banner aspect ratio for desktop layout
+      },
+      zIndex: {
+        'timeline-line': '1',    // Timeline horizontal/vertical lines - behind dots and icons
+        'timeline-dot': '2',     // Timeline dots - above lines, below endpoint dots  
+        'timeline-endpoint': '5', // Timeline endpoint dots - above all timeline elements
       },
       colors: {
         primary: {

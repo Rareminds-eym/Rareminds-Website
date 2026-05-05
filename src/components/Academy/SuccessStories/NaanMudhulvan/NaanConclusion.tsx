@@ -112,7 +112,7 @@ function ConclusionSection({ section }: ConclusionSectionProps): JSX.Element {
                 <motion.img
                   src={imageUrl}
                   alt="Conclusion illustration"
-                  className="w-full max-w-44 h-36 object-contain relative z-10 mt-3"
+                  className="w-full max-w-conclusion-mobile-img-compact h-36 object-contain relative z-10 mt-3"
                   variants={scaleIn}
                   onError={(e) => {
                     // Hide image if it fails to load
@@ -124,7 +124,7 @@ function ConclusionSection({ section }: ConclusionSectionProps): JSX.Element {
             </div>
 
             <div className="p-4 px-5 relative pt-6">
-              <div className="absolute -top-2 left-4 w-6 h-6 rounded-lg bg-blue-600 z-30 drop-shadow-[0_4px_6px_rgba(59,130,246,0.35)]" />
+              <div className="absolute -top-2 left-4 w-6 h-6 rounded-lg bg-blue-600 z-30 drop-shadow-conclusion-decorator" />
 
               <p className="text-gray-900 mb-2.5 text-justify text-sm leading-relaxed">
                 {section.content}
@@ -187,7 +187,7 @@ function ConclusionSection({ section }: ConclusionSectionProps): JSX.Element {
                 <motion.img
                   src={imageUrl}
                   alt="Conclusion illustration"
-                  className={`w-full object-contain relative z-10 mt-10 drop-shadow-[0_10px_6px_rgba(0,0,0,0.1)] ${isTablet
+                  className={`w-full object-contain relative z-10 mt-10 drop-shadow-conclusion-image ${isTablet
                       ? 'max-w-conclusion-img-sm h-conclusion-img-h-sm'
                       : 'max-w-conclusion-img-lg h-conclusion-img-h-lg'
                     }`}
@@ -206,7 +206,7 @@ function ConclusionSection({ section }: ConclusionSectionProps): JSX.Element {
           </motion.div>
 
           <motion.div
-            className="flex-1 min-w-[300px]"
+            className="flex-1 min-w-conclusion-content-min"
             variants={fadeUp}
             initial="hidden"
             whileInView="visible"

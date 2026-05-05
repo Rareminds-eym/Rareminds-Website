@@ -2,7 +2,13 @@
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 import { useState, useEffect } from 'react';
+import { PLACEHOLDER_BANNER_IMAGE } from '../../../constants/images';
 import type { ProgramWithTransformedSections } from '../../../types/program';
+
+// ── Constants ────────────────────────────────────────────────────────────────
+
+// Placeholder image for missing banners
+const PLACEHOLDER_IMAGE = PLACEHOLDER_BANNER_IMAGE;
 
 interface HeroBannerProps {
   project: ProgramWithTransformedSections;
@@ -33,8 +39,8 @@ function HeroBanner({ project }: HeroBannerProps) {
     };
   }, []); // Empty dependency array is correct - we only want to set up the listener once
   
-  // Implement proper banner URL fallback logic
-  const bannerUrl = project.bannerUrl || project.imageUrl || '/academy/Projects/default-banner.jpg';
+  // Use placeholder image when no image in database
+  const bannerUrl = project.bannerUrl || project.imageUrl || PLACEHOLDER_IMAGE;
   
   return (
     <div className="w-full mt-16 relative">
@@ -54,7 +60,7 @@ function HeroBanner({ project }: HeroBannerProps) {
       <img
         src={bannerUrl}
         alt={project.name || project.title || 'Success story banner image'}
-        className="block w-full object-cover md:aspect-[1666/720]"
+        className="block w-full object-cover md:aspect-banner"
       />
     </div>
   );
