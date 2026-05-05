@@ -9,7 +9,7 @@ export default function CorporateLanding() {
   return (
     <>
       <Helmet>
-        <title>Corporate Training Solutions | Rareminds</title>
+        <title>Corporate Training Solutions | Rareminds Pvt. Ltd.</title>
         <meta name="description" content="Transform your workforce with Rareminds' corporate training solutions" />
       </Helmet>
 

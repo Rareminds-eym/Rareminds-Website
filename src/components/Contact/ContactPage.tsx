@@ -2303,7 +2303,7 @@ Indiranagar, Bangalore - 560038`
                     Address
                   </p>
                   <p className="text-gray-600 text-xs sm:text-sm">
-                    RareMinds<br />
+                    Rareminds Pvt. Ltd.<br />
                     {selectedLocation.city}<br />
                     {selectedLocation.country}
                   </p>

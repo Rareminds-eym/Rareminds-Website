@@ -1478,7 +1478,7 @@ const ContactPage: React.FC = () => {
       } else {
         toast({
           title: "Message sent successfully",
-          description: "Thank you for contacting Rareminds! We'll be in touch soon.",
+          description: "Thank you for contacting Rareminds Pvt. Ltd.! We'll be in touch soon.",
         });
       }
       

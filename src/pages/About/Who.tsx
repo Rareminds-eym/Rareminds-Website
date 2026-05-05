@@ -1,4 +1,4 @@
-
+﻿
 
 // import React from "react";
 // import { MapPin, Users, Briefcase } from "lucide-react";
@@ -90,7 +90,7 @@ const AboutEcosystem = () => {
 
         <div className="space-y-8">
           {[
-            "At Rareminds, we go beyond classrooms and certifications — we create a 360° Skill Ecosystem that connects students, educators, institutions, corporates, and governments into one seamless journey from learning to earning.",
+            "At Rareminds Pvt. Ltd., we go beyond classrooms and certifications — we create a 360° Skill Ecosystem that connects students, educators, institutions, corporates, and governments into one seamless journey from learning to earning.",
             "We are a nationally recognized Training Partner of TNSDC under Naan Mudhalvan, and our mission is to empower the next generation with skills that sustain careers and create impact.",
             "With every learner, college, and project, we’re rewriting India’s employability story — powered by purpose, people, and performance.",
           ].map((text, i) => (
