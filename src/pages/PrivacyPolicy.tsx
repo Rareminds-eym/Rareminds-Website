@@ -55,10 +55,10 @@ const PrivacyPolicy = () => {
   return (
     <>
       <Helmet>
-        <title>Privacy Policy | Rareminds Data Protection</title>
+        <title>Privacy Policy | Rareminds Pvt. Ltd. Data Protection</title>
         <meta
           name="description"
-          content="Read how Rareminds collects, uses, and protects your data. Transparent practices for secure training, recruitment, and platform interactions."
+          content="Read how Rareminds Pvt. Ltd. collects, uses, and protects your data. Transparent practices for secure training, recruitment, and platform interactions."
         />
       </Helmet>
       <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-50">
@@ -112,7 +112,7 @@ const PrivacyPolicy = () => {
               <div className="prose prose-lg max-w-none">
                 <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 mb-8">
                   <p className="text-gray-600 leading-relaxed">
-                    Rareminds ("we", "our", "us") respects your privacy and is
+                    Rareminds Pvt. Ltd. ("we", "our", "us") respects your privacy and is
                     committed to protecting it through our compliance with this
                     policy. This Privacy Policy explains how we collect, use,
                     share, and safeguard your information when you visit our
@@ -410,7 +410,7 @@ const PrivacyPolicy = () => {
                             Address
                           </h3>
                           <p className="text-gray-100">
-                            Rareminds
+                            Rareminds Pvt. Ltd.
                             <br />
                             231, 13th Cross Rd, 2nd Stage,
                             <br />
