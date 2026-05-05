@@ -18,8 +18,8 @@ import { HelmetProvider } from 'react-helmet-async';
 
 const Govt = () => {
   const seoData = {
-    title: "Government Skilling & LMS Solutions | Rareminds India",
-    description: "Partner with Rareminds for NEP-ready training, LMS, dashboards & skilling at scale. Trusted by 500K+ students & 10+ state governments. Go live in 48 hrs.",
+    title: "Government Skilling & LMS Solutions | Rareminds Pvt. Ltd. India",
+    description: "Partner with Rareminds Pvt. Ltd. for NEP-ready training, LMS, dashboards & skilling at scale. Trusted by 500K+ students & 10+ state governments. Go live in 48 hrs.",
     keywords: "government skilling solutions, LMS for government training, government LMS India, skill development India",
     canonicalUrl: "https://rareminds.in/government"
   };

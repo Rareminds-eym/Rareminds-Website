@@ -187,12 +187,12 @@ useEffect(() => {
     }, []);
 
     return (      <>  <Helmet>
-    <title>Bilingual NEP 2020-Aligned School Programs | Rareminds School Services</title>
+    <title>Bilingual NEP 2020-Aligned School Programs | Rareminds Pvt. Ltd. School Services</title>
     <meta
       name="description"
       content="Bilingual, NEP 2020-aligned school programs that strengthen communication, digital skills, and career paths designed for practical, classroom-ready impact."
     />
-    <meta property="og:title" content="Bilingual NEP 2020-Aligned School Programs | Rareminds School Services" />
+    <meta property="og:title" content="Bilingual NEP 2020-Aligned School Programs | Rareminds Pvt. Ltd. School Services" />
     <meta property="og:description" content="Bilingual, NEP 2020-aligned school programs that strengthen communication, digital skills, and career paths designed for practical, classroom-ready impact." />
     <meta property="og:type" content="website" />
     <meta property="og:image" content="https://rareminds.com/RareMinds.webp" />
@@ -202,7 +202,7 @@ useEffect(() => {
         {
           "@context": "https://schema.org",
           "@type": "EducationalOrganization",
-          "name": "Rareminds",
+          "name": "Rareminds Pvt. Ltd.",
           "url": "https://rareminds.com",
           "logo": "https://rareminds.com/RMLogo.webp",
           "description": "Bilingual, NEP 2020-aligned school programs that strengthen communication, digital skills, and career paths designed for practical, classroom-ready impact."
