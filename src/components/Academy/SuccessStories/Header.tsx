@@ -1,8 +1,5 @@
-
-
-// Import banner images
-import successBannerMobile from '/academy/Projects/success_banner_mobile_390x844.png';
-import successBannerDesktop from '/academy/Projects/Success Stories Banner copy.jpg';
+import successBannerMobile from '../../../assets/success_banner_mobile_390x844.png';
+import successBannerDesktop from '../../../assets/Success Stories Banner copy.jpg';
 
 interface HeaderProps {
   searchQuery: string;

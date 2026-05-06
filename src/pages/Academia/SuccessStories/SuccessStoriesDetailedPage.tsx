@@ -1,31 +1,7 @@
-
 import { useParams, Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { getProgramWithSections } from '../../../lib/api/programs';
 import type { ProgramWithTransformedSections, SectionContent, TextContent, TransformedSection } from '../../../types/program';
-
-// ── JSONB content unwrappers ──────────────────────────────────────────────────
-
-function extractText(content: SectionContent | string | undefined | null): string {
-  if (!content) return '';
-  if (typeof content === 'string') return content;
-  if ('text' in content) return (content as TextContent).text;
-  return '';
-}
-
-function extractItems(content: SectionContent | string | undefined | null): { id: string; title: string; description: string }[] {
-  if (!content || typeof content === 'string') return [];
-  if ('items' in content) return (content as { items: { id: string; title: string; description: string }[] }).items;
-  return [];
-}
-
-function extractStats(content: SectionContent | string | undefined | null): { id: string; value: string; label: string }[] {
-  if (!content || typeof content === 'string') return [];
-  if ('items' in content) return (content as { items: { id: string; value: string; label: string }[] }).items;
-  return [];
-}
-
-// Import generic components for layout
 import AcademyHeader from '../../../components/Header/AcademyHeader';
 import HeroBanner from '../../../components/Academy/SuccessStories/HeroBanner';
 import HeaderSection from '../../../components/Academy/SuccessStories/HeaderSection';
@@ -48,6 +24,26 @@ const ALWAYS_AFTER_VIDEO_KEYS = ['impact', 'strategic_alignment', 'conclusion'];
 // Sections handled individually above the dynamic block
 const HANDLED_ABOVE_KEYS = ['introduction', 'header', 'modules', 'approaches', 'inventions', 'programs'];
 
+// ── JSONB content unwrappers ──────────────────────────────────────────────────
+
+function extractText(content: SectionContent | string | undefined | null): string {
+  if (!content) return '';
+  if (typeof content === 'string') return content;
+  if ('text' in content) return (content as TextContent).text;
+  return '';
+}
+
+function extractItems(content: SectionContent | string | undefined | null): { id: string; title: string; description: string }[] {
+  if (!content || typeof content === 'string') return [];
+  if ('items' in content) return (content as { items: { id: string; title: string; description: string }[] }).items;
+  return [];
+}
+
+function extractStats(content: SectionContent | string | undefined | null): { id: string; value: string; label: string }[] {
+  if (!content || typeof content === 'string') return [];
+  if ('items' in content) return (content as { items: { id: string; value: string; label: string }[] }).items;
+  return [];
+}
 function SuccessStoriesDetailedPage() {
   const { name } = useParams<{ name: string }>();
   const [project, setProject] = useState<ProgramWithTransformedSections | null>(null);
@@ -231,11 +227,9 @@ function SuccessStoriesDetailedPage() {
       <div key={key} className="bg-white rounded-lg shadow-sm p-8 mb-12">
         <h2 className="text-2xl font-bold text-gray-900 mb-6">{section.title}</h2>
         <div className="prose prose-lg max-w-none text-gray-700 leading-relaxed">
-          {text.split('. ').map((sentence: string, index: number) => (
-            <p key={index} className="mb-4">
-              {sentence.trim() && !sentence.trim().endsWith('.') ? sentence.trim() + '.' : sentence.trim()}
-            </p>
-          ))}
+          <p className="mb-4">
+            {text}
+          </p>
         </div>
       </div>
     );

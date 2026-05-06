@@ -24,7 +24,7 @@ export const ProjectsGrid = ({
     <>
       {/* Projects Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-4 gap-y-8 md:gap-x-6 md:gap-y-16">
-        {(projects || []).map((project, index) => (
+        {projects.map((project, index) => (
           <div
             key={project.id}
             className="bg-white rounded-xl border border-gray-400 shadow-sm overflow-hidden flex flex-col h-full transition-shadow hover:shadow-md"

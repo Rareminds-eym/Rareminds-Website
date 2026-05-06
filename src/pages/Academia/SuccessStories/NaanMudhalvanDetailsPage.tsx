@@ -2,7 +2,15 @@ import { useParams, Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { getProgramWithSections } from '../../../lib/api/programs';
 import type { ProgramWithTransformedSections, SectionContent, TextContent, CardsContent, StatsContent, CoursesContent, TransformedSection } from '../../../types/program';
-
+import AcademyHeader from '../../../components/Header/AcademyHeader';
+import HeroSection from '../../../components/Academy/SuccessStories/NaanMudhulvan/HeroSection';
+import NaanIntroduction from '../../../components/Academy/SuccessStories/NaanMudhulvan/NaanIntroduction';
+import NaanAboutProgramme from '../../../components/Academy/SuccessStories/NaanMudhulvan/NaanAboutProgramme';
+import NaanCourseEnrollment from '../../../components/Academy/SuccessStories/NaanMudhulvan/NaanCourseEnrollment';
+import NaanImpactSection from '../../../components/Academy/SuccessStories/NaanMudhulvan/NaanImpactSection';
+import NaanStrategicAlignment from '../../../components/Academy/SuccessStories/NaanMudhulvan/NaanStrategicAlignment';
+import NaanConclusion from '../../../components/Academy/SuccessStories/NaanMudhulvan/NaanConclusion';
+import MediaGallery from '../../../components/Academy/SuccessStories/MediaGallery';
 // ── JSONB content unwrappers ──────────────────────────────────────────────────
 // The API returns content as typed JSONB objects. Components expect plain strings
 // or structured arrays. These helpers bridge that gap.
@@ -31,16 +39,6 @@ function extractCourses(content: SectionContent | string | undefined | null) {
   if ('courses' in content) return (content as CoursesContent).courses;
   return [];
 }
-import AcademyHeader from '../../../components/Header/AcademyHeader';
-import HeroSection from '../../../components/Academy/SuccessStories/NaanMudhulvan/HeroSection';
-import NaanIntroduction from '../../../components/Academy/SuccessStories/NaanMudhulvan/NaanIntroduction';
-import NaanAboutProgramme from '../../../components/Academy/SuccessStories/NaanMudhulvan/NaanAboutProgramme';
-import NaanCourseEnrollment from '../../../components/Academy/SuccessStories/NaanMudhulvan/NaanCourseEnrollment';
-import NaanImpactSection from '../../../components/Academy/SuccessStories/NaanMudhulvan/NaanImpactSection';
-import NaanStrategicAlignment from '../../../components/Academy/SuccessStories/NaanMudhulvan/NaanStrategicAlignment';
-import NaanConclusion from '../../../components/Academy/SuccessStories/NaanMudhulvan/NaanConclusion';
-import MediaGallery from '../../../components/Academy/SuccessStories/MediaGallery';
-
 function NaanMudhalvanDetailsPage() {
   const { name } = useParams<{ name: string }>();
   const [project, setProject] = useState<ProgramWithTransformedSections | null>(null);
@@ -154,9 +152,7 @@ function NaanMudhalvanDetailsPage() {
         : '';
 
       // Extract items directly from JSONB cards content
-      const rawItems = extractItems(project.sections!.strategic_alignment.content);
-      // REPLACE WITH THIS ✅
-      const items = rawItems;
+      const items = extractItems(project.sections!.strategic_alignment.content);
       return {
         title: project.sections!.strategic_alignment.title,
         description: description,
@@ -273,15 +269,9 @@ function NaanMudhalvanDetailsPage() {
                         <div className={`ml-12 ${index % 2 === 0 ? 'bg-white' : 'bg-blue-50'} rounded-2xl p-10 shadow-sm`}>
                           <h2 className="text-3xl font-bold text-gray-900 mb-8">{section.title}</h2>
                           <div className="prose prose-lg max-w-none text-gray-700 leading-relaxed">
-                            {text.split('. ').map((sentence: string, si: number) => {
-                              const t = sentence.trim();
-                              if (!t) return null;
-                              return (
-                                <p key={si} className="mb-6 text-lg leading-relaxed">
-                                  {t.endsWith('.') ? t : t + '.'}
-                                </p>
-                              );
-                            })}
+                            <p className="mb-6 text-lg leading-relaxed">
+                              {text}
+                            </p>
                           </div>
                         </div>
                       </div>

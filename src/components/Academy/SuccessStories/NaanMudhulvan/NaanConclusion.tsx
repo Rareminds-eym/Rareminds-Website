@@ -178,14 +178,11 @@ function ConclusionSection({ section }: ConclusionSectionProps): JSX.Element {
           >
             {/* ✅ Blue decorative box - bottom left of image */}
             <div className={`absolute w-11 h-11 rounded-xl bg-blue-600 z-20 drop-shadow-blue-box ${isTablet
-                ? '-bottom-8 left-36'
+                ? '-bottom-3 left-44'
                 : '-bottom-3 left-12'
               }`} />
 
-            <div className={`absolute bottom-0 left-1/2 -translate-x-1/2 rounded-blue-shape bg-blue-conclusion-bg z-0 ${isTablet
-                ? 'w-conclusion-shape-sm h-conclusion-shape-h-sm'
-                : 'w-96 h-80'
-              }`} />
+            <div className="absolute bottom-0 left-1/2 -translate-x-1/2 rounded-blue-shape bg-blue-conclusion-bg z-0 w-96 h-80"/>
 
             <div className="relative z-10 flex justify-center items-center w-full h-full">
               {imageUrl && !desktopImageError && (
@@ -193,7 +190,7 @@ function ConclusionSection({ section }: ConclusionSectionProps): JSX.Element {
                   src={imageUrl}
                   alt="Conclusion illustration"
                   className={`w-full object-contain relative z-10 mt-8 left-3 drop-shadow-conclusion-image ${isTablet
-                      ? 'max-w-conclusion-img-sm h-conclusion-img-h-sm'
+                      ? 'max-w-80 h-72'
                       : 'max-w-xs h-80'
                     }`}
                   variants={scaleIn}

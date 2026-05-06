@@ -274,7 +274,7 @@ export const Filters = ({ onFilterChange, onClearFilters, filters, filterOptions
         </div>
       </div>
       {/* Desktop Apply Button */}
-        <div className={`hidden mt-4 justify-center ${category !== 'All' || name !== 'All' || year !== 'All' || location !== 'All' ? 'sm:flex' : 'sm:hidden'}`}>
+        <div className={`hidden mt-4 justify-center ${category !== 'All' || name !== 'All' || year !== 'All' || location !== 'All' ? 'sm:flex' : ''}`}>
         <button
           onClick={handleApplyFilters}
           className="bg-blue-500 text-white py-2 px-8 rounded-full font-medium hover:bg-blue-600 transition-colors text-sm"
