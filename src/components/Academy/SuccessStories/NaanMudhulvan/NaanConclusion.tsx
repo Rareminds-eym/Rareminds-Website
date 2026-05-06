@@ -8,7 +8,7 @@ import { ArrowRight } from "lucide-react";
 // Responsive breakpoints (in pixels)
 const BREAKPOINTS = {
   MOBILE_MAX: 768,
-  DESKTOP_MIN: 1280,
+  DESKTOP_MIN: 1024,
 } as const;
 
 interface ImageItem {
@@ -94,7 +94,7 @@ function ConclusionSection({ section }: ConclusionSectionProps): JSX.Element {
 
   if (isMobile) {
     return (
-      <section className={`bg-white w-screen breakout pt-2.5 pb-16 -mt-14 mb-16`}>
+      <section className={`bg-white w-screen breakout pt-2.5 pb-16 -mt-14 mb-10`}>
         <div className="max-w-conclusion-container mx-auto px-6">
 
           <motion.h2
@@ -121,7 +121,7 @@ function ConclusionSection({ section }: ConclusionSectionProps): JSX.Element {
                 <motion.img
                   src={imageUrl}
                   alt="Conclusion illustration"
-                  className="w-full max-w-conclusion-mobile-img-compact h-36 object-contain relative z-10 mt-3"
+                  className="w-full max-w-40 h-36 object-contain relative z-10 mt-3"
                   variants={scaleIn}
                   onError={() => setMobileImageError(true)}
                 />
@@ -129,9 +129,9 @@ function ConclusionSection({ section }: ConclusionSectionProps): JSX.Element {
             </div>
 
             <div className="p-4 px-5 relative pt-6">
-              <div className="absolute -top-2 left-4 w-6 h-6 rounded-lg bg-blue-600 z-30 drop-shadow-conclusion-decorator" />
+              <div className="absolute -top-2 left-8 w-6 h-6 rounded-lg bg-blue-600 z-30 drop-shadow-conclusion-decorator" />
 
-              <p className="text-gray-900 mb-2.5 text-justify text-sm leading-relaxed">
+              <p className="text-gray-900 mb-2.5 text-justify text-xs leading-relaxed">
                 {section.content}
               </p>
 
@@ -150,12 +150,12 @@ function ConclusionSection({ section }: ConclusionSectionProps): JSX.Element {
   }
   // ── Desktop / Tablet layout ──
   return (
-    <section className={`bg-white w-screen breakout mb-16 ${isDesktop ? 'pt-30 pb-35 -mt-25' : 'pt-2.5 pb-35'
+    <section className={`bg-white w-screen breakout mb-16 ${isDesktop ? 'pt-30 pb-35 -mt-25' : '-mt-20 pt-1 pb-35'
       }`}>
       <div className="max-w-conclusion-container mx-auto px-6">
 
         <motion.h2
-          className="text-center font-bold text-gray-900 mb-20 mt-10 text-4xl"
+          className={`text-center font-bold text-gray-900 text-4xl ${isTablet ? 'mb-10 mt-6' : 'mb-16 mt-10'}`}
           variants={fadeUp}
           initial="hidden"
           whileInView="visible"
@@ -164,7 +164,7 @@ function ConclusionSection({ section }: ConclusionSectionProps): JSX.Element {
           {section.title}
         </motion.h2>
 
-        <div className="flex gap-10 items-center flex-wrap">
+        <div className="flex gap-2 items-center flex-wrap">
 
           <motion.div
             className={`relative h-80 flex items-end justify-center pb-5 ${isTablet
@@ -178,13 +178,13 @@ function ConclusionSection({ section }: ConclusionSectionProps): JSX.Element {
           >
             {/* ✅ Blue decorative box - bottom left of image */}
             <div className={`absolute w-11 h-11 rounded-xl bg-blue-600 z-20 drop-shadow-blue-box ${isTablet
-                ? 'bottom-blue-box-tablet-bottom left-center-offset'
-                : 'bottom-blue-box-desktop-bottom left-blue-box-desktop-left'
+                ? '-bottom-8 left-36'
+                : '-bottom-3 left-12'
               }`} />
 
             <div className={`absolute bottom-0 left-1/2 -translate-x-1/2 rounded-blue-shape bg-blue-conclusion-bg z-0 ${isTablet
                 ? 'w-conclusion-shape-sm h-conclusion-shape-h-sm'
-                : 'w-conclusion-shape-lg h-conclusion-shape-h-lg'
+                : 'w-96 h-80'
               }`} />
 
             <div className="relative z-10 flex justify-center items-center w-full h-full">
@@ -192,9 +192,9 @@ function ConclusionSection({ section }: ConclusionSectionProps): JSX.Element {
                 <motion.img
                   src={imageUrl}
                   alt="Conclusion illustration"
-                  className={`w-full object-contain relative z-10 mt-10 drop-shadow-conclusion-image ${isTablet
+                  className={`w-full object-contain relative z-10 mt-8 left-3 drop-shadow-conclusion-image ${isTablet
                       ? 'max-w-conclusion-img-sm h-conclusion-img-h-sm'
-                      : 'max-w-conclusion-img-lg h-conclusion-img-h-lg'
+                      : 'max-w-xs h-80'
                     }`}
                   variants={scaleIn}
                   initial="hidden"
@@ -214,7 +214,7 @@ function ConclusionSection({ section }: ConclusionSectionProps): JSX.Element {
             viewport={{ once: true, amount: 0.1 }}
           >
             {/* Card with button inside */}
-            <div className="bg-white rounded-xl shadow-conclusion-card border border-gray-200 p-8 px-9 min-h-Naancard-min-height">
+            <div className={`bg-white rounded-xl shadow-conclusion-card border border-gray-200 p-8 px-9 min-h-Naancard-min-height ${isTablet ? 'mt-16' : ''}`}>
               <p className="text-gray-700 mb-4 text-justify font-normal text-sm leading-normal">
                 {section.content}
               </p>
