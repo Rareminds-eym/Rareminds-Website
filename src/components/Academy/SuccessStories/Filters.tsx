@@ -61,9 +61,8 @@ const SelectField = ({
                 <li
                   key={item}
                   onClick={() => { onChange(item); setIsOpen(false); }}
-                  className={`px-3 py-2 text-xs cursor-pointer hover:bg-blue-50 ${
-                    item === value ? 'bg-blue-100 font-semibold text-blue-700' : 'text-gray-700'
-                  }`}
+                  className={`px-3 py-2 text-xs cursor-pointer hover:bg-blue-50 ${item === value ? 'bg-blue-100 font-semibold text-blue-700' : 'text-gray-700'
+                    }`}
                 >
                   {item}
                 </li>
@@ -118,7 +117,7 @@ export const Filters = ({ onFilterChange, onClearFilters, filters, filterOptions
     }
   }, [filters]);
 
-  const handle = (type: string, val: string) => {
+  const handleFilterSelect = (type: string, val: string) => {
     if (type === 'category') setCategory(val);
     if (type === 'name') setName(val);
     if (type === 'year') setYear(val);
@@ -156,10 +155,10 @@ export const Filters = ({ onFilterChange, onClearFilters, filters, filterOptions
           className="flex items-center justify-center gap-2 px-6 py-3 bg-white border border-white rounded-lg shadow-sm w-full max-w-xs"
         >
           <span className="text-sm sm:text-lg font-semibold text-gray-700">Filters</span>
-          <svg 
-            className="w-4 h-4 text-gray-600 ml-1" 
-            fill="none" 
-            stroke="currentColor" 
+          <svg
+            className="w-4 h-4 text-gray-600 ml-1"
+            fill="none"
+            stroke="currentColor"
             viewBox="0 0 24 24"
           >
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
@@ -171,13 +170,13 @@ export const Filters = ({ onFilterChange, onClearFilters, filters, filterOptions
       {isMenuOpen && (
         <>
           {/* Backdrop */}
-          <div 
+          <div
             className="sm:hidden fixed inset-0 bg-black bg-opacity-50 z-40"
             onClick={closeMenu}
           />
-          
+
           {/* Side Modal */}
-        <div className="sm:hidden fixed top-24 bottom-4 right-4 left-4 bg-white shadow-xl z-50 transform transition-transform duration-300 ease-in-out rounded-lg flex flex-col overflow-hidden">
+          <div className="sm:hidden fixed top-24 bottom-4 right-4 left-4 bg-white shadow-xl z-50 transform transition-transform duration-300 ease-in-out rounded-lg flex flex-col overflow-hidden">
             {/* Modal Header */}
             <div className="flex items-center justify-between p-4 border-b border-gray-200">
               <h2 className="text-lg font-semibold text-gray-900">Filters</h2>
@@ -190,38 +189,38 @@ export const Filters = ({ onFilterChange, onClearFilters, filters, filterOptions
                 </svg>
               </button>
             </div>
-            
+
             {/* Modal Content */}
             <div className="flex flex-col h-full">
-              <div 
+              <div
                 className="flex-1 p-3 space-y-3 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100"
               >
                 <SelectField
                   label="Categories"
                   options={categories}
                   value={category}
-                  onChange={(val) => handle('category', val)}
+                  onChange={(val) => handleFilterSelect('category', val)}
                 />
                 <SelectField
                   label="Names"
                   options={names}
                   value={name}
-                  onChange={(val) => handle('name', val)}
+                  onChange={(val) => handleFilterSelect('name', val)}
                 />
                 <SelectField
                   label="Years"
                   options={years}
                   value={year}
-                  onChange={(val) => handle('year', val)}
+                  onChange={(val) => handleFilterSelect('year', val)}
                 />
                 <SelectField
                   label="Locations"
                   options={locations}
                   value={location}
-                  onChange={(val) => handle('location', val)}
+                  onChange={(val) => handleFilterSelect('location', val)}
                 />
               </div>
-              
+
               {/* Fixed buttons at bottom */}
               <div className="shrink-0 border-t border-gray-200 p-3 space-y-2 bg-white">
                 <button
@@ -251,30 +250,30 @@ export const Filters = ({ onFilterChange, onClearFilters, filters, filterOptions
             label="Categories"
             options={categories}
             value={category}
-            onChange={(val) => handle('category', val)}
+            onChange={(val) => handleFilterSelect('category', val)}
           />
           <SelectField
             label="Names"
             options={names}
             value={name}
-            onChange={(val) => handle('name', val)}
+            onChange={(val) => handleFilterSelect('name', val)}
           />
           <SelectField
             label="Years"
             options={years}
             value={year}
-            onChange={(val) => handle('year', val)}
+            onChange={(val) => handleFilterSelect('year', val)}
           />
           <SelectField
             label="Locations"
             options={locations}
             value={location}
-            onChange={(val) => handle('location', val)}
+            onChange={(val) => handleFilterSelect('location', val)}
           />
         </div>
       </div>
       {/* Desktop Apply Button */}
-        <div className={`hidden mt-4 justify-center ${category !== 'All' || name !== 'All' || year !== 'All' || location !== 'All' ? 'sm:flex' : ''}`}>
+      <div className={`hidden mt-4 justify-center ${category !== 'All' || name !== 'All' || year !== 'All' || location !== 'All' ? 'sm:flex' : ''}`}>
         <button
           onClick={handleApplyFilters}
           className="bg-blue-500 text-white py-2 px-8 rounded-full font-medium hover:bg-blue-600 transition-colors text-sm"

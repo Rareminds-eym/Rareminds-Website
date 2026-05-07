@@ -74,7 +74,7 @@ function SuccessStoriesDetailedPage() {
           setProject(null);
         }
       } catch (err) {
-        setError('Failed to load project data');
+        setError(`Failed to load project data: ${err instanceof Error ? err.message : String(err)}`);
         setProject(null);
       } finally {
         setLoading(false);

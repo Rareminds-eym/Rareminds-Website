@@ -64,25 +64,6 @@ export default {
         'bottom-card-height': '42%',  // Bottom course card height
         // NaanConclusion component dimensions
         'conclusion-container': '1100px',  // Container max width
-        'conclusion-shape-sm': '420px',    // Tablet blue shape width
-        'conclusion-shape-lg': '450px',    // Desktop blue shape width
-        'conclusion-shape-h-sm': '320px',  // Tablet blue shape height
-        'conclusion-shape-h-lg': '350px',  // Desktop blue shape height
-        'conclusion-img-sm': '360px',      // Tablet image max width
-        'conclusion-img-lg': '400px',      // Desktop image max width
-        'conclusion-img-h-sm': '300px',    // Tablet image height
-        'conclusion-img-h-lg': '330px',    // Desktop image height
-        'conclusion-mobile-shape': '260px', // Mobile blue shape width
-        'conclusion-mobile-img': '240px',   // Mobile image max width
-        'conclusion-mobile-img-compact': '176px', // Mobile image max width (compact layout) to prevent overflow
-        'conclusion-mobile-h': '210px',     // Mobile blue shape height
-        'conclusion-mobile-img-h': '200px', // Mobile image height
-        'conclusion-mobile-container': '220px', // Mobile container height
-        'conclusion-flex-base': '480px',    // Desktop flex basis
-        // Blue decorative box positioning values
-        'blue-box-tablet-bottom': '-38px',  // Tablet blue box bottom position
-        'blue-box-desktop-bottom': '-55px', // Desktop blue box bottom position  
-        'blue-box-desktop-left': '22px',    // Desktop blue box left position
         // Card minimum heights
         'Naancard-min-height': '280px',         // NaanConclusion card minimum height
         // NaanCourseEnrollment component dimensions
@@ -338,7 +319,11 @@ export default {
     },
   },
   plugins: [
-    function ({ addUtilities }) {
+    function ({ addUtilities, addVariant }) {
+      
+      addVariant('grid-2nd',     '&>*:nth-child(2n) .btn-view-details')      // mobile/tablet: every 2nd card
+      addVariant('lg-grid-mid',  '&>*:nth-child(3n+2) .btn-view-details')    // desktop: middle card of 3
+
       addUtilities({
         '.transform-style-3d': {
           transformStyle: 'preserve-3d',

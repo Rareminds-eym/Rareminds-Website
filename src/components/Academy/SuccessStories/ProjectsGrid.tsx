@@ -11,20 +11,27 @@ interface ProjectsGridProps {
   onPageChange: (page: number) => void;
 }
 
-export const ProjectsGrid = ({ 
+export const ProjectsGrid = ({
   projects = [], // Default to empty array
-  onClearSearch, 
-  currentPage, 
-  totalPages, 
-  totalCount, 
-  onPageChange 
+  onClearSearch,
+  currentPage,
+  totalPages,
+  totalCount,
+  onPageChange
 }: ProjectsGridProps) => {
-
+  // Common button classes
   return (
     <>
       {/* Projects Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-4 gap-y-8 md:gap-x-6 md:gap-y-16">
-        {projects.map((project, index) => (
+      <div className="
+  grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-4 gap-y-8 md:gap-x-6 md:gap-y-16
+  grid-2nd:border-2 grid-2nd:border-blue-500 grid-2nd:text-blue-500
+  grid-2nd:bg-transparent grid-2nd:hover:bg-blue-50
+  lg:grid-2nd:bg-blue-500 lg:grid-2nd:text-white lg:grid-2nd:border-0 lg:grid-2nd:hover:bg-blue-600
+  lg:lg-grid-mid:border-2 lg:lg-grid-mid:border-blue-500 lg:lg-grid-mid:text-blue-500
+  lg:lg-grid-mid:bg-transparent lg:lg-grid-mid:hover:bg-blue-50
+">
+        {projects.map((project) => (
           <div
             key={project.id}
             className="bg-white rounded-xl border border-gray-400 shadow-sm overflow-hidden flex flex-col h-full transition-shadow hover:shadow-md"
@@ -36,7 +43,7 @@ export const ProjectsGrid = ({
               <h3 className="text-sm sm:text-lg font-bold text-gray-900 text-center mb-3 min-h-14 flex items-center justify-center">
                 {project.name || ''}
               </h3>
-              
+
               {/* Logo + Description Row */}
               <div className="flex items-start gap-4 mb-3 h-24 sm:h-32">
                 {/* Logo */}
@@ -56,7 +63,7 @@ export const ProjectsGrid = ({
                     {(project.description || '').length > 100 && (
                       <Link
                         to={
-                          project.category === 'Naan Mudhalvan' 
+                          project.category === 'Naan Mudhalvan'
                             ? `/success-stories/naan-mudhalvan/${project.slug}`
                             : `/success-stories/${project.slug}`
                         }
@@ -76,45 +83,41 @@ export const ProjectsGrid = ({
               <div className="flex flex-row items-start sm:items-center justify-between text-gray-500 text-xs sm:text-sm mb-6 gap-2 sm:gap-0">
 
                 {/* Category */}
-                <div className="flex items-start sm:items-center gap-1 sm:gap-1.5 flex-1 sm:flex-none justify-center sm:justify-start">
+                <div className="flex items-start lg:items-center gap-1 sm:gap-1.5 flex-1 xl:flex-none justify-center xl:justify-start">
                   <svg className="w-3 h-3 sm:w-4 sm:h-4 flex-shrink-0 mt-0.5 sm:mt-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-4m-5 0H9m0 0H5m0 0h4M9 21v-4a2 2 0 012-2h2a2 2 0 012 2v4" />
                   </svg>
-                  <span className="text-xs sm:text-sm leading-tight font-normal text-gray-900 text-center sm:text-left break-words sm:truncate">{project.category || ''}</span>
+                  <span className="text-xs lg:text-sm leading-tight font-normal text-gray-900 text-center xl:text-left break-words xl-truncate">{project.category || ''}</span>
                 </div>
 
                 {/* Location */}
-                <div className="flex items-start sm:items-center gap-1 sm:gap-1.5 flex-1 sm:flex-none justify-center sm:justify-start">
+                <div className="flex items-start lg:items-center gap-1 sm:gap-1.5 flex-1 xl:flex-none justify-center xl:justify-start">
                   <svg className="w-3 h-3 sm:w-4 sm:h-4 flex-shrink-0 mt-0.5 sm:mt-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                   </svg>
-                  <span className="text-xs sm:text-sm leading-tight font-normal text-gray-900 text-center sm:text-left break-words sm:truncate">{project.location || ''}</span>
+                  <span className="text-xs lg:text-sm leading-tight font-normal text-gray-900 text-center xl:text-left break-words xl-truncate">{project.location || ''}</span>
                 </div>
 
                 {/* Timeline */}
-                <div className="flex items-start sm:items-center gap-1 sm:gap-1.5 flex-1 sm:flex-none justify-center sm:justify-start">
+                <div className="flex items-start lg:items-center gap-1 sm:gap-1.5 flex-1 xl:flex-none justify-center xl:justify-start">
                   <svg className="w-3 h-3 sm:w-4 sm:h-4 flex-shrink-0 mt-0.5 sm:mt-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
-                  <span className="text-xs sm:text-sm leading-tight font-normal text-gray-900 text-center sm:text-left break-words sm:truncate">{project.timeline || ''}</span>
+                  <span className="text-xs lg:text-sm leading-tight font-normal text-gray-900 text-center xl:text-left break-words xl-truncate">{project.timeline || ''}</span>
                 </div>
 
               </div>
 
               {/* View Details Button */}
               <div className="mt-auto flex justify-center">
-                <Link 
+                <Link
                   to={
-                    project.category === 'Naan Mudhalvan' 
+                    project.category === 'Naan Mudhalvan'
                       ? `/success-stories/naan-mudhalvan/${project.slug}`
                       : `/success-stories/${project.slug}`
                   }
-                  className={
-                    index % 3 === 1 
-                      ? "w-36 h-7 flex items-center justify-center border-2 border-blue-500 hover:bg-blue-50 text-blue-500 text-xs sm:text-sm font-semibold rounded-full transition-colors duration-200"
-                      : "w-36 h-7 flex items-center justify-center bg-blue-500 hover:bg-blue-600 text-white text-xs sm:text-sm font-semibold rounded-full transition-colors duration-200"
-                  }
+               className="btn-view-details w-36 h-7 flex items-center justify-center text-xs sm:text-sm font-semibold rounded-full transition-colors duration-200 bg-blue-500 text-white hover:bg-blue-600"
                 >
                   View Details
                 </Link>

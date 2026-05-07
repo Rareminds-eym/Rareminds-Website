@@ -69,7 +69,7 @@ function NaanMudhalvanDetailsPage() {
           setProject(null);
         }
       } catch (err) {
-        setError('Failed to load Naan Mudhalvan program data');
+        setError(`Failed to load Naan Mudhalvan program data: ${err instanceof Error ? err.message : String(err)}`);
         setProject(null);
       } finally {
         setLoading(false);
@@ -198,19 +198,19 @@ function NaanMudhalvanDetailsPage() {
 
       {/* Video Section - After About section */}
       {(() => {
-  const videoSection = project.sections?.['video'];
-  if (!videoSection?.videoUrl?.length) return null;
-  return (
-    <MediaGallery
-      media={videoSection.videoUrl.map((item, index) => ({
-        ...item,
-        id: item.item1 || `video-${index}`,
-      }))}
-      title={videoSection.title || 'Program Videos'}
-      compact={true}
-    />
-  );
-})()}
+        const videoSection = project.sections?.['video'];
+        if (!videoSection?.videoUrl?.length) return null;
+        return (
+          <MediaGallery
+            media={videoSection.videoUrl.map((item, index) => ({
+              ...item,
+              id: item.item1 || `video-${index}`,
+            }))}
+            title={videoSection.title || 'Program Videos'}
+            compact={true}
+          />
+        );
+      })()}
 
       {/* Naan Mudhalvan Course Enrollment Section */}
       {transformedSections.courseEnrollment && (
@@ -241,7 +241,7 @@ function NaanMudhalvanDetailsPage() {
       )}
 
       {/* Naan Mudhalvan Content Sections */}
-      <div className="">
+      
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto">
             {/* Detailed Sections for Naan Mudhalvan - Using API data only */}
@@ -295,9 +295,6 @@ function NaanMudhalvanDetailsPage() {
           </div>
         </div>
       </div>
-
-
-    </div>
   );
 }
 

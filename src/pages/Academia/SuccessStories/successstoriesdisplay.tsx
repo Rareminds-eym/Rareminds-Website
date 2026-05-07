@@ -71,10 +71,7 @@ function SuccessStoriesDisplay() {
           setError('No programs found in database');
         }
       } catch (err) {
-        const errorMsg = err instanceof Error 
-          ? `Failed to connect to database: ${err.message}`
-          : `Failed to connect to database: ${String(err)}`;
-        setError(errorMsg);
+        setError(`Failed to connect to database: ${err instanceof Error ? err.message : String(err)}`);
         setPrograms([]);
         setTotalPages(0);
         setTotalCount(0);
@@ -93,6 +90,7 @@ function SuccessStoriesDisplay() {
         const options = await getProgramFilterOptions();
         setFilterOptions(options);
       } catch (error) {
+        console.error('Failed to fetch filter options:', error);
         // Error fetching filter options - fail silently
       }
     }
@@ -149,7 +147,7 @@ function SuccessStoriesDisplay() {
     timeline: formatDate(program.date),
     imageUrl: program.image_url,
     status: program.status,
-    slug: program.slug
+    slug: program.slug,
   }));
 
   // Check if any filters are active
