@@ -24,13 +24,11 @@ export const ProjectsGrid = ({
     <>
       {/* Projects Grid */}
       <div className="
-  grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-4 gap-y-8 md:gap-x-6 md:gap-y-16
-  grid-2nd:border-2 grid-2nd:border-blue-500 grid-2nd:text-blue-500
-  grid-2nd:bg-transparent grid-2nd:hover:bg-blue-50
-  lg:grid-2nd:bg-blue-500 lg:grid-2nd:text-white lg:grid-2nd:border-0 lg:grid-2nd:hover:bg-blue-600
-  lg:lg-grid-mid:border-2 lg:lg-grid-mid:border-blue-500 lg:lg-grid-mid:text-blue-500
-  lg:lg-grid-mid:bg-transparent lg:lg-grid-mid:hover:bg-blue-50
-">
+        grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-4 gap-y-8 md:gap-x-6 md:gap-y-16
+        grid-2nd:btn-outline-style
+        lg:grid-2nd:btn-filled-style
+        lg:lg-grid-mid:btn-outline-style
+      ">
         {projects.map((project) => (
           <div
             key={project.id}
@@ -117,7 +115,7 @@ export const ProjectsGrid = ({
                       ? `/success-stories/naan-mudhalvan/${project.slug}`
                       : `/success-stories/${project.slug}`
                   }
-               className="btn-view-details w-36 h-7 flex items-center justify-center text-xs sm:text-sm font-semibold rounded-full transition-colors duration-200 bg-blue-500 text-white hover:bg-blue-600"
+                  className="btn-view-details w-36 h-7 flex items-center justify-center text-xs sm:text-sm font-semibold rounded-full transition-colors duration-200 btn-filled-style"
                 >
                   View Details
                 </Link>

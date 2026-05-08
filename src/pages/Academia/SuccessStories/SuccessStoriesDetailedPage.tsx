@@ -131,7 +131,7 @@ function SuccessStoriesDetailedPage() {
 
   // Check if this is a coming soon program
 
-  if (COMING_SOON_SLUGS.includes(project.slug.toLowerCase())) {
+  if (project.slug && COMING_SOON_SLUGS.includes(project.slug.toLowerCase())) {
     return (
       <div className="min-h-screen bg-gray-50">
         <AcademyHeader />
@@ -143,98 +143,97 @@ function SuccessStoriesDetailedPage() {
 
   // Helper: render a section by key
   const renderSection = (key: string, section: TransformedSection) => {
-    // Skip sections handled above the dynamic block
-    if (HANDLED_ABOVE_KEYS.includes(key)) return null;
+  // ── Single guard: if sections is undefined, nothing below can run safely ──
+  if (!transformedProject.sections) return null;
 
-    if (key === 'about') {
-      if (transformedProject.aboutSection) {
-        if (transformedProject.slug === 'dsatm') {
-          return (
-            <DSATMAboutSection
-              key={key}
-              section={{
-                title: transformedProject.aboutSection.title,
-                content: extractItems(transformedProject.sections?.about?.content),
-                preamble: transformedProject.sections?.about?.preamble,
-              }}
-            />
-          );
-        }
+  // Skip sections handled above the dynamic block
+  if (HANDLED_ABOVE_KEYS.includes(key)) return null;
+
+  if (key === 'about') {
+    if (transformedProject.aboutSection) {
+      if (transformedProject.slug === 'dsatm') {
         return (
-          <AboutProgramSection
+          <DSATMAboutSection
+            key={key}
             section={{
               title: transformedProject.aboutSection.title,
-              content: extractItems(transformedProject.sections?.about?.content),
-              // ↑ now goes through your extractor which already handles id correctly
+              content: extractItems(transformedProject.sections.about?.content),
+              preamble: transformedProject.sections.about?.preamble,
             }}
           />
         );
       }
       return (
-        <div key={key} className="bg-white rounded-lg shadow-sm p-8 mb-12">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">{section.title}</h2>
-          <p className="text-gray-700 leading-relaxed">{extractText(section.content)}</p>
-        </div>
-      );
-    }
-
-    if (key === 'impact') {
-      return (
-        <ImpactSection
-          key={key}
+        <AboutProgramSection
           section={{
-            title: section.title,
-            items: extractStats(section.content),
+            title: transformedProject.aboutSection.title,
+            content: extractItems(transformedProject.sections.about?.content),
           }}
         />
       );
     }
-
-    if (key === 'strategic_alignment') {
-      return (
-        <StratageticSection
-          key={key}
-          section={{
-            title: section.title,
-            content: extractItems(section.content),
-          }}
-        />
-      );
-    }
-
-    if (key === 'conclusion') {
-      return (
-        <ConclusionSection
-          key={key}
-          section={{
-            title: section.title,
-            content: extractText(section.content),
-            image: (() => {
-              const content = section.content;
-              if (content && typeof content === 'object' && 'image' in content) {
-                return (content as { image?: { id: string; url: string } }).image;
-              }
-              return undefined;
-            })(),
-          }}
-        />
-      );
-    }
-
-    // Default section rendering — extract text from JSONB
-    const text = extractText(section.content);
     return (
       <div key={key} className="bg-white rounded-lg shadow-sm p-8 mb-12">
         <h2 className="text-2xl font-bold text-gray-900 mb-6">{section.title}</h2>
-        <div className="prose prose-lg max-w-none text-gray-700 leading-relaxed">
-          <p className="mb-4">
-            {text}
-          </p>
-        </div>
+        <p className="text-gray-700 leading-relaxed">{extractText(section.content)}</p>
       </div>
     );
-  };
+  }
 
+  if (key === 'impact') {
+    return (
+      <ImpactSection
+        key={key}
+        section={{
+          title: section.title,
+          items: extractStats(section.content),
+        }}
+      />
+    );
+  }
+
+  if (key === 'strategic_alignment') {
+    return (
+      <StratageticSection
+        key={key}
+        section={{
+          title: section.title,
+          content: extractItems(section.content),
+        }}
+      />
+    );
+  }
+
+  if (key === 'conclusion') {
+    return (
+      <ConclusionSection
+        key={key}
+        section={{
+          title: section.title,
+          content: extractText(section.content),
+          image: (() => {
+            const content = section.content;
+            if (content && typeof content === 'object' && 'image' in content) {
+              return (content as { image?: { id: string; url: string } }).image;
+            }
+            return undefined;
+          })(),
+        }}
+      />
+    );
+  }
+
+  // Default section rendering — extract text from JSONB
+  const text = extractText(section.content);
+  return (
+    <div key={key} className="bg-white rounded-lg shadow-sm p-8 mb-12">
+      <h2 className="text-2xl font-bold text-gray-900 mb-6">{section.title}</h2>
+      <div className="prose prose-lg max-w-none text-gray-700 leading-relaxed">
+        <p className="mb-4">{text}</p>
+      </div>
+    </div>
+  );
+};
   return (
     <div className="min-h-screen bg-white">
       <AcademyHeader />

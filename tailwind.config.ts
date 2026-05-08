@@ -323,6 +323,29 @@ export default {
       
       addVariant('grid-2nd',     '&>*:nth-child(2n) .btn-view-details')      // mobile/tablet: every 2nd card
       addVariant('lg-grid-mid',  '&>*:nth-child(3n+2) .btn-view-details')    // desktop: middle card of 3
+      
+      addUtilities({
+  '.btn-outline-style': {
+    borderWidth: '2px',
+    borderColor: '#3b82f6',
+    color: '#3b82f6',
+    backgroundColor: 'transparent',
+  },
+
+  '.btn-outline-style:hover': {
+    backgroundColor: '#eff6ff',
+  },
+
+  '.btn-filled-style': {
+    backgroundColor: '#3b82f6',
+    color: '#ffffff',
+    borderWidth: '0',
+  },
+
+  '.btn-filled-style:hover': {
+    backgroundColor: '#2563eb',
+  },
+})
 
       addUtilities({
         '.transform-style-3d': {

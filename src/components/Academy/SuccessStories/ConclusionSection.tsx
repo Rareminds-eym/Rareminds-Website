@@ -72,21 +72,13 @@ const ConclusionSection = ({ section }: ConclusionSectionProps): JSX.Element => 
 
   return (
     <section
-      className="
-bg-white w-screen breakout
-py-6 md:py-16
--mt-12 -mb-12
-"
+      className="bg-white w-screen breakout py-6 md:py-16 -mt-12 -mb-12"
     >
       <div className="max-w-5xl mx-auto px-6">
 
         {/* ── Title fade-up ─────────────────────────────────────── */}
         <motion.h2
-          className="
-text-center font-bold text-gray-900
-text-3xl -mb-8
-md:text-5xl md:mb-16
-"
+          className="text-center font-bold text-gray-900 text-3xl -mb-8 md:text-5xl md:mb-16"
           variants={fadeUp}
           initial="hidden"
           whileInView="visible"
@@ -97,10 +89,7 @@ md:text-5xl md:mb-16
 
         {/* ── Row stagger container ─────────────────────────────── */}
         <motion.div
-          className="
-flex items-center flex-wrap
-gap-10 lg:gap-2
-"
+          className="flex items-center flex-wrap gap-10 lg:gap-2"
           variants={rowContainer}
           initial="hidden"
           whileInView="visible"
@@ -108,38 +97,17 @@ gap-10 lg:gap-2
         >
 
           {/* ── Left column ───────────────────────────────────────── */}
-          <motion.div className="
-relative flex items-end justify-center
-flex-none w-full h-56 pb-2.5
-md:h-80 md:pb-5
-lg:flex-image-column
-" variants={fadeIn}>
+          <motion.div className="relative flex items-end justify-center flex-none w-full h-56 pb-2.5 md:h-80 md:pb-5 lg:flex-image-column" variants={fadeIn}>
 
             {/* Decorative blue box - bottom left of image */}
-            <div className="
-hidden md:block
-absolute -bottom-4
-md:left-44 lg:left-12
-w-11 h-11 rounded-xl
-bg-blue-500 z-20 drop-shadow-lg
-" />
+            <div className="hidden md:block absolute -bottom-4 md:left-44 lg:left-12 w-11 h-11 rounded-xl bg-blue-500 z-20 drop-shadow-lg" />
 
             {/* Blob */}
             <div
-              className="
-  absolute bottom-0 left-1/2 -translate-x-1/2
-  rounded-blue-shape bg-blue-50 z-0
-  w-48 h-40
-  md:w-96 md:h-80
-  "
+              className="absolute bottom-0 left-1/2 -translate-x-1/2 rounded-blue-shape bg-blue-50 z-0 w-48 h-40 md:w-96 md:h-80"
             />
             <div
-              className="
-  block md:hidden
-  absolute -bottom-5 left-2/5 -translate-x-24
-  w-7 h-7 rounded-lg
-  bg-blue-500 z-20 drop-shadow-lg
-  "
+              className="block md:hidden absolute -bottom-5 left-2/5 -translate-x-24 w-7 h-7 rounded-lg bg-blue-500 z-20 drop-shadow-lg"
             />
 
             {/* Illustration */}
@@ -148,12 +116,7 @@ bg-blue-500 z-20 drop-shadow-lg
                 <motion.img
                   src={imageUrl}
                   alt="Conclusion illustration"
-                  className="
-w-full object-contain relative z-10 drop-shadow-lg
-max-w-40 h-36 mt-24
-md:max-w-80 md:h-72 md:mt-8
-lg:max-w-xs lg:h-80 lg:mt-12
-"
+                  className="w-full object-contain relative z-10 drop-shadow-lg max-w-40 h-36 mt-24 md:max-w-80 md:h-72 md:mt-8 lg:max-w-xs lg:h-80 lg:mt-12"
                   variants={scaleIn}
                   onError={() => setImageError(true)}
                 />
@@ -162,25 +125,11 @@ lg:max-w-xs lg:h-80 lg:mt-12
           </motion.div>
 
           {/* ── Right column / card ───────────────────────────────── */}
-          <motion.div className="
-w-full px-2
-md:flex-1 md:min-w-80
-" variants={fadeUp}>
+          <motion.div className="w-full px-2 md:flex-1 md:min-w-80" variants={fadeUp}>
             <motion.div
-              className="
-bg-white rounded-xl shadow-lg border border-gray-200 relative
-p-5
-md:p-8 md:min-h-72
-"
+              className="bg-white rounded-xl shadow-lg border border-gray-200 relative p-5 md:p-8 md:min-h-72"
               variants={scaleIn}
             >
-              {/* Decorative blue box - mobile top-left of card */}
-              {/* <div className="
-block md:hidden
-absolute -top-11 left-6
-w-7 h-7 rounded-lg
-bg-blue-500 z-30 drop-shadow-lg
-" /> */}
 
               {/* Paragraphs with stagger */}
               <motion.div
@@ -189,11 +138,7 @@ bg-blue-500 z-30 drop-shadow-lg
                 whileInView="visible"
                 viewport={{ once: true, amount: 0.2 }}
               >
-                <motion.p className="
-text-gray-700 text-justify
-text-xs leading-snug mb-2
-md:text-base md:leading-relaxed md:mb-4
-" variants={paragraphItem}>
+                <motion.p className="text-gray-700 text-justify text-xs leading-snug mb-2 md:text-base md:leading-relaxed md:mb-4" variants={paragraphItem}>
                   {section.content}
                 </motion.p>
               </motion.div>
