@@ -151,14 +151,16 @@ const HeroSection = ({ onDemoClick }: { onDemoClick: () => void }) => {
     }]);
     
     if (error) {
-      // Log error with sanitized context for debugging (no PII in logs)
-      console.error('Form submission failed:', {
-        errorCode: error.code,
-        errorMessage: error.message,
-        company: formData.company, // Business context, not PII
-        role: formData.role,
-        timestamp: new Date().toISOString()
-      });
+      // Log only in development environment for debugging
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Form submission failed:', {
+          errorCode: error.code,
+          errorMessage: error.message,
+          company: formData.company, // Business context, not PII
+          role: formData.role,
+          timestamp: new Date().toISOString()
+        });
+      }
       throw new Error('FORM_SUBMISSION_FAILED');
     }
   };
@@ -183,17 +185,18 @@ const HeroSection = ({ onDemoClick }: { onDemoClick: () => void }) => {
       const blob = await response.blob();
       const url = URL.createObjectURL(blob);
       
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = 'Resume-Checklist.pdf';
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      
-      // Clean up the blob URL
-      URL.revokeObjectURL(url);
-      
-      return true;
+      try {
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'Resume-Checklist.pdf';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        return true;
+      } finally {
+        // Always clean up blob URL to prevent memory leaks
+        URL.revokeObjectURL(url);
+      }
     } catch (error) {
       if (error instanceof Error && error.name === 'AbortError') {
         throw new Error('DOWNLOAD_TIMEOUT');
