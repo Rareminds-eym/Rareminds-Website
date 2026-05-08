@@ -1,3 +1,4 @@
+// Icons: FaCalendarAlt (Enquiry button), FaDownload (Download button), FaRedo (Retry download button)
 import { FaCalendarAlt, FaDownload, FaRedo } from "react-icons/fa";
 import { supabase } from "../../../../lib/supabase";
 import { motion, AnimatePresence } from "framer-motion";
@@ -150,6 +151,14 @@ const HeroSection = ({ onDemoClick }: { onDemoClick: () => void }) => {
     }]);
     
     if (error) {
+      // Log error with sanitized context for debugging (no PII in logs)
+      console.error('Form submission failed:', {
+        errorCode: error.code,
+        errorMessage: error.message,
+        company: formData.company, // Business context, not PII
+        role: formData.role,
+        timestamp: new Date().toISOString()
+      });
       throw new Error('FORM_SUBMISSION_FAILED');
     }
   };
@@ -231,6 +240,12 @@ const HeroSection = ({ onDemoClick }: { onDemoClick: () => void }) => {
     }
   };
 
+  /**
+   * Direct download fallback - intentionally simple and synchronous.
+   * This is a last-resort option when automatic download fails.
+   * Browser handles file availability naturally (404 page in new tab).
+   * No async error handling to avoid complexity in fallback mechanism.
+   */
   const handleDirectDownload = () => {
     const link = document.createElement('a');
     link.href = '/passport/pdf/Resume checklist.pdf';
@@ -313,6 +328,7 @@ const HeroSection = ({ onDemoClick }: { onDemoClick: () => void }) => {
   // Calculate button state before rendering
   const isSubmitDisabled = !isFormComplete || loading || (submitted && !downloadError);
   const buttonText = loading ? 'Submitting...' : (submitted && !downloadError) ? 'Submitted' : 'Submit & Download';
+  const submitButtonClassName = `bg-[#E32A18] hover:bg-[#cc2515] px-7 py-3 rounded-lg font-semibold transition-all duration-300 text-white w-full mt-2 ${isSubmitDisabled ? 'opacity-50 cursor-not-allowed' : ''}`;
 
   return (
     <section id="resume-checklist-download" className="relative w-auto min-h-[640px] md:min-h-[640px] overflow-hidden m-4 md:m-6 rounded-2xl shadow-sm bg-[#EDF2F9]">
@@ -444,7 +460,7 @@ const HeroSection = ({ onDemoClick }: { onDemoClick: () => void }) => {
                   <button
                     type="submit"
                     disabled={isSubmitDisabled}
-                    className={`bg-[#E32A18] hover:bg-[#cc2515] px-7 py-3 rounded-lg font-semibold transition-all duration-300 text-white w-full mt-2 ${isSubmitDisabled ? 'opacity-50 cursor-not-allowed' : ''}`}
+                    className={submitButtonClassName}
                   >
                     {buttonText}
                   </button>

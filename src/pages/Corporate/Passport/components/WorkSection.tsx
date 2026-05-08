@@ -74,7 +74,7 @@ export default function WorkSection() {
             <img
               src="/svgs/passport/step-number.svg"
               alt=""
-              aria-hidden={true}
+              aria-hidden="true"
               className="w-10 h-10 lg:w-12 lg:h-12"
             />
           </div>
