@@ -1,12 +1,5 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { motion } from 'framer-motion';
-
-// Tailwind breakpoint constants
-const TAILWIND_BREAKPOINTS = {
-  MD: 768,  // Tailwind md breakpoint
-  LG: 1024, // Tailwind lg breakpoint
-} as const;
-
 interface ImageItem {
   id: string;
   url: string;
@@ -23,26 +16,10 @@ interface ConclusionSectionProps {
 }
 
 const ConclusionSection = ({ section }: ConclusionSectionProps): JSX.Element => {
-  const [isMobile, setIsMobile] = useState(false);
-  const [isTablet, setIsTablet] = useState(false);
   const [imageError, setImageError] = useState(false);
 
   // Only use dynamic image from database - no fallback
   const imageUrl = section.image?.url;
-
-  useEffect(() => {
-    const check = () => {
-      const w = window.innerWidth;
-      setIsMobile(w < TAILWIND_BREAKPOINTS.MD);
-      setIsTablet(w >= TAILWIND_BREAKPOINTS.MD && w <= TAILWIND_BREAKPOINTS.LG);
-    };
-    check();
-    window.addEventListener('resize', check);
-    return () => window.removeEventListener('resize', check);
-  }, []);
-
-  
-
   // ── Animation Variants ──────────────────────────────────────────────────────
 
   const fadeUp = {
@@ -92,74 +69,16 @@ const ConclusionSection = ({ section }: ConclusionSectionProps): JSX.Element => 
     },
   };
 
-  // Convert all styles to Tailwind classes
-  const getLeftColClasses = () => {
-    if (isMobile) {
-      return "flex-none w-full relative h-56 flex items-end justify-center pb-2.5";
-    } else if (isTablet) {
-      return "flex-none w-full relative h-80 flex items-end justify-center pb-5";
-    } else {
-      return "flex-image-column relative h-80 flex items-end justify-center pb-5";
-    }
-  };
-
-  const getBlueShapeClasses = () => {
-    const baseClasses = "absolute bottom-0 left-1/2 -translate-x-1/2 rounded-blue-shape bg-blue-50 z-0";
-    if (isMobile) {
-      return `${baseClasses} w-64 h-52`;
-    } else if (isTablet) {
-      return `${baseClasses} w-96 h-80`;
-    } else {
-      return `${baseClasses} w-96 h-80`;
-    }
-  };
-
-  const getImageClasses = () => {
-    const baseClasses = "w-full object-contain relative z-10 drop-shadow-lg";
-    if (isMobile) {
-      return `${baseClasses} max-w-60 h-48 mt-6`;
-    } else if (isTablet) {
-      return `${baseClasses} max-w-80 h-72 mt-8`;
-    } else {
-      return `${baseClasses} max-w-80 h-72 mt-1`;
-    }
-  };
-
-  const getTitleClasses = () => {
-    const baseClasses = "text-center font-bold text-gray-900";
-    if (isMobile) {
-      return `${baseClasses} text-3xl mb-4`;
-    } else {
-      return `${baseClasses} text-5xl mb-16`;
-    }
-  };
-
-  const getParagraphClasses = () => {
-    const baseClasses = "text-gray-700 text-justify";
-    if (isMobile) {
-      return `${baseClasses} text-xs leading-snug mb-2`;
-    } else {
-      return `${baseClasses} text-base leading-relaxed mb-4`;
-    }
-  };
-
-  // Convert textCard styles to Tailwind classes
-  const getTextCardClasses = () => {
-    const baseClasses = "bg-white rounded-xl shadow-lg border border-gray-200 relative";
-    const paddingClasses = isMobile ? "p-5" : "p-8";
-    const heightClasses = isMobile ? "" : "min-h-72";
-    return `${baseClasses} ${paddingClasses} ${heightClasses}`.trim();
-  };
 
   return (
-    <section 
-      className="bg-white py-16 w-screen -mt-12 -mb-12 breakout"
+    <section
+      className="bg-white w-screen breakout py-6 md:py-16 -mt-12 -mb-12"
     >
       <div className="max-w-5xl mx-auto px-6">
 
         {/* ── Title fade-up ─────────────────────────────────────── */}
         <motion.h2
-          className={getTitleClasses()}
+          className="text-center font-bold text-gray-900 text-3xl -mb-8 md:text-5xl md:mb-16"
           variants={fadeUp}
           initial="hidden"
           whileInView="visible"
@@ -170,7 +89,7 @@ const ConclusionSection = ({ section }: ConclusionSectionProps): JSX.Element => 
 
         {/* ── Row stagger container ─────────────────────────────── */}
         <motion.div
-          className="flex gap-10 items-center flex-wrap"
+          className="flex items-center flex-wrap gap-10 lg:gap-2"
           variants={rowContainer}
           initial="hidden"
           whileInView="visible"
@@ -178,23 +97,26 @@ const ConclusionSection = ({ section }: ConclusionSectionProps): JSX.Element => 
         >
 
           {/* ── Left column ───────────────────────────────────────── */}
-          <motion.div className={getLeftColClasses()} variants={fadeIn}>
+          <motion.div className="relative flex items-end justify-center flex-none w-full h-56 pb-2.5 md:h-80 md:pb-5 lg:flex-image-column" variants={fadeIn}>
 
             {/* Decorative blue box - bottom left of image */}
-            {!isMobile && (
-              <div className={`absolute -bottom-8 ${isTablet ? 'center-offset' : 'left-7'} w-11 h-11 rounded-xl bg-blue-500 z-20 drop-shadow-lg`} />
-            )}
+            <div className="hidden md:block absolute -bottom-4 md:left-44 lg:left-12 w-11 h-11 rounded-xl bg-blue-500 z-20 drop-shadow-lg" />
 
             {/* Blob */}
-            <div className={getBlueShapeClasses()} />
+            <div
+              className="absolute bottom-0 left-1/2 -translate-x-1/2 rounded-blue-shape bg-blue-50 z-0 w-48 h-40 md:w-96 md:h-80"
+            />
+            <div
+              className="block md:hidden absolute -bottom-5 left-2/5 -translate-x-24 w-7 h-7 rounded-lg bg-blue-500 z-20 drop-shadow-lg"
+            />
 
             {/* Illustration */}
-            <div className="relative z-10 flex justify-center items-center w-full h-full">
+            <div className="relative z-10 flex justify-center items-center w-full h-full left-1 md:left-4">
               {imageUrl && !imageError && (
                 <motion.img
                   src={imageUrl}
                   alt="Conclusion illustration"
-                  className={getImageClasses()}
+                  className="w-full object-contain relative z-10 drop-shadow-lg max-w-40 h-36 mt-24 md:max-w-80 md:h-72 md:mt-8 lg:max-w-xs lg:h-80 lg:mt-12"
                   variants={scaleIn}
                   onError={() => setImageError(true)}
                 />
@@ -203,15 +125,11 @@ const ConclusionSection = ({ section }: ConclusionSectionProps): JSX.Element => 
           </motion.div>
 
           {/* ── Right column / card ───────────────────────────────── */}
-          <motion.div className="flex-1 min-w-80" variants={fadeUp}>
+          <motion.div className="w-full px-2 md:flex-1 md:min-w-80" variants={fadeUp}>
             <motion.div
-              className={getTextCardClasses()}
+              className="bg-white rounded-xl shadow-lg border border-gray-200 relative p-5 md:p-8 md:min-h-72"
               variants={scaleIn}
             >
-              {/* Decorative blue box - mobile top-left of card */}
-              {isMobile && (
-                <div className="absolute -top-4 left-4 w-7 h-7 rounded-lg bg-blue-500 z-30 drop-shadow-lg" />
-              )}
 
               {/* Paragraphs with stagger */}
               <motion.div
@@ -220,9 +138,9 @@ const ConclusionSection = ({ section }: ConclusionSectionProps): JSX.Element => 
                 whileInView="visible"
                 viewport={{ once: true, amount: 0.2 }}
               >
-                  <motion.p className={getParagraphClasses()} variants={paragraphItem}>
-                    {section.content}
-                  </motion.p>
+                <motion.p className="text-gray-700 text-justify text-xs leading-snug mb-2 md:text-base md:leading-relaxed md:mb-4" variants={paragraphItem}>
+                  {section.content}
+                </motion.p>
               </motion.div>
             </motion.div>
           </motion.div>
