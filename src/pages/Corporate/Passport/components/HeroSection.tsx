@@ -1,24 +1,13 @@
-import { FaCalendarAlt, FaDownload } from "react-icons/fa";
+import { FaCalendarAlt, FaDownload, FaRedo } from "react-icons/fa";
 import { supabase } from "../../../../lib/supabase";
 import { motion, AnimatePresence } from "framer-motion";
-import { useState, useEffect } from "react";
-// import banner1 from "../../../../../public/passport/Home-page-banner_1.png";
-// import banner2 from "../../../../../public/passport/Home-page-banner_2.png";
-// import Banner3 from "../../../../../public/passport/Home-page-banner_3.png";
-// import Banner4 from "../../../../../public/passport/Home-page-banner_4.png";
-// import Banner5 from "../../../../../public/passport/Home-page-banner_5.png";
-
-// import mobileBanner1 from "../../../../../public/passport/Home-page-banner_mobile_1.png";
-// import mobileBanner2 from "../../../../../public/passport/Home-page-banner_mobile_2.png";
-// import mobileBanner3 from "../../../../../public/passport/Home-page-banner_mobile_3.png";
-// import mobileBanner4 from "../../../../../public/passport/Home-page-banner_mobile_4.png";
-// import mobileBanner5 from "../../../../../public/passport/Home-page-banner_mobile_5.png";
+import { useState, useEffect, useRef } from "react";
 
 const banner1 = "/passport/Home-page-banner_1.png";
 const banner2 = "/passport/Home-page-banner_2.png";
-const Banner3 = "/passport/Home-page-banner_3.png";
-const Banner4 = "/passport/Home-page-banner_4.png";
-const Banner5 = "/passport/Home-page-banner_5.png";
+const banner3 = "/passport/Home-page-banner_3.png";
+const banner4 = "/passport/Home-page-banner_4.png";
+const banner5 = "/passport/Home-page-banner_5.png";
 
 const mobileBanner1 = "/passport/Home-page-banner_mobile_1.png";
 const mobileBanner2 = "/passport/Home-page-banner_mobile_2.png";
@@ -26,26 +15,25 @@ const mobileBanner3 = "/passport/Home-page-banner_mobile_3.png";
 const mobileBanner4 = "/passport/Home-page-banner_mobile_4.png";
 const mobileBanner5 = "/passport/Home-page-banner_mobile_5.png";
 
-
 const desktopSlides = [
   {
     image: banner1,
-    heading: "Still Reading Resumes? You’re Already Behind",
+    heading: "Still Reading Resumes? You're Already Behind",
   },
   {
     image: banner2,
     heading: "Stop Guessing. Start Hiring Verified.",
   },
   {
-    image: Banner3,
+    image: banner3,
     heading: "AI Verifies. Not Guesses. Your Hiring Should Too.",
   },
   {
-    image: Banner4,
-    heading: "Smart Companies Don’t Hunt Talent — They Scan SkillPassports.",
+    image: banner4,
+    heading: "Smart Companies Don't Hunt Talent — They Scan SkillPassports.",
   },
   {
-    image: Banner5,
+    image: banner5,
     heading: "Cut Hiring Time by 70%. Keep Every Bit of Quality.",
   }
 ];
@@ -53,7 +41,7 @@ const desktopSlides = [
 const mobileSlides = [
   {
     image: mobileBanner1,
-    heading: "Still Reading Resumes? You’re Already Behind",
+    heading: "Still Reading Resumes? You're Already Behind",
   },
   {
     image: mobileBanner2,
@@ -65,7 +53,7 @@ const mobileSlides = [
   },
   {
     image: mobileBanner4,
-    heading: "Smart Companies Don’t Hunt Talent. They Scan SkillPassports.",
+    heading: "Smart Companies Don't Hunt Talent. They Scan SkillPassports.",
   },
   {
     image: mobileBanner5,
@@ -75,7 +63,7 @@ const mobileSlides = [
 
 const HeroSection = ({ onDemoClick }: { onDemoClick: () => void }) => {
   const [showForm, setShowForm] = useState(false);
-  const [formTimeout, setFormTimeout] = useState<NodeJS.Timeout | null>(null);
+  const formTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const [current, setCurrent] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
   const [form, setForm] = useState({
@@ -89,7 +77,8 @@ const HeroSection = ({ onDemoClick }: { onDemoClick: () => void }) => {
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  // Detect screen size
+  const [downloadError, setDownloadError] = useState(false);
+
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 768);
     checkMobile();
@@ -99,73 +88,230 @@ const HeroSection = ({ onDemoClick }: { onDemoClick: () => void }) => {
 
   const slides = isMobile ? mobileSlides : desktopSlides;
 
-  // Auto fade every 5s
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrent((prev) => (prev + 1) % slides.length);
     }, 5000);
     return () => clearInterval(interval);
-  }, [slides]);
+  }, [slides.length]);
 
   const isFormComplete = Object.values(form).every((v) => v.trim() !== "");
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const newForm = { ...form, [e.target.name]: e.target.value };
     setForm(newForm);
-    // If any field is filled, clear the timeout so form stays open
-    if (formTimeout && Object.values(newForm).some((v) => v.trim() !== "")) {
-      clearTimeout(formTimeout);
+    if (formTimeoutRef.current && Object.values(newForm).some((v) => v.trim() !== "")) {
+      clearTimeout(formTimeoutRef.current);
+      formTimeoutRef.current = null;
     }
   };
 
-  // Start timeout when form is opened
   useEffect(() => {
+    // Clear any existing timeout first to prevent stale timer overwrites
+    if (formTimeoutRef.current) {
+      clearTimeout(formTimeoutRef.current);
+      formTimeoutRef.current = null;
+    }
+    
+    // Set new timeout only if form is shown and all fields are empty
     if (showForm && Object.values(form).every((v) => v.trim() === "")) {
-      if (formTimeout) clearTimeout(formTimeout);
-      const timeout = setTimeout(() => {
+      const newTimeout = setTimeout(() => {
         setShowForm(false);
       }, 10000);
-      setFormTimeout(timeout);
-    } else {
-      if (formTimeout) clearTimeout(formTimeout);
+      formTimeoutRef.current = newTimeout;
     }
-    // Cleanup on unmount
+    
     return () => {
-      if (formTimeout) clearTimeout(formTimeout);
+      if (formTimeoutRef.current) {
+        clearTimeout(formTimeoutRef.current);
+        formTimeoutRef.current = null;
+      }
     };
-  }, [showForm, form]);
+  }, [showForm, form.name, form.company, form.email, form.phone, form.role, form.message]);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleOpenForm = () => {
+    setShowForm(true);
+    setError(null);
+    setSubmitted(false);
+    setDownloadError(false);
+  };
+
+  const handleCloseForm = () => {
+    setShowForm(false);
+    setError(null);
+    setSubmitted(false);
+    setDownloadError(false);
+  };
+
+  const submitFormToDatabase = async (formData: typeof form) => {
+    const { error } = await supabase.from('pdf_downloads').insert([{
+      ...formData,
+      download_type: 'Resume Checklist'
+    }]);
+    
+    if (error) {
+      throw new Error('FORM_SUBMISSION_FAILED');
+    }
+  };
+
+  const attemptFileDownload = async () => {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 5000);
+    
+    try {
+      const response = await fetch('/passport/pdf/Resume checklist.pdf', {
+        signal: controller.signal
+      });
+      
+      clearTimeout(timeoutId);
+      
+      if (response.status === 404) {
+        throw new Error('FILE_NOT_FOUND');
+      }
+      if (!response.ok) {
+        throw new Error('NETWORK_ERROR');
+      }
+      
+      // Download file once using blob
+      const blob = await response.blob();
+      const url = URL.createObjectURL(blob);
+      
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = 'Resume-Checklist.pdf';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      
+      // Clean up the blob URL
+      URL.revokeObjectURL(url);
+      
+      return true;
+    } catch (error) {
+      clearTimeout(timeoutId);
+      if (error instanceof Error && error.name === 'AbortError') {
+        throw new Error('DOWNLOAD_TIMEOUT');
+      }
+      if (error instanceof Error) {
+        throw error;
+      }
+      throw new Error('DOWNLOAD_FAILED');
+    }
+  };
+
+  const handleRetryDownload = async () => {
+    setLoading(true);
+    setError(null);
+    
+    try {
+      await attemptFileDownload();
+      setDownloadError(false);
+      setError(null);
+    } catch (err) {
+      if (err instanceof Error) {
+        switch (err.message) {
+          case 'FILE_NOT_FOUND':
+            setError('File is not available. Please contact support for assistance.');
+            break;
+          case 'DOWNLOAD_TIMEOUT':
+            setError('Download timed out. Please check your connection and try again.');
+            break;
+          case 'NETWORK_ERROR':
+            setError('Network error occurred. Please check your connection and try again.');
+            break;
+          default:
+            setError('Download failed. Please try the direct download link below or contact support.');
+        }
+      } else {
+        setError('Download failed. Please try the direct download link below or contact support.');
+      }
+      setDownloadError(true);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleDirectDownload = () => {
+    const link = document.createElement('a');
+    link.href = '/passport/pdf/Resume checklist.pdf';
+    link.download = 'Resume-Checklist.pdf';
+    link.target = '_blank';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
-    try {
-      const { error } = await supabase.from('pdf_downloads').insert([{
-        ...form,
-        download_type: 'Resume Checklist'
-      }]);
-      if (error) {
-        setError('Failed to submit. Please try again.');
-        setSubmitted(false);
-      } else {
-        setSubmitted(true);
-        // Start download after successful submit
-        const link = document.createElement('a');
-        link.href = '/passport/pdf/Resume checklist.pdf';
-        link.download = 'Resume-Checklist.pdf';
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-      }
-    } catch (err) {
-      setError('Unexpected error. Please try again.');
-      setSubmitted(false);
+    setDownloadError(false);
+    
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+    if (!emailRegex.test(form.email.trim())) {
+      setError('Please enter a valid email address.');
+      setLoading(false);
+      return;
     }
-    setLoading(false);
+    
+    // Validate phone format
+    const phoneRegex = /^[+]?[\d\s\-()]{7,15}$/;
+    if (!phoneRegex.test(form.phone.trim())) {
+      setError('Please enter a valid phone number.');
+      setLoading(false);
+      return;
+    }
+    
+    try {
+      await submitFormToDatabase(form);
+      // Don't set submitted here - wait for download to complete
+    } catch (err) {
+      if (err instanceof Error && err.message === 'FORM_SUBMISSION_FAILED') {
+        setError('Failed to submit form. Please try again.');
+        setSubmitted(false);
+        setDownloadError(false);
+      } else {
+        setError('Unexpected error. Please try again.');
+        setSubmitted(false);
+        setDownloadError(false);
+      }
+      setLoading(false);
+      return;
+    }
+
+    try {
+      await attemptFileDownload();
+      setError(null);
+      setDownloadError(false);
+      setSubmitted(true);  // Set submitted only after successful download
+    } catch (downloadErr) {
+      setDownloadError(true);
+      setSubmitted(true);  // Form was submitted successfully, just download failed
+      if (downloadErr instanceof Error) {
+        switch (downloadErr.message) {
+          case 'FILE_NOT_FOUND':
+            setError('Form submitted successfully! However, the file is temporarily unavailable. Use the options below to get your download.');
+            break;
+          case 'DOWNLOAD_TIMEOUT':
+            setError('Form submitted successfully! Download timed out. Use the options below to retry.');
+            break;
+          case 'NETWORK_ERROR':
+            setError('Form submitted successfully! Network error occurred. Use the options below to retry.');
+            break;
+          default:
+            setError('Form submitted successfully! Download failed. Use the options below to get your file.');
+        }
+      } else {
+        setError('Form submitted successfully! Download failed. Use the options below to get your file.');
+      }
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-  <section id="resume-checklist-download" className="relative w-auto min-h-[640px] md:min-h-[640px] overflow-hidden m-4 md:m-6 rounded-2xl shadow-sm bg-[#EDF2F9]">
-      {/* Fade Images */}
+    <section id="resume-checklist-download" className="relative w-auto min-h-[640px] md:min-h-[640px] overflow-hidden m-4 md:m-6 rounded-2xl shadow-sm bg-[#EDF2F9]">
       <div className="absolute inset-0 z-0">
         <AnimatePresence>
           <motion.img
@@ -182,7 +328,6 @@ const HeroSection = ({ onDemoClick }: { onDemoClick: () => void }) => {
         </AnimatePresence>
       </div>
 
-      {/* Content */}
       <div className="relative z-10 max-w-7xl mx-auto px-6 sm:px-10 py-10 sm:py-20 md:py-28">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
           <motion.div
@@ -191,11 +336,10 @@ const HeroSection = ({ onDemoClick }: { onDemoClick: () => void }) => {
             transition={{ duration: 1.2, ease: "easeInOut" }}
             className="text-white"
           >
-            {/* Fade Headings */}
             <AnimatePresence mode="wait">
               <motion.h1
                 key={slides[current].heading}
-                className={`text-3xl sm:text-4xl md:text-5xl lg:text-[50px] xl:text-6xl font-extrabold leading-tight mb-6 text-black`}
+                className="text-3xl sm:text-4xl md:text-5xl lg:text-[50px] xl:text-6xl font-extrabold leading-tight mb-6 text-black"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
@@ -210,14 +354,6 @@ const HeroSection = ({ onDemoClick }: { onDemoClick: () => void }) => {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4">
-              {/* 
-                Enquiry Button Flow:
-                1. onClick triggers onDemoClick prop from parent (Index.tsx)
-                2. Index.tsx passes setIsModalOpen(true) as onDemoClick
-                3. This opens the BookDemo modal component
-                4. BookDemo component uses Zoho Bookings: https://subashini-rareminds37.zohobookings.in/portal-embed#/rareminds
-                Location: src/components/Corporate/BookDemo.tsx
-              */}
               <button
                 onClick={onDemoClick}
                 className="bg-[#E32A18] hover:bg-[#cc2515] px-7 py-3 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center gap-2 shadow-lg text-white"
@@ -225,7 +361,7 @@ const HeroSection = ({ onDemoClick }: { onDemoClick: () => void }) => {
                 <FaCalendarAlt /> Enquiry
               </button>
               <button
-                onClick={() => setShowForm(true)}
+                onClick={handleOpenForm}
                 className="bg-white hover:bg-gray-50 border-2 border-[#E32A18] text-[#E32A18] hover:text-[#cc2515] px-7 py-3 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center gap-2 shadow-lg"
               >
                 <FaDownload /> Download
@@ -234,85 +370,88 @@ const HeroSection = ({ onDemoClick }: { onDemoClick: () => void }) => {
 
             {showForm && (
               <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-                <form className="bg-white rounded-xl p-6 shadow-2xl max-w-2xl w-full relative max-h-[90vh] overflow-y-auto" autoComplete="off" onSubmit={async (e) => {
-                e.preventDefault();
-                setLoading(true);
-                setError(null);
-                try {
-                  const { error } = await supabase.from('pdf_downloads').insert([{
-                    ...form,
-                    download_type: 'Resume Checklist'
-                  }]);
-                  if (error) {
-                    setError('Failed to submit. Please try again.');
-                    setSubmitted(false);
-                  } else {
-                    setSubmitted(true);
-                    // Start download after successful submit
-                    const link = document.createElement('a');
-                    link.href = '/passport/pdf/Resume checklist.pdf';
-                    link.download = 'Resume-Checklist.pdf';
-                    document.body.appendChild(link);
-                    link.click();
-                    document.body.removeChild(link);
-                  }
-                } catch (err) {
-                  setError('Unexpected error. Please try again.');
-                  setSubmitted(false);
-                }
-                setLoading(false);
-              }}>
-                <button 
-                  type="button" 
-                  onClick={() => setShowForm(false)}
-                  className="absolute top-4 right-4 text-gray-600 hover:text-red-500 text-3xl font-bold focus:outline-none z-10"
-                  aria-label="Close form"
-                >
-                  &times;
-                </button>
-                <div className="flex flex-col sm:flex-row gap-4 mb-4">
-                  <div className="flex-1">
-                    <label className="block text-gray-700 font-semibold mb-2">Your Name</label>
-                    <input type="text" name="name" value={form.name} onChange={handleChange} placeholder="Full Name" className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E32A18] text-black bg-white" />
+                <form className="bg-white rounded-xl p-6 shadow-2xl max-w-2xl w-full relative max-h-[90vh] overflow-y-auto" autoComplete="off" onSubmit={handleFormSubmit}>
+                  <button 
+                    type="button" 
+                    onClick={handleCloseForm}
+                    className="absolute top-4 right-4 text-gray-600 hover:text-red-500 text-3xl font-bold focus:outline-none z-10"
+                    aria-label="Close form"
+                  >
+                    &times;
+                  </button>
+                  <div className="flex flex-col sm:flex-row gap-4 mb-4">
+                    <div className="flex-1">
+                      <label htmlFor="form-name" className="block text-gray-700 font-semibold mb-2">Your Name</label>
+                      <input id="form-name" type="text" name="name" value={form.name} onChange={handleChange} placeholder="Full Name" required className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E32A18] text-black bg-white" />
+                    </div>
+                    <div className="flex-1">
+                      <label htmlFor="form-company" className="block text-gray-700 font-semibold mb-2">Company</label>
+                      <input id="form-company" type="text" name="company" value={form.company} onChange={handleChange} placeholder="Company Name" required className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E32A18] text-black bg-white" />
+                    </div>
                   </div>
-                  <div className="flex-1">
-                    <label className="block text-gray-700 font-semibold mb-2">Company</label>
-                    <input type="text" name="company" value={form.company} onChange={handleChange} placeholder="Company Name" className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E32A18] text-black bg-white" />
+                  <div className="flex flex-col sm:flex-row gap-4 mb-4">
+                    <div className="flex-1">
+                      <label htmlFor="form-email" className="block text-gray-700 font-semibold mb-2">Email Address</label>
+                      <input id="form-email" type="email" name="email" value={form.email} onChange={handleChange} placeholder="name@company.com" required className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E32A18] text-black bg-white" />
+                    </div>
+                    <div className="flex-1">
+                      <label htmlFor="form-phone" className="block text-gray-700 font-semibold mb-2">Phone Number</label>
+                      <input id="form-phone" type="tel" name="phone" value={form.phone} onChange={handleChange} placeholder="+91 98765 43210" required className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E32A18] text-black bg-white" />
+                    </div>
                   </div>
-                </div>
-                <div className="flex flex-col sm:flex-row gap-4 mb-4">
-                  <div className="flex-1">
-                    <label className="block text-gray-700 font-semibold mb-2">Email Address</label>
-                    <input type="email" name="email" value={form.email} onChange={handleChange} placeholder="name@company.com" className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E32A18] text-black bg-white" />
+                  <div className="flex flex-col sm:flex-row gap-4 mb-4">
+                    <div className="flex-1">
+                      <label htmlFor="form-role" className="block text-gray-700 font-semibold mb-2">Role to Hire</label>
+                      <input id="form-role" type="text" name="role" value={form.role} onChange={handleChange} placeholder="Job Title/Position" required className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E32A18] text-black bg-white" />
+                    </div>
                   </div>
-                  <div className="flex-1">
-                    <label className="block text-gray-700 font-semibold mb-2">Phone Number</label>
-                    <input type="tel" name="phone" value={form.phone} onChange={handleChange} placeholder="+91 98765 43210" className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E32A18] text-black bg-white" />
+                  <div className="mb-4">
+                    <label htmlFor="form-message" className="block text-gray-700 font-semibold mb-2">Message</label>
+                    <textarea id="form-message" name="message" value={form.message} onChange={handleChange} placeholder="Tell us about your hiring needs or challenges" required className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E32A18] text-black bg-white resize-none" rows={3} />
                   </div>
-                </div>
-                <div className="flex flex-col sm:flex-row gap-4 mb-4">
-                  <div className="flex-1">
-                    <label className="block text-gray-700 font-semibold mb-2">Role to Hire</label>
-                    <input type="text" name="role" value={form.role} onChange={handleChange} placeholder="Job Title/Position" className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E32A18] text-black bg-white" />
-                  </div>
-                </div>
-                <div className="mb-4">
-                  <label className="block text-gray-700 font-semibold mb-2">Message</label>
-                  <textarea name="message" value={form.message} onChange={handleChange} placeholder="Tell us about your hiring needs or challenges" className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E32A18] text-black bg-white resize-none" rows={3} />
-                </div>
-                {error && <p className="text-red-600 mb-2">{error}</p>}
-                {submitted && <p className="text-green-600 mb-2">Thank you! Your download will start now.</p>}
-                <button
-                  type="submit"
-                  disabled={!isFormComplete || loading || submitted}
-                  className={`bg-[#E32A18] hover:bg-[#cc2515] px-7 py-3 rounded-lg font-semibold transition-all duration-300 text-white w-full mt-2 ${(!isFormComplete || loading || submitted) ? 'opacity-50 cursor-not-allowed' : ''}`}
-                >
-                  {loading ? 'Submitting...' : submitted ? 'Submitted' : 'Submit'}
-                </button>
-              </form>
+                  {error && <p className="text-red-600 mb-2">{error}</p>}
+                  {submitted && !error && !downloadError && <p className="text-green-600 mb-2">Thank you! Your download should start automatically.</p>}
+                  
+                  {submitted && downloadError && (
+                    <div className="mb-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+                      <p className="text-yellow-800 mb-3 font-medium">Download Options:</p>
+                      <div className="flex flex-col sm:flex-row gap-2">
+                        <button
+                          type="button"
+                          onClick={handleRetryDownload}
+                          disabled={loading}
+                          className="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg font-medium text-white transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-50"
+                        >
+                          <FaRedo className={loading ? 'animate-spin' : ''} />
+                          {loading ? 'Retrying...' : 'Retry Download'}
+                        </button>
+                        <button
+                          type="button"
+                          onClick={handleDirectDownload}
+                          className="bg-green-600 hover:bg-green-700 px-4 py-2 rounded-lg font-medium text-white transition-all duration-300 flex items-center justify-center gap-2"
+                        >
+                          <FaDownload />
+                          Direct Download
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                  
+                  {(() => {
+                    const isSubmitDisabled = !isFormComplete || loading || (submitted && !downloadError);
+                    return (
+                      <button
+                        type="submit"
+                        disabled={isSubmitDisabled}
+                        className={`bg-[#E32A18] hover:bg-[#cc2515] px-7 py-3 rounded-lg font-semibold transition-all duration-300 text-white w-full mt-2 ${isSubmitDisabled ? 'opacity-50 cursor-not-allowed' : ''}`}
+                      >
+                        {loading ? 'Submitting...' : (submitted && !downloadError) ? 'Submitted' : 'Submit & Download'}
+                      </button>
+                    );
+                  })()}
+                </form>
               </div>
             )}
-            
           </motion.div>
         </div>
       </div>
