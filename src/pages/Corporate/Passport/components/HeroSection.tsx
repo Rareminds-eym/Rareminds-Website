@@ -127,7 +127,7 @@ const HeroSection = ({ onDemoClick }: { onDemoClick: () => void }) => {
         formTimeoutRef.current = null;
       }
     };
-  }, [showForm, form.name, form.company, form.email, form.phone, form.role, form.message]);
+  }, [showForm, form]);
 
   const handleOpenForm = () => {
     setShowForm(true);
@@ -163,8 +163,6 @@ const HeroSection = ({ onDemoClick }: { onDemoClick: () => void }) => {
         signal: controller.signal
       });
       
-      clearTimeout(timeoutId);
-      
       if (response.status === 404) {
         throw new Error('FILE_NOT_FOUND');
       }
@@ -188,7 +186,6 @@ const HeroSection = ({ onDemoClick }: { onDemoClick: () => void }) => {
       
       return true;
     } catch (error) {
-      clearTimeout(timeoutId);
       if (error instanceof Error && error.name === 'AbortError') {
         throw new Error('DOWNLOAD_TIMEOUT');
       }
@@ -196,6 +193,9 @@ const HeroSection = ({ onDemoClick }: { onDemoClick: () => void }) => {
         throw error;
       }
       throw new Error('DOWNLOAD_FAILED');
+    } finally {
+      // Always clear timeout to prevent memory leaks
+      clearTimeout(timeoutId);
     }
   };
 
@@ -309,6 +309,10 @@ const HeroSection = ({ onDemoClick }: { onDemoClick: () => void }) => {
       setLoading(false);
     }
   };
+
+  // Calculate button state before rendering
+  const isSubmitDisabled = !isFormComplete || loading || (submitted && !downloadError);
+  const buttonText = loading ? 'Submitting...' : (submitted && !downloadError) ? 'Submitted' : 'Submit & Download';
 
   return (
     <section id="resume-checklist-download" className="relative w-auto min-h-[640px] md:min-h-[640px] overflow-hidden m-4 md:m-6 rounded-2xl shadow-sm bg-[#EDF2F9]">
@@ -437,18 +441,13 @@ const HeroSection = ({ onDemoClick }: { onDemoClick: () => void }) => {
                     </div>
                   )}
                   
-                  {(() => {
-                    const isSubmitDisabled = !isFormComplete || loading || (submitted && !downloadError);
-                    return (
-                      <button
-                        type="submit"
-                        disabled={isSubmitDisabled}
-                        className={`bg-[#E32A18] hover:bg-[#cc2515] px-7 py-3 rounded-lg font-semibold transition-all duration-300 text-white w-full mt-2 ${isSubmitDisabled ? 'opacity-50 cursor-not-allowed' : ''}`}
-                      >
-                        {loading ? 'Submitting...' : (submitted && !downloadError) ? 'Submitted' : 'Submit & Download'}
-                      </button>
-                    );
-                  })()}
+                  <button
+                    type="submit"
+                    disabled={isSubmitDisabled}
+                    className={`bg-[#E32A18] hover:bg-[#cc2515] px-7 py-3 rounded-lg font-semibold transition-all duration-300 text-white w-full mt-2 ${isSubmitDisabled ? 'opacity-50 cursor-not-allowed' : ''}`}
+                  >
+                    {buttonText}
+                  </button>
                 </form>
               </div>
             )}
