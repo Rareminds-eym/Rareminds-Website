@@ -4,7 +4,7 @@ type PointData = {
   id: string;
   Icon: LucideIcon;
   title?: string;
-  body: string;
+  body?: string;
   highlights?: string[];
   bullets?: string[];
 };
@@ -52,7 +52,7 @@ const OverviewSection = () => {
           {item.title && <strong>{item.title}</strong>}
           <ul className="list-disc ml-5 mt-2">
             {item.bullets.map((bullet, index) => (
-              <li key={index}>{bullet}</li>
+              <li key={`${item.id}-bullet-${index}`}>{bullet}</li>
             ))}
           </ul>
         </>
@@ -60,14 +60,21 @@ const OverviewSection = () => {
     }
 
     if (item.highlights && item.highlights.length > 0) {
-      const parts = item.body.split(/(The Rareminds Skill Passport|digital skill transcript|digital passport of verified skills|data-backed insights)/g);
+      // Dynamically build regex pattern from highlights array
+      // Escape special regex characters to prevent regex injection
+      const escapedHighlights = item.highlights.map(h => 
+        h.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+      );
+      const highlightPattern = new RegExp(`(${escapedHighlights.join('|')})`, 'g');
+      const parts = item.body.split(highlightPattern);
+      
       return (
         <>
           {parts.map((part, index) => {
             if (item.highlights?.includes(part)) {
-              return <strong key={index}>{part}</strong>;
+              return <strong key={`${item.id}-part-${index}`}>{part}</strong>;
             }
-            return part;
+            return <span key={`${item.id}-part-${index}`}>{part}</span>;
           })}
         </>
       );
