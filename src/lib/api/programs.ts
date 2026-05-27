@@ -338,7 +338,8 @@ export async function getProgramWithSections(slug: string): Promise<{
       ...program,
       sections: transformedSections,
       aboutSection,
-      bannerUrl: program.banner_url ?? null,
+      // banner_url is JSONB { desktop, mobile } — fallback ensures object shape is always present
+      bannerUrl: program.banner_url ?? { desktop: null, mobile: null },
       // Legacy compatibility fields for Naan Mudhalvan components
       name: program.title,
       description: program.short_description,

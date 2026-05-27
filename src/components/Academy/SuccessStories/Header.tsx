@@ -1,4 +1,4 @@
-import successBannerMobile from '../../../assets/Success Stories Mobile Banner copy.jpg';
+import successBannerMobile from '../../../assets/Success-Stories-Mobile-Banner.jpg';
 import successBannerDesktop from '../../../assets/Success Stories Banner copy.jpg';
 
 interface HeaderProps {
@@ -29,7 +29,7 @@ export const Header = ({ searchQuery, onSearchChange }: HeaderProps) => {
         <div className="container mx-auto px-4 h-full flex flex-col justify-center items-center max-w-6xl">
           <div className="w-full flex justify-between items-center">
             {/* Content — center on mobile/tab, left-aligned on desktop */}
-            <div className="max-w-lg lg:ml-10 lg:mt-12 w-full lg:w-auto flex flex-col items-center -mt-24 md:mt-0">
+            <div className="max-w-lg lg:ml-10 lg:mt-12 w-full lg:w-auto flex flex-col items-center md:mt-0">
               <h1 className="text-2xl sm:text-4xl lg:text-5xl font-semibold mb-5 md:mb-10 text-gray-900 text-center">
                 Success Stories
               </h1>
