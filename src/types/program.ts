@@ -101,8 +101,10 @@ export interface Program {
   date: string;
   status: string;
   image_url: string;
-  banner_url: string | null;
+  banner_url: { desktop: string | null; mobile: string | null } | null;
   short_description: string;
+  hero_title: string;
+  hero_description: string;
   display_order: number;
   is_active: boolean;
   created_at: string;
@@ -206,7 +208,7 @@ export interface ProgramWithTransformedSections extends Omit<Program, 'banner_ur
   aboutSection?: AboutSection;
   enhancedSections?: { [key: string]: EnhancedSection };
   technologies?: string[];
-  bannerUrl: string;
+  bannerUrl: { desktop: string | null; mobile: string | null } | null;
   // Legacy compatibility fields for Naan Mudhalvan components
   name: string;
   description: string;

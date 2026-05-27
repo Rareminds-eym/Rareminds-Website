@@ -10,57 +10,56 @@ interface HeroSectionProps {
 
 function HeroSection({ project }: HeroSectionProps) {
   const navigate = useNavigate();
-  
-  /**
-   * Get banner URL with proper fallback chain
-   * Production-level type-safe implementation without any type assertions
-   */
-  const getBannerUrl = (projectData: ProgramWithTransformedSections): string => {
-    // Primary: Use the transformed camelCase field (guaranteed to exist per type definition)
-    if (projectData.bannerUrl) {
-      return projectData.bannerUrl;
-    }
-    
-    // Secondary: Use imageUrl as fallback
-    if (projectData.imageUrl) {
-      return projectData.imageUrl;
-    }
-    
-    // Tertiary: Use placeholder image
-    return placeholderBanner;
-  };
-  
-  const banner = getBannerUrl(project);
+   const desktopBanner = project.bannerUrl?.desktop ?? project.imageUrl ?? placeholderBanner;
+  const mobileBanner = project.bannerUrl?.mobile ?? project.imageUrl ?? placeholderBanner;
+  const heroTitle = project?.hero_title || project?.name || project?.title;
+  const heroDescription = project?.hero_description || project?.description || project?.short_description;
   
   return (
     <div className="w-full">
       {/* Banner Image - Use banner directly without encoding */}
-      <div className="w-full overflow-hidden relative">
+      <div className="w-full overflow-hidden relative mb-32 md:mb-36 h-auto md:h-auto">
         {/* Back Button */}
         <button
           type="button"
           onClick={() => navigate('/success-stories')}
-          className="absolute left-4 z-10 flex items-center bg-blue-600 hover:bg-blue-700 text-white rounded-full transition-all shadow-md hover:shadow-lg font-medium top-2 px-2 py-1 text-xs gap-1 md:top-10 md:px-5 md:py-2 md:gap-2"
+          className="fixed left-4 z-50 flex items-center bg-blue-600 hover:bg-blue-700 text-white rounded-full transition-all shadow-md hover:shadow-lg font-medium top-24 px-2 py-1 text-xs gap-1 md:top-28 md:px-5 md:py-2 md:gap-2"
         >
           <ArrowLeft className="w-3 h-3 md:w-4 md:h-4" />
           <span className="inline md:hidden">Back</span>
           <span className="hidden md:inline">Back to SuccessStories</span>
         </button>
         
-        <img 
-          src={banner} 
-          alt={project?.name || project?.title || "Program banner image"} 
-          className="w-full h-auto object-cover object-center"
+         <img
+          src={mobileBanner}
+          alt={project?.name || project?.title || "Program banner image"}
+          className="block md:hidden w-full object-cover object-center"
         />
-      </div>
-      
-      {/* Title Section Below Banner */}
-      <div className="bg-white py-24">
-        <div className="container mx-auto px-4 text-center">
-          <h1 className="text-xl lg:text-4xl font-bold text-gray-900 mb-4">
-            {project?.name || project?.title}
-          </h1>
-        </div>
+        {/* Desktop banner */}
+        <img
+          src={desktopBanner}
+          alt={project?.name || project?.title || "Program banner image"}
+          className="hidden md:block w-full md:h-auto object-cover object-center"
+        />
+
+        {/* Text overlay on banner */}
+        {(heroTitle || heroDescription) && (
+          <div className="absolute inset-0 flex flex-col justify-start items-center md:items-start lg:items-start px-6 md:px-10 lg:px-16 md:max-w-xs lg:max-w-md xl:max-w-3xl pt-44 md:pt-44 lg:pt-64 xl:pt-0 xl:pb-24 xl:justify-end text-center md:text-left lg:text-left overflow-hidden">
+
+            {heroTitle && (
+              <h1 className="text-black text-xl md:text-base lg:text-xl xl:text-4xl font-bold leading-snug w-full">
+                {heroTitle}
+              </h1>
+            )}
+
+            {heroDescription && (
+              <p className="text-black text-xs md:text-xs lg:text-xs xl:text-base max-w-full xl:max-w-none mx-auto xl:mx-0 w-full mt-4 leading-relaxed md:line-clamp-3 lg:line-clamp-4 xl:line-clamp-none">
+                {heroDescription}
+              </p>
+            )}
+
+          </div>
+        )}
       </div>
     </div>
   );

@@ -116,7 +116,7 @@ export async function getPrograms(params: PaginationParams = {}): Promise<Pagina
     let query = supabase
       .from('programs')
       .select(
-        'id, title, slug, program_type, location, date, status, image_url, banner_url, short_description, display_order, is_active, created_at, updated_at',
+        'id, title, slug, program_type, location, date, status, image_url, banner_url, short_description, hero_title, hero_description, display_order, is_active, created_at, updated_at',
         { count: 'exact' }
       )
       .eq('is_active', true);
@@ -242,7 +242,7 @@ export async function getProgramWithSections(slug: string): Promise<{
       .from('programs')
       .select(`
         id, title, slug, program_type, location, date, status, image_url, banner_url, 
-        short_description, display_order, is_active, created_at, updated_at,
+        short_description, hero_title, hero_description, display_order, is_active, created_at, updated_at,
         program_sections (
           id, program_id, section_key, content_type, title, preamble, content, 
           display_order, created_at, updated_at
@@ -338,7 +338,7 @@ export async function getProgramWithSections(slug: string): Promise<{
       ...program,
       sections: transformedSections,
       aboutSection,
-      bannerUrl: program.banner_url || program.image_url,
+      bannerUrl: program.banner_url ?? null,
       // Legacy compatibility fields for Naan Mudhalvan components
       name: program.title,
       description: program.short_description,
