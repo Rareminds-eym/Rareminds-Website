@@ -32,7 +32,7 @@ const fadeIn = {
 
 function NaanIntroduction({ section }: NaanIntroductionProps): JSX.Element {
   return (
-    <div className="min-h-screen bg-white -mt-16 md:-mt-5 pb-4 px-4 md:px-8 flex flex-col items-center">
+    <div className="bg-white -mt-16 md:-mt-5 pb-4 px-4 md:px-8 flex flex-col items-center">
 
       {/* Heading — fade up */}
       <motion.h1

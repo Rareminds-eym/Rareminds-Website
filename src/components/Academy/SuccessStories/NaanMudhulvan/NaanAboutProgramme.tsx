@@ -96,7 +96,7 @@ function NaanAboutProgramme({
   const otherCourses = courses.filter((c) => c.title !== mainCourse.title);
 
   return (
-    <section className="bg-white mt-2 sm:-mt-12 md:mt-5 lg:-mt-52 pb-5 md:pb-24 px-4 md:px-8 max-w-5xl mx-auto">
+    <section className="bg-white mt-8 sm:mt-10 md:mt-28 pb-5 md:pb-24 px-4 md:px-8 max-w-5xl mx-auto">
 
       {/* Title */}
       <motion.h2

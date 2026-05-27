@@ -57,9 +57,9 @@ function NaanImpactSection({ impactSection }: NaanImpactSectionProps): JSX.Eleme
             <Icon className="w-5 h-5 text-blue-500" />
           </div>
         </div>
-        <div className="pt-6 text-center">
+        <div className="pt-6 text-center flex flex-col flex-1">
           <h3 className="text-xl font-bold text-gray-600 mb-2">{item.value}</h3>
-          <p className="text-sm text-gray-600 leading-relaxed">{item.label}</p>
+          <p className="text-sm text-gray-600 leading-relaxed flex-1">{item.label}</p>
         </div>
       </div>
     );
@@ -71,7 +71,7 @@ function NaanImpactSection({ impactSection }: NaanImpactSectionProps): JSX.Eleme
   const mobileFifth = items[4];
 
   return (
-    <div className="min-h-screen bg-white py-3 px-6 -mt-5 md:mt-16">
+    <div className="bg-white py-3 px-6 -mt-5 md:mt-16 pb-8 md:pb-8 lg:pb-28">
       <h1 className="text-2xl md:text-4xl font-bold text-center text-gray-900 mb-16">
         {title}
       </h1>
@@ -79,18 +79,18 @@ function NaanImpactSection({ impactSection }: NaanImpactSectionProps): JSX.Eleme
       <div className="max-w-6xl mx-auto">
 
         {/* Desktop (xl+): top 3 + bottom 2 */}
-        <div className="hidden xl:grid xl:grid-cols-3 gap-6 mb-16">
+        <div className="hidden xl:grid xl:grid-cols-3 gap-6 mb-16 items-stretch">
           {topItems.map((item, i) => (
-            <div key={item.id}>
-              {renderCard(item, i, "p-5")}
+            <div key={item.id} className="h-full">
+              {renderCard(item, i, "p-6 h-full flex flex-col")}
             </div>
           ))}
         </div>
         {bottomItems.length > 0 && (
-          <div className="hidden xl:grid xl:grid-cols-2 gap-6 max-w-4xl mx-auto">
+          <div className="hidden xl:grid xl:grid-cols-2 gap-6 max-w-4xl mx-auto items-stretch">
             {bottomItems.map((item, i) => (
-              <div key={item.id}>
-                {renderCard(item, i + 3, "p-5")}
+              <div key={item.id} className="h-full">
+                {renderCard(item, i + 3, "p-6 h-full flex flex-col")}
               </div>
             ))}
           </div>
@@ -98,10 +98,10 @@ function NaanImpactSection({ impactSection }: NaanImpactSectionProps): JSX.Eleme
 
         {/* Mobile/tablet (below xl): 2-col grid + centered 5th */}
         <div className="xl:hidden">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-16 md:gap-x-6 md:gap-y-16 mb-16">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-16 md:gap-x-6 md:gap-y-16 mb-16 md:items-stretch">
             {mobileFirst4.map((item, i) => (
-              <div key={item.id}>
-                {renderCard(item, i, "p-4 md:p-8")}
+              <div key={item.id} className="h-full">
+                {renderCard(item, i, "p-4 md:p-8 h-full flex flex-col")}
               </div>
             ))}
           </div>
