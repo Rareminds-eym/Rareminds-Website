@@ -115,7 +115,7 @@ const Index = () => {
               Rareminds: Empowering Minds, Shaping Futures
             </h1>
             <p className="mt-3">
-              At Rareminds, we transform potential into excellence through
+              At Rareminds Pvt. Ltd., we transform potential into excellence through
               innovative talent acquisition, training, and consultation
               solutions. Bridging aspirations with achievements, we empower
               students, professionals, organizations, and academic institutions

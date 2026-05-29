@@ -21,11 +21,11 @@ const Passport = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const seoData = {
-    title: "Skill Passport for Institutions | Empower Student Employability | Rareminds",
+    title: "Skill Passport for Institutions | Empower Student Employability | Rareminds Pvt. Ltd.",
     description:
-      "Partner with Rareminds to bring the Skill Passport to your campus. Assess and enhance students’ employability through real-world skill benchmarks and career mapping.",
+      "Partner with Rareminds Pvt. Ltd. to bring the Skill Passport to your campus. Assess and enhance students’ employability through real-world skill benchmarks and career mapping.",
     keywords:
-      "Skill Passport, Universities, Rareminds, student employability, assessments, career readiness, skill mapping, higher education, student upskilling, university programs,Skill Passport | Student Employability | Learning Outcomes | Academic Analytics | Institutional Dashboard | Naan Mudhalvan | TNSDC | Skill Tracking | University Skill Passport",
+      "Skill Passport, Universities, Rareminds Pvt. Ltd., student employability, assessments, career readiness, skill mapping, higher education, student upskilling, university programs,Skill Passport | Student Employability | Learning Outcomes | Academic Analytics | Institutional Dashboard | Naan Mudhalvan | TNSDC | Skill Tracking | University Skill Passport",
 
     canonicalUrl: "https://rareminds.in/skill-passport/universities"
   };

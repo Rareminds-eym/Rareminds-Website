@@ -255,8 +255,8 @@ const Blogs: React.FC = () => {
   return (
     <>
       <Helmet>
-        <title>Rareminds Blog | Talent & Hiring Insights</title>
-        <meta name="description" content="Stay updated with data-driven insights on recruitment, talent strategy, culture fit, leadership hiring & workforce trends from the Rareminds team." />
+        <title>Rareminds Pvt. Ltd. Blog | Talent & Hiring Insights</title>
+        <meta name="description" content="Stay updated with data-driven insights on recruitment, talent strategy, culture fit, leadership hiring & workforce trends from the Rareminds Pvt. Ltd. team." />
       </Helmet>
       <div className="min-h-screen bg-gradient-to-br from-sage-50 via-background to-olive-50">
         {/* Hero Section */}

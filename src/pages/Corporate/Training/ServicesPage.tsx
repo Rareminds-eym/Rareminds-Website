@@ -6,7 +6,7 @@ const ServicesPage: React.FC = () => {
   return (
     <>
       <Helmet>
-        <title>Our Services | Corporate Training | Rareminds</title>
+        <title>Our Services | Corporate Training | Rareminds Pvt. Ltd.</title>
         <meta
           name="description"
           content="Explore our comprehensive corporate training services designed to tackle diverse workforce challenges and deliver measurable business impact."

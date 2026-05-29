@@ -927,31 +927,31 @@ highlights: [
 // Meta content configuration for different pages/services
 const metaContent = {
   default: {
-    title: "Bilingual NEP 2020-Aligned School Programs | Rareminds School Services",
+    title: "Bilingual NEP 2020-Aligned School Programs | Rareminds Pvt. Ltd. School Services",
     description: "Bilingual, NEP 2020-aligned school programs that strengthen communication, digital skills, and career paths designed for practical, classroom-ready impact."
   },
   'Teacher Development Programs (TDP)': {
-    title: "Teacher Development Programs | NEP Training for Educators | Rareminds",
+    title: "Teacher Development Programs | NEP Training for Educators | Rareminds Pvt. Ltd.",
     description: "Empower educators with NEP-aligned programs in ranking readiness, innovation cells, and peer-learning teacher communities."
   },
   'communication-personality': {
-    title: "Communication & Personality Development for Teachers | Rareminds",
+    title: "Communication & Personality Development for Teachers | Rareminds Pvt. Ltd.",
     description: "Enhance teacher communication skills, classroom management, and parent engagement with stress-free, practical training programs."
   },
   'mental-health-counseling': {
-    title: "Mental Health & Counseling Training for Teachers | Rareminds",
+    title: "Mental Health & Counseling Training for Teachers | Rareminds Pvt. Ltd.",
     description: "Train teachers to recognize at-risk students, provide first response support, and create safe, empathetic classroom environments."
   },
   'domain-specific-certification': {
-    title: "Industry Certification Programs for Teachers | AgriTech, AI, EV | Rareminds",
+    title: "Industry Certification Programs for Teachers | AgriTech, AI, EV | Rareminds Pvt. Ltd.",
     description: "Industry-partnered certification programs in AgriTech, EV, EdTech, AI, and Biotechnology for future-ready teacher training."
   },
   'leadership-career-growth': {
-    title: "School Leadership & Career Growth Programs | Principal Training | Rareminds",
+    title: "School Leadership & Career Growth Programs | Principal Training | Rareminds Pvt. Ltd.",
     description: "Leadership development programs for academic leaders, HODs, and principals to drive positive change and institutional excellence."
   },
   'institutional-value-added': {
-    title: "Institutional Value-Added Services | School Excellence Programs | Rareminds",
+    title: "Institutional Value-Added Services | School Excellence Programs | Rareminds Pvt. Ltd.",
     description: "Comprehensive school improvement services including performance audits, ranking preparation, and teacher-led innovation programs."
   }
 };

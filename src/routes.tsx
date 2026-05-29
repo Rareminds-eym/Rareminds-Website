@@ -46,11 +46,7 @@ const AcademiaBlogs = lazy(() => import("./pages/Academia/Blogs/index"));
 const Student = lazy(() => import("./pages/Academia/Student/student"));
 const School = lazy(() => import("./pages/Academia/Teacher/teacher.tsx"));
 const Universities = lazy(() => import("./pages/Universities/Index"));
-const SDPLandingPage = lazy(() => import("./pages/Universities/sdp/SDPLandingPage"));
 const ServiceCategoriesPage = lazy(() => import("./pages/Universities/sdp/ServiceCategoriesPage"));
-const UniversitiesServices = lazy(
-  () => import("./pages/Universities/UniversitiesServices")
-);
 const FDP = lazy(() => import("./pages/Universities/Fdp"));
 const ServiceCategoryCard = lazy(
   () => import("./components/universities/sdp/ServiceCategoryCard/ServiceCategoryCard")
@@ -83,6 +79,17 @@ const StudentCoursesListingPage = lazy(
 );
 const StudentCourseDetailPage = lazy(
   () => import("./pages/Academia/Student/StudentCourseDetailPage")
+);
+const SuccessStoriesDisplay = lazy(
+  () => import("./pages/Academia/SuccessStories/successstoriesdisplay")
+);
+
+const SuccessStoryDetail = lazy(
+  () => import("./pages/Academia/SuccessStories/SuccessStoriesDetailedPage")
+);
+
+const NaanMudhalvanDetail = lazy(
+  () => import("./pages/Academia/SuccessStories/NaanMudhalvanDetailsPage")
 );
 
 const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
@@ -412,6 +419,18 @@ const router = createBrowserRouter([
       {
         path: "/school/new-projects/:projectId",
         element: withSuspense(NewProjectDetail),
+      },
+      {
+        path: "/success-stories",
+        element: withSuspense(SuccessStoriesDisplay),
+      },
+      {
+        path: "/success-stories/naan-mudhalvan/:name",
+        element: withSuspense(NaanMudhalvanDetail),
+      },
+      {
+        path: "/success-stories/:name",
+        element: withSuspense(SuccessStoryDetail),
       },
     ],
   },

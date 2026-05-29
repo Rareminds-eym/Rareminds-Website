@@ -240,10 +240,10 @@ const CaseStudy = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       <Helmet>
-        <title>School Impact Case Studies | NEP Transformation Success | Rareminds</title>
+        <title>School Impact Case Studies | NEP Transformation Success | Rareminds Pvt. Ltd.</title>
         <meta
           name="description"
-          content="See how Rareminds transforms schools with STEM, NEP training, climate action, and entrepreneurship — with real-world student & teacher outcomes."
+          content="See how Rareminds Pvt. Ltd. transforms schools with STEM, NEP training, climate action, and entrepreneurship — with real-world student & teacher outcomes."
         />
       </Helmet>
       

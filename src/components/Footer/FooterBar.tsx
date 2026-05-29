@@ -650,7 +650,7 @@ const FooterBar: React.FC<FooterBarProps> = ({ hideServices }) => {
 			{/* Footer Bottom Section */}
 			<div className="relative border-t border-gray-700 py-4 text-center text-gray-400">
 				<div className="container lg:px-14 mx-auto flex justify-between items-center">
-					<p>© {new Date().getFullYear()} Rareminds. All rights reserved.</p>
+					<p>© {new Date().getFullYear()} Rareminds Pvt. Ltd. All rights reserved.</p>
 					<div className="flex space-x-4">
 						<Link
 							to="/privacy-policy"

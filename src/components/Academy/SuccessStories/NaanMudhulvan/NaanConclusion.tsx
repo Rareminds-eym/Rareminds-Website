@@ -1,0 +1,191 @@
+import { useState } from 'react';
+import { motion } from 'framer-motion';
+import { ArrowRight } from "lucide-react";
+
+interface ImageItem {
+  id: string;
+  url: string;
+}
+
+interface SectionData {
+  title: string;
+  content: string;
+  image?: ImageItem;
+}
+
+interface ConclusionSectionProps {
+  section: SectionData;
+}
+
+function ConclusionSection({ section }: ConclusionSectionProps): JSX.Element {
+  const [imageError, setImageError] = useState(false);
+
+  // Only use dynamic image from database - no fallback
+  const imageUrl = section.image?.url;
+
+  // ── Animation Variants ──────────────────────────────────────────────────────
+  const fadeUp = {
+    hidden: { opacity: 0, y: 40 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.6, ease: 'easeOut' as const },
+    },
+  };
+
+  const fadeIn = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: { duration: 0.7, ease: 'easeOut' as const },
+    },
+  };
+
+  const scaleIn = {
+    hidden: { opacity: 0, scale: 0.88 },
+    visible: {
+      opacity: 1,
+      scale: 1,
+      transition: { duration: 0.65, ease: 'easeOut' as const },
+    },
+  };
+
+  return (
+    <>
+      {/* ── Mobile Layout ───────────────────────────────────────────── */}
+      <section className="block md:hidden bg-white w-screen breakout pt-2.5 pb-16 -mt-14 mb-10">
+        <div className="max-w-conclusion-container mx-auto px-6">
+
+          <motion.h2
+            className="text-center font-bold text-gray-900 mb-10 mt-5 text-3xl"
+            variants={fadeUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.5 }}
+          >
+            {section.title}
+          </motion.h2>
+
+          <motion.div
+            className="bg-white rounded-xl shadow-conclusion-card border border-gray-200 p-0 overflow-visible"
+            variants={scaleIn}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.15 }}
+          >
+            <div className="relative w-full h-48 flex items-end justify-center overflow-hidden rounded-t-xl">
+              <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-48 h-40 rounded-blue-shape bg-blue-conclusion-bg z-0" />
+
+              {imageUrl && !imageError && (
+                <motion.img
+                  src={imageUrl}
+                  alt="Conclusion illustration"
+                  className="w-full max-w-40 h-36 object-contain relative z-10 mt-3"
+                  variants={scaleIn}
+                  onError={() => setImageError(true)}
+                />
+              )}
+            </div>
+
+            <div className="p-4 px-5 relative pt-6">
+              <div className="absolute -top-2 left-8 w-6 h-6 rounded-lg bg-blue-600 z-30 drop-shadow-conclusion-decorator" />
+
+              <p className="text-gray-900 mb-2.5 text-justify text-xs leading-relaxed">
+                {section.content}
+              </p>
+
+              <div className="flex justify-center mt-4 pb-1">
+                <button
+                  type="button"
+                  className="bg-blue-conclusion-btn hover:bg-blue-conclusion-btn-hover text-white font-medium px-4 py-2 rounded-lg transition-colors duration-200 flex items-center gap-1 text-xs"
+                >
+                  Download case study <ArrowRight size={16} />
+                </button>
+              </div>
+            </div>
+          </motion.div>
+
+        </div>
+      </section>
+
+      {/* ── Tablet / Desktop Layout ───────────────────────────────── */}
+      <section className="hidden md:block bg-white w-screen breakout mb-16 -mt-20 pt-1 pb-35 lg:pt-36 lg:pb-35 lg:-mt-28">
+        <div className="max-w-conclusion-container mx-auto px-6">
+
+          <motion.h2
+            className="text-center font-bold text-gray-900 text-4xl mb-10 mt-6 lg:mb-16 lg:mt-10"
+            variants={fadeUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.5 }}
+          >
+            {section.title}
+          </motion.h2>
+
+          <div className="flex gap-2 items-center flex-wrap">
+
+            <motion.div
+              className="relative h-80 flex items-end justify-center pb-5 flex-image-column-tablet lg:flex-image-column"
+              variants={fadeIn}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.1 }}
+            >
+              {/* Decorative blue box */}
+              <div className="absolute w-11 h-11 rounded-xl bg-blue-600 z-20 drop-shadow-blue-box -bottom-3 left-44 lg:left-12" />
+
+              {/* Background shape */}
+              <div className="absolute bottom-0 left-1/2 -translate-x-1/2 rounded-blue-shape bg-blue-conclusion-bg z-0 w-96 h-80" />
+
+              {/* Image */}
+              <div className="relative z-10 flex justify-center items-center w-full h-full">
+                {imageUrl && !imageError && (
+                  <motion.img
+                    src={imageUrl}
+                    alt="Conclusion illustration"
+                    className="w-full object-contain relative z-10 mt-8 left-3 drop-shadow-conclusion-image max-w-80 h-72 lg:max-w-xs lg:h-80"
+                    variants={scaleIn}
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true, amount: 0.1 }}
+                    onError={() => setImageError(true)}
+                  />
+                )}
+              </div>
+            </motion.div>
+
+            {/* Content */}
+            <motion.div
+              className="flex-1 min-w-conclusion-content-min"
+              variants={fadeUp}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.1 }}
+            >
+              <div className="bg-white rounded-xl shadow-conclusion-card border border-gray-200 p-8 px-9 min-h-Naancard-min-height mt-16 lg:mt-0">
+
+                <p className="text-gray-700 mb-4 text-justify font-normal text-sm leading-normal">
+                  {section.content}
+                </p>
+
+                {/* Download Button */}
+                <div className="flex justify-start mt-6">
+                  <button
+                    type="button"
+                    className="bg-blue-conclusion-btn hover:bg-blue-conclusion-btn-hover text-white text-xs font-medium px-3 py-3 rounded-lg transition-colors duration-200 flex items-center gap-1"
+                  >
+                    Download case study <ArrowRight size={16} />
+                  </button>
+                </div>
+
+              </div>
+            </motion.div>
+
+          </div>
+        </div>
+      </section>
+    </>
+  );
+}
+
+export default ConclusionSection;

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+﻿import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Helmet } from "react-helmet-async";
 
@@ -53,8 +53,8 @@ const Terms = () => {
   return (
     <>
       <Helmet>
-        <title>Terms of Service | Rareminds Official Policies</title>
-        <meta name="description" content="Review Rareminds’ terms for using our training, recruitment, and digital services. Know your rights, responsibilities, and legal protections." />
+        <title>Terms of Service | Rareminds Pvt. Ltd. Official Policies</title>
+        <meta name="description" content="Review Rareminds Pvt. Ltd.'s terms for using our training, recruitment, and digital services. Know your rights, responsibilities, and legal protections." />
       </Helmet>
       <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-50">
         {/* Header Section */}
@@ -111,7 +111,7 @@ const Terms = () => {
                     <a href="https://rareminds.in" className="text-red-600 hover:text-red-700 underline decoration-2 underline-offset-2">
                       rareminds.in
                     </a>{" "}
-                    and the services provided by Rareminds. By accessing or using our Website and services, you agree to comply with and be bound by these Terms.
+                    and the services provided by Rareminds Pvt. Ltd. By accessing or using our Website and services, you agree to comply with and be bound by these Terms.
                   </p>
                 </div>
 
@@ -139,7 +139,7 @@ const Terms = () => {
                         <span className="w-8 h-8 rounded-full bg-red-100 text-red-600 flex items-center justify-center text-sm font-bold mr-3">2</span>
                         Services
                       </h2>
-                      <p className="text-gray-600 mb-4">Rareminds provides educational and professional development services, including but not limited to:</p>
+                      <p className="text-gray-600 mb-4">Rareminds Pvt. Ltd. provides educational and professional development services, including but not limited to:</p>
                       <div className="grid md:grid-cols-2 gap-6">
                         <ul className="list-disc pl-5 space-y-2 text-gray-600">
                           <li>Customized training programs</li>
@@ -183,7 +183,7 @@ const Terms = () => {
                         Intellectual Property
                       </h2>
                       <div className="space-y-4 text-gray-600">
-                        <p>All content on our Website, including text, graphics, logos, images, and software, is the property of Rareminds or its licensors and is protected by intellectual property laws.</p>
+                        <p>All content on our Website, including text, graphics, logos, images, and software, is the property of Rareminds Pvt. Ltd. or its licensors and is protected by intellectual property laws.</p>
                         <p>You may not use, reproduce, or distribute any content without prior written permission from the Company.</p>
                       </div>
                     </div>
@@ -248,8 +248,8 @@ const Terms = () => {
                         Limitation of Liability
                       </h2>
                       <div className="space-y-4 text-gray-600">
-                        <p>To the fullest extent permitted by law, Rareminds shall not be liable for any indirect, incidental, special, consequential, or punitive damages arising from your use of our Website or services.</p>
-                        <p>Rareminds is not liable for issues arising from third-party software platforms used during service delivery.</p>
+                        <p>To the fullest extent permitted by law, Rareminds Pvt. Ltd. shall not be liable for any indirect, incidental, special, consequential, or punitive damages arising from your use of our Website or services.</p>
+                        <p>Rareminds Pvt. Ltd. is not liable for issues arising from third-party software platforms used during service delivery.</p>
                         <p>Our total liability to you shall not exceed the amount you paid for the specific service giving rise to the claim.</p>
                       </div>
                     </div>
@@ -263,7 +263,7 @@ const Terms = () => {
                         Indemnification
                       </h2>
                       <div className="space-y-4 text-gray-600">
-                        <p>You agree to indemnify and hold harmless Rareminds and its affiliates, employees, agents, and partners from any claims, losses, liabilities, damages, costs, or expenses (including legal fees) arising out of:</p>
+                        <p>You agree to indemnify and hold harmless Rareminds Pvt. Ltd. and its affiliates, employees, agents, and partners from any claims, losses, liabilities, damages, costs, or expenses (including legal fees) arising out of:</p>
                         <ul className="list-disc pl-5 space-y-2">
                           <li>Your use of our Website or services</li>
                           <li>Your violation of these Terms</li>
@@ -291,7 +291,7 @@ const Terms = () => {
                         </div>
                         <div>
                           <h3 className="font-semibold text-gray-800 mb-2">Force Majeure</h3>
-                          <p>Rareminds shall not be held liable for any failure or delay in performance due to causes beyond its reasonable control, including but not limited to natural disasters, internet outages, acts of government, or pandemics.</p>
+                          <p>Rareminds Pvt. Ltd. shall not be held liable for any failure or delay in performance due to causes beyond its reasonable control, including but not limited to natural disasters, internet outages, acts of government, or pandemics.</p>
                         </div>
                       </div>
                     </div>
@@ -305,7 +305,7 @@ const Terms = () => {
                         <div>
                           <h3 className="font-semibold text-gray-300 mb-2">Address</h3>
                           <p className="text-gray-100">
-                            Rareminds<br />
+                            Rareminds Pvt. Ltd.<br />
                             231, 13th Cross Rd, 2nd Stage,<br />
                             Indira Nagar II Stage, Hoysala Nagar,<br />
                             Indiranagar, Bengaluru,<br />
