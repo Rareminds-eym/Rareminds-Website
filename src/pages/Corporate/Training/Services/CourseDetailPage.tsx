@@ -58,7 +58,7 @@ export default function CourseDetailPage() {
   return (
     <>
       <Helmet>
-        <title>{program.title} | Corporate Training | Rareminds</title>
+        <title>{program.title} | Corporate Training | Rareminds Pvt. Ltd.</title>
         <meta name="description" content={program.overview} />
       </Helmet>
 

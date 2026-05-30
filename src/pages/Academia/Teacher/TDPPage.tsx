@@ -421,7 +421,7 @@ export default function TDPPage() {
 	return (
 		<>
 			<Helmet>
-				<title>Teacher Development Programs | NEP Training for Educators | Rareminds</title>
+				<title>Teacher Development Programs | NEP Training for Educators | Rareminds Pvt. Ltd.</title>
 				<meta
 					name="description"
 					content="Empower educators with NEP-aligned programs in ranking readiness, innovation cells, and peer-learning teacher communities."

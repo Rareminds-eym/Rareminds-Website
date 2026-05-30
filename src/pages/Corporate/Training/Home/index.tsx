@@ -80,8 +80,8 @@ const CorporateTraining: React.FC = () => {
   return (
     <>
       <Helmet>
-        <title>Experience-Driven Corporate Training | Rareminds Learning Solutions</title>
-        <meta name="description" content="Boost employee engagement with Rareminds' immersive, gamified, and role-based corporate training solutions that drive performance, retention, and growth." />
+        <title>Experience-Driven Corporate Training | Rareminds Pvt. Ltd. Learning Solutions</title>
+        <meta name="description" content="Boost employee engagement with Rareminds Pvt. Ltd. immersive, gamified, and role-based corporate training solutions that drive performance, retention, and growth." />
       </Helmet>
       <section className="bg-[url('/Corporate/Images/Training/hero/header-bg.png')] bg-cover sticky top-[80px]">
         <FullScreenCarousel slides={slides} />

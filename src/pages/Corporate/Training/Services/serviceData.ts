@@ -2,7 +2,7 @@ export const services = [
   {
     id: "leadership-management",
     meta_title:
-      "Leadership & Management Excellence | Rareminds Corporate Training",
+      "Leadership & Management Excellence | Rareminds Pvt. Ltd. Corporate Training",
     meta_desc:
       "Transform managers into impactful leaders with focused programs on strategy, emotional intelligence, agility, and performance. Tailored for first-time managers to CXOs.",
     heroTitle: "Leadership and Management Excellence",
@@ -746,7 +746,7 @@ export const services = [
   {
     id: "communication-collaboration",
     meta_title:
-      "Communication & Collaboration Training | Rareminds Corporate Programs",
+      "Communication & Collaboration Training | Rareminds Pvt. Ltd. Corporate Programs",
     meta_description:
       "Enhance team impact with training in business communication, executive presence, cross-cultural collaboration, and virtual etiquette. Build clarity, confidence, and influence across all levels.",
     heroTitle: "Communication and Collaboration",
@@ -1437,7 +1437,7 @@ export const services = [
   {
     id: "workplace-productivity",
     meta_title:
-      "Workplace Productivity & Digital Fluency Training | Rareminds Programs",
+      "Workplace Productivity & Digital Fluency Training | Rareminds Pvt. Ltd. Programs",
     meta_description:
       "Boost efficiency with training in time management, digital tools, AI productivity, and problem-solving. Equip professionals to work smarter, faster, and more effectively in the digital workplace.",
     heroTitle: "Workplace Productivity and Digital Fluency",

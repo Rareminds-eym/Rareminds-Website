@@ -57,11 +57,11 @@ const ServicesPage: React.FC = () => {
   return (
     <>
       <Helmet>
-        <title>Rareminds Recruitment Services | Recruitment Services</title>
+        <title>Rareminds Pvt. Ltd. Recruitment Services | Recruitment Services</title>
         <meta
           name="description"
           content={
-            "Explore scalable hiring solutions with Rareminds: tech, bulk, leadership, RPO, Interview-as-a-service, and more with higher placement rates. Hire top talent in 48 hours."
+            "Explore scalable hiring solutions with Rareminds Pvt. Ltd.: tech, bulk, leadership, RPO, Interview-as-a-service, and more with higher placement rates. Hire top talent in 48 hours."
           }
         />
       </Helmet>

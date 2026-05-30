@@ -58,10 +58,10 @@ const Corporate: React.FC = () => {
   return (
     <>
       <Helmet>
-        <title>Top Recruitment Services in India | Top Hiring Agency | Rareminds</title>
+        <title>Top Recruitment Services in India | Top Hiring Agency | Rareminds Pvt. Ltd.</title>
         <meta
           name="description"
-          content="Rareminds delivers fast, scalable, and data-driven recruitment solutions across India and globally—20+ industries, 500K+ hires, and 250+ clients worldwide."
+          content="Rareminds Pvt. Ltd. delivers fast, scalable, and data-driven recruitment solutions across India and globally—20+ industries, 500K+ hires, and 250+ clients worldwide."
         />
       </Helmet>
       <section className="bg-[url('https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Corporate/Recruitment/Index/Hero/header-bg.webp')] sticky top-[80px] w-full overflow-hidden">
