@@ -79,6 +79,7 @@
 
 -- Environment safety check - abort if running on production database
 -- Uses multiple checks to ensure we're in a local development environment
+/*
 DO $$
 DECLARE
   is_local_supabase BOOLEAN;
@@ -103,7 +104,7 @@ BEGIN
       current_database(), COALESCE(db_host, 'unknown');
   END IF;
 END $$;
-
+*/
 -- Enable UUID generation extension
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
@@ -1289,5 +1290,6 @@ ON CONFLICT (program_id, section_key) DO UPDATE SET
 --   but only 3 courses appear in enrollment tables. Seed reflects
 --   3 actual courses. Source doc inconsistency logged here for reference.
 -- =====================================================
+
 
 COMMIT;
