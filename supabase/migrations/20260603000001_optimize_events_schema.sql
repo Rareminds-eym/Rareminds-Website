@@ -26,7 +26,7 @@
 --   id, created_by, title, event_date, event_time,
 --   duration (integer), category (enum),
 --   price (numeric), registration_deadline, status (enum),
---   is_physical, slug,
+--   is_physical, slug, zoho_form_url,
 --   content_metadata, media_metadata,
 --   organizer_metadata, location_metadata,
 --   created_at, updated_at
@@ -74,10 +74,11 @@ CREATE TYPE public.event_status_enum AS ENUM (
 -- =====================================================
 
 ALTER TABLE public.events
-    ADD COLUMN content_metadata   JSONB NOT NULL DEFAULT '{}'::jsonb,
-    ADD COLUMN media_metadata     JSONB NOT NULL DEFAULT '{}'::jsonb,
+    ADD COLUMN content_metadata   JSONB NOT NULL DEFAULT '{"event_link":"","sponsors":[],"requirements":"","additional_contact_info":"","languages":[],"event_tags":[],"capacity":0}'::jsonb,
+    ADD COLUMN media_metadata     JSONB NOT NULL DEFAULT '{"featured_image":"","mobile_featured_image":"","event_banner":"","teaser_video":"","enquiry_pdf":""}'::jsonb,
     ADD COLUMN organizer_metadata JSONB NOT NULL DEFAULT '{}'::jsonb,
-    ADD COLUMN location_metadata  JSONB NOT NULL DEFAULT '{}'::jsonb;
+    ADD COLUMN location_metadata  JSONB NOT NULL DEFAULT '{}'::jsonb,
+    ADD COLUMN zoho_form_url      TEXT;
 
 -- =====================================================
 -- STEP 3: Backfill JSONB columns from flat columns
@@ -85,6 +86,7 @@ ALTER TABLE public.events
 
 UPDATE public.events
 SET content_metadata = jsonb_strip_nulls(jsonb_build_object(
+    'event_link',              COALESCE(event_link, ''),
     'requirements',            requirements,
     'sponsors',                to_jsonb(COALESCE(sponsors,   '{}'::text[])),
     'additional_contact_info', additional_contact_info,
@@ -98,7 +100,8 @@ SET media_metadata = jsonb_strip_nulls(jsonb_build_object(
     'featured_image',        featured_image,
     'event_banner',          event_banner,
     'mobile_featured_image', mobile_featured_image,
-    'teaser_video',          teaser_video
+    'teaser_video',          teaser_video,
+    'enquiry_pdf',           COALESCE(enquiry_pdf, '')
 ));
 
 UPDATE public.events
