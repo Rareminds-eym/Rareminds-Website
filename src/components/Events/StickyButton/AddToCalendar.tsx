@@ -11,30 +11,15 @@ interface AddToCalendarProps {
 
 const formatDateForCalendar = (dateStr: string, timeStr: string) => {
     // Combine date and time for calendar formatting
-    const eventDate = new Date(`${dateStr}T${timeStr}`);
+    const eventDate = new Date(`${dateStr}T${timeStr || '00:00:00'}`);
     return eventDate.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
 };
 
-const formatEndDateForCalendar = (dateStr: string, timeStr: string, duration: string) => {
-    // Parse duration and calculate end time
-    const eventDate = new Date(`${dateStr}T${timeStr}`);
-    
-    // Extract duration (assuming format like "2 hours", "1.5 hours", "90 minutes")
-    const durationMatch = duration.match(/(\d+(?:\.\d+)?)\s*(hour|minute)s?/i);
-    if (durationMatch) {
-        const value = parseFloat(durationMatch[1]);
-        const unit = durationMatch[2].toLowerCase();
-        
-        if (unit.startsWith('hour')) {
-            eventDate.setHours(eventDate.getHours() + value);
-        } else if (unit.startsWith('minute')) {
-            eventDate.setMinutes(eventDate.getMinutes() + value);
-        }
-    } else {
-        // Default to 1 hour if duration can't be parsed
-        eventDate.setHours(eventDate.getHours() + 1);
-    }
-    
+const formatEndDateForCalendar = (dateStr: string, timeStr: string, duration: number) => {
+    const eventDate = new Date(`${dateStr}T${timeStr || '00:00:00'}`);
+    // duration is now INTEGER minutes
+    const minutes = typeof duration === 'number' && duration > 0 ? duration : 60;
+    eventDate.setMinutes(eventDate.getMinutes() + minutes);
     return eventDate.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
 };
 
@@ -45,7 +30,7 @@ export const AddToCalendar: React.FC<AddToCalendarProps> = ({ isVisible, onClose
     const endDate = formatEndDateForCalendar(currentEvent.event_date, currentEvent.event_time, currentEvent.duration);
     
     // Clean HTML from description for calendar
-    const cleanDescription = currentEvent.description.replace(/<[^>]*>/g, '').substring(0, 200) + '...';
+    const cleanDescription = (currentEvent.description ?? '').replace(/<[^>]*>/g, '').substring(0, 200) + '...';
     
     const generateGoogleCalendarUrl = () => {
         const params = new URLSearchParams({

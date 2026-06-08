@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Calendar, Clock, MapPin, Users, AlertCircle } from 'lucide-react';
+import { MapPin, AlertCircle } from 'lucide-react';
 import { Event } from '../../types/Events/event';
 
 interface SingleEventCountdownProps {
@@ -34,8 +34,6 @@ function parseDeadlineEndOfDay(dateStr: string): Date {
 
 const SingleEventCountdown: React.FC<SingleEventCountdownProps> = ({
   event,
-  backgroundColor = "from-orange-50 to-yellow-50",
-  accentColor = "from-yellow-400 to-orange-400",
   className = "",
   alignMode = 'responsive'
 }) => {
@@ -117,18 +115,6 @@ const SingleEventCountdown: React.FC<SingleEventCountdownProps> = ({
     }).toUpperCase();
   };
 
-  // Format time for display (not shown in UI now, but kept for future use)
-  const formatTime = (timeString: string) => {
-    const [hours, minutes] = timeString.split(':');
-    const date = new Date();
-    date.setHours(parseInt(hours), parseInt(minutes));
-    return date.toLocaleTimeString('en-US', {
-      hour: 'numeric',
-      minute: '2-digit',
-      hour12: true
-    });
-  };
-
   // Format event date like "SEP 21, 2025" (uses event_date column only)
   const formatEventDate = (dateString: string) => {
     const dt = new Date(dateString);
@@ -169,7 +155,7 @@ const SingleEventCountdown: React.FC<SingleEventCountdownProps> = ({
             <div className="bg-gray-300 text-gray-700 px-4 py-2 md:px-6 md:py-3 rounded-full inline-flex items-center gap-2 md:gap-3 w-full lg:w-auto justify-center">
               <MapPin className="w-4 h-4 md:w-5 md:h-5" />
               <div className="text-center">
-                <div className="font-bold text-base md:text-lg">{formatLocation(event.location)}</div>
+                <div className="font-bold text-base md:text-lg">{formatLocation(event.location_metadata?.address ?? '')}</div>
                 <div className="text-xs md:text-sm opacity-75">Event: {formatDate(event.event_date)}</div>
               </div>
             </div>
@@ -242,7 +228,7 @@ const SingleEventCountdown: React.FC<SingleEventCountdownProps> = ({
             <div className="flex items-center justify-center lg:justify-start gap-2 md:gap-3">
               <MapPin className="w-5 h-5 md:w-6 md:h-6" />
               <div className="text-left">
-                <div className="font-extrabold text-base md:text-lg">{formatLocation(event.location)}</div>
+                <div className="font-extrabold text-base md:text-lg">{formatLocation(event.location_metadata?.address ?? '')}</div>
                 <div className="text-xs opacity-95 mt-0.5 tracking-wide">{formatEventDate(event.event_date)}</div>
               </div>
             </div>

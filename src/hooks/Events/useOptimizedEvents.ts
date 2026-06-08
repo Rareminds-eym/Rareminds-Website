@@ -1,148 +1,108 @@
 import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '../../lib/supabase';
-import { Event } from '../../types/Events/event';
+import { Event, EventSection } from '../../types/Events/event';
 import { testEnvironmentVariables } from '../../utils/testConnection';
-
-// Minimal event data for initial load (fast)
-interface MinimalEvent {
-  id: string;
-  title: string;
-  event_date: string;
-  event_time: string;
-  location: string;
-  status: 'upcoming' | 'ongoing' | 'completed' | 'cancelled';
-  category: string;
-  price?: string;
-  registration_status?: 'open' | 'closed' | 'full';
-  registration_deadline?: string;
-  featured_image?: string;
-  mobile_featured_image?: string;
-  slug: string;
-  organizer_name: string;
-  capacity: number;
-}
 
 export const useOptimizedEvents = () => {
   const [events, setEvents] = useState<Event[]>([]);
-  const [minimalEvents, setMinimalEvents] = useState<MinimalEvent[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [retryCount, setRetryCount] = useState(0);
-  
+
   const MAX_RETRIES = 3;
   const RETRY_DELAY = 1000;
 
-  // Fast initial load - only essential fields
+  // Fast initial load — only flat columns that exist in the new schema
   const fetchMinimalEvents = useCallback(async (isRetry: boolean = false) => {
     try {
-      console.log('🚀 Fetching minimal events data...');
-      
       if (!isRetry) {
         setLoading(true);
         setError(null);
-        
+
         if (!testEnvironmentVariables()) {
           throw new Error('Missing or invalid environment variables.');
         }
       }
-      
+
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 8000); // Shorter timeout for minimal data
-      
+      const timeoutId = setTimeout(() => controller.abort(), 8000);
+
       const { data, error: supabaseError } = await supabase
         .from('events')
         .select(`
           id,
+          created_by,
           title,
           event_date,
           event_time,
-          location,
-          status,
+          duration,
           category,
           price,
           registration_deadline,
-          featured_image,
-          mobile_featured_image,
+          status,
+          is_physical,
           slug,
-          organizer_name,
-          capacity
+          organizer_metadata,
+          media_metadata,
+          content_metadata,
+          location_metadata
         `)
         .order('event_date', { ascending: true })
-        .limit(50) // Even smaller limit for initial load
+        .limit(50)
         .abortSignal(controller.signal);
-      
+
       clearTimeout(timeoutId);
 
       if (supabaseError) {
-        console.error('❌ Supabase error (minimal):', supabaseError);
-        
         if (supabaseError.code === '57014') {
           throw new Error('Database query timeout. Please try again.');
         }
-        
         throw new Error(`Database error: ${supabaseError.message}`);
       }
 
       if (!data) {
         throw new Error('No data received from database');
       }
-
-      console.log(`✅ Minimal events loaded: ${data.length} events`);
-      setMinimalEvents(data);
-      
-      // Convert minimal events to full Event format with placeholders
-      const expandedEvents: Event[] = data.map(event => ({
-        ...event,
-        description: '',
-        duration: '',
-        location_geo: undefined,
-        location_type: 'physical',
-        organizer_email: '',
-        organizer_phone: '',
-        requirements: '',
-        agenda: '',
-        speakers: [],
-        sponsors: [],
-        additional_contact_info: '',
-        event_banner: event.featured_image,
-        mobile_featured_image: event.mobile_featured_image,
-        event_tags: [],
-        meta_title: event.title,
-        meta_description: '',
-        teaser_video: '',
-        key_highlights: [],
-        languages: [],
-        faq: [],
-        speakers_details: [],
-        events_gallery: []
+      // Map DB rows directly — all JSONB fields come back as objects already
+      const expandedEvents: Event[] = data.map(row => ({
+        id:                   row.id,
+        created_by:           row.created_by,
+        title:                row.title,
+        event_date:           row.event_date,
+        event_time:           row.event_time,
+        duration:             row.duration,
+        category:             row.category,
+        price:                row.price,
+        registration_deadline: row.registration_deadline,
+        status:               row.status,
+        is_physical:          row.is_physical,
+        slug:                 row.slug,
+        organizer_metadata:   row.organizer_metadata   ?? {},
+        media_metadata:       row.media_metadata       ?? {},
+        content_metadata:     row.content_metadata     ?? {},
+        location_metadata:    row.location_metadata    ?? {},
       }));
-      
+
       setEvents(expandedEvents);
       setError(null);
       setRetryCount(0);
-      
+
     } catch (err) {
-      console.error('❌ Error fetching minimal events:', err);
-      
       const errorMessage = err instanceof Error ? err.message : 'An unknown error occurred';
-      
-      if (retryCount < MAX_RETRIES && (
-        errorMessage.includes('AbortError') || 
-        errorMessage.includes('timeout') ||
-        errorMessage.includes('network') ||
-        errorMessage.includes('fetch') ||
-        errorMessage.includes('57014')
-      )) {
-        console.log(`🔄 Retrying minimal fetch... (${retryCount + 1}/${MAX_RETRIES})`);
+
+      if (
+        retryCount < MAX_RETRIES &&
+        (errorMessage.includes('AbortError') ||
+          errorMessage.includes('timeout') ||
+          errorMessage.includes('network') ||
+          errorMessage.includes('fetch') ||
+          errorMessage.includes('57014'))
+      ) {
         setRetryCount(prev => prev + 1);
-        
-        setTimeout(() => {
-          fetchMinimalEvents(true);
-        }, RETRY_DELAY);
-        
+        setTimeout(() => fetchMinimalEvents(true), RETRY_DELAY);
         return;
       }
-      
+
       setError(errorMessage);
       setRetryCount(0);
     } finally {
@@ -150,46 +110,79 @@ export const useOptimizedEvents = () => {
     }
   }, [retryCount]);
 
-  // Load full event details on demand
+  // Load full event details on demand (includes entity_sections + section_contents)
   const loadFullEventDetails = useCallback(async (eventId: string): Promise<Event | null> => {
     try {
-      console.log(`🔍 Loading full details for event: ${eventId}`);
-      
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 15000);
-      
+
       const { data, error: supabaseError } = await supabase
         .from('events')
         .select('*')
         .eq('id', eventId)
-        .single()
-        .abortSignal(controller.signal);
-      
+        .single();
+
       clearTimeout(timeoutId);
 
       if (supabaseError) {
-        console.error('❌ Error loading event details:', supabaseError);
+        throw new Error(`Failed to load event: ${supabaseError.message}`);
         return null;
       }
 
-      if (!data) {
-        return null;
-      }
+      if (!data) return null;
 
-      // Map location data
+      // Fetch entity_sections + section_contents
+      const { data: sectionsData, error: sectionsError } = await supabase
+        .from('entity_sections')
+        .select(`
+          id,
+          section_key,
+          content_type,
+          display_order,
+          section_contents!entity_section_id ( content )
+        `)
+        .eq('entity_type', 'event')
+        .eq('entity_id', eventId)
+        .eq('is_active', true)
+        .order('display_order', { ascending: true });
+
+      if (sectionsError) {
+      }
+      const eventSections: EventSection[] = (sectionsData ?? []).map((s: any) => {
+        const contentRow = Array.isArray(s.section_contents)
+          ? s.section_contents[0]
+          : s.section_contents;
+        return {
+          section_key:   s.section_key,
+          content_type:  s.content_type,
+          display_order: s.display_order,
+          content:       contentRow?.content ?? null,
+        };
+      });
       const fullEvent: Event = {
-        ...data,
-        location_geo:
-          data.location_latitude !== undefined && data.location_longitude !== undefined
-            ? { lat: data.location_latitude, lng: data.location_longitude }
-            : undefined,
-        location_type: data.location_type ?? (data.is_physical ? 'physical' : 'virtual'),
+        id:                   data.id,
+        created_by:           data.created_by,
+        title:                data.title,
+        event_date:           data.event_date,
+        event_time:           data.event_time,
+        duration:             data.duration,
+        category:             data.category,
+        price:                data.price,
+        registration_deadline: data.registration_deadline,
+        status:               data.status,
+        is_physical:          data.is_physical,
+        slug:                 data.slug,
+        organizer_metadata:   data.organizer_metadata   ?? {},
+        media_metadata:       data.media_metadata       ?? {},
+        content_metadata:     data.content_metadata     ?? {},
+        location_metadata:    data.location_metadata    ?? {},
+        eventSections,
       };
 
       return fullEvent;
-      
+
     } catch (err) {
-      console.error('❌ Error loading event details:', err);
+      throw err;
       return null;
     }
   }, []);
@@ -203,12 +196,11 @@ export const useOptimizedEvents = () => {
     fetchMinimalEvents();
   }, []);
 
-  return { 
-    events, 
-    minimalEvents, 
-    loading, 
-    error, 
-    refetch, 
-    loadFullEventDetails 
+  return {
+    events,
+    loading,
+    error,
+    refetch,
+    loadFullEventDetails,
   };
 };

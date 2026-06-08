@@ -57,22 +57,20 @@ const EventCard: React.FC<EventCardProps> = ({ event, compact = false }) => {
       style={{ textDecoration: 'none' }}
     >
       {/* Event Image */}
-      {(event.featured_image || event.mobile_featured_image) && (
+      {(event.media_metadata?.featured_image || event.media_metadata?.mobile_featured_image) && (
         <div className="relative h-40 sm:h-48 overflow-hidden">
           <img
             src={
-              // Use mobile_featured_image for mobile devices if available, otherwise fallback to featured_image
-              isMobile && event.mobile_featured_image 
-                ? event.mobile_featured_image 
-                : event.featured_image
+              isMobile && event.media_metadata?.mobile_featured_image
+                ? event.media_metadata.mobile_featured_image
+                : event.media_metadata?.featured_image
             }
             alt={event.title}
             className="w-full h-full object-cover object-center transition-transform duration-300 group-hover:scale-105"
             onError={(e) => {
-              // Fallback to featured_image if mobile_featured_image fails to load
               const target = e.target as HTMLImageElement;
-              if (isMobile && event.mobile_featured_image && target.src === event.mobile_featured_image) {
-                target.src = event.featured_image || '';
+              if (isMobile && event.media_metadata?.mobile_featured_image && target.src === event.media_metadata.mobile_featured_image) {
+                target.src = event.media_metadata?.featured_image || '';
               }
             }}
           />
@@ -93,20 +91,17 @@ const EventCard: React.FC<EventCardProps> = ({ event, compact = false }) => {
             </div>
           )
         ) : (
-          event.event_tags && event.event_tags.length > 0 && (
+          event.content_metadata?.event_tags && event.content_metadata.event_tags.length > 0 && (
             <div className="flex flex-wrap gap-2 mb-3">
-              {event.event_tags.slice(0, 2).map((tag, index) => (
-                <span
-                  key={index}
-                  className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800"
-                >
+              {event.content_metadata.event_tags.slice(0, 2).map((tag, index) => (
+                <span key={index} className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
                   <Tag className="w-3 h-3 mr-1" />
                   {tag}
                 </span>
               ))}
-              {event.event_tags.length > 2 && (
+              {event.content_metadata.event_tags.length > 2 && (
                 <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-600">
-                  +{event.event_tags.length - 2} more
+                  +{event.content_metadata.event_tags.length - 2} more
                 </span>
               )}
             </div>
@@ -132,25 +127,27 @@ const EventCard: React.FC<EventCardProps> = ({ event, compact = false }) => {
 
           <div className="flex items-center text-xs text-gray-500">
             <MapPin className="w-4 h-4 mr-1 flex-shrink-0" />
-            <span>{event.location}</span>
+            <span>{event.location_metadata?.address}</span>
           </div>
 
           <div className="flex items-center text-xs text-gray-500">
             <Users className="w-4 h-4 mr-1 flex-shrink-0" />
-            <span>Capacity: {event.capacity}</span>
+            <span>Capacity: {event.content_metadata?.capacity}</span>
           </div>
         </div>
 
         {/* Organizer Info */}
         <div className={`border-t ${compact ? 'pt-2' : 'pt-4'}`}>
           <p className="text-xs text-gray-500">
-            Organized by <span className="font-medium text-gray-700">{event.organizer_name}</span>
+            Organized by <span className="font-medium text-gray-700">{event.organizer_metadata?.name}</span>
           </p>
-          {event.price && (
+          {event.price != null && event.price > 0 ? (
             <p className="text-sm font-bold text-green-600 mt-1">
-              {event.price === '0' ? 'Free' : `${event.price}`}
+              {new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(event.price)}
             </p>
-          )}
+          ) : event.price === 0 ? (
+            <p className="text-sm font-bold text-green-600 mt-1">Free</p>
+          ) : null}
         </div>
       </div>
     </Link>
