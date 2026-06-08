@@ -32,7 +32,8 @@
 --   created_at, updated_at
 --
 -- JSONB column contents:
---   content_metadata:   requirements, sponsors,
+--   content_metadata:   event_link, zoho_form_url,
+--                       requirements, sponsors,
 --                       additional_contact_info,
 --                       languages, event_tags, capacity
 --   media_metadata:     featured_image, event_banner,
@@ -74,8 +75,8 @@ CREATE TYPE public.event_status_enum AS ENUM (
 -- =====================================================
 
 ALTER TABLE public.events
-    ADD COLUMN content_metadata   JSONB NOT NULL DEFAULT '{}'::jsonb,
-    ADD COLUMN media_metadata     JSONB NOT NULL DEFAULT '{}'::jsonb,
+    ADD COLUMN content_metadata   JSONB NOT NULL DEFAULT '{"event_link":"","zoho_form_url":"","sponsors":[],"requirements":"","additional_contact_info":"","languages":[],"event_tags":[],"capacity":0}'::jsonb,
+    ADD COLUMN media_metadata     JSONB NOT NULL DEFAULT '{"featured_image":"","mobile_featured_image":"","event_banner":"","teaser_video":"","enquiry_pdf":""}'::jsonb,
     ADD COLUMN organizer_metadata JSONB NOT NULL DEFAULT '{}'::jsonb,
     ADD COLUMN location_metadata  JSONB NOT NULL DEFAULT '{}'::jsonb;
 
@@ -85,6 +86,8 @@ ALTER TABLE public.events
 
 UPDATE public.events
 SET content_metadata = jsonb_strip_nulls(jsonb_build_object(
+    'event_link',              COALESCE(event_link, ''),
+    'zoho_form_url',           '',
     'requirements',            requirements,
     'sponsors',                to_jsonb(COALESCE(sponsors,   '{}'::text[])),
     'additional_contact_info', additional_contact_info,
@@ -98,7 +101,8 @@ SET media_metadata = jsonb_strip_nulls(jsonb_build_object(
     'featured_image',        featured_image,
     'event_banner',          event_banner,
     'mobile_featured_image', mobile_featured_image,
-    'teaser_video',          teaser_video
+    'teaser_video',          teaser_video,
+    'enquiry_pdf',           COALESCE(enquiry_pdf, '')
 ));
 
 UPDATE public.events
