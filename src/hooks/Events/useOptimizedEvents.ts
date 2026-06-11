@@ -148,7 +148,12 @@ export const useOptimizedEvents = () => {
 
       if (sectionsError) {
       }
-      const eventSections: EventSection[] = (sectionsData ?? []).map((s: any) => {
+      const eventSections: EventSection[] = (sectionsData ?? []).map((s: {
+        section_key: string;
+        content_type: string;
+        display_order: number;
+        section_contents: { content: unknown } | { content: unknown }[] | null;
+      }) => {
         const contentRow = Array.isArray(s.section_contents)
           ? s.section_contents[0]
           : s.section_contents;
