@@ -160,6 +160,32 @@ const EventDetail: React.FC = () => {
   const [contactModalOpen, setContactModalOpen] = React.useState(false);
   const [fullEventData, setFullEventData] = React.useState<AppEvent | null>(null);
   const [loadingFullDetails, setLoadingFullDetails] = React.useState(false);
+  
+  // Debug: Log when modalOpen changes
+  React.useEffect(() => {
+    console.log('🎭 EventDetail: Registration modal state changed to:', modalOpen);
+  }, [modalOpen]);
+  
+  // Global message listener for Zoho form (in case HeroSection isn't rendered)
+  React.useEffect(() => {
+    console.log('🌐 EventDetail: Setting up global message listener for Zoho forms');
+    
+    const handleGlobalMessage = (event: MessageEvent) => {
+      if (event.data && event.data.type === 'ZOHO_IFRAME_LOADED') {
+        console.log('✅ EventDetail Global: Iframe loaded and communication working!');
+        return;
+      }
+      
+      if (event.data && event.data.type === 'ZOHO_FORM_SUBMITTING') {
+        console.log('🌐 EventDetail: Received ZOHO_FORM_SUBMITTING at global level:', event.data);
+        console.log('🎫 EventDetail: Opening registration modal from global listener');
+        setModalOpen(true);
+      }
+    };
+    
+    window.addEventListener('message', handleGlobalMessage);
+    return () => window.removeEventListener('message', handleGlobalMessage);
+  }, []);
 
   React.useEffect(() => {
     if (contactModalOpen) {
@@ -1388,11 +1414,18 @@ const EventDetail: React.FC = () => {
               <div className="mt-8">
                 <HeroSection
                   content={event.eventSections.find(s => s.section_key === 'hero')?.content as { title?: string; description?: string; benefits?: string[] } | undefined}
-                  zohoFormUrl={event.content_metadata?.zoho_form_url}
+                  formId={event.form_id}
                   eventDate={event.event_date}
                   eventTime={event.event_time}
                   location={event.location_metadata?.address}
                   price={event.price}
+                  eventType={event.event_type}
+                  eventId={event.id}
+                  eventName={event.title}
+                  onRegisterClick={() => {
+                    console.log('🎯 EventDetail: onRegisterClick called - opening registration modal');
+                    setModalOpen(true);
+                  }}
                 />
               </div>
             )}

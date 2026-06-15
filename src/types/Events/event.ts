@@ -2,6 +2,9 @@
 // EVENT TYPES — Final schema after all 3 migrations
 // =====================================================
 
+// Event type enum
+export type EventType = 'paid' | 'free';
+
 // Typed section content shapes matching the DB JSONB structure
 export interface EventSectionContent {
   // about, agenda, cta
@@ -73,10 +76,12 @@ export interface Event {
   duration: number;           // INTEGER — total minutes (e.g. 4320 = 3 days)
   category: string;           // event_category_enum: Workshop | Webinar | Seminar | Conference | Training | Bootcamp | Hackathon | Other
   price?: number;             // NUMERIC(10,2) — e.g. 2999.00, or 0 for free
+  event_type: EventType;      // event_type_enum: paid | free (default: 'free')
   registration_deadline?: string;
   status: 'upcoming' | 'ongoing' | 'completed' | 'cancelled';
   is_physical?: boolean;
   slug: string;
+  form_id?: string | null;    // UUID reference to custom registration form
 
   // JSONB metadata columns
   organizer_metadata?: OrganizerMetadata;

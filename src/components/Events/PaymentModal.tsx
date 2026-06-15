@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { CheckCircle, CreditCard, X } from 'lucide-react';
+import { SignJWT } from 'jose';
 
 declare global {
   interface Window {
@@ -10,7 +11,7 @@ declare global {
 type PaymentModalProps = {
   open: boolean;
   onClose: () => void;
-  onSuccess: () => void;
+  onSuccess: (paymentDetails: { razorpay_payment_id: string; order_id: string; payment_date: string }) => void;
   registrationId: number | null;
   eventName: string;
   amount: number; // Amount in rupees (total)
@@ -37,6 +38,25 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
   const [processing, setProcessing] = useState(false);
   const [error, setError] = useState('');
 
+  // Generate service JWT for authenticating with the payment worker
+  const generateServiceJWT = async (): Promise<string> => {
+    const secret = import.meta.env.VITE_RAZORPAY_SERVICE_SECRET;
+    if (!secret) {
+      throw new Error('RAZORPAY_SERVICE_SECRET not configured');
+    }
+
+    const encoder = new TextEncoder();
+    const jwt = await new SignJWT({
+      service_id: 'functions-payment-service',
+    })
+      .setProtectedHeader({ alg: 'HS256' })
+      .setIssuedAt()
+      .setExpirationTime('5m')
+      .sign(encoder.encode(secret));
+
+    return jwt;
+  };
+
   React.useEffect(() => {
     if (open) {
       document.body.style.overflow = 'hidden';
@@ -62,80 +82,119 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
     // Ensure minimum amount is ₹1 as required by Razorpay
     const minimumAmount = 1;
     const finalAmount = Math.max(minimumAmount, amount);
+    const amountInPaise = finalAmount * 100; // Convert rupees to paise
 
     setProcessing(true);
     setError('');
 
     try {
-      // Create order using Supabase Edge Function
-      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-      const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+      // Get worker URL from env
+      // In development, use the Vite proxy to avoid CORS issues
+      const isDevelopment = import.meta.env.DEV;
+      const workerUrl = isDevelopment 
+        ? '/payments'  // Use Vite proxy in development
+        : import.meta.env.VITE_RAZORPAY_WORKER_URL;
+      const razorpayKeyId = import.meta.env.VITE_RAZORPAY_KEY_ID;
+
+      if (!workerUrl) {
+        throw new Error('Payment worker URL not configured. Please set VITE_RAZORPAY_WORKER_URL in production.');
+      }
+
+      if (!razorpayKeyId) {
+        throw new Error('Razorpay Key ID not configured');
+      }
+
+      // Generate JWT token for authentication
+      const serviceJWT = await generateServiceJWT();
 
       console.log('Creating payment order with:', {
         registrationId,
-        amount: finalAmount,
-        ticketQuantity,
-        pricePerTicket,
-        currency: 'INR'
+        amount: amountInPaise,
+        currency: 'INR',
+        workerUrl
       });
 
-      const response = await fetch(`${supabaseUrl}/functions/v1/create-payment-order`, {
+      // Create order using Cloudflare Worker
+      const orderResponse = await fetch(`${workerUrl}/create-order`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${supabaseKey}`,
+          'Authorization': `Bearer ${serviceJWT}`,
         },
         body: JSON.stringify({
-          registrationId,
-          amount: finalAmount, // Amount in rupees, ensuring minimum amount
+          amount: amountInPaise,
           currency: 'INR',
+          receipt: `rcpt_${registrationId}_${Date.now()}`,
+          notes: {
+            registration_id: registrationId.toString(),
+            event_name: eventName,
+            customer_name: userDetails.name,
+            customer_email: userDetails.email,
+          }
         }),
       });
 
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
+      if (!orderResponse.ok) {
+        const errorData = await orderResponse.json().catch(() => ({}));
         console.error('Payment order creation failed:', {
-          status: response.status,
-          statusText: response.statusText,
+          status: orderResponse.status,
+          statusText: orderResponse.statusText,
           errorData
         });
-        throw new Error(errorData.error || `Failed to create payment order (${response.status})`);
+        throw new Error(errorData.error?.message || `Failed to create payment order (${orderResponse.status})`);
       }
 
-      const order = await response.json();
+      const orderResult = await orderResponse.json();
+      const order = orderResult.order;
+
+      console.log('Payment order created:', order);
 
       const options = {
-        key: order.keyId,
+        key: razorpayKeyId,
         amount: order.amount,
         currency: order.currency,
         name: 'Rareminds',
         description: `Payment for ${eventName}`,
-        order_id: order.orderId,
+        order_id: order.id,
         handler: async (paymentResult: any) => {
           try {
-            // Verify payment using Supabase Edge Function
-            const verifyResponse = await fetch(`${supabaseUrl}/functions/v1/verify-payment`, {
+            console.log('Payment successful, verifying...', paymentResult);
+            
+            // Generate new JWT for verification
+            const verifyJWT = await generateServiceJWT();
+
+            // Verify payment using Cloudflare Worker
+            const verifyResponse = await fetch(`${workerUrl}/verify-payment`, {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${supabaseKey}`,
+                'Authorization': `Bearer ${verifyJWT}`,
               },
               body: JSON.stringify({
                 razorpay_order_id: paymentResult.razorpay_order_id,
                 razorpay_payment_id: paymentResult.razorpay_payment_id,
                 razorpay_signature: paymentResult.razorpay_signature,
-                registrationId,
               }),
             });
 
             if (!verifyResponse.ok) {
               const errorData = await verifyResponse.json().catch(() => ({}));
-              throw new Error(errorData.error || 'Payment verification failed. Please contact support.');
+              console.error('Payment verification failed:', errorData);
+              throw new Error(errorData.error?.message || 'Payment verification failed. Please contact support.');
             }
 
-            onSuccess();
+            const verifyResult = await verifyResponse.json();
+            console.log('Payment verified:', verifyResult);
+
+            // Pass payment details back to parent
+            onSuccess({
+              razorpay_payment_id: paymentResult.razorpay_payment_id,
+              order_id: paymentResult.razorpay_order_id,
+              payment_date: new Date().toISOString()
+            });
             setProcessing(false);
           } catch (verificationError: any) {
+            console.error('Verification error:', verificationError);
             setError(verificationError?.message || 'Payment verification failed. Please contact support.');
             setProcessing(false);
           }
@@ -158,6 +217,7 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
       const rzp = new window.Razorpay(options);
       rzp.open();
     } catch (err: any) {
+      console.error('Payment initiation error:', err);
       setError(err?.message || 'Failed to initiate payment. Please try again.');
       setProcessing(false);
     }

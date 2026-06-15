@@ -5,15 +5,18 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:pages": "wrangler pages dev dist --port 8788",
+    "dev:full": "npm run build && wrangler pages dev dist --port 8788",
     "server": "node server.js",
-    "dev:full": "concurrently \"npm run dev\" \"npm run server\"",
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "test:connection": "node test-connection.js"
+    "test:connection": "node test-connection.js",
+    "pages:deploy": "npm run build && wrangler pages deploy dist"
   },
   "dependencies": {
     "@emailjs/browser": "^4.4.1",
+    "@heroicons/react": "^2.2.0",
     "@hookform/resolvers": "^5.0.1",
     "@iconify/react": "^4.1.1",
     "@lottiefiles/dotlottie-react": "^0.13.5",
@@ -45,7 +48,9 @@
     "embla-carousel-react": "^8.6.0",
     "express": "^5.1.0",
     "framer-motion": "^12.23.21",
+    "heroicons": "^2.2.0",
     "input-otp": "^1.4.2",
+    "jose": "^6.2.3",
     "lucide-react": "^0.484.0",
     "next": "^16.0.1",
     "nodemailer": "^7.0.3",
@@ -73,6 +78,7 @@
     "zod": "^3.24.4"
   },
   "devDependencies": {
+    "@cloudflare/workers-types": "^4.20260611.1",
     "@eslint/config-array": "^0.20.0",
     "@eslint/object-schema": "^2.1.6",
     "@types/aos": "^3.0.7",
@@ -97,7 +103,8 @@
     "ts-node": "^10.9.2",
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.8.3",
-    "vite": "^6.3.5"
+    "vite": "^6.3.5",
+    "wrangler": "^4.99.0"
   },
   "description": "This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.",
   "main": "index.js",

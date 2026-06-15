@@ -1,6 +1,9 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useState } from "react";
 import { CalendarDaysIcon, ClockIcon, MapPinIcon, TagIcon } from "@heroicons/react/24/outline";
 import { Ticket, BadgeIndianRupee } from "lucide-react";
+import type { EventType } from "../../types/Events/event";
+import PaymentModal from "./PaymentModal";
+import DynamicEventForm from "./DynamicEventForm";
 
 interface HeroSectionProps {
   content?: {
@@ -8,65 +11,145 @@ interface HeroSectionProps {
     description?: string;
     benefits?: string[];
   };
-  zohoFormUrl?: string;
   eventDate?: string;
   eventTime?: string;
   location?: string;
   price?: number;
+  eventType?: EventType;
+  eventId?: string;
+  eventName?: string;
+  formId?: string | null; // ID of the custom form to render
 }
 
 const WebinarSection: React.FC<HeroSectionProps> = ({
   content,
-  zohoFormUrl,
   eventDate,
   eventTime,
   location,
   price,
+  eventType = 'free',
+  eventId,
+  eventName,
+  formId,
 }) => {
   const title       = content?.title;
   const description = content?.description;
   const benefits    = content?.benefits ?? [];
 
-  // Dynamically track iframe height so it expands to full content — no scrollbar
-  const iframeRef = useRef<HTMLIFrameElement>(null);
-  const [iframeHeight, setIframeHeight] = useState<number>(700);
+  // Payment modal state
+  const [showPaymentModal, setShowPaymentModal] = useState(false);
+  const [registrationSuccess, setRegistrationSuccess] = useState(false);
+  const [registrationId, setRegistrationId] = useState<number | null>(null);
+  const [userDetails, setUserDetails] = useState<{ name: string; email: string; phone: string } | null>(null);
+  const [formAnswers, setFormAnswers] = useState<Record<string, any> | null>(null);
 
-  useEffect(() => {
-    const handleMessage = (event: MessageEvent) => {
-      // Zoho forms sometimes post their height via postMessage
-      if (event.data && typeof event.data === "object" && event.data.height) {
-        setIframeHeight(Number(event.data.height));
-      }
-    };
-    window.addEventListener("message", handleMessage);
-    return () => window.removeEventListener("message", handleMessage);
-  }, []);
+  // Handle form submission success
+  const handleFormSubmitSuccess = async (formData: Record<string, any>) => {
+    if (!eventId) {
+      console.error('Missing event ID');
+      throw new Error('Event information is missing. Please refresh the page and try again.');
+    }
 
-  useEffect(() => {
-    const iframe = iframeRef.current;
-    if (!iframe) return;
+    try {
+      // Create Supabase client
+      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || "";
+      const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY || "";
+      const { createClient } = await import('@supabase/supabase-js');
+      const supabase = createClient(supabaseUrl, supabaseKey);
 
-    const tryReadHeight = () => {
-      try {
-        const body = iframe.contentDocument?.body;
-        const html = iframe.contentDocument?.documentElement;
-        if (body && html) {
-          const h = Math.max(
-            body.scrollHeight,
-            body.offsetHeight,
-            html.scrollHeight,
-            html.offsetHeight
-          );
-          if (h > 100) setIframeHeight(h);
+      // Extract common fields (fallback to form field names)
+      const name = formData.name || formData.full_name || formData.first_name || formData.attendee_name || formData.firstName || formData.first || '';
+      const email = formData.email || formData.email_address || formData.emailAddress || formData.Email || '';
+      const phone = formData.phone || formData.mobile || formData.phone_number || formData.phoneNumber || formData.mobileNumber || formData.mobile_number || '';
+      const organization = formData.organization || formData.company || formData.university || formData.institution_university_name || '';
+
+      console.log('📝 Registration attempt:', { eventId, name, email, phone });
+
+      // Find email field dynamically if standard field names don't match
+      if (!email) {
+        const emailKey = Object.keys(formData).find(key => 
+          key.toLowerCase().includes('email')
+        );
+        if (emailKey && formData[emailKey]) {
+          formData.email = formData[emailKey];
         }
-      } catch {
-        // cross-origin — rely on postMessage fallback above
       }
-    };
 
-    iframe.addEventListener("load", tryReadHeight);
-    return () => iframe.removeEventListener("load", tryReadHeight);
-  }, []);
+      // Re-check after dynamic search
+      const finalEmail = email || formData.email;
+      
+      if (!finalEmail) {
+        console.error('❌ Email not found in form data');
+        throw new Error(`Email is required for registration`);
+      }
+
+      // Check if user already registered for this event
+      const { data: existingRegistration, error: checkError } = await supabase
+        .from('event_registrations')
+        .select('id, payment_status')
+        .eq('event_id', eventId)
+        .eq('email', finalEmail)
+        .maybeSingle();
+
+      if (checkError) {
+        console.error('❌ Duplicate check error:', checkError);
+      }
+
+      if (existingRegistration) {
+        throw new Error('You have already registered for this event. Please check your email for confirmation.');
+      }
+
+      // Check if this is a paid event
+      const isPaidEvent = eventType === 'paid' && price && price > 0;
+
+      // Save registration to database
+      const registrationData = {
+        event_id: eventId,
+        event_name: eventName || '',
+        name,
+        email: finalEmail,
+        phone,
+        organization,
+        quantity: 1,
+        total_amount: isPaidEvent ? price : null,
+        payment_status: isPaidEvent ? 'pending' : 'not_required'
+      };
+
+      const { data, error } = await supabase
+        .from('event_registrations')
+        .insert(registrationData)
+        .select()
+        .single();
+
+      if (error) {
+        console.error('❌ Registration error:', error);
+        throw new Error('Failed to save registration. Please try again.');
+      }
+
+      console.log('✅ Registration saved:', data.id);
+
+      // Store form answers for later use in worker call
+      setFormAnswers(formData);
+
+      if (isPaidEvent) {
+        // Save registration ID and user details, then show payment modal
+        setRegistrationId(data.id);
+        setUserDetails({ name, email: finalEmail, phone });
+        setShowPaymentModal(true);
+      } else {
+        // Free event - send to worker and show success message
+        await sendRegistrationToWorker(null);
+        
+        setRegistrationSuccess(true);
+        setTimeout(() => {
+          setRegistrationSuccess(false);
+        }, 3000);
+      }
+    } catch (err: any) {
+      console.error('❌ Exception during registration:', err);
+      throw err; // Let DynamicEventForm handle the error display
+    }
+  };
 
   const formatDate = (dateString?: string) => {
     if (!dateString) return null;
@@ -85,6 +168,97 @@ const WebinarSection: React.FC<HeroSectionProps> = ({
       minute: "2-digit",
       hour12: true,
     });
+  };
+
+  // Handle payment success
+  const handlePaymentSuccess = async (paymentDetails: { razorpay_payment_id: string; order_id: string; payment_date: string }) => {
+    if (!registrationId) {
+      console.error('No registration ID found');
+      return;
+    }
+
+    try {
+      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || "";
+      const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY || "";
+      const { createClient } = await import('@supabase/supabase-js');
+      const supabase = createClient(supabaseUrl, supabaseKey);
+
+      const { data, error } = await supabase
+        .from('event_registrations')
+        .update({ 
+          payment_status: 'completed',
+          razorpay_payment_id: paymentDetails.razorpay_payment_id,
+          order_id: paymentDetails.order_id,
+          payment_date: paymentDetails.payment_date,
+          payment_verified_at: new Date().toISOString()
+        })
+        .eq('id', registrationId)
+        .select();
+
+      if (error) {
+        console.error('❌ Failed to update payment status:', error);
+        throw new Error('Failed to save payment details to database');
+      }
+
+      console.log('✅ Payment verified:', paymentDetails.razorpay_payment_id);
+
+      // Send registration data to worker for Zoho CRM integration
+      await sendRegistrationToWorker(paymentDetails.razorpay_payment_id);
+
+      // Close payment modal and show success message
+      setShowPaymentModal(false);
+      setRegistrationSuccess(true);
+
+      // Hide success message after 3 seconds
+      setTimeout(() => {
+        setRegistrationSuccess(false);
+        setRegistrationId(null);
+        setUserDetails(null);
+        setFormAnswers(null);
+      }, 3000);
+    } catch (err) {
+      console.error('Exception during payment success handling:', err);
+      setShowPaymentModal(false);
+      alert('Payment was successful, but there was an error saving the details. Please contact support with your payment ID: ' + paymentDetails.razorpay_payment_id);
+    }
+  };
+
+  // Send registration to Cloudflare Pages Function for Zoho CRM integration
+  const sendRegistrationToWorker = async (paymentId: string | null) => {
+    try {
+      const answers = formAnswers || {};
+
+      const payload = {
+        answers,
+        event_id: eventId || '',
+        form_id: formId || '',
+        event_type: eventType,
+        event_name: eventName || '',
+        payment_id: paymentId,
+        total_amount: eventType === 'paid' && price ? price : 0
+      };
+
+      const response = await fetch(`/api/register`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload)
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        console.error('❌ Zoho webhook failed:', errorData);
+      } else {
+        console.log('✅ Registration sent to Zoho CRM');
+      }
+    } catch (error) {
+      console.error('⚠️ Zoho webhook error:', error);
+    }
+  };
+
+  const handlePaymentClose = () => {
+    setShowPaymentModal(false);
   };
 
   return (
@@ -158,18 +332,15 @@ const WebinarSection: React.FC<HeroSectionProps> = ({
           )}
         </div>
 
-        {/* Zoho Form — no overflow-hidden, iframe expands to full height */}
-        <div className="bg-white rounded-2xl shadow-xl">
-          {zohoFormUrl ? (
-            <iframe
-              ref={iframeRef}
-              src={zohoFormUrl}
-              title="Registration Form"
-              width="100%"
-              height={iframeHeight}
-              className="block w-full border-0 overflow-hidden"
-              scrolling="no"
-              loading="lazy"
+        {/* Dynamic Event Form */}
+       
+          {eventId ? (
+            <DynamicEventForm
+              formId={formId}
+              eventId={eventId}
+              onSubmitSuccess={async (formData) => {
+                await handleFormSubmitSuccess(formData);
+              }}
             />
           ) : (
             <div className="flex items-center justify-center h-64 lg:h-96 text-gray-400 text-sm">
@@ -178,7 +349,6 @@ const WebinarSection: React.FC<HeroSectionProps> = ({
           )}
         </div>
 
-      </div>
 
       {/* Sticky bottom bar — mobile only */}
       {price !== undefined && (
@@ -193,6 +363,49 @@ const WebinarSection: React.FC<HeroSectionProps> = ({
           >
             {price === 0 ? "Reserve My Free Seat →" : `Reserve My Seat — ₹${price} →`}
           </a>
+        </div>
+      )}
+
+      {/* Payment Modal for Paid Events */}
+      {showPaymentModal && eventId && eventName && registrationId && userDetails && (
+        <PaymentModal
+          open={showPaymentModal}
+          onClose={handlePaymentClose}
+          onSuccess={handlePaymentSuccess}
+          registrationId={registrationId}
+          eventName={eventName}
+          amount={price || 0}
+          ticketQuantity={1}
+          pricePerTicket={price}
+          userDetails={userDetails}
+        />
+      )}
+
+      {/* Registration Success Message */}
+      {registrationSuccess && (
+        <div className="fixed inset-0 z-[200] flex items-center justify-center bg-black/50">
+          <div className="bg-white rounded-2xl p-8 shadow-2xl max-w-md mx-4">
+            <div className="text-center">
+              <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
+              {eventType === 'paid' && price && price > 0 ? (
+                <>
+                  <h3 className="text-2xl font-bold text-gray-900 mb-2">Payment Successful!</h3>
+                  <p className="text-gray-600">Thank you for submitting your response.</p>
+                  <p className="text-sm text-gray-500 mt-2">Your registration has been confirmed. We will reach out to you soon.</p>
+                </>
+              ) : (
+                <>
+                  <h3 className="text-2xl font-bold text-gray-900 mb-2">Registration Successful!</h3>
+                  <p className="text-gray-600">Thank you for registering for this event.</p>
+                  <p className="text-sm text-gray-500 mt-2">Your registration has been confirmed. We will reach out to you soon.</p>
+                </>
+              )}
+            </div>
+          </div>
         </div>
       )}
     </section>
