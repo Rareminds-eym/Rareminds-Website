@@ -4,6 +4,7 @@ import { Ticket, BadgeIndianRupee } from "lucide-react";
 import type { EventType } from "../../types/Events/event";
 import PaymentModal from "./PaymentModal";
 import DynamicEventForm from "./DynamicEventForm";
+import { supabase } from "../../lib/supabase";
 
 interface HeroSectionProps {
   content?: {
@@ -51,12 +52,6 @@ const WebinarSection: React.FC<HeroSectionProps> = ({
     }
 
     try {
-      // Create Supabase client
-      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || "";
-      const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY || "";
-      const { createClient } = await import('@supabase/supabase-js');
-      const supabase = createClient(supabaseUrl, supabaseKey);
-
       // Extract common fields (fallback to form field names)
       const name = formData.name || formData.full_name || formData.first_name || formData.attendee_name || formData.firstName || formData.first || '';
       const email = formData.email || formData.email_address || formData.emailAddress || formData.Email || '';
@@ -178,12 +173,7 @@ const WebinarSection: React.FC<HeroSectionProps> = ({
     }
 
     try {
-      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || "";
-      const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY || "";
-      const { createClient } = await import('@supabase/supabase-js');
-      const supabase = createClient(supabaseUrl, supabaseKey);
-
-      const { data, error } = await supabase
+      const { error } = await supabase
         .from('event_registrations')
         .update({ 
           payment_status: 'completed',
