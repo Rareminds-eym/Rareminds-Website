@@ -35,43 +35,24 @@ export const useEvents = () => {
         .from('events')
         .select(`
           id,
+          created_by,
           title,
-          description,
           event_date,
           event_time,
           duration,
-          location,
-          location_latitude,
-          location_longitude,
-          organizer_name,
-          organizer_email,
-          organizer_phone,
-          capacity,
           category,
           price,
           registration_deadline,
           status,
-          event_banner,
-          featured_image,
-          mobile_featured_image,
-          event_tags,
-          meta_title,
-          meta_description,
+          is_physical,
           slug,
-          teaser_video,
-          key_highlights,
-          languages,
-          requirements,
-          agenda,
-          speakers,
-          sponsors,
-          additional_contact_info,
-          faq,
-          speakers_details,
-          events_gallery
+          organizer_metadata,
+          media_metadata,
+          content_metadata,
+          location_metadata
         `)
         .order('event_date', { ascending: true })
-        .limit(100) // Limit to prevent timeout on large datasets
+        .limit(100)
         .abortSignal(controller.signal);
       
       clearTimeout(timeoutId);
@@ -93,12 +74,12 @@ export const useEvents = () => {
 
       console.log(`✅ Successfully fetched ${data.length} events`);
 
-      // Map location_latitude and location_longitude to location_geo
+      // Map JSONB fields and derive location_geo from location_metadata
       const mappedEvents = data.map((event: any) => ({
         ...event,
         location_geo:
-          event.location_latitude !== undefined && event.location_longitude !== undefined
-            ? { lat: event.location_latitude, lng: event.location_longitude }
+          event.location_metadata?.lat !== undefined && event.location_metadata?.lng !== undefined
+            ? { lat: event.location_metadata.lat, lng: event.location_metadata.lng }
             : undefined,
         location_type:
           event.location_type ?? (event.is_physical ? 'physical' : 'virtual'),

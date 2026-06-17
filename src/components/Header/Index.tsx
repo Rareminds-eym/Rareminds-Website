@@ -23,7 +23,7 @@ const Index: React.FC<HeaderProps> = ({ navbarOpen, setNavbarOpen }) => {
     };
 
     return (
-        <nav className="w-full py-4 px-4 md:px-8 relative">
+        <nav className="w-full py-4 px-4 md:px-8 sticky top-0 z-50 bg-white shadow-sm">
             <div className="container mx-auto relative z-50">
                 {/* Logo and social icons */}
                 <div className="flex justify-between items-center">

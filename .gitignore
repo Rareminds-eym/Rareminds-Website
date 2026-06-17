@@ -30,6 +30,7 @@ dist-ssr
 .env
 .env.*
 !.env.example
+.dev.vars
 
 # Build files
 /build
@@ -42,3 +43,6 @@ dist-ssr
 .temp
 .tmp
 .cache
+
+# Wrangler (Cloudflare Workers)
+.wrangler

@@ -10,7 +10,7 @@ declare global {
 type PaymentModalProps = {
   open: boolean;
   onClose: () => void;
-  onSuccess: () => void;
+  onSuccess: (paymentDetails: { razorpay_payment_id: string; order_id: string; payment_date: string }) => void;
   registrationId: number | null;
   eventName: string;
   amount: number; // Amount in rupees (total)
@@ -62,80 +62,104 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
     // Ensure minimum amount is ₹1 as required by Razorpay
     const minimumAmount = 1;
     const finalAmount = Math.max(minimumAmount, amount);
+    const amountInPaise = Math.round(finalAmount * 100); // Convert rupees to paise
 
     setProcessing(true);
     setError('');
 
     try {
-      // Create order using Supabase Edge Function
-      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-      const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+      const paymentsApiUrl = '/api/payments';
 
       console.log('Creating payment order with:', {
         registrationId,
-        amount: finalAmount,
-        ticketQuantity,
-        pricePerTicket,
-        currency: 'INR'
+        amount: amountInPaise,
+        currency: 'INR',
+        paymentsApiUrl
       });
 
-      const response = await fetch(`${supabaseUrl}/functions/v1/create-payment-order`, {
+      const receipt = `rcpt_${registrationId}_${Date.now()}`;
+
+      // Create order through Pages Function. The function calls the payment worker service binding.
+      const orderResponse = await fetch(`${paymentsApiUrl}/create-order`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${supabaseKey}`,
         },
         body: JSON.stringify({
-          registrationId,
-          amount: finalAmount, // Amount in rupees, ensuring minimum amount
+          amount: amountInPaise,
           currency: 'INR',
+          receipt,
+          notes: {
+            registration_id: registrationId.toString(),
+            event_name: eventName,
+            customer_name: userDetails.name,
+            customer_email: userDetails.email,
+          }
         }),
       });
 
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
+      if (!orderResponse.ok) {
+        const errorData = await orderResponse.json().catch(() => ({}));
         console.error('Payment order creation failed:', {
-          status: response.status,
-          statusText: response.statusText,
+          status: orderResponse.status,
+          statusText: orderResponse.statusText,
           errorData
         });
-        throw new Error(errorData.error || `Failed to create payment order (${response.status})`);
+        throw new Error(errorData.error?.message || `Failed to create payment order (${orderResponse.status})`);
       }
 
-      const order = await response.json();
+      const orderResult = await orderResponse.json();
+      const order = orderResult.order;
+      const razorpayKeyId = orderResult.razorpay_key_id || order?.key_id || import.meta.env.VITE_RAZORPAY_KEY_ID;
+
+      if (!razorpayKeyId) {
+        throw new Error('Razorpay Key ID not returned by payment service');
+      }
+
+      console.log('Payment order created:', order);
 
       const options = {
-        key: order.keyId,
+        key: razorpayKeyId,
         amount: order.amount,
         currency: order.currency,
         name: 'Rareminds',
         description: `Payment for ${eventName}`,
-        order_id: order.orderId,
+        order_id: order.id,
         handler: async (paymentResult: any) => {
           try {
-            // Verify payment using Supabase Edge Function
-            const verifyResponse = await fetch(`${supabaseUrl}/functions/v1/verify-payment`, {
+            console.log('Payment successful, verifying...', paymentResult);
+
+            // Verify payment through Pages Function. The function calls the payment worker service binding.
+            const verifyResponse = await fetch(`${paymentsApiUrl}/verify-payment`, {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${supabaseKey}`,
               },
               body: JSON.stringify({
                 razorpay_order_id: paymentResult.razorpay_order_id,
                 razorpay_payment_id: paymentResult.razorpay_payment_id,
                 razorpay_signature: paymentResult.razorpay_signature,
-                registrationId,
               }),
             });
 
             if (!verifyResponse.ok) {
               const errorData = await verifyResponse.json().catch(() => ({}));
-              throw new Error(errorData.error || 'Payment verification failed. Please contact support.');
+              console.error('Payment verification failed:', errorData);
+              throw new Error(errorData.error?.message || 'Payment verification failed. Please contact support.');
             }
 
-            onSuccess();
+            const verifyResult = await verifyResponse.json();
+            console.log('Payment verified:', verifyResult);
+
+            // Pass payment details back to parent
+            onSuccess({
+              razorpay_payment_id: paymentResult.razorpay_payment_id,
+              order_id: paymentResult.razorpay_order_id,
+              payment_date: new Date().toISOString()
+            });
             setProcessing(false);
           } catch (verificationError: any) {
+            console.error('Verification error:', verificationError);
             setError(verificationError?.message || 'Payment verification failed. Please contact support.');
             setProcessing(false);
           }
@@ -158,6 +182,7 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
       const rzp = new window.Razorpay(options);
       rzp.open();
     } catch (err: any) {
+      console.error('Payment initiation error:', err);
       setError(err?.message || 'Failed to initiate payment. Please try again.');
       setProcessing(false);
     }

@@ -1,0 +1,11 @@
+name = "rareminds-website"
+compatibility_date = "2026-05-25"
+compatibility_flags = ["nodejs_compat"]
+
+# Payment worker service binding for Pages Functions.
+# Local dev equivalent:
+# wrangler pages dev dist --port 8788 --service PAYMENT_WORKER=razorpay-api
+[[services]]
+binding = "PAYMENT_WORKER"
+service = "razorpay-api"
+entrypoint = "PaymentService"

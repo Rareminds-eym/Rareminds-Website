@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useOptimizedEvents } from '../../hooks/Events/useOptimizedEvents';
 import { Event } from '../../types/Events/event';
 import EventCard from './EventCard';
 import EventFilters from './EventFilters';
 import RegistrationModal from './RegistrationModal';
+import { Pagination } from '../Academy/SuccessStories/Pagination';
 import { Calendar, AlertCircle, Loader2, Tag, X, Filter  } from 'lucide-react';
-import { parsePrice } from '../../utils/priceUtils';
 
 const EventsPage: React.FC = () => {
   const { events, loading, error, refetch } = useOptimizedEvents();
@@ -16,7 +16,7 @@ const EventsPage: React.FC = () => {
   const banners = events
     .filter(e => e.status === 'upcoming')
     .map(e => ({
-      img: e.event_banner || e.featured_image,
+      img: e.media_metadata?.event_banner || e.media_metadata?.featured_image,
       title: e.title,
       status: e.status,
       category: e.category,
@@ -37,9 +37,19 @@ const EventsPage: React.FC = () => {
     }
   }, [events]);
 
-  const handleFilteredEvents = (filtered: Event[]) => {
+  const EVENTS_PER_PAGE = 4;
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const handleFilteredEvents = useCallback((filtered: Event[]) => {
     setFilteredEvents(filtered);
-  };
+    setCurrentPage(1);
+  }, []);
+
+  const totalPages = Math.ceil(filteredEvents.length / EVENTS_PER_PAGE);
+  const paginatedEvents = filteredEvents.slice(
+    (currentPage - 1) * EVENTS_PER_PAGE,
+    currentPage * EVENTS_PER_PAGE
+  );
 
     // Back to top button logic
   const [showTopBtn, setShowTopBtn] = React.useState(false);
@@ -139,7 +149,7 @@ const EventsPage: React.FC = () => {
               {Array.from(new Set(events.map(e => e.category))).map((cat, idx) => {
                 // Find first event with this category for image
                 const eventWithCat = events.find(e => e.category === cat);
-                const img = eventWithCat?.event_banner || eventWithCat?.featured_image || '';
+                const img = eventWithCat?.media_metadata?.event_banner || eventWithCat?.media_metadata?.featured_image || '';
                 return (
                   <motion.div
                     key={cat}
@@ -294,7 +304,7 @@ const EventsPage: React.FC = () => {
                       onClose={() => setShowRegistrationModal(false)}
                       eventId={events[current].id ?? ""}
                       eventName={events[current].title ?? ""}
-                      eventPrice={parsePrice(events[current].price)}
+                      eventPrice={(events[current].price ?? 0)}
                     />
                   )}
                         </div>
@@ -372,10 +382,18 @@ const EventsPage: React.FC = () => {
             </div>
 
             {/* Filters and Events Grid Layout */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch">
               {/* Desktop: Vertical Filter Bar */}
-              <div className="hidden md:block md:col-span-1" style={{ paddingTop: '24px' }}>
+              <div className="hidden md:flex md:flex-col md:col-span-1" style={{ paddingTop: '24px' }}>
                 <EventFilters events={events} onFilteredEvents={handleFilteredEvents} />
+                {/* Static featured image */}
+                <div className="mt-4 rounded-xl overflow-hidden shadow-lg flex-1 min-h-0">
+                  <img
+                    src="https://fastly.picsum.photos/id/10/2500/1667.jpg?hmac=J04WWC_ebchx3WwzbM-Z4_KC_LeLBWr5LZMaAkWkF68"
+                    alt="Featured"
+                    className="w-full h-full object-cover"
+                  />
+                </div>
               </div>
               {/* Mobile: Horizontal Scrollable Event Cards */}
               <div className="md:hidden w-full flex items-center justify-between p-2">
@@ -420,12 +438,11 @@ const EventsPage: React.FC = () => {
                           });
                         };
                         let priceDisplay: string;
-                        const priceStr = (event.price ?? '0').toString().toLowerCase();
-                        if (priceStr === 'free' || priceStr === '0' || priceStr === '') {
+                        const priceVal = event.price ?? 0;
+                        if (priceVal === 0) {
                           priceDisplay = 'FREE';
                         } else {
-                          const numeric = parseFloat(priceStr.replace(/[^\d.]/g, '')) || 0;
-                          priceDisplay = new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(numeric);
+                          priceDisplay = new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(priceVal);
                         }
                         return (
                           <motion.div
@@ -437,7 +454,7 @@ const EventsPage: React.FC = () => {
                           >
                             {/* ...existing card content... */}
                             <div className="relative h-32 w-full mb-2 rounded-xl overflow-hidden">
-                              <img src={event.event_banner || event.featured_image || ''} alt={event.title} className="w-full h-full object-cover" />
+                              <img src={event.media_metadata?.event_banner || event.media_metadata?.featured_image || ''} alt={event.title} className="w-full h-full object-cover" />
                               <span className={`absolute top-2 left-2 text-xs px-2 py-0.5 rounded-full capitalize shadow ${
                                 event.status === 'upcoming' ? 'bg-green-100 text-green-800' :
                                 event.status === 'ongoing' ? 'bg-blue-100 text-blue-800' :
@@ -467,10 +484,10 @@ const EventsPage: React.FC = () => {
                                 <span className="font-medium">{event.category}</span>
                               </div>
                               {/* Attendees (capacity) */}
-                              {typeof event.capacity !== 'undefined' && (
+                              {event.content_metadata?.capacity != null && (
                                 <div className="flex items-center gap-1 text-xs text-gray-600 mb-1">
                                   <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M17 20h5v-2a4 4 0 00-3-3.87M9 20H4v-2a4 4 0 013-3.87m9-5a4 4 0 11-8 0 4 4 0 018 0zm6 6v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2a2 2 0 012-2h2a2 2 0 012 2z" /></svg>
-                                  <span>{event.capacity} Attendees</span>
+                                  <span>{event.content_metadata.capacity} Attendees</span>
                                 </div>
                               )}
                               {/* Price */}
@@ -479,16 +496,16 @@ const EventsPage: React.FC = () => {
                                 <span>{priceDisplay}</span>
                               </div>
                               {/* Location with map link */}
-                              {event.location && (
+                              {event.location_metadata?.address && (
                                 <div className="flex items-center gap-1 text-xs text-blue-700 mb-1">
                                   <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 20.9a2 2 0 01-2.828 0l-4.243-4.243a8 8 0 1111.314 0z" /><circle cx="12" cy="10" r="3" /></svg>
                                   <a
-                                    href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(event.location)}`}
+                                    href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(event.location_metadata.address)}`}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="underline hover:text-blue-900"
                                   >
-                                    {event.location}
+                                    {event.location_metadata.address}
                                   </a>
                                 </div>
                               )}
@@ -571,7 +588,7 @@ const EventsPage: React.FC = () => {
                 <div style={{ paddingTop: '24px' }}>
                   {filteredEvents.length > 0 ? (
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
-                      {filteredEvents.slice(0, 4).map((event, index) => (
+                      {paginatedEvents.map((event, index) => (
                         <EventCard key={event.id || index} event={event} />
                       ))}
                     </div>
@@ -587,6 +604,19 @@ const EventsPage: React.FC = () => {
                 </div>
               </div>
             </div>
+            {/* Pagination — full width below the grid */}
+            {totalPages > 1 && (
+              <div className="hidden md:block mt-6">
+                <Pagination
+                  currentPage={currentPage}
+                  totalPages={totalPages}
+                  onPageChange={(page) => {
+                    setCurrentPage(page);
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                  }}
+                />
+              </div>
+            )}
             {/* ...sticky filter button and bottom drawer removed for mobile... */}
           </>
         ) : (
@@ -634,3 +664,4 @@ const EventsPage: React.FC = () => {
 };
 
 export default EventsPage;
+

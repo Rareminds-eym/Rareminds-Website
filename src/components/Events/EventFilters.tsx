@@ -15,7 +15,7 @@ const EventFilters: React.FC<EventFiltersProps> = ({ events, onFilteredEvents })
 
   // Get unique values for filters
   const categories = [...new Set(events.map(event => event.category))];
-  const locations = [...new Set(events.map(event => event.location))];
+  const locations = [...new Set(events.map(event => event.location_metadata?.address).filter(Boolean))];
   const statuses = ['upcoming', 'ongoing', 'completed', 'cancelled'];
 
   React.useEffect(() => {
@@ -25,8 +25,8 @@ const EventFilters: React.FC<EventFiltersProps> = ({ events, onFilteredEvents })
     if (searchTerm) {
       filtered = filtered.filter(event =>
         event.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        event.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        event.organizer_name.toLowerCase().includes(searchTerm.toLowerCase())
+        (event.organizer_metadata?.name ?? '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (event.location_metadata?.address ?? '').toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
 
@@ -42,7 +42,7 @@ const EventFilters: React.FC<EventFiltersProps> = ({ events, onFilteredEvents })
 
     // Location filter
     if (selectedLocation !== 'all') {
-      filtered = filtered.filter(event => event.location === selectedLocation);
+      filtered = filtered.filter(event => event.location_metadata?.address === selectedLocation);
     }
 
     onFilteredEvents(filtered);
@@ -58,7 +58,7 @@ const EventFilters: React.FC<EventFiltersProps> = ({ events, onFilteredEvents })
   const hasActiveFilters = searchTerm || selectedStatus !== 'all' || selectedCategory !== 'all' || selectedLocation !== 'all';
 
   return (
-    <div className="bg-[#f4f4f4] rounded-xl shadow-lg p-6 mb-8" style={{ minHeight: '570px' }}>
+    <div className="bg-[#f4f4f4] rounded-xl shadow-lg p-6 mb-8">
       <div className="flex items-center mb-4">
         <h3 className="text-lg font-semibold text-gray-900 flex items-center">
           <Filter className="w-5 h-5 mr-2" />
@@ -149,11 +149,9 @@ const EventFilters: React.FC<EventFiltersProps> = ({ events, onFilteredEvents })
           </button>
         </div>
       )}
-      <div className='pt-36'>
       <hr className="my-6 border-gray-300" />
-        <div className="text-center text-gray-600 text-sm font-medium">
-          Showing {typeof window !== 'undefined' && Array.isArray(events) ? (typeof filteredEvents !== 'undefined' ? filteredEvents.length : events.length) : events.length} of {events.length} events
-        </div>
+      <div className="text-center text-gray-600 text-sm font-medium">
+        Showing {events.length} events
       </div>
     </div>
   );
