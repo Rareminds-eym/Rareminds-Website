@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useOptimizedEvents } from '../../hooks/Events/useOptimizedEvents';
 import { Event } from '../../types/Events/event';
 import EventCard from './EventCard';
 import EventFilters from './EventFilters';
 import RegistrationModal from './RegistrationModal';
+import { Pagination } from '../Academy/SuccessStories/Pagination';
 import { Calendar, AlertCircle, Loader2, Tag, X, Filter  } from 'lucide-react';
 
 const EventsPage: React.FC = () => {
@@ -36,9 +37,19 @@ const EventsPage: React.FC = () => {
     }
   }, [events]);
 
-  const handleFilteredEvents = (filtered: Event[]) => {
+  const EVENTS_PER_PAGE = 4;
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const handleFilteredEvents = useCallback((filtered: Event[]) => {
     setFilteredEvents(filtered);
-  };
+    setCurrentPage(1);
+  }, []);
+
+  const totalPages = Math.ceil(filteredEvents.length / EVENTS_PER_PAGE);
+  const paginatedEvents = filteredEvents.slice(
+    (currentPage - 1) * EVENTS_PER_PAGE,
+    currentPage * EVENTS_PER_PAGE
+  );
 
     // Back to top button logic
   const [showTopBtn, setShowTopBtn] = React.useState(false);
@@ -371,10 +382,18 @@ const EventsPage: React.FC = () => {
             </div>
 
             {/* Filters and Events Grid Layout */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch">
               {/* Desktop: Vertical Filter Bar */}
-              <div className="hidden md:block md:col-span-1" style={{ paddingTop: '24px' }}>
+              <div className="hidden md:flex md:flex-col md:col-span-1" style={{ paddingTop: '24px' }}>
                 <EventFilters events={events} onFilteredEvents={handleFilteredEvents} />
+                {/* Static featured image */}
+                <div className="mt-4 rounded-xl overflow-hidden shadow-lg flex-1 min-h-0">
+                  <img
+                    src="https://fastly.picsum.photos/id/10/2500/1667.jpg?hmac=J04WWC_ebchx3WwzbM-Z4_KC_LeLBWr5LZMaAkWkF68"
+                    alt="Featured"
+                    className="w-full h-full object-cover"
+                  />
+                </div>
               </div>
               {/* Mobile: Horizontal Scrollable Event Cards */}
               <div className="md:hidden w-full flex items-center justify-between p-2">
@@ -569,7 +588,7 @@ const EventsPage: React.FC = () => {
                 <div style={{ paddingTop: '24px' }}>
                   {filteredEvents.length > 0 ? (
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
-                      {filteredEvents.slice(0, 4).map((event, index) => (
+                      {paginatedEvents.map((event, index) => (
                         <EventCard key={event.id || index} event={event} />
                       ))}
                     </div>
@@ -585,6 +604,19 @@ const EventsPage: React.FC = () => {
                 </div>
               </div>
             </div>
+            {/* Pagination — full width below the grid */}
+            {totalPages > 1 && (
+              <div className="hidden md:block mt-6">
+                <Pagination
+                  currentPage={currentPage}
+                  totalPages={totalPages}
+                  onPageChange={(page) => {
+                    setCurrentPage(page);
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                  }}
+                />
+              </div>
+            )}
             {/* ...sticky filter button and bottom drawer removed for mobile... */}
           </>
         ) : (
