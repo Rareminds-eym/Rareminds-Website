@@ -173,13 +173,15 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
       zohoPayload["Payment Status"] = 'completed';
       
       if (total_amount !== null && total_amount !== undefined) {
-        zohoPayload["Total Amount"] = total_amount;
-        zohoPayload["Amount"] = total_amount;
+        // Convert amount to string for Zoho CRM compatibility
+        zohoPayload["Total Amount"] = String(total_amount);
+        zohoPayload["Amount"] = String(total_amount);
       }
     } else {
       zohoPayload["Payment Status"] = 'not_required';
-      zohoPayload["Total Amount"] = 0;
-      zohoPayload["Amount"] = 0;
+      // Convert amount to string for Zoho CRM compatibility
+      zohoPayload["Total Amount"] = "0";
+      zohoPayload["Amount"] = "0";
     }
 
     console.log('[Register] Zoho payload prepared:', {

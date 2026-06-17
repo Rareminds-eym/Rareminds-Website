@@ -5,8 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "dev:pages": "wrangler pages dev dist --port 8788",
-    "dev:full": "npm run build && wrangler pages dev dist --port 8788",
+    "dev:pages": "wrangler pages dev dist --port 8789 --service PAYMENT_WORKER=razorpay-api",
+    "dev:full": "npm run build && wrangler pages dev dist --port 8789 --service PAYMENT_WORKER=razorpay-api",
     "server": "node server.js",
     "build": "vite build",
     "lint": "eslint .",
@@ -104,7 +104,7 @@
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.8.3",
     "vite": "^6.3.5",
-    "wrangler": "^4.99.0"
+    "wrangler": "^4.101.0"
   },
   "description": "This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.",
   "main": "index.js",

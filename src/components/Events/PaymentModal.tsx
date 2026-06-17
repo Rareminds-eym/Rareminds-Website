@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { CheckCircle, CreditCard, X } from 'lucide-react';
-import { SignJWT } from 'jose';
 
 declare global {
   interface Window {
@@ -38,25 +37,6 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
   const [processing, setProcessing] = useState(false);
   const [error, setError] = useState('');
 
-  // Generate service JWT for authenticating with the payment worker
-  const generateServiceJWT = async (): Promise<string> => {
-    const secret = import.meta.env.VITE_RAZORPAY_SERVICE_SECRET;
-    if (!secret) {
-      throw new Error('RAZORPAY_SERVICE_SECRET not configured');
-    }
-
-    const encoder = new TextEncoder();
-    const jwt = await new SignJWT({
-      service_id: 'functions-payment-service',
-    })
-      .setProtectedHeader({ alg: 'HS256' })
-      .setIssuedAt()
-      .setExpirationTime('5m')
-      .sign(encoder.encode(secret));
-
-    return jwt;
-  };
-
   React.useEffect(() => {
     if (open) {
       document.body.style.overflow = 'hidden';
@@ -82,49 +62,33 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
     // Ensure minimum amount is ₹1 as required by Razorpay
     const minimumAmount = 1;
     const finalAmount = Math.max(minimumAmount, amount);
-    const amountInPaise = finalAmount * 100; // Convert rupees to paise
+    const amountInPaise = Math.round(finalAmount * 100); // Convert rupees to paise
 
     setProcessing(true);
     setError('');
 
     try {
-      // Get worker URL from env
-      // In development, use the Vite proxy to avoid CORS issues
-      const isDevelopment = import.meta.env.DEV;
-      const workerUrl = isDevelopment 
-        ? '/payments'  // Use Vite proxy in development
-        : import.meta.env.VITE_RAZORPAY_WORKER_URL;
-      const razorpayKeyId = import.meta.env.VITE_RAZORPAY_KEY_ID;
-
-      if (!workerUrl) {
-        throw new Error('Payment worker URL not configured. Please set VITE_RAZORPAY_WORKER_URL in production.');
-      }
-
-      if (!razorpayKeyId) {
-        throw new Error('Razorpay Key ID not configured');
-      }
-
-      // Generate JWT token for authentication
-      const serviceJWT = await generateServiceJWT();
+      const paymentsApiUrl = '/api/payments';
 
       console.log('Creating payment order with:', {
         registrationId,
         amount: amountInPaise,
         currency: 'INR',
-        workerUrl
+        paymentsApiUrl
       });
 
-      // Create order using Cloudflare Worker
-      const orderResponse = await fetch(`${workerUrl}/create-order`, {
+      const receipt = `rcpt_${registrationId}_${Date.now()}`;
+
+      // Create order through Pages Function. The function calls the payment worker service binding.
+      const orderResponse = await fetch(`${paymentsApiUrl}/create-order`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${serviceJWT}`,
         },
         body: JSON.stringify({
           amount: amountInPaise,
           currency: 'INR',
-          receipt: `rcpt_${registrationId}_${Date.now()}`,
+          receipt,
           notes: {
             registration_id: registrationId.toString(),
             event_name: eventName,
@@ -146,6 +110,11 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
 
       const orderResult = await orderResponse.json();
       const order = orderResult.order;
+      const razorpayKeyId = orderResult.razorpay_key_id || order?.key_id || import.meta.env.VITE_RAZORPAY_KEY_ID;
+
+      if (!razorpayKeyId) {
+        throw new Error('Razorpay Key ID not returned by payment service');
+      }
 
       console.log('Payment order created:', order);
 
@@ -159,16 +128,12 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
         handler: async (paymentResult: any) => {
           try {
             console.log('Payment successful, verifying...', paymentResult);
-            
-            // Generate new JWT for verification
-            const verifyJWT = await generateServiceJWT();
 
-            // Verify payment using Cloudflare Worker
-            const verifyResponse = await fetch(`${workerUrl}/verify-payment`, {
+            // Verify payment through Pages Function. The function calls the payment worker service binding.
+            const verifyResponse = await fetch(`${paymentsApiUrl}/verify-payment`, {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${verifyJWT}`,
               },
               body: JSON.stringify({
                 razorpay_order_id: paymentResult.razorpay_order_id,
