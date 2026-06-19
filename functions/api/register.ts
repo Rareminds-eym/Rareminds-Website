@@ -46,12 +46,6 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
   }
 
   try {
-    // Debug: Log environment check
-    console.log('[Register] Environment check:', {
-      has_zoho_url: !!env.ZOHO_FLOW_WEBHOOK_URL,
-      url_preview: env.ZOHO_FLOW_WEBHOOK_URL ? env.ZOHO_FLOW_WEBHOOK_URL.substring(0, 50) + '...' : 'undefined'
-    });
-
     // Parse request body
     const body: RegisterRequest = await request.json();
     const { answers, event_id, form_id, event_type, event_name, payment_id, total_amount } = body;
@@ -86,13 +80,6 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' }
       });
     }
-
-    console.log('[Register] Processing registration:', {
-      event_id,
-      form_id,
-      event_type,
-      has_payment: !!payment_id
-    });
 
     // Enhanced field extraction with fuzzy matching for common variations and typos
     const extractFieldFuzzy = (answers: Record<string, any>, possibleKeys: string[]): string => {
@@ -173,34 +160,52 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
       finalLastName = last_name;
     } else if (first_name && !last_name) {
       finalFirstName = first_name;
-      finalLastName = first_name;
+      finalLastName = first_name; // Use first name as last name fallback
     } else if (full_name && !first_name && !last_name) {
       const nameParts = full_name.trim().split(' ');
-      finalFirstName = nameParts[0] || 'Unknown';
+      finalFirstName = nameParts[0];
       finalLastName = nameParts.length > 1 ? nameParts.slice(1).join(' ') : nameParts[0];
     } else {
-      finalFirstName = 'Unknown';
-      finalLastName = 'Unknown';
+      // If no name data at all, return validation error instead of fake names
+      return new Response(JSON.stringify({ 
+        error: 'Name is required for registration',
+        message: 'Please provide at least a full name or first name'
+      }), {
+        status: 400,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+      });
     }
 
-    // Format phone number for WhatsApp (ensure +91 prefix for Indian numbers)
+    // Format phone number for WhatsApp with validation
     const formatPhoneForWhatsApp = (phoneNumber: string): string => {
       if (!phoneNumber) return '';
       
       const digitsOnly = phoneNumber.replace(/\D/g, '');
       
+      // Validate minimum length for any phone number
+      if (digitsOnly.length < 10) return phoneNumber; // Return as-is if too short
+      
+      // Handle various international formats
       if (digitsOnly.startsWith('91') && digitsOnly.length === 12) {
-        return '+' + digitsOnly;
+        return '+' + digitsOnly; // Already has country code
       }
       
       if (digitsOnly.length === 10) {
+        // Assume Indian number if no country code and exactly 10 digits
         return '+91' + digitsOnly;
       }
       
       if (digitsOnly.length === 11 && digitsOnly.startsWith('0')) {
+        // Remove leading 0 and add Indian country code
         return '+91' + digitsOnly.substring(1);
       }
       
+      if (digitsOnly.length > 12) {
+        // Likely already has country code, just add + if missing
+        return phoneNumber.startsWith('+') ? phoneNumber : '+' + digitsOnly;
+      }
+      
+      // For other cases, return with + prefix if not already present
       return phoneNumber.startsWith('+') ? phoneNumber : '+' + digitsOnly;
     };
 
@@ -213,38 +218,21 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
 
     // Convert various opt-in formats to standardized boolean value for Zoho CRM
     const getOptInValue = (value: string): boolean => {
-      if (!value) return true; // DEFAULT TO TRUE - Users consent by default unless they opt-out
+      if (!value) return false; // GDPR compliant - no consent means no consent
       
       const normalizedValue = String(value).toLowerCase().trim();
       
-      // Handle various true/consent values
+      // Handle various true/consent values - explicit consent only
       if (['yes', 'true', '1', 'on', 'checked', 'agree', 'accept', 'consent'].includes(normalizedValue)) {
         return true;
       }
       
-      // Handle false/no consent values (explicit opt-out)
-      if (['no', 'false', '0', 'off', 'unchecked', 'decline', 'reject'].includes(normalizedValue)) {
-        return false;
-      }
-      
-      // If unclear, default to true (opt-in by default)
-      return true;
+      // All other cases including unclear values should be false for GDPR compliance
+      return false;
     };
 
     const whatsappOptInStatus = getOptInValue(whatsappOptIn);
     const whatsappFormattedNumber = formatPhoneForWhatsApp(phone);
-
-    console.log('[Register] Name and Phone processing:', {
-      original_first: first_name,
-      original_last: last_name,
-      original_full: full_name,
-      original_phone: phone,
-      final_first: finalFirstName,
-      final_last: finalLastName,
-      whatsapp_number: whatsappFormattedNumber,
-      whatsapp_opt_in_raw: whatsappOptIn,
-      whatsapp_opt_in_processed: whatsappOptInStatus
-    });
 
     // Build Zoho payload with standard fields
     const registrationTimestamp = new Date().toISOString();
@@ -270,7 +258,7 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
       "Registration Date": registrationTimestamp.split('T')[0],
       
       // Lead source and classification
-      "Lead Source": event_name,
+      "Lead Source": event_type === 'paid' ? 'Paid Event' : 'Free Event',
       "Lead Status": "New Lead",
       "Lead Type": "Individual",
       "Client Category": "Prospect",
@@ -278,19 +266,14 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
       "Campaign Name": event_name
     };
 
-    // Add WhatsApp fields AFTER the main payload to ensure they're not overridden
+    // Add WhatsApp fields with proper data types for Zoho CRM
     const addWhatsAppFields = () => {
-      // Force WhatsApp Opt-In to Yes regardless of form input
-      const optInValue = "Yes";
-      zohoPayload["WhatsApp Opt-In"] = optInValue; // Preferred field name with space
-      zohoPayload["WhatsApp_Opt_In"] = optInValue; // Alternative field name
-      // Map formatted WhatsApp number (ensure +91 prefix)
-      zohoPayload["Whatsapp No"] = whatsappFormattedNumber;
+      zohoPayload["WhatsApp Opt-In"] = whatsappOptInStatus; // Boolean: true/false
+      zohoPayload["WhatsApp_Opt_In"] = whatsappOptInStatus; // Alternative field name
+      zohoPayload["Whatsapp No"] = whatsappFormattedNumber; // Formatted phone number
       zohoPayload["Whatsapp_No"] = whatsappFormattedNumber; // Alternative field name
-      console.log('[Register] WhatsApp fields set:', {
-        opt_in: optInValue,
-        number: whatsappFormattedNumber
-      });
+      zohoPayload["Whatsapp Number"] = whatsappFormattedNumber; // Another common field name
+      zohoPayload["Mobile Number"] = whatsappFormattedNumber; // Backup phone field
     };
 
     addWhatsAppFields();
@@ -377,16 +360,21 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
           // Exact match after normalization
           if (normalizedKey === normalizedMappingKey) {
             zohoFieldName = mappingValue;
-            console.log(`[Register] Fuzzy matched: ${key} -> ${zohoFieldName}`);
             break;
           }
           
-          // Partial match for common patterns
-          if (normalizedKey.length > 3 && normalizedMappingKey.length > 3) {
-            if (normalizedKey.includes(normalizedMappingKey) || normalizedMappingKey.includes(normalizedKey)) {
-              zohoFieldName = mappingValue;
-              console.log(`[Register] Partial matched: ${key} -> ${zohoFieldName}`);
-              break;
+          // Partial match for common patterns - more restrictive to avoid false positives
+          if (normalizedKey.length > 4 && normalizedMappingKey.length > 4) {
+            // Only match if one is a clear subset of the other with significant overlap
+            const minLength = Math.min(normalizedKey.length, normalizedMappingKey.length);
+            const maxLength = Math.max(normalizedKey.length, normalizedMappingKey.length);
+            
+            // Require at least 70% overlap and minimum 5 characters to avoid false matches
+            if (minLength >= 5 && (minLength / maxLength) >= 0.7) {
+              if (normalizedKey.includes(normalizedMappingKey) || normalizedMappingKey.includes(normalizedKey)) {
+                zohoFieldName = mappingValue;
+                break;
+              }
             }
           }
         }
@@ -400,7 +388,6 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
           .split(' ')
           .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
           .join(' ');
-        console.log(`[Register] Auto-converted: ${key} -> ${zohoFieldName}`);
       }
       
       // CRITICAL: Never override required fields that are already set
@@ -411,7 +398,6 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
       
       if (isWhatsAppField) {
         // NEVER allow WhatsApp fields to be overridden by form data
-        console.log(`[Register] Blocked WhatsApp field override: ${zohoFieldName} = ${value}`);
         continue; // Skip this field, continue processing remaining fields
       } else if (!isRequiredField) {
         zohoPayload[zohoFieldName] = String(value);
@@ -420,7 +406,6 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
         if ((!zohoPayload[zohoFieldName] || zohoPayload[zohoFieldName] === '' || zohoPayload[zohoFieldName] === 'null') && 
             value && value !== '' && value !== null) {
           zohoPayload[zohoFieldName] = String(value);
-          console.log(`[Register] Updated required field: ${zohoFieldName} = ${value}`);
         }
       }
     }
@@ -436,31 +421,6 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
       zohoPayload["Full Name"] = `${finalFirstName} ${finalLastName}`;
     }
     
-    // FORCE RE-ADD WhatsApp fields (they should never be overridden)
-    addWhatsAppFields();
-    
-    console.log('[Register] Final WhatsApp validation:', {
-      whatsapp_opt_in_final: zohoPayload["WhatsApp Opt-In"],
-      whatsapp_number_final: zohoPayload["Whatsapp No"],
-      calculated_opt_in: whatsappOptInStatus,
-      calculated_number: whatsappFormattedNumber
-    });
-
-    // FORCE SET WhatsApp fields with CORRECT data types for Zoho CRM
-    zohoPayload["Whatsapp Number"] = whatsappFormattedNumber;     // String: Phone number
-    zohoPayload["Mobile Number"] = whatsappFormattedNumber;       // String: Backup phone field
-    zohoPayload["WhatsApp Opt-In"] = whatsappOptInStatus;         // Boolean: true/false
-    zohoPayload["WhatsApp_Opt_In"] = whatsappOptInStatus;         // Boolean: Alternative field name
-    
-    console.log('[Register] SET WhatsApp fields with DEFAULT TRUE opt-in:', {
-      'Whatsapp Number': `"${zohoPayload["Whatsapp Number"]}" (string)`,      
-      'WhatsApp Opt-In': `${zohoPayload["WhatsApp Opt-In"]} (boolean - defaults to TRUE)`,
-      'WhatsApp_Opt_In': `${zohoPayload["WhatsApp_Opt_In"]} (boolean - defaults to TRUE)`,
-      'Raw opt-in from form': whatsappOptIn || 'NOT PROVIDED',
-      'Processed to boolean': whatsappOptInStatus,
-      'Type check': typeof whatsappOptInStatus
-    });
-
     // Add payment fields with proper Zoho field names (using spaces)
     if (event_type === 'paid' && payment_id) {
       zohoPayload["Payment Id"] = payment_id;
@@ -478,22 +438,8 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
       zohoPayload["Total Amount"] = "0";
     }
 
-    console.log('[Register] Zoho payload prepared:', {
-      total_fields: Object.keys(zohoPayload).length,
-      first_name_check: zohoPayload["First Name"],
-      last_name_check: zohoPayload["Last Name"],
-      full_name_check: zohoPayload["Full Name"],
-      email_check: zohoPayload["Email"],
-      whatsapp_number: zohoPayload["Whatsapp No"],
-      whatsapp_opt_in: zohoPayload["WhatsApp Opt-In"],
-      whatsapp_formatted_number: whatsappFormattedNumber,
-      whatsapp_opt_in_status: whatsappOptInStatus,
-      original_whatsapp_opt_in: whatsappOptIn
-    });
-
     // Send to Zoho Flow webhook
     if (!env.ZOHO_FLOW_WEBHOOK_URL) {
-      console.warn('[Register] ZOHO_FLOW_WEBHOOK_URL not configured');
       return new Response(JSON.stringify({
         success: true,
         message: 'Registration processed (Zoho webhook not configured)'
@@ -505,17 +451,6 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
 
     try {
       const webhookUrl = env.ZOHO_FLOW_WEBHOOK_URL;
-      
-      console.log('[Register] Sending to Zoho Flow:', {
-        url: webhookUrl,
-        total_fields: Object.keys(zohoPayload).length,
-        payload_preview: {
-          first_name: zohoPayload["First Name"],
-          last_name: zohoPayload["Last Name"],
-          email: zohoPayload["Email"],
-          event: zohoPayload["Event Name"]
-        }
-      });
 
       // Send POST request with JSON body
       const zohoResponse = await fetch(webhookUrl, {
@@ -528,23 +463,11 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
 
       const responseText = await zohoResponse.text();
       
-      console.log('[Register] Zoho Flow response:', {
-        status: zohoResponse.status,
-        statusText: zohoResponse.statusText,
-        body: responseText
-      });
-
       if (!zohoResponse.ok) {
-        console.warn('[Register] Zoho webhook failed (non-critical):', {
-          status: zohoResponse.status,
-          response: responseText
-        });
-      } else {
-        console.log('[Register] ✅ Zoho webhook sent successfully');
+        // Zoho webhook failed (non-critical)
       }
 
     } catch (error) {
-      console.error('[Register] Zoho webhook error (non-critical):', error);
       // Don't fail the request - Zoho errors are non-critical
     }
 
@@ -558,7 +481,6 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
     });
 
   } catch (error) {
-    console.error('[Register] Unhandled error:', error);
     return new Response(JSON.stringify({
       error: 'Internal server error',
       message: error instanceof Error ? error.message : 'Unknown error'
