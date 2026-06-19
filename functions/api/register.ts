@@ -30,6 +30,107 @@ interface RegisterRequest {
   total_amount: number | null;
 }
 
+// Utility functions for efficient field matching and processing
+class FieldMatcher {
+  private normalizedCache = new Map<string, string>();
+  private matchCache = new Map<string, boolean>();
+  
+  // Normalize field names with caching to avoid repeated operations
+  private normalize(fieldName: string): string {
+    if (this.normalizedCache.has(fieldName)) {
+      return this.normalizedCache.get(fieldName)!;
+    }
+    
+    const normalized = fieldName.toLowerCase().replace(/[^a-z0-9]/g, '');
+    this.normalizedCache.set(fieldName, normalized);
+    return normalized;
+  }
+  
+  // Check if two field names match with similarity threshold
+  private isPartialMatch(key1: string, key2: string): boolean {
+    const cacheKey = `${key1}|${key2}`;
+    if (this.matchCache.has(cacheKey)) {
+      return this.matchCache.get(cacheKey)!;
+    }
+    
+    const norm1 = this.normalize(key1);
+    const norm2 = this.normalize(key2);
+    
+    let isMatch = false;
+    
+    // Exact match after normalization
+    if (norm1 === norm2) {
+      isMatch = true;
+    } else if (norm1.length > 4 && norm2.length > 4) {
+      // Partial match with strict requirements to avoid false positives
+      const minLength = Math.min(norm1.length, norm2.length);
+      const maxLength = Math.max(norm1.length, norm2.length);
+      
+      // Require at least 70% overlap and minimum 5 characters
+      if (minLength >= 5 && (minLength / maxLength) >= 0.7) {
+        isMatch = norm1.includes(norm2) || norm2.includes(norm1);
+      }
+    }
+    
+    this.matchCache.set(cacheKey, isMatch);
+    return isMatch;
+  }
+  
+  // Extract field value with fuzzy matching
+  extractField(answers: Record<string, any>, possibleKeys: string[]): string {
+    // Direct match first (most efficient)
+    for (const key of possibleKeys) {
+      const value = answers[key];
+      if (value && value !== '') {
+        return String(value);
+      }
+    }
+    
+    // Fuzzy match only if direct match fails
+    const answersEntries = Object.entries(answers);
+    for (const [formKey, value] of answersEntries) {
+      if (!value || value === '') continue;
+      
+      for (const possibleKey of possibleKeys) {
+        if (this.isPartialMatch(formKey, possibleKey)) {
+          return String(value);
+        }
+      }
+    }
+    
+    return '';
+  }
+  
+  // Find matching field name from mapping with fuzzy logic
+  findMappedField(fieldName: string, fieldMapping: Record<string, string>): string | null {
+    // Try direct mapping first (case insensitive)
+    const lowerFieldName = fieldName.toLowerCase();
+    const normalizedKey = this.normalize(fieldName);
+    
+    const directMatch = fieldMapping[lowerFieldName] || fieldMapping[normalizedKey];
+    if (directMatch) return directMatch;
+    
+    // Fuzzy matching fallback - only if direct match fails
+    const mappingEntries = Object.entries(fieldMapping);
+    for (const [mappingKey, mappingValue] of mappingEntries) {
+      if (this.isPartialMatch(fieldName, mappingKey)) {
+        return mappingValue;
+      }
+    }
+    
+    return null;
+  }
+  
+  // Clear caches to prevent memory leaks in long-running processes
+  clearCache(): void {
+    this.normalizedCache.clear();
+    this.matchCache.clear();
+  }
+}
+
+// Create reusable field matcher instance
+const fieldMatcher = new FieldMatcher();
+
 export async function onRequestPost(context: { request: Request; env: Env }) {
   const { request, env } = context;
 
@@ -81,47 +182,9 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
       });
     }
 
-    // Enhanced field extraction with fuzzy matching for common variations and typos
+    // Enhanced field extraction using optimized utility
     const extractFieldFuzzy = (answers: Record<string, any>, possibleKeys: string[]): string => {
-      // Direct match first
-      for (const key of possibleKeys) {
-        if (answers[key] && answers[key] !== '') {
-          return String(answers[key]);
-        }
-      }
-      
-      // Fuzzy match - check all form keys against possible variations
-      for (const [formKey, value] of Object.entries(answers)) {
-        if (!value || value === '') continue;
-        
-        const normalizedFormKey = formKey.toLowerCase().replace(/[^a-z]/g, '');
-        
-        for (const possibleKey of possibleKeys) {
-          const normalizedPossibleKey = possibleKey.toLowerCase().replace(/[^a-z]/g, '');
-          
-          // Exact match after normalization
-          if (normalizedFormKey === normalizedPossibleKey) {
-            return String(value);
-          }
-          
-          // Partial match for common patterns - more restrictive to avoid false positives
-          if (normalizedFormKey.length > 4 && normalizedPossibleKey.length > 4) {
-            // Only match if one is a clear subset of the other with significant overlap
-            const minLength = Math.min(normalizedFormKey.length, normalizedPossibleKey.length);
-            const maxLength = Math.max(normalizedFormKey.length, normalizedPossibleKey.length);
-            
-            // Require at least 70% overlap and minimum 5 characters to avoid false matches
-            if (minLength >= 5 && (minLength / maxLength) >= 0.7) {
-              if (normalizedFormKey.includes(normalizedPossibleKey) || 
-                  normalizedPossibleKey.includes(normalizedFormKey)) {
-                return String(value);
-              }
-            }
-          }
-        }
-      }
-      
-      return '';
+      return fieldMatcher.extractField(answers, possibleKeys);
     };
 
     const first_name = extractFieldFuzzy(answers, [
@@ -160,6 +223,12 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
       'your_phone', 'your_mobile', 'cell', 'cell_number', 'telephone', 'tel'
     ]);
 
+    // Extract country information to determine appropriate phone formatting
+    const country = extractFieldFuzzy(answers, [
+      'country', 'Country', 'COUNTRY', 'country_code', 'countryCode',
+      'nationality', 'Nationality', 'nation', 'location_country'
+    ]);
+
     // Smart name processing for Zoho CRM requirements
     let finalFirstName = '';
     let finalLastName = '';
@@ -168,12 +237,21 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
       finalFirstName = first_name;
       finalLastName = last_name;
     } else if (first_name && !last_name) {
-      finalFirstName = first_name;
-      finalLastName = first_name; // Use first name as last name fallback
+      // If only first name provided, check if it's actually a full name
+      const nameParts = first_name.trim().split(' ');
+      if (nameParts.length > 1) {
+        // Multiple words in "first name" field - treat as full name
+        finalFirstName = nameParts[0];
+        finalLastName = nameParts.slice(1).join(' ');
+      } else {
+        // Single word - use as first name only, leave last name empty for CRM
+        finalFirstName = first_name;
+        finalLastName = ''; // Empty rather than duplicate
+      }
     } else if (full_name && !first_name && !last_name) {
       const nameParts = full_name.trim().split(' ');
       finalFirstName = nameParts[0];
-      finalLastName = nameParts.length > 1 ? nameParts.slice(1).join(' ') : nameParts[0];
+      finalLastName = nameParts.length > 1 ? nameParts.slice(1).join(' ') : '';
     } else {
       // If no name data at all, return validation error instead of fake names
       return new Response(JSON.stringify({ 
@@ -185,53 +263,75 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
       });
     }
 
-    // Format phone number for WhatsApp with international validation
-    const formatPhoneForWhatsApp = (phoneNumber: string): string => {
+    // Format phone number for WhatsApp without hardcoded country assumptions
+    const formatPhoneForWhatsApp = (phoneNumber: string, userCountry?: string): string => {
       if (!phoneNumber) return '';
       
       const digitsOnly = phoneNumber.replace(/\D/g, '');
       
       // Validate minimum length for any phone number
-      if (digitsOnly.length < 10) return ''; // Return empty for invalid numbers
+      if (digitsOnly.length < 7) return ''; // Return empty for clearly invalid numbers
       
-      // Handle various international formats
-      if (digitsOnly.startsWith('91') && digitsOnly.length === 12) {
-        return '+' + digitsOnly; // Indian number with country code
+      // If already has proper international format, return as-is
+      if (phoneNumber.startsWith('+') && digitsOnly.length >= 10) {
+        return phoneNumber;
       }
       
-      if (digitsOnly.startsWith('1') && digitsOnly.length === 11) {
-        return '+' + digitsOnly; // US/Canada number
+      // Handle numbers that already include country code (without + prefix)
+      if (digitsOnly.length >= 11) {
+        // Common country code patterns
+        if (digitsOnly.startsWith('91') && digitsOnly.length === 12) {
+          return '+' + digitsOnly; // India
+        }
+        if (digitsOnly.startsWith('1') && digitsOnly.length === 11) {
+          return '+' + digitsOnly; // US/Canada
+        }
+        if (digitsOnly.startsWith('44') && digitsOnly.length >= 12) {
+          return '+' + digitsOnly; // UK
+        }
+        if (digitsOnly.startsWith('61') && digitsOnly.length >= 11) {
+          return '+' + digitsOnly; // Australia
+        }
+        if (digitsOnly.startsWith('49') && digitsOnly.length >= 11) {
+          return '+' + digitsOnly; // Germany
+        }
+        // Add + prefix for other long numbers that likely have country code
+        return '+' + digitsOnly;
       }
       
-      if (digitsOnly.startsWith('44') && digitsOnly.length >= 12) {
-        return '+' + digitsOnly; // UK number
+      // Handle numbers without country code based on user's country if available
+      if (userCountry && digitsOnly.length >= 7) {
+        const countryLower = userCountry.toLowerCase();
+        if (countryLower.includes('india') || countryLower.includes('ind')) {
+          if (digitsOnly.length === 10) return '+91' + digitsOnly;
+          if (digitsOnly.length === 11 && digitsOnly.startsWith('0')) {
+            return '+91' + digitsOnly.substring(1);
+          }
+        } else if (countryLower.includes('usa') || countryLower.includes('united states') || 
+                   countryLower.includes('canada')) {
+          if (digitsOnly.length === 10) return '+1' + digitsOnly;
+        } else if (countryLower.includes('uk') || countryLower.includes('united kingdom') ||
+                   countryLower.includes('britain')) {
+          if (digitsOnly.length >= 10) return '+44' + digitsOnly;
+        }
       }
       
-      if (digitsOnly.length === 10) {
-        // Default to Indian number if no country code and exactly 10 digits
-        // This assumption should be configurable based on event location
-        return '+91' + digitsOnly;
+      // For ambiguous cases without country info, return number with warning
+      // Don't assume any country code - let the system handle it downstream
+      if (digitsOnly.length >= 7) {
+        const formatted = '+' + digitsOnly;
+        console.warn(`Phone number format uncertain - no country specified: ${phoneNumber} -> ${formatted}`);
+        return formatted;
       }
       
-      if (digitsOnly.length === 11 && digitsOnly.startsWith('0')) {
-        // Remove leading 0 and add Indian country code (common Indian format)
-        return '+91' + digitsOnly.substring(1);
-      }
-      
-      if (digitsOnly.length > 12) {
-        // Likely already has country code, validate and format
-        return phoneNumber.startsWith('+') ? phoneNumber : '+' + digitsOnly;
-      }
-      
-      // For ambiguous cases, return with + prefix but log for review
-      const formatted = phoneNumber.startsWith('+') ? phoneNumber : '+' + digitsOnly;
-      console.warn(`Phone number format uncertain: ${phoneNumber} -> ${formatted}`);
-      return formatted;
+      // Return empty for numbers that are too short to be valid
+      console.warn(`Phone number too short to be valid: ${phoneNumber}`);
+      return '';
     };
 
     // Extract WhatsApp opt-in consent from form
     const whatsappOptIn = extractFieldFuzzy(answers, [
-      'whatsapp_opt_in', 'whatsappOptIn', 'WhatsApp Opt-In', 'whatsapp_optin',
+      'whatsapp_opt_in', 'whatsappOptIn', 'WhatsApp Opt In', 'whatsapp_optin',
       'opt_in', 'optin', 'consent', 'whatsapp_consent', 'marketing_consent',
       'communication_consent', 'sms_opt_in', 'phone_opt_in'
     ]);
@@ -252,7 +352,7 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
     };
 
     const whatsappOptInStatus = getOptInValue(whatsappOptIn);
-    const whatsappFormattedNumber = formatPhoneForWhatsApp(phone);
+    const whatsappFormattedNumber = formatPhoneForWhatsApp(phone, country);
 
     // Build Zoho payload with standard fields
     const registrationTimestamp = new Date().toISOString();
@@ -262,10 +362,11 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
       // REQUIRED Core contact fields - Using SPACES as Zoho Flow expects
       "First Name": finalFirstName,
       "Last Name": finalLastName,
-      "Full Name": full_name || `${finalFirstName} ${finalLastName}`,
+      "Full Name": full_name || (finalLastName ? `${finalFirstName} ${finalLastName}` : finalFirstName),
       "Email": email,
       "Phone": phone,
       "Mobile": phone,
+      "Country": country || '', // User's country for proper phone formatting
       
       // Event metadata - Using SPACES  
       "Event Id": event_id,
@@ -288,11 +389,8 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
 
     // Add WhatsApp fields with proper data types for Zoho CRM
     const addWhatsAppFields = () => {
-      zohoPayload["WhatsApp Opt-In"] = whatsappOptInStatus; // Boolean: true/false
-      zohoPayload["WhatsApp_Opt_In"] = whatsappOptInStatus; // Alternative field name
-      zohoPayload["Whatsapp No"] = whatsappFormattedNumber; // Formatted phone number
-      zohoPayload["Whatsapp_No"] = whatsappFormattedNumber; // Alternative field name
-      zohoPayload["Whatsapp Number"] = whatsappFormattedNumber; // Another common field name
+      zohoPayload["WhatsApp Opt In"] = whatsappOptInStatus; // Boolean: true/false - standardized without hyphen
+      zohoPayload["WhatsApp Number"] = whatsappFormattedNumber; // Primary WhatsApp field
       zohoPayload["Mobile Number"] = whatsappFormattedNumber; // Backup phone field
     };
 
@@ -309,14 +407,14 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
       'mobile': 'Mobile Number', 'mobilenumber': 'Mobile Number', 'mobile_number': 'Mobile Number',
       
       // WHATSAPP FIELDS (Critical mapping)
-      'whatsapp': 'Whatsapp Number', 'whatsappnumber': 'Whatsapp Number', 'whatsapp_number': 'Whatsapp Number',
-      'whatsappno': 'Whatsapp Number', 'whatsapp_no': 'Whatsapp Number',
+      'whatsapp': 'WhatsApp Number', 'whatsappnumber': 'WhatsApp Number', 'whatsapp_number': 'WhatsApp Number',
+      'whatsappno': 'WhatsApp Number', 'whatsapp_no': 'WhatsApp Number',
       
       // WHATSAPP OPT-IN (All possible variations) - Maps to boolean fields
-      'whatsappoptin': 'WhatsApp_Opt_In', 'whatsapp_opt_in': 'WhatsApp_Opt_In', 'whatsapp_optin': 'WhatsApp_Opt_In',
-      'optin': 'WhatsApp_Opt_In', 'opt_in': 'WhatsApp_Opt_In', 'marketing_opt_in': 'WhatsApp_Opt_In',
-      'consent': 'WhatsApp_Opt_In', 'whatsapp_consent': 'WhatsApp_Opt_In', 'marketing_consent': 'WhatsApp_Opt_In',
-      'communication_consent': 'WhatsApp_Opt_In', 'sms_opt_in': 'WhatsApp_Opt_In',
+      'whatsappoptin': 'WhatsApp Opt In', 'whatsapp_opt_in': 'WhatsApp Opt In', 'whatsapp_optin': 'WhatsApp Opt In',
+      'optin': 'WhatsApp Opt In', 'opt_in': 'WhatsApp Opt In', 'marketing_opt_in': 'WhatsApp Opt In',
+      'consent': 'WhatsApp Opt In', 'whatsapp_consent': 'WhatsApp Opt In', 'marketing_consent': 'WhatsApp Opt In',
+      'communication_consent': 'WhatsApp Opt In', 'sms_opt_in': 'WhatsApp Opt In',
       
       // EDUCATIONAL FIELDS
       'institution': 'School / College / University Name', 'school': 'School / College / University Name',
@@ -337,6 +435,7 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
       'years_of_experience': 'Years Of Experience', 'work_experience': 'Years Of Experience',
       
       // LOCATION FIELDS
+      'country': 'Country', 'nationality': 'Country', 'nation': 'Country', 'location_country': 'Country',
       'state': 'State', 'statename': 'State', 'region': 'State',
       'district': 'District', 'districtname': 'District', 'area': 'District',
       'city': 'City', 'cityname': 'City', 'town': 'City',
@@ -366,39 +465,8 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
     for (const [key, value] of Object.entries(answers)) {
       if (value === null || value === '' || value === undefined) continue;
       
-      // Normalize the form field name for better matching
-      const normalizedKey = key.toLowerCase().replace(/[^a-z0-9]/g, '');
-      
-      // Try direct mapping first (exact match)
-      let zohoFieldName = fieldMapping[key.toLowerCase()] || fieldMapping[normalizedKey];
-      
-      // If no direct match, try fuzzy matching for typos and variations
-      if (!zohoFieldName) {
-        for (const [mappingKey, mappingValue] of Object.entries(fieldMapping)) {
-          const normalizedMappingKey = mappingKey.replace(/[^a-z0-9]/g, '');
-          
-          // Exact match after normalization
-          if (normalizedKey === normalizedMappingKey) {
-            zohoFieldName = mappingValue;
-            break;
-          }
-          
-          // Partial match for common patterns - more restrictive to avoid false positives
-          if (normalizedKey.length > 4 && normalizedMappingKey.length > 4) {
-            // Only match if one is a clear subset of the other with significant overlap
-            const minLength = Math.min(normalizedKey.length, normalizedMappingKey.length);
-            const maxLength = Math.max(normalizedKey.length, normalizedMappingKey.length);
-            
-            // Require at least 70% overlap and minimum 5 characters to avoid false matches
-            if (minLength >= 5 && (minLength / maxLength) >= 0.7) {
-              if (normalizedKey.includes(normalizedMappingKey) || normalizedMappingKey.includes(normalizedKey)) {
-                zohoFieldName = mappingValue;
-                break;
-              }
-            }
-          }
-        }
-      }
+      // Use optimized field matcher utility
+      let zohoFieldName = fieldMatcher.findMappedField(key, fieldMapping);
       
       // If still no match, convert to proper Zoho format as fallback (using spaces)
       if (!zohoFieldName) {
@@ -412,7 +480,7 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
       
       // CRITICAL: Never override required fields that are already set
       const requiredFields = ['First Name', 'Last Name', 'Email', 'Phone', 'Mobile', 'Full Name'];
-      const whatsappFields = ['WhatsApp Opt-In', 'WhatsApp_Opt_In', 'Whatsapp No', 'Whatsapp_No'];
+      const whatsappFields = ['WhatsApp Opt In', 'WhatsApp Number', 'Mobile Number'];
       const isRequiredField = requiredFields.includes(zohoFieldName);
       const isWhatsAppField = whatsappFields.includes(zohoFieldName);
       
@@ -435,10 +503,12 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
       zohoPayload["First Name"] = finalFirstName;
     }
     if (!zohoPayload["Last Name"] || zohoPayload["Last Name"] === 'null' || zohoPayload["Last Name"] === '') {
-      zohoPayload["Last Name"] = finalLastName;
+      // If Zoho CRM absolutely requires a last name, use a standard placeholder
+      // Otherwise, empty last name is semantically correct for single names
+      zohoPayload["Last Name"] = finalLastName || '.'; // Minimal placeholder if required by CRM
     }
     if (!zohoPayload["Full Name"] || zohoPayload["Full Name"] === 'null' || zohoPayload["Full Name"] === '') {
-      zohoPayload["Full Name"] = `${finalFirstName} ${finalLastName}`;
+      zohoPayload["Full Name"] = finalLastName ? `${finalFirstName} ${finalLastName}` : finalFirstName;
     }
     
     // Add payment fields with proper Zoho field names (using spaces)
