@@ -23,7 +23,7 @@ interface Env {
 }
 
 interface RegisterRequest {
-  answers: Record<string, any>;
+  answers: Record<string, unknown>;
   event_id: string;
   form_id: string;
   event_type: 'free' | 'paid';
@@ -40,7 +40,28 @@ interface ZohoPayload {
   'Phone': string;
   'Mobile': string;
   'Country': string;
-  [key: string]: any; // Allow additional dynamic fields
+  'Event Id': string;
+  'Event Name': string;
+  'Event Type': string;
+  'Webinar Name': string;
+  'Form Id': string;
+  'Registration Date': string;
+  'Lead Source': string;
+  'Lead Status': string;
+  'Lead Type': string;
+  'Client Category': string;
+  'Database Name': string;
+  'Campaign Name': string;
+  'WhatsApp Opt In': boolean;
+  'WhatsApp Number': string;
+  'Payment Id'?: string;
+  'Razorpay Payment Id'?: string;
+  'Payment Status': string;
+  'Mode of Payment'?: string;
+  'Amount': string;
+  'Total Amount': string;
+  // Allow additional dynamic fields with restricted types for better type safety
+  [key: string]: string | boolean | undefined;
 }
 
 // Utility functions for efficient field matching and processing
@@ -80,8 +101,8 @@ class FieldMatcher {
       const minLength = Math.min(norm1.length, norm2.length);
       const maxLength = Math.max(norm1.length, norm2.length);
       
-      // Require at least 70% overlap and minimum 5 characters
-      if (minLength >= 5 && (minLength / maxLength) >= 0.7) {
+      // Require at least 70% overlap to prevent unrelated matches
+      if ((minLength / maxLength) >= 0.7) {
         const isMatch = norm1.includes(norm2) || norm2.includes(norm1);
         this.matchCache.set(cacheKey, isMatch);
         return isMatch;
@@ -93,7 +114,7 @@ class FieldMatcher {
   }
   
   // Extract field value with fuzzy matching
-  extractField(answers: Record<string, any>, possibleKeys: string[]): string {
+  extractField(answers: Record<string, unknown>, possibleKeys: string[]): string {
     // Direct match first (most efficient)
     for (const key of possibleKeys) {
       const value = answers[key];
@@ -169,7 +190,6 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
 
     // Validate required fields
     if (!answers || typeof answers !== 'object') {
-      fieldMatcher.clearCache(); // Explicit cleanup before early return
       return new Response(JSON.stringify({ error: 'Invalid answers field' }), {
         status: 400,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' }
@@ -177,7 +197,6 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
     }
 
     if (!event_id || !form_id || !event_type || !event_name) {
-      fieldMatcher.clearCache(); // Explicit cleanup before early return
       return new Response(JSON.stringify({ error: 'Missing required fields' }), {
         status: 400,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' }
@@ -186,7 +205,6 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
 
     // Validate event_type
     if (!['free', 'paid'].includes(event_type)) {
-      fieldMatcher.clearCache(); // Explicit cleanup before early return
       return new Response(JSON.stringify({ error: 'event_type must be "free" or "paid"' }), {
         status: 400,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' }
@@ -195,7 +213,6 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
 
     // Validate payment_id for paid events
     if (event_type === 'paid' && !payment_id) {
-      fieldMatcher.clearCache(); // Explicit cleanup before early return
       return new Response(JSON.stringify({ error: 'payment_id required for paid events' }), {
         status: 400,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' }
@@ -203,7 +220,7 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
     }
 
     // Enhanced field extraction using optimized utility
-    const extractFieldFuzzy = (answers: Record<string, any>, possibleKeys: string[]): string => {
+    const extractFieldFuzzy = (answers: Record<string, unknown>, possibleKeys: string[]): string => {
       return fieldMatcher.extractField(answers, possibleKeys);
     };
 
@@ -269,7 +286,6 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
       [finalFirstName, finalLastName] = splitName(full_name);
     } else {
       // No name data at all — reject the registration
-      fieldMatcher.clearCache();
       return new Response(JSON.stringify({ 
         error: 'Name is required for registration',
         message: 'Please provide at least a full name or first name'
@@ -280,7 +296,7 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
     }
 
     // Format phone number for WhatsApp - country-agnostic approach
-    const formatPhoneForWhatsApp = (phoneNumber: string, userCountry?: string): string => {
+    const formatPhoneForWhatsApp = (phoneNumber: string): string => {
       if (!phoneNumber) return '';
       
       // Extract digits only
@@ -293,16 +309,26 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
       
       // Maximum reasonable length (E.164 format allows up to 15 digits)
       if (digitsOnly.length > 15) {
-        return phoneNumber; // Return as-is, let downstream handle
+        return ''; // Return empty string for invalid length
       }
       
-      // If already in international format, preserve it
+      // If already in international format, validate it properly
       if (phoneNumber.startsWith('+')) {
+        // First check if there are any non-digit, non-formatting characters after +
+        const afterPlus = phoneNumber.substring(1);
+        const hasInvalidChars = /[a-zA-Z]/.test(afterPlus);
+        
+        if (hasInvalidChars) {
+          return ''; // Reject numbers with letters after +
+        }
+        
         // Validate that what follows + is all digits (after cleaning)
-        const cleanInternational = phoneNumber.substring(1).replace(/\D/g, '');
-        if (cleanInternational.length >= 7 && cleanInternational.length <= 15) {
+        const cleanInternational = afterPlus.replace(/\D/g, '');
+        if (cleanInternational.length >= 7 && cleanInternational.length <= 15 && /^\d+$/.test(cleanInternational)) {
           return '+' + cleanInternational;
         }
+        // If international format validation fails, return empty string
+        return '';
       }
       
       // For numbers without + prefix:
@@ -315,8 +341,8 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
         return '+' + digitsOnly;
       }
       
-      // For edge cases, return original and let downstream handle
-      return phoneNumber;
+      // For invalid cases, return empty string
+      return '';
     };
 
     // Extract WhatsApp opt-in consent from form
@@ -330,7 +356,7 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
     const getOptInValue = (value: string): boolean => {
       if (!value) return false; // GDPR compliant - no consent means no consent
       
-      const normalizedValue = String(value).toLowerCase().trim();
+      const normalizedValue = value.toLowerCase().trim();
       
       // Handle various true/consent values - explicit consent only
       if (['yes', 'true', '1', 'on', 'checked', 'agree', 'accept', 'consent'].includes(normalizedValue)) {
@@ -342,7 +368,7 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
     };
 
     const whatsappOptInStatus = getOptInValue(whatsappOptIn);
-    const whatsappFormattedNumber = formatPhoneForWhatsApp(phone, country);
+    const whatsappFormattedNumber = formatPhoneForWhatsApp(phone);
 
     // Build Zoho payload with standard fields
     const registrationTimestamp = new Date().toISOString();
@@ -374,12 +400,17 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
       "Lead Type": "Individual",
       "Client Category": "Prospect",
       "Database Name": "RareMinds Website",
-      "Campaign Name": event_name
+      "Campaign Name": event_name,
+      
+      // WhatsApp fields - initialized with proper values
+      "WhatsApp Opt In": whatsappOptInStatus,
+      "WhatsApp Number": whatsappFormattedNumber,
+      
+      // Payment fields - will be updated conditionally below
+      "Payment Status": event_type === 'paid' ? 'completed' : 'not_required',
+      "Amount": "0",
+      "Total Amount": "0"
     };
-
-    // Add WhatsApp fields with proper data types for Zoho CRM
-    zohoPayload["WhatsApp Opt In"] = whatsappOptInStatus; // Boolean: true/false - standardized without hyphen
-    zohoPayload["WhatsApp Number"] = whatsappFormattedNumber;
 
     // Intelligent field processing with robust mapping and typo tolerance
     for (const [key, value] of Object.entries(answers)) {
@@ -405,23 +436,15 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
         if (!currentValue || currentValue.toString().trim() === '') {
           zohoPayload[zohoFieldName] = String(value).trim();
         }
-        // Log if we're skipping an override attempt
-        if (currentValue && currentValue !== '') {
-          console.debug(`Skipped override of required field ${zohoFieldName}`);
-        }
+        // Skip override of required field - already set
       } else {
         zohoPayload[zohoFieldName] = String(value);
       }
     }
 
-    // Final safety net: ensure First Name was not wiped during field processing.
-    // Last Name and Full Name are intentionally left as-is — they may be legitimately
-    // empty (e.g. single-word names) and should not be silently re-populated.
-    if (!zohoPayload["First Name"] || zohoPayload["First Name"].toString().trim() === '') {
-      zohoPayload["First Name"] = finalFirstName;
-    }
+    // Note: First Name is already protected via PROTECTED_REQUIRED_FIELDS in the field processing loop above
     
-    // Add payment fields with proper Zoho field names (using spaces)
+    // Update payment fields with proper Zoho field names (using spaces)
     if (event_type === 'paid' && payment_id) {
       zohoPayload["Payment Id"] = payment_id;
       zohoPayload["Razorpay Payment Id"] = payment_id;
@@ -432,15 +455,10 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
         zohoPayload["Amount"] = String(total_amount);
         zohoPayload["Total Amount"] = String(total_amount);
       }
-    } else {
-      zohoPayload["Payment Status"] = 'not_required';
-      zohoPayload["Amount"] = "0";
-      zohoPayload["Total Amount"] = "0";
     }
 
     // Send to Zoho Flow webhook
     if (!env.ZOHO_FLOW_WEBHOOK_URL) {
-      fieldMatcher.clearCache(); // Explicit cleanup before early return
       return new Response(JSON.stringify({
         success: true,
         message: 'Registration processed (Zoho webhook not configured)'
@@ -454,19 +472,13 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
       const webhookUrl = env.ZOHO_FLOW_WEBHOOK_URL;
 
       // Send POST request with JSON body
-      const zohoResponse = await fetch(webhookUrl, {
+      await fetch(webhookUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(zohoPayload)
       });
-
-      const responseText = await zohoResponse.text();
-      
-      if (!zohoResponse.ok) {
-        // Zoho webhook failed (non-critical)
-      }
 
     } catch (error) {
       // Don't fail the request - Zoho errors are non-critical

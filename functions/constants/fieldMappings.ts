@@ -151,9 +151,9 @@ export const FIELD_MAPPING: Record<string, string> = {
   'title': 'Job Title',
   
   // ADDITIONAL FIELDS
-  'linkedin': 'Linkedin Profile',
-  'linkedinprofile': 'Linkedin Profile',
-  'linkedin_profile': 'Linkedin Profile',
+  'linkedin': 'LinkedIn Profile',
+  'linkedinprofile': 'LinkedIn Profile',
+  'linkedin_profile': 'LinkedIn Profile',
   'website': 'Website',
   'referralcode': 'Referral Code',
   'referral_code': 'Referral Code'
