@@ -104,10 +104,19 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
             return String(value);
           }
           
-          // Partial match for common patterns
-          if (normalizedFormKey.includes(normalizedPossibleKey) || 
-              normalizedPossibleKey.includes(normalizedFormKey)) {
-            return String(value);
+          // Partial match for common patterns - more restrictive to avoid false positives
+          if (normalizedFormKey.length > 4 && normalizedPossibleKey.length > 4) {
+            // Only match if one is a clear subset of the other with significant overlap
+            const minLength = Math.min(normalizedFormKey.length, normalizedPossibleKey.length);
+            const maxLength = Math.max(normalizedFormKey.length, normalizedPossibleKey.length);
+            
+            // Require at least 70% overlap and minimum 5 characters to avoid false matches
+            if (minLength >= 5 && (minLength / maxLength) >= 0.7) {
+              if (normalizedFormKey.includes(normalizedPossibleKey) || 
+                  normalizedPossibleKey.includes(normalizedFormKey)) {
+                return String(value);
+              }
+            }
           }
         }
       }
@@ -176,37 +185,48 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
       });
     }
 
-    // Format phone number for WhatsApp with validation
+    // Format phone number for WhatsApp with international validation
     const formatPhoneForWhatsApp = (phoneNumber: string): string => {
       if (!phoneNumber) return '';
       
       const digitsOnly = phoneNumber.replace(/\D/g, '');
       
       // Validate minimum length for any phone number
-      if (digitsOnly.length < 10) return phoneNumber; // Return as-is if too short
+      if (digitsOnly.length < 10) return ''; // Return empty for invalid numbers
       
       // Handle various international formats
       if (digitsOnly.startsWith('91') && digitsOnly.length === 12) {
-        return '+' + digitsOnly; // Already has country code
+        return '+' + digitsOnly; // Indian number with country code
+      }
+      
+      if (digitsOnly.startsWith('1') && digitsOnly.length === 11) {
+        return '+' + digitsOnly; // US/Canada number
+      }
+      
+      if (digitsOnly.startsWith('44') && digitsOnly.length >= 12) {
+        return '+' + digitsOnly; // UK number
       }
       
       if (digitsOnly.length === 10) {
-        // Assume Indian number if no country code and exactly 10 digits
+        // Default to Indian number if no country code and exactly 10 digits
+        // This assumption should be configurable based on event location
         return '+91' + digitsOnly;
       }
       
       if (digitsOnly.length === 11 && digitsOnly.startsWith('0')) {
-        // Remove leading 0 and add Indian country code
+        // Remove leading 0 and add Indian country code (common Indian format)
         return '+91' + digitsOnly.substring(1);
       }
       
       if (digitsOnly.length > 12) {
-        // Likely already has country code, just add + if missing
+        // Likely already has country code, validate and format
         return phoneNumber.startsWith('+') ? phoneNumber : '+' + digitsOnly;
       }
       
-      // For other cases, return with + prefix if not already present
-      return phoneNumber.startsWith('+') ? phoneNumber : '+' + digitsOnly;
+      // For ambiguous cases, return with + prefix but log for review
+      const formatted = phoneNumber.startsWith('+') ? phoneNumber : '+' + digitsOnly;
+      console.warn(`Phone number format uncertain: ${phoneNumber} -> ${formatted}`);
+      return formatted;
     };
 
     // Extract WhatsApp opt-in consent from form
