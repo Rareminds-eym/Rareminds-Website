@@ -32,6 +32,17 @@ interface RegisterRequest {
   total_amount: number | null;
 }
 
+interface ZohoPayload {
+  'First Name': string;
+  'Last Name': string;
+  'Full Name': string;
+  'Email': string;
+  'Phone': string;
+  'Mobile': string;
+  'Country': string;
+  [key: string]: any; // Allow additional dynamic fields
+}
+
 // Utility functions for efficient field matching and processing
 class FieldMatcher {
   private normalizedCache = new Map<string, string>();
@@ -60,11 +71,10 @@ class FieldMatcher {
     const norm1 = this.normalize(key1);
     const norm2 = this.normalize(key2);
     
-    let isMatch = false;
-    
     // Exact match after normalization
     if (norm1 === norm2) {
-      isMatch = true;
+      this.matchCache.set(cacheKey, true);
+      return true;
     } else if (norm1.length > 4 && norm2.length > 4) {
       // Partial match with strict requirements to avoid false positives
       const minLength = Math.min(norm1.length, norm2.length);
@@ -72,12 +82,14 @@ class FieldMatcher {
       
       // Require at least 70% overlap and minimum 5 characters
       if (minLength >= 5 && (minLength / maxLength) >= 0.7) {
-        isMatch = norm1.includes(norm2) || norm2.includes(norm1);
+        const isMatch = norm1.includes(norm2) || norm2.includes(norm1);
+        this.matchCache.set(cacheKey, isMatch);
+        return isMatch;
       }
     }
     
-    this.matchCache.set(cacheKey, isMatch);
-    return isMatch;
+    this.matchCache.set(cacheKey, false);
+    return false;
   }
   
   // Extract field value with fuzzy matching
@@ -238,31 +250,26 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
     ]);
 
     // Smart name processing for Zoho CRM requirements
+    // Helper to split a name string into [first, last] parts
+    const splitName = (name: string): [string, string] => {
+      const parts = name.trim().split(/\s+/);
+      return [parts[0], parts.length > 1 ? parts.slice(1).join(' ') : ''];
+    };
+
     let finalFirstName = '';
     let finalLastName = '';
 
     if (first_name && last_name) {
       finalFirstName = first_name;
       finalLastName = last_name;
-    } else if (first_name && !last_name) {
-      // If only first name provided, check if it's actually a full name
-      const nameParts = first_name.trim().split(' ');
-      if (nameParts.length > 1) {
-        // Multiple words in "first name" field - treat as full name
-        finalFirstName = nameParts[0];
-        finalLastName = nameParts.slice(1).join(' ');
-      } else {
-        // Single word - use as first name only, leave last name empty for CRM
-        finalFirstName = first_name;
-        finalLastName = ''; // Empty rather than duplicate
-      }
-    } else if (full_name && !first_name && !last_name) {
-      const nameParts = full_name.trim().split(' ');
-      finalFirstName = nameParts[0];
-      finalLastName = nameParts.length > 1 ? nameParts.slice(1).join(' ') : '';
+    } else if (first_name) {
+      // first_name may contain a full name — split if multi-word
+      [finalFirstName, finalLastName] = splitName(first_name);
+    } else if (full_name) {
+      [finalFirstName, finalLastName] = splitName(full_name);
     } else {
-      // If no name data at all, return validation error instead of fake names
-      fieldMatcher.clearCache(); // Explicit cleanup before early return
+      // No name data at all — reject the registration
+      fieldMatcher.clearCache();
       return new Response(JSON.stringify({ 
         error: 'Name is required for registration',
         message: 'Please provide at least a full name or first name'
@@ -281,13 +288,11 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
       
       // Basic validation - minimum length for any valid phone number globally
       if (digitsOnly.length < 7) {
-        console.warn(`Phone number too short to be valid: ${phoneNumber}`);
         return '';
       }
       
       // Maximum reasonable length (E.164 format allows up to 15 digits)
       if (digitsOnly.length > 15) {
-        console.warn(`Phone number too long (max 15 digits): ${phoneNumber}`);
         return phoneNumber; // Return as-is, let downstream handle
       }
       
@@ -307,20 +312,10 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
       
       // Simply add + prefix if the number looks reasonable
       if (digitsOnly.length >= 7 && digitsOnly.length <= 15) {
-        const formatted = '+' + digitsOnly;
-        
-        // Log for monitoring - helps identify common patterns without hardcoding assumptions
-        if (userCountry) {
-          console.info(`Phone formatted without country assumption: ${phoneNumber} -> ${formatted} (user country: ${userCountry})`);
-        } else {
-          console.info(`Phone formatted without country info: ${phoneNumber} -> ${formatted}`);
-        }
-        
-        return formatted;
+        return '+' + digitsOnly;
       }
       
       // For edge cases, return original and let downstream handle
-      console.warn(`Phone number format uncertain, returning as-is: ${phoneNumber}`);
       return phoneNumber;
     };
 
@@ -353,7 +348,7 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
     const registrationTimestamp = new Date().toISOString();
     
     // Create Zoho payload with proper CRM field mapping (using SPACES not underscores)
-    const zohoPayload: Record<string, any> = {
+    const zohoPayload: ZohoPayload = {
       // REQUIRED Core contact fields - Using SPACES as Zoho Flow expects
       "First Name": finalFirstName,
       "Last Name": finalLastName,
@@ -384,8 +379,7 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
 
     // Add WhatsApp fields with proper data types for Zoho CRM
     zohoPayload["WhatsApp Opt In"] = whatsappOptInStatus; // Boolean: true/false - standardized without hyphen
-    zohoPayload["WhatsApp Number"] = whatsappFormattedNumber; // Primary WhatsApp field
-    zohoPayload["Mobile Number"] = whatsappFormattedNumber; // Backup phone field
+    zohoPayload["WhatsApp Number"] = whatsappFormattedNumber;
 
     // Intelligent field processing with robust mapping and typo tolerance
     for (const [key, value] of Object.entries(answers)) {
@@ -404,43 +398,27 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
       const isWhatsAppField = PROTECTED_WHATSAPP_FIELDS.includes(zohoFieldName);
       
       if (isWhatsAppField) {
-        // NEVER allow WhatsApp fields to be overridden by form data
-        continue; // Skip this field, continue processing remaining fields
-      } else if (!isRequiredField) {
-        zohoPayload[zohoFieldName] = String(value);
-      } else {
-        // For required fields, only update if current value is empty and new value is not empty
-        if ((!zohoPayload[zohoFieldName] || zohoPayload[zohoFieldName] === '') && 
-            value && value !== '' && value !== null) {
-          zohoPayload[zohoFieldName] = String(value);
+        continue; // Never override WhatsApp fields
+      } else if (isRequiredField) {
+        // For required fields, only update if current value is truly empty
+        const currentValue = zohoPayload[zohoFieldName];
+        if (!currentValue || currentValue.toString().trim() === '') {
+          zohoPayload[zohoFieldName] = String(value).trim();
         }
+        // Log if we're skipping an override attempt
+        if (currentValue && currentValue !== '') {
+          console.debug(`Skipped override of required field ${zohoFieldName}`);
+        }
+      } else {
+        zohoPayload[zohoFieldName] = String(value);
       }
     }
 
-    // FINAL VALIDATION AND RE-ADD: Ensure required fields are never empty
-    if (!zohoPayload["First Name"] || zohoPayload["First Name"] === '') {
+    // Final safety net: ensure First Name was not wiped during field processing.
+    // Last Name and Full Name are intentionally left as-is — they may be legitimately
+    // empty (e.g. single-word names) and should not be silently re-populated.
+    if (!zohoPayload["First Name"] || zohoPayload["First Name"].toString().trim() === '') {
       zohoPayload["First Name"] = finalFirstName;
-    }
-    if (!zohoPayload["Last Name"] || zohoPayload["Last Name"] === '') {
-      // Handle missing last name appropriately
-      if (finalLastName) {
-        zohoPayload["Last Name"] = finalLastName;
-      } else {
-        // For single names, try alternative approaches before falling back to empty
-        if (finalFirstName && finalFirstName.includes(' ')) {
-          // If first name contains spaces, split it
-          const parts = finalFirstName.split(' ');
-          zohoPayload["First Name"] = parts[0];
-          zohoPayload["Last Name"] = parts.slice(1).join(' ');
-        } else {
-          // Single name - leave last name empty (semantically correct)
-          // Most modern CRM systems handle this properly
-          zohoPayload["Last Name"] = '';
-        }
-      }
-    }
-    if (!zohoPayload["Full Name"] || zohoPayload["Full Name"] === '') {
-      zohoPayload["Full Name"] = finalLastName ? `${finalFirstName} ${finalLastName}` : finalFirstName;
     }
     
     // Add payment fields with proper Zoho field names (using spaces)

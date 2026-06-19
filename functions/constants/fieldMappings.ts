@@ -14,10 +14,15 @@
  * Converts a field name to proper Zoho CRM format (Title Case with spaces)
  */
 export const convertToZohoFieldName = (fieldName: string): string => {
+  if (!fieldName || fieldName.trim() === '') {
+    return '';
+  }
+
   return fieldName
     .replace(/([a-z])([A-Z])/g, '$1 $2')  // camelCase to spaces
     .replace(/[_-]+/g, ' ')               // underscores/dashes to spaces
     .split(' ')
+    .filter(word => word.length > 0)       // Remove empty segments
     .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
     .join(' ');
 };
