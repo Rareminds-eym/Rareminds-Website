@@ -16,6 +16,8 @@
  * - Configure Zoho Flow to map the fields you need
  */
 
+import { FIELD_MAPPING, PROTECTED_REQUIRED_FIELDS, PROTECTED_WHATSAPP_FIELDS, convertToZohoFieldName } from '../constants/fieldMappings';
+
 interface Env {
   ZOHO_FLOW_WEBHOOK_URL: string;
 }
@@ -155,6 +157,7 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
 
     // Validate required fields
     if (!answers || typeof answers !== 'object') {
+      fieldMatcher.clearCache(); // Explicit cleanup before early return
       return new Response(JSON.stringify({ error: 'Invalid answers field' }), {
         status: 400,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' }
@@ -162,6 +165,7 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
     }
 
     if (!event_id || !form_id || !event_type || !event_name) {
+      fieldMatcher.clearCache(); // Explicit cleanup before early return
       return new Response(JSON.stringify({ error: 'Missing required fields' }), {
         status: 400,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' }
@@ -170,6 +174,7 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
 
     // Validate event_type
     if (!['free', 'paid'].includes(event_type)) {
+      fieldMatcher.clearCache(); // Explicit cleanup before early return
       return new Response(JSON.stringify({ error: 'event_type must be "free" or "paid"' }), {
         status: 400,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' }
@@ -178,6 +183,7 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
 
     // Validate payment_id for paid events
     if (event_type === 'paid' && !payment_id) {
+      fieldMatcher.clearCache(); // Explicit cleanup before early return
       return new Response(JSON.stringify({ error: 'payment_id required for paid events' }), {
         status: 400,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' }
@@ -256,6 +262,7 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
       finalLastName = nameParts.length > 1 ? nameParts.slice(1).join(' ') : '';
     } else {
       // If no name data at all, return validation error instead of fake names
+      fieldMatcher.clearCache(); // Explicit cleanup before early return
       return new Response(JSON.stringify({ 
         error: 'Name is required for registration',
         message: 'Please provide at least a full name or first name'
@@ -376,101 +383,25 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
     };
 
     // Add WhatsApp fields with proper data types for Zoho CRM
-    const addWhatsAppFields = () => {
-      zohoPayload["WhatsApp Opt In"] = whatsappOptInStatus; // Boolean: true/false - standardized without hyphen
-      zohoPayload["WhatsApp Number"] = whatsappFormattedNumber; // Primary WhatsApp field
-      zohoPayload["Mobile Number"] = whatsappFormattedNumber; // Backup phone field
-    };
-
-    addWhatsAppFields();
-
-    // Comprehensive field mapping - Maps ANY dashboard form field to correct Zoho CRM field
-    const fieldMapping: Record<string, string> = {
-      // CORE CONTACT FIELDS (Always required)
-      'name': 'Name', 'fullname': 'Name', 'full_name': 'Name', 'attendee_name': 'Name',
-      'firstname': 'First Name', 'first_name': 'First Name', 'fname': 'First Name',
-      'lastname': 'Last Name', 'last_name': 'Last Name', 'lname': 'Last Name', 'surname': 'Last Name',
-      'email': 'Email', 'emailaddress': 'Email', 'email_address': 'Email', 'mail': 'Email',
-      'phone': 'Phone', 'phonenumber': 'Phone', 'phone_number': 'Phone Number',
-      'mobile': 'Mobile Number', 'mobilenumber': 'Mobile Number', 'mobile_number': 'Mobile Number',
-      
-      // WHATSAPP FIELDS (Critical mapping)
-      'whatsapp': 'WhatsApp Number', 'whatsappnumber': 'WhatsApp Number', 'whatsapp_number': 'WhatsApp Number',
-      'whatsappno': 'WhatsApp Number', 'whatsapp_no': 'WhatsApp Number',
-      
-      // WHATSAPP OPT-IN (All possible variations) - Maps to boolean fields
-      'whatsappoptin': 'WhatsApp Opt In', 'whatsapp_opt_in': 'WhatsApp Opt In', 'whatsapp_optin': 'WhatsApp Opt In',
-      'optin': 'WhatsApp Opt In', 'opt_in': 'WhatsApp Opt In', 'marketing_opt_in': 'WhatsApp Opt In',
-      'consent': 'WhatsApp Opt In', 'whatsapp_consent': 'WhatsApp Opt In', 'marketing_consent': 'WhatsApp Opt In',
-      'communication_consent': 'WhatsApp Opt In', 'sms_opt_in': 'WhatsApp Opt In',
-      
-      // EDUCATIONAL FIELDS
-      'institution': 'School / College / University Name', 'school': 'School / College / University Name',
-      'college': 'School / College / University Name', 'university': 'School / College / University Name',
-      'institutionname': 'School / College / University Name', 'institution_name': 'School / College / University Name',
-      'company': 'Company Name', 'organization': 'Company Name', 'employer': 'Company Name',
-      
-      'department': 'Department Stream', 'dept': 'Department Stream', 'stream': 'Department Stream',
-      'branch': 'Students Branch/department', 'course': 'Department Stream',
-      
-      'subject': 'Subject You Teach', 'subjecttaught': 'Subject You Teach', 'subject_taught': 'Subject You Teach',
-      'teachingsubject': 'Subject You Teach', 'teaching_subject': 'Subject You Teach',
-      
-      'teachinglevel': 'Teaching Level', 'teaching_level': 'Teaching Level', 'level': 'Teaching Level',
-      'grade': 'Teaching Level', 'class': 'Teaching Level',
-      
-      'experience': 'Years Of Experience', 'yearsofexperience': 'Years Of Experience',
-      'years_of_experience': 'Years Of Experience', 'work_experience': 'Years Of Experience',
-      
-      // LOCATION FIELDS
-      'country': 'Country', 'nationality': 'Country', 'nation': 'Country', 'location_country': 'Country',
-      'state': 'State', 'statename': 'State', 'region': 'State',
-      'district': 'District', 'districtname': 'District', 'area': 'District',
-      'city': 'City', 'cityname': 'City', 'town': 'City',
-      'address': 'Current Address', 'currentaddress': 'Current Address',
-      
-      // EVENT FIELDS  
-      'howdidyouhear': 'How Did You Hear About Us', 'heard_from': 'How Did You Hear About Us',
-      'heardfrom': 'How Did You Hear About Us', 'source': 'How Did You Hear About Us',
-      
-      'preferreddate': 'Preferred Date', 'preferred_date': 'Preferred Date',
-      'preferredtime': 'Preferred Time', 'preferred_time': 'Preferred Time',
-      'timeslot': 'Preferred Time', 'webinar_time_slot': 'Preferred Time',
-      
-      'preferredlanguage': 'Preferred Language', 'preferred_language': 'Preferred Language',
-      'language': 'Preferred Language',
-      
-      // PROFESSIONAL FIELDS
-      'designation': 'Job Title', 'jobtitle': 'Job Title', 'job_title': 'Job Title',
-      'position': 'Job Title', 'role': 'Job Title', 'title': 'Job Title',
-      
-      // ADDITIONAL FIELDS
-      'linkedin': 'Linkedin Profile', 'linkedinprofile': 'Linkedin Profile', 'linkedin_profile': 'Linkedin Profile',
-      'website': 'Website', 'referralcode': 'Referral Code', 'referral_code': 'Referral Code'
-    };
+    zohoPayload["WhatsApp Opt In"] = whatsappOptInStatus; // Boolean: true/false - standardized without hyphen
+    zohoPayload["WhatsApp Number"] = whatsappFormattedNumber; // Primary WhatsApp field
+    zohoPayload["Mobile Number"] = whatsappFormattedNumber; // Backup phone field
 
     // Intelligent field processing with robust mapping and typo tolerance
     for (const [key, value] of Object.entries(answers)) {
       if (value === null || value === '' || value === undefined) continue;
       
-      // Use optimized field matcher utility
-      let zohoFieldName = fieldMatcher.findMappedField(key, fieldMapping);
+      // Use optimized field matcher utility with extracted mapping configuration
+      let zohoFieldName = fieldMatcher.findMappedField(key, FIELD_MAPPING);
       
       // If still no match, convert to proper Zoho format as fallback (using spaces)
       if (!zohoFieldName) {
-        zohoFieldName = key
-          .replace(/([a-z])([A-Z])/g, '$1 $2')  // camelCase to spaces
-          .replace(/[_-]+/g, ' ')               // underscores/dashes to spaces
-          .split(' ')
-          .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-          .join(' ');
+        zohoFieldName = convertToZohoFieldName(key);
       }
       
       // CRITICAL: Never override required fields that are already set
-      const requiredFields = ['First Name', 'Last Name', 'Email', 'Phone', 'Mobile', 'Full Name'];
-      const whatsappFields = ['WhatsApp Opt In', 'WhatsApp Number', 'Mobile Number'];
-      const isRequiredField = requiredFields.includes(zohoFieldName);
-      const isWhatsAppField = whatsappFields.includes(zohoFieldName);
+      const isRequiredField = PROTECTED_REQUIRED_FIELDS.includes(zohoFieldName);
+      const isWhatsAppField = PROTECTED_WHATSAPP_FIELDS.includes(zohoFieldName);
       
       if (isWhatsAppField) {
         // NEVER allow WhatsApp fields to be overridden by form data
@@ -478,19 +409,19 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
       } else if (!isRequiredField) {
         zohoPayload[zohoFieldName] = String(value);
       } else {
-        // For required fields, only update if current value is empty/null and new value is not empty
-        if ((!zohoPayload[zohoFieldName] || zohoPayload[zohoFieldName] === '' || zohoPayload[zohoFieldName] === 'null') && 
+        // For required fields, only update if current value is empty and new value is not empty
+        if ((!zohoPayload[zohoFieldName] || zohoPayload[zohoFieldName] === '') && 
             value && value !== '' && value !== null) {
           zohoPayload[zohoFieldName] = String(value);
         }
       }
     }
 
-    // FINAL VALIDATION AND RE-ADD: Ensure required fields are never null/empty
-    if (!zohoPayload["First Name"] || zohoPayload["First Name"] === 'null' || zohoPayload["First Name"] === '') {
+    // FINAL VALIDATION AND RE-ADD: Ensure required fields are never empty
+    if (!zohoPayload["First Name"] || zohoPayload["First Name"] === '') {
       zohoPayload["First Name"] = finalFirstName;
     }
-    if (!zohoPayload["Last Name"] || zohoPayload["Last Name"] === 'null' || zohoPayload["Last Name"] === '') {
+    if (!zohoPayload["Last Name"] || zohoPayload["Last Name"] === '') {
       // Handle missing last name appropriately
       if (finalLastName) {
         zohoPayload["Last Name"] = finalLastName;
@@ -508,7 +439,7 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
         }
       }
     }
-    if (!zohoPayload["Full Name"] || zohoPayload["Full Name"] === 'null' || zohoPayload["Full Name"] === '') {
+    if (!zohoPayload["Full Name"] || zohoPayload["Full Name"] === '') {
       zohoPayload["Full Name"] = finalLastName ? `${finalFirstName} ${finalLastName}` : finalFirstName;
     }
     
@@ -531,6 +462,7 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
 
     // Send to Zoho Flow webhook
     if (!env.ZOHO_FLOW_WEBHOOK_URL) {
+      fieldMatcher.clearCache(); // Explicit cleanup before early return
       return new Response(JSON.stringify({
         success: true,
         message: 'Registration processed (Zoho webhook not configured)'
