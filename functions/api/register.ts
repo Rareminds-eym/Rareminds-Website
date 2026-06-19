@@ -128,11 +128,11 @@ class FieldMatcher {
   }
 }
 
-// Create reusable field matcher instance
-const fieldMatcher = new FieldMatcher();
-
 export async function onRequestPost(context: { request: Request; env: Env }) {
   const { request, env } = context;
+  
+  // Create fresh field matcher instance per request to avoid global state and memory leaks
+  const fieldMatcher = new FieldMatcher();
 
   // Set CORS headers
   const corsHeaders = {
@@ -141,7 +141,7 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
     'Access-Control-Allow-Headers': 'Content-Type',
   };
 
-  // Handle preflight
+  // Handle preflight - no field matching needed
   if (request.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
@@ -263,70 +263,56 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
       });
     }
 
-    // Format phone number for WhatsApp without hardcoded country assumptions
+    // Format phone number for WhatsApp - country-agnostic approach
     const formatPhoneForWhatsApp = (phoneNumber: string, userCountry?: string): string => {
       if (!phoneNumber) return '';
       
+      // Extract digits only
       const digitsOnly = phoneNumber.replace(/\D/g, '');
       
-      // Validate minimum length for any phone number
-      if (digitsOnly.length < 7) return ''; // Return empty for clearly invalid numbers
-      
-      // If already has proper international format, return as-is
-      if (phoneNumber.startsWith('+') && digitsOnly.length >= 10) {
-        return phoneNumber;
+      // Basic validation - minimum length for any valid phone number globally
+      if (digitsOnly.length < 7) {
+        console.warn(`Phone number too short to be valid: ${phoneNumber}`);
+        return '';
       }
       
-      // Handle numbers that already include country code (without + prefix)
-      if (digitsOnly.length >= 11) {
-        // Common country code patterns
-        if (digitsOnly.startsWith('91') && digitsOnly.length === 12) {
-          return '+' + digitsOnly; // India
-        }
-        if (digitsOnly.startsWith('1') && digitsOnly.length === 11) {
-          return '+' + digitsOnly; // US/Canada
-        }
-        if (digitsOnly.startsWith('44') && digitsOnly.length >= 12) {
-          return '+' + digitsOnly; // UK
-        }
-        if (digitsOnly.startsWith('61') && digitsOnly.length >= 11) {
-          return '+' + digitsOnly; // Australia
-        }
-        if (digitsOnly.startsWith('49') && digitsOnly.length >= 11) {
-          return '+' + digitsOnly; // Germany
-        }
-        // Add + prefix for other long numbers that likely have country code
-        return '+' + digitsOnly;
+      // Maximum reasonable length (E.164 format allows up to 15 digits)
+      if (digitsOnly.length > 15) {
+        console.warn(`Phone number too long (max 15 digits): ${phoneNumber}`);
+        return phoneNumber; // Return as-is, let downstream handle
       }
       
-      // Handle numbers without country code based on user's country if available
-      if (userCountry && digitsOnly.length >= 7) {
-        const countryLower = userCountry.toLowerCase();
-        if (countryLower.includes('india') || countryLower.includes('ind')) {
-          if (digitsOnly.length === 10) return '+91' + digitsOnly;
-          if (digitsOnly.length === 11 && digitsOnly.startsWith('0')) {
-            return '+91' + digitsOnly.substring(1);
-          }
-        } else if (countryLower.includes('usa') || countryLower.includes('united states') || 
-                   countryLower.includes('canada')) {
-          if (digitsOnly.length === 10) return '+1' + digitsOnly;
-        } else if (countryLower.includes('uk') || countryLower.includes('united kingdom') ||
-                   countryLower.includes('britain')) {
-          if (digitsOnly.length >= 10) return '+44' + digitsOnly;
+      // If already in international format, preserve it
+      if (phoneNumber.startsWith('+')) {
+        // Validate that what follows + is all digits (after cleaning)
+        const cleanInternational = phoneNumber.substring(1).replace(/\D/g, '');
+        if (cleanInternational.length >= 7 && cleanInternational.length <= 15) {
+          return '+' + cleanInternational;
         }
       }
       
-      // For ambiguous cases without country info, return number with warning
-      // Don't assume any country code - let the system handle it downstream
-      if (digitsOnly.length >= 7) {
+      // For numbers without + prefix:
+      // - Don't assume any country codes
+      // - Don't make geographic assumptions
+      // - Let downstream systems (Zoho CRM, WhatsApp API) handle country-specific validation
+      
+      // Simply add + prefix if the number looks reasonable
+      if (digitsOnly.length >= 7 && digitsOnly.length <= 15) {
         const formatted = '+' + digitsOnly;
-        console.warn(`Phone number format uncertain - no country specified: ${phoneNumber} -> ${formatted}`);
+        
+        // Log for monitoring - helps identify common patterns without hardcoding assumptions
+        if (userCountry) {
+          console.info(`Phone formatted without country assumption: ${phoneNumber} -> ${formatted} (user country: ${userCountry})`);
+        } else {
+          console.info(`Phone formatted without country info: ${phoneNumber} -> ${formatted}`);
+        }
+        
         return formatted;
       }
       
-      // Return empty for numbers that are too short to be valid
-      console.warn(`Phone number too short to be valid: ${phoneNumber}`);
-      return '';
+      // For edge cases, return original and let downstream handle
+      console.warn(`Phone number format uncertain, returning as-is: ${phoneNumber}`);
+      return phoneNumber;
     };
 
     // Extract WhatsApp opt-in consent from form
