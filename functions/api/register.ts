@@ -37,8 +37,9 @@ class FieldMatcher {
   
   // Normalize field names with caching to avoid repeated operations
   private normalize(fieldName: string): string {
-    if (this.normalizedCache.has(fieldName)) {
-      return this.normalizedCache.get(fieldName)!;
+    const cached = this.normalizedCache.get(fieldName);
+    if (cached !== undefined) {
+      return cached;
     }
     
     const normalized = fieldName.toLowerCase().replace(/[^a-z0-9]/g, '');
@@ -49,8 +50,9 @@ class FieldMatcher {
   // Check if two field names match with similarity threshold
   private isPartialMatch(key1: string, key2: string): boolean {
     const cacheKey = `${key1}|${key2}`;
-    if (this.matchCache.has(cacheKey)) {
-      return this.matchCache.get(cacheKey)!;
+    const cached = this.matchCache.get(cacheKey);
+    if (cached !== undefined) {
+      return cached;
     }
     
     const norm1 = this.normalize(key1);
@@ -131,7 +133,7 @@ class FieldMatcher {
 export async function onRequestPost(context: { request: Request; env: Env }) {
   const { request, env } = context;
   
-  // Create fresh field matcher instance per request to avoid global state and memory leaks
+  // Create fresh field matcher instance per request
   const fieldMatcher = new FieldMatcher();
 
   // Set CORS headers
@@ -489,9 +491,22 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
       zohoPayload["First Name"] = finalFirstName;
     }
     if (!zohoPayload["Last Name"] || zohoPayload["Last Name"] === 'null' || zohoPayload["Last Name"] === '') {
-      // If Zoho CRM absolutely requires a last name, use a standard placeholder
-      // Otherwise, empty last name is semantically correct for single names
-      zohoPayload["Last Name"] = finalLastName || '.'; // Minimal placeholder if required by CRM
+      // Handle missing last name appropriately
+      if (finalLastName) {
+        zohoPayload["Last Name"] = finalLastName;
+      } else {
+        // For single names, try alternative approaches before falling back to empty
+        if (finalFirstName && finalFirstName.includes(' ')) {
+          // If first name contains spaces, split it
+          const parts = finalFirstName.split(' ');
+          zohoPayload["First Name"] = parts[0];
+          zohoPayload["Last Name"] = parts.slice(1).join(' ');
+        } else {
+          // Single name - leave last name empty (semantically correct)
+          // Most modern CRM systems handle this properly
+          zohoPayload["Last Name"] = '';
+        }
+      }
     }
     if (!zohoPayload["Full Name"] || zohoPayload["Full Name"] === 'null' || zohoPayload["Full Name"] === '') {
       zohoPayload["Full Name"] = finalLastName ? `${finalFirstName} ${finalLastName}` : finalFirstName;
@@ -564,5 +579,9 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
       status: 500,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' }
     });
+  } finally {
+    // Explicit cleanup: Clear caches to ensure deterministic memory release
+    // While GC will eventually clean up, explicit cleanup is better for serverless environments
+    fieldMatcher.clearCache();
   }
 }
