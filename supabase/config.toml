@@ -174,7 +174,7 @@ port = 54327
 backend = "postgres"
 
 [db.seed]
-sql_paths = ['./seed.sql', './seed_remote.sql', './seed_event_sections.sql']
+sql_paths = ["./seed/*.sql"]
 
 [functions.send-recruitment-email]
 enabled = true
