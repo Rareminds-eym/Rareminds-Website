@@ -46,6 +46,12 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
   }
 
   try {
+    // Debug: Log environment check
+    console.log('[Register] Environment check:', {
+      has_zoho_url: !!env.ZOHO_FLOW_WEBHOOK_URL,
+      url_preview: env.ZOHO_FLOW_WEBHOOK_URL ? env.ZOHO_FLOW_WEBHOOK_URL.substring(0, 50) + '...' : 'undefined'
+    });
+
     // Parse request body
     const body: RegisterRequest = await request.json();
     const { answers, event_id, form_id, event_type, event_name, payment_id, total_amount } = body;
@@ -88,104 +94,401 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
       has_payment: !!payment_id
     });
 
-    // Extract standard fields using flexible field name matching
-    const extractField = (answers: Record<string, any>, possibleKeys: string[]): string => {
+    // Enhanced field extraction with fuzzy matching for common variations and typos
+    const extractFieldFuzzy = (answers: Record<string, any>, possibleKeys: string[]): string => {
+      // Direct match first
       for (const key of possibleKeys) {
         if (answers[key] && answers[key] !== '') {
           return String(answers[key]);
         }
       }
+      
+      // Fuzzy match - check all form keys against possible variations
+      for (const [formKey, value] of Object.entries(answers)) {
+        if (!value || value === '') continue;
+        
+        const normalizedFormKey = formKey.toLowerCase().replace(/[^a-z]/g, '');
+        
+        for (const possibleKey of possibleKeys) {
+          const normalizedPossibleKey = possibleKey.toLowerCase().replace(/[^a-z]/g, '');
+          
+          // Exact match after normalization
+          if (normalizedFormKey === normalizedPossibleKey) {
+            return String(value);
+          }
+          
+          // Partial match for common patterns
+          if (normalizedFormKey.includes(normalizedPossibleKey) || 
+              normalizedPossibleKey.includes(normalizedFormKey)) {
+            return String(value);
+          }
+        }
+      }
+      
       return '';
     };
 
-    const first_name = extractField(answers, [
-      'first_name', 'firstName', 'First Name', 'fname', 'given_name'
+    const first_name = extractFieldFuzzy(answers, [
+      'first_name', 'firstName', 'First Name', 'First_Name', 'FIRST_NAME',
+      'fname', 'given_name', 'givenName', 'Given Name',
+      'firstname', 'firstnm', 'first', 'name1', 'fName', 'f_name',
+      'your_first_name', 'attendee_first_name', 'participant_first_name'
     ]);
     
-    const last_name = extractField(answers, [
-      'last_name', 'lastName', 'Last Name', 'lname', 'surname', 'family_name'
+    const last_name = extractFieldFuzzy(answers, [
+      'last_name', 'lastName', 'Last Name', 'Last_Name', 'LAST_NAME',
+      'lname', 'surname', 'family_name', 'familyName', 'Family Name',
+      'lastname', 'lastnm', 'last', 'name2', 'lName', 'l_name',
+      'sur_name', 'your_last_name', 'attendee_last_name', 'participant_last_name'
     ]);
     
-    const full_name = extractField(answers, [
-      'name', 'full_name', 'fullName', 'Full Name', 'attendee_name'
-    ]) || (first_name + (last_name ? ' ' + last_name : ''));
-    
-    const email = extractField(answers, [
-      'email', 'Email', 'email_address', 'emailAddress', 'mail'
+    const full_name = extractFieldFuzzy(answers, [
+      'name', 'full_name', 'fullName', 'Full Name', 'Full_Name', 'FULL_NAME',
+      'attendee_name', 'participant_name', 'your_name', 'your_full_name',
+      'fullname', 'completename', 'complete_name', 'wholename', 'whole_name',
+      'person_name', 'contact_name', 'user_name', 'participant', 'attendee'
     ]);
     
-    const phone = extractField(answers, [
-      'phone', 'Phone', 'phone_number', 'phoneNumber', 'mobile', 'Mobile', 'contact', 'whatsapp'
+    const email = extractFieldFuzzy(answers, [
+      'email', 'Email', 'EMAIL', 'email_address', 'emailAddress', 'Email Address',
+      'mail', 'Mail', 'e_mail', 'eMail', 'e-mail',
+      'your_email', 'contact_email', 'work_email', 'personal_email',
+      'email_id', 'emailid', 'mail_id', 'mailid', 'participant_email'
     ]);
+    
+    const phone = extractFieldFuzzy(answers, [
+      'phone', 'Phone', 'PHONE', 'phone_number', 'phoneNumber', 'Phone Number',
+      'mobile', 'Mobile', 'MOBILE', 'mobile_number', 'mobileNumber', 'Mobile Number',
+      'contact', 'contact_number', 'contactNumber', 'Contact Number',
+      'whatsapp', 'whatsapp_number', 'whatsappNumber', 'WhatsApp Number',
+      'your_phone', 'your_mobile', 'cell', 'cell_number', 'telephone', 'tel'
+    ]);
+
+    // Smart name processing for Zoho CRM requirements
+    let finalFirstName = '';
+    let finalLastName = '';
+
+    if (first_name && last_name) {
+      finalFirstName = first_name;
+      finalLastName = last_name;
+    } else if (first_name && !last_name) {
+      finalFirstName = first_name;
+      finalLastName = first_name;
+    } else if (full_name && !first_name && !last_name) {
+      const nameParts = full_name.trim().split(' ');
+      finalFirstName = nameParts[0] || 'Unknown';
+      finalLastName = nameParts.length > 1 ? nameParts.slice(1).join(' ') : nameParts[0];
+    } else {
+      finalFirstName = 'Unknown';
+      finalLastName = 'Unknown';
+    }
+
+    // Format phone number for WhatsApp (ensure +91 prefix for Indian numbers)
+    const formatPhoneForWhatsApp = (phoneNumber: string): string => {
+      if (!phoneNumber) return '';
+      
+      const digitsOnly = phoneNumber.replace(/\D/g, '');
+      
+      if (digitsOnly.startsWith('91') && digitsOnly.length === 12) {
+        return '+' + digitsOnly;
+      }
+      
+      if (digitsOnly.length === 10) {
+        return '+91' + digitsOnly;
+      }
+      
+      if (digitsOnly.length === 11 && digitsOnly.startsWith('0')) {
+        return '+91' + digitsOnly.substring(1);
+      }
+      
+      return phoneNumber.startsWith('+') ? phoneNumber : '+' + digitsOnly;
+    };
+
+    // Extract WhatsApp opt-in consent from form
+    const whatsappOptIn = extractFieldFuzzy(answers, [
+      'whatsapp_opt_in', 'whatsappOptIn', 'WhatsApp Opt-In', 'whatsapp_optin',
+      'opt_in', 'optin', 'consent', 'whatsapp_consent', 'marketing_consent',
+      'communication_consent', 'sms_opt_in', 'phone_opt_in'
+    ]);
+
+    // Convert various opt-in formats to standardized boolean value for Zoho CRM
+    const getOptInValue = (value: string): boolean => {
+      if (!value) return true; // DEFAULT TO TRUE - Users consent by default unless they opt-out
+      
+      const normalizedValue = String(value).toLowerCase().trim();
+      
+      // Handle various true/consent values
+      if (['yes', 'true', '1', 'on', 'checked', 'agree', 'accept', 'consent'].includes(normalizedValue)) {
+        return true;
+      }
+      
+      // Handle false/no consent values (explicit opt-out)
+      if (['no', 'false', '0', 'off', 'unchecked', 'decline', 'reject'].includes(normalizedValue)) {
+        return false;
+      }
+      
+      // If unclear, default to true (opt-in by default)
+      return true;
+    };
+
+    const whatsappOptInStatus = getOptInValue(whatsappOptIn);
+    const whatsappFormattedNumber = formatPhoneForWhatsApp(phone);
+
+    console.log('[Register] Name and Phone processing:', {
+      original_first: first_name,
+      original_last: last_name,
+      original_full: full_name,
+      original_phone: phone,
+      final_first: finalFirstName,
+      final_last: finalLastName,
+      whatsapp_number: whatsappFormattedNumber,
+      whatsapp_opt_in_raw: whatsappOptIn,
+      whatsapp_opt_in_processed: whatsappOptInStatus
+    });
 
     // Build Zoho payload with standard fields
     const registrationTimestamp = new Date().toISOString();
     
+    // Create Zoho payload with proper CRM field mapping (using SPACES not underscores)
     const zohoPayload: Record<string, any> = {
-      // Core contact fields
-      "Name": full_name,
-      "First Name": first_name || '',
-      "Last Name": last_name || full_name,
+      // REQUIRED Core contact fields - Using SPACES as Zoho Flow expects
+      "First Name": finalFirstName,
+      "Last Name": finalLastName,
+      "Full Name": full_name || `${finalFirstName} ${finalLastName}`,
       "Email": email,
       "Phone": phone,
-      "Mobile Number": phone,
-      "Email Address": email,
+      "Mobile": phone,
       
-      // Event metadata
-      "Event ID": event_id,
+      // Event metadata - Using SPACES  
+      "Event Id": event_id,
       "Event Name": event_name,
       "Event Type": event_type,
       "Webinar Name": event_name,
-      
-      // Form metadata
-      "Form ID": form_id,
+      "Form Id": form_id,
       
       // Registration tracking
-      "Registration Timestamp": registrationTimestamp,
       "Registration Date": registrationTimestamp.split('T')[0],
       
-      // Lead source
-      "Lead Source": event_type === 'paid' ? 'Paid Event' : 'Free Event',
+      // Lead source and classification
+      "Lead Source": event_name,
+      "Lead Status": "New Lead",
+      "Lead Type": "Individual",
+      "Client Category": "Prospect",
+      "Database Name": "RareMinds Website",
+      "Campaign Name": event_name
     };
 
-    // Add ALL form fields dynamically (converted to Title Case)
+    // Add WhatsApp fields AFTER the main payload to ensure they're not overridden
+    const addWhatsAppFields = () => {
+      // Force WhatsApp Opt-In to Yes regardless of form input
+      const optInValue = "Yes";
+      zohoPayload["WhatsApp Opt-In"] = optInValue; // Preferred field name with space
+      zohoPayload["WhatsApp_Opt_In"] = optInValue; // Alternative field name
+      // Map formatted WhatsApp number (ensure +91 prefix)
+      zohoPayload["Whatsapp No"] = whatsappFormattedNumber;
+      zohoPayload["Whatsapp_No"] = whatsappFormattedNumber; // Alternative field name
+      console.log('[Register] WhatsApp fields set:', {
+        opt_in: optInValue,
+        number: whatsappFormattedNumber
+      });
+    };
+
+    addWhatsAppFields();
+
+    // Comprehensive field mapping - Maps ANY dashboard form field to correct Zoho CRM field
+    const fieldMapping: Record<string, string> = {
+      // CORE CONTACT FIELDS (Always required)
+      'name': 'Name', 'fullname': 'Name', 'full_name': 'Name', 'attendee_name': 'Name',
+      'firstname': 'First Name', 'first_name': 'First Name', 'fname': 'First Name',
+      'lastname': 'Last Name', 'last_name': 'Last Name', 'lname': 'Last Name', 'surname': 'Last Name',
+      'email': 'Email', 'emailaddress': 'Email', 'email_address': 'Email', 'mail': 'Email',
+      'phone': 'Phone', 'phonenumber': 'Phone', 'phone_number': 'Phone Number',
+      'mobile': 'Mobile Number', 'mobilenumber': 'Mobile Number', 'mobile_number': 'Mobile Number',
+      
+      // WHATSAPP FIELDS (Critical mapping)
+      'whatsapp': 'Whatsapp Number', 'whatsappnumber': 'Whatsapp Number', 'whatsapp_number': 'Whatsapp Number',
+      'whatsappno': 'Whatsapp Number', 'whatsapp_no': 'Whatsapp Number',
+      
+      // WHATSAPP OPT-IN (All possible variations) - Maps to boolean fields
+      'whatsappoptin': 'WhatsApp_Opt_In', 'whatsapp_opt_in': 'WhatsApp_Opt_In', 'whatsapp_optin': 'WhatsApp_Opt_In',
+      'optin': 'WhatsApp_Opt_In', 'opt_in': 'WhatsApp_Opt_In', 'marketing_opt_in': 'WhatsApp_Opt_In',
+      'consent': 'WhatsApp_Opt_In', 'whatsapp_consent': 'WhatsApp_Opt_In', 'marketing_consent': 'WhatsApp_Opt_In',
+      'communication_consent': 'WhatsApp_Opt_In', 'sms_opt_in': 'WhatsApp_Opt_In',
+      
+      // EDUCATIONAL FIELDS
+      'institution': 'School / College / University Name', 'school': 'School / College / University Name',
+      'college': 'School / College / University Name', 'university': 'School / College / University Name',
+      'institutionname': 'School / College / University Name', 'institution_name': 'School / College / University Name',
+      'company': 'Company Name', 'organization': 'Company Name', 'employer': 'Company Name',
+      
+      'department': 'Department Stream', 'dept': 'Department Stream', 'stream': 'Department Stream',
+      'branch': 'Students Branch/department', 'course': 'Department Stream',
+      
+      'subject': 'Subject You Teach', 'subjecttaught': 'Subject You Teach', 'subject_taught': 'Subject You Teach',
+      'teachingsubject': 'Subject You Teach', 'teaching_subject': 'Subject You Teach',
+      
+      'teachinglevel': 'Teaching Level', 'teaching_level': 'Teaching Level', 'level': 'Teaching Level',
+      'grade': 'Teaching Level', 'class': 'Teaching Level',
+      
+      'experience': 'Years Of Experience', 'yearsofexperience': 'Years Of Experience',
+      'years_of_experience': 'Years Of Experience', 'work_experience': 'Years Of Experience',
+      
+      // LOCATION FIELDS
+      'state': 'State', 'statename': 'State', 'region': 'State',
+      'district': 'District', 'districtname': 'District', 'area': 'District',
+      'city': 'City', 'cityname': 'City', 'town': 'City',
+      'address': 'Current Address', 'currentaddress': 'Current Address',
+      
+      // EVENT FIELDS  
+      'howdidyouhear': 'How Did You Hear About Us', 'heard_from': 'How Did You Hear About Us',
+      'heardfrom': 'How Did You Hear About Us', 'source': 'How Did You Hear About Us',
+      
+      'preferreddate': 'Preferred Date', 'preferred_date': 'Preferred Date',
+      'preferredtime': 'Preferred Time', 'preferred_time': 'Preferred Time',
+      'timeslot': 'Preferred Time', 'webinar_time_slot': 'Preferred Time',
+      
+      'preferredlanguage': 'Preferred Language', 'preferred_language': 'Preferred Language',
+      'language': 'Preferred Language',
+      
+      // PROFESSIONAL FIELDS
+      'designation': 'Job Title', 'jobtitle': 'Job Title', 'job_title': 'Job Title',
+      'position': 'Job Title', 'role': 'Job Title', 'title': 'Job Title',
+      
+      // ADDITIONAL FIELDS
+      'linkedin': 'Linkedin Profile', 'linkedinprofile': 'Linkedin Profile', 'linkedin_profile': 'Linkedin Profile',
+      'website': 'Website', 'referralcode': 'Referral Code', 'referral_code': 'Referral Code'
+    };
+
+    // Intelligent field processing with robust mapping and typo tolerance
     for (const [key, value] of Object.entries(answers)) {
       if (value === null || value === '' || value === undefined) continue;
       
-      // Convert snake_case to Title Case with spaces
-      let displayName = key;
-      if (key.includes('_')) {
-        displayName = key
-          .split('_')
-          .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-          .join(' ');
-      } else {
-        displayName = key.charAt(0).toUpperCase() + key.slice(1);
+      // Normalize the form field name for better matching
+      const normalizedKey = key.toLowerCase().replace(/[^a-z0-9]/g, '');
+      
+      // Try direct mapping first (exact match)
+      let zohoFieldName = fieldMapping[key.toLowerCase()] || fieldMapping[normalizedKey];
+      
+      // If no direct match, try fuzzy matching for typos and variations
+      if (!zohoFieldName) {
+        for (const [mappingKey, mappingValue] of Object.entries(fieldMapping)) {
+          const normalizedMappingKey = mappingKey.replace(/[^a-z0-9]/g, '');
+          
+          // Exact match after normalization
+          if (normalizedKey === normalizedMappingKey) {
+            zohoFieldName = mappingValue;
+            console.log(`[Register] Fuzzy matched: ${key} -> ${zohoFieldName}`);
+            break;
+          }
+          
+          // Partial match for common patterns
+          if (normalizedKey.length > 3 && normalizedMappingKey.length > 3) {
+            if (normalizedKey.includes(normalizedMappingKey) || normalizedMappingKey.includes(normalizedKey)) {
+              zohoFieldName = mappingValue;
+              console.log(`[Register] Partial matched: ${key} -> ${zohoFieldName}`);
+              break;
+            }
+          }
+        }
       }
       
-      zohoPayload[displayName] = value;
+      // If still no match, convert to proper Zoho format as fallback (using spaces)
+      if (!zohoFieldName) {
+        zohoFieldName = key
+          .replace(/([a-z])([A-Z])/g, '$1 $2')  // camelCase to spaces
+          .replace(/[_-]+/g, ' ')               // underscores/dashes to spaces
+          .split(' ')
+          .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+          .join(' ');
+        console.log(`[Register] Auto-converted: ${key} -> ${zohoFieldName}`);
+      }
+      
+      // CRITICAL: Never override required fields that are already set
+      const requiredFields = ['First Name', 'Last Name', 'Email', 'Phone', 'Mobile', 'Full Name'];
+      const whatsappFields = ['WhatsApp Opt-In', 'WhatsApp_Opt_In', 'Whatsapp No', 'Whatsapp_No'];
+      const isRequiredField = requiredFields.includes(zohoFieldName);
+      const isWhatsAppField = whatsappFields.includes(zohoFieldName);
+      
+      if (isWhatsAppField) {
+        // NEVER allow WhatsApp fields to be overridden by form data
+        console.log(`[Register] Blocked WhatsApp field override: ${zohoFieldName} = ${value}`);
+        continue; // Skip this field, continue processing remaining fields
+      } else if (!isRequiredField) {
+        zohoPayload[zohoFieldName] = String(value);
+      } else {
+        // For required fields, only update if current value is empty/null and new value is not empty
+        if ((!zohoPayload[zohoFieldName] || zohoPayload[zohoFieldName] === '' || zohoPayload[zohoFieldName] === 'null') && 
+            value && value !== '' && value !== null) {
+          zohoPayload[zohoFieldName] = String(value);
+          console.log(`[Register] Updated required field: ${zohoFieldName} = ${value}`);
+        }
+      }
     }
 
-    // Add payment fields
+    // FINAL VALIDATION AND RE-ADD: Ensure required fields are never null/empty
+    if (!zohoPayload["First Name"] || zohoPayload["First Name"] === 'null' || zohoPayload["First Name"] === '') {
+      zohoPayload["First Name"] = finalFirstName;
+    }
+    if (!zohoPayload["Last Name"] || zohoPayload["Last Name"] === 'null' || zohoPayload["Last Name"] === '') {
+      zohoPayload["Last Name"] = finalLastName;
+    }
+    if (!zohoPayload["Full Name"] || zohoPayload["Full Name"] === 'null' || zohoPayload["Full Name"] === '') {
+      zohoPayload["Full Name"] = `${finalFirstName} ${finalLastName}`;
+    }
+    
+    // FORCE RE-ADD WhatsApp fields (they should never be overridden)
+    addWhatsAppFields();
+    
+    console.log('[Register] Final WhatsApp validation:', {
+      whatsapp_opt_in_final: zohoPayload["WhatsApp Opt-In"],
+      whatsapp_number_final: zohoPayload["Whatsapp No"],
+      calculated_opt_in: whatsappOptInStatus,
+      calculated_number: whatsappFormattedNumber
+    });
+
+    // FORCE SET WhatsApp fields with CORRECT data types for Zoho CRM
+    zohoPayload["Whatsapp Number"] = whatsappFormattedNumber;     // String: Phone number
+    zohoPayload["Mobile Number"] = whatsappFormattedNumber;       // String: Backup phone field
+    zohoPayload["WhatsApp Opt-In"] = whatsappOptInStatus;         // Boolean: true/false
+    zohoPayload["WhatsApp_Opt_In"] = whatsappOptInStatus;         // Boolean: Alternative field name
+    
+    console.log('[Register] SET WhatsApp fields with DEFAULT TRUE opt-in:', {
+      'Whatsapp Number': `"${zohoPayload["Whatsapp Number"]}" (string)`,      
+      'WhatsApp Opt-In': `${zohoPayload["WhatsApp Opt-In"]} (boolean - defaults to TRUE)`,
+      'WhatsApp_Opt_In': `${zohoPayload["WhatsApp_Opt_In"]} (boolean - defaults to TRUE)`,
+      'Raw opt-in from form': whatsappOptIn || 'NOT PROVIDED',
+      'Processed to boolean': whatsappOptInStatus,
+      'Type check': typeof whatsappOptInStatus
+    });
+
+    // Add payment fields with proper Zoho field names (using spaces)
     if (event_type === 'paid' && payment_id) {
-      zohoPayload["Payment ID"] = payment_id;
-      zohoPayload["Razorpay Payment ID"] = payment_id;
+      zohoPayload["Payment Id"] = payment_id;
+      zohoPayload["Razorpay Payment Id"] = payment_id;
       zohoPayload["Payment Status"] = 'completed';
+      zohoPayload["Mode of Payment"] = 'Online';
       
       if (total_amount !== null && total_amount !== undefined) {
-        // Convert amount to string for Zoho CRM compatibility
-        zohoPayload["Total Amount"] = String(total_amount);
         zohoPayload["Amount"] = String(total_amount);
+        zohoPayload["Total Amount"] = String(total_amount);
       }
     } else {
       zohoPayload["Payment Status"] = 'not_required';
-      // Convert amount to string for Zoho CRM compatibility
-      zohoPayload["Total Amount"] = "0";
       zohoPayload["Amount"] = "0";
+      zohoPayload["Total Amount"] = "0";
     }
 
     console.log('[Register] Zoho payload prepared:', {
-      total_fields: Object.keys(zohoPayload).length
+      total_fields: Object.keys(zohoPayload).length,
+      first_name_check: zohoPayload["First Name"],
+      last_name_check: zohoPayload["Last Name"],
+      full_name_check: zohoPayload["Full Name"],
+      email_check: zohoPayload["Email"],
+      whatsapp_number: zohoPayload["Whatsapp No"],
+      whatsapp_opt_in: zohoPayload["WhatsApp Opt-In"],
+      whatsapp_formatted_number: whatsappFormattedNumber,
+      whatsapp_opt_in_status: whatsappOptInStatus,
+      original_whatsapp_opt_in: whatsappOptIn
     });
 
     // Send to Zoho Flow webhook
@@ -207,7 +510,8 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
         url: webhookUrl,
         total_fields: Object.keys(zohoPayload).length,
         payload_preview: {
-          name: zohoPayload["Name"],
+          first_name: zohoPayload["First Name"],
+          last_name: zohoPayload["Last Name"],
           email: zohoPayload["Email"],
           event: zohoPayload["Event Name"]
         }
