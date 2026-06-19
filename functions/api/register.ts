@@ -66,6 +66,10 @@ interface ZohoPayload {
 
 // Utility functions for efficient field matching and processing
 class FieldMatcher {
+  // Configuration constants for field matching behavior
+  private static readonly MIN_FIELD_LENGTH_FOR_FUZZY_MATCH = 4;
+  private static readonly SIMILARITY_THRESHOLD = 0.7; // 70% overlap required
+  
   private normalizedCache = new Map<string, string>();
   private matchCache = new Map<string, boolean>();
   
@@ -96,13 +100,14 @@ class FieldMatcher {
     if (norm1 === norm2) {
       this.matchCache.set(cacheKey, true);
       return true;
-    } else if (norm1.length > 4 && norm2.length > 4) {
+    } else if (norm1.length > FieldMatcher.MIN_FIELD_LENGTH_FOR_FUZZY_MATCH && 
+               norm2.length > FieldMatcher.MIN_FIELD_LENGTH_FOR_FUZZY_MATCH) {
       // Partial match with strict requirements to avoid false positives
       const minLength = Math.min(norm1.length, norm2.length);
       const maxLength = Math.max(norm1.length, norm2.length);
       
-      // Require at least 70% overlap to prevent unrelated matches
-      if ((minLength / maxLength) >= 0.7) {
+      // Require similarity threshold overlap to prevent unrelated matches
+      if ((minLength / maxLength) >= FieldMatcher.SIMILARITY_THRESHOLD) {
         const isMatch = norm1.includes(norm2) || norm2.includes(norm1);
         this.matchCache.set(cacheKey, isMatch);
         return isMatch;
@@ -296,6 +301,7 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
     }
 
     // Format phone number for WhatsApp - country-agnostic approach
+    // Returns formatted number or empty string if invalid (caller should handle empty)
     const formatPhoneForWhatsApp = (phoneNumber: string): string => {
       if (!phoneNumber) return '';
       
@@ -309,7 +315,7 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
       
       // Maximum reasonable length (E.164 format allows up to 15 digits)
       if (digitsOnly.length > 15) {
-        return ''; // Return empty string for invalid length
+        return '';
       }
       
       // If already in international format, validate it properly
@@ -324,7 +330,10 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
         
         // Validate that what follows + is all digits (after cleaning)
         const cleanInternational = afterPlus.replace(/\D/g, '');
-        if (cleanInternational.length >= 7 && cleanInternational.length <= 15 && /^\d+$/.test(cleanInternational)) {
+        const hasValidLength = cleanInternational.length >= 7 && cleanInternational.length <= 15;
+        const isAllDigits = /^\d+$/.test(cleanInternational);
+        
+        if (hasValidLength && isAllDigits) {
           return '+' + cleanInternational;
         }
         // If international format validation fails, return empty string
@@ -433,7 +442,11 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
       } else if (isRequiredField) {
         // For required fields, only update if current value is truly empty
         const currentValue = zohoPayload[zohoFieldName];
-        if (!currentValue || currentValue.toString().trim() === '') {
+        const isEmptyValue = !currentValue || 
+          (typeof currentValue === 'string' && currentValue.trim() === '') ||
+          currentValue === undefined;
+          
+        if (isEmptyValue) {
           zohoPayload[zohoFieldName] = String(value).trim();
         }
         // Skip override of required field - already set
@@ -472,7 +485,7 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
       const webhookUrl = env.ZOHO_FLOW_WEBHOOK_URL;
 
       // Send POST request with JSON body
-      await fetch(webhookUrl, {
+      const response = await fetch(webhookUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -480,8 +493,13 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
         body: JSON.stringify(zohoPayload)
       });
 
+      if (!response.ok) {
+        console.warn(`Zoho webhook returned ${response.status}: ${response.statusText}`);
+      }
+
     } catch (error) {
       // Don't fail the request - Zoho errors are non-critical
+      console.error('Zoho webhook error:', error instanceof Error ? error.message : 'Unknown error');
     }
 
     // Return success
