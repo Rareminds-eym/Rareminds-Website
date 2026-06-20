@@ -473,16 +473,6 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
     const whatsappSourceNumber = whatsappNumber || phone;
     const formattedWhatsApp = formatPhoneWithCountryCode(whatsappSourceNumber, country);
     const formattedPhone = formatPhoneWithCountryCode(phone, country);
-    
-    // Debug logging for phone formatting
-    console.log('Phone formatting debug:', {
-      country: country,
-      rawPhone: phone,
-      rawWhatsApp: whatsappNumber,
-      whatsappSource: whatsappSourceNumber,
-      formattedPhone: formattedPhone,
-      formattedWhatsApp: formattedWhatsApp
-    });
 
     // Build Zoho payload with standard fields
     const registrationTimestamp = new Date().toISOString();
@@ -563,9 +553,13 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
         }
         // Skip override of required field - already set
       } else {
-        // Type-safe assignment using ZohoPayload index signature [key: string]
-        // All dynamic fields are stored as strings per the ZohoPayload index signature
-        zohoPayload[zohoFieldName] = String(value);
+        // Type-safe assignment with proper type preservation
+        // For boolean fields, preserve type; for others, convert to string
+        if (typeof value === 'boolean') {
+          zohoPayload[zohoFieldName] = value;
+        } else {
+          zohoPayload[zohoFieldName] = String(value);
+        }
       }
     }
 
@@ -595,24 +589,6 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
       });
     }
 
-    // Debug: Log the WhatsApp fields before sending
-    console.log('Zoho payload WhatsApp fields:', {
-      'WhatsApp Opt In': zohoPayload['WhatsApp Opt In'],
-      'WhatsApp Opt-In': zohoPayload['WhatsApp Opt-In'],
-      'Whatsapp No': zohoPayload['Whatsapp No'],
-      'WhatsApp No': zohoPayload['WhatsApp No'],
-      'WhatsApp Number': zohoPayload['WhatsApp Number'],
-      'Whatsapp Number': zohoPayload['Whatsapp Number'],
-      'whatsapp_no': zohoPayload['whatsapp_no'],
-      'whatsapp_number': zohoPayload['whatsapp_number'],
-      'Phone': zohoPayload['Phone'],
-      'Mobile': zohoPayload['Mobile'],
-      'Country': zohoPayload['Country']
-    });
-    
-    // Log the full payload being sent to Zoho
-    console.log('Full Zoho Payload:', JSON.stringify(zohoPayload, null, 2));
-
     try {
       const webhookUrl = env.ZOHO_FLOW_WEBHOOK_URL;
 
@@ -625,13 +601,24 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
         body: JSON.stringify(zohoPayload)
       });
 
+      // Read response body to prevent unhandled promises
+      const responseText = await response.text();
+
       if (!response.ok) {
-        console.warn(`Zoho webhook returned ${response.status}: ${response.statusText}`);
+        // Log webhook failures for monitoring (non-blocking)
+        console.warn(`Zoho webhook failed: ${response.status} ${response.statusText}`, {
+          event_id,
+          status: response.status,
+          response: responseText.substring(0, 200) // Truncate for security
+        });
       }
 
     } catch (error) {
-      // Don't fail the request - Zoho errors are non-critical
-      console.error('Zoho webhook error:', error instanceof Error ? error.message : 'Unknown error');
+      // Log webhook errors for monitoring (non-blocking)
+      console.error('Zoho webhook request failed:', {
+        event_id,
+        error: error instanceof Error ? error.message : 'Unknown error'
+      });
     }
 
     // Return success
