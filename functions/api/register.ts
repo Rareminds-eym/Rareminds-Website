@@ -266,19 +266,21 @@ function logWarningOnce(key: string, message: string): void {
     console.warn(message);
     warningCache.set(key, now);
     
-    // Smart cache eviction: first remove expired entries, then clear all if still over limit
-    // This preserves recent rate-limiting state and prevents log spam spikes after full clear
+    // Eviction strategy: remove stale entries first, then oldest 20% if still over limit
+    // This preserves recent rate-limiting state and prevents log spam spikes
     if (warningCache.size > MAX_CACHE_SIZE) {
-      // Remove entries older than 2x the cooldown period (stale entries)
-      for (const [cacheKey, timestamp] of warningCache.entries()) {
-        if (now - timestamp > WARNING_COOLDOWN_MS * 2) {
-          warningCache.delete(cacheKey);
-        }
-      }
+      const staleThreshold = now - WARNING_COOLDOWN_MS * 2;
+      const entriesToDelete = Array.from(warningCache.entries())
+        .filter(([_, timestamp]) => timestamp < staleThreshold)
+        .map(([cacheKey]) => cacheKey);
       
-      // If still over limit after cleanup, clear everything as fallback
+      entriesToDelete.forEach(cacheKey => warningCache.delete(cacheKey));
+      
+      // If still over limit after removing stale entries, remove oldest 20% by insertion order
       if (warningCache.size > MAX_CACHE_SIZE) {
-        warningCache.clear();
+        const keysToDelete = Array.from(warningCache.keys())
+          .slice(0, Math.ceil(MAX_CACHE_SIZE * 0.2));
+        keysToDelete.forEach(cacheKey => warningCache.delete(cacheKey));
       }
     }
   }
@@ -686,31 +688,45 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
     const registrationTimestamp = new Date().toISOString();
     const registrationDate = registrationTimestamp.split('T')[0];
     
-    // Determine best phone number for each field with clear fallback and debugging
+    // Determine best phone number for each field with clear fallback and validation
     let phoneValue = formattedPhone;
-    if (!phoneValue) {
-      // Use rate-limited warning to avoid log spam in high-volume scenarios
-      logWarningOnce(
-        `phone-format-fallback-${event_id}`,
-        `[Event ${event_id}] Phone formatting failed - using raw value. ` +
-        `Original: "${phone}", Country: "${country || 'not provided'}". ` +
-        `Add 'country' field to form for accurate international formatting.`
-      );
-      phoneValue = phone || '';
+    if (!phoneValue && phone) {
+      // Only use raw phone if it contains at least 7 digits (minimum valid phone length)
+      const digitsOnly = phone.replace(REGEX_NON_DIGIT, '');
+      if (digitsOnly.length >= 7) {
+        // Use rate-limited warning to avoid log spam in high-volume scenarios
+        logWarningOnce(
+          `phone-format-fallback-${event_id}`,
+          `[Event ${event_id}] Phone formatting failed - using raw value. ` +
+          `Original: "${phone}", Country: "${country || 'not provided'}". ` +
+          `Add 'country' field to form for accurate international formatting.`
+        );
+        phoneValue = phone;
+      } else {
+        // Phone has too few digits, skip it entirely
+        phoneValue = '';
+      }
     }
     
     let whatsappValue = formattedWhatsApp;
-    if (!whatsappValue) {
-      if (whatsappSourceNumber && whatsappSourceNumber !== phone) {
-        // Rate-limited warning for WhatsApp-specific formatting failures
-        logWarningOnce(
-          `whatsapp-format-fallback-${event_id}`,
-          `[Event ${event_id}] WhatsApp formatting failed - using raw value. ` +
-          `Original: "${whatsappSourceNumber}", Country: "${country || 'not provided'}". ` +
-          `Add 'country' field to form for accurate international formatting.`
-        );
+    if (!whatsappValue && whatsappSourceNumber) {
+      // Only use raw WhatsApp number if it contains at least 7 digits
+      const digitsOnly = whatsappSourceNumber.replace(REGEX_NON_DIGIT, '');
+      if (digitsOnly.length >= 7) {
+        if (whatsappSourceNumber !== phone) {
+          // Rate-limited warning for WhatsApp-specific formatting failures
+          logWarningOnce(
+            `whatsapp-format-fallback-${event_id}`,
+            `[Event ${event_id}] WhatsApp formatting failed - using raw value. ` +
+            `Original: "${whatsappSourceNumber}", Country: "${country || 'not provided'}". ` +
+            `Add 'country' field to form for accurate international formatting.`
+          );
+        }
+        whatsappValue = whatsappSourceNumber;
+      } else {
+        // Fallback to phone value if WhatsApp number is invalid
+        whatsappValue = phoneValue;
       }
-      whatsappValue = whatsappSourceNumber || phoneValue;
     }
     
     // Create Zoho payload matching exact webhook fields (no duplicates)
@@ -877,12 +893,19 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
       );
     }
     
-    // Apply workaround if WhatsApp Opt-In is still null after field processing
+    // TODO: REMOVE THIS WORKAROUND - This is a temporary fallback for backward compatibility
+    // CONTEXT: Some older forms may not have the WhatsApp Opt-In checkbox properly configured
+    // ASSUMPTION: If user provides WhatsApp number + complete registration, they likely consented
+    // RISK: This assumes implicit consent which may not meet compliance requirements
+    // ACTION NEEDED: Ensure all forms include explicit WhatsApp Opt-In checkbox field
+    // REMOVAL DATE: Once all active forms are verified to send opt-in field explicitly
     if (zohoPayload["WhatsApp Opt-In"] === null) {
       const hasWhatsAppNumber = zohoPayload["Whatsapp Number"] && zohoPayload["Whatsapp Number"].trim() !== '';
       const hasEmail = zohoPayload["Email"] && zohoPayload["Email"].trim() !== '';
       const hasName = zohoPayload["First Name"] && zohoPayload["First Name"].trim() !== '';
       
+      // Only apply workaround if user provided WhatsApp number (implicit consent indicator)
+      // This should be removed once all forms properly send explicit opt-in values
       if (hasWhatsAppNumber && hasEmail && hasName) {
         zohoPayload["WhatsApp Opt-In"] = true;
         zohoPayload["Opt In Source"] = 'Website Form';
