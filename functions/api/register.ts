@@ -430,10 +430,10 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
     // Format phone number for international use with intelligent country code detection
     // Returns formatted number with proper country code prefix
     // 
-    // IMPORTANT: For numbers with leading zeros, country detection is LIMITED.
+    // IMPORTANT: For numbers with leading zeros, country detection is NOT POSSIBLE.
     // Best practice: Always include a 'country' field in your forms for accurate formatting.
-    // Without country context, leading-zero numbers default to India (91) for 10-digit numbers,
-    // and return unformatted for other lengths to avoid incorrect country code assignment.
+    // Without country context, leading-zero numbers cannot be reliably formatted and will
+    // be returned with just a '+' prefix to avoid incorrect country code assignment.
     const formatPhoneWithCountryCode = (phoneNumber: string, countryName: string): string => {
       if (!phoneNumber) return '';
       
@@ -585,9 +585,9 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
         const length = withoutLeadingZero.length;
         
         if (length === 10) {
-          // 10 digits: India (most likely), Australia
-          // Default to India as it's most common in our user base
-          detectedCode = '91';
+          // 10 digits: India, Australia (ambiguous without country context)
+          // Cannot reliably detect - return empty to avoid incorrect formatting
+          detectedCode = '';
         } else if (length === 9) {
           // 9 digits: UK, Germany, France, Italy, Spain
           // Without country context, we cannot reliably detect
@@ -615,13 +615,23 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
         return ''; // Invalid length after formatting
       }
       
-      // Fallback: validate E.164 format before returning
-      // Only return if it's a valid E.164 format (7-15 digits total)
+      // Fallback: For numbers with leading zeros where country is unknown,
+      // return as-is with + prefix. While technically incorrect E.164 format
+      // (leading zeros should be removed), this preserves the number for storage
+      // in Zoho CRM. The number can be manually corrected or formatted later
+      // when country context is available.
+      // 
+      // Examples:
+      //   09876543210 (India) → +09876543210 (should be +919876543210)
+      //   0412345678 (Australia) → +0412345678 (should be +61412345678)
+      //   07123456789 (UK) → +07123456789 (should be +447123456789)
+      //
+      // Note: This is better than rejecting the number entirely.
       if (digitsOnly.length >= 7 && digitsOnly.length <= 15) {
         return '+' + digitsOnly;
       }
       
-      return '';
+      return ''; // Invalid length - reject
     };
 
     // Extract WhatsApp opt-in consent from form
