@@ -54,12 +54,12 @@ export const FIELD_MAPPING: Record<string, string> = {
   'mobilenumber': 'Mobile Number',
   'mobile_number': 'Mobile Number',
   
-  // WHATSAPP FIELDS (Critical mapping)
-  'whatsapp': 'WhatsApp Number',
-  'whatsappnumber': 'WhatsApp Number',
-  'whatsapp_number': 'WhatsApp Number',
-  'whatsappno': 'WhatsApp Number',
-  'whatsapp_no': 'WhatsApp Number',
+  // WHATSAPP FIELDS (Critical mapping) - Use exact Zoho CRM field name
+  'whatsapp': 'Whatsapp No',
+  'whatsappnumber': 'Whatsapp No',
+  'whatsapp_number': 'Whatsapp No',
+  'whatsappno': 'Whatsapp No',
+  'whatsapp_no': 'Whatsapp No',
   
   // WHATSAPP OPT-IN (All possible variations) - Maps to boolean fields
   'whatsappoptin': 'WhatsApp Opt In',
@@ -178,6 +178,12 @@ export const PROTECTED_REQUIRED_FIELDS = [
  */
 export const PROTECTED_WHATSAPP_FIELDS = [
   'WhatsApp Opt In',
+  'WhatsApp Opt-In',
+  'Whatsapp No',
+  'WhatsApp No',
   'WhatsApp Number',
-  'Mobile Number'
+  'Whatsapp Number',
+  'whatsapp_no',
+  'whatsapp_number',
+  'Mobile'
 ];

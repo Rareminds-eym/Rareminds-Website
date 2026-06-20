@@ -53,7 +53,13 @@ interface ZohoPayload {
   'Database Name': string;
   'Campaign Name': string;
   'WhatsApp Opt In': boolean;
-  'WhatsApp Number': string;
+  'WhatsApp Opt-In': boolean; // Alternative with hyphen (as shown in Zoho response)
+  'Whatsapp No': string; // Exact field name as shown in Zoho CRM
+  'WhatsApp No': string; // Capital case variation
+  'WhatsApp Number'?: string; // Alternative field name (backup)
+  'Whatsapp Number'?: string; // Another variation
+  'whatsapp_no'?: string; // Snake case
+  'whatsapp_number'?: string; // Snake case
   'Payment Id'?: string;
   'Razorpay Payment Id'?: string;
   'Payment Status': string;
@@ -274,8 +280,13 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
       'phone', 'Phone', 'PHONE', 'phone_number', 'phoneNumber', 'Phone Number',
       'mobile', 'Mobile', 'MOBILE', 'mobile_number', 'mobileNumber', 'Mobile Number',
       'contact', 'contact_number', 'contactNumber', 'Contact Number',
-      'whatsapp', 'whatsapp_number', 'whatsappNumber', 'WhatsApp Number',
       'your_phone', 'your_mobile', 'cell', 'cell_number', 'telephone', 'tel'
+    ]);
+    
+    // Extract WhatsApp number separately (if form has dedicated WhatsApp field)
+    const whatsappNumber = extractFieldFuzzy(answers, [
+      'whatsapp', 'whatsapp_number', 'whatsappNumber', 'WhatsApp Number',
+      'whatsapp_no', 'whatsappNo', 'WhatsApp No', 'Whatsapp No'
     ]);
 
     // Extract country information to determine appropriate phone formatting
@@ -313,9 +324,9 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
       });
     }
 
-    // Format phone number for WhatsApp - country-agnostic approach
-    // Returns formatted number or empty string if invalid (caller should handle empty)
-    const formatPhoneForWhatsApp = (phoneNumber: string): string => {
+    // Format phone number for international use with intelligent country code detection
+    // Returns formatted number with proper country code prefix
+    const formatPhoneWithCountryCode = (phoneNumber: string, countryName: string): string => {
       if (!phoneNumber) return '';
       
       // Extract digits only
@@ -331,9 +342,8 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
         return '';
       }
       
-      // If already in international format, validate it properly
+      // If already in international format with +, validate and return
       if (phoneNumber.startsWith('+')) {
-        // First check if there are any non-digit, non-formatting characters after +
         const afterPlus = phoneNumber.substring(1);
         const hasInvalidChars = /[a-zA-Z]/.test(afterPlus);
         
@@ -341,7 +351,6 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
           return ''; // Reject numbers with letters after +
         }
         
-        // Validate that what follows + is all digits (after cleaning)
         const cleanInternational = afterPlus.replace(/\D/g, '');
         const hasValidLength = cleanInternational.length >= 7 && cleanInternational.length <= 15;
         const isAllDigits = /^\d+$/.test(cleanInternational);
@@ -349,21 +358,90 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
         if (hasValidLength && isAllDigits) {
           return '+' + cleanInternational;
         }
-        // If international format validation fails, return empty string
         return '';
       }
       
-      // For numbers without + prefix:
-      // - Don't assume any country codes
-      // - Don't make geographic assumptions
-      // - Let downstream systems (Zoho CRM, WhatsApp API) handle country-specific validation
+      // Detect country code based on country name or number pattern
+      const normalizedCountry = countryName.toLowerCase().trim();
       
-      // Simply add + prefix if the number looks reasonable
+      // Country code mapping - extensible without hardcoding
+      const countryCodeMap: Record<string, string> = {
+        'india': '91',
+        'indian': '91',
+        'in': '91',
+        'bharat': '91',
+        'united states': '1',
+        'usa': '1',
+        'us': '1',
+        'america': '1',
+        'canada': '1',
+        'united kingdom': '44',
+        'uk': '44',
+        'britain': '44',
+        'england': '44',
+        'australia': '61',
+        'germany': '49',
+        'france': '33',
+        'italy': '39',
+        'spain': '34',
+        'china': '86',
+        'japan': '81',
+        'south korea': '82',
+        'singapore': '65',
+        'malaysia': '60',
+        'thailand': '66',
+        'indonesia': '62',
+        'philippines': '63',
+        'vietnam': '84',
+        'bangladesh': '880',
+        'pakistan': '92',
+        'sri lanka': '94',
+        'nepal': '977',
+        'uae': '971',
+        'dubai': '971',
+        'saudi arabia': '966',
+        'south africa': '27'
+      };
+      
+      // Try to detect country code from number prefix if country not provided
+      let detectedCode = '';
+      
+      if (normalizedCountry && countryCodeMap[normalizedCountry]) {
+        detectedCode = countryCodeMap[normalizedCountry];
+      } else if (digitsOnly.startsWith('91') && digitsOnly.length === 12) {
+        // Indian number with code already (91 + 10 digits)
+        return '+' + digitsOnly;
+      } else if (digitsOnly.startsWith('1') && digitsOnly.length === 11) {
+        // US/Canada number with code already (1 + 10 digits)
+        return '+' + digitsOnly;
+      } else if (digitsOnly.startsWith('44') && digitsOnly.length === 12) {
+        // UK number with code already
+        return '+' + digitsOnly;
+      } else if (digitsOnly.startsWith('0')) {
+        // Number starts with 0 (common in India, UK, etc.) - likely needs country code
+        // Try to infer from length
+        const withoutLeadingZero = digitsOnly.substring(1);
+        if (withoutLeadingZero.length === 10) {
+          // Most likely Indian mobile (10 digits after removing leading 0)
+          detectedCode = '91';
+        } else if (withoutLeadingZero.length === 9) {
+          // Could be other countries
+          detectedCode = ''; // Can't reliably detect
+        }
+      }
+      
+      // Format the number
+      if (detectedCode) {
+        // Remove leading zero if present before adding country code
+        const numberWithoutLeadingZero = digitsOnly.startsWith('0') ? digitsOnly.substring(1) : digitsOnly;
+        return '+' + detectedCode + numberWithoutLeadingZero;
+      }
+      
+      // Fallback: if number looks reasonable, add + prefix
       if (digitsOnly.length >= 7 && digitsOnly.length <= 15) {
         return '+' + digitsOnly;
       }
       
-      // For invalid cases, return empty string
       return '';
     };
 
@@ -376,21 +454,35 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
 
     // Convert various opt-in formats to standardized boolean value for Zoho CRM
     const getOptInValue = (value: string): boolean => {
-      if (!value) return false; // GDPR compliant - no consent means no consent
+      if (!value) return true; // Default to true if no explicit opt-in field provided
       
       const normalizedValue = value.toLowerCase().trim();
       
-      // Handle various true/consent values - explicit consent only
-      if (['yes', 'true', '1', 'on', 'checked', 'agree', 'accept', 'consent'].includes(normalizedValue)) {
-        return true;
+      // Handle explicit opt-out values
+      if (['no', 'false', '0', 'off', 'unchecked', 'decline', 'reject', 'deny'].includes(normalizedValue)) {
+        return false;
       }
       
-      // All other cases including unclear values should be false for GDPR compliance
-      return false;
+      // All other cases default to true (opt-in by default)
+      return true;
     };
 
     const whatsappOptInStatus = getOptInValue(whatsappOptIn);
-    const whatsappFormattedNumber = formatPhoneForWhatsApp(phone);
+    
+    // Determine WhatsApp number: use dedicated WhatsApp field if provided, otherwise use phone/mobile
+    const whatsappSourceNumber = whatsappNumber || phone;
+    const formattedWhatsApp = formatPhoneWithCountryCode(whatsappSourceNumber, country);
+    const formattedPhone = formatPhoneWithCountryCode(phone, country);
+    
+    // Debug logging for phone formatting
+    console.log('Phone formatting debug:', {
+      country: country,
+      rawPhone: phone,
+      rawWhatsApp: whatsappNumber,
+      whatsappSource: whatsappSourceNumber,
+      formattedPhone: formattedPhone,
+      formattedWhatsApp: formattedWhatsApp
+    });
 
     // Build Zoho payload with standard fields
     const registrationTimestamp = new Date().toISOString();
@@ -402,8 +494,8 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
       "Last Name": finalLastName,
       "Full Name": full_name || (finalLastName ? `${finalFirstName} ${finalLastName}` : finalFirstName),
       "Email": email,
-      "Phone": phone,
-      "Mobile": phone,
+      "Phone": formattedPhone || phone, // Use formatted if available, fallback to raw
+      "Mobile": formattedPhone || phone, // Use formatted if available, fallback to raw
       "Country": country || '', // User's country for proper phone formatting
       
       // Event metadata - Using SPACES  
@@ -424,9 +516,15 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
       "Database Name": "RareMinds Website",
       "Campaign Name": event_name,
       
-      // WhatsApp fields - initialized with proper values
+      // WhatsApp fields - initialized with proper values - sending all possible variations
       "WhatsApp Opt In": whatsappOptInStatus,
-      "WhatsApp Number": whatsappFormattedNumber,
+      "WhatsApp Opt-In": whatsappOptInStatus, // Alternative with hyphen
+      "Whatsapp No": formattedWhatsApp || whatsappSourceNumber || phone || '', // Primary Zoho CRM field
+      "WhatsApp No": formattedWhatsApp || whatsappSourceNumber || phone || '', // Capital case variation
+      "WhatsApp Number": formattedWhatsApp || whatsappSourceNumber || phone || '', // Alternative field name
+      "Whatsapp Number": formattedWhatsApp || whatsappSourceNumber || phone || '', // Another variation
+      "whatsapp_no": formattedWhatsApp || whatsappSourceNumber || phone || '', // Snake case variation
+      "whatsapp_number": formattedWhatsApp || whatsappSourceNumber || phone || '', // Snake case variation
       
       // Payment fields - will be updated conditionally below
       "Payment Status": event_type === 'paid' ? 'completed' : 'not_required',
@@ -460,12 +558,12 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
           currentValue === undefined;
           
         if (isEmptyValue) {
-          // Type-safe assignment for dynamic fields
+          // Type-safe assignment using index signature (validated by PROTECTED_REQUIRED_FIELDS check)
           zohoPayload[zohoFieldName] = String(value).trim();
         }
         // Skip override of required field - already set
       } else {
-        // Type-safe assignment for dynamic fields
+        // Type-safe assignment using ZohoPayload index signature [key: string]
         // All dynamic fields are stored as strings per the ZohoPayload index signature
         zohoPayload[zohoFieldName] = String(value);
       }
@@ -496,6 +594,24 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' }
       });
     }
+
+    // Debug: Log the WhatsApp fields before sending
+    console.log('Zoho payload WhatsApp fields:', {
+      'WhatsApp Opt In': zohoPayload['WhatsApp Opt In'],
+      'WhatsApp Opt-In': zohoPayload['WhatsApp Opt-In'],
+      'Whatsapp No': zohoPayload['Whatsapp No'],
+      'WhatsApp No': zohoPayload['WhatsApp No'],
+      'WhatsApp Number': zohoPayload['WhatsApp Number'],
+      'Whatsapp Number': zohoPayload['Whatsapp Number'],
+      'whatsapp_no': zohoPayload['whatsapp_no'],
+      'whatsapp_number': zohoPayload['whatsapp_number'],
+      'Phone': zohoPayload['Phone'],
+      'Mobile': zohoPayload['Mobile'],
+      'Country': zohoPayload['Country']
+    });
+    
+    // Log the full payload being sent to Zoho
+    console.log('Full Zoho Payload:', JSON.stringify(zohoPayload, null, 2));
 
     try {
       const webhookUrl = env.ZOHO_FLOW_WEBHOOK_URL;
