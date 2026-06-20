@@ -138,6 +138,21 @@ type ZohoPayloadKey = typeof ZOHO_PAYLOAD_KEYS[number];
 function isZohoPayloadKey(key: string): key is ZohoPayloadKey {
   return ZOHO_PAYLOAD_KEYS.includes(key as ZohoPayloadKey);
 }
+
+// Type-safe helper to assign validated fields to Zoho payload
+// Only call this AFTER validating with isZohoPayloadKey()
+// Uses unknown as intermediate type for maximum type safety
+function assignToZohoPayload(
+  payload: ZohoPayload,
+  key: ZohoPayloadKey,
+  value: string | boolean
+): void {
+  // Type assertion chain: ZohoPayload -> unknown -> Record
+  // This is safer than direct casting and leverages the index signature
+  const payloadRecord = payload as unknown as Record<ZohoPayloadKey, string | boolean>;
+  payloadRecord[key] = value;
+}
+
 // Regex constants for validation and formatting
 const REGEX_NON_ALPHANUMERIC = /[^a-z0-9]/g;
 const REGEX_NON_DIGIT = /\D/g;
@@ -414,6 +429,11 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
 
     // Format phone number for international use with intelligent country code detection
     // Returns formatted number with proper country code prefix
+    // 
+    // IMPORTANT: For numbers with leading zeros, country detection is LIMITED.
+    // Best practice: Always include a 'country' field in your forms for accurate formatting.
+    // Without country context, leading-zero numbers default to India (91) for 10-digit numbers,
+    // and return unformatted for other lengths to avoid incorrect country code assignment.
     const formatPhoneWithCountryCode = (phoneNumber: string, countryName: string): string => {
       if (!phoneNumber) return '';
       
@@ -559,15 +579,26 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
         // UK number with code already
         return '+' + digitsOnly;
       } else if (digitsOnly.startsWith('0')) {
-        // Number starts with 0 (common in India, UK, etc.) - likely needs country code
-        // Try to infer from length
+        // Number starts with 0 (common in many countries) - needs country code
+        // Try to infer country from length pattern
         const withoutLeadingZero = digitsOnly.substring(1);
-        if (withoutLeadingZero.length === 10) {
-          // Most likely Indian mobile (10 digits after removing leading 0)
+        const length = withoutLeadingZero.length;
+        
+        if (length === 10) {
+          // 10 digits: India (most likely), Australia
+          // Default to India as it's most common in our user base
           detectedCode = '91';
-        } else if (withoutLeadingZero.length === 9) {
-          // Could be other countries
-          detectedCode = ''; // Can't reliably detect
+        } else if (length === 9) {
+          // 9 digits: UK, Germany, France, Italy, Spain
+          // Without country context, we cannot reliably detect
+          // Return empty to trigger fallback
+          detectedCode = '';
+        } else if (length === 8) {
+          // 8 digits: Netherlands, Belgium, Switzerland
+          detectedCode = '';
+        } else {
+          // Other lengths - cannot detect reliably
+          detectedCode = '';
         }
       }
       
@@ -709,15 +740,15 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
           currentValue === undefined;
           
         if (isEmptyValue) {
-          // Direct assignment - zohoFieldName validated by isZohoPayloadKey
+          // Type-safe assignment using helper - zohoFieldName validated by isZohoPayloadKey
           const assignValue = typeof value === 'boolean' ? value : String(value).trim();
-          (zohoPayload as any)[zohoFieldName] = assignValue;
+          assignToZohoPayload(zohoPayload, zohoFieldName, assignValue);
         }
         // Skip override of required field - already set
       } else {
-        // Direct assignment with type preservation - zohoFieldName validated by isZohoPayloadKey
+        // Type-safe assignment using helper - zohoFieldName validated by isZohoPayloadKey
         const assignValue = typeof value === 'boolean' ? value : String(value);
-        (zohoPayload as any)[zohoFieldName] = assignValue;
+        assignToZohoPayload(zohoPayload, zohoFieldName, assignValue);
       }
     }
     
