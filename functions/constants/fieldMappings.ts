@@ -12,6 +12,18 @@
 
 /**
  * Converts a field name to proper Zoho CRM format (Title Case with spaces)
+ * 
+ * This is a FALLBACK function for unmapped fields. It attempts to format
+ * field names consistently but may not match known Zoho fields exactly.
+ * 
+ * For known fields, always use FIELD_MAPPING which maps to validated
+ * Zoho field names in ZOHO_PAYLOAD_KEYS.
+ * 
+ * @param fieldName - The field name to convert
+ * @returns Title Case formatted string with spaces
+ * @example
+ *   convertToZohoFieldName('user_email') => 'User Email'
+ *   convertToZohoFieldName('phoneNumber') => 'Phone Number'
  */
 export const convertToZohoFieldName = (fieldName: string): string => {
   if (!fieldName || fieldName.trim() === '') {

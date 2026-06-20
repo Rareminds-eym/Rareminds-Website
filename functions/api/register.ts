@@ -75,6 +75,7 @@ const ZOHO_PAYLOAD_KEYS = [
   'First Name',
   'Last Name',
   'Full Name',
+  'Name',
   'Email',
   'Phone',
   'Mobile',
@@ -104,7 +105,31 @@ const ZOHO_PAYLOAD_KEYS = [
   'Payment Status',
   'Mode of Payment',
   'Amount',
-  'Total Amount'
+  'Total Amount',
+  // Educational fields
+  'School / College / University Name',
+  'Company Name',
+  'Department Stream',
+  'Students Branch/department',
+  'Subject You Teach',
+  'Teaching Level',
+  'Years Of Experience',
+  // Location fields
+  'State',
+  'District',
+  'City',
+  'Current Address',
+  // Event fields
+  'How Did You Hear About Us',
+  'Preferred Date',
+  'Preferred Time',
+  'Preferred Language',
+  // Professional fields
+  'Job Title',
+  // Additional fields
+  'LinkedIn Profile',
+  'Website',
+  'Referral Code'
 ] as const;
 
 type ZohoPayloadKey = typeof ZOHO_PAYLOAD_KEYS[number];
@@ -139,10 +164,11 @@ class FieldMatcher {
     
     const normalized = fieldName.toLowerCase().replace(REGEX_NON_ALPHANUMERIC, '');
     
-    // Prevent unbounded cache growth in edge cases
-    if (this.normalizedCache.size < FieldMatcher.MAX_CACHE_SIZE) {
-      this.normalizedCache.set(fieldName, normalized);
+    // Actively enforce cache size limit - clear when limit reached
+    if (this.normalizedCache.size >= FieldMatcher.MAX_CACHE_SIZE) {
+      this.normalizedCache.clear();
     }
+    this.normalizedCache.set(fieldName, normalized);
     
     return normalized;
   }
@@ -180,11 +206,12 @@ class FieldMatcher {
     return false;
   }
   
-  // Helper to set cache only if under size limit
+  // Helper to set cache with active size enforcement
   private setCacheIfSpace(key: string, value: boolean): void {
-    if (this.matchCache.size < FieldMatcher.MAX_CACHE_SIZE) {
-      this.matchCache.set(key, value);
+    if (this.matchCache.size >= FieldMatcher.MAX_CACHE_SIZE) {
+      this.matchCache.clear();
     }
+    this.matchCache.set(key, value);
   }
   
   // Extract field value with fuzzy matching
@@ -264,7 +291,7 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
     // Parse request body
     body = await request.json();
     
-    if (!body || typeof body !== 'object') {
+    if (!body || typeof body !== 'object' || Array.isArray(body)) {
       return new Response(JSON.stringify({ error: 'Invalid request body' }), {
         status: 400,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' }
@@ -425,43 +452,96 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
       // Detect country code based on country name or number pattern
       const normalizedCountry = countryName.toLowerCase().trim();
       
-      // Country code mapping - extensible without hardcoding
+      // Comprehensive country code mapping covering major regions
       const countryCodeMap: Record<string, string> = {
-        'india': '91',
-        'indian': '91',
-        'in': '91',
-        'bharat': '91',
-        'united states': '1',
-        'usa': '1',
-        'us': '1',
-        'america': '1',
-        'canada': '1',
-        'united kingdom': '44',
-        'uk': '44',
-        'britain': '44',
-        'england': '44',
-        'australia': '61',
-        'germany': '49',
-        'france': '33',
-        'italy': '39',
-        'spain': '34',
-        'china': '86',
-        'japan': '81',
-        'south korea': '82',
-        'singapore': '65',
-        'malaysia': '60',
-        'thailand': '66',
-        'indonesia': '62',
-        'philippines': '63',
-        'vietnam': '84',
-        'bangladesh': '880',
-        'pakistan': '92',
-        'sri lanka': '94',
-        'nepal': '977',
-        'uae': '971',
-        'dubai': '971',
-        'saudi arabia': '966',
-        'south africa': '27'
+        // Asia - South
+        'india': '91', 'indian': '91', 'in': '91', 'bharat': '91',
+        'pakistan': '92', 'pk': '92',
+        'bangladesh': '880', 'bd': '880',
+        'sri lanka': '94', 'lk': '94',
+        'nepal': '977', 'np': '977',
+        'maldives': '960', 'mv': '960',
+        'bhutan': '975', 'bt': '975',
+        'afghanistan': '93', 'af': '93',
+        
+        // Asia - Southeast
+        'indonesia': '62', 'id': '62',
+        'philippines': '63', 'ph': '63',
+        'vietnam': '84', 'vn': '84',
+        'thailand': '66', 'th': '66',
+        'malaysia': '60', 'my': '60',
+        'singapore': '65', 'sg': '65',
+        'myanmar': '95', 'mm': '95',
+        'cambodia': '855', 'kh': '855',
+        'laos': '856', 'la': '856',
+        
+        // Asia - East
+        'china': '86', 'cn': '86',
+        'japan': '81', 'jp': '81',
+        'south korea': '82', 'korea': '82', 'kr': '82',
+        'hong kong': '852', 'hk': '852',
+        'taiwan': '886', 'tw': '886',
+        
+        // Middle East
+        'uae': '971', 'dubai': '971', 'ae': '971',
+        'saudi arabia': '966', 'sa': '966',
+        'qatar': '974', 'qa': '974',
+        'kuwait': '965', 'kw': '965',
+        'bahrain': '973', 'bh': '973',
+        'oman': '968', 'om': '968',
+        'israel': '972', 'il': '972',
+        'turkey': '90', 'tr': '90',
+        'iran': '98', 'ir': '98',
+        'iraq': '964', 'iq': '964',
+        'jordan': '962', 'jo': '962',
+        'lebanon': '961', 'lb': '961',
+        
+        // Europe - Western
+        'united kingdom': '44', 'uk': '44', 'britain': '44', 'england': '44', 'gb': '44',
+        'france': '33', 'fr': '33',
+        'germany': '49', 'de': '49',
+        'italy': '39', 'it': '39',
+        'spain': '34', 'es': '34',
+        'netherlands': '31', 'holland': '31', 'nl': '31',
+        'belgium': '32', 'be': '32',
+        'switzerland': '41', 'ch': '41',
+        'austria': '43', 'at': '43',
+        'portugal': '351', 'pt': '351',
+        'greece': '30', 'gr': '30',
+        
+        // Europe - Eastern
+        'russia': '7', 'ru': '7',
+        'poland': '48', 'pl': '48',
+        'ukraine': '380', 'ua': '380',
+        'romania': '40', 'ro': '40',
+        'czech republic': '420', 'cz': '420',
+        'hungary': '36', 'hu': '36',
+        
+        // Americas - North
+        'united states': '1', 'usa': '1', 'us': '1', 'america': '1',
+        'canada': '1', 'ca': '1',
+        'mexico': '52', 'mx': '52',
+        
+        // Americas - South
+        'brazil': '55', 'br': '55',
+        'argentina': '54', 'ar': '54',
+        'colombia': '57', 'co': '57',
+        'chile': '56', 'cl': '56',
+        'peru': '51', 'pe': '51',
+        'venezuela': '58', 've': '58',
+        
+        // Africa
+        'south africa': '27', 'za': '27',
+        'nigeria': '234', 'ng': '234',
+        'egypt': '20', 'eg': '20',
+        'kenya': '254', 'ke': '254',
+        'ghana': '233', 'gh': '233',
+        'ethiopia': '251', 'et': '251',
+        'morocco': '212', 'ma': '212',
+        
+        // Oceania
+        'australia': '61', 'au': '61',
+        'new zealand': '64', 'nz': '64'
       };
       
       // Try to detect country code from number prefix if country not provided
@@ -491,14 +571,21 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
         }
       }
       
-      // Format the number
+      // Format the number with proper E.164 validation
       if (detectedCode) {
         // Remove leading zero if present before adding country code
         const numberWithoutLeadingZero = digitsOnly.startsWith('0') ? digitsOnly.substring(1) : digitsOnly;
-        return '+' + detectedCode + numberWithoutLeadingZero;
+        const formattedNumber = '+' + detectedCode + numberWithoutLeadingZero;
+        
+        // Validate final E.164 format: + followed by 1-15 digits
+        if (formattedNumber.length >= 8 && formattedNumber.length <= 16) {
+          return formattedNumber;
+        }
+        return ''; // Invalid length after formatting
       }
       
-      // Fallback: if number looks reasonable, add + prefix
+      // Fallback: validate E.164 format before returning
+      // Only return if it's a valid E.164 format (7-15 digits total)
       if (digitsOnly.length >= 7 && digitsOnly.length <= 15) {
         return '+' + digitsOnly;
       }
@@ -514,18 +601,19 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
     ]);
 
     // Convert various opt-in formats to standardized boolean value for Zoho CRM
+    // GDPR/Privacy Compliance: Default to false (opt-out) to require explicit consent
     const getOptInValue = (value: string): boolean => {
-      if (!value) return true; // Default to true if no explicit opt-in field provided
+      if (!value) return false; // Default to false - explicit consent required
       
       const normalizedValue = value.toLowerCase().trim();
       
-      // Handle explicit opt-out values
-      if (['no', 'false', '0', 'off', 'unchecked', 'decline', 'reject', 'deny'].includes(normalizedValue)) {
-        return false;
+      // Handle explicit opt-in values
+      if (['yes', 'true', '1', 'on', 'checked', 'accept', 'agree', 'allow'].includes(normalizedValue)) {
+        return true;
       }
       
-      // All other cases default to true (opt-in by default)
-      return true;
+      // All other cases default to false (opt-out)
+      return false;
     };
 
     const whatsappOptInStatus = getOptInValue(whatsappOptIn);
@@ -587,6 +675,9 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
     };
 
     // Intelligent field processing with robust mapping and typo tolerance
+    // Collect skipped fields to reduce log spam
+    const skippedFields: string[] = [];
+    
     for (const [key, value] of Object.entries(answers)) {
       if (value === null || value === '' || value === undefined) continue;
       
@@ -600,7 +691,7 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
       
       // Validate that the mapped field name is a valid Zoho payload key
       if (!isZohoPayloadKey(zohoFieldName)) {
-        console.warn(`Skipping invalid Zoho field: ${zohoFieldName}`);
+        skippedFields.push(`${key} -> ${zohoFieldName}`);
         continue;
       }
       
@@ -618,16 +709,21 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
           currentValue === undefined;
           
         if (isEmptyValue) {
-          // Type-safe assignment - validated by isZohoPayloadKey, use index signature
-          (zohoPayload as Record<string, string | boolean>)[zohoFieldName] = 
-            typeof value === 'boolean' ? value : String(value).trim();
+          // Direct assignment - zohoFieldName validated by isZohoPayloadKey
+          const assignValue = typeof value === 'boolean' ? value : String(value).trim();
+          (zohoPayload as any)[zohoFieldName] = assignValue;
         }
         // Skip override of required field - already set
       } else {
-        // Type-safe assignment with proper type preservation - use index signature
-        (zohoPayload as Record<string, string | boolean>)[zohoFieldName] = 
-          typeof value === 'boolean' ? value : String(value);
+        // Direct assignment with type preservation - zohoFieldName validated by isZohoPayloadKey
+        const assignValue = typeof value === 'boolean' ? value : String(value);
+        (zohoPayload as any)[zohoFieldName] = assignValue;
       }
+    }
+    
+    // Log skipped fields once at the end to reduce log spam
+    if (skippedFields.length > 0) {
+      console.warn(`Skipped ${skippedFields.length} invalid Zoho field(s) for event ${event_id}:`, skippedFields.slice(0, 5).join(', ') + (skippedFields.length > 5 ? `... and ${skippedFields.length - 5} more` : ''));
     }
 
     // Note: First Name is already protected via PROTECTED_REQUIRED_FIELDS in the field processing loop above
