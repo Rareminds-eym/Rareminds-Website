@@ -69,6 +69,7 @@ class FieldMatcher {
   // Configuration constants for field matching behavior
   private static readonly MIN_FIELD_LENGTH_FOR_FUZZY_MATCH = 4;
   private static readonly SIMILARITY_THRESHOLD = 0.7; // 70% overlap required
+  private static readonly MAX_CACHE_SIZE = 100; // Prevent unbounded cache growth
   
   private normalizedCache = new Map<string, string>();
   private matchCache = new Map<string, boolean>();
@@ -81,7 +82,12 @@ class FieldMatcher {
     }
     
     const normalized = fieldName.toLowerCase().replace(/[^a-z0-9]/g, '');
-    this.normalizedCache.set(fieldName, normalized);
+    
+    // Prevent unbounded cache growth in edge cases
+    if (this.normalizedCache.size < FieldMatcher.MAX_CACHE_SIZE) {
+      this.normalizedCache.set(fieldName, normalized);
+    }
+    
     return normalized;
   }
   
@@ -98,7 +104,7 @@ class FieldMatcher {
     
     // Exact match after normalization
     if (norm1 === norm2) {
-      this.matchCache.set(cacheKey, true);
+      this.setCacheIfSpace(cacheKey, true);
       return true;
     } else if (norm1.length > FieldMatcher.MIN_FIELD_LENGTH_FOR_FUZZY_MATCH && 
                norm2.length > FieldMatcher.MIN_FIELD_LENGTH_FOR_FUZZY_MATCH) {
@@ -109,13 +115,20 @@ class FieldMatcher {
       // Require similarity threshold overlap to prevent unrelated matches
       if ((minLength / maxLength) >= FieldMatcher.SIMILARITY_THRESHOLD) {
         const isMatch = norm1.includes(norm2) || norm2.includes(norm1);
-        this.matchCache.set(cacheKey, isMatch);
+        this.setCacheIfSpace(cacheKey, isMatch);
         return isMatch;
       }
     }
     
-    this.matchCache.set(cacheKey, false);
+    this.setCacheIfSpace(cacheKey, false);
     return false;
+  }
+  
+  // Helper to set cache only if under size limit
+  private setCacheIfSpace(key: string, value: boolean): void {
+    if (this.matchCache.size < FieldMatcher.MAX_CACHE_SIZE) {
+      this.matchCache.set(key, value);
+    }
   }
   
   // Extract field value with fuzzy matching
@@ -441,16 +454,19 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
         continue; // Never override WhatsApp fields
       } else if (isRequiredField) {
         // For required fields, only update if current value is truly empty
-        const currentValue = zohoPayload[zohoFieldName];
+        const currentValue = zohoPayload[zohoFieldName as keyof ZohoPayload];
         const isEmptyValue = !currentValue || 
           (typeof currentValue === 'string' && currentValue.trim() === '') ||
           currentValue === undefined;
           
         if (isEmptyValue) {
+          // Type-safe assignment for dynamic fields
           zohoPayload[zohoFieldName] = String(value).trim();
         }
         // Skip override of required field - already set
       } else {
+        // Type-safe assignment for dynamic fields
+        // All dynamic fields are stored as strings per the ZohoPayload index signature
         zohoPayload[zohoFieldName] = String(value);
       }
     }
