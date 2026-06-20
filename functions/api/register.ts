@@ -632,19 +632,19 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
     ]);
 
     // Convert various opt-in formats to standardized boolean value for Zoho CRM
-    // GDPR/Privacy Compliance: Default to false (opt-out) to require explicit consent
+    // Default to true (opt-in) unless explicit opt-out is provided
     const getOptInValue = (value: string): boolean => {
-      if (!value) return false; // Default to false - explicit consent required
+      if (!value) return true; // Default to true - opt-in by default
       
       const normalizedValue = value.toLowerCase().trim();
       
-      // Handle explicit opt-in values
-      if (['yes', 'true', '1', 'on', 'checked', 'accept', 'agree', 'allow'].includes(normalizedValue)) {
-        return true;
+      // Handle explicit opt-out values
+      if (['no', 'false', '0', 'off', 'unchecked', 'decline', 'reject', 'deny'].includes(normalizedValue)) {
+        return false;
       }
       
-      // All other cases default to false (opt-out)
-      return false;
+      // All other cases default to true (opt-in)
+      return true;
     };
 
     const whatsappOptInStatus = getOptInValue(whatsappOptIn);
@@ -840,5 +840,9 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
       status: 500,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' }
     });
+  } finally {
+    // Critical: Clear field matcher caches to prevent memory leaks in serverless environment
+    // Serverless functions may be reused across requests, so explicit cleanup is essential
+    fieldMatcher.clearCache();
   }
 }
