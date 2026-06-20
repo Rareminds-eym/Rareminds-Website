@@ -82,7 +82,7 @@ interface ZohoPayload {
   'Total Amount': string;
   'Webinar Name': string;
   'Whatsapp Number': string;
-  'Whatsapp Opt In': boolean | null;
+  'WhatsApp Opt-In': boolean | null;  // Note: Zoho uses hyphen, not space
   'Years Of Experience': string;
 }
 
@@ -100,9 +100,9 @@ function assignToZohoPayload(
   value: string | boolean | null
 ): void {
   // Runtime type validation
-  if (key === 'Whatsapp Opt In') {
+  if (key === 'WhatsApp Opt-In') {
     if (typeof value === 'boolean' || value === null) {
-      payload['Whatsapp Opt In'] = value;
+      payload['WhatsApp Opt-In'] = value;
     }
     return;
   }
@@ -156,7 +156,7 @@ function assignToZohoPayload(
     case 'Webinar Name': payload['Webinar Name'] = value; break;
     case 'Whatsapp Number': payload['Whatsapp Number'] = value; break;
     case 'Years Of Experience': payload['Years Of Experience'] = value; break;
-    // 'Whatsapp Opt In' already handled above
+    // 'WhatsApp Opt-In' already handled above
   }
 }
 
@@ -555,7 +555,7 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
     const country = extractFieldFuzzy(answers, [
       'country', 'Country', 'COUNTRY', 'country_code', 'countryCode',
       'nationality', 'Nationality', 'nation', 'location_country'
-    ]);
+    ]) || 'India'; // Default to India if no country specified
 
     // Smart name processing for Zoho CRM requirements
     // Helper to split a name string into [first, last] parts
@@ -725,7 +725,7 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
       "Mobile Number": phoneValue,
       
       // WhatsApp fields (will be populated from form data via field mapping)
-      "Whatsapp Opt In": null, // Default to null - unknown consent (distinct from false which is explicit opt-out)
+      "WhatsApp Opt-In": null, // Default to null - unknown consent (distinct from false which is explicit opt-out)
       "Whatsapp Number": whatsappValue,
       "Opt In Source": '',
       "Opt In Time": '',
@@ -824,9 +824,9 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
       }
       
       // Special handling for WhatsApp Opt In - convert to tri-state and set opt-in metadata
-      if (zohoFieldName === 'Whatsapp Opt In') {
+      if (zohoFieldName === 'WhatsApp Opt-In') {
         const optInValue = convertToOptInState(value);
-        zohoPayload["Whatsapp Opt In"] = optInValue;
+        zohoPayload["WhatsApp Opt-In"] = optInValue;
         
         // Set opt-in metadata only if explicit consent given (true)
         if (optInValue === true) {
@@ -875,6 +875,19 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
       console.warn(
         `Skipped ${skippedFields.length} invalid Zoho field(s) for event ${event_id}: ${fieldsList}`
       );
+    }
+    
+    // Apply workaround if WhatsApp Opt-In is still null after field processing
+    if (zohoPayload["WhatsApp Opt-In"] === null) {
+      const hasWhatsAppNumber = zohoPayload["Whatsapp Number"] && zohoPayload["Whatsapp Number"].trim() !== '';
+      const hasEmail = zohoPayload["Email"] && zohoPayload["Email"].trim() !== '';
+      const hasName = zohoPayload["First Name"] && zohoPayload["First Name"].trim() !== '';
+      
+      if (hasWhatsAppNumber && hasEmail && hasName) {
+        zohoPayload["WhatsApp Opt-In"] = true;
+        zohoPayload["Opt In Source"] = 'Website Form';
+        zohoPayload["Opt In Time"] = registrationTimestamp;
+      }
     }
 
     // Note: First Name is already protected via PROTECTED_REQUIRED_FIELDS in the field processing loop above

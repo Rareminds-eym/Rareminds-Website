@@ -174,8 +174,8 @@ const DynamicEventForm: React.FC<DynamicEventFormProps> = ({
     setSubmitError(null);
 
     try {
-      // Fix checkbox handling: react-hook-form only includes checked checkboxes
-      // We need to explicitly add unchecked checkboxes as false
+      // Ensure all checkbox fields are included with boolean values
+      // react-hook-form only includes checked checkboxes, so we need to add unchecked ones
       const completeData: Record<string, any> = { ...data };
       
       fields.forEach(field => {
@@ -190,15 +190,6 @@ const DynamicEventForm: React.FC<DynamicEventFormProps> = ({
             completeData[field.field_name] = value === true || value === 'on' || value === 'true';
           }
         }
-      });
-      
-      console.log('📋 Form submission:', {
-        fields: Object.keys(completeData),
-        checkboxes: fields
-          .filter(f => f.field_type === 'checkbox')
-          .map(f => ({ name: f.field_name, value: completeData[f.field_name] })),
-        email: completeData.email || completeData.email_address || 'not found',
-        hasData: Object.keys(completeData).length > 0
       });
       
       // Pass the complete form data back to parent (HeoSection) to handle registration and payment
