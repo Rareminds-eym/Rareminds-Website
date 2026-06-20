@@ -103,13 +103,22 @@ function assignToZohoPayload(
   if (key === 'WhatsApp Opt-In') {
     if (typeof value === 'boolean' || value === null) {
       payload['WhatsApp Opt-In'] = value;
+    } else {
+      logWarningOnce(
+        `type-mismatch-whatsapp-optin`,
+        `Type mismatch for WhatsApp Opt-In: expected boolean or null, got ${typeof value}`
+      );
     }
     return;
   }
   
   // All other fields must be strings
   if (typeof value !== 'string') {
-    return; // Silently ignore type mismatches
+    logWarningOnce(
+      `type-mismatch-${key}`,
+      `Type mismatch for field "${key}": expected string, got ${typeof value}. Value will be ignored.`
+    );
+    return;
   }
   
   // Explicit assignment for each field ensures type safety without assertions
@@ -893,12 +902,22 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
       );
     }
     
-    // TODO: REMOVE THIS WORKAROUND - This is a temporary fallback for backward compatibility
-    // CONTEXT: Some older forms may not have the WhatsApp Opt-In checkbox properly configured
-    // ASSUMPTION: If user provides WhatsApp number + complete registration, they likely consented
-    // RISK: This assumes implicit consent which may not meet compliance requirements
-    // ACTION NEEDED: Ensure all forms include explicit WhatsApp Opt-In checkbox field
-    // REMOVAL DATE: Once all active forms are verified to send opt-in field explicitly
+    // COMPLIANCE WORKAROUND - Temporary fallback with enforced removal date
+    // CONTEXT: Legacy forms without explicit WhatsApp Opt-In checkbox
+    // ASSUMPTION: WhatsApp number provision implies consent (may violate GDPR/data protection laws)
+    // RISK: Implicit consent assumption does not meet compliance standards
+    // TRACKING: Create issue at your issue tracker before deploying
+    // REMOVAL: This workaround expires 2026-07-01 and will throw runtime error
+    const WORKAROUND_REMOVAL_DATE = new Date('2026-07-01');
+    
+    if (Date.now() > WORKAROUND_REMOVAL_DATE.getTime()) {
+      throw new Error(
+        'COMPLIANCE VIOLATION: Implicit consent workaround expired. ' +
+        'All forms must include explicit WhatsApp Opt-In field. ' +
+        'Remove this workaround code and verify all active forms send opt-in values.'
+      );
+    }
+    
     if (zohoPayload["WhatsApp Opt-In"] === null) {
       const hasWhatsAppNumber = zohoPayload["Whatsapp Number"] && zohoPayload["Whatsapp Number"].trim() !== '';
       const hasEmail = zohoPayload["Email"] && zohoPayload["Email"].trim() !== '';
@@ -908,8 +927,14 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
       // This should be removed once all forms properly send explicit opt-in values
       if (hasWhatsAppNumber && hasEmail && hasName) {
         zohoPayload["WhatsApp Opt-In"] = true;
-        zohoPayload["Opt In Source"] = 'Website Form';
+        zohoPayload["Opt In Source"] = 'Website Form (Legacy Implicit)';
         zohoPayload["Opt In Time"] = registrationTimestamp;
+        
+        // Log implicit consent usage for compliance audit trail
+        console.warn(
+          `COMPLIANCE: Implicit WhatsApp consent applied for event ${event_id}. ` +
+          `Form ${form_id} lacks explicit opt-in field. Update form before ${WORKAROUND_REMOVAL_DATE.toISOString().split('T')[0]}.`
+        );
       }
     }
 
