@@ -12,6 +12,8 @@ const WebinarCTA: React.FC<WebinarCTAProps> = ({ content }) => {
   const button = content.button;
   const badges = content.badges ?? [];
 
+  if (!quote && !button && badges.length === 0) return null;
+
   return (
     <section className="rounded-3xl bg-gray-50 px-4 py-10 text-center sm:px-10 sm:py-20">
       <div className="mx-auto mb-12 h-px w-24 rounded-full bg-slate-200" />

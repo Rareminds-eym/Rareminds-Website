@@ -6,23 +6,23 @@ import EventCard from './EventCard';
 import EventFilters from './EventFilters';
 import RegistrationModal from './RegistrationModal';
 import { Pagination } from '../Academy/SuccessStories/Pagination';
-import { Calendar, AlertCircle, Loader2, Tag, X, Filter  } from 'lucide-react';
+import { Calendar, Loader2, Tag, X, Filter } from 'lucide-react';
+import { supabase } from '../../lib/supabase';
 
 const EventsPage: React.FC = () => {
-  const { events, loading, error, refetch } = useOptimizedEvents();
+  const { events, loading } = useOptimizedEvents();
   const [filteredEvents, setFilteredEvents] = useState<Event[]>([]);
   const [showRegistrationModal, setShowRegistrationModal] = React.useState(false);
   // Banner carousel logic (hooks must be top-level)
   const banners = events
-    .filter(e => e.status === 'upcoming')
+    .filter(e => e.status === 'upcoming' || e.status === 'ongoing')
     .map(e => ({
-      img: e.media_metadata?.event_banner || e.media_metadata?.featured_image,
+      img: e.media_metadata?.event_banner || e.media_metadata?.featured_image || e.media_metadata?.mobile_featured_image || 'https://fastly.picsum.photos/id/20/3670/2462.jpg?hmac=CmQ0ln-k5ZqkdtLvVO23LjVAEabZQx2wOaT4pyeG10I',
       title: e.title,
       status: e.status,
       category: e.category,
       slug: e.slug
-    }))
-    .filter(b => b.img);
+    }));
   const [current, setCurrent] = React.useState(0);
   React.useEffect(() => {
     if (banners.length < 2) return;
@@ -51,11 +51,56 @@ const EventsPage: React.FC = () => {
     currentPage * EVENTS_PER_PAGE
   );
 
-    // Back to top button logic
+  // Back to top button logic
   const [showTopBtn, setShowTopBtn] = React.useState(false);
   // (Removed) Mobile filter drawer state (bottom)
   // Mobile right-side filter drawer state
   const [showMobileRightFilter, setShowMobileRightFilter] = React.useState(false);
+
+  // Gallery carousel for left sidebar — fetch from DB directly
+  const [galleryImages, setGalleryImages] = React.useState<Array<{ id: string; url: string }>>([]);
+
+  React.useEffect(() => {
+    if (events.length === 0) return;
+    const eventIds = events.map(e => e.id).filter(Boolean);
+    const fetchGallery = async () => {
+      const { data } = await supabase
+        .from('entity_sections')
+        .select(`section_contents!entity_section_id ( content )`)
+        .eq('entity_type', 'event')
+        .eq('section_key', 'gallery')
+        .eq('is_active', true)
+        .in('entity_id', eventIds);
+
+      const imgs: Array<{ id: string; url: string }> = [];
+      (data ?? []).forEach((row: { section_contents: { content: unknown } | { content: unknown }[] | null }) => {
+        const contentRow = Array.isArray(row.section_contents) ? row.section_contents[0] : row.section_contents;
+        const items = ((contentRow?.content as { items?: Array<{ id?: string; image_url?: string }> } | null)?.items) ?? [];
+        items.forEach(item => {
+          if (item.image_url?.trim()) {
+            imgs.push({ id: item.id ?? item.image_url, url: item.image_url });
+          }
+        });
+      });
+
+      if (imgs.length > 0) {
+        setGalleryImages(imgs);
+      } else {
+        setGalleryImages(
+          events
+            .map(e => e.media_metadata?.event_banner || e.media_metadata?.featured_image)
+            .filter(Boolean)
+            .map((url, idx) => ({ id: `banner-${idx}`, url: url! }))
+        );
+      }
+    };
+    fetchGallery();
+  }, [events.length]);
+
+  React.useEffect(() => {
+    if (galleryImages.length < 2) return;
+  }, [galleryImages.length]);
+
   React.useEffect(() => {
     const handleScroll = () => {
       setShowTopBtn(window.scrollY > 100);
@@ -80,37 +125,6 @@ const EventsPage: React.FC = () => {
       </div>
     );
   }
-
-  if (error) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center">
-        <div className="text-center max-w-md mx-auto px-6">
-          <AlertCircle className="w-12 h-12 text-red-600 mx-auto mb-4" />
-          <h2 className="text-xl font-semibold text-gray-700 mb-2">Error Loading Events</h2>
-          <p className="text-gray-500 mb-2">Unable to load events at the moment.</p>
-          <p className="text-sm text-gray-400 mb-6">{error}</p>
-          <div className="flex flex-col gap-3 sm:flex-row sm:justify-center">
-            <button
-              onClick={() => refetch()}
-              className="inline-flex items-center px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all duration-300 transform hover:scale-105"
-            >
-              <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-              </svg>
-              Try Again
-            </button>
-            <button
-              onClick={() => window.location.reload()}
-              className="px-6 py-3 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
-            >
-              Reload Page
-            </button>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
@@ -219,10 +233,13 @@ const EventsPage: React.FC = () => {
         }
       `}</style>
       {/* Hero Banner Carousel Section */}
-      <div className="container mx-auto px-4 pt-8">
+      <div className="container mx-auto px-8 md:px-28 pt-6">
         {/* Mobile: Upcoming Events heading above banner */}
-        <div className="md:hidden mb-4">
-          <h2 className="text-xl font-bold text-gray-900">Upcoming Events</h2>
+        <div className={`mb-4 md:mb-10 md:mt-5 md:text-center`}>
+          <h2 className="text-xl md:text-4xl font-bold text-gray-900 md:tracking-tight">
+            Events
+          </h2>
+          <p className="hidden md:block text-gray-500 mt-2 text-lg">Explore and register for our latest events</p>
         </div>
         {banners.length > 0 && (
           <div className="relative h-[50vh] min-h-[320px] rounded-3xl overflow-hidden shadow-2xl mb-6">
@@ -232,20 +249,20 @@ const EventsPage: React.FC = () => {
               className="w-full h-full object-cover transition-all duration-700"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent"></div>
-            <div className="absolute bottom-0 left-0 right-0">
+            <div className="absolute inset-0">
               {/* Desktop: status badge in content */}
               <div>
                 {/* Desktop: in content */}
-                <div className="hidden md:block p-8 md:p-12 lg:p-16">
-                  <div className="max-w-4xl">
-                    <div className="inline-flex items-center px-4 py-2 rounded-2xl text-sm font-semibold mb-6 bg-gradient-to-r from-blue-500/10 to-cyan-500/10 text-blue-700 border border-blue-200/50 backdrop-blur-sm">
+                <div className="hidden md:flex h-full items-center">
+                  <div className="max-w-4xl p-8 md:p-12 lg:pl-16 lg:pr-24 mt-8">
+                    <div className="inline-flex items-center px-4 py-2 rounded-2xl text-sm font-semibold mb-4 bg-gradient-to-r from-blue-500/10 to-cyan-500/10 text-blue-700 border border-blue-200/50 backdrop-blur-sm">
                       <Calendar className="w-4 h-4" />
                       <span className="ml-2 capitalize">{banners[current].status}</span>
                     </div>
-                    <h1 className="text-2xl lg:text-3xl font-bold text-white mb-6 leading-[1.1] tracking-tight">
+                    <h1 className="text-2xl lg:text-3xl font-bold text-white mb-4 leading-[1.1] tracking-tight">
                       {banners[current].title}
                     </h1>
-                    <div className="flex flex-wrap items-center gap-8 text-white/90 text-base">
+                    <div className="flex flex-wrap items-center gap-4 text-white/90 text-base">
                       <div className="flex items-center">
                         <div className="w-6 h-6 bg-white/20 rounded-full flex items-center justify-center mr-3">
                           <Tag className="w-4 h-4" />
@@ -258,15 +275,15 @@ const EventsPage: React.FC = () => {
               </div>
               {/* Mobile: title and category below image */}
               <div className="md:hidden p-6 pt-24">
-                <h1 className="text-xl font-bold text-white mb-20 leading-[1.1] tracking-tight">
+                <h1 className="text-lg font-bold text-white mb-18 leading-[1.1] tracking-tight">
                   {banners[current].title}
                 </h1>
                 <div className="flex items-center gap-4 text-white/90 text-sm">
                   <div className="flex items-center">
-                    <div className="w-6 h-6 bg-white/20 rounded-full flex items-center justify-center mr-2">
-                      <Tag className="w-4 h-4" />
+                    <div className="w-6 h-6 bg-white/20 rounded-full flex items-center justify-center mr-2 mt-5">
+                      <Tag className="w-4 h-4 mt-1" />
                     </div>
-                    <span className="font-medium">{banners[current].category}</span>
+                    <span className="font-medium mt-5">{banners[current].category}</span>
                   </div>
                 </div>
               </div>
@@ -296,36 +313,36 @@ const EventsPage: React.FC = () => {
                   Register
                 </button>
               </div>
-              
-                  {/* Registration Modal for Banner CTA */}
-                  {showRegistrationModal && events[current] && (
-                    <RegistrationModal
-                      open={showRegistrationModal}
-                      onClose={() => setShowRegistrationModal(false)}
-                      eventId={events[current].id ?? ""}
-                      eventName={events[current].title ?? ""}
-                      eventPrice={(events[current].price ?? 0)}
-                    />
-                  )}
-                        </div>
-                        {/* Pagination Dots */}
-                        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-10">
-                          {banners.map((_, idx) => (
-                            <button
-                              key={idx}
-                              className={`w-3 h-3 rounded-full border-2 border-white transition-all duration-300 ${current === idx ? 'bg-blue-500 scale-125' : 'bg-white/40'}`}
-                              onClick={() => setCurrent(idx)}
-                              aria-label={`Go to banner ${idx + 1}`}
-                            />
-                          ))}
-                        </div>
-                      </div>
-                    )}
+
+              {/* Registration Modal for Banner CTA */}
+              {showRegistrationModal && events[current] && (
+                <RegistrationModal
+                  open={showRegistrationModal}
+                  onClose={() => setShowRegistrationModal(false)}
+                  eventId={events[current].id ?? ""}
+                  eventName={events[current].title ?? ""}
+                  eventPrice={(events[current].price ?? 0)}
+                />
+              )}
+            </div>
+            {/* Pagination Dots */}
+            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-10">
+              {banners.map((_, idx) => (
+                <button
+                  key={idx}
+                  className={`w-3 h-3 rounded-full border-2 border-white transition-all duration-300 ${current === idx ? 'bg-blue-500 scale-125' : 'bg-white/40'}`}
+                  onClick={() => setCurrent(idx)}
+                  aria-label={`Go to banner ${idx + 1}`}
+                />
+              ))}
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Main Content */}
-      <div className="container mx-auto px-4 py-8">
-        {events.length > 0 ? (
+      <div className="container mx-auto px-8 md:px-32 py-8">
+        {true ? (
           <>
             {/* Event Statistics */}
             {/* Mobile: horizontal scrollable cards */}
@@ -336,15 +353,15 @@ const EventsPage: React.FC = () => {
                   <div className="text-[11px] text-gray-600 leading-tight">Total Events</div>
                 </div>
                 <div className="min-w-[96px] rounded-md shadow p-2 text-center bg-[#f4f4f4] flex-shrink-0">
-                  <div className="text-base font-bold text-green-600 mb-0.5">{events.filter(e => e.status === 'upcoming').length}</div>
+                  <div className="text-base font-bold text-blue-600 mb-0.5">{events.filter(e => e.status === 'upcoming').length}</div>
                   <div className="text-[11px] text-gray-600 leading-tight">Upcoming</div>
                 </div>
                 <div className="min-w-[96px] rounded-md shadow p-2 text-center bg-[#f4f4f4] flex-shrink-0">
-                  <div className="text-base font-bold text-orange-600 mb-0.5">{events.filter(e => e.status === 'ongoing').length}</div>
+                  <div className="text-base font-bold text-blue-600 mb-0.5">{events.filter(e => e.status === 'ongoing').length}</div>
                   <div className="text-[11px] text-gray-600 leading-tight">Ongoing</div>
                 </div>
                 <div className="min-w-[96px] rounded-md shadow p-2 text-center bg-[#f4f4f4] flex-shrink-0">
-                  <div className="text-base font-bold text-purple-600 mb-0.5">{[...new Set(events.map(e => e.category))].length}</div>
+                  <div className="text-base font-bold text-blue-600 mb-0.5">{[...new Set(events.map(e => e.category))].length}</div>
                   <div className="text-[11px] text-gray-600 leading-tight">Categories</div>
                 </div>
                 <div className="min-w-[80px] rounded-md shadow p-2 text-center bg-[#f4f4f4] flex-shrink-0 mr-4 opacity-80">
@@ -364,15 +381,15 @@ const EventsPage: React.FC = () => {
                 <div className="text-sm text-gray-600">Total Events</div>
               </div>
               <div className="rounded-lg shadow p-6 text-center" style={{ backgroundColor: '#f4f4f4' }}>
-                <div className="text-2xl font-bold text-green-600 mb-2">{events.filter(e => e.status === 'upcoming').length}</div>
+                <div className="text-2xl font-bold text-blue-600 mb-2">{events.filter(e => e.status === 'upcoming').length}</div>
                 <div className="text-sm text-gray-600">Upcoming</div>
               </div>
               <div className="rounded-lg shadow p-6 text-center" style={{ backgroundColor: '#f4f4f4' }}>
-                <div className="text-2xl font-bold text-orange-600 mb-2">{events.filter(e => e.status === 'ongoing').length}</div>
+                <div className="text-2xl font-bold text-blue-600 mb-2">{events.filter(e => e.status === 'ongoing').length}</div>
                 <div className="text-sm text-gray-600">Ongoing</div>
               </div>
               <div className="rounded-lg shadow p-6 text-center" style={{ backgroundColor: '#f4f4f4' }}>
-                <div className="text-2xl font-bold text-purple-600 mb-2">{[...new Set(events.map(e => e.category))].length}</div>
+                <div className="text-2xl font-bold text-blue-600 mb-2">{[...new Set(events.map(e => e.category))].length}</div>
                 <div className="text-sm text-gray-600">Categories</div>
               </div>
               <div className="rounded-lg shadow p-6 text-center" style={{ backgroundColor: '#f4f4f4' }}>
@@ -386,14 +403,24 @@ const EventsPage: React.FC = () => {
               {/* Desktop: Vertical Filter Bar */}
               <div className="hidden md:flex md:flex-col md:col-span-1" style={{ paddingTop: '24px' }}>
                 <EventFilters events={events} onFilteredEvents={handleFilteredEvents} />
-                {/* Static featured image */}
-                <div className="mt-4 rounded-xl overflow-hidden shadow-lg flex-1 min-h-0">
-                  <img
-                    src="https://fastly.picsum.photos/id/10/2500/1667.jpg?hmac=J04WWC_ebchx3WwzbM-Z4_KC_LeLBWr5LZMaAkWkF68"
-                    alt="Featured"
-                    className="w-full h-full object-cover"
-                  />
-                </div>
+                {/* Gallery vertical scroll carousel */}
+                {galleryImages.length > 0 && (
+                  <div className="mt-4 rounded-xl overflow-hidden shadow-lg relative flex-1 min-h-48">
+                    <div
+                      className="absolute inset-x-0 top-0 flex flex-col animate-[testimonial-scroll_var(--duration)_linear_infinite] hover:[animation-play-state:paused]"
+                      style={{ '--duration': `${galleryImages.length * 2.5}s` } as React.CSSProperties}
+                    >
+                      {[...galleryImages, ...galleryImages].map((img, idx) => (
+                        <img
+                          key={`${img.id}-${idx}`}
+                          src={img.url}
+                          alt="Event gallery"
+                          className="w-full h-64 object-cover flex-shrink-0 block"
+                        />
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
               {/* Mobile: Horizontal Scrollable Event Cards */}
               <div className="md:hidden w-full flex items-center justify-between p-2">
@@ -491,7 +518,7 @@ const EventsPage: React.FC = () => {
                                 </div>
                               )}
                               {/* Price */}
-                              <div className="flex items-center gap-1 text-xs text-green-600 mb-1">
+                              <div className="flex items-center gap-1 text-xs text-blue-600 mb-1">
                                 <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 8c-1.657 0-3 1.343-3 3s1.343 3 3 3 3-1.343 3-3-1.343-3-3-3zm0 0V4m0 12v4" /></svg>
                                 <span>{priceDisplay}</span>
                               </div>

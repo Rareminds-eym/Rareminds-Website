@@ -12,6 +12,9 @@ const TrustStatsSection: React.FC<TrustStatsSectionProps> = ({ content }) => {
   const stats   = (content.items as Array<{ value: string; label: string }> | undefined) ?? [];
   const badges  = content.badges ?? [];
 
+  // Nothing to show
+  if (!heading && stats.length === 0 && badges.length === 0) return null;
+
   return (
     <section className="bg-white px-6 py-24 sm:px-10 sm:py-32 mb-10 sm:mb-12 mt-10 rounded-3xl">
       {heading && (
