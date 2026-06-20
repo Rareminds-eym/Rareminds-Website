@@ -33,6 +33,7 @@ interface RegisterRequest {
 }
 
 interface ZohoPayload {
+  // Core required fields
   'First Name': string;
   'Last Name': string;
   'Full Name': string;
@@ -53,21 +54,43 @@ interface ZohoPayload {
   'Database Name': string;
   'Campaign Name': string;
   'WhatsApp Opt In': boolean;
-  'WhatsApp Opt-In': boolean; // Alternative with hyphen (as shown in Zoho response)
-  'Whatsapp No': string; // Exact field name as shown in Zoho CRM
-  'WhatsApp No': string; // Capital case variation
-  'WhatsApp Number': string; // Alternative field name (backup)
-  'Whatsapp Number': string; // Another variation
-  'whatsapp_no': string; // Snake case
-  'whatsapp_number': string; // Snake case
+  'WhatsApp Opt-In': boolean;
+  'Whatsapp No': string;
+  'WhatsApp No': string;
+  'WhatsApp Number': string;
+  'Whatsapp Number': string;
+  'whatsapp_no': string;
+  'whatsapp_number': string;
   'Payment Id': string;
   'Razorpay Payment Id': string;
   'Payment Status': string;
   'Mode of Payment': string;
   'Amount': string;
   'Total Amount': string;
-  // Allow additional dynamic fields - all values must be defined (string or boolean)
-  [key: string]: string | boolean;
+  
+  // Optional dynamic fields
+  'Name'?: string;
+  'School / College / University Name'?: string;
+  'Company Name'?: string;
+  'Department Stream'?: string;
+  'Students Branch/department'?: string;
+  'Subject You Teach'?: string;
+  'Teaching Level'?: string;
+  'Years Of Experience'?: string;
+  'State'?: string;
+  'District'?: string;
+  'City'?: string;
+  'Current Address'?: string;
+  'How Did You Hear About Us'?: string;
+  'Preferred Date'?: string;
+  'Preferred Time'?: string;
+  'Preferred Language'?: string;
+  'Job Title'?: string;
+  'LinkedIn Profile'?: string;
+  'Website'?: string;
+  'Referral Code'?: string;
+  // No index signature - all fields explicitly defined
+  // Dynamic field assignment validated via isZohoPayloadKey() type guard
 }
 
 // Valid Zoho payload keys for type-safe dynamic assignment
@@ -141,16 +164,16 @@ function isZohoPayloadKey(key: string): key is ZohoPayloadKey {
 
 // Type-safe helper to assign validated fields to Zoho payload
 // Only call this AFTER validating with isZohoPayloadKey()
-// Uses unknown as intermediate type for maximum type safety
 function assignToZohoPayload(
   payload: ZohoPayload,
   key: ZohoPayloadKey,
   value: string | boolean
 ): void {
-  // Type assertion chain: ZohoPayload -> unknown -> Record
-  // This is safer than direct casting and leverages the index signature
-  const payloadRecord = payload as unknown as Record<ZohoPayloadKey, string | boolean>;
-  payloadRecord[key] = value;
+  // Direct assignment is safe because:
+  // 1. key is validated by isZohoPayloadKey() before calling this function
+  // 2. All ZohoPayloadKey values are explicitly defined in ZohoPayload interface
+  // 3. Using Partial<Record> to handle optional fields safely
+  (payload as Partial<Record<ZohoPayloadKey, string | boolean>>)[key] = value;
 }
 
 // Regex constants for validation and formatting
