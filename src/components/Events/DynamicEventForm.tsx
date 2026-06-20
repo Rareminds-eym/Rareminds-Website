@@ -198,9 +198,9 @@ const DynamicEventForm: React.FC<DynamicEventFormProps> = ({
       // Reset form and submitting state after successful submission
       reset();
       setIsSubmitting(false);
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Submit error:', error);
-      const errorMessage = error?.message || 'An unexpected error occurred. Please try again.';
+      const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred. Please try again.';
       setSubmitError(errorMessage);
       setIsSubmitting(false);
     }
