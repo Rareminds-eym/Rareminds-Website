@@ -93,15 +93,13 @@ function isZohoPayloadKey(key: string): key is ZohoPayloadKey {
 
 // Type-safe helper to assign validated fields to Zoho payload
 // Only call this AFTER validating with isZohoPayloadKey()
+// Uses explicit switch-case for compile-time type safety without type assertions
 function assignToZohoPayload(
   payload: ZohoPayload,
   key: ZohoPayloadKey,
   value: string | boolean | null
 ): void {
-  // Type-safe assignment using discriminated key handling
-  // All ZohoPayloadKey values are explicitly defined in ZohoPayload interface
-  
-  // Special handling for the only non-string field in ZohoPayload
+  // Runtime type validation
   if (key === 'Whatsapp Opt In') {
     if (typeof value === 'boolean' || value === null) {
       payload['Whatsapp Opt In'] = value;
@@ -109,23 +107,63 @@ function assignToZohoPayload(
     return;
   }
   
-  // All other fields are string-typed
-  if (typeof value === 'string') {
-    // Type-safe assignment: Create a separate string-only payload object
-    // and assign through it to avoid type assertion
-    const stringPayload: Partial<Record<Exclude<ZohoPayloadKey, 'Whatsapp Opt In'>, string>> = payload;
-    stringPayload[key as Exclude<ZohoPayloadKey, 'Whatsapp Opt In'>] = value;
+  // All other fields must be strings
+  if (typeof value !== 'string') {
+    return; // Silently ignore type mismatches
   }
-  // Note: Mismatched types are silently ignored (e.g., boolean assigned to string field)
-  // This is intentional - conversion happens before calling this function
+  
+  // Explicit assignment for each field ensures type safety without assertions
+  // TypeScript verifies each assignment matches the interface definition
+  switch (key) {
+    case 'Amount': payload['Amount'] = value; break;
+    case 'Comments': payload['Comments'] = value; break;
+    case 'Company Name': payload['Company Name'] = value; break;
+    case 'Date Of Birth': payload['Date Of Birth'] = value; break;
+    case 'Department Stream': payload['Department Stream'] = value; break;
+    case 'District': payload['District'] = value; break;
+    case 'Email': payload['Email'] = value; break;
+    case 'Email Address': payload['Email Address'] = value; break;
+    case 'Event Id': payload['Event Id'] = value; break;
+    case 'Event Name': payload['Event Name'] = value; break;
+    case 'Event Type': payload['Event Type'] = value; break;
+    case 'First Name': payload['First Name'] = value; break;
+    case 'Form Id': payload['Form Id'] = value; break;
+    case 'How Did You Hear About Us': payload['How Did You Hear About Us'] = value; break;
+    case 'Institution University Name': payload['Institution University Name'] = value; break;
+    case 'Job Title': payload['Job Title'] = value; break;
+    case 'Last Name': payload['Last Name'] = value; break;
+    case 'Lead Source': payload['Lead Source'] = value; break;
+    case 'Linkedin Profile': payload['Linkedin Profile'] = value; break;
+    case 'Mobile Number': payload['Mobile Number'] = value; break;
+    case 'Name': payload['Name'] = value; break;
+    case 'Opt In Source': payload['Opt In Source'] = value; break;
+    case 'Opt In Time': payload['Opt In Time'] = value; break;
+    case 'Payment Id': payload['Payment Id'] = value; break;
+    case 'Payment Status': payload['Payment Status'] = value; break;
+    case 'Phone': payload['Phone'] = value; break;
+    case 'Preferred Date': payload['Preferred Date'] = value; break;
+    case 'Preferred Language': payload['Preferred Language'] = value; break;
+    case 'Preferred Time': payload['Preferred Time'] = value; break;
+    case 'Razorpay Payment Id': payload['Razorpay Payment Id'] = value; break;
+    case 'Referral Code': payload['Referral Code'] = value; break;
+    case 'Registration Date': payload['Registration Date'] = value; break;
+    case 'Registration Timestamp': payload['Registration Timestamp'] = value; break;
+    case 'School College Institution Name': payload['School College Institution Name'] = value; break;
+    case 'State': payload['State'] = value; break;
+    case 'Subject You Teach': payload['Subject You Teach'] = value; break;
+    case 'Teaching Level': payload['Teaching Level'] = value; break;
+    case 'Total Amount': payload['Total Amount'] = value; break;
+    case 'Webinar Name': payload['Webinar Name'] = value; break;
+    case 'Whatsapp Number': payload['Whatsapp Number'] = value; break;
+    case 'Years Of Experience': payload['Years Of Experience'] = value; break;
+    // 'Whatsapp Opt In' already handled above
+  }
 }
 
 // Regex constants for validation and formatting
 const REGEX_NON_ALPHANUMERIC = /[^a-z0-9]/g;
 const REGEX_NON_DIGIT = /\D/g;
 const REGEX_WHITESPACE = /\s+/;
-const REGEX_ALPHA_CHARS = /[a-zA-Z]/;
-const REGEX_DIGITS_ONLY = /^\d+$/;
 
 // Comprehensive country code mapping with ISO codes
 const countryCodeMap: Record<string, { code: string; iso: string; lengths: number[] }> = {
@@ -216,6 +254,7 @@ const countryCodeMap: Record<string, { code: string; iso: string; lengths: numbe
 // Warning deduplication cache to prevent log spam
 // Stores unique warning keys with timestamps for rate limiting
 const warningCache = new Map<string, number>();
+const MAX_CACHE_SIZE = 100;
 const WARNING_COOLDOWN_MS = 60000; // 1 minute cooldown per unique warning
 
 // Helper to log warnings with rate limiting
@@ -227,10 +266,11 @@ function logWarningOnce(key: string, message: string): void {
     console.warn(message);
     warningCache.set(key, now);
     
-    // Prevent unbounded cache growth - clear if > 100 entries
-    if (warningCache.size > 100) {
-      const oldestKey = warningCache.keys().next().value;
-      if (oldestKey) warningCache.delete(oldestKey);
+    // Efficient cache eviction: clear entire cache when limit reached
+    // This is more efficient than iterating to find oldest entries
+    // and prevents unbounded growth under high volume
+    if (warningCache.size > MAX_CACHE_SIZE) {
+      warningCache.clear();
     }
   }
 }
@@ -632,13 +672,15 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
     const registrationTimestamp = new Date().toISOString();
     const registrationDate = registrationTimestamp.split('T')[0];
     
-    // Determine best phone number for each field with logging
+    // Determine best phone number for each field with clear fallback and debugging
     let phoneValue = formattedPhone;
     if (!phoneValue) {
-      console.warn(
-        `Phone formatting failed for event ${event_id}. ` +
-        `Using raw phone number. Original: "${phone}", Country: "${country || 'not provided'}". ` +
-        `Recommendation: Add a 'country' field to your form for accurate formatting.`
+      // Use rate-limited warning to avoid log spam in high-volume scenarios
+      logWarningOnce(
+        `phone-format-fallback-${event_id}`,
+        `[Event ${event_id}] Phone formatting failed - using raw value. ` +
+        `Original: "${phone}", Country: "${country || 'not provided'}". ` +
+        `Add 'country' field to form for accurate international formatting.`
       );
       phoneValue = phone || '';
     }
@@ -646,10 +688,12 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
     let whatsappValue = formattedWhatsApp;
     if (!whatsappValue) {
       if (whatsappSourceNumber && whatsappSourceNumber !== phone) {
-        console.warn(
-          `WhatsApp number formatting failed for event ${event_id}. ` +
-          `Using raw WhatsApp number. Original: "${whatsappSourceNumber}", Country: "${country || 'not provided'}". ` +
-          `Recommendation: Add a 'country' field to your form for accurate formatting.`
+        // Rate-limited warning for WhatsApp-specific formatting failures
+        logWarningOnce(
+          `whatsapp-format-fallback-${event_id}`,
+          `[Event ${event_id}] WhatsApp formatting failed - using raw value. ` +
+          `Original: "${whatsappSourceNumber}", Country: "${country || 'not provided'}". ` +
+          `Add 'country' field to form for accurate international formatting.`
         );
       }
       whatsappValue = whatsappSourceNumber || phoneValue;
