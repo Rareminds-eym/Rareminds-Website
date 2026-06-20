@@ -52,7 +52,7 @@ export const ZOHO_PAYLOAD_KEYS = [
   'Total Amount',
   'Webinar Name',
   'Whatsapp Number',
-  'Whatsapp Opt In',
+  'WhatsApp Opt-In',
   'Years Of Experience'
 ] as const;
 
@@ -115,8 +115,15 @@ export const FIELD_MAPPING: Record<string, ZohoPayloadKey> = {
   'whatsappnumber': 'Whatsapp Number',
   'whatsappno': 'Whatsapp Number',
   
-  // WHATSAPP OPT-IN
-  'whatsappoptin': 'Whatsapp Opt In',
+  // WHATSAPP OPT-IN (All possible field name variations)
+  'whatsappoptin': 'WhatsApp Opt-In',
+  'whatsapp_opt_in': 'WhatsApp Opt-In',
+  'whatsapp-opt-in': 'WhatsApp Opt-In',
+  'whatsappopt in': 'WhatsApp Opt-In',
+  'whatsappconsent': 'WhatsApp Opt-In',
+  'whatsapp_consent': 'WhatsApp Opt-In',
+  'whatsapp-consent': 'WhatsApp Opt-In',
+  'whatsapp consent': 'WhatsApp Opt-In',
   
   // INSTITUTION FIELDS
   'school': 'School College Institution Name',

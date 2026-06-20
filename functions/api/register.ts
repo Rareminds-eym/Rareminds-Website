@@ -266,11 +266,20 @@ function logWarningOnce(key: string, message: string): void {
     console.warn(message);
     warningCache.set(key, now);
     
-    // Efficient cache eviction: clear entire cache when limit reached
-    // This is more efficient than iterating to find oldest entries
-    // and prevents unbounded growth under high volume
+    // Smart cache eviction: first remove expired entries, then clear all if still over limit
+    // This preserves recent rate-limiting state and prevents log spam spikes after full clear
     if (warningCache.size > MAX_CACHE_SIZE) {
-      warningCache.clear();
+      // Remove entries older than 2x the cooldown period (stale entries)
+      for (const [cacheKey, timestamp] of warningCache.entries()) {
+        if (now - timestamp > WARNING_COOLDOWN_MS * 2) {
+          warningCache.delete(cacheKey);
+        }
+      }
+      
+      // If still over limit after cleanup, clear everything as fallback
+      if (warningCache.size > MAX_CACHE_SIZE) {
+        warningCache.clear();
+      }
     }
   }
 }
@@ -294,9 +303,11 @@ class FieldMatcher {
     
     const normalized = fieldName.toLowerCase().replace(REGEX_NON_ALPHANUMERIC, '');
     
-    // Actively enforce cache size limit - clear when limit reached
+    // Smart cache eviction: remove oldest 20% of entries instead of clearing everything
+    // This preserves 80% of cached computations and avoids performance cliff
     if (this.normalizedCache.size >= FieldMatcher.MAX_CACHE_SIZE) {
-      this.normalizedCache.clear();
+      const keysToDelete = Array.from(this.normalizedCache.keys()).slice(0, Math.ceil(FieldMatcher.MAX_CACHE_SIZE * 0.2));
+      keysToDelete.forEach(key => this.normalizedCache.delete(key));
     }
     this.normalizedCache.set(fieldName, normalized);
     
@@ -375,8 +386,11 @@ class FieldMatcher {
   
   // Helper to set cache with active size enforcement
   private setCacheIfSpace(key: string, value: boolean): void {
+    // Smart cache eviction: remove oldest 20% of entries instead of clearing everything
+    // This preserves expensive Levenshtein distance computations
     if (this.matchCache.size >= FieldMatcher.MAX_CACHE_SIZE) {
-      this.matchCache.clear();
+      const keysToDelete = Array.from(this.matchCache.keys()).slice(0, Math.ceil(FieldMatcher.MAX_CACHE_SIZE * 0.2));
+      keysToDelete.forEach(cacheKey => this.matchCache.delete(cacheKey));
     }
     this.matchCache.set(key, value);
   }
