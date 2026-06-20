@@ -46,13 +46,10 @@ export const FIELD_MAPPING: Record<string, string> = {
   'mail': 'Email',
   'phone': 'Phone',
   'phonenumber': 'Phone',
-  // NOTE: 'Phone Number' vs 'Phone' inconsistency is intentional
-  // Some form fields map to 'Phone Number' while core payload uses 'Phone'
-  // This reflects actual Zoho CRM field requirements
-  'phone_number': 'Phone Number',
-  'mobile': 'Mobile Number',
-  'mobilenumber': 'Mobile Number',
-  'mobile_number': 'Mobile Number',
+  'phone_number': 'Phone',
+  'mobile': 'Mobile',
+  'mobilenumber': 'Mobile',
+  'mobile_number': 'Mobile',
   
   // WHATSAPP FIELDS (Critical mapping) - Use exact Zoho CRM field name
   'whatsapp': 'Whatsapp No',

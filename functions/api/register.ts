@@ -70,6 +70,49 @@ interface ZohoPayload {
   [key: string]: string | boolean;
 }
 
+// Valid Zoho payload keys for type-safe dynamic assignment
+const ZOHO_PAYLOAD_KEYS = [
+  'First Name',
+  'Last Name',
+  'Full Name',
+  'Email',
+  'Phone',
+  'Mobile',
+  'Country',
+  'Event Id',
+  'Event Name',
+  'Event Type',
+  'Webinar Name',
+  'Form Id',
+  'Registration Date',
+  'Lead Source',
+  'Lead Status',
+  'Lead Type',
+  'Client Category',
+  'Database Name',
+  'Campaign Name',
+  'WhatsApp Opt In',
+  'WhatsApp Opt-In',
+  'Whatsapp No',
+  'WhatsApp No',
+  'WhatsApp Number',
+  'Whatsapp Number',
+  'whatsapp_no',
+  'whatsapp_number',
+  'Payment Id',
+  'Razorpay Payment Id',
+  'Payment Status',
+  'Mode of Payment',
+  'Amount',
+  'Total Amount'
+] as const;
+
+type ZohoPayloadKey = typeof ZOHO_PAYLOAD_KEYS[number];
+
+// Type guard to validate Zoho field names before assignment
+function isZohoPayloadKey(key: string): key is ZohoPayloadKey {
+  return ZOHO_PAYLOAD_KEYS.includes(key as ZohoPayloadKey);
+}
 // Regex constants for validation and formatting
 const REGEX_NON_ALPHANUMERIC = /[^a-z0-9]/g;
 const REGEX_NON_DIGIT = /\D/g;
@@ -215,13 +258,13 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
   }
 
   // Declare body outside try block for error logging
-  let body: RegisterRequest | null = null;
+  let body: RegisterRequest | undefined;
 
   try {
     // Parse request body
     body = await request.json();
     
-    if (!body) {
+    if (!body || typeof body !== 'object') {
       return new Response(JSON.stringify({ error: 'Invalid request body' }), {
         status: 400,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' }
@@ -555,6 +598,12 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
         zohoFieldName = convertToZohoFieldName(key);
       }
       
+      // Validate that the mapped field name is a valid Zoho payload key
+      if (!isZohoPayloadKey(zohoFieldName)) {
+        console.warn(`Skipping invalid Zoho field: ${zohoFieldName}`);
+        continue;
+      }
+      
       // CRITICAL: Never override required fields that are already set
       const isRequiredField = PROTECTED_REQUIRED_FIELDS.includes(zohoFieldName);
       const isWhatsAppField = PROTECTED_WHATSAPP_FIELDS.includes(zohoFieldName);
@@ -563,24 +612,21 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
         continue; // Never override WhatsApp fields
       } else if (isRequiredField) {
         // For required fields, only update if current value is truly empty
-        const currentValue = zohoPayload[zohoFieldName as keyof ZohoPayload];
+        const currentValue = zohoPayload[zohoFieldName];
         const isEmptyValue = !currentValue || 
           (typeof currentValue === 'string' && currentValue.trim() === '') ||
           currentValue === undefined;
           
         if (isEmptyValue) {
-          // Type-safe assignment using index signature (validated by PROTECTED_REQUIRED_FIELDS check)
-          zohoPayload[zohoFieldName] = String(value).trim();
+          // Type-safe assignment - validated by isZohoPayloadKey, use index signature
+          (zohoPayload as Record<string, string | boolean>)[zohoFieldName] = 
+            typeof value === 'boolean' ? value : String(value).trim();
         }
         // Skip override of required field - already set
       } else {
-        // Type-safe assignment with proper type preservation
-        // For boolean fields, preserve type; for others, convert to string
-        if (typeof value === 'boolean') {
-          zohoPayload[zohoFieldName] = value;
-        } else {
-          zohoPayload[zohoFieldName] = String(value);
-        }
+        // Type-safe assignment with proper type preservation - use index signature
+        (zohoPayload as Record<string, string | boolean>)[zohoFieldName] = 
+          typeof value === 'boolean' ? value : String(value);
       }
     }
 
@@ -667,9 +713,5 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
       status: 500,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' }
     });
-  } finally {
-    // Explicit cleanup: Clear caches to ensure deterministic memory release
-    // While GC will eventually clean up, explicit cleanup is better for serverless environments
-    fieldMatcher.clearCache();
   }
 }
