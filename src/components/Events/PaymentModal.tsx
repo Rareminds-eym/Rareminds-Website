@@ -110,7 +110,7 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
 
       const orderResult = await orderResponse.json();
       const order = orderResult.order;
-      const razorpayKeyId = orderResult.razorpay_key_id || order?.key_id || import.meta.env.VITE_RAZORPAY_KEY_ID;
+      const razorpayKeyId = orderResult.razorpay_key_id || order?.key_id;
 
       if (!razorpayKeyId) {
         throw new Error('Razorpay Key ID not returned by payment service');
