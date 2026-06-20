@@ -10,6 +10,54 @@
  * - Keys should be lowercase for consistent matching
  */
 
+// Valid Zoho payload keys - SINGLE SOURCE OF TRUTH
+export const ZOHO_PAYLOAD_KEYS = [
+  'Amount',
+  'Comments',
+  'Company Name',
+  'Date Of Birth',
+  'Department Stream',
+  'District',
+  'Email',
+  'Email Address',
+  'Event Id',
+  'Event Name',
+  'Event Type',
+  'First Name',
+  'Form Id',
+  'How Did You Hear About Us',
+  'Institution University Name',
+  'Job Title',
+  'Last Name',
+  'Lead Source',
+  'Linkedin Profile',
+  'Mobile Number',
+  'Name',
+  'Opt In Source',
+  'Opt In Time',
+  'Payment Id',
+  'Payment Status',
+  'Phone',
+  'Preferred Date',
+  'Preferred Language',
+  'Preferred Time',
+  'Razorpay Payment Id',
+  'Referral Code',
+  'Registration Date',
+  'Registration Timestamp',
+  'School College Institution Name',
+  'State',
+  'Subject You Teach',
+  'Teaching Level',
+  'Total Amount',
+  'Webinar Name',
+  'Whatsapp Number',
+  'Whatsapp Opt In',
+  'Years Of Experience'
+] as const;
+
+export type ZohoPayloadKey = typeof ZOHO_PAYLOAD_KEYS[number];
+
 /**
  * Converts a field name to proper Zoho CRM format (Title Case with spaces)
  * 
@@ -39,7 +87,8 @@ export const convertToZohoFieldName = (fieldName: string): string => {
     .join(' ');
 };
 
-export const FIELD_MAPPING: Record<string, string> = {
+// Type-safe field mapping - all values MUST be valid ZohoPayloadKey
+export const FIELD_MAPPING: Record<string, ZohoPayloadKey> = {
   // CORE CONTACT FIELDS
   'name': 'Name',
   'fullname': 'Name',
@@ -170,7 +219,7 @@ export const FIELD_MAPPING: Record<string, string> = {
  * Required fields that should never be overridden by form data
  * after being processed by the main extraction logic
  */
-export const PROTECTED_REQUIRED_FIELDS = [
+export const PROTECTED_REQUIRED_FIELDS: ZohoPayloadKey[] = [
   'First Name',
   'Last Name', 
   'Email',

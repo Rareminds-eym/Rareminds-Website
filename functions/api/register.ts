@@ -16,7 +16,7 @@
  * - Configure Zoho Flow to map the fields you need
  */
 
-import { FIELD_MAPPING, PROTECTED_REQUIRED_FIELDS, convertToZohoFieldName } from '../constants/fieldMappings';
+import { FIELD_MAPPING, PROTECTED_REQUIRED_FIELDS, convertToZohoFieldName, ZOHO_PAYLOAD_KEYS, ZohoPayloadKey } from '../constants/fieldMappings';
 
 interface Env {
   ZOHO_FLOW_WEBHOOK_URL: string;
@@ -84,57 +84,7 @@ interface ZohoPayload {
   'Whatsapp Number': string;
   'Whatsapp Opt In': boolean | null;
   'Years Of Experience': string;
-  // No index signature - all fields explicitly defined
-  // Dynamic field assignment validated via isZohoPayloadKey() type guard
 }
-
-// Valid Zoho payload keys for type-safe dynamic assignment
-const ZOHO_PAYLOAD_KEYS = [
-  'Amount',
-  'Comments',
-  'Company Name',
-  'Date Of Birth',
-  'Department Stream',
-  'District',
-  'Email',
-  'Email Address',
-  'Event Id',
-  'Event Name',
-  'Event Type',
-  'First Name',
-  'Form Id',
-  'How Did You Hear About Us',
-  'Institution University Name',
-  'Job Title',
-  'Last Name',
-  'Lead Source',
-  'Linkedin Profile',
-  'Mobile Number',
-  'Name',
-  'Opt In Source',
-  'Opt In Time',
-  'Payment Id',
-  'Payment Status',
-  'Phone',
-  'Preferred Date',
-  'Preferred Language',
-  'Preferred Time',
-  'Razorpay Payment Id',
-  'Referral Code',
-  'Registration Date',
-  'Registration Timestamp',
-  'School College Institution Name',
-  'State',
-  'Subject You Teach',
-  'Teaching Level',
-  'Total Amount',
-  'Webinar Name',
-  'Whatsapp Number',
-  'Whatsapp Opt In',
-  'Years Of Experience'
-] as const;
-
-type ZohoPayloadKey = typeof ZOHO_PAYLOAD_KEYS[number];
 
 // Type guard to validate Zoho field names before assignment
 function isZohoPayloadKey(key: string): key is ZohoPayloadKey {
@@ -148,21 +98,23 @@ function assignToZohoPayload(
   key: ZohoPayloadKey,
   value: string | boolean | null
 ): void {
-  // Direct assignment is safe because:
-  // 1. key is validated by isZohoPayloadKey() before calling this function
-  // 2. All ZohoPayloadKey values are explicitly defined in ZohoPayload interface
-  // 3. TypeScript verifies the value type matches the field type
+  // Type-safe assignment using discriminated key handling
+  // All ZohoPayloadKey values are explicitly defined in ZohoPayload interface
   
-  // Special handling for tri-state boolean field
+  // Special handling for the only non-string field in ZohoPayload
   if (key === 'Whatsapp Opt In') {
     if (typeof value === 'boolean' || value === null) {
-      payload[key] = value as boolean | null;
+      payload['Whatsapp Opt In'] = value;
     }
-  } else if (typeof value === 'string') {
-    // All non-WhatsApp fields are typed as string in ZohoPayload.
-    // Use a targeted assertion narrowed to string values only (not 'any'),
-    // since isZohoPayloadKey() has already validated the key at runtime.
-    (payload as unknown as Record<string, string>)[key] = value;
+    return;
+  }
+  
+  // All other fields are string-typed
+  if (typeof value === 'string') {
+    // Type-safe assignment: Create a separate string-only payload object
+    // and assign through it to avoid type assertion
+    const stringPayload: Partial<Record<Exclude<ZohoPayloadKey, 'Whatsapp Opt In'>, string>> = payload;
+    stringPayload[key as Exclude<ZohoPayloadKey, 'Whatsapp Opt In'>] = value;
   }
   // Note: Mismatched types are silently ignored (e.g., boolean assigned to string field)
   // This is intentional - conversion happens before calling this function
@@ -175,97 +127,113 @@ const REGEX_WHITESPACE = /\s+/;
 const REGEX_ALPHA_CHARS = /[a-zA-Z]/;
 const REGEX_DIGITS_ONLY = /^\d+$/;
 
-// Comprehensive country code mapping covering major regions (module-level for performance)
-const countryCodeMap: Record<string, string> = {
-  // Asia - South
-  'india': '91', 'indian': '91', 'in': '91', 'bharat': '91',
-  'pakistan': '92', 'pk': '92',
-  'bangladesh': '880', 'bd': '880',
-  'sri lanka': '94', 'lk': '94',
-  'nepal': '977', 'np': '977',
-  'maldives': '960', 'mv': '960',
-  'bhutan': '975', 'bt': '975',
-  'afghanistan': '93', 'af': '93',
+// Comprehensive country code mapping with ISO codes
+const countryCodeMap: Record<string, { code: string; iso: string; lengths: number[] }> = {
+  'india': { code: '91', iso: 'IN', lengths: [10] },
+  'indian': { code: '91', iso: 'IN', lengths: [10] },
+  'in': { code: '91', iso: 'IN', lengths: [10] },
+  'bharat': { code: '91', iso: 'IN', lengths: [10] },
   
-  // Asia - Southeast
-  'indonesia': '62', 'id': '62',
-  'philippines': '63', 'ph': '63',
-  'vietnam': '84', 'vn': '84',
-  'thailand': '66', 'th': '66',
-  'malaysia': '60', 'my': '60',
-  'singapore': '65', 'sg': '65',
-  'myanmar': '95', 'mm': '95',
-  'cambodia': '855', 'kh': '855',
-  'laos': '856', 'la': '856',
+  'pakistan': { code: '92', iso: 'PK', lengths: [10] },
+  'pk': { code: '92', iso: 'PK', lengths: [10] },
   
-  // Asia - East
-  'china': '86', 'cn': '86',
-  'japan': '81', 'jp': '81',
-  'south korea': '82', 'korea': '82', 'kr': '82',
-  'hong kong': '852', 'hk': '852',
-  'taiwan': '886', 'tw': '886',
+  'bangladesh': { code: '880', iso: 'BD', lengths: [10] },
+  'bd': { code: '880', iso: 'BD', lengths: [10] },
   
-  // Middle East
-  'uae': '971', 'dubai': '971', 'ae': '971',
-  'saudi arabia': '966', 'sa': '966',
-  'qatar': '974', 'qa': '974',
-  'kuwait': '965', 'kw': '965',
-  'bahrain': '973', 'bh': '973',
-  'oman': '968', 'om': '968',
-  'israel': '972', 'il': '972',
-  'turkey': '90', 'tr': '90',
-  'iran': '98', 'ir': '98',
-  'iraq': '964', 'iq': '964',
-  'jordan': '962', 'jo': '962',
-  'lebanon': '961', 'lb': '961',
+  'sri lanka': { code: '94', iso: 'LK', lengths: [9] },
+  'lk': { code: '94', iso: 'LK', lengths: [9] },
   
-  // Europe - Western
-  'united kingdom': '44', 'uk': '44', 'britain': '44', 'england': '44', 'gb': '44',
-  'france': '33', 'fr': '33',
-  'germany': '49', 'de': '49',
-  'italy': '39', 'it': '39',
-  'spain': '34', 'es': '34',
-  'netherlands': '31', 'holland': '31', 'nl': '31',
-  'belgium': '32', 'be': '32',
-  'switzerland': '41', 'ch': '41',
-  'austria': '43', 'at': '43',
-  'portugal': '351', 'pt': '351',
-  'greece': '30', 'gr': '30',
+  'nepal': { code: '977', iso: 'NP', lengths: [10] },
+  'np': { code: '977', iso: 'NP', lengths: [10] },
   
-  // Europe - Eastern
-  'russia': '7', 'ru': '7',
-  'poland': '48', 'pl': '48',
-  'ukraine': '380', 'ua': '380',
-  'romania': '40', 'ro': '40',
-  'czech republic': '420', 'cz': '420',
-  'hungary': '36', 'hu': '36',
+  'united states': { code: '1', iso: 'US', lengths: [10] },
+  'usa': { code: '1', iso: 'US', lengths: [10] },
+  'us': { code: '1', iso: 'US', lengths: [10] },
+  'america': { code: '1', iso: 'US', lengths: [10] },
   
-  // Americas - North
-  'united states': '1', 'usa': '1', 'us': '1', 'america': '1',
-  'canada': '1', 'ca': '1',
-  'mexico': '52', 'mx': '52',
+  'canada': { code: '1', iso: 'CA', lengths: [10] },
+  'ca': { code: '1', iso: 'CA', lengths: [10] },
   
-  // Americas - South
-  'brazil': '55', 'br': '55',
-  'argentina': '54', 'ar': '54',
-  'colombia': '57', 'co': '57',
-  'chile': '56', 'cl': '56',
-  'peru': '51', 'pe': '51',
-  'venezuela': '58', 've': '58',
+  'united kingdom': { code: '44', iso: 'GB', lengths: [10] },
+  'uk': { code: '44', iso: 'GB', lengths: [10] },
+  'britain': { code: '44', iso: 'GB', lengths: [10] },
+  'england': { code: '44', iso: 'GB', lengths: [10] },
+  'gb': { code: '44', iso: 'GB', lengths: [10] },
   
-  // Africa
-  'south africa': '27', 'za': '27',
-  'nigeria': '234', 'ng': '234',
-  'egypt': '20', 'eg': '20',
-  'kenya': '254', 'ke': '254',
-  'ghana': '233', 'gh': '233',
-  'ethiopia': '251', 'et': '251',
-  'morocco': '212', 'ma': '212',
+  'australia': { code: '61', iso: 'AU', lengths: [9] },
+  'au': { code: '61', iso: 'AU', lengths: [9] },
   
-  // Oceania
-  'australia': '61', 'au': '61',
-  'new zealand': '64', 'nz': '64'
+  'china': { code: '86', iso: 'CN', lengths: [11, 12] },
+  'cn': { code: '86', iso: 'CN', lengths: [11, 12] },
+  
+  'japan': { code: '81', iso: 'JP', lengths: [10] },
+  'jp': { code: '81', iso: 'JP', lengths: [10] },
+  
+  'germany': { code: '49', iso: 'DE', lengths: [10, 11] },
+  'de': { code: '49', iso: 'DE', lengths: [10, 11] },
+  
+  'france': { code: '33', iso: 'FR', lengths: [9] },
+  'fr': { code: '33', iso: 'FR', lengths: [9] },
+  
+  'italy': { code: '39', iso: 'IT', lengths: [9, 10] },
+  'it': { code: '39', iso: 'IT', lengths: [9, 10] },
+  
+  'spain': { code: '34', iso: 'ES', lengths: [9] },
+  'es': { code: '34', iso: 'ES', lengths: [9] },
+  
+  'brazil': { code: '55', iso: 'BR', lengths: [10, 11] },
+  'br': { code: '55', iso: 'BR', lengths: [10, 11] },
+  
+  'mexico': { code: '52', iso: 'MX', lengths: [10] },
+  'mx': { code: '52', iso: 'MX', lengths: [10] },
+  
+  'uae': { code: '971', iso: 'AE', lengths: [9] },
+  'dubai': { code: '971', iso: 'AE', lengths: [9] },
+  'ae': { code: '971', iso: 'AE', lengths: [9] },
+  
+  'saudi arabia': { code: '966', iso: 'SA', lengths: [9] },
+  'sa': { code: '966', iso: 'SA', lengths: [9] },
+  
+  'south africa': { code: '27', iso: 'ZA', lengths: [9] },
+  'za': { code: '27', iso: 'ZA', lengths: [9] },
+  
+  'nigeria': { code: '234', iso: 'NG', lengths: [10] },
+  'ng': { code: '234', iso: 'NG', lengths: [10] },
+  
+  'indonesia': { code: '62', iso: 'ID', lengths: [9, 10, 11] },
+  'id': { code: '62', iso: 'ID', lengths: [9, 10, 11] },
+  
+  'philippines': { code: '63', iso: 'PH', lengths: [10] },
+  'ph': { code: '63', iso: 'PH', lengths: [10] },
+  
+  'singapore': { code: '65', iso: 'SG', lengths: [8] },
+  'sg': { code: '65', iso: 'SG', lengths: [8] },
+  
+  'malaysia': { code: '60', iso: 'MY', lengths: [9, 10] },
+  'my': { code: '60', iso: 'MY', lengths: [9, 10] }
 };
+
+// Warning deduplication cache to prevent log spam
+// Stores unique warning keys with timestamps for rate limiting
+const warningCache = new Map<string, number>();
+const WARNING_COOLDOWN_MS = 60000; // 1 minute cooldown per unique warning
+
+// Helper to log warnings with rate limiting
+function logWarningOnce(key: string, message: string): void {
+  const now = Date.now();
+  const lastWarned = warningCache.get(key);
+  
+  if (!lastWarned || (now - lastWarned) > WARNING_COOLDOWN_MS) {
+    console.warn(message);
+    warningCache.set(key, now);
+    
+    // Prevent unbounded cache growth - clear if > 100 entries
+    if (warningCache.size > 100) {
+      const oldestKey = warningCache.keys().next().value;
+      if (oldestKey) warningCache.delete(oldestKey);
+    }
+  }
+}
 
 // Utility functions for efficient field matching and processing
 class FieldMatcher {
@@ -598,122 +566,61 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
       });
     }
 
-    // Format phone number for international use with intelligent country code detection
-    // Returns formatted number with proper country code prefix
-    // 
-    // IMPORTANT: For numbers with leading zeros, country detection is NOT POSSIBLE.
-    // Best practice: Always include a 'country' field in your forms for accurate formatting.
-    // Without country context, leading-zero numbers cannot be reliably formatted and will
-    // be returned with just a '+' prefix to avoid incorrect country code assignment.
     const formatPhoneWithCountryCode = (phoneNumber: string, countryName: string): string => {
       if (!phoneNumber) return '';
       
-      // Extract digits only
-      const digitsOnly = phoneNumber.replace(REGEX_NON_DIGIT, '');
+      const cleanNumber = phoneNumber.trim();
+      const digitsOnly = cleanNumber.replace(REGEX_NON_DIGIT, '');
       
-      // Basic validation - minimum length for any valid phone number globally
       if (digitsOnly.length < 7) {
+        logWarningOnce(`phone-short-${digitsOnly.length}`, `Phone number too short: ${digitsOnly.length} digits`);
         return '';
       }
       
-      // Maximum reasonable length (E.164 format allows up to 15 digits)
       if (digitsOnly.length > 15) {
+        logWarningOnce(`phone-long-${digitsOnly.length}`, `Phone number too long: ${digitsOnly.length} digits`);
         return '';
       }
       
-      // If already in international format with +, validate and return
-      if (phoneNumber.startsWith('+')) {
-        const afterPlus = phoneNumber.substring(1);
-        const hasInvalidChars = REGEX_ALPHA_CHARS.test(afterPlus);
-        
-        if (hasInvalidChars) {
-          return ''; // Reject numbers with letters after +
-        }
-        
-        const cleanInternational = afterPlus.replace(REGEX_NON_DIGIT, '');
-        const hasValidLength = cleanInternational.length >= 7 && cleanInternational.length <= 15;
-        const isAllDigits = REGEX_DIGITS_ONLY.test(cleanInternational);
-        
-        if (hasValidLength && isAllDigits) {
-          return '+' + cleanInternational;
+      if (cleanNumber.startsWith('+')) {
+        const internationalDigits = cleanNumber.substring(1).replace(REGEX_NON_DIGIT, '');
+        if (internationalDigits.length >= 7 && internationalDigits.length <= 15) {
+          return '+' + internationalDigits;
         }
         return '';
       }
       
-      // Detect country code based on country name or number pattern
-      const normalizedCountry = countryName.toLowerCase().trim();
+      const normalized = countryName.toLowerCase().trim();
+      const countryInfo = countryCodeMap[normalized];
       
-      // Try to detect country code from number prefix if country not provided
-      let detectedCode = '';
-      
-      if (normalizedCountry && countryCodeMap[normalizedCountry]) {
-        detectedCode = countryCodeMap[normalizedCountry];
-      } else if (normalizedCountry) {
-        console.warn(`Unknown country for phone formatting: ${normalizedCountry}`);
-      } else if (digitsOnly.startsWith('91') && digitsOnly.length === 12) {
-        // Indian number with code already (91 + 10 digits)
-        return '+' + digitsOnly;
-      } else if (digitsOnly.startsWith('1') && digitsOnly.length === 11) {
-        // US/Canada number with code already (1 + 10 digits)
-        return '+' + digitsOnly;
-      } else if (digitsOnly.startsWith('44') && digitsOnly.length === 12) {
-        // UK number with code already
-        return '+' + digitsOnly;
-      } else if (digitsOnly.startsWith('0')) {
-        // Number starts with 0 (common in many countries) - needs country code
-        // Try to infer country from length pattern
-        const withoutLeadingZero = digitsOnly.substring(1);
-        const length = withoutLeadingZero.length;
+      if (countryInfo) {
+        let nationalNumber = digitsOnly;
         
-        if (length === 10) {
-          // 10 digits: India, Australia (ambiguous without country context)
-          // Cannot reliably detect - return empty to avoid incorrect formatting
-          detectedCode = '';
-        } else if (length === 9) {
-          // 9 digits: UK, Germany, France, Italy, Spain
-          // Without country context, we cannot reliably detect
-          // Return empty to trigger fallback
-          detectedCode = '';
-        } else if (length === 8) {
-          // 8 digits: Netherlands, Belgium, Switzerland
-          detectedCode = '';
-        } else {
-          // Other lengths - cannot detect reliably
-          detectedCode = '';
+        if (nationalNumber.startsWith('0')) {
+          nationalNumber = nationalNumber.substring(1);
         }
-      }
-      
-      // Format the number with proper E.164 validation
-      if (detectedCode) {
-        // Remove leading zero if present before adding country code
-        const numberWithoutLeadingZero = digitsOnly.startsWith('0') ? digitsOnly.substring(1) : digitsOnly;
-        const formattedNumber = '+' + detectedCode + numberWithoutLeadingZero;
         
-        // Validate final E.164 format: + followed by 1-15 digits
-        if (formattedNumber.length >= 8 && formattedNumber.length <= 16) {
-          return formattedNumber;
+        if (nationalNumber.startsWith(countryInfo.code)) {
+          return '+' + nationalNumber;
         }
-        return ''; // Invalid length after formatting
-      }
-      
-      // Fallback: number without detectable country code
-      // For E.164 consistency, always add '+' prefix unless it creates an invalid format
-      // Leading zeros indicate local format - keep as-is for Zoho to handle with their country detection
-      if (digitsOnly.startsWith('0')) {
-        // Leading zero = local format, needs country context
-        // Keep raw format - Zoho CRM has better country detection context
-        if (digitsOnly.length >= 7 && digitsOnly.length <= 15) {
-          return digitsOnly;
+        
+        const isValidLength = countryInfo.lengths.includes(nationalNumber.length);
+        if (isValidLength) {
+          return '+' + countryInfo.code + nationalNumber;
         }
-        return ''; // Invalid length
+        
+        logWarningOnce(
+          `phone-length-${countryInfo.iso}`,
+          `Invalid phone length for ${countryInfo.iso}: expected ${countryInfo.lengths.join(' or ')}, got ${nationalNumber.length}`
+        );
+      } else if (countryName) {
+        logWarningOnce(
+          `unknown-country-${normalized}`,
+          `Unknown country: "${countryName}". Add to countryCodeMap or ensure country field uses standard names (e.g., "India", "United States").`
+        );
       }
       
-      // No leading zero - add '+' for E.164 format consistency
-      if (digitsOnly.length >= 7 && digitsOnly.length <= 15) {
-        return '+' + digitsOnly;
-      }
-      
-      return ''; // Invalid length - reject
+      return '+' + digitsOnly;
     };
 
     // Determine WhatsApp number: use dedicated WhatsApp field if provided, otherwise use phone/mobile
@@ -725,9 +632,28 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
     const registrationTimestamp = new Date().toISOString();
     const registrationDate = registrationTimestamp.split('T')[0];
     
-    // Determine best phone number for each field
-    const phoneValue = formattedPhone || phone || '';
-    const whatsappValue = formattedWhatsApp || whatsappSourceNumber || phoneValue;
+    // Determine best phone number for each field with logging
+    let phoneValue = formattedPhone;
+    if (!phoneValue) {
+      console.warn(
+        `Phone formatting failed for event ${event_id}. ` +
+        `Using raw phone number. Original: "${phone}", Country: "${country || 'not provided'}". ` +
+        `Recommendation: Add a 'country' field to your form for accurate formatting.`
+      );
+      phoneValue = phone || '';
+    }
+    
+    let whatsappValue = formattedWhatsApp;
+    if (!whatsappValue) {
+      if (whatsappSourceNumber && whatsappSourceNumber !== phone) {
+        console.warn(
+          `WhatsApp number formatting failed for event ${event_id}. ` +
+          `Using raw WhatsApp number. Original: "${whatsappSourceNumber}", Country: "${country || 'not provided'}". ` +
+          `Recommendation: Add a 'country' field to your form for accurate formatting.`
+        );
+      }
+      whatsappValue = whatsappSourceNumber || phoneValue;
+    }
     
     // Create Zoho payload matching exact webhook fields (no duplicates)
     const zohoPayload: ZohoPayload = {
