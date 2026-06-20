@@ -615,18 +615,30 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
         return ''; // Invalid length after formatting
       }
       
-      // Fallback: For numbers with leading zeros where country is unknown,
-      // return as-is with + prefix. While technically incorrect E.164 format
-      // (leading zeros should be removed), this preserves the number for storage
-      // in Zoho CRM. The number can be manually corrected or formatted later
-      // when country context is available.
+      // Fallback handling for numbers without detected country code
       // 
-      // Examples:
-      //   09876543210 (India) → +09876543210 (should be +919876543210)
-      //   0412345678 (Australia) → +0412345678 (should be +61412345678)
-      //   07123456789 (UK) → +07123456789 (should be +447123456789)
-      //
-      // Note: This is better than rejecting the number entirely.
+      // For numbers with LEADING ZEROS where country is unknown:
+      // - Cannot safely format to E.164 (requires removing leading zero + adding country code)
+      // - Storing with '+0...' violates E.164 standard
+      // - Better to store RAW number without '+' prefix for manual correction in Zoho
+      // 
+      // For numbers WITHOUT leading zeros:
+      // - Can safely add '+' prefix (likely already has country code)
+      // - E.164 compliant if within valid length
+      if (digitsOnly.startsWith('0')) {
+        // Leading zero detected - cannot format without country
+        // Return raw number (no + prefix) to avoid E.164 violation
+        // Examples:
+        //   09876543210 → 09876543210 (Zoho can handle this)
+        //   07123456789 → 07123456789 (manual correction possible)
+        if (digitsOnly.length >= 7 && digitsOnly.length <= 15) {
+          return digitsOnly; // Raw format - safe for Zoho storage
+        }
+        return ''; // Invalid length
+      }
+      
+      // No leading zero - likely already has country code or is valid format
+      // Safe to add '+' prefix for E.164 compliance
       if (digitsOnly.length >= 7 && digitsOnly.length <= 15) {
         return '+' + digitsOnly;
       }
