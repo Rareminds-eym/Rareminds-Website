@@ -209,11 +209,3 @@ export const PROTECTED_REQUIRED_FIELDS = [
   'Mobile Number',
   'Name'
 ];
-
-/**
- * WhatsApp fields that should never be overridden by raw form data
- * to maintain proper formatting and validation
- */
-export const PROTECTED_WHATSAPP_FIELDS = [
-  'Whatsapp Number' // Only protect the number field, opt-in is mapped from form
-];

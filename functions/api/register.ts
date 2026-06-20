@@ -82,7 +82,7 @@ interface ZohoPayload {
   'Total Amount': string;
   'Webinar Name': string;
   'Whatsapp Number': string;
-  'Whatsapp Opt In': boolean;
+  'Whatsapp Opt In': boolean | null;
   'Years Of Experience': string;
   // No index signature - all fields explicitly defined
   // Dynamic field assignment validated via isZohoPayloadKey() type guard
@@ -146,13 +146,24 @@ function isZohoPayloadKey(key: string): key is ZohoPayloadKey {
 function assignToZohoPayload(
   payload: ZohoPayload,
   key: ZohoPayloadKey,
-  value: string | boolean
+  value: string | boolean | null
 ): void {
   // Direct assignment is safe because:
   // 1. key is validated by isZohoPayloadKey() before calling this function
   // 2. All ZohoPayloadKey values are explicitly defined in ZohoPayload interface
-  // 3. Using Partial<Record> to handle optional fields safely
-  (payload as Partial<Record<ZohoPayloadKey, string | boolean>>)[key] = value;
+  // 3. TypeScript verifies the value type matches the field type
+  
+  // Special handling for tri-state boolean field
+  if (key === 'Whatsapp Opt In') {
+    if (typeof value === 'boolean' || value === null) {
+      payload[key] = value as boolean | null;
+    }
+  } else if (typeof value === 'string') {
+    // All other fields are strings - use type assertion after runtime validation
+    (payload as Record<string, any>)[key] = value;
+  }
+  // Note: Mismatched types are silently ignored (e.g., boolean assigned to string field)
+  // This is intentional - conversion happens before calling this function
 }
 
 // Regex constants for validation and formatting
@@ -161,6 +172,98 @@ const REGEX_NON_DIGIT = /\D/g;
 const REGEX_WHITESPACE = /\s+/;
 const REGEX_ALPHA_CHARS = /[a-zA-Z]/;
 const REGEX_DIGITS_ONLY = /^\d+$/;
+
+// Comprehensive country code mapping covering major regions (module-level for performance)
+const countryCodeMap: Record<string, string> = {
+  // Asia - South
+  'india': '91', 'indian': '91', 'in': '91', 'bharat': '91',
+  'pakistan': '92', 'pk': '92',
+  'bangladesh': '880', 'bd': '880',
+  'sri lanka': '94', 'lk': '94',
+  'nepal': '977', 'np': '977',
+  'maldives': '960', 'mv': '960',
+  'bhutan': '975', 'bt': '975',
+  'afghanistan': '93', 'af': '93',
+  
+  // Asia - Southeast
+  'indonesia': '62', 'id': '62',
+  'philippines': '63', 'ph': '63',
+  'vietnam': '84', 'vn': '84',
+  'thailand': '66', 'th': '66',
+  'malaysia': '60', 'my': '60',
+  'singapore': '65', 'sg': '65',
+  'myanmar': '95', 'mm': '95',
+  'cambodia': '855', 'kh': '855',
+  'laos': '856', 'la': '856',
+  
+  // Asia - East
+  'china': '86', 'cn': '86',
+  'japan': '81', 'jp': '81',
+  'south korea': '82', 'korea': '82', 'kr': '82',
+  'hong kong': '852', 'hk': '852',
+  'taiwan': '886', 'tw': '886',
+  
+  // Middle East
+  'uae': '971', 'dubai': '971', 'ae': '971',
+  'saudi arabia': '966', 'sa': '966',
+  'qatar': '974', 'qa': '974',
+  'kuwait': '965', 'kw': '965',
+  'bahrain': '973', 'bh': '973',
+  'oman': '968', 'om': '968',
+  'israel': '972', 'il': '972',
+  'turkey': '90', 'tr': '90',
+  'iran': '98', 'ir': '98',
+  'iraq': '964', 'iq': '964',
+  'jordan': '962', 'jo': '962',
+  'lebanon': '961', 'lb': '961',
+  
+  // Europe - Western
+  'united kingdom': '44', 'uk': '44', 'britain': '44', 'england': '44', 'gb': '44',
+  'france': '33', 'fr': '33',
+  'germany': '49', 'de': '49',
+  'italy': '39', 'it': '39',
+  'spain': '34', 'es': '34',
+  'netherlands': '31', 'holland': '31', 'nl': '31',
+  'belgium': '32', 'be': '32',
+  'switzerland': '41', 'ch': '41',
+  'austria': '43', 'at': '43',
+  'portugal': '351', 'pt': '351',
+  'greece': '30', 'gr': '30',
+  
+  // Europe - Eastern
+  'russia': '7', 'ru': '7',
+  'poland': '48', 'pl': '48',
+  'ukraine': '380', 'ua': '380',
+  'romania': '40', 'ro': '40',
+  'czech republic': '420', 'cz': '420',
+  'hungary': '36', 'hu': '36',
+  
+  // Americas - North
+  'united states': '1', 'usa': '1', 'us': '1', 'america': '1',
+  'canada': '1', 'ca': '1',
+  'mexico': '52', 'mx': '52',
+  
+  // Americas - South
+  'brazil': '55', 'br': '55',
+  'argentina': '54', 'ar': '54',
+  'colombia': '57', 'co': '57',
+  'chile': '56', 'cl': '56',
+  'peru': '51', 'pe': '51',
+  'venezuela': '58', 've': '58',
+  
+  // Africa
+  'south africa': '27', 'za': '27',
+  'nigeria': '234', 'ng': '234',
+  'egypt': '20', 'eg': '20',
+  'kenya': '254', 'ke': '254',
+  'ghana': '233', 'gh': '233',
+  'ethiopia': '251', 'et': '251',
+  'morocco': '212', 'ma': '212',
+  
+  // Oceania
+  'australia': '61', 'au': '61',
+  'new zealand': '64', 'nz': '64'
+};
 
 // Utility functions for efficient field matching and processing
 class FieldMatcher {
@@ -190,6 +293,35 @@ class FieldMatcher {
     return normalized;
   }
   
+  // Levenshtein distance algorithm for fuzzy string matching
+  private levenshtein(a: string, b: string): number {
+    const matrix: number[][] = [];
+    
+    for (let i = 0; i <= b.length; i++) {
+      matrix[i] = [i];
+    }
+    
+    for (let j = 0; j <= a.length; j++) {
+      matrix[0][j] = j;
+    }
+    
+    for (let i = 1; i <= b.length; i++) {
+      for (let j = 1; j <= a.length; j++) {
+        if (b.charAt(i - 1) === a.charAt(j - 1)) {
+          matrix[i][j] = matrix[i - 1][j - 1];
+        } else {
+          matrix[i][j] = Math.min(
+            matrix[i - 1][j - 1] + 1, // substitution
+            matrix[i][j - 1] + 1,     // insertion
+            matrix[i - 1][j] + 1      // deletion
+          );
+        }
+      }
+    }
+    
+    return matrix[b.length][a.length];
+  }
+  
   // Check if two field names match with similarity threshold
   private isPartialMatch(key1: string, key2: string): boolean {
     const cacheKey = `${key1}|${key2}`;
@@ -205,18 +337,19 @@ class FieldMatcher {
     if (norm1 === norm2) {
       this.setCacheIfSpace(cacheKey, true);
       return true;
-    } else if (norm1.length > FieldMatcher.MIN_FIELD_LENGTH_FOR_FUZZY_MATCH && 
-               norm2.length > FieldMatcher.MIN_FIELD_LENGTH_FOR_FUZZY_MATCH) {
-      // Partial match with strict requirements to avoid false positives
-      const minLength = Math.min(norm1.length, norm2.length);
+    }
+    
+    // Levenshtein distance-based fuzzy matching
+    if (norm1.length > FieldMatcher.MIN_FIELD_LENGTH_FOR_FUZZY_MATCH && 
+        norm2.length > FieldMatcher.MIN_FIELD_LENGTH_FOR_FUZZY_MATCH) {
       const maxLength = Math.max(norm1.length, norm2.length);
+      const distance = this.levenshtein(norm1, norm2);
+      const similarity = 1 - (distance / maxLength);
       
-      // Require similarity threshold overlap to prevent unrelated matches
-      if ((minLength / maxLength) >= FieldMatcher.SIMILARITY_THRESHOLD) {
-        const isMatch = norm1.includes(norm2) || norm2.includes(norm1);
-        this.setCacheIfSpace(cacheKey, isMatch);
-        return isMatch;
-      }
+      // Only consider fields a match if similarity >= 0.7
+      const isMatch = similarity >= FieldMatcher.SIMILARITY_THRESHOLD;
+      this.setCacheIfSpace(cacheKey, isMatch);
+      return isMatch;
     }
     
     this.setCacheIfSpace(cacheKey, false);
@@ -440,8 +573,8 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
       });
     }
 
-    // Basic email validation (RFC 5322 simplified)
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    // Basic email validation (RFC 5322 simplified) - require at least 2 characters in TLD
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
     if (!emailRegex.test(email)) {
       return new Response(JSON.stringify({ 
         error: 'Invalid email format',
@@ -508,97 +641,8 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
       // Detect country code based on country name or number pattern
       const normalizedCountry = countryName.toLowerCase().trim();
       
-      // Comprehensive country code mapping covering major regions
-      const countryCodeMap: Record<string, string> = {
-        // Asia - South
-        'india': '91', 'indian': '91', 'in': '91', 'bharat': '91',
-        'pakistan': '92', 'pk': '92',
-        'bangladesh': '880', 'bd': '880',
-        'sri lanka': '94', 'lk': '94',
-        'nepal': '977', 'np': '977',
-        'maldives': '960', 'mv': '960',
-        'bhutan': '975', 'bt': '975',
-        'afghanistan': '93', 'af': '93',
-        
-        // Asia - Southeast
-        'indonesia': '62', 'id': '62',
-        'philippines': '63', 'ph': '63',
-        'vietnam': '84', 'vn': '84',
-        'thailand': '66', 'th': '66',
-        'malaysia': '60', 'my': '60',
-        'singapore': '65', 'sg': '65',
-        'myanmar': '95', 'mm': '95',
-        'cambodia': '855', 'kh': '855',
-        'laos': '856', 'la': '856',
-        
-        // Asia - East
-        'china': '86', 'cn': '86',
-        'japan': '81', 'jp': '81',
-        'south korea': '82', 'korea': '82', 'kr': '82',
-        'hong kong': '852', 'hk': '852',
-        'taiwan': '886', 'tw': '886',
-        
-        // Middle East
-        'uae': '971', 'dubai': '971', 'ae': '971',
-        'saudi arabia': '966', 'sa': '966',
-        'qatar': '974', 'qa': '974',
-        'kuwait': '965', 'kw': '965',
-        'bahrain': '973', 'bh': '973',
-        'oman': '968', 'om': '968',
-        'israel': '972', 'il': '972',
-        'turkey': '90', 'tr': '90',
-        'iran': '98', 'ir': '98',
-        'iraq': '964', 'iq': '964',
-        'jordan': '962', 'jo': '962',
-        'lebanon': '961', 'lb': '961',
-        
-        // Europe - Western
-        'united kingdom': '44', 'uk': '44', 'britain': '44', 'england': '44', 'gb': '44',
-        'france': '33', 'fr': '33',
-        'germany': '49', 'de': '49',
-        'italy': '39', 'it': '39',
-        'spain': '34', 'es': '34',
-        'netherlands': '31', 'holland': '31', 'nl': '31',
-        'belgium': '32', 'be': '32',
-        'switzerland': '41', 'ch': '41',
-        'austria': '43', 'at': '43',
-        'portugal': '351', 'pt': '351',
-        'greece': '30', 'gr': '30',
-        
-        // Europe - Eastern
-        'russia': '7', 'ru': '7',
-        'poland': '48', 'pl': '48',
-        'ukraine': '380', 'ua': '380',
-        'romania': '40', 'ro': '40',
-        'czech republic': '420', 'cz': '420',
-        'hungary': '36', 'hu': '36',
-        
-        // Americas - North
-        'united states': '1', 'usa': '1', 'us': '1', 'america': '1',
-        'canada': '1', 'ca': '1',
-        'mexico': '52', 'mx': '52',
-        
-        // Americas - South
-        'brazil': '55', 'br': '55',
-        'argentina': '54', 'ar': '54',
-        'colombia': '57', 'co': '57',
-        'chile': '56', 'cl': '56',
-        'peru': '51', 'pe': '51',
-        'venezuela': '58', 've': '58',
-        
-        // Africa
-        'south africa': '27', 'za': '27',
-        'nigeria': '234', 'ng': '234',
-        'egypt': '20', 'eg': '20',
-        'kenya': '254', 'ke': '254',
-        'ghana': '233', 'gh': '233',
-        'ethiopia': '251', 'et': '251',
-        'morocco': '212', 'ma': '212',
-        
-        // Oceania
-        'australia': '61', 'au': '61',
-        'new zealand': '64', 'nz': '64'
-      };
+      // Use module-level country code map
+      const countryCode = countryCodeMap[normalizedCountry];
       
       // Try to detect country code from number prefix if country not provided
       let detectedCode = '';
@@ -696,7 +740,7 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
       "Mobile Number": phoneValue,
       
       // WhatsApp fields (will be populated from form data via field mapping)
-      "Whatsapp Opt In": false, // Default to false - explicit consent required
+      "Whatsapp Opt In": null, // Default to null - unknown consent (distinct from false which is explicit opt-out)
       "Whatsapp Number": whatsappValue,
       "Opt In Source": '',
       "Opt In Time": '',
@@ -747,20 +791,34 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
     // Collect skipped fields to reduce log spam
     const skippedFields: string[] = [];
     
-    // Helper to convert opt-in values to boolean
-    const convertToOptInBoolean = (value: unknown): boolean => {
+    // Helper to convert opt-in values to tri-state: true (explicit yes), false (explicit no), null (unanswered/absent)
+    const convertToOptInState = (value: unknown): boolean | null => {
+      // null or undefined = field absent/unanswered
+      if (value === null || value === undefined) return null;
+      
+      // Boolean values pass through
       if (typeof value === 'boolean') return value;
-      if (!value) return false; // Default to false - require explicit opt-in
+      
+      // Empty string = unanswered
+      if (value === '') return null;
       
       const normalizedValue = String(value).toLowerCase().trim();
       
-      // Handle explicit opt-in values
+      // Empty after normalization = unanswered
+      if (normalizedValue === '') return null;
+      
+      // Handle explicit opt-in values (yes)
       if (['yes', 'true', '1', 'on', 'checked', 'accept', 'agree', 'consent'].includes(normalizedValue)) {
         return true;
       }
       
-      // All other cases default to false (no consent)
-      return false;
+      // Handle explicit opt-out values (no/decline)
+      if (['no', 'false', '0', 'off', 'unchecked', 'decline', 'reject', 'deny'].includes(normalizedValue)) {
+        return false;
+      }
+      
+      // Unknown/ambiguous values default to null (unknown consent)
+      return null;
     };
     
     for (const [key, value] of Object.entries(answers)) {
@@ -780,16 +838,18 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
         continue;
       }
       
-      // Special handling for WhatsApp Opt In - convert to boolean and set opt-in metadata
+      // Special handling for WhatsApp Opt In - convert to tri-state and set opt-in metadata
       if (zohoFieldName === 'Whatsapp Opt In') {
-        const optInValue = convertToOptInBoolean(value);
+        const optInValue = convertToOptInState(value);
         zohoPayload["Whatsapp Opt In"] = optInValue;
         
-        // Set opt-in metadata if consent given
-        if (optInValue) {
+        // Set opt-in metadata only if explicit consent given (true)
+        if (optInValue === true) {
           zohoPayload["Opt In Source"] = 'Website Form';
           zohoPayload["Opt In Time"] = registrationTimestamp;
         }
+        // Note: optInValue can be true (explicit yes), false (explicit no), or null (unknown)
+        // Do not collapse null into false - they have distinct meanings
         continue;
       }
       
@@ -819,11 +879,16 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
       }
     }
     
-    // Log all skipped fields for full debuggability
+    // Log skipped fields with truncation to first 10 fields
     if (skippedFields.length > 0) {
+      const displayFields = skippedFields.slice(0, 10);
+      const remainingCount = skippedFields.length - 10;
+      const fieldsList = remainingCount > 0 
+        ? `${displayFields.join(', ')}, ...and ${remainingCount} more`
+        : displayFields.join(', ');
+      
       console.warn(
-        `Skipped ${skippedFields.length} invalid Zoho field(s) for event ${event_id}:`,
-        skippedFields.join(', ')
+        `Skipped ${skippedFields.length} invalid Zoho field(s) for event ${event_id}: ${fieldsList}`
       );
     }
 
