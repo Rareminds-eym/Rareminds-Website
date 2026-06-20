@@ -70,6 +70,13 @@ interface ZohoPayload {
   [key: string]: string | boolean;
 }
 
+// Regex constants for validation and formatting
+const REGEX_NON_ALPHANUMERIC = /[^a-z0-9]/g;
+const REGEX_NON_DIGIT = /\D/g;
+const REGEX_WHITESPACE = /\s+/;
+const REGEX_ALPHA_CHARS = /[a-zA-Z]/;
+const REGEX_DIGITS_ONLY = /^\d+$/;
+
 // Utility functions for efficient field matching and processing
 class FieldMatcher {
   // Configuration constants for field matching behavior
@@ -87,7 +94,7 @@ class FieldMatcher {
       return cached;
     }
     
-    const normalized = fieldName.toLowerCase().replace(/[^a-z0-9]/g, '');
+    const normalized = fieldName.toLowerCase().replace(REGEX_NON_ALPHANUMERIC, '');
     
     // Prevent unbounded cache growth in edge cases
     if (this.normalizedCache.size < FieldMatcher.MAX_CACHE_SIZE) {
@@ -309,7 +316,7 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
     // Smart name processing for Zoho CRM requirements
     // Helper to split a name string into [first, last] parts
     const splitName = (name: string): [string, string] => {
-      const parts = name.trim().split(/\s+/);
+      const parts = name.trim().split(REGEX_WHITESPACE);
       return [parts[0], parts.length > 1 ? parts.slice(1).join(' ') : ''];
     };
 
@@ -341,7 +348,7 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
       if (!phoneNumber) return '';
       
       // Extract digits only
-      const digitsOnly = phoneNumber.replace(/\D/g, '');
+      const digitsOnly = phoneNumber.replace(REGEX_NON_DIGIT, '');
       
       // Basic validation - minimum length for any valid phone number globally
       if (digitsOnly.length < 7) {
@@ -356,15 +363,15 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
       // If already in international format with +, validate and return
       if (phoneNumber.startsWith('+')) {
         const afterPlus = phoneNumber.substring(1);
-        const hasInvalidChars = /[a-zA-Z]/.test(afterPlus);
+        const hasInvalidChars = REGEX_ALPHA_CHARS.test(afterPlus);
         
         if (hasInvalidChars) {
           return ''; // Reject numbers with letters after +
         }
         
-        const cleanInternational = afterPlus.replace(/\D/g, '');
+        const cleanInternational = afterPlus.replace(REGEX_NON_DIGIT, '');
         const hasValidLength = cleanInternational.length >= 7 && cleanInternational.length <= 15;
-        const isAllDigits = /^\d+$/.test(cleanInternational);
+        const isAllDigits = REGEX_DIGITS_ONLY.test(cleanInternational);
         
         if (hasValidLength && isAllDigits) {
           return '+' + cleanInternational;
