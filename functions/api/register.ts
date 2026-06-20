@@ -56,18 +56,18 @@ interface ZohoPayload {
   'WhatsApp Opt-In': boolean; // Alternative with hyphen (as shown in Zoho response)
   'Whatsapp No': string; // Exact field name as shown in Zoho CRM
   'WhatsApp No': string; // Capital case variation
-  'WhatsApp Number'?: string; // Alternative field name (backup)
-  'Whatsapp Number'?: string; // Another variation
-  'whatsapp_no'?: string; // Snake case
-  'whatsapp_number'?: string; // Snake case
-  'Payment Id'?: string;
-  'Razorpay Payment Id'?: string;
+  'WhatsApp Number': string; // Alternative field name (backup)
+  'Whatsapp Number': string; // Another variation
+  'whatsapp_no': string; // Snake case
+  'whatsapp_number': string; // Snake case
+  'Payment Id': string;
+  'Razorpay Payment Id': string;
   'Payment Status': string;
-  'Mode of Payment'?: string;
+  'Mode of Payment': string;
   'Amount': string;
   'Total Amount': string;
-  // Allow additional dynamic fields with restricted types for better type safety
-  [key: string]: string | boolean | undefined;
+  // Allow additional dynamic fields - all values must be defined (string or boolean)
+  [key: string]: string | boolean;
 }
 
 // Utility functions for efficient field matching and processing
@@ -207,9 +207,20 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
     return new Response(null, { headers: corsHeaders });
   }
 
+  // Declare body outside try block for error logging
+  let body: RegisterRequest | null = null;
+
   try {
     // Parse request body
-    const body: RegisterRequest = await request.json();
+    body = await request.json();
+    
+    if (!body) {
+      return new Response(JSON.stringify({ error: 'Invalid request body' }), {
+        status: 400,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+      });
+    }
+    
     const { answers, event_id, form_id, event_type, event_name, payment_id, total_amount } = body;
 
     // Validate required fields
@@ -517,7 +528,10 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
       "whatsapp_number": formattedWhatsApp || whatsappSourceNumber || phone || '', // Snake case variation
       
       // Payment fields - will be updated conditionally below
+      "Payment Id": '',
+      "Razorpay Payment Id": '',
       "Payment Status": event_type === 'paid' ? 'completed' : 'not_required',
+      "Mode of Payment": '',
       "Amount": "0",
       "Total Amount": "0"
     };
@@ -631,6 +645,14 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
     });
 
   } catch (error) {
+    // Log internal server errors for monitoring
+    console.error('Registration request failed:', {
+      event_id: body?.event_id || 'unknown',
+      event_name: body?.event_name || 'unknown',
+      error: error instanceof Error ? error.message : 'Unknown error',
+      stack: error instanceof Error ? error.stack : undefined
+    });
+    
     return new Response(JSON.stringify({
       error: 'Internal server error',
       message: error instanceof Error ? error.message : 'Unknown error'
