@@ -40,7 +40,7 @@ export const convertToZohoFieldName = (fieldName: string): string => {
 };
 
 export const FIELD_MAPPING: Record<string, string> = {
-  // CORE CONTACT FIELDS (Always required)
+  // CORE CONTACT FIELDS
   'name': 'Name',
   'fullname': 'Name',
   'full_name': 'Name',
@@ -52,53 +52,63 @@ export const FIELD_MAPPING: Record<string, string> = {
   'last_name': 'Last Name',
   'lname': 'Last Name',
   'surname': 'Last Name',
+  
+  // EMAIL FIELDS
   'email': 'Email',
-  'emailaddress': 'Email',
-  'email_address': 'Email',
+  'emailaddress': 'Email Address',
+  'email_address': 'Email Address',
   'mail': 'Email',
+  
+  // PHONE FIELDS
   'phone': 'Phone',
   'phonenumber': 'Phone',
   'phone_number': 'Phone',
-  'mobile': 'Mobile',
-  'mobilenumber': 'Mobile',
-  'mobile_number': 'Mobile',
+  'mobile': 'Mobile Number',
+  'mobilenumber': 'Mobile Number',
+  'mobile_number': 'Mobile Number',
   
-  // WHATSAPP FIELDS (Critical mapping) - Use exact Zoho CRM field name
-  'whatsapp': 'Whatsapp No',
-  'whatsappnumber': 'Whatsapp No',
-  'whatsapp_number': 'Whatsapp No',
-  'whatsappno': 'Whatsapp No',
-  'whatsapp_no': 'Whatsapp No',
+  // WHATSAPP FIELDS
+  'whatsapp': 'Whatsapp Number',
+  'whatsappnumber': 'Whatsapp Number',
+  'whatsapp_number': 'Whatsapp Number',
+  'whatsappno': 'Whatsapp Number',
+  'whatsapp_no': 'Whatsapp Number',
   
-  // WHATSAPP OPT-IN (All possible variations) - Maps to boolean fields
-  'whatsappoptin': 'WhatsApp Opt In',
-  'whatsapp_opt_in': 'WhatsApp Opt In',
-  'whatsapp_optin': 'WhatsApp Opt In',
-  'optin': 'WhatsApp Opt In',
-  'opt_in': 'WhatsApp Opt In',
-  'marketing_opt_in': 'WhatsApp Opt In',
-  'consent': 'WhatsApp Opt In',
-  'whatsapp_consent': 'WhatsApp Opt In',
-  'marketing_consent': 'WhatsApp Opt In',
-  'communication_consent': 'WhatsApp Opt In',
-  'sms_opt_in': 'WhatsApp Opt In',
+  // WHATSAPP OPT-IN
+  'whatsappoptin': 'Whatsapp Opt In',
+  'whatsapp_opt_in': 'Whatsapp Opt In',
+  'whatsapp_optin': 'Whatsapp Opt In',
   
-  // EDUCATIONAL FIELDS
-  'institution': 'School / College / University Name',
-  'school': 'School / College / University Name',
-  'college': 'School / College / University Name',
-  'university': 'School / College / University Name',
-  'institutionname': 'School / College / University Name',
-  'institution_name': 'School / College / University Name',
+  // INSTITUTION FIELDS
+  'school': 'School College Institution Name',
+  'college': 'School College Institution Name',
+  'schoolname': 'School College Institution Name',
+  'school_name': 'School College Institution Name',
+  'collegename': 'School College Institution Name',
+  'college_name': 'School College Institution Name',
+  
+  'institution': 'Institution University Name',
+  'university': 'Institution University Name',
+  'institutionname': 'Institution University Name',
+  'institution_name': 'Institution University Name',
+  'universityname': 'Institution University Name',
+  'university_name': 'Institution University Name',
+  
+  // COMPANY
   'company': 'Company Name',
   'organization': 'Company Name',
   'employer': 'Company Name',
+  'company_name': 'Company Name',
+  'companyname': 'Company Name',
   
+  // EDUCATIONAL FIELDS
   'department': 'Department Stream',
   'dept': 'Department Stream',
   'stream': 'Department Stream',
-  'branch': 'Students Branch/department',
+  'branch': 'Department Stream',
   'course': 'Department Stream',
+  'departmentstream': 'Department Stream',
+  'department_stream': 'Department Stream',
   
   'subject': 'Subject You Teach',
   'subjecttaught': 'Subject You Teach',
@@ -116,36 +126,49 @@ export const FIELD_MAPPING: Record<string, string> = {
   'yearsofexperience': 'Years Of Experience',
   'years_of_experience': 'Years Of Experience',
   'work_experience': 'Years Of Experience',
+  'yearsexperience': 'Years Of Experience',
   
   // LOCATION FIELDS
-  'country': 'Country',
-  'nationality': 'Country',
-  'nation': 'Country',
-  'location_country': 'Country',
   'state': 'State',
   'statename': 'State',
   'region': 'State',
+  
   'district': 'District',
   'districtname': 'District',
   'area': 'District',
-  'city': 'City',
-  'cityname': 'City',
-  'town': 'City',
-  'address': 'Current Address',
-  'currentaddress': 'Current Address',
   
-  // EVENT FIELDS  
+  // PERSONAL FIELDS
+  'dob': 'Date Of Birth',
+  'dateofbirth': 'Date Of Birth',
+  'date_of_birth': 'Date Of Birth',
+  'birthdate': 'Date Of Birth',
+  'birthday': 'Date Of Birth',
+  
+  // COMMENTS/MESSAGE
+  'comments': 'Comments',
+  'comment': 'Comments',
+  'message': 'Comments',
+  'notes': 'Comments',
+  'note': 'Comments',
+  'remarks': 'Comments',
+  
+  // EVENT FIELDS
   'howdidyouhear': 'How Did You Hear About Us',
   'heard_from': 'How Did You Hear About Us',
   'heardfrom': 'How Did You Hear About Us',
   'source': 'How Did You Hear About Us',
+  'heardaboutus': 'How Did You Hear About Us',
   
   'preferreddate': 'Preferred Date',
   'preferred_date': 'Preferred Date',
+  'date': 'Preferred Date',
+  
   'preferredtime': 'Preferred Time',
   'preferred_time': 'Preferred Time',
   'timeslot': 'Preferred Time',
+  'time_slot': 'Preferred Time',
   'webinar_time_slot': 'Preferred Time',
+  'time': 'Preferred Time',
   
   'preferredlanguage': 'Preferred Language',
   'preferred_language': 'Preferred Language',
@@ -159,13 +182,18 @@ export const FIELD_MAPPING: Record<string, string> = {
   'role': 'Job Title',
   'title': 'Job Title',
   
-  // ADDITIONAL FIELDS
-  'linkedin': 'LinkedIn Profile',
-  'linkedinprofile': 'LinkedIn Profile',
-  'linkedin_profile': 'LinkedIn Profile',
-  'website': 'Website',
+  // SOCIAL/ADDITIONAL
+  'linkedin': 'Linkedin Profile',
+  'linkedinprofile': 'Linkedin Profile',
+  'linkedin_profile': 'Linkedin Profile',
+  'linkedinurl': 'Linkedin Profile',
+  'linkedin_url': 'Linkedin Profile',
+  
   'referralcode': 'Referral Code',
-  'referral_code': 'Referral Code'
+  'referral_code': 'Referral Code',
+  'referral': 'Referral Code',
+  'promocode': 'Referral Code',
+  'promo_code': 'Referral Code'
 };
 
 /**
@@ -176,9 +204,10 @@ export const PROTECTED_REQUIRED_FIELDS = [
   'First Name',
   'Last Name', 
   'Email',
+  'Email Address',
   'Phone',
-  'Mobile',
-  'Full Name'
+  'Mobile Number',
+  'Name'
 ];
 
 /**
@@ -186,13 +215,5 @@ export const PROTECTED_REQUIRED_FIELDS = [
  * to maintain proper formatting and validation
  */
 export const PROTECTED_WHATSAPP_FIELDS = [
-  'WhatsApp Opt In',
-  'WhatsApp Opt-In',
-  'Whatsapp No',
-  'WhatsApp No',
-  'WhatsApp Number',
-  'Whatsapp Number',
-  'whatsapp_no',
-  'whatsapp_number',
-  'Mobile'
+  'Whatsapp Number' // Only protect the number field, opt-in is mapped from form
 ];

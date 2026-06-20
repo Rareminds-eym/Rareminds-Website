@@ -16,14 +16,22 @@
  * - Configure Zoho Flow to map the fields you need
  */
 
-import { FIELD_MAPPING, PROTECTED_REQUIRED_FIELDS, PROTECTED_WHATSAPP_FIELDS, convertToZohoFieldName } from '../constants/fieldMappings';
+import { FIELD_MAPPING, PROTECTED_REQUIRED_FIELDS, convertToZohoFieldName } from '../constants/fieldMappings';
 
 interface Env {
   ZOHO_FLOW_WEBHOOK_URL: string;
 }
 
 interface RegisterRequest {
-  answers: Record<string, unknown>;
+  /** 
+   * Form field answers from the event registration form.
+   * Expected value types: string | boolean | number | null
+   * - String values are most common (text inputs, select fields)
+   * - Boolean values for checkboxes/opt-ins
+   * - Number values for numeric inputs
+   * - Null for optional empty fields
+   */
+  answers: Record<string, string | boolean | number | null>;
   event_id: string;
   form_id: string;
   event_type: 'free' | 'paid';
@@ -33,126 +41,97 @@ interface RegisterRequest {
 }
 
 interface ZohoPayload {
-  // Core required fields
-  'First Name': string;
-  'Last Name': string;
-  'Full Name': string;
+  // Exact Zoho CRM webhook fields (no duplicates)
+  'Amount': string;
+  'Comments': string;
+  'Company Name': string;
+  'Date Of Birth': string;
+  'Department Stream': string;
+  'District': string;
   'Email': string;
-  'Phone': string;
-  'Mobile': string;
-  'Country': string;
+  'Email Address': string;
   'Event Id': string;
   'Event Name': string;
   'Event Type': string;
-  'Webinar Name': string;
+  'First Name': string;
   'Form Id': string;
-  'Registration Date': string;
+  'How Did You Hear About Us': string;
+  'Institution University Name': string;
+  'Job Title': string;
+  'Last Name': string;
   'Lead Source': string;
-  'Lead Status': string;
-  'Lead Type': string;
-  'Client Category': string;
-  'Database Name': string;
-  'Campaign Name': string;
-  'WhatsApp Opt In': boolean;
-  'WhatsApp Opt-In': boolean;
-  'Whatsapp No': string;
-  'WhatsApp No': string;
-  'WhatsApp Number': string;
-  'Whatsapp Number': string;
-  'whatsapp_no': string;
-  'whatsapp_number': string;
+  'Linkedin Profile': string;
+  'Mobile Number': string;
+  'Name': string;
+  'Opt In Source': string;
+  'Opt In Time': string;
   'Payment Id': string;
-  'Razorpay Payment Id': string;
   'Payment Status': string;
-  'Mode of Payment': string;
-  'Amount': string;
+  'Phone': string;
+  'Preferred Date': string;
+  'Preferred Language': string;
+  'Preferred Time': string;
+  'Razorpay Payment Id': string;
+  'Referral Code': string;
+  'Registration Date': string;
+  'Registration Timestamp': string;
+  'School College Institution Name': string;
+  'State': string;
+  'Subject You Teach': string;
+  'Teaching Level': string;
   'Total Amount': string;
-  
-  // Optional dynamic fields
-  'Name'?: string;
-  'School / College / University Name'?: string;
-  'Company Name'?: string;
-  'Department Stream'?: string;
-  'Students Branch/department'?: string;
-  'Subject You Teach'?: string;
-  'Teaching Level'?: string;
-  'Years Of Experience'?: string;
-  'State'?: string;
-  'District'?: string;
-  'City'?: string;
-  'Current Address'?: string;
-  'How Did You Hear About Us'?: string;
-  'Preferred Date'?: string;
-  'Preferred Time'?: string;
-  'Preferred Language'?: string;
-  'Job Title'?: string;
-  'LinkedIn Profile'?: string;
-  'Website'?: string;
-  'Referral Code'?: string;
+  'Webinar Name': string;
+  'Whatsapp Number': string;
+  'Whatsapp Opt In': boolean;
+  'Years Of Experience': string;
   // No index signature - all fields explicitly defined
   // Dynamic field assignment validated via isZohoPayloadKey() type guard
 }
 
 // Valid Zoho payload keys for type-safe dynamic assignment
 const ZOHO_PAYLOAD_KEYS = [
-  'First Name',
-  'Last Name',
-  'Full Name',
-  'Name',
+  'Amount',
+  'Comments',
+  'Company Name',
+  'Date Of Birth',
+  'Department Stream',
+  'District',
   'Email',
-  'Phone',
-  'Mobile',
-  'Country',
+  'Email Address',
   'Event Id',
   'Event Name',
   'Event Type',
-  'Webinar Name',
+  'First Name',
   'Form Id',
-  'Registration Date',
+  'How Did You Hear About Us',
+  'Institution University Name',
+  'Job Title',
+  'Last Name',
   'Lead Source',
-  'Lead Status',
-  'Lead Type',
-  'Client Category',
-  'Database Name',
-  'Campaign Name',
-  'WhatsApp Opt In',
-  'WhatsApp Opt-In',
-  'Whatsapp No',
-  'WhatsApp No',
-  'WhatsApp Number',
-  'Whatsapp Number',
-  'whatsapp_no',
-  'whatsapp_number',
+  'Linkedin Profile',
+  'Mobile Number',
+  'Name',
+  'Opt In Source',
+  'Opt In Time',
   'Payment Id',
-  'Razorpay Payment Id',
   'Payment Status',
-  'Mode of Payment',
-  'Amount',
-  'Total Amount',
-  // Educational fields
-  'School / College / University Name',
-  'Company Name',
-  'Department Stream',
-  'Students Branch/department',
+  'Phone',
+  'Preferred Date',
+  'Preferred Language',
+  'Preferred Time',
+  'Razorpay Payment Id',
+  'Referral Code',
+  'Registration Date',
+  'Registration Timestamp',
+  'School College Institution Name',
+  'State',
   'Subject You Teach',
   'Teaching Level',
-  'Years Of Experience',
-  // Location fields
-  'State',
-  'District',
-  'City',
-  'Current Address',
-  // Event fields
-  'How Did You Hear About Us',
-  'Preferred Date',
-  'Preferred Time',
-  'Preferred Language',
-  // Professional fields
-  'Job Title',
-  // Additional fields
-  'LinkedIn Profile',
-  'Website',
-  'Referral Code'
+  'Total Amount',
+  'Webinar Name',
+  'Whatsapp Number',
+  'Whatsapp Opt In',
+  'Years Of Experience'
 ] as const;
 
 type ZohoPayloadKey = typeof ZOHO_PAYLOAD_KEYS[number];
@@ -450,6 +429,40 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
       });
     }
 
+    // Validate email format
+    if (!email || email.trim() === '') {
+      return new Response(JSON.stringify({ 
+        error: 'Email is required for registration',
+        message: 'Please provide a valid email address'
+      }), {
+        status: 400,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+      });
+    }
+
+    // Basic email validation (RFC 5322 simplified)
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      return new Response(JSON.stringify({ 
+        error: 'Invalid email format',
+        message: 'Please provide a valid email address'
+      }), {
+        status: 400,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+      });
+    }
+
+    // Validate phone number exists
+    if (!phone || phone.trim() === '') {
+      return new Response(JSON.stringify({ 
+        error: 'Phone number is required for registration',
+        message: 'Please provide a valid phone number'
+      }), {
+        status: 400,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+      });
+    }
+
     // Format phone number for international use with intelligent country code detection
     // Returns formatted number with proper country code prefix
     // 
@@ -638,30 +651,19 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
         return ''; // Invalid length after formatting
       }
       
-      // Fallback handling for numbers without detected country code
-      // 
-      // For numbers with LEADING ZEROS where country is unknown:
-      // - Cannot safely format to E.164 (requires removing leading zero + adding country code)
-      // - Storing with '+0...' violates E.164 standard
-      // - Better to store RAW number without '+' prefix for manual correction in Zoho
-      // 
-      // For numbers WITHOUT leading zeros:
-      // - Can safely add '+' prefix (likely already has country code)
-      // - E.164 compliant if within valid length
+      // Fallback: number without detectable country code
+      // For E.164 consistency, always add '+' prefix unless it creates an invalid format
+      // Leading zeros indicate local format - keep as-is for Zoho to handle with their country detection
       if (digitsOnly.startsWith('0')) {
-        // Leading zero detected - cannot format without country
-        // Return raw number (no + prefix) to avoid E.164 violation
-        // Examples:
-        //   09876543210 → 09876543210 (Zoho can handle this)
-        //   07123456789 → 07123456789 (manual correction possible)
+        // Leading zero = local format, needs country context
+        // Keep raw format - Zoho CRM has better country detection context
         if (digitsOnly.length >= 7 && digitsOnly.length <= 15) {
-          return digitsOnly; // Raw format - safe for Zoho storage
+          return digitsOnly;
         }
         return ''; // Invalid length
       }
       
-      // No leading zero - likely already has country code or is valid format
-      // Safe to add '+' prefix for E.164 compliance
+      // No leading zero - add '+' for E.164 format consistency
       if (digitsOnly.length >= 7 && digitsOnly.length <= 15) {
         return '+' + digitsOnly;
       }
@@ -669,51 +671,37 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
       return ''; // Invalid length - reject
     };
 
-    // Extract WhatsApp opt-in consent from form
-    const whatsappOptIn = extractFieldFuzzy(answers, [
-      'whatsapp_opt_in', 'whatsappOptIn', 'WhatsApp Opt In', 'whatsapp_optin',
-      'opt_in', 'optin', 'consent', 'whatsapp_consent', 'marketing_consent',
-      'communication_consent', 'sms_opt_in', 'phone_opt_in'
-    ]);
-
-    // Convert various opt-in formats to standardized boolean value for Zoho CRM
-    // Default to true (opt-in) unless explicit opt-out is provided
-    const getOptInValue = (value: string): boolean => {
-      if (!value) return true; // Default to true - opt-in by default
-      
-      const normalizedValue = value.toLowerCase().trim();
-      
-      // Handle explicit opt-out values
-      if (['no', 'false', '0', 'off', 'unchecked', 'decline', 'reject', 'deny'].includes(normalizedValue)) {
-        return false;
-      }
-      
-      // All other cases default to true (opt-in)
-      return true;
-    };
-
-    const whatsappOptInStatus = getOptInValue(whatsappOptIn);
-    
     // Determine WhatsApp number: use dedicated WhatsApp field if provided, otherwise use phone/mobile
     const whatsappSourceNumber = whatsappNumber || phone;
     const formattedWhatsApp = formatPhoneWithCountryCode(whatsappSourceNumber, country);
     const formattedPhone = formatPhoneWithCountryCode(phone, country);
 
-    // Build Zoho payload with standard fields
+    // Build Zoho payload with exact webhook field mapping
     const registrationTimestamp = new Date().toISOString();
+    const registrationDate = registrationTimestamp.split('T')[0];
     
-    // Create Zoho payload with proper CRM field mapping (using SPACES not underscores)
+    // Determine best phone number for each field
+    const phoneValue = formattedPhone || phone || '';
+    const whatsappValue = formattedWhatsApp || whatsappSourceNumber || phoneValue;
+    
+    // Create Zoho payload matching exact webhook fields (no duplicates)
     const zohoPayload: ZohoPayload = {
-      // REQUIRED Core contact fields - Using SPACES as Zoho Flow expects
+      // Core contact fields
+      "Name": full_name || (finalLastName ? `${finalFirstName} ${finalLastName}` : finalFirstName),
       "First Name": finalFirstName,
       "Last Name": finalLastName,
-      "Full Name": full_name || (finalLastName ? `${finalFirstName} ${finalLastName}` : finalFirstName),
       "Email": email,
-      "Phone": formattedPhone || phone, // Use formatted if available, fallback to raw
-      "Mobile": formattedPhone || phone, // Use formatted if available, fallback to raw
-      "Country": country || '', // User's country for proper phone formatting
+      "Email Address": email,
+      "Phone": phoneValue,
+      "Mobile Number": phoneValue,
       
-      // Event metadata - Using SPACES  
+      // WhatsApp fields (will be populated from form data via field mapping)
+      "Whatsapp Opt In": false, // Default to false - explicit consent required
+      "Whatsapp Number": whatsappValue,
+      "Opt In Source": '',
+      "Opt In Time": '',
+      
+      // Event metadata
       "Event Id": event_id,
       "Event Name": event_name,
       "Event Type": event_type,
@@ -721,38 +709,59 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
       "Form Id": form_id,
       
       // Registration tracking
-      "Registration Date": registrationTimestamp.split('T')[0],
+      "Registration Date": registrationDate,
+      "Registration Timestamp": registrationTimestamp,
       
-      // Lead source and classification
+      // Lead source
       "Lead Source": event_type === 'paid' ? 'Paid Event' : 'Free Event',
-      "Lead Status": "New Lead",
-      "Lead Type": "Individual",
-      "Client Category": "Prospect",
-      "Database Name": "RareMinds Website",
-      "Campaign Name": event_name,
       
-      // WhatsApp fields - initialized with proper values - sending all possible variations
-      "WhatsApp Opt In": whatsappOptInStatus,
-      "WhatsApp Opt-In": whatsappOptInStatus, // Alternative with hyphen
-      "Whatsapp No": formattedWhatsApp || whatsappSourceNumber || phone || '', // Primary Zoho CRM field
-      "WhatsApp No": formattedWhatsApp || whatsappSourceNumber || phone || '', // Capital case variation
-      "WhatsApp Number": formattedWhatsApp || whatsappSourceNumber || phone || '', // Alternative field name
-      "Whatsapp Number": formattedWhatsApp || whatsappSourceNumber || phone || '', // Another variation
-      "whatsapp_no": formattedWhatsApp || whatsappSourceNumber || phone || '', // Snake case variation
-      "whatsapp_number": formattedWhatsApp || whatsappSourceNumber || phone || '', // Snake case variation
-      
-      // Payment fields - will be updated conditionally below
+      // Payment fields (will be updated conditionally below)
       "Payment Id": '',
       "Razorpay Payment Id": '',
       "Payment Status": event_type === 'paid' ? 'completed' : 'not_required',
-      "Mode of Payment": '',
-      "Amount": "0",
-      "Total Amount": "0"
+      "Amount": '0',
+      "Total Amount": '0',
+      
+      // Optional fields (will be populated from form data)
+      "Company Name": '',
+      "Job Title": '',
+      "Department Stream": '',
+      "Subject You Teach": '',
+      "Teaching Level": '',
+      "Years Of Experience": '',
+      "School College Institution Name": '',
+      "Institution University Name": '',
+      "State": '',
+      "District": '',
+      "How Did You Hear About Us": '',
+      "Preferred Date": '',
+      "Preferred Time": '',
+      "Preferred Language": '',
+      "Linkedin Profile": '',
+      "Referral Code": '',
+      "Date Of Birth": '',
+      "Comments": ''
     };
 
     // Intelligent field processing with robust mapping and typo tolerance
     // Collect skipped fields to reduce log spam
     const skippedFields: string[] = [];
+    
+    // Helper to convert opt-in values to boolean
+    const convertToOptInBoolean = (value: unknown): boolean => {
+      if (typeof value === 'boolean') return value;
+      if (!value) return false; // Default to false - require explicit opt-in
+      
+      const normalizedValue = String(value).toLowerCase().trim();
+      
+      // Handle explicit opt-in values
+      if (['yes', 'true', '1', 'on', 'checked', 'accept', 'agree', 'consent'].includes(normalizedValue)) {
+        return true;
+      }
+      
+      // All other cases default to false (no consent)
+      return false;
+    };
     
     for (const [key, value] of Object.entries(answers)) {
       if (value === null || value === '' || value === undefined) continue;
@@ -771,12 +780,25 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
         continue;
       }
       
+      // Special handling for WhatsApp Opt In - convert to boolean and set opt-in metadata
+      if (zohoFieldName === 'Whatsapp Opt In') {
+        const optInValue = convertToOptInBoolean(value);
+        zohoPayload["Whatsapp Opt In"] = optInValue;
+        
+        // Set opt-in metadata if consent given
+        if (optInValue) {
+          zohoPayload["Opt In Source"] = 'Website Form';
+          zohoPayload["Opt In Time"] = registrationTimestamp;
+        }
+        continue;
+      }
+      
       // CRITICAL: Never override required fields that are already set
       const isRequiredField = PROTECTED_REQUIRED_FIELDS.includes(zohoFieldName);
-      const isWhatsAppField = PROTECTED_WHATSAPP_FIELDS.includes(zohoFieldName);
+      const isWhatsAppNumberField = zohoFieldName === 'Whatsapp Number';
       
-      if (isWhatsAppField) {
-        continue; // Never override WhatsApp fields
+      if (isWhatsAppNumberField) {
+        continue; // Never override WhatsApp Number - already formatted
       } else if (isRequiredField) {
         // For required fields, only update if current value is truly empty
         const currentValue = zohoPayload[zohoFieldName];
@@ -797,19 +819,21 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
       }
     }
     
-    // Log skipped fields once at the end to reduce log spam
+    // Log all skipped fields for full debuggability
     if (skippedFields.length > 0) {
-      console.warn(`Skipped ${skippedFields.length} invalid Zoho field(s) for event ${event_id}:`, skippedFields.slice(0, 5).join(', ') + (skippedFields.length > 5 ? `... and ${skippedFields.length - 5} more` : ''));
+      console.warn(
+        `Skipped ${skippedFields.length} invalid Zoho field(s) for event ${event_id}:`,
+        skippedFields.join(', ')
+      );
     }
 
     // Note: First Name is already protected via PROTECTED_REQUIRED_FIELDS in the field processing loop above
     
-    // Update payment fields with proper Zoho field names (using spaces)
+    // Update payment fields with proper Zoho field names
     if (event_type === 'paid' && payment_id) {
       zohoPayload["Payment Id"] = payment_id;
       zohoPayload["Razorpay Payment Id"] = payment_id;
       zohoPayload["Payment Status"] = 'completed';
-      zohoPayload["Mode of Payment"] = 'Online';
       
       if (total_amount !== null && total_amount !== undefined) {
         zohoPayload["Amount"] = String(total_amount);
@@ -885,9 +909,7 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
       status: 500,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' }
     });
-  } finally {
-    // Critical: Clear field matcher caches to prevent memory leaks in serverless environment
-    // Serverless functions may be reused across requests, so explicit cleanup is essential
-    fieldMatcher.clearCache();
   }
+  // Note: fieldMatcher is request-scoped and will be garbage collected automatically
+  // No explicit cleanup needed
 }
