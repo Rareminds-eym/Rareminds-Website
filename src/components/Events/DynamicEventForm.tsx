@@ -8,7 +8,7 @@ import { getFormById } from '../../services/dynamicFormService';
 interface DynamicEventFormProps {
   formId?: string | null;
   eventId: string;
-  onSubmitSuccess?: (formData: Record<string, any>) => void | Promise<void>;
+  onSubmitSuccess?: (formData: Record<string, unknown>) => void | Promise<void>;
   onCancel?: () => void;
 }
 
@@ -176,7 +176,7 @@ const DynamicEventForm: React.FC<DynamicEventFormProps> = ({
     try {
       // Ensure all checkbox fields are included with boolean values
       // react-hook-form only includes checked checkboxes, so we need to add unchecked ones
-      const completeData: Record<string, any> = { ...data };
+      const completeData: Record<string, unknown> = { ...data };
       
       fields.forEach(field => {
         if (field.field_type === 'checkbox') {
