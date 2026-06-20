@@ -43,62 +43,47 @@ export const FIELD_MAPPING: Record<string, string> = {
   // CORE CONTACT FIELDS
   'name': 'Name',
   'fullname': 'Name',
-  'full_name': 'Name',
-  'attendee_name': 'Name',
+  'attendeename': 'Name',
   'firstname': 'First Name',
-  'first_name': 'First Name',
   'fname': 'First Name',
   'lastname': 'Last Name',
-  'last_name': 'Last Name',
   'lname': 'Last Name',
   'surname': 'Last Name',
   
   // EMAIL FIELDS
   'email': 'Email',
   'emailaddress': 'Email Address',
-  'email_address': 'Email Address',
   'mail': 'Email',
   
   // PHONE FIELDS
   'phone': 'Phone',
   'phonenumber': 'Phone',
-  'phone_number': 'Phone',
   'mobile': 'Mobile Number',
   'mobilenumber': 'Mobile Number',
-  'mobile_number': 'Mobile Number',
   
   // WHATSAPP FIELDS
   'whatsapp': 'Whatsapp Number',
   'whatsappnumber': 'Whatsapp Number',
-  'whatsapp_number': 'Whatsapp Number',
   'whatsappno': 'Whatsapp Number',
-  'whatsapp_no': 'Whatsapp Number',
   
   // WHATSAPP OPT-IN
   'whatsappoptin': 'Whatsapp Opt In',
-  'whatsapp_opt_in': 'Whatsapp Opt In',
-  'whatsapp_optin': 'Whatsapp Opt In',
   
   // INSTITUTION FIELDS
   'school': 'School College Institution Name',
   'college': 'School College Institution Name',
   'schoolname': 'School College Institution Name',
-  'school_name': 'School College Institution Name',
   'collegename': 'School College Institution Name',
-  'college_name': 'School College Institution Name',
   
   'institution': 'Institution University Name',
   'university': 'Institution University Name',
   'institutionname': 'Institution University Name',
-  'institution_name': 'Institution University Name',
   'universityname': 'Institution University Name',
-  'university_name': 'Institution University Name',
   
   // COMPANY
   'company': 'Company Name',
   'organization': 'Company Name',
   'employer': 'Company Name',
-  'company_name': 'Company Name',
   'companyname': 'Company Name',
   
   // EDUCATIONAL FIELDS
@@ -108,24 +93,19 @@ export const FIELD_MAPPING: Record<string, string> = {
   'branch': 'Department Stream',
   'course': 'Department Stream',
   'departmentstream': 'Department Stream',
-  'department_stream': 'Department Stream',
   
   'subject': 'Subject You Teach',
   'subjecttaught': 'Subject You Teach',
-  'subject_taught': 'Subject You Teach',
   'teachingsubject': 'Subject You Teach',
-  'teaching_subject': 'Subject You Teach',
   
   'teachinglevel': 'Teaching Level',
-  'teaching_level': 'Teaching Level',
   'level': 'Teaching Level',
   'grade': 'Teaching Level',
   'class': 'Teaching Level',
   
   'experience': 'Years Of Experience',
   'yearsofexperience': 'Years Of Experience',
-  'years_of_experience': 'Years Of Experience',
-  'work_experience': 'Years Of Experience',
+  'workexperience': 'Years Of Experience',
   'yearsexperience': 'Years Of Experience',
   
   // LOCATION FIELDS
@@ -133,6 +113,7 @@ export const FIELD_MAPPING: Record<string, string> = {
   'statename': 'State',
   'region': 'State',
   
+  // DISTRICT FIELDS
   'district': 'District',
   'districtname': 'District',
   'area': 'District',
@@ -140,7 +121,6 @@ export const FIELD_MAPPING: Record<string, string> = {
   // PERSONAL FIELDS
   'dob': 'Date Of Birth',
   'dateofbirth': 'Date Of Birth',
-  'date_of_birth': 'Date Of Birth',
   'birthdate': 'Date Of Birth',
   'birthday': 'Date Of Birth',
   
@@ -154,30 +134,24 @@ export const FIELD_MAPPING: Record<string, string> = {
   
   // EVENT FIELDS
   'howdidyouhear': 'How Did You Hear About Us',
-  'heard_from': 'How Did You Hear About Us',
   'heardfrom': 'How Did You Hear About Us',
   'source': 'How Did You Hear About Us',
   'heardaboutus': 'How Did You Hear About Us',
   
   'preferreddate': 'Preferred Date',
-  'preferred_date': 'Preferred Date',
   'date': 'Preferred Date',
   
   'preferredtime': 'Preferred Time',
-  'preferred_time': 'Preferred Time',
   'timeslot': 'Preferred Time',
-  'time_slot': 'Preferred Time',
-  'webinar_time_slot': 'Preferred Time',
+  'webinartimeslot': 'Preferred Time',
   'time': 'Preferred Time',
   
   'preferredlanguage': 'Preferred Language',
-  'preferred_language': 'Preferred Language',
   'language': 'Preferred Language',
   
   // PROFESSIONAL FIELDS
   'designation': 'Job Title',
   'jobtitle': 'Job Title',
-  'job_title': 'Job Title',
   'position': 'Job Title',
   'role': 'Job Title',
   'title': 'Job Title',
@@ -185,15 +159,11 @@ export const FIELD_MAPPING: Record<string, string> = {
   // SOCIAL/ADDITIONAL
   'linkedin': 'Linkedin Profile',
   'linkedinprofile': 'Linkedin Profile',
-  'linkedin_profile': 'Linkedin Profile',
   'linkedinurl': 'Linkedin Profile',
-  'linkedin_url': 'Linkedin Profile',
   
   'referralcode': 'Referral Code',
-  'referral_code': 'Referral Code',
   'referral': 'Referral Code',
-  'promocode': 'Referral Code',
-  'promo_code': 'Referral Code'
+  'promocode': 'Referral Code'
 };
 
 /**

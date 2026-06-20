@@ -159,8 +159,10 @@ function assignToZohoPayload(
       payload[key] = value as boolean | null;
     }
   } else if (typeof value === 'string') {
-    // All other fields are strings - use type assertion after runtime validation
-    (payload as Record<string, any>)[key] = value;
+    // All non-WhatsApp fields are typed as string in ZohoPayload.
+    // Use a targeted assertion narrowed to string values only (not 'any'),
+    // since isZohoPayloadKey() has already validated the key at runtime.
+    (payload as unknown as Record<string, string>)[key] = value;
   }
   // Note: Mismatched types are silently ignored (e.g., boolean assigned to string field)
   // This is intentional - conversion happens before calling this function
@@ -293,33 +295,40 @@ class FieldMatcher {
     return normalized;
   }
   
-  // Levenshtein distance algorithm for fuzzy string matching
+  // Space-optimized Levenshtein distance (O(min(n,m)) space instead of O(n*m))
   private levenshtein(a: string, b: string): number {
-    const matrix: number[][] = [];
-    
-    for (let i = 0; i <= b.length; i++) {
-      matrix[i] = [i];
+    // Ensure 'b' is the shorter string so rows are minimal size
+    if (a.length < b.length) {
+      [a, b] = [b, a];
     }
     
-    for (let j = 0; j <= a.length; j++) {
-      matrix[0][j] = j;
+    const bLen = b.length;
+    let prev = new Array<number>(bLen + 1);
+    let curr = new Array<number>(bLen + 1);
+    
+    // Initialize first row
+    for (let i = 0; i <= bLen; i++) {
+      prev[i] = i;
     }
     
-    for (let i = 1; i <= b.length; i++) {
-      for (let j = 1; j <= a.length; j++) {
+    for (let j = 1; j <= a.length; j++) {
+      curr[0] = j;
+      for (let i = 1; i <= bLen; i++) {
         if (b.charAt(i - 1) === a.charAt(j - 1)) {
-          matrix[i][j] = matrix[i - 1][j - 1];
+          curr[i] = prev[i - 1];
         } else {
-          matrix[i][j] = Math.min(
-            matrix[i - 1][j - 1] + 1, // substitution
-            matrix[i][j - 1] + 1,     // insertion
-            matrix[i - 1][j] + 1      // deletion
+          curr[i] = Math.min(
+            prev[i - 1] + 1, // substitution
+            prev[i] + 1,     // insertion
+            curr[i - 1] + 1  // deletion
           );
         }
       }
+      // Swap rows — no allocation or copying needed
+      [prev, curr] = [curr, prev];
     }
     
-    return matrix[b.length][a.length];
+    return prev[bLen];
   }
   
   // Check if two field names match with similarity threshold
@@ -391,11 +400,10 @@ class FieldMatcher {
   
   // Find matching field name from mapping with fuzzy logic
   findMappedField(fieldName: string, fieldMapping: Record<string, string>): string | null {
-    // Try direct mapping first (case insensitive)
-    const lowerFieldName = fieldName.toLowerCase();
     const normalizedKey = this.normalize(fieldName);
     
-    const directMatch = fieldMapping[lowerFieldName] || fieldMapping[normalizedKey];
+    // Try direct mapping first (on normalized key)
+    const directMatch = fieldMapping[normalizedKey];
     if (directMatch) return directMatch;
     
     // Fuzzy matching fallback - only if direct match fails
@@ -407,12 +415,6 @@ class FieldMatcher {
     }
     
     return null;
-  }
-  
-  // Clear caches to prevent memory leaks in long-running processes
-  clearCache(): void {
-    this.normalizedCache.clear();
-    this.matchCache.clear();
   }
 }
 
@@ -641,14 +643,13 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
       // Detect country code based on country name or number pattern
       const normalizedCountry = countryName.toLowerCase().trim();
       
-      // Use module-level country code map
-      const countryCode = countryCodeMap[normalizedCountry];
-      
       // Try to detect country code from number prefix if country not provided
       let detectedCode = '';
       
       if (normalizedCountry && countryCodeMap[normalizedCountry]) {
         detectedCode = countryCodeMap[normalizedCountry];
+      } else if (normalizedCountry) {
+        console.warn(`Unknown country for phone formatting: ${normalizedCountry}`);
       } else if (digitsOnly.startsWith('91') && digitsOnly.length === 12) {
         // Indian number with code already (91 + 10 digits)
         return '+' + digitsOnly;
