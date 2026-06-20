@@ -9,7 +9,7 @@ import { Pagination } from '../Academy/SuccessStories/Pagination';
 import { Calendar, Loader2, Tag, X, Filter } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import { useToast } from '../Academy/UI/use-toast';
-import fallbackImage from '../../assets/rareminds_bulb.png';
+import fallbackImage from '../../assets/RMLogo.webp';
 
 const EventsPage: React.FC = () => {
   const { events, loading } = useOptimizedEvents();
@@ -79,10 +79,7 @@ const EventsPage: React.FC = () => {
         if (error) {
           toast({ title: 'Error', description: 'Failed to load gallery images.', variant: 'destructive' });
           setGalleryImages(
-            events
-              .map(e => e.media_metadata?.event_banner || e.media_metadata?.featured_image)
-              .filter(Boolean)
-              .map((url, idx) => ({ id: `banner-${idx}`, url: url! }))
+          events.map((_e, idx) => ({ id: `placeholder-${idx}`, url: fallbackImage }))
           );
           return;
         }
@@ -102,19 +99,13 @@ const EventsPage: React.FC = () => {
           setGalleryImages(imgs);
         } else {
           setGalleryImages(
-            events
-              .map(e => e.media_metadata?.event_banner || e.media_metadata?.featured_image)
-              .filter(Boolean)
-              .map((url, idx) => ({ id: `banner-${idx}`, url: url! }))
+          events.map((_e, idx) => ({ id: `placeholder-${idx}`, url: fallbackImage }))
           );
         }
       } catch (_err) {
         toast({ title: 'Error', description: 'Unexpected error loading gallery.', variant: 'destructive' });
         setGalleryImages(
-          events
-            .map(e => e.media_metadata?.event_banner || e.media_metadata?.featured_image)
-            .filter(Boolean)
-            .map((url, idx) => ({ id: `banner-${idx}`, url: url! }))
+          events.map((_e, idx) => ({ id: `placeholder-${idx}`, url: fallbackImage }))
         );
       }
     };
@@ -432,14 +423,18 @@ const EventsPage: React.FC = () => {
                   <div className="mt-4 rounded-xl overflow-hidden shadow-lg relative flex-1 min-h-48">
                     <div
                       className="absolute inset-x-0 top-0 flex flex-col animate-[testimonial-scroll_var(--duration)_linear_infinite] hover:[animation-play-state:paused]"
-                      style={{ '--duration': `${galleryImages.length * 2.5}s` } as React.CSSProperties}
+                      style={{ '--duration': `${galleryImages.length * 6}s` } as React.CSSProperties}
                     >
                       {[...galleryImages, ...galleryImages].map((img, idx) => (
                         <img
                           key={`${img.id}-${idx}`}
                           src={img.url}
                           alt="Event gallery"
-                          className="w-full h-64 object-cover flex-shrink-0 block"
+                          className={
+                           img.url === fallbackImage
+                           ? 'w-56 h-56 object-contain mx-auto block'   
+                           : 'w-full h-full object-cover block'  
+                           }
                         />
                       ))}
                     </div>
