@@ -4,6 +4,7 @@ import RegistrationModal from './RegistrationModal';
 import { Event } from '../../types/Events/event';
 import { Calendar, Clock, MapPin, Users, Tag } from 'lucide-react';
 import compact from 'lodash/compact';
+import fallbackImage from '../../assets/rareminds_bulb.png';
 
 interface EventCardProps {
   event: Event;
@@ -67,7 +68,7 @@ const EventCard: React.FC<EventCardProps> = ({ event, compact = false }) => {
           alt={event.title}
           className="w-full h-full object-cover object-center transition-transform duration-300 group-hover:scale-105"
           onError={(e) => {
-            (e.target as HTMLImageElement).src = 'https://fastly.picsum.photos/id/20/3670/2462.jpg?hmac=CmQ0ln-k5ZqkdtLvVO23LjVAEabZQx2wOaT4pyeG10I';
+            (e.target as HTMLImageElement).src = fallbackImage;
           }}
         />
         <div className="absolute top-2 right-2">

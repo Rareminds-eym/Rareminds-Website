@@ -12,7 +12,7 @@ const TeacherTrainersSection: React.FC<TeacherTrainersSectionProps> = ({ content
   const subheading = content.subheading;
   const cards = (content.items as Array<{ title: string; description: string }> | undefined) ?? [];
 
-  if (!heading && subheading && cards.length === 0) return null;
+  if (!heading && !subheading && cards.length === 0) return null;
 
   return (
     <section className="bg-gray-50 px-6 py-16 sm:px-10 sm:py-20 rounded-3xl">

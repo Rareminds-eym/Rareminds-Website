@@ -8,16 +8,19 @@ import RegistrationModal from './RegistrationModal';
 import { Pagination } from '../Academy/SuccessStories/Pagination';
 import { Calendar, Loader2, Tag, X, Filter } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
+import { useToast } from '../Academy/UI/use-toast';
+import fallbackImage from '../../assets/rareminds_bulb.png';
 
 const EventsPage: React.FC = () => {
   const { events, loading } = useOptimizedEvents();
+  const { toast } = useToast();
   const [filteredEvents, setFilteredEvents] = useState<Event[]>([]);
   const [showRegistrationModal, setShowRegistrationModal] = React.useState(false);
   // Banner carousel logic (hooks must be top-level)
   const banners = events
     .filter(e => e.status === 'upcoming' || e.status === 'ongoing')
     .map(e => ({
-      img: e.media_metadata?.event_banner || e.media_metadata?.featured_image || e.media_metadata?.mobile_featured_image || 'https://fastly.picsum.photos/id/20/3670/2462.jpg?hmac=CmQ0ln-k5ZqkdtLvVO23LjVAEabZQx2wOaT4pyeG10I',
+      img: e.media_metadata?.event_banner || e.media_metadata?.featured_image || e.media_metadata?.mobile_featured_image || fallbackImage,
       title: e.title,
       status: e.status,
       category: e.category,
@@ -64,28 +67,49 @@ const EventsPage: React.FC = () => {
     if (events.length === 0) return;
     const eventIds = events.map(e => e.id).filter(Boolean);
     const fetchGallery = async () => {
-      const { data } = await supabase
-        .from('entity_sections')
-        .select(`section_contents!entity_section_id ( content )`)
-        .eq('entity_type', 'event')
-        .eq('section_key', 'gallery')
-        .eq('is_active', true)
-        .in('entity_id', eventIds);
+      try {
+        const { data, error } = await supabase
+          .from('entity_sections')
+          .select(`section_contents!entity_section_id ( content )`)
+          .eq('entity_type', 'event')
+          .eq('section_key', 'gallery')
+          .eq('is_active', true)
+          .in('entity_id', eventIds);
 
-      const imgs: Array<{ id: string; url: string }> = [];
-      (data ?? []).forEach((row: { section_contents: { content: unknown } | { content: unknown }[] | null }) => {
-        const contentRow = Array.isArray(row.section_contents) ? row.section_contents[0] : row.section_contents;
-        const items = ((contentRow?.content as { items?: Array<{ id?: string; image_url?: string }> } | null)?.items) ?? [];
-        items.forEach(item => {
-          if (item.image_url?.trim()) {
-            imgs.push({ id: item.id ?? item.image_url, url: item.image_url });
-          }
+        if (error) {
+          toast({ title: 'Error', description: 'Failed to load gallery images.', variant: 'destructive' });
+          setGalleryImages(
+            events
+              .map(e => e.media_metadata?.event_banner || e.media_metadata?.featured_image)
+              .filter(Boolean)
+              .map((url, idx) => ({ id: `banner-${idx}`, url: url! }))
+          );
+          return;
+        }
+
+        const imgs: Array<{ id: string; url: string }> = [];
+        (data ?? []).forEach((row: { section_contents: { content: unknown } | { content: unknown }[] | null }) => {
+          const contentRow = Array.isArray(row.section_contents) ? row.section_contents[0] : row.section_contents;
+          const items = ((contentRow?.content as { items?: Array<{ id?: string; image_url?: string }> } | null)?.items) ?? [];
+          items.forEach(item => {
+            if (item.image_url?.trim()) {
+              imgs.push({ id: item.id ?? item.image_url, url: item.image_url });
+            }
+          });
         });
-      });
 
-      if (imgs.length > 0) {
-        setGalleryImages(imgs);
-      } else {
+        if (imgs.length > 0) {
+          setGalleryImages(imgs);
+        } else {
+          setGalleryImages(
+            events
+              .map(e => e.media_metadata?.event_banner || e.media_metadata?.featured_image)
+              .filter(Boolean)
+              .map((url, idx) => ({ id: `banner-${idx}`, url: url! }))
+          );
+        }
+      } catch (_err) {
+        toast({ title: 'Error', description: 'Unexpected error loading gallery.', variant: 'destructive' });
         setGalleryImages(
           events
             .map(e => e.media_metadata?.event_banner || e.media_metadata?.featured_image)
