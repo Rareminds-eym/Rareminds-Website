@@ -116,7 +116,7 @@ const EventsPage: React.FC = () => {
       }
     };
     fetchGallery();
-  }, [events, toast]);
+  }, [events.length]);
 
   React.useEffect(() => {
     const handleScroll = () => {

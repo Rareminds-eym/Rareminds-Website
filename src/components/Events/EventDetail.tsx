@@ -1,4 +1,9 @@
 import DOMPurify from 'dompurify';
+
+const DOMPURIFY_CONFIG = {
+  ALLOWED_TAGS: ['b', 'i', 'em', 'strong', 'a', 'p', 'br', 'ul', 'ol', 'li', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'],
+  ALLOWED_ATTR: ['href', 'title']
+};
 import { safeGetItem, safeSetItem } from '@/lib/localStorage';
 import {
   AlertCircle,
@@ -941,7 +946,7 @@ const EventDetail: React.FC = () => {
                             className="text-gray-700 leading-relaxed prose prose-base md:prose-lg prose-slate max-w-none prose-headings:text-slate-800 prose-p:text-slate-700 prose-p:leading-relaxed prose-a:text-blue-600 prose-a:hover:text-blue-700 prose-strong:text-slate-800 prose-ul:text-slate-700 prose-ol:text-slate-700"
                             dangerouslySetInnerHTML={{ __html: (() => {
                               const aboutText = event.eventSections?.find(s => s.section_key === 'about')?.content?.text;
-                              return aboutText ? DOMPurify.sanitize(aboutText) : '';
+                              return aboutText ? DOMPurify.sanitize(aboutText, DOMPURIFY_CONFIG) : '';
                             })() }}
                           />
                         </div>
@@ -985,7 +990,7 @@ const EventDetail: React.FC = () => {
                           </div>
                           <div
                             className="bg-gradient-to-r from-green-50/80 to-emerald-50/80 border border-green-200/50 rounded-2xl p-6 backdrop-blur-sm prose prose-base md:prose-lg prose-slate max-w-none prose-headings:text-slate-800 prose-p:text-slate-700 prose-p:leading-relaxed prose-a:text-blue-600 prose-a:hover:text-blue-700 prose-strong:text-slate-800 prose-ul:text-slate-700 prose-ol:text-slate-700"
-                            dangerouslySetInnerHTML={{ __html: agendaText ? DOMPurify.sanitize(agendaText) : '' }}
+                            dangerouslySetInnerHTML={{ __html: agendaText ? DOMPurify.sanitize(agendaText, DOMPURIFY_CONFIG) : '' }}
                           />
                         </div>
                       ) : null;
@@ -1216,7 +1221,7 @@ const EventDetail: React.FC = () => {
                         <div className="mb-6 sm:mb-12">
                           <div className="text-gray-700 leading-relaxed prose prose-base md:prose-lg prose-slate max-w-none prose-headings:text-slate-800 prose-p:text-slate-700 prose-p:leading-relaxed prose-a:text-blue-600 prose-a:hover:text-blue-700 prose-strong:text-slate-800 prose-ul:text-slate-700 prose-ol:text-slate-700" dangerouslySetInnerHTML={{ __html: (() => {
                               const aboutText = event.eventSections?.find(s => s.section_key === 'about')?.content?.text;
-                              return aboutText ? DOMPurify.sanitize(aboutText) : '';
+                              return aboutText ? DOMPurify.sanitize(aboutText, DOMPURIFY_CONFIG) : '';
                             })() }} />
                         </div>
                          </>
@@ -1244,7 +1249,7 @@ const EventDetail: React.FC = () => {
                             </div>
                             <h2 className="rm-section-title">Event Agenda</h2>
                           </div>
-                          <div className="bg-gradient-to-r from-green-50/80 to-emerald-50/80 border border-green-200/50 rounded-2xl p-6 backdrop-blur-sm prose prose-base md:prose-lg prose-slate max-w-none prose-headings:text-slate-800 prose-p:text-slate-700 prose-p:leading-relaxed prose-a:text-blue-600 prose-a:hover:text-blue-700 prose-strong:text-slate-800 prose-ul:text-slate-700 prose-ol:text-slate-700" dangerouslySetInnerHTML={{ __html: agendaText ? DOMPurify.sanitize(agendaText) : '' }} />
+                          <div className="bg-gradient-to-r from-green-50/80 to-emerald-50/80 border border-green-200/50 rounded-2xl p-6 backdrop-blur-sm prose prose-base md:prose-lg prose-slate max-w-none prose-headings:text-slate-800 prose-p:text-slate-700 prose-p:leading-relaxed prose-a:text-blue-600 prose-a:hover:text-blue-700 prose-strong:text-slate-800 prose-ul:text-slate-700 prose-ol:text-slate-700" dangerouslySetInnerHTML={{ __html: agendaText ? DOMPurify.sanitize(agendaText, DOMPURIFY_CONFIG) : '' }} />
                         </div>
                       ) : null;
                     })()}
@@ -1410,7 +1415,10 @@ const EventDetail: React.FC = () => {
                       )}
                       {hasAbout && (
                       <div className="mb-6 sm:mb-12">
-                        <div className="text-gray-700 leading-relaxed prose prose-base md:prose-lg prose-slate max-w-none" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(event.eventSections?.find(s => s.section_key === 'about')?.content?.text ?? '') }} />
+                        <div className="text-gray-700 leading-relaxed prose prose-base md:prose-lg prose-slate max-w-none" dangerouslySetInnerHTML={{ __html: (() => {
+                              const aboutText = event.eventSections?.find(s => s.section_key === 'about')?.content?.text;
+                              return aboutText ? DOMPurify.sanitize(aboutText, DOMPURIFY_CONFIG) : '';
+                            })() }} />
                       </div>
                       )}
                       {hasHighlights && (
