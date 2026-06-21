@@ -11,6 +11,10 @@ import { supabase } from '../../lib/supabase';
 import { useToast } from '../Academy/UI/use-toast';
 import fallbackImage from '../../assets/RMLogo.webp';
 
+type GalleryItem = { id?: string; image_url?: string };
+type SectionContent = { items?: GalleryItem[] };
+type SectionRow = { section_contents: { content: SectionContent } | { content: SectionContent }[] | null };
+
 const EventsPage: React.FC = () => {
   const { events, loading } = useOptimizedEvents();
   const { toast } = useToast();
@@ -85,9 +89,6 @@ const EventsPage: React.FC = () => {
         }
 
         const imgs: Array<{ id: string; url: string }> = [];
-        type GalleryItem = { id?: string; image_url?: string };
-        type SectionContent = { items?: GalleryItem[] };
-        type SectionRow = { section_contents: { content: SectionContent } | { content: SectionContent }[] | null };
 
         (data ?? []).forEach((row: SectionRow) => {
           const contentRow = Array.isArray(row.section_contents) ? row.section_contents[0] : row.section_contents;
@@ -115,7 +116,7 @@ const EventsPage: React.FC = () => {
       }
     };
     fetchGallery();
-  }, [events.length, toast]);
+  }, [events, toast]);
 
   React.useEffect(() => {
     const handleScroll = () => {
