@@ -1,0 +1,16 @@
+# ============================================================================
+# RAREMINDS WEBSITE - Cloudflare Development Variables
+# ============================================================================
+# Copy this file to .env.local or wrangler.toml for local development
+# These variables are used by wrangler during local development
+# with the dev:pages and dev:full commands
+
+# ============================================================================
+# ZOHO FLOW WEBHOOK - Event Registration Integration
+# ============================================================================
+# Webhook URL that receives form submissions and syncs with Zoho CRM
+# This is called by functions/api/register.ts when users submit event forms
+# Get this from your Zoho Flow dashboard
+
+# Example format: https://flow.zoho.com/api/webhooks/trigger/...
+ZOHO_FLOW_WEBHOOK_URL=https://flow.zoho.com/api/webhooks/trigger/sample-webhook-url

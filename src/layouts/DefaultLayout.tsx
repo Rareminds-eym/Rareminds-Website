@@ -12,9 +12,9 @@ const DefaultLayout: React.FC<DefaultLayoutProps> = ({ children }) => {
   usePageTracking();
 
   return (
-    <div className="flex h-screen flex-col">
+    <div className="flex min-h-screen flex-col">
       <Header navbarOpen={navbarOpen} setNavbarOpen={setNavbarOpen} />
-      <main className="App w-full flex-1 ">{children}</main>
+      <main className="App w-full flex-1">{children}</main>
       <FooterBar hideServices={true} />
       <Toaster />
     </div>

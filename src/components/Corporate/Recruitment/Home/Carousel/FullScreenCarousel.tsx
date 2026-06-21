@@ -3,10 +3,21 @@ import { Icon } from "@iconify/react";
 import { useLocation } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import arrowDown from "@/assets/corporate/Home/Carousal/arrowDown.svg";
+import DOMPurify from 'dompurify';
+import type { Config } from 'dompurify';
 
 // Custom styles for pagination
 import "@/assets/corporate/Home/Carousal/carousel.css";
 import LogoCarousel from "./LogoCarousel";
+
+// Simple sanitization for carousel headings
+const sanitizeHeading = (html: string): string => {
+  const config: Config = {
+    ALLOWED_TAGS: ['span', 'br'],
+    ALLOWED_ATTR: ['class']
+  };
+  return DOMPurify.sanitize(html, config);
+};
 
 interface CarouselSlide {
   heading: string;
@@ -149,7 +160,7 @@ const FullScreenCarousel: React.FC<FullScreenCarouselProps> = ({
                       <motion.h1
                         key={slides[activeIndex].heading}
                         className="text-2xl sm:text-3xl md:text-4xl lg:text-[40px] font-bold !leading-[1.5] md:!leading-[1.4] w-full"
-                        dangerouslySetInnerHTML={{ __html: slides[activeIndex].heading }}
+                        dangerouslySetInnerHTML={{ __html: sanitizeHeading(slides[activeIndex].heading) }}
                         initial={{ opacity: 0, y: 40, scale: 0.95, filter: 'blur(4px)' }}
                         animate={{ opacity: 1, y: 0, scale: 1, filter: 'blur(0px)' }}
                         exit={{ opacity: 0, y: -40, scale: 0.95, filter: 'blur(4px)' }}
