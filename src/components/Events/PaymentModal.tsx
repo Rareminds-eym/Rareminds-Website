@@ -70,12 +70,14 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
     try {
       const paymentsApiUrl = '/api/payments';
 
-      console.log('Creating payment order with:', {
-        registrationId,
-        amount: amountInPaise,
-        currency: 'INR',
-        paymentsApiUrl
-      });
+      if (process.env.NODE_ENV === 'development') {
+        console.log('Creating payment order with:', {
+          registrationId,
+          amount: amountInPaise,
+          currency: 'INR',
+          paymentsApiUrl
+        });
+      }
 
       const receipt = `rcpt_${registrationId}_${Date.now()}`;
 
@@ -100,11 +102,13 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
 
       if (!orderResponse.ok) {
         const errorData = await orderResponse.json().catch(() => ({}));
-        console.error('Payment order creation failed:', {
-          status: orderResponse.status,
-          statusText: orderResponse.statusText,
-          errorData
-        });
+        if (process.env.NODE_ENV === 'development') {
+          console.error('Payment order creation failed:', {
+            status: orderResponse.status,
+            statusText: orderResponse.statusText,
+            errorData
+          });
+        }
         throw new Error(errorData.error?.message || `Failed to create payment order (${orderResponse.status})`);
       }
 
@@ -116,7 +120,9 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
         throw new Error('Razorpay Key ID not returned by payment service');
       }
 
-      console.log('Payment order created:', order);
+      if (process.env.NODE_ENV === 'development') {
+        console.log('Payment order created:', order);
+      }
 
       const options = {
         key: razorpayKeyId,
@@ -127,7 +133,9 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
         order_id: order.id,
         handler: async (paymentResult: any) => {
           try {
-            console.log('Payment successful, verifying...', paymentResult);
+            if (process.env.NODE_ENV === 'development') {
+              console.log('Payment successful, verifying...', paymentResult);
+            }
 
             // Verify payment through Pages Function. The function calls the payment worker service binding.
             const verifyResponse = await fetch(`${paymentsApiUrl}/verify-payment`, {
@@ -144,12 +152,16 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
 
             if (!verifyResponse.ok) {
               const errorData = await verifyResponse.json().catch(() => ({}));
-              console.error('Payment verification failed:', errorData);
+              if (process.env.NODE_ENV === 'development') {
+                console.error('Payment verification failed:', errorData);
+              }
               throw new Error(errorData.error?.message || 'Payment verification failed. Please contact support.');
             }
 
             const verifyResult = await verifyResponse.json();
-            console.log('Payment verified:', verifyResult);
+            if (process.env.NODE_ENV === 'development') {
+              console.log('Payment verified:', verifyResult);
+            }
 
             // Pass payment details back to parent
             onSuccess({
@@ -159,7 +171,9 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
             });
             setProcessing(false);
           } catch (verificationError: any) {
-            console.error('Verification error:', verificationError);
+            if (process.env.NODE_ENV === 'development') {
+              console.error('Verification error:', verificationError);
+            }
             setError(verificationError?.message || 'Payment verification failed. Please contact support.');
             setProcessing(false);
           }
@@ -182,7 +196,9 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
       const rzp = new window.Razorpay(options);
       rzp.open();
     } catch (err: any) {
-      console.error('Payment initiation error:', err);
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Payment initiation error:', err);
+      }
       setError(err?.message || 'Failed to initiate payment. Please try again.');
       setProcessing(false);
     }

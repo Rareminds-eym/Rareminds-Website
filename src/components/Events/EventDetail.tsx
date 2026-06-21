@@ -1,3 +1,5 @@
+import DOMPurify from 'dompurify';
+import type { Config } from 'dompurify';
 import { safeGetItem, safeSetItem } from '@/lib/localStorage';
 import {
   AlertCircle,
@@ -36,6 +38,42 @@ import SingleEventCountdown from './SingleEventCountdown';
 import FloatingActionMenu from './StickyButton/FloatingAction';
 import styles from './TeaserVideoButton.module.css';
 import TeaserVideoModal from './TeaserVideoModal';
+
+// DOMPurify configuration for safe HTML sanitization
+// Strict configuration without div/span/style/class to prevent styling attacks
+const DOMPURIFY_CONFIG: Config = {
+  ALLOWED_TAGS: ['a', 'b', 'br', 'em', 'i', 'li', 'ol', 'p', 'strong', 'ul', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'],
+  ALLOWED_ATTR: ['href', 'title', 'target', 'rel'], // Explicitly exclude 'class' to prevent style injection
+  ALLOW_DATA_ATTR: false,
+  ALLOW_UNKNOWN_PROTOCOLS: false,
+  SAFE_FOR_TEMPLATES: true,
+  FORBID_ATTR: ['onerror', 'onload', 'onclick', 'style', 'class'], // Block class attributes
+  KEEP_CONTENT: true // Preserve text content when stripping disallowed elements
+};
+
+// Add security hook for anchor tags
+DOMPurify.addHook('afterSanitizeAttributes', (node) => {
+  // Ensure node is an Element before accessing Element-specific methods
+  if (!(node instanceof Element)) return;
+  
+  // Secure anchor tags - remove javascript: protocols and add security attributes
+  if (node.tagName === 'A') {
+    const href = node.getAttribute('href') ?? '';
+    if (/^javascript:/i.test(href)) node.removeAttribute('href');
+    node.setAttribute('rel', 'noopener noreferrer');
+  }
+  
+  // Additional safety: strip any class attributes that might have slipped through
+  if (node.hasAttribute('class')) {
+    node.removeAttribute('class');
+  }
+});
+
+// Utility function for sanitizing HTML content
+const sanitizeHtml = (html?: string): string => {
+  if (!html) return '';
+  return DOMPurify.sanitize(html, DOMPURIFY_CONFIG);
+};
 
 // Animated Teaser Video Button Component
 export const TeaserVideoButton: React.FC<{ teaserVideo?: string }> = (props) => {
@@ -163,22 +201,30 @@ const EventDetail: React.FC = () => {
   
   // Debug: Log when modalOpen changes
   React.useEffect(() => {
-    console.log('🎭 EventDetail: Registration modal state changed to:', modalOpen);
+    if (process.env.NODE_ENV === 'development') {
+      console.log('🎭 EventDetail: Registration modal state changed to:', modalOpen);
+    }
   }, [modalOpen]);
   
   // Global message listener for Zoho form (in case HeroSection isn't rendered)
   React.useEffect(() => {
-    console.log('🌐 EventDetail: Setting up global message listener for Zoho forms');
+    if (process.env.NODE_ENV === 'development') {
+      console.log('🌐 EventDetail: Setting up global message listener for Zoho forms');
+    }
     
     const handleGlobalMessage = (event: MessageEvent) => {
       if (event.data && event.data.type === 'ZOHO_IFRAME_LOADED') {
-        console.log('✅ EventDetail Global: Iframe loaded and communication working!');
+        if (process.env.NODE_ENV === 'development') {
+          console.log('✅ EventDetail Global: Iframe loaded and communication working!');
+        }
         return;
       }
       
       if (event.data && event.data.type === 'ZOHO_FORM_SUBMITTING') {
-        console.log('🌐 EventDetail: Received ZOHO_FORM_SUBMITTING at global level:', event.data);
-        console.log('🎫 EventDetail: Opening registration modal from global listener');
+        if (process.env.NODE_ENV === 'development') {
+          console.log('🌐 EventDetail: Received ZOHO_FORM_SUBMITTING at global level:', event.data);
+          console.log('🎫 EventDetail: Opening registration modal from global listener');
+        }
         setModalOpen(true);
       }
     };
@@ -591,7 +637,7 @@ const EventDetail: React.FC = () => {
 
       {/* Main Container with Proper Alignment */}
       <div className="relative z-10 mt-8 sm:mt-0">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 ${event.category?.toLowerCase() === 'webinar' ? 'pt-10 sm:pt-14' : ''}`}>
           {/* Hero Section with Modern Banner - Improved Spacing */}
           {event.category?.toLowerCase() !== 'webinar' && (
             <div className="mb-12 pt-0 sm:pt-8 sm:mb-16">
@@ -897,47 +943,51 @@ const EventDetail: React.FC = () => {
                     {(hasAbout || hasHighlights) && (
                       <div className="rm-card p-4 sm:p-8 lg:p-10">
                         {/* Header Section with Title, Status Badge, and Share Button */}
-                        <div className="flex items-start justify-between mb-4 sm:mb-8">
-                          <div className="flex items-center gap-3 sm:gap-4">
-                            <h2 className="rm-section-title">About The Event</h2>
-                            {/* Dynamic Status Badge */}
-                            <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium capitalize ${getStatusColor(event.status)}`}>
-                              {getStatusIcon(event.status)}
-                              <span className="ml-2">{event.status}</span>
-                            </span>
-                          </div>
-                          {/* Share Button */}
-                          <button
-                            onClick={() => {
-                              if (navigator.share) {
-                                navigator.share({
-                                  title: event.title,
-                                  text: `Check out this event: ${event.title}`,
-                                  url: window.location.href
-                                });
-                              } else {
-                                // Fallback to copy link
-                                navigator.clipboard.writeText(window.location.href);
-                                // Note: toast is not imported, using alert as fallback
-                                alert('Link copied to clipboard!');
-                              }
-                            }}
-                            className="flex items-center gap-2 px-3 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-colors duration-200 shrink-0"
-                            title="Share this event"
-                          >
-                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z" />
-                            </svg>
-                          </button>
-                        </div>
+                        {hasAbout && (
+                          <>
+                            <div className="flex items-start justify-between mb-4 sm:mb-8">
+                              <div className="flex items-center gap-3 sm:gap-4">
+                                <h2 className="rm-section-title">About The Event</h2>
+                                {/* Dynamic Status Badge */}
+                                <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium capitalize ${getStatusColor(event.status)}`}>
+                                  {getStatusIcon(event.status)}
+                                  <span className="ml-2">{event.status}</span>
+                                </span>
+                              </div>
+                              {/* Share Button */}
+                              <button
+                                onClick={() => {
+                                  if (navigator.share) {
+                                    navigator.share({
+                                      title: event.title,
+                                      text: `Check out this event: ${event.title}`,
+                                      url: window.location.href
+                                    });
+                                  } else {
+                                    // Fallback to copy link
+                                    navigator.clipboard.writeText(window.location.href);
+                                    // Note: toast is not imported, using alert as fallback
+                                    alert('Link copied to clipboard!');
+                                  }
+                                }}
+                                className="flex items-center gap-2 px-3 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-colors duration-200 shrink-0"
+                                title="Share this event"
+                              >
+                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z" />
+                                </svg>
+                              </button>
+                            </div>
 
-                        {/* Event Description */}
-                        <div className="mb-6 sm:mb-12">
-                          <div
-                            className="text-gray-700 leading-relaxed prose prose-base md:prose-lg prose-slate max-w-none prose-headings:text-slate-800 prose-p:text-slate-700 prose-p:leading-relaxed prose-a:text-blue-600 prose-a:hover:text-blue-700 prose-strong:text-slate-800 prose-ul:text-slate-700 prose-ol:text-slate-700"
-                            dangerouslySetInnerHTML={{ __html: event.eventSections?.find(s => s.section_key === 'about')?.content?.text ?? '' }}
-                          />
-                        </div>
+                            {/* Event Description */}
+                            <div className="mb-6 sm:mb-12">
+                              <div
+                                className="text-gray-700 leading-relaxed prose prose-base md:prose-lg prose-slate max-w-none prose-headings:text-slate-800 prose-p:text-slate-700 prose-p:leading-relaxed prose-a:text-blue-600 prose-a:hover:text-blue-700 prose-strong:text-slate-800 prose-ul:text-slate-700 prose-ol:text-slate-700"
+                                dangerouslySetInnerHTML={{ __html: sanitizeHtml(event.eventSections?.find(s => s.section_key === 'about')?.content?.text) }}
+                              />
+                            </div>
+                          </>
+                        )}
 
                         {/* Key Highlights Section */}
                         {hasHighlights && (
@@ -977,7 +1027,7 @@ const EventDetail: React.FC = () => {
                           </div>
                           <div
                             className="bg-gradient-to-r from-green-50/80 to-emerald-50/80 border border-green-200/50 rounded-2xl p-6 backdrop-blur-sm prose prose-base md:prose-lg prose-slate max-w-none prose-headings:text-slate-800 prose-p:text-slate-700 prose-p:leading-relaxed prose-a:text-blue-600 prose-a:hover:text-blue-700 prose-strong:text-slate-800 prose-ul:text-slate-700 prose-ol:text-slate-700"
-                            dangerouslySetInnerHTML={{ __html: agendaText }}
+                            dangerouslySetInnerHTML={{ __html: sanitizeHtml(agendaText) }}
                           />
                         </div>
                       ) : null;
@@ -1192,20 +1242,24 @@ const EventDetail: React.FC = () => {
                   <div className="space-y-6">
                     {(hasAbout || hasHighlights) && (
                       <div className="rm-card p-4 sm:p-8 lg:p-10">
-                        <div className="flex items-start justify-between mb-4 sm:mb-8">
-                          <div className="flex items-center gap-3 sm:gap-4">
-                            <h2 className="rm-section-title">About The Event</h2>
-                            <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium capitalize ${getStatusColor(event.status)}`}>
-                              {getStatusIcon(event.status)}<span className="ml-2">{event.status}</span>
-                            </span>
-                          </div>
-                          <button onClick={() => { if (navigator.share) { navigator.share({ title: event.title, text: `Check out this event: ${event.title}`, url: window.location.href }); } else { navigator.clipboard.writeText(window.location.href); alert('Link copied to clipboard!'); } }} className="flex items-center gap-2 px-3 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-colors duration-200 shrink-0" title="Share this event">
-                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z" /></svg>
-                          </button>
-                        </div>
-                        <div className="mb-6 sm:mb-12">
-                          <div className="text-gray-700 leading-relaxed prose prose-base md:prose-lg prose-slate max-w-none prose-headings:text-slate-800 prose-p:text-slate-700 prose-p:leading-relaxed prose-a:text-blue-600 prose-a:hover:text-blue-700 prose-strong:text-slate-800 prose-ul:text-slate-700 prose-ol:text-slate-700" dangerouslySetInnerHTML={{ __html: event.eventSections?.find(s => s.section_key === 'about')?.content?.text ?? '' }} />
-                        </div>
+                        {hasAbout && (
+                          <>
+                            <div className="flex items-start justify-between mb-4 sm:mb-8">
+                              <div className="flex items-center gap-3 sm:gap-4">
+                                <h2 className="rm-section-title">About The Event</h2>
+                                <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium capitalize ${getStatusColor(event.status)}`}>
+                                  {getStatusIcon(event.status)}<span className="ml-2">{event.status}</span>
+                                </span>
+                              </div>
+                              <button onClick={() => { if (navigator.share) { navigator.share({ title: event.title, text: `Check out this event: ${event.title}`, url: window.location.href }); } else { navigator.clipboard.writeText(window.location.href); alert('Link copied to clipboard!'); } }} className="flex items-center gap-2 px-3 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-colors duration-200 shrink-0" title="Share this event">
+                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z" /></svg>
+                              </button>
+                            </div>
+                            <div className="mb-6 sm:mb-12">
+                              <div className="text-gray-700 leading-relaxed prose prose-base md:prose-lg prose-slate max-w-none prose-headings:text-slate-800 prose-p:text-slate-700 prose-p:leading-relaxed prose-a:text-blue-600 prose-a:hover:text-blue-700 prose-strong:text-slate-800 prose-ul:text-slate-700 prose-ol:text-slate-700" dangerouslySetInnerHTML={{ __html: sanitizeHtml(event.eventSections?.find(s => s.section_key === 'about')?.content?.text) }} />
+                            </div>
+                          </>
+                        )}
                         {hasHighlights && (
                           <div>
                             <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6">Key Highlights</h3>
@@ -1229,7 +1283,7 @@ const EventDetail: React.FC = () => {
                             </div>
                             <h2 className="rm-section-title">Event Agenda</h2>
                           </div>
-                          <div className="bg-gradient-to-r from-green-50/80 to-emerald-50/80 border border-green-200/50 rounded-2xl p-6 backdrop-blur-sm prose prose-base md:prose-lg prose-slate max-w-none prose-headings:text-slate-800 prose-p:text-slate-700 prose-p:leading-relaxed prose-a:text-blue-600 prose-a:hover:text-blue-700 prose-strong:text-slate-800 prose-ul:text-slate-700 prose-ol:text-slate-700" dangerouslySetInnerHTML={{ __html: agendaText }} />
+                          <div className="bg-gradient-to-r from-green-50/80 to-emerald-50/80 border border-green-200/50 rounded-2xl p-6 backdrop-blur-sm prose prose-base md:prose-lg prose-slate max-w-none prose-headings:text-slate-800 prose-p:text-slate-700 prose-p:leading-relaxed prose-a:text-blue-600 prose-a:hover:text-blue-700 prose-strong:text-slate-800 prose-ul:text-slate-700 prose-ol:text-slate-700" dangerouslySetInnerHTML={{ __html: sanitizeHtml(agendaText) }} />
                         </div>
                       ) : null;
                     })()}
@@ -1378,21 +1432,27 @@ const EventDetail: React.FC = () => {
                   </div>
                   <div className="space-y-6">
                     {/* About The Event */}
-                    <div className="rm-card p-4 sm:p-8 lg:p-10">
-                      <div className="flex items-start justify-between mb-4 sm:mb-8">
-                        <div className="flex items-center gap-3 sm:gap-4">
-                          <h2 className="rm-section-title">About The Event</h2>
-                          <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium capitalize ${getStatusColor(event.status)}`}>
-                            {getStatusIcon(event.status)}<span className="ml-2">{event.status}</span>
-                          </span>
-                        </div>
-                        <button onClick={() => { if (navigator.share) { navigator.share({ title: event.title, text: `Check out this event: ${event.title}`, url: window.location.href }); } else { navigator.clipboard.writeText(window.location.href); alert('Link copied to clipboard!'); } }} className="flex items-center gap-2 px-3 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-colors duration-200 shrink-0" title="Share this event">
-                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z" /></svg>
-                        </button>
-                      </div>
-                      <div className="mb-6 sm:mb-12">
-                        <div className="text-gray-700 leading-relaxed prose prose-base md:prose-lg prose-slate max-w-none" dangerouslySetInnerHTML={{ __html: event.eventSections?.find(s => s.section_key === 'about')?.content?.text ?? '' }} />
-                      </div>
+                    {(hasAbout || hasHighlights) && (
+                      <div className="rm-card p-4 sm:p-8 lg:p-10">
+                        {hasAbout && (
+                          <>
+                            <div className="flex items-start justify-between mb-4 sm:mb-8">
+                              <div className="flex items-center gap-3 sm:gap-4">
+                                <h2 className="rm-section-title">About The Event</h2>
+                                <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium capitalize ${getStatusColor(event.status)}`}>
+                                  {getStatusIcon(event.status)}<span className="ml-2">{event.status}</span>
+                                </span>
+                              </div>
+                              <button onClick={() => { if (navigator.share) { navigator.share({ title: event.title, text: `Check out this event: ${event.title}`, url: window.location.href }); } else { navigator.clipboard.writeText(window.location.href); alert('Link copied to clipboard!'); } }} className="flex items-center gap-2 px-3 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-colors duration-200 shrink-0" title="Share this event">
+                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z" /></svg>
+                              </button>
+                            </div>
+                            <div className="mb-6 sm:mb-12">
+                              <div className="text-gray-700 leading-relaxed prose prose-base md:prose-lg prose-slate max-w-none" dangerouslySetInnerHTML={{ __html: sanitizeHtml(event.eventSections?.find(s => s.section_key === 'about')?.content?.text) }} />
+                            </div>
+                          </>
+                        )}
+                      {hasHighlights && (
                       <div>
                         <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6">Key Highlights</h3>
                         {(() => {
@@ -1401,7 +1461,9 @@ const EventDetail: React.FC = () => {
                           return (<ul className="space-y-2 text-gray-700 text-sm md:text-base">{rawItems.map(item => (<li key={item.id} className="flex items-start"><span className="inline-block w-2 h-2 bg-blue-500 rounded-full mt-2 mr-3 shrink-0"></span>{item.text}</li>))}</ul>);
                         })()}
                       </div>
+                      )}
                     </div>
+                    )}
                   </div>
                 </>
               );
@@ -1423,7 +1485,9 @@ const EventDetail: React.FC = () => {
                   eventId={event.id}
                   eventName={event.title}
                   onRegisterClick={() => {
-                    console.log('🎯 EventDetail: onRegisterClick called - opening registration modal');
+                    if (process.env.NODE_ENV === 'development') {
+                      console.log('🎯 EventDetail: onRegisterClick called - opening registration modal');
+                    }
                     setModalOpen(true);
                   }}
                 />

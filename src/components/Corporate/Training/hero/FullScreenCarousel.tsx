@@ -2,9 +2,20 @@ import React, { useState, useEffect, useRef } from "react";
 import { Icon } from "@iconify/react";
 import { AnimatePresence, motion } from "framer-motion";
 import arrowDown from "@/assets/corporate/Home/Carousal/arrowDown.svg";
+import DOMPurify from 'dompurify';
+import type { Config } from 'dompurify';
 
 // Custom styles for pagination
 import "@/assets/corporate/Home/Carousal/carousel.css";
+
+// Simple sanitization for carousel headings
+const sanitizeHeading = (html: string): string => {
+  const config: Config = {
+    ALLOWED_TAGS: ['span', 'br'],
+    ALLOWED_ATTR: ['class']
+  };
+  return DOMPurify.sanitize(html, config);
+};
 
 interface CarouselSlide {
   heading: string;
@@ -154,7 +165,7 @@ const FullScreenCarousel: React.FC<FullScreenCarouselProps> = ({
                         key={slides[activeIndex].heading}
                         className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-semibold !leading-[1.5] md:!leading-[1.4] w-full"
                         dangerouslySetInnerHTML={{
-                          __html: slides[activeIndex].heading,
+                          __html: sanitizeHeading(slides[activeIndex].heading),
                         }}
                         initial={{
                           opacity: 0,

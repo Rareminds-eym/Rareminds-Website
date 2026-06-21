@@ -29,7 +29,7 @@ const DynamicEventForm: React.FC<DynamicEventFormProps> = ({
   
   // Debug logging (only in development)
   useEffect(() => {
-    if (form && fields.length > 0) {
+    if (form && fields.length > 0 && process.env.NODE_ENV === 'development') {
       console.log('📝 Form loaded:', {
         title: form.title,
         fields: fields.map(f => f.field_name),
@@ -125,40 +125,56 @@ const DynamicEventForm: React.FC<DynamicEventFormProps> = ({
 
   // Fetch form data - REQUIRED
   useEffect(() => {
-    console.log('DynamicEventForm: formId prop received:', formId);
-    console.log('DynamicEventForm: eventId prop received:', eventId);
+    if (process.env.NODE_ENV === 'development') {
+      console.log('DynamicEventForm: formId prop received:', formId);
+      console.log('DynamicEventForm: eventId prop received:', eventId);
+    }
     
     if (!formId) {
-      console.error('DynamicEventForm: No formId provided - cannot load form');
+      if (process.env.NODE_ENV === 'development') {
+        console.error('DynamicEventForm: No formId provided - cannot load form');
+      }
       setFetchError('No form configured for this event. Please contact the event organizer.');
       setIsLoading(false);
       return;
     }
 
     const fetchForm = async () => {
-      console.log('DynamicEventForm: Fetching form data for formId:', formId);
+      if (process.env.NODE_ENV === 'development') {
+        console.log('DynamicEventForm: Fetching form data for formId:', formId);
+      }
       setIsLoading(true);
       setFetchError(null);
       
       try {
         const formData = await getFormById(formId);
-        console.log('DynamicEventForm: Form data received:', formData);
+        if (process.env.NODE_ENV === 'development') {
+          console.log('DynamicEventForm: Form data received:', formData);
+        }
         
         if (!formData) {
-          console.error('DynamicEventForm: Form not found for ID:', formId);
+          if (process.env.NODE_ENV === 'development') {
+            console.error('DynamicEventForm: Form not found for ID:', formId);
+          }
           setFetchError('Registration form not found. Please contact the event organizer.');
           setForm(null);
         } else if (!formData.fields || formData.fields.length === 0) {
-          console.error('DynamicEventForm: Form has no fields');
+          if (process.env.NODE_ENV === 'development') {
+            console.error('DynamicEventForm: Form has no fields');
+          }
           setFetchError('Registration form is empty. Please contact the event organizer.');
           setForm(null);
         } else {
-          console.log('DynamicEventForm: Setting form with', formData.fields.length, 'fields');
+          if (process.env.NODE_ENV === 'development') {
+            console.log('DynamicEventForm: Setting form with', formData.fields.length, 'fields');
+          }
           setForm(formData);
           setFetchError(null);
         }
       } catch (error) {
-        console.error('DynamicEventForm: Error fetching form:', error);
+        if (process.env.NODE_ENV === 'development') {
+          console.error('DynamicEventForm: Error fetching form:', error);
+        }
         setFetchError('Failed to load registration form. Please try again or contact support.');
         setForm(null);
       } finally {

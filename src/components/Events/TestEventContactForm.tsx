@@ -9,12 +9,10 @@ import { toast, Toaster } from 'sonner';
 const TestEventContactForm: React.FC = () => {
   const handleSuccess = () => {
     toast.success('✅ Form submitted successfully!');
-    console.log('Form submitted successfully!');
   };
 
   const handleError = (error: string) => {
     toast.error(`❌ Form error: ${error}`);
-    console.error('Form error:', error);
   };
 
   // Test data - replace with real event ID from your database

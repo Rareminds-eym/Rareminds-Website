@@ -43,20 +43,17 @@ const TeaserVideoModal: React.FC<TeaserVideoModalProps> = ({ open, videoUrl, onC
   }, []);
 
   const handleError = (error?: any) => {
-    console.error('Video loading error:', error);
     setHasError(true);
     setIsLoading(false);
     setErrorMessage(error?.message || 'Failed to load video. The video URL might be incorrect or the file may not be accessible.');
   };
 
   const handleReady = () => {
-    console.log('Video ready to play');
     setIsLoading(false);
     setLoadingTimeout(false);
   };
   
   const handleRetry = () => {
-    console.log('Retrying video load...');
     setHasError(false);
     setIsLoading(true);
     setLoadingTimeout(false);
@@ -149,11 +146,9 @@ const TeaserVideoModal: React.FC<TeaserVideoModalProps> = ({ open, videoUrl, onC
             onError={handleError}
             onLoadedData={handleReady}
             onCanPlay={() => {
-              console.log('Base64 video can play');
               setIsLoading(false);
             }}
             onLoadStart={() => {
-              console.log('Base64 video loading started');
               setIsLoading(true);
             }}
             style={{ maxHeight: '480px' }}
@@ -223,7 +218,6 @@ const TeaserVideoModal: React.FC<TeaserVideoModalProps> = ({ open, videoUrl, onC
           onError={handleError}
           onReady={handleReady}
           onStart={() => {
-            console.log('Video started playing');
             setIsLoading(false);
           }}
           onProgress={() => {

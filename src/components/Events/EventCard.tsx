@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import RegistrationModal from './RegistrationModal';
 import { Event } from '../../types/Events/event';
 import { Calendar, Clock, MapPin, Users, Tag } from 'lucide-react';
-import compact from 'lodash/compact';
+import fallbackImage from '../../assets/RMLogo.webp';
 
 interface EventCardProps {
   event: Event;
@@ -12,11 +11,11 @@ interface EventCardProps {
 
 
 const EventCard: React.FC<EventCardProps> = ({ event, compact = false }) => {
-  const [modalOpen, setModalOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [imgError, setImgError] = useState(false);
   
   // Track mobile viewport to use appropriate image
-  React.useEffect(() => {
+  useEffect(() => {
     const mq = window.matchMedia('(max-width: 640px)');
     const onChange = (e: MediaQueryListEvent) => setIsMobile(e.matches);
     setIsMobile(mq.matches);
@@ -27,6 +26,11 @@ const EventCard: React.FC<EventCardProps> = ({ event, compact = false }) => {
       else (mq as any).removeListener(onChange);
     };
   }, []);
+
+  // Reset imgError when image source changes
+  useEffect(() => {
+    setImgError(false);
+  }, [event.media_metadata?.featured_image, event.media_metadata?.mobile_featured_image, event.media_metadata?.event_banner]);
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-US', {
       year: 'numeric',
@@ -53,34 +57,32 @@ const EventCard: React.FC<EventCardProps> = ({ event, compact = false }) => {
   return (
     <Link
       to={`/events/${event.slug}`}
-      className={`block bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden group cursor-pointer ${compact ? 'min-h-[180px]' : ''}`}
+      className={`flex flex-col h-full bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden group cursor-pointer ${compact ? 'min-h-[180px]' : ''}`}
       style={{ textDecoration: 'none' }}
     >
       {/* Event Image */}
-      {(event.media_metadata?.featured_image || event.media_metadata?.mobile_featured_image) && (
-        <div className="relative h-40 sm:h-48 overflow-hidden">
-          <img
-            src={
-              isMobile && event.media_metadata?.mobile_featured_image
-                ? event.media_metadata.mobile_featured_image
-                : event.media_metadata?.featured_image
-            }
-            alt={event.title}
-            className="w-full h-full object-cover object-center transition-transform duration-300 group-hover:scale-105"
-            onError={(e) => {
-              const target = e.target as HTMLImageElement;
-              if (isMobile && event.media_metadata?.mobile_featured_image && target.src === event.media_metadata.mobile_featured_image) {
-                target.src = event.media_metadata?.featured_image || '';
-              }
-            }}
-          />
-          <div className="absolute top-2 right-2">
-            <span className={`px-2 py-0.5 rounded-full text-xs font-medium capitalize ${getStatusColor(event.status)}`}>{event.status}</span>
-          </div>
+      <div className="relative h-40 sm:h-48 overflow-hidden bg-gray-100 flex-shrink-0">
+        <img
+          src={
+            isMobile && event.media_metadata?.mobile_featured_image
+              ? event.media_metadata.mobile_featured_image
+              : event.media_metadata?.featured_image || event.media_metadata?.event_banner || fallbackImage
+          }
+          alt={event.title}
+          className={
+          imgError
+              ? 'w-32 h-32 object-contain mx-auto mt-12'
+              : 'w-full h-full object-cover object-center transition-transform duration-300 group-hover:scale-105'
+          }
+          onLoad={() => setImgError(false)}
+          onError={() => setImgError(true)}
+        />
+        <div className="absolute top-2 right-2">
+          <span className={`px-2 py-0.5 rounded-full text-xs font-medium capitalize ${getStatusColor(event.status)}`}>{event.status}</span>
         </div>
-      )}
+      </div>
 
-      <div className={`${compact ? 'p-3' : 'p-6'}`} style={{ backgroundColor: '#eef5ff', borderRadius: '0 0 0.75rem 0.75rem' }}>
+      <div className={`flex flex-col flex-1 ${compact ? 'p-3' : 'p-6'}`} style={{ backgroundColor: '#eef5ff', borderRadius: '0 0 0.75rem 0.75rem' }}>
         {/* Show only category in compact (view all) mode, tags hidden */}
         {compact ? (
           event.category && (
@@ -109,26 +111,27 @@ const EventCard: React.FC<EventCardProps> = ({ event, compact = false }) => {
         )}
 
         {/* Event Title */}
-        <h3 className={`${compact ? 'text-base mb-2' : 'text-xl mb-3'} font-bold text-gray-900 line-clamp-2 group-hover:text-blue-600 transition-colors`}>
+        <h3 className={`${compact ? 'text-base mb-3' : 'text-xl mb-5'} font-bold text-gray-900 line-clamp-3 group-hover:text-blue-600 transition-colors`}>
           {event.title}
         </h3>
-
+        <div className="flex-grow" />
         {/* Event Details */}
-        <div className={`space-y-1 ${compact ? 'mb-2' : 'mb-4'}`}>
+        <div className={`space-y-1 ${compact ? 'mb-2' : 'mb-3'}`}>
           <div className="flex items-center text-xs text-gray-500">
             <Calendar className="w-4 h-4 mr-1 flex-shrink-0" />
             <span>{formatDate(event.event_date)} at {event.event_time}</span>
           </div>
-
-          <div className="flex items-center text-xs text-gray-500">
-            <Clock className="w-4 h-4 mr-1 flex-shrink-0" />
-            <span>{event.duration}</span>
-          </div>
-
           <div className="flex items-center text-xs text-gray-500">
             <MapPin className="w-4 h-4 mr-1 flex-shrink-0" />
             <span>{event.location_metadata?.address}</span>
           </div>
+
+          {event.duration && (
+            <div className="flex items-center gap-1 text-sm text-gray-500">
+              <Clock className="w-4 h-4" />
+              <span>{event.duration}</span>
+            </div>
+          )}
 
           <div className="flex items-center text-xs text-gray-500">
             <Users className="w-4 h-4 mr-1 flex-shrink-0" />
@@ -137,7 +140,7 @@ const EventCard: React.FC<EventCardProps> = ({ event, compact = false }) => {
         </div>
 
         {/* Organizer Info */}
-        <div className={`border-t ${compact ? 'pt-2' : 'pt-4'}`}>
+        <div className={`border-t mt-auto ${compact ? 'pt-2' : 'pt-4'}`}>
           <p className="text-xs text-gray-500">
             Organized by <span className="font-medium text-gray-700">{event.organizer_metadata?.name}</span>
           </p>

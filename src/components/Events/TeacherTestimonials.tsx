@@ -12,6 +12,8 @@ const TeacherTestimonials: React.FC<TeacherTestimonialsProps> = ({ content }) =>
   const heading = content.heading;
   const testimonials = (content.items as Array<{ name: string; designation: string; school: string; location: string; rating: number; review: string }> | undefined) ?? [];
 
+  if (!heading && testimonials.length === 0) return null;
+
   return (
     <section className="mt-8 sm:mt-12 rounded-3xl bg-white px-4 py-12 sm:px-6 sm:py-16 lg:px-10 lg:py-20">
       <div className="mx-auto max-w-8xl">
