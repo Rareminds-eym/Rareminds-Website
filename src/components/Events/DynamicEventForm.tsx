@@ -8,7 +8,7 @@ import { getFormById } from '../../services/dynamicFormService';
 interface DynamicEventFormProps {
   formId?: string | null;
   eventId: string;
-  onSubmitSuccess?: (formData: Record<string, any>) => void | Promise<void>;
+  onSubmitSuccess?: (formData: Record<string, unknown>) => void | Promise<void>;
   onCancel?: () => void;
 }
 
@@ -190,25 +190,33 @@ const DynamicEventForm: React.FC<DynamicEventFormProps> = ({
     setSubmitError(null);
 
     try {
-      if (process.env.NODE_ENV === 'development') {
-        console.log('📋 Form submission:', {
-          fields: Object.keys(data),
-          email: data.email || data.email_address || 'not found',
-          hasData: Object.keys(data).length > 0
-        });
-      }
+      // Ensure all checkbox fields are included with boolean values
+      // react-hook-form only includes checked checkboxes, so we need to add unchecked ones
+      const completeData: Record<string, unknown> = { ...data };
       
-      // Pass the form data back to parent (HeoSection) to handle registration and payment
-      await onSubmitSuccess?.(data);
+      fields.forEach(field => {
+        if (field.field_type === 'checkbox') {
+          // If checkbox is not in data, it means it's unchecked
+          if (!(field.field_name in completeData)) {
+            completeData[field.field_name] = false;
+          } else {
+            // Convert checkbox value to proper boolean
+            // react-hook-form might send true, "on", or other values
+            const value = completeData[field.field_name];
+            completeData[field.field_name] = value === true || value === 'on' || value === 'true';
+          }
+        }
+      });
+      
+      // Pass the complete form data back to parent (HeoSection) to handle registration and payment
+      await onSubmitSuccess?.(completeData);
       
       // Reset form and submitting state after successful submission
       reset();
       setIsSubmitting(false);
-    } catch (error: any) {
-      if (process.env.NODE_ENV === 'development') {
-        console.error('Submit error:', error);
-      }
-      const errorMessage = error?.message || 'An unexpected error occurred. Please try again.';
+    } catch (error: unknown) {
+      console.error('Submit error:', error);
+      const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred. Please try again.';
       setSubmitError(errorMessage);
       setIsSubmitting(false);
     }
