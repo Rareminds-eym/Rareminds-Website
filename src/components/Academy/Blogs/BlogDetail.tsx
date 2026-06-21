@@ -8,7 +8,31 @@ import { useToast } from "@/hooks/use-toast";
 import { motion } from "framer-motion";
 import AcademyHeader from "@/components/Header/AcademyHeader";
 import FloatingActionMenu from "@/components/Academy/StickyButton/StickyButton/FloatingAction";
-import styles from "./styles.module.css"; // Assuming you have a CSS module for styles
+import styles from "./styles.module.css";
+import DOMPurify from 'dompurify';
+
+// DOMPurify configuration for blog content sanitization
+const DOMPURIFY_CONFIG = {
+  ALLOWED_TAGS: ['a', 'b', 'br', 'em', 'i', 'li', 'ol', 'p', 'strong', 'ul', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'blockquote', 'code', 'pre'],
+  ALLOWED_ATTR: ['href', 'title', 'target', 'rel'],
+  ALLOW_DATA_ATTR: false,
+  ALLOW_UNKNOWN_PROTOCOLS: false,
+  HOOKS: {
+    afterSanitizeAttributes: (node: Element) => {
+      if (!(node instanceof Element)) return;
+      if (node.tagName === 'A') {
+        const href = node.getAttribute('href') ?? '';
+        if (/^javascript:/i.test(href)) node.removeAttribute('href');
+        node.setAttribute('rel', 'noopener noreferrer');
+      }
+    }
+  }
+};
+
+const sanitizeHtml = (html?: string): string => {
+  if (!html) return '';
+  return DOMPurify.sanitize(html, DOMPURIFY_CONFIG);
+};
 
 // Supabase blog post interface
 interface BlogPost {
@@ -322,7 +346,7 @@ const BlogDetail = () => {
               {/* Article Content */}
               <div
                 className={`${styles.blogContent} prose prose-lg max-w-none prose-headings:text-gray-900 prose-headings:font-bold prose-p:text-gray-700 prose-p:leading-relaxed prose-a:text-red-500 prose-a:no-underline hover:prose-a:underline prose-strong:text-gray-900 prose-blockquote:border-red-500 prose-blockquote:bg-red-50 prose-blockquote:text-gray-800`}
-                dangerouslySetInnerHTML={{ __html: post.content } }
+                dangerouslySetInnerHTML={{ __html: sanitizeHtml(post.content) }}
               />
 
               {/* Author Profile */}

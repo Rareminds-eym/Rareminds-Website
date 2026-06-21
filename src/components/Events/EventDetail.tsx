@@ -39,26 +39,19 @@ import styles from './TeaserVideoButton.module.css';
 import TeaserVideoModal from './TeaserVideoModal';
 
 // DOMPurify configuration for safe HTML sanitization
+// Strict configuration without div/span/style to prevent styling attacks
 const DOMPURIFY_CONFIG = {
-  ALLOWED_TAGS: ['a', 'b', 'br', 'em', 'i', 'li', 'ol', 'p', 'strong', 'ul', 'span', 'div', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'],
-  ALLOWED_ATTR: ['href', 'title', 'target', 'rel', 'style'],
+  ALLOWED_TAGS: ['a', 'b', 'br', 'em', 'i', 'li', 'ol', 'p', 'strong', 'ul', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'],
+  ALLOWED_ATTR: ['href', 'title', 'target', 'rel'],
   ALLOW_DATA_ATTR: false,
   ALLOW_UNKNOWN_PROTOCOLS: false,
   SAFE_FOR_TEMPLATES: true,
-  FORBID_ATTR: ['onerror', 'onload', 'onclick'],
+  FORBID_ATTR: ['onerror', 'onload', 'onclick', 'style'],
   HOOKS: {
     afterSanitizeAttributes: (node: Element) => {
       // Ensure node is an Element before accessing Element-specific methods
       if (!(node instanceof Element)) return;
       
-      // Block dangerous CSS properties after sanitization
-      if (node.hasAttribute('style')) {
-        const style = node.getAttribute('style') ?? '';
-        // Strip expression(), url(), and javascript: from inline styles
-        if (/expression|javascript:|url\s*\(/i.test(style)) {
-          node.removeAttribute('style');
-        }
-      }
       // Secure anchor tags
       if (node.tagName === 'A') {
         const href = node.getAttribute('href') ?? '';
