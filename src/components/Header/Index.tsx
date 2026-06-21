@@ -40,7 +40,10 @@ const Index: React.FC<HeaderProps> = ({ navbarOpen, setNavbarOpen }) => {
     return () => {
         isMounted = false;
         window.removeEventListener('scroll', onScroll);
-        if (rafId !== null) cancelAnimationFrame(rafId);
+        if (rafId !== null) {
+            cancelAnimationFrame(rafId);
+            rafId = null;
+        }
     };
 }, []);
 
