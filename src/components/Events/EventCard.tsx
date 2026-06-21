@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Event } from '../../types/Events/event';
 import { Calendar, Clock, MapPin, Users, Tag } from 'lucide-react';
@@ -15,7 +15,7 @@ const EventCard: React.FC<EventCardProps> = ({ event, compact = false }) => {
   const [imgError, setImgError] = useState(false);
   
   // Track mobile viewport to use appropriate image
-  React.useEffect(() => {
+  useEffect(() => {
     const mq = window.matchMedia('(max-width: 640px)');
     const onChange = (e: MediaQueryListEvent) => setIsMobile(e.matches);
     setIsMobile(mq.matches);
@@ -28,7 +28,7 @@ const EventCard: React.FC<EventCardProps> = ({ event, compact = false }) => {
   }, []);
 
   // Reset imgError when image source changes
-  React.useEffect(() => {
+  useEffect(() => {
     setImgError(false);
   }, [event.media_metadata?.featured_image, event.media_metadata?.mobile_featured_image, event.media_metadata?.event_banner]);
   const formatDate = (dateString: string) => {

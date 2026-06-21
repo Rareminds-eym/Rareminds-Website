@@ -122,8 +122,7 @@ const EventsPage: React.FC = () => {
       }
     };
     void fetchGallery();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [events]);
+  }, [events, toast]);
 
   React.useEffect(() => {
     const handleScroll = () => {
@@ -458,7 +457,7 @@ const EventsPage: React.FC = () => {
                   <div className="mt-4 rounded-xl overflow-hidden shadow-lg relative flex-1 min-h-48">
                     <div
                       className="absolute inset-x-0 top-0 flex flex-col animate-testimonial-scroll hover:[animation-play-state:paused]"
-                      style={{ '--duration': `${galleryImages.length * 6}s` } as GalleryStyles}
+                      style={{ '--duration': `${galleryImages.length * 12}s` } as GalleryStyles}
                     >
                       {[...galleryImages, ...galleryImages].map((img, idx) => (
                         <img
