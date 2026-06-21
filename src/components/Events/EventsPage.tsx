@@ -85,9 +85,14 @@ const EventsPage: React.FC = () => {
         }
 
         const imgs: Array<{ id: string; url: string }> = [];
-        (data ?? []).forEach((row: { section_contents: { content: unknown } | { content: unknown }[] | null }) => {
+        type GalleryItem = { id?: string; image_url?: string };
+        type SectionContent = { items?: GalleryItem[] };
+        type SectionRow = { section_contents: { content: SectionContent } | { content: SectionContent }[] | null };
+
+        (data ?? []).forEach((row: SectionRow) => {
           const contentRow = Array.isArray(row.section_contents) ? row.section_contents[0] : row.section_contents;
-          const items = ((contentRow?.content as { items?: Array<{ id?: string; image_url?: string }> } | null)?.items) ?? [];
+          const content = contentRow?.content;
+          const items: GalleryItem[] = content?.items ?? [];
           items.forEach(item => {
             if (item.image_url?.trim()) {
               imgs.push({ id: item.id ?? item.image_url, url: item.image_url });
@@ -110,11 +115,7 @@ const EventsPage: React.FC = () => {
       }
     };
     fetchGallery();
-  }, [events.length]);
-
-  React.useEffect(() => {
-    if (galleryImages.length < 2) return;
-  }, [galleryImages.length]);
+  }, [events.length, toast]);
 
   React.useEffect(() => {
     const handleScroll = () => {
@@ -357,7 +358,6 @@ const EventsPage: React.FC = () => {
 
       {/* Main Content */}
       <div className="container mx-auto px-8 md:px-32 py-8">
-        {true ? (
           <>
             {/* Event Statistics */}
             {/* Mobile: horizontal scrollable cards */}
@@ -665,24 +665,6 @@ const EventsPage: React.FC = () => {
             )}
             {/* ...sticky filter button and bottom drawer removed for mobile... */}
           </>
-        ) : (
-          <div className="text-center py-16">
-            <Calendar className="w-20 h-20 text-gray-400 mx-auto mb-6" />
-            <h2 className="text-2xl font-semibold text-gray-700 mb-4">No Events Available</h2>
-            <p className="text-gray-500 text-lg mb-8">
-              There are currently no events to display. Check back soon for exciting upcoming events!
-            </p>
-            <div className="bg-white rounded-lg shadow-lg p-8 max-w-md mx-auto">
-              <h3 className="text-lg font-semibold text-gray-800 mb-4">Stay Updated</h3>
-              <p className="text-gray-600 mb-4">
-                Be the first to know about new events and workshops.
-              </p>
-              <button className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-6 rounded-lg transition-colors">
-                Notify Me
-              </button>
-            </div>
-          </div>
-        )}
       </div>
       {/* Back to Top Button */}
       {showTopBtn && (

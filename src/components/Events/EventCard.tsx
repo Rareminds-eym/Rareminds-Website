@@ -15,7 +15,7 @@ interface EventCardProps {
 const EventCard: React.FC<EventCardProps> = ({ event, compact = false }) => {
   const [modalOpen, setModalOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
-  
+  const [imgError, setImgError] = useState(false);
   // Track mobile viewport to use appropriate image
   React.useEffect(() => {
     const mq = window.matchMedia('(max-width: 640px)');
@@ -63,15 +63,15 @@ const EventCard: React.FC<EventCardProps> = ({ event, compact = false }) => {
           src={
             isMobile && event.media_metadata?.mobile_featured_image
               ? event.media_metadata.mobile_featured_image
-              : event.media_metadata?.featured_image || event.media_metadata?.event_banner || ''
+              : event.media_metadata?.featured_image || event.media_metadata?.event_banner || fallbackImage
           }
           alt={event.title}
-          className="w-full h-full object-cover object-center transition-transform duration-300 group-hover:scale-105"
-          onError={(e) => {
-            const img = e.target as HTMLImageElement;
-            img.src = fallbackImage;
-            img.className = 'w-32 h-32 object-contain mx-auto mt-12';
-          }}
+          className={
+          imgError
+              ? 'w-32 h-32 object-contain mx-auto mt-12'
+              : 'w-full h-full object-cover object-center transition-transform duration-300 group-hover:scale-105'
+          }
+          onError={() => setImgError(true)}
         />
         <div className="absolute top-2 right-2">
           <span className={`px-2 py-0.5 rounded-full text-xs font-medium capitalize ${getStatusColor(event.status)}`}>{event.status}</span>
