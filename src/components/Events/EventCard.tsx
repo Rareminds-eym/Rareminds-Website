@@ -122,6 +122,13 @@ const EventCard: React.FC<EventCardProps> = ({ event, compact = false }) => {
             <span>{event.location_metadata?.address}</span>
           </div>
 
+          {event.duration && (
+            <div className="flex items-center gap-1 text-sm text-gray-500">
+              <Clock className="w-4 h-4" />
+              <span>{event.duration}</span>
+            </div>
+          )}
+
           <div className="flex items-center text-xs text-gray-500">
             <Users className="w-4 h-4 mr-1 flex-shrink-0" />
             <span>Capacity: {event.content_metadata?.capacity}</span>

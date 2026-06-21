@@ -11,8 +11,13 @@ import { supabase } from '../../lib/supabase';
 import { useToast } from '../Academy/UI/use-toast';
 import fallbackImage from '../../assets/RMLogo.webp';
 
+// Typed interface for components that use CSS custom properties
+interface GalleryStyles extends React.CSSProperties {
+  '--duration': string;
+}
+
 const EventsPage: React.FC = () => {
-  const { events, loading } = useOptimizedEvents();
+  const { events, loading, error } = useOptimizedEvents();
   const { toast } = useToast();
   const [filteredEvents, setFilteredEvents] = useState<Event[]>([]);
   const [showRegistrationModal, setShowRegistrationModal] = React.useState(false);
@@ -79,7 +84,7 @@ const EventsPage: React.FC = () => {
         if (error) {
           toast({ title: 'Error', description: 'Failed to load gallery images.', variant: 'destructive' });
           setGalleryImages(
-          events.map((_e, idx) => ({ id: `placeholder-${idx}`, url: fallbackImage }))
+          events.map((_, idx) => ({ id: `placeholder-${idx}`, url: fallbackImage }))
           );
           return;
         }
@@ -104,13 +109,14 @@ const EventsPage: React.FC = () => {
           setGalleryImages(imgs);
         } else {
           setGalleryImages(
-          events.map((_e, idx) => ({ id: `placeholder-${idx}`, url: fallbackImage }))
+          events.map((_, idx) => ({ id: `placeholder-${idx}`, url: fallbackImage }))
           );
         }
-      } catch (_err) {
-        toast({ title: 'Error', description: 'Unexpected error loading gallery.', variant: 'destructive' });
+      } catch (err) {
+        console.error('[EventsPage] Gallery fetch failed:', err);
+        toast({ title: 'Error', description: 'Failed to load gallery images. Please try again.', variant: 'destructive' });
         setGalleryImages(
-          events.map((_e, idx) => ({ id: `placeholder-${idx}`, url: fallbackImage }))
+          events.map((_, idx) => ({ id: `placeholder-${idx}`, url: fallbackImage }))
         );
       }
     };
@@ -137,6 +143,33 @@ const EventsPage: React.FC = () => {
           <Loader2 className="w-12 h-12 text-blue-600 animate-spin mx-auto mb-4" />
           <h2 className="text-xl font-semibold text-gray-700 mb-2">Loading Events</h2>
           <p className="text-gray-500">Please wait while we fetch the latest events...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-red-50 to-gray-100 flex items-center justify-center">
+        <div className="text-center max-w-md mx-auto px-6">
+          <div className="bg-white rounded-2xl shadow-lg p-8 border border-red-100">
+            <div className="w-16 h-16 mx-auto mb-4 bg-red-100 rounded-full flex items-center justify-center">
+              <svg className="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <h2 className="text-2xl font-bold text-gray-900 mb-2">Error Loading Events</h2>
+            <p className="text-gray-600 mb-6">{error}</p>
+            <button
+              onClick={() => window.location.reload()}
+              className="inline-flex items-center px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-semibold transition-colors"
+            >
+              <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+              </svg>
+              Try Again
+            </button>
+          </div>
         </div>
       </div>
     );
@@ -291,7 +324,7 @@ const EventsPage: React.FC = () => {
               </div>
               {/* Mobile: title and category below image */}
               <div className="md:hidden p-6 pt-24">
-                <h1 className="text-lg font-bold text-white mb-18 leading-[1.1] tracking-tight">
+                <h1 className="text-lg font-bold text-white mb-16 leading-[1.1] tracking-tight">
                   {banners[current].title}
                 </h1>
                 <div className="flex items-center gap-4 text-white/90 text-sm">
@@ -422,8 +455,8 @@ const EventsPage: React.FC = () => {
                 {galleryImages.length > 0 && (
                   <div className="mt-4 rounded-xl overflow-hidden shadow-lg relative flex-1 min-h-48">
                     <div
-                      className="absolute inset-x-0 top-0 flex flex-col animate-[testimonial-scroll_var(--duration)_linear_infinite] hover:[animation-play-state:paused]"
-                      style={{ '--duration': `${galleryImages.length * 6}s` } as React.CSSProperties}
+                      className="absolute inset-x-0 top-0 flex flex-col animate-testimonial-scroll hover:[animation-play-state:paused]"
+                      style={{ '--duration': `${galleryImages.length * 6}s` } as GalleryStyles}
                     >
                       {[...galleryImages, ...galleryImages].map((img, idx) => (
                         <img

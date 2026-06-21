@@ -14,18 +14,28 @@ const Index: React.FC<HeaderProps> = ({ navbarOpen, setNavbarOpen }) => {
     // Check if current path matches /events/:slug
     const isEventDetailPage = /^\/events\/.+/.test(location.pathname);
 
+    // Scroll threshold for header state change
+    const SCROLL_THRESHOLD_PX = 10;
+    
+    // Layout constants for header positioning
+    const HEADER_OFFSET_CLASS = '-mt-16';  // matches header height
+    const SIDEBAR_WIDTH_CLASS = 'ml-72';    // matches sidebar width
+
    React.useEffect(() => {
     let rafId: number | null = null;
 
     const onScroll = () => {
         if (rafId !== null) return; // already scheduled, skip
         rafId = requestAnimationFrame(() => {
-            setIsScrolled(window.scrollY > 10);
+            setIsScrolled(window.scrollY > SCROLL_THRESHOLD_PX);
             rafId = null;
         });
     };
 
     window.addEventListener('scroll', onScroll, { passive: true });
+    // Cleanup correctly cancels any pending RAF on unmount.
+    // State updates from stale callbacks are safe because React
+    // ignores setState calls on unmounted components in this pattern.
     return () => {
         window.removeEventListener('scroll', onScroll);
         if (rafId !== null) cancelAnimationFrame(rafId);
@@ -63,7 +73,7 @@ const Index: React.FC<HeaderProps> = ({ navbarOpen, setNavbarOpen }) => {
                   <div className="relative h-12 mt-1">
                     <div
                       className={`flex items-center gap-2 transition-all duration-500 ease-in-out will-change-transform ${
-  isEventsPage && isScrolled ? '-mt-16 ml-72' : 'mt-0 ml-0'
+  isEventsPage && isScrolled ? `${HEADER_OFFSET_CLASS} ${SIDEBAR_WIDTH_CLASS}` : 'mt-0 ml-0'
 }`}
                     >
                       <button

@@ -18,6 +18,7 @@ import React from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import DOMPurify from 'dompurify';
 import { useOptimizedEvents } from '../../hooks/Events/useOptimizedEvents';
 import { eventInterestedService } from '../../services/eventInterestedService';
 import { Event as AppEvent } from '../../types/Events/event';
@@ -37,6 +38,38 @@ import SingleEventCountdown from './SingleEventCountdown';
 import FloatingActionMenu from './StickyButton/FloatingAction';
 import styles from './TeaserVideoButton.module.css';
 import TeaserVideoModal from './TeaserVideoModal';
+
+// DOMPurify configuration for safe HTML sanitization
+const DOMPURIFY_CONFIG = {
+  ALLOWED_TAGS: ['a', 'b', 'br', 'em', 'i', 'li', 'ol', 'p', 'strong', 'ul', 'span', 'div'],
+  ALLOWED_ATTR: ['href', 'title', 'target', 'rel', 'style'],
+  ALLOW_DATA_ATTR: false,
+  ALLOW_UNKNOWN_PROTOCOLS: false,
+  SAFE_FOR_TEMPLATES: true,
+  FORBID_ATTR: ['onerror', 'onload', 'onclick'],
+};
+
+// Block dangerous CSS properties after sanitization
+DOMPurify.addHook('afterSanitizeAttributes', (node) => {
+  if (node.hasAttribute('style')) {
+    const style = node.getAttribute('style') ?? '';
+    // Strip expression(), url(), and javascript: from inline styles
+    if (/expression|javascript:|url\s*\(/i.test(style)) {
+      node.removeAttribute('style');
+    }
+  }
+  if (node.tagName === 'A') {
+    const href = node.getAttribute('href') ?? '';
+    if (/^javascript:/i.test(href)) node.removeAttribute('href');
+    node.setAttribute('rel', 'noopener noreferrer');
+  }
+});
+
+// Utility function for sanitizing HTML content
+const sanitizeHtml = (html?: string): string => {
+  if (!html) return '';
+  return DOMPurify.sanitize(html, DOMPURIFY_CONFIG);
+};
 
 // Animated Teaser Video Button Component
 export const TeaserVideoButton: React.FC<{ teaserVideo?: string }> = (props) => {
@@ -1213,7 +1246,7 @@ const EventDetail: React.FC = () => {
                         <div className="mb-6 sm:mb-12">
                           <div className="text-gray-700 leading-relaxed prose prose-base md:prose-lg prose-slate max-w-none prose-headings:text-slate-800 prose-p:text-slate-700 prose-p:leading-relaxed prose-a:text-blue-600 prose-a:hover:text-blue-700 prose-strong:text-slate-800 prose-ul:text-slate-700 prose-ol:text-slate-700" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(event.eventSections?.find(s => s.section_key === 'about')?.content?.text ?? '') }} />
                         </div>
-                         </>
+                        </>
                           )}
                         {hasHighlights && (
                           <div>
@@ -1617,4 +1650,3 @@ export function EventGallery({ images }: EventGalleryProps) {
     </>
   );
 }
-
