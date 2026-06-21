@@ -201,22 +201,30 @@ const EventDetail: React.FC = () => {
   
   // Debug: Log when modalOpen changes
   React.useEffect(() => {
-    console.log('🎭 EventDetail: Registration modal state changed to:', modalOpen);
+    if (process.env.NODE_ENV === 'development') {
+      console.log('🎭 EventDetail: Registration modal state changed to:', modalOpen);
+    }
   }, [modalOpen]);
   
   // Global message listener for Zoho form (in case HeroSection isn't rendered)
   React.useEffect(() => {
-    console.log('🌐 EventDetail: Setting up global message listener for Zoho forms');
+    if (process.env.NODE_ENV === 'development') {
+      console.log('🌐 EventDetail: Setting up global message listener for Zoho forms');
+    }
     
     const handleGlobalMessage = (event: MessageEvent) => {
       if (event.data && event.data.type === 'ZOHO_IFRAME_LOADED') {
-        console.log('✅ EventDetail Global: Iframe loaded and communication working!');
+        if (process.env.NODE_ENV === 'development') {
+          console.log('✅ EventDetail Global: Iframe loaded and communication working!');
+        }
         return;
       }
       
       if (event.data && event.data.type === 'ZOHO_FORM_SUBMITTING') {
-        console.log('🌐 EventDetail: Received ZOHO_FORM_SUBMITTING at global level:', event.data);
-        console.log('🎫 EventDetail: Opening registration modal from global listener');
+        if (process.env.NODE_ENV === 'development') {
+          console.log('🌐 EventDetail: Received ZOHO_FORM_SUBMITTING at global level:', event.data);
+          console.log('🎫 EventDetail: Opening registration modal from global listener');
+        }
         setModalOpen(true);
       }
     };
@@ -1235,23 +1243,23 @@ const EventDetail: React.FC = () => {
                     {(hasAbout || hasHighlights) && (
                       <div className="rm-card p-4 sm:p-8 lg:p-10">
                         {hasAbout && (
-                        <>
-                        <div className="flex items-start justify-between mb-4 sm:mb-8">
-                          <div className="flex items-center gap-3 sm:gap-4">
-                            <h2 className="rm-section-title">About The Event</h2>
-                            <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium capitalize ${getStatusColor(event.status)}`}>
-                              {getStatusIcon(event.status)}<span className="ml-2">{event.status}</span>
-                            </span>
-                          </div>
-                          <button onClick={() => { if (navigator.share) { navigator.share({ title: event.title, text: `Check out this event: ${event.title}`, url: window.location.href }); } else { navigator.clipboard.writeText(window.location.href); alert('Link copied to clipboard!'); } }} className="flex items-center gap-2 px-3 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-colors duration-200 shrink-0" title="Share this event">
-                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z" /></svg>
-                          </button>
-                        </div>
-                        <div className="mb-6 sm:mb-12">
-                          <div className="text-gray-700 leading-relaxed prose prose-base md:prose-lg prose-slate max-w-none prose-headings:text-slate-800 prose-p:text-slate-700 prose-p:leading-relaxed prose-a:text-blue-600 prose-a:hover:text-blue-700 prose-strong:text-slate-800 prose-ul:text-slate-700 prose-ol:text-slate-700" dangerouslySetInnerHTML={{ __html: sanitizeHtml(event.eventSections?.find(s => s.section_key === 'about')?.content?.text) }} />
-                        </div>
-                        </>
-                          )}
+                          <>
+                            <div className="flex items-start justify-between mb-4 sm:mb-8">
+                              <div className="flex items-center gap-3 sm:gap-4">
+                                <h2 className="rm-section-title">About The Event</h2>
+                                <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium capitalize ${getStatusColor(event.status)}`}>
+                                  {getStatusIcon(event.status)}<span className="ml-2">{event.status}</span>
+                                </span>
+                              </div>
+                              <button onClick={() => { if (navigator.share) { navigator.share({ title: event.title, text: `Check out this event: ${event.title}`, url: window.location.href }); } else { navigator.clipboard.writeText(window.location.href); alert('Link copied to clipboard!'); } }} className="flex items-center gap-2 px-3 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-colors duration-200 shrink-0" title="Share this event">
+                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z" /></svg>
+                              </button>
+                            </div>
+                            <div className="mb-6 sm:mb-12">
+                              <div className="text-gray-700 leading-relaxed prose prose-base md:prose-lg prose-slate max-w-none prose-headings:text-slate-800 prose-p:text-slate-700 prose-p:leading-relaxed prose-a:text-blue-600 prose-a:hover:text-blue-700 prose-strong:text-slate-800 prose-ul:text-slate-700 prose-ol:text-slate-700" dangerouslySetInnerHTML={{ __html: sanitizeHtml(event.eventSections?.find(s => s.section_key === 'about')?.content?.text) }} />
+                            </div>
+                          </>
+                        )}
                         {hasHighlights && (
                           <div>
                             <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6">Key Highlights</h3>
@@ -1425,25 +1433,25 @@ const EventDetail: React.FC = () => {
                   <div className="space-y-6">
                     {/* About The Event */}
                     {(hasAbout || hasHighlights) && (
-                    <div className="rm-card p-4 sm:p-8 lg:p-10">
-                      {hasAbout && (
-                      <div className="flex items-start justify-between mb-4 sm:mb-8">
-                        <div className="flex items-center gap-3 sm:gap-4">
-                          <h2 className="rm-section-title">About The Event</h2>
-                          <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium capitalize ${getStatusColor(event.status)}`}>
-                            {getStatusIcon(event.status)}<span className="ml-2">{event.status}</span>
-                          </span>
-                        </div>
-                        <button onClick={() => { if (navigator.share) { navigator.share({ title: event.title, text: `Check out this event: ${event.title}`, url: window.location.href }); } else { navigator.clipboard.writeText(window.location.href); alert('Link copied to clipboard!'); } }} className="flex items-center gap-2 px-3 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-colors duration-200 shrink-0" title="Share this event">
-                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z" /></svg>
-                        </button>
-                      </div>
-                      )}
-                      {hasAbout && (
-                      <div className="mb-6 sm:mb-12">
-                        <div className="text-gray-700 leading-relaxed prose prose-base md:prose-lg prose-slate max-w-none" dangerouslySetInnerHTML={{ __html: sanitizeHtml(event.eventSections?.find(s => s.section_key === 'about')?.content?.text) }} />
-                      </div>
-                      )}
+                      <div className="rm-card p-4 sm:p-8 lg:p-10">
+                        {hasAbout && (
+                          <>
+                            <div className="flex items-start justify-between mb-4 sm:mb-8">
+                              <div className="flex items-center gap-3 sm:gap-4">
+                                <h2 className="rm-section-title">About The Event</h2>
+                                <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium capitalize ${getStatusColor(event.status)}`}>
+                                  {getStatusIcon(event.status)}<span className="ml-2">{event.status}</span>
+                                </span>
+                              </div>
+                              <button onClick={() => { if (navigator.share) { navigator.share({ title: event.title, text: `Check out this event: ${event.title}`, url: window.location.href }); } else { navigator.clipboard.writeText(window.location.href); alert('Link copied to clipboard!'); } }} className="flex items-center gap-2 px-3 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-colors duration-200 shrink-0" title="Share this event">
+                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z" /></svg>
+                              </button>
+                            </div>
+                            <div className="mb-6 sm:mb-12">
+                              <div className="text-gray-700 leading-relaxed prose prose-base md:prose-lg prose-slate max-w-none" dangerouslySetInnerHTML={{ __html: sanitizeHtml(event.eventSections?.find(s => s.section_key === 'about')?.content?.text) }} />
+                            </div>
+                          </>
+                        )}
                       {hasHighlights && (
                       <div>
                         <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6">Key Highlights</h3>
@@ -1477,7 +1485,9 @@ const EventDetail: React.FC = () => {
                   eventId={event.id}
                   eventName={event.title}
                   onRegisterClick={() => {
-                    console.log('🎯 EventDetail: onRegisterClick called - opening registration modal');
+                    if (process.env.NODE_ENV === 'development') {
+                      console.log('🎯 EventDetail: onRegisterClick called - opening registration modal');
+                    }
                     setModalOpen(true);
                   }}
                 />

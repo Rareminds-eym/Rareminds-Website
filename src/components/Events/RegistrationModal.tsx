@@ -15,13 +15,9 @@ type RegistrationModalProps = {
 };
 
 const RegistrationModal: React.FC<RegistrationModalProps> = ({ open, onClose, eventId, eventName, eventPrice = 0, ticketQuantity = 1, pricePerTicket }) => {
-  // Debug logging
+  // Modal state tracking
   React.useEffect(() => {
-    if (open) {
-      console.log('RegistrationModal opened with:', { eventId, eventName, eventPrice });
-      console.log('Event price type:', typeof eventPrice);
-      console.log('Will show payment?', eventPrice > 0);
-    }
+    // Track modal open state for cleanup
   }, [open, eventId, eventName, eventPrice]);
 
   React.useEffect(() => {
@@ -145,22 +141,30 @@ const RegistrationModal: React.FC<RegistrationModalProps> = ({ open, onClose, ev
     setOtpError("");
 
     try {
-      console.log("🚀 Sending OTP to:", email.trim());
+      if (process.env.NODE_ENV === 'development') {
+        console.log("🚀 Sending OTP to:", email.trim());
+      }
       
       const { data, error } = await supabase.functions.invoke("send-otp-email", {
         body: { email: email.trim() }
       });
 
-      console.log("📧 OTP Response - Data:", data);
-      console.log("❌ OTP Response - Error:", error);
-      console.log("📊 Full Response:", { data, error });
+      if (process.env.NODE_ENV === 'development') {
+        console.log("📧 OTP Response - Data:", data);
+        console.log("❌ OTP Response - Error:", error);
+        console.log("📊 Full Response:", { data, error });
+      }
 
       if (error) {
-        console.error("OTP send error:", error);
+        if (process.env.NODE_ENV === 'development') {
+          console.error("OTP send error:", error);
+        }
         const { message, status, name } = extractSupabaseFunctionError(error);
         const normalizedMessage = message?.toLowerCase() ?? "";
 
-        console.log("🔍 Extracted Error Details:", { message, status, name, normalizedMessage });
+        if (process.env.NODE_ENV === 'development') {
+          console.log("🔍 Extracted Error Details:", { message, status, name, normalizedMessage });
+        }
 
         if (status === 404 || normalizedMessage.includes("not found")) {
           setOtpError("⚠️ Email verification service is not available. Please contact support.");
@@ -180,19 +184,24 @@ const RegistrationModal: React.FC<RegistrationModalProps> = ({ open, onClose, ev
         return;
       }
 
-      console.log("✅ Checking data.success:", data?.success);
-      console.log("📝 Data content:", JSON.stringify(data, null, 2));
+      if (process.env.NODE_ENV === 'development') {
+        console.log("✅ Checking data.success:", data?.success);
+        console.log("📝 Data content:", JSON.stringify(data, null, 2));
+      }
 
       if (data?.success) {
-        console.log("🎉 OTP sent successfully!");
         setOtpSent(true);
         setResendCooldown(60); // 60 seconds cooldown
       } else {
-        console.log("❌ OTP send failed:", data?.error);
+        if (process.env.NODE_ENV === 'development') {
+          console.log("❌ OTP send failed:", data?.error);
+        }
         setOtpError(data?.error || "Failed to send OTP. Please try again.");
       }
     } catch (error) {
-      console.error("OTP send exception:", error);
+      if (process.env.NODE_ENV === 'development') {
+        console.error("OTP send exception:", error);
+      }
       const { message } = extractSupabaseFunctionError(error);
 
       if (message?.toLowerCase().includes("failed to fetch")) {
@@ -223,7 +232,9 @@ const RegistrationModal: React.FC<RegistrationModalProps> = ({ open, onClose, ev
       });
 
       if (error) {
-        console.error("OTP verification error:", error);
+        if (process.env.NODE_ENV === 'development') {
+          console.error("OTP verification error:", error);
+        }
         const { message, status, name } = extractSupabaseFunctionError(error);
         const normalizedMessage = message?.toLowerCase() ?? "";
 
@@ -249,7 +260,9 @@ const RegistrationModal: React.FC<RegistrationModalProps> = ({ open, onClose, ev
         setOtpError(data?.error || "Invalid or expired OTP");
       }
     } catch (error) {
-      console.error("OTP verification exception:", error);
+      if (process.env.NODE_ENV === 'development') {
+        console.error("OTP verification exception:", error);
+      }
       const { message } = extractSupabaseFunctionError(error);
 
       if (message?.toLowerCase().includes("failed to fetch")) {
@@ -275,9 +288,11 @@ const RegistrationModal: React.FC<RegistrationModalProps> = ({ open, onClose, ev
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitError("");
-    console.log('Form submitted with eventPrice:', eventPrice);
-    console.log('Form submitted with ticketQuantity:', ticketQuantity);
-    console.log('Will require payment?', eventPrice > 0);
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Form submitted with eventPrice:', eventPrice);
+      console.log('Form submitted with ticketQuantity:', ticketQuantity);
+      console.log('Will require payment?', eventPrice > 0);
+    }
     
     if (validate()) {
       setSubmitting(true);
@@ -294,23 +309,27 @@ const RegistrationModal: React.FC<RegistrationModalProps> = ({ open, onClose, ev
           payment_status: eventPrice > 0 ? 'pending' : 'not_required'
         };
         
-        console.log('🚀 Inserting registration data:', registrationData);
+        if (process.env.NODE_ENV === 'development') {
+          console.log('🚀 Inserting registration data:', registrationData);
+        }
         
         const { data, error } = await supabase.from('event_registrations').insert(registrationData).select().single();
         
         if (error) {
-          console.error('Registration error:', error);
+          if (process.env.NODE_ENV === 'development') {
+            console.error('Registration error:', error);
+          }
           setSubmitError(error.message);
         } else {
-          console.log('Registration successful:', data);
+          if (process.env.NODE_ENV === 'development') {
+            console.log('Registration successful:', data);
+          }
           if (eventPrice > 0) {
             // Show payment modal for paid events
-            console.log('Showing payment modal for registration ID:', data.id);
             setRegistrationId(data.id);
             setShowPayment(true);
           } else {
             // Free event - show success immediately
-            console.log('Free event - showing success');
             setSuccess(true);
             resetForm();
             setTimeout(() => {
@@ -320,7 +339,9 @@ const RegistrationModal: React.FC<RegistrationModalProps> = ({ open, onClose, ev
           }
         }
       } catch (err) {
-        console.error('Registration catch error:', err);
+        if (process.env.NODE_ENV === 'development') {
+          console.error('Registration catch error:', err);
+        }
         setSubmitError("Failed to submit registration. Please try again.");
       } finally {
         setSubmitting(false);
@@ -330,7 +351,9 @@ const RegistrationModal: React.FC<RegistrationModalProps> = ({ open, onClose, ev
 
   const handlePaymentSuccess = async () => {
     if (registrationId == null) {
-      console.error('Missing registration ID during payment success handling');
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Missing registration ID during payment success handling');
+      }
       return;
     }
 
@@ -352,7 +375,9 @@ const RegistrationModal: React.FC<RegistrationModalProps> = ({ open, onClose, ev
         onClose();
       }, 1500);
     } catch (err) {
-      console.error('Failed to update payment status:', err);
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Failed to update payment status:', err);
+      }
       setSubmitError('Payment succeeded, but updating the registration record failed. Please contact support.');
     }
   };

@@ -114,7 +114,9 @@ const EventsPage: React.FC = () => {
           );
         }
       } catch (err) {
-        console.error('[EventsPage] Gallery fetch failed:', err);
+        if (process.env.NODE_ENV === 'development') {
+          console.error('[EventsPage] Gallery fetch failed:', err);
+        }
         toast({ title: 'Error', description: 'Failed to load gallery images. Please try again.', variant: 'destructive' });
         setGalleryImages(
           events.map((_, idx) => ({ id: `placeholder-${idx}`, url: fallbackImage }))

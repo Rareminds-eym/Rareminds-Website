@@ -47,7 +47,9 @@ const WebinarSection: React.FC<HeroSectionProps> = ({
   // Handle form submission success
   const handleFormSubmitSuccess = async (formData: Record<string, any>) => {
     if (!eventId) {
-      console.error('Missing event ID');
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Missing event ID');
+      }
       throw new Error('Event information is missing. Please refresh the page and try again.');
     }
 
@@ -58,7 +60,9 @@ const WebinarSection: React.FC<HeroSectionProps> = ({
       const phone = formData.phone || formData.mobile || formData.phone_number || formData.phoneNumber || formData.mobileNumber || formData.mobile_number || '';
       const organization = formData.organization || formData.company || formData.university || formData.institution_university_name || '';
 
-      console.log('📝 Registration attempt:', { eventId, name, email, phone });
+      if (process.env.NODE_ENV === 'development') {
+        console.log('📝 Registration attempt:', { eventId, name, email, phone });
+      }
 
       // Find email field dynamically if standard field names don't match
       if (!email) {
@@ -74,7 +78,9 @@ const WebinarSection: React.FC<HeroSectionProps> = ({
       const finalEmail = email || formData.email;
       
       if (!finalEmail) {
-        console.error('❌ Email not found in form data');
+        if (process.env.NODE_ENV === 'development') {
+          console.error('❌ Email not found in form data');
+        }
         throw new Error(`Email is required for registration`);
       }
 
@@ -87,7 +93,9 @@ const WebinarSection: React.FC<HeroSectionProps> = ({
         .maybeSingle();
 
       if (checkError) {
-        console.error('❌ Duplicate check error:', checkError);
+        if (process.env.NODE_ENV === 'development') {
+          console.error('❌ Duplicate check error:', checkError);
+        }
       }
 
       if (existingRegistration) {
@@ -117,11 +125,15 @@ const WebinarSection: React.FC<HeroSectionProps> = ({
         .single();
 
       if (error) {
-        console.error('❌ Registration error:', error);
+        if (process.env.NODE_ENV === 'development') {
+          console.error('❌ Registration error:', error);
+        }
         throw new Error('Failed to save registration. Please try again.');
       }
 
-      console.log('✅ Registration saved:', data.id);
+      if (process.env.NODE_ENV === 'development') {
+        console.log('Registration saved:', data.id);
+      }
 
       // Store form answers for later use in worker call
       setFormAnswers(formData);
@@ -141,7 +153,9 @@ const WebinarSection: React.FC<HeroSectionProps> = ({
         }, 3000);
       }
     } catch (err: any) {
-      console.error('❌ Exception during registration:', err);
+      if (process.env.NODE_ENV === 'development') {
+        console.error('❌ Exception during registration:', err);
+      }
       throw err; // Let DynamicEventForm handle the error display
     }
   };
@@ -168,7 +182,9 @@ const WebinarSection: React.FC<HeroSectionProps> = ({
   // Handle payment success
   const handlePaymentSuccess = async (paymentDetails: { razorpay_payment_id: string; order_id: string; payment_date: string }) => {
     if (!registrationId) {
-      console.error('No registration ID found');
+      if (process.env.NODE_ENV === 'development') {
+        console.error('No registration ID found');
+      }
       return;
     }
 
@@ -186,11 +202,15 @@ const WebinarSection: React.FC<HeroSectionProps> = ({
         .select();
 
       if (error) {
-        console.error('❌ Failed to update payment status:', error);
+        if (process.env.NODE_ENV === 'development') {
+          console.error('❌ Failed to update payment status:', error);
+        }
         throw new Error('Failed to save payment details to database');
       }
 
-      console.log('✅ Payment verified:', paymentDetails.razorpay_payment_id);
+      if (process.env.NODE_ENV === 'development') {
+        console.log('✅ Payment verified:', paymentDetails.razorpay_payment_id);
+      }
 
       // Send registration data to worker for Zoho CRM integration
       await sendRegistrationToWorker(paymentDetails.razorpay_payment_id);
@@ -207,7 +227,9 @@ const WebinarSection: React.FC<HeroSectionProps> = ({
         setFormAnswers(null);
       }, 3000);
     } catch (err) {
-      console.error('Exception during payment success handling:', err);
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Exception during payment success handling:', err);
+      }
       setShowPaymentModal(false);
       alert('Payment was successful, but there was an error saving the details. Please contact support with your payment ID: ' + paymentDetails.razorpay_payment_id);
     }
@@ -238,12 +260,18 @@ const WebinarSection: React.FC<HeroSectionProps> = ({
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
-        console.error('❌ Zoho webhook failed:', errorData);
+        if (process.env.NODE_ENV === 'development') {
+          console.error('❌ Zoho webhook failed:', errorData);
+        }
       } else {
-        console.log('✅ Registration sent to Zoho CRM');
+        if (process.env.NODE_ENV === 'development') {
+          console.log('✅ Registration sent to Zoho CRM');
+        }
       }
     } catch (error) {
-      console.error('⚠️ Zoho webhook error:', error);
+      if (process.env.NODE_ENV === 'development') {
+        console.error('⚠️ Zoho webhook error:', error);
+      }
     }
   };
 
