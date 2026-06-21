@@ -121,7 +121,9 @@ const InterestedModal: React.FC<InterestedModalProps> = ({
       onSuccess?.();
       onClose();
     } catch (error) {
-      console.error('Error saving interest:', error);
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Error saving interest:', error);
+      }
       const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred';
       setSubmitError(errorMessage);
       onError?.(errorMessage);

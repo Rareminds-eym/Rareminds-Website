@@ -82,10 +82,10 @@ export const useEventCountdown = () => {
 
         return {
           ...event,
-          // Map location_latitude and location_longitude to location_geo for consistency
+          // Derive location_geo from location_metadata JSONB
           location_geo:
-            event.location_latitude !== undefined && event.location_longitude !== undefined
-              ? { lat: event.location_latitude, lng: event.location_longitude }
+            event.location_metadata?.lat !== undefined && event.location_metadata?.lng !== undefined
+              ? { lat: event.location_metadata.lat, lng: event.location_metadata.lng }
               : undefined,
           location_type:
             event.location_type ?? (event.is_physical ? 'physical' : 'virtual'),
