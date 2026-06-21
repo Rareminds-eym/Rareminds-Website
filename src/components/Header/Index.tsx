@@ -23,20 +23,22 @@ const Index: React.FC<HeaderProps> = ({ navbarOpen, setNavbarOpen }) => {
 
    React.useEffect(() => {
     let rafId: number | null = null;
+    let isMounted = true;
 
     const onScroll = () => {
         if (rafId !== null) return; // already scheduled, skip
         rafId = requestAnimationFrame(() => {
-            setIsScrolled(window.scrollY > SCROLL_THRESHOLD_PX);
+            if (isMounted) {
+                setIsScrolled(window.scrollY > SCROLL_THRESHOLD_PX);
+            }
             rafId = null;
         });
     };
 
     window.addEventListener('scroll', onScroll, { passive: true });
-    // Cleanup correctly cancels any pending RAF on unmount.
-    // State updates from stale callbacks are safe because React
-    // ignores setState calls on unmounted components in this pattern.
+    
     return () => {
+        isMounted = false;
         window.removeEventListener('scroll', onScroll);
         if (rafId !== null) cancelAnimationFrame(rafId);
     };

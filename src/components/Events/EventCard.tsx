@@ -1,9 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import RegistrationModal from './RegistrationModal';
 import { Event } from '../../types/Events/event';
 import { Calendar, Clock, MapPin, Users, Tag } from 'lucide-react';
-import compact from 'lodash/compact';
 import fallbackImage from '../../assets/RMLogo.webp';
 
 interface EventCardProps {
@@ -13,9 +11,9 @@ interface EventCardProps {
 
 
 const EventCard: React.FC<EventCardProps> = ({ event, compact = false }) => {
-  const [modalOpen, setModalOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [imgError, setImgError] = useState(false);
+  
   // Track mobile viewport to use appropriate image
   React.useEffect(() => {
     const mq = window.matchMedia('(max-width: 640px)');
@@ -28,6 +26,11 @@ const EventCard: React.FC<EventCardProps> = ({ event, compact = false }) => {
       else (mq as any).removeListener(onChange);
     };
   }, []);
+
+  // Reset imgError when image source changes
+  React.useEffect(() => {
+    setImgError(false);
+  }, [event.media_metadata?.featured_image, event.media_metadata?.mobile_featured_image, event.media_metadata?.event_banner]);
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-US', {
       year: 'numeric',
@@ -71,6 +74,7 @@ const EventCard: React.FC<EventCardProps> = ({ event, compact = false }) => {
               ? 'w-32 h-32 object-contain mx-auto mt-12'
               : 'w-full h-full object-cover object-center transition-transform duration-300 group-hover:scale-105'
           }
+          onLoad={() => setImgError(false)}
           onError={() => setImgError(true)}
         />
         <div className="absolute top-2 right-2">

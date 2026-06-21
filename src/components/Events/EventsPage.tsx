@@ -24,6 +24,7 @@ const EventsPage: React.FC = () => {
   // Banner carousel logic (hooks must be top-level)
   const banners = events
     .filter(e => e.status === 'upcoming' || e.status === 'ongoing')
+    .filter(e => e.media_metadata?.event_banner || e.media_metadata?.featured_image || e.media_metadata?.mobile_featured_image)
     .map(e => ({
       img: e.media_metadata?.event_banner || e.media_metadata?.featured_image || e.media_metadata?.mobile_featured_image || fallbackImage,
       title: e.title,
@@ -120,8 +121,9 @@ const EventsPage: React.FC = () => {
         );
       }
     };
-    fetchGallery();
-  }, [events.length, toast]);
+    void fetchGallery();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [events]);
 
   React.useEffect(() => {
     const handleScroll = () => {
@@ -464,7 +466,7 @@ const EventsPage: React.FC = () => {
                           src={img.url}
                           alt="Event gallery"
                           className={
-                           img.url === fallbackImage
+                           img.url.includes('RMLogo.webp') || img.id.startsWith('placeholder-')
                            ? 'w-56 h-56 object-contain mx-auto block'   
                            : 'w-full h-full object-cover block'  
                            }

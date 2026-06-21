@@ -18,7 +18,6 @@ import React from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import DOMPurify from 'dompurify';
 import { useOptimizedEvents } from '../../hooks/Events/useOptimizedEvents';
 import { eventInterestedService } from '../../services/eventInterestedService';
 import { Event as AppEvent } from '../../types/Events/event';
@@ -41,29 +40,34 @@ import TeaserVideoModal from './TeaserVideoModal';
 
 // DOMPurify configuration for safe HTML sanitization
 const DOMPURIFY_CONFIG = {
-  ALLOWED_TAGS: ['a', 'b', 'br', 'em', 'i', 'li', 'ol', 'p', 'strong', 'ul', 'span', 'div'],
+  ALLOWED_TAGS: ['a', 'b', 'br', 'em', 'i', 'li', 'ol', 'p', 'strong', 'ul', 'span', 'div', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'],
   ALLOWED_ATTR: ['href', 'title', 'target', 'rel', 'style'],
   ALLOW_DATA_ATTR: false,
   ALLOW_UNKNOWN_PROTOCOLS: false,
   SAFE_FOR_TEMPLATES: true,
   FORBID_ATTR: ['onerror', 'onload', 'onclick'],
-};
-
-// Block dangerous CSS properties after sanitization
-DOMPurify.addHook('afterSanitizeAttributes', (node) => {
-  if (node.hasAttribute('style')) {
-    const style = node.getAttribute('style') ?? '';
-    // Strip expression(), url(), and javascript: from inline styles
-    if (/expression|javascript:|url\s*\(/i.test(style)) {
-      node.removeAttribute('style');
+  HOOKS: {
+    afterSanitizeAttributes: (node: Element) => {
+      // Ensure node is an Element before accessing Element-specific methods
+      if (!(node instanceof Element)) return;
+      
+      // Block dangerous CSS properties after sanitization
+      if (node.hasAttribute('style')) {
+        const style = node.getAttribute('style') ?? '';
+        // Strip expression(), url(), and javascript: from inline styles
+        if (/expression|javascript:|url\s*\(/i.test(style)) {
+          node.removeAttribute('style');
+        }
+      }
+      // Secure anchor tags
+      if (node.tagName === 'A') {
+        const href = node.getAttribute('href') ?? '';
+        if (/^javascript:/i.test(href)) node.removeAttribute('href');
+        node.setAttribute('rel', 'noopener noreferrer');
+      }
     }
   }
-  if (node.tagName === 'A') {
-    const href = node.getAttribute('href') ?? '';
-    if (/^javascript:/i.test(href)) node.removeAttribute('href');
-    node.setAttribute('rel', 'noopener noreferrer');
-  }
-});
+};
 
 // Utility function for sanitizing HTML content
 const sanitizeHtml = (html?: string): string => {
@@ -625,7 +629,7 @@ const EventDetail: React.FC = () => {
 
       {/* Main Container with Proper Alignment */}
       <div className="relative z-10 mt-8 sm:mt-0">
-         <div className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 ${event.category?.toLowerCase() === 'webinar' ? 'pt-10 sm:pt-14' : ''}`}>
+        <div className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 ${event.category?.toLowerCase() === 'webinar' ? 'pt-10 sm:pt-14' : ''}`}>
           {/* Hero Section with Modern Banner - Improved Spacing */}
           {event.category?.toLowerCase() !== 'webinar' && (
             <div className="mb-12 pt-0 sm:pt-8 sm:mb-16">
@@ -972,7 +976,7 @@ const EventDetail: React.FC = () => {
                         <div className="mb-6 sm:mb-12">
                           <div
                             className="text-gray-700 leading-relaxed prose prose-base md:prose-lg prose-slate max-w-none prose-headings:text-slate-800 prose-p:text-slate-700 prose-p:leading-relaxed prose-a:text-blue-600 prose-a:hover:text-blue-700 prose-strong:text-slate-800 prose-ul:text-slate-700 prose-ol:text-slate-700"
-                            dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(event.eventSections?.find(s => s.section_key === 'about')?.content?.text ?? '') }}
+                            dangerouslySetInnerHTML={{ __html: sanitizeHtml(event.eventSections?.find(s => s.section_key === 'about')?.content?.text) }}
                           />
                         </div>
                         )}
@@ -1015,7 +1019,7 @@ const EventDetail: React.FC = () => {
                           </div>
                           <div
                             className="bg-gradient-to-r from-green-50/80 to-emerald-50/80 border border-green-200/50 rounded-2xl p-6 backdrop-blur-sm prose prose-base md:prose-lg prose-slate max-w-none prose-headings:text-slate-800 prose-p:text-slate-700 prose-p:leading-relaxed prose-a:text-blue-600 prose-a:hover:text-blue-700 prose-strong:text-slate-800 prose-ul:text-slate-700 prose-ol:text-slate-700"
-                            dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(agendaText) }}
+                            dangerouslySetInnerHTML={{ __html: sanitizeHtml(agendaText) }}
                           />
                         </div>
                       ) : null;
@@ -1244,7 +1248,7 @@ const EventDetail: React.FC = () => {
                           </button>
                         </div>
                         <div className="mb-6 sm:mb-12">
-                          <div className="text-gray-700 leading-relaxed prose prose-base md:prose-lg prose-slate max-w-none prose-headings:text-slate-800 prose-p:text-slate-700 prose-p:leading-relaxed prose-a:text-blue-600 prose-a:hover:text-blue-700 prose-strong:text-slate-800 prose-ul:text-slate-700 prose-ol:text-slate-700" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(event.eventSections?.find(s => s.section_key === 'about')?.content?.text ?? '') }} />
+                          <div className="text-gray-700 leading-relaxed prose prose-base md:prose-lg prose-slate max-w-none prose-headings:text-slate-800 prose-p:text-slate-700 prose-p:leading-relaxed prose-a:text-blue-600 prose-a:hover:text-blue-700 prose-strong:text-slate-800 prose-ul:text-slate-700 prose-ol:text-slate-700" dangerouslySetInnerHTML={{ __html: sanitizeHtml(event.eventSections?.find(s => s.section_key === 'about')?.content?.text) }} />
                         </div>
                         </>
                           )}
@@ -1271,7 +1275,7 @@ const EventDetail: React.FC = () => {
                             </div>
                             <h2 className="rm-section-title">Event Agenda</h2>
                           </div>
-                          <div className="bg-gradient-to-r from-green-50/80 to-emerald-50/80 border border-green-200/50 rounded-2xl p-6 backdrop-blur-sm prose prose-base md:prose-lg prose-slate max-w-none prose-headings:text-slate-800 prose-p:text-slate-700 prose-p:leading-relaxed prose-a:text-blue-600 prose-a:hover:text-blue-700 prose-strong:text-slate-800 prose-ul:text-slate-700 prose-ol:text-slate-700" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(agendaText) }} />
+                          <div className="bg-gradient-to-r from-green-50/80 to-emerald-50/80 border border-green-200/50 rounded-2xl p-6 backdrop-blur-sm prose prose-base md:prose-lg prose-slate max-w-none prose-headings:text-slate-800 prose-p:text-slate-700 prose-p:leading-relaxed prose-a:text-blue-600 prose-a:hover:text-blue-700 prose-strong:text-slate-800 prose-ul:text-slate-700 prose-ol:text-slate-700" dangerouslySetInnerHTML={{ __html: sanitizeHtml(agendaText) }} />
                         </div>
                       ) : null;
                     })()}
@@ -1437,7 +1441,7 @@ const EventDetail: React.FC = () => {
                       )}
                       {hasAbout && (
                       <div className="mb-6 sm:mb-12">
-                        <div className="text-gray-700 leading-relaxed prose prose-base md:prose-lg prose-slate max-w-none" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(event.eventSections?.find(s => s.section_key === 'about')?.content?.text ?? '') }} />
+                        <div className="text-gray-700 leading-relaxed prose prose-base md:prose-lg prose-slate max-w-none" dangerouslySetInnerHTML={{ __html: sanitizeHtml(event.eventSections?.find(s => s.section_key === 'about')?.content?.text) }} />
                       </div>
                       )}
                       {hasHighlights && (
