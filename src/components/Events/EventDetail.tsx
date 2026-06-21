@@ -1,4 +1,5 @@
 import DOMPurify from 'dompurify';
+import type { Config } from 'dompurify';
 import { safeGetItem, safeSetItem } from '@/lib/localStorage';
 import {
   AlertCircle,
@@ -39,28 +40,34 @@ import styles from './TeaserVideoButton.module.css';
 import TeaserVideoModal from './TeaserVideoModal';
 
 // DOMPurify configuration for safe HTML sanitization
-// Strict configuration without div/span/style to prevent styling attacks
-const DOMPURIFY_CONFIG = {
+// Strict configuration without div/span/style/class to prevent styling attacks
+const DOMPURIFY_CONFIG: Config = {
   ALLOWED_TAGS: ['a', 'b', 'br', 'em', 'i', 'li', 'ol', 'p', 'strong', 'ul', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'],
-  ALLOWED_ATTR: ['href', 'title', 'target', 'rel'],
+  ALLOWED_ATTR: ['href', 'title', 'target', 'rel'], // Explicitly exclude 'class' to prevent style injection
   ALLOW_DATA_ATTR: false,
   ALLOW_UNKNOWN_PROTOCOLS: false,
   SAFE_FOR_TEMPLATES: true,
-  FORBID_ATTR: ['onerror', 'onload', 'onclick', 'style'],
-  HOOKS: {
-    afterSanitizeAttributes: (node: Element) => {
-      // Ensure node is an Element before accessing Element-specific methods
-      if (!(node instanceof Element)) return;
-      
-      // Secure anchor tags
-      if (node.tagName === 'A') {
-        const href = node.getAttribute('href') ?? '';
-        if (/^javascript:/i.test(href)) node.removeAttribute('href');
-        node.setAttribute('rel', 'noopener noreferrer');
-      }
-    }
-  }
+  FORBID_ATTR: ['onerror', 'onload', 'onclick', 'style', 'class'], // Block class attributes
+  KEEP_CONTENT: true // Preserve text content when stripping disallowed elements
 };
+
+// Add security hook for anchor tags
+DOMPurify.addHook('afterSanitizeAttributes', (node) => {
+  // Ensure node is an Element before accessing Element-specific methods
+  if (!(node instanceof Element)) return;
+  
+  // Secure anchor tags - remove javascript: protocols and add security attributes
+  if (node.tagName === 'A') {
+    const href = node.getAttribute('href') ?? '';
+    if (/^javascript:/i.test(href)) node.removeAttribute('href');
+    node.setAttribute('rel', 'noopener noreferrer');
+  }
+  
+  // Additional safety: strip any class attributes that might have slipped through
+  if (node.hasAttribute('class')) {
+    node.removeAttribute('class');
+  }
+});
 
 // Utility function for sanitizing HTML content
 const sanitizeHtml = (html?: string): string => {

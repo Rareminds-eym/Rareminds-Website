@@ -4,6 +4,7 @@ import { useLocation } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import arrowDown from "@/assets/corporate/Home/Carousal/arrowDown.svg";
 import DOMPurify from 'dompurify';
+import type { Config } from 'dompurify';
 
 // Custom styles for pagination
 import "@/assets/corporate/Home/Carousal/carousel.css";
@@ -11,10 +12,11 @@ import LogoCarousel from "./LogoCarousel";
 
 // Simple sanitization for carousel headings
 const sanitizeHeading = (html: string): string => {
-  return DOMPurify.sanitize(html, {
+  const config: Config = {
     ALLOWED_TAGS: ['span', 'br'],
     ALLOWED_ATTR: ['class']
-  });
+  };
+  return DOMPurify.sanitize(html, config);
 };
 
 interface CarouselSlide {

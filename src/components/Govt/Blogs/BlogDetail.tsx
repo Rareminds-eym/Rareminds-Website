@@ -12,24 +12,31 @@ import GovernmentHeader from "@/components/Header/GovernmentHeader";
 import FloatingActionMenu from "@/components/Govt/StickyButton/FloatingAction";
 import styles from "./styles.module.css";
 import DOMPurify from 'dompurify';
+import type { Config } from 'dompurify';
 
 // DOMPurify configuration for blog content sanitization
-const DOMPURIFY_CONFIG = {
+const DOMPURIFY_CONFIG: Config = {
   ALLOWED_TAGS: ['a', 'b', 'br', 'em', 'i', 'li', 'ol', 'p', 'strong', 'ul', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'blockquote', 'code', 'pre'],
-  ALLOWED_ATTR: ['href', 'title', 'target', 'rel'],
+  ALLOWED_ATTR: ['href', 'title', 'target', 'rel'], // Explicitly exclude 'class' to prevent style injection
   ALLOW_DATA_ATTR: false,
   ALLOW_UNKNOWN_PROTOCOLS: false,
-  HOOKS: {
-    afterSanitizeAttributes: (node: Element) => {
-      if (!(node instanceof Element)) return;
-      if (node.tagName === 'A') {
-        const href = node.getAttribute('href') ?? '';
-        if (/^javascript:/i.test(href)) node.removeAttribute('href');
-        node.setAttribute('rel', 'noopener noreferrer');
-      }
-    }
-  }
+  KEEP_CONTENT: true, // Preserve text content when stripping disallowed elements
+  FORBID_ATTR: ['onerror', 'onload', 'onclick', 'style', 'class'] // Block class and style attributes
 };
+
+// Add security hook for anchor tags
+DOMPurify.addHook('afterSanitizeAttributes', (node) => {
+  if (!(node instanceof Element)) return;
+  if (node.tagName === 'A') {
+    const href = node.getAttribute('href') ?? '';
+    if (/^javascript:/i.test(href)) node.removeAttribute('href');
+    node.setAttribute('rel', 'noopener noreferrer');
+  }
+  // Additional safety: strip any class attributes that might have slipped through
+  if (node.hasAttribute('class')) {
+    node.removeAttribute('class');
+  }
+});
 
 const sanitizeHtml = (html?: string): string => {
   if (!html) return '';
