@@ -33,7 +33,7 @@ interface RegisterRequest {
    */
   answers: Record<string, string | boolean | number | null>;
   event_id: string;
-  form_id: string;
+  form_id?: string;
   event_type: 'free' | 'paid';
   event_name: string;
   payment_id: string | null;
@@ -477,6 +477,7 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
     body = await request.json();
     
     if (!body || typeof body !== 'object' || Array.isArray(body)) {
+      console.warn('[Register] Invalid request body');
       return new Response(JSON.stringify({ error: 'Invalid request body' }), {
         status: 400,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' }
@@ -485,15 +486,24 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
     
     const { answers, event_id, form_id, event_type, event_name, payment_id, total_amount } = body;
 
+    console.log('[Register] Incoming request:', JSON.stringify({
+      event_id, form_id: form_id || '(not set)', event_type, event_name,
+      answerCount: answers ? Object.keys(answers).length : 0,
+      answerKeys: answers ? Object.keys(answers) : [],
+      hasPaymentId: !!payment_id, total_amount
+    }));
+
     // Validate required fields
     if (!answers || typeof answers !== 'object') {
+      console.warn('[Register] Invalid answers field');
       return new Response(JSON.stringify({ error: 'Invalid answers field' }), {
         status: 400,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' }
       });
     }
 
-    if (!event_id || !form_id || !event_type || !event_name) {
+    if (!event_id || !event_type || !event_name) {
+      console.warn('[Register] Missing required fields:', { event_id, event_type, event_name });
       return new Response(JSON.stringify({ error: 'Missing required fields' }), {
         status: 400,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' }
@@ -502,6 +512,7 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
 
     // Validate event_type
     if (!['free', 'paid'].includes(event_type)) {
+      console.warn('[Register] Invalid event_type:', event_type);
       return new Response(JSON.stringify({ error: 'event_type must be "free" or "paid"' }), {
         status: 400,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' }
@@ -510,6 +521,7 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
 
     // Validate payment_id for paid events
     if (event_type === 'paid' && !payment_id) {
+      console.warn('[Register] Paid event missing payment_id');
       return new Response(JSON.stringify({ error: 'payment_id required for paid events' }), {
         status: 400,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' }
@@ -567,6 +579,10 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
       'country', 'Country', 'COUNTRY', 'country_code', 'countryCode',
       'nationality', 'Nationality', 'nation', 'location_country'
     ]) || 'India'; // Default to India if no country specified
+
+    console.log('[Register] Extracted fields:', JSON.stringify({
+      first_name, last_name, full_name, email, phone, whatsappNumber, country
+    }));
 
     // Smart name processing for Zoho CRM requirements
     // Helper to split a name string into [first, last] parts
@@ -760,7 +776,7 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
       "Event Name": event_name,
       "Event Type": event_type,
       "Webinar Name": event_name,
-      "Form Id": form_id,
+      "Form Id": form_id ?? '',
       
       // Registration tracking
       "Registration Date": registrationDate,
@@ -933,7 +949,7 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
         // Log implicit consent usage for compliance audit trail
         console.warn(
           `COMPLIANCE: Implicit WhatsApp consent applied for event ${event_id}. ` +
-          `Form ${form_id} lacks explicit opt-in field. Update form before ${WORKAROUND_REMOVAL_DATE.toISOString().split('T')[0]}.`
+          `Form ${form_id || 'unknown'} lacks explicit opt-in field. Update form before ${WORKAROUND_REMOVAL_DATE.toISOString().split('T')[0]}.`
         );
       }
     }
@@ -954,6 +970,7 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
 
     // Send to Zoho Flow webhook
     if (!env.ZOHO_FLOW_WEBHOOK_URL) {
+      console.log('[Register] ZOHO_FLOW_WEBHOOK_URL not configured, skipping Zoho submission');
       return new Response(JSON.stringify({
         success: true,
         message: 'Registration processed (Zoho webhook not configured)'
@@ -962,6 +979,14 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' }
       });
     }
+
+    console.log('[Register] Sending to Zoho Flow webhook:', JSON.stringify({
+      event_id,
+      name: zohoPayload["First Name"],
+      email: zohoPayload["Email"],
+      phone: zohoPayload["Phone"],
+      payloadKeyCount: Object.keys(zohoPayload).filter(k => zohoPayload[k as keyof ZohoPayload]).length,
+    }));
 
     try {
       const webhookUrl = env.ZOHO_FLOW_WEBHOOK_URL;
@@ -980,22 +1005,25 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
 
       if (!response.ok) {
         // Log webhook failures for monitoring (non-blocking)
-        console.warn(`Zoho webhook failed: ${response.status} ${response.statusText}`, {
+        console.warn(`[Register] Zoho webhook failed: ${response.status} ${response.statusText}`, {
           event_id,
           status: response.status,
-          response: responseText.substring(0, 200) // Truncate for security
+          response: responseText.substring(0, 200)
         });
+      } else {
+        console.log('[Register] Zoho webhook success:', responseText.substring(0, 200));
       }
 
     } catch (error) {
       // Log webhook errors for monitoring (non-blocking)
-      console.error('Zoho webhook request failed:', {
+      console.error('[Register] Zoho webhook request failed:', {
         event_id,
         error: error instanceof Error ? error.message : 'Unknown error'
       });
     }
 
     // Return success
+    console.log('[Register] Registration complete:', { event_id, email });
     return new Response(JSON.stringify({
       success: true,
       message: 'Registration processed and sent to Zoho CRM'
@@ -1005,8 +1033,7 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
     });
 
   } catch (error) {
-    // Log internal server errors for monitoring
-    console.error('Registration request failed:', {
+    console.error('[Register] Internal error:', {
       event_id: body?.event_id || 'unknown',
       event_name: body?.event_name || 'unknown',
       error: error instanceof Error ? error.message : 'Unknown error',
