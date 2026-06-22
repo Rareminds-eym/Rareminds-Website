@@ -47,22 +47,21 @@ const WebinarSection: React.FC<HeroSectionProps> = ({
   // Handle form submission success
   const handleFormSubmitSuccess = async (formData: Record<string, any>) => {
     if (!eventId) {
-      if (process.env.NODE_ENV === 'development') {
-        console.error('Missing event ID');
-      }
+      console.error('[Registration] Missing event ID');
       throw new Error('Event information is missing. Please refresh the page and try again.');
     }
 
     try {
       // Extract common fields (fallback to form field names)
-      const name = formData.name || formData.full_name || formData.first_name || formData.attendee_name || formData.firstName || formData.first || '';
+      const firstName = formData.first_name || formData.firstName || formData.first || '';
+      const lastName = formData.last_name || formData.lastName || formData.last || formData.surname || '';
+      const combinedName = [firstName, lastName].filter(Boolean).join(' ');
+      const name = formData.name || formData.full_name || formData.fullName || formData.attendee_name || combinedName || '';
       const email = formData.email || formData.email_address || formData.emailAddress || formData.Email || '';
       const phone = formData.phone || formData.mobile || formData.phone_number || formData.phoneNumber || formData.mobileNumber || formData.mobile_number || '';
       const organization = formData.organization || formData.company || formData.university || formData.institution_university_name || '';
 
-      if (process.env.NODE_ENV === 'development') {
-        console.log('📝 Registration attempt:', { eventId, name, email, phone });
-      }
+      console.log('[Registration] Attempt:', JSON.stringify({ eventId, name, email, phone, organization, eventType }));
 
       // Find email field dynamically if standard field names don't match
       if (!email) {
@@ -78,9 +77,7 @@ const WebinarSection: React.FC<HeroSectionProps> = ({
       const finalEmail = email || formData.email;
       
       if (!finalEmail) {
-        if (process.env.NODE_ENV === 'development') {
-          console.error('❌ Email not found in form data');
-        }
+        console.error('[Registration] Email not found in form data. Available keys:', Object.keys(formData));
         throw new Error(`Email is required for registration`);
       }
 
@@ -93,9 +90,7 @@ const WebinarSection: React.FC<HeroSectionProps> = ({
         .maybeSingle();
 
       if (checkError) {
-        if (process.env.NODE_ENV === 'development') {
-          console.error('❌ Duplicate check error:', checkError);
-        }
+        console.error('[Registration] Duplicate check error:', checkError);
       }
 
       if (existingRegistration) {
@@ -125,38 +120,33 @@ const WebinarSection: React.FC<HeroSectionProps> = ({
         .single();
 
       if (error) {
-        if (process.env.NODE_ENV === 'development') {
-          console.error('❌ Registration error:', error);
-        }
+        console.error('[Registration] Supabase insert error:', error);
         throw new Error('Failed to save registration. Please try again.');
       }
 
-      if (process.env.NODE_ENV === 'development') {
-        console.log('Registration saved:', data.id);
-      }
+      console.log('[Registration] Saved to Supabase:', { id: data.id, eventId, email: finalEmail });
 
       // Store form answers for later use in worker call
       setFormAnswers(formData);
 
       if (isPaidEvent) {
-        // Save registration ID and user details, then show payment modal
+        console.log('[Registration] Paid event, showing payment modal:', { registrationId: data.id, name, email: finalEmail });
         setRegistrationId(data.id);
         setUserDetails({ name, email: finalEmail, phone });
         setShowPaymentModal(true);
       } else {
-        // Free event - send to worker and show success message
-        await sendRegistrationToWorker(null);
+        console.log('[Registration] Free event, sending to Zoho worker');
+        await sendRegistrationToWorker(null, formData);
         
         setRegistrationSuccess(true);
         setTimeout(() => {
           setRegistrationSuccess(false);
+          setFormAnswers(null);
         }, 3000);
       }
     } catch (err: any) {
-      if (process.env.NODE_ENV === 'development') {
-        console.error('❌ Exception during registration:', err);
-      }
-      throw err; // Let DynamicEventForm handle the error display
+      console.error('[Registration] Exception:', err);
+      throw err;
     }
   };
 
@@ -182,9 +172,7 @@ const WebinarSection: React.FC<HeroSectionProps> = ({
   // Handle payment success
   const handlePaymentSuccess = async (paymentDetails: { razorpay_payment_id: string; order_id: string; payment_date: string }) => {
     if (!registrationId) {
-      if (process.env.NODE_ENV === 'development') {
-        console.error('No registration ID found');
-      }
+      console.error('[Registration] No registration ID found in handlePaymentSuccess');
       return;
     }
 
@@ -202,15 +190,11 @@ const WebinarSection: React.FC<HeroSectionProps> = ({
         .select();
 
       if (error) {
-        if (process.env.NODE_ENV === 'development') {
-          console.error('❌ Failed to update payment status:', error);
-        }
+        console.error('[Registration] Failed to update payment status:', error);
         throw new Error('Failed to save payment details to database');
       }
 
-      if (process.env.NODE_ENV === 'development') {
-        console.log('✅ Payment verified:', paymentDetails.razorpay_payment_id);
-      }
+      console.log('[Registration] Payment verified:', { paymentId: paymentDetails.razorpay_payment_id, orderId: paymentDetails.order_id, registrationId });
 
       // Send registration data to worker for Zoho CRM integration
       await sendRegistrationToWorker(paymentDetails.razorpay_payment_id);
@@ -227,21 +211,28 @@ const WebinarSection: React.FC<HeroSectionProps> = ({
         setFormAnswers(null);
       }, 3000);
     } catch (err) {
-      if (process.env.NODE_ENV === 'development') {
-        console.error('Exception during payment success handling:', err);
-      }
+      console.error('[Registration] Exception during payment success handling:', err);
       setShowPaymentModal(false);
       alert('Payment was successful, but there was an error saving the details. Please contact support with your payment ID: ' + paymentDetails.razorpay_payment_id);
     }
   };
 
   // Send registration to Cloudflare Pages Function for Zoho CRM integration
-  const sendRegistrationToWorker = async (paymentId: string | null) => {
+  const sendRegistrationToWorker = async (paymentId: string | null, answers?: Record<string, any>) => {
     try {
-      const answers = formAnswers || {};
+      const finalAnswers = answers ?? formAnswers ?? {};
+      console.log('[Registration] Sending to /api/register:', JSON.stringify({
+        eventId,
+        formId,
+        eventType,
+        eventName,
+        paymentId,
+        answerKeys: Object.keys(finalAnswers),
+        answerCount: Object.keys(finalAnswers).length
+      }));
 
       const payload = {
-        answers,
+        answers: finalAnswers,
         event_id: eventId || '',
         form_id: formId || '',
         event_type: eventType,
@@ -260,18 +251,13 @@ const WebinarSection: React.FC<HeroSectionProps> = ({
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
-        if (process.env.NODE_ENV === 'development') {
-          console.error('❌ Zoho webhook failed:', errorData);
-        }
+        console.error('[Registration] /api/register failed:', { status: response.status, error: errorData });
       } else {
-        if (process.env.NODE_ENV === 'development') {
-          console.log('✅ Registration sent to Zoho CRM');
-        }
+        const responseData = await response.json().catch(() => ({}));
+        console.log('[Registration] /api/register success:', responseData);
       }
     } catch (error) {
-      if (process.env.NODE_ENV === 'development') {
-        console.error('⚠️ Zoho webhook error:', error);
-      }
+      console.error('[Registration] /api/register network error:', error);
     }
   };
 
