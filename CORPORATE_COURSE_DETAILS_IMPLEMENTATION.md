@@ -1,6 +1,6 @@
 # Corporate Course Details Page - Implementation Complete
 
-## ✅ DONE
+## ✅ DONE 
 
 The Corporate Training course details page now matches the Universities course details page exactly.
 
