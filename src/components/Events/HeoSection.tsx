@@ -197,7 +197,7 @@ const WebinarSection: React.FC<HeroSectionProps> = ({
       console.log('[Registration] Payment verified:', { paymentId: paymentDetails.razorpay_payment_id, orderId: paymentDetails.order_id, registrationId });
 
       // Send registration data to worker for Zoho CRM integration
-      await sendRegistrationToWorker(paymentDetails.razorpay_payment_id);
+      await sendRegistrationToWorker(paymentDetails.razorpay_payment_id, formAnswers ?? undefined);
 
       // Close payment modal and show success message
       setShowPaymentModal(false);

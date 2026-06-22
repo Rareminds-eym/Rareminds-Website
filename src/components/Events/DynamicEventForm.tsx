@@ -217,8 +217,9 @@ const DynamicEventForm: React.FC<DynamicEventFormProps> = ({
       });
 
       await onSubmitSuccess?.(completeData);
+
+      console.log('[DynamicEventForm] Form submitted successfully');
       
-      // Reset form and submitting state after successful submission
       reset();
       setIsSubmitting(false);
     } catch (error: unknown) {
