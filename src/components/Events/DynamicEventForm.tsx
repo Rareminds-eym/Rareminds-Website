@@ -208,7 +208,14 @@ const DynamicEventForm: React.FC<DynamicEventFormProps> = ({
         }
       });
       
-      // Pass the complete form data back to parent (HeoSection) to handle registration and payment
+      console.log('[DynamicEventForm] Submitting form data:', {
+        fieldCount: fields.length,
+        formId,
+        eventId,
+        answerKeys: Object.keys(completeData),
+        answerValues: JSON.stringify(completeData)
+      });
+
       await onSubmitSuccess?.(completeData);
       
       // Reset form and submitting state after successful submission
