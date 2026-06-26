@@ -42,7 +42,7 @@ const EventsPage: React.FC = () => {
   }, [banners.length]);
   // Reset filtered events when the source events change (e.g. after load/refetch)
   React.useEffect(() => {
-    setFilteredEvents(null); // null = "no filter applied, show all"
+    setFilteredEvents(null);
   }, [events]);
 
   const EVENTS_PER_PAGE = 4;

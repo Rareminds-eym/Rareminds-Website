@@ -789,7 +789,7 @@ const EventDetail: React.FC = () => {
           const hasAbout = (() => {
           const text = event.eventSections?.find(s => s.section_key === 'about')?.content?.text;
           if (!text) return false;
-          const stripped = sanitizeHtml(text).replace(/<[^>]*>/g, '').replace(/&nbsp;/g, ' ').trim();
+          const stripped = DOMPurify.sanitize(text).replace(/<[^>]*>/g, '').replace(/&nbsp;/g, ' ').trim();
           return stripped.length > 0;
           })();
             const hasHighlights = (() => {

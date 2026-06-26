@@ -13,9 +13,6 @@ const Index: React.FC<HeaderProps> = ({ navbarOpen, setNavbarOpen }) => {
     const location = useLocation();
     // Check if current path matches /events/:slug
     const isEventDetailPage = /^\/events\/.+/.test(location.pathname);
-
-    // Scroll threshold for header state change
-    const SCROLL_THRESHOLD_PX = 10;
     
     // Layout constants for header positioning
     const HEADER_OFFSET_CLASS = 'lg:-mt-16';  // matches header height
@@ -23,21 +20,28 @@ const Index: React.FC<HeaderProps> = ({ navbarOpen, setNavbarOpen }) => {
 
    React.useEffect(() => {
     let isMounted = true;
+    let rafId: number | null = null;
 
     const onScroll = () => {
-             if (!isMounted) return;
-    setIsScrolled(prev => {
-        if (!prev && window.scrollY > 10) return true;
-        if (prev && window.scrollY === 0) return false;
-        return prev;
-    });
+      if (!isMounted) return;
+      if (rafId !== null) return; // already scheduled this frame
+      rafId = requestAnimationFrame(() => {
+        rafId = null;
+        if (!isMounted) return;
+        setIsScrolled(prev => {
+          if (!prev && window.scrollY > 10) return true;
+          if (prev && window.scrollY === 0) return false;
+          return prev;
+        });
+      });
     };
 
     window.addEventListener('scroll', onScroll, { passive: true });
-    
+
     return () => {
-        isMounted = false;
-        window.removeEventListener('scroll', onScroll);
+      isMounted = false;
+      if (rafId !== null) cancelAnimationFrame(rafId);
+      window.removeEventListener('scroll', onScroll);
     };
 }, []);
 

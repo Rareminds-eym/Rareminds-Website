@@ -307,7 +307,7 @@ const WebinarSection: React.FC<HeroSectionProps> = ({
           )}
 
           {(eventDate || eventTime || location || price !== undefined) && (
-            <div className="mt-6 lg:mt-8 flex flex-col gap-2 lg:gap-3 w-64">
+            <div className="mt-6 lg:mt-8 flex flex-col gap-2 lg:gap-3 max-w-64">
               {eventDate && (
                 <span className="inline-flex items-center gap-2 px-3 py-2 rounded-xl bg-white border border-gray-200 text-xs sm:text-sm text-gray-800">
                   <CalendarDaysIcon className="text-gray-500 shrink-0 w-4 h-4" />
