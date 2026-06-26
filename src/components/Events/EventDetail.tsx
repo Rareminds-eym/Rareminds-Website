@@ -15,7 +15,7 @@ import {
   XCircle,
   Zap
 } from 'lucide-react';
-import React, { useMemo } from 'react';
+import React from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -477,12 +477,10 @@ const EventDetail: React.FC = () => {
     }
   };
 
-  const hasAbout = useMemo(() => {
-    const text = event?.eventSections?.find(s => s.section_key === 'about')?.content?.text;
-    if (!text) return false;
-    const stripped = DOMPurify.sanitize(text).replace(/<[^>]*>/g, '').replace(/&nbsp;/g, ' ').trim();
-    return stripped.length > 0;
-  }, [event?.eventSections]);
+  const aboutText = event?.eventSections?.find(s => s.section_key === 'about')?.content?.text;
+  const hasAbout = aboutText
+    ? DOMPurify.sanitize(aboutText).replace(/<[^>]*>/g, '').replace(/&nbsp;/g, ' ').trim().length > 0
+    : false;
 
   if (loading) {
     return (

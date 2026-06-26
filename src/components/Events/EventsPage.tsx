@@ -19,7 +19,8 @@ interface GalleryStyles extends React.CSSProperties {
 const EventsPage: React.FC = () => {
   const { events, loading, error } = useOptimizedEvents();
   const { toast } = useToast();
-  const [filteredEvents, setFilteredEvents] = useState<Event[] | null>(null);
+  const [filteredEvents, setFilteredEvents] = useState<Event[]>([]);
+  const [hasFiltered, setHasFiltered] = useState(false);
   const [showRegistrationModal, setShowRegistrationModal] = React.useState(false);
   // Banner carousel logic (hooks must be top-level)
   const banners = events
@@ -40,9 +41,10 @@ const EventsPage: React.FC = () => {
     }, 2000);
     return () => clearInterval(timer);
   }, [banners.length]);
-  // Reset filtered events when the source events change (e.g. after load/refetch)
+  // Reset filter state when source events change (e.g. after load/refetch)
   React.useEffect(() => {
-    setFilteredEvents(null);
+    setFilteredEvents([]);
+    setHasFiltered(false);
   }, [events]);
 
   const EVENTS_PER_PAGE = 4;
@@ -50,11 +52,12 @@ const EventsPage: React.FC = () => {
 
   const handleFilteredEvents = useCallback((filtered: Event[]) => {
     setFilteredEvents(filtered);
+    setHasFiltered(true);
     setCurrentPage(1);
   }, []);
 
-  // Use filteredEvents if a filter has been applied, otherwise show all events
-  const displayedEvents = filteredEvents ?? events;
+  // Show filtered results when a filter is active, otherwise show all events
+  const displayedEvents = hasFiltered ? filteredEvents : events;
 
   const totalPages = Math.ceil(displayedEvents.length / EVENTS_PER_PAGE);
   const paginatedEvents = displayedEvents.slice(

@@ -11,7 +11,7 @@ const Index: React.FC<HeaderProps> = ({ navbarOpen, setNavbarOpen }) => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const location = useLocation();
     // Check if current path matches /events/:slug
-    const isEventDetailPage = /^\/events\/.+/.test(location.pathname);;
+    const isEventDetailPage = /^\/events\/.+/.test(location.pathname);
 
     const toggleMenu = () => {
         setIsMenuOpen(!isMenuOpen);
@@ -50,7 +50,7 @@ const Index: React.FC<HeaderProps> = ({ navbarOpen, setNavbarOpen }) => {
                                     className="bg-black text-white px-6 py-2 rounded-full flex items-center justify-center w-auto whitespace-nowrap relative z-40 font-medium text-sm sm:text-base group hover:bg-gray-50 hover:text-black transition"
                                     style={{ minWidth: 0 }}
                                 >
-                                    <Briefcase size={14} className="mr-1.5 sm:mr-2 w-4 h-4 sm:w-6 sm:h-6 flex-shrink-0 text-white group-hover:text-black" />
+                                    <Briefcase className="mr-1.5 sm:mr-2 w-4 h-4 sm:w-6 sm:h-6 flex-shrink-0 text-white group-hover:text-black" />
                                     Skill Passport
                                 </a>
                             </div>
@@ -78,7 +78,7 @@ const Index: React.FC<HeaderProps> = ({ navbarOpen, setNavbarOpen }) => {
                           className="bg-black text-white px-6 py-2 rounded-full flex items-center justify-center w-auto whitespace-nowrap relative z-40 font-medium text-sm sm:text-base animate-glow group hover:bg-gray-50 hover:text-black transition"
                           style={{ minWidth: 0 }}
                       >
-                          <Briefcase size={14} className="mr-1.5 sm:mr-2 w-4 h-4 sm:w-6 sm:h-6 flex-shrink-0 text-white hover:text-black" />
+                          <Briefcase className="mr-1.5 sm:mr-2 w-4 h-4 sm:w-6 sm:h-6 flex-shrink-0 text-white hover:text-black" />
                           Skill Passport
                       </a>
                     </div>
