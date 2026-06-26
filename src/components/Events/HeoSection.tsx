@@ -279,7 +279,7 @@ const WebinarSection: React.FC<HeroSectionProps> = ({
         </div>
       )}
 
-      <div className="max-w-full mx-auto px-4 sm:px-6 grid lg:grid-cols-2 gap-8 lg:gap-12 mt-16">
+      <div className="max-w-full mx-auto px-4 sm:px-6 flex flex-col-reverse lg:grid lg:grid-cols-2 gap-8 lg:gap-12 mt-16">
 
         {/* Left Content */}
         <div className="text-black mt-0 lg:ml-12">
