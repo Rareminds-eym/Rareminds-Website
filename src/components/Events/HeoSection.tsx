@@ -279,10 +279,10 @@ const WebinarSection: React.FC<HeroSectionProps> = ({
         </div>
       )}
 
-      <div className="max-w-full mx-auto px-4 sm:px-6 flex flex-col-reverse lg:grid lg:grid-cols-2 gap-8 lg:gap-12 mt-16">
+      <div className="max-w-full mx-auto px-4 sm:px-6 flex flex-col lg:grid lg:grid-cols-2 gap-8 lg:gap-12 mt-16">
 
         {/* Left Content */}
-        <div className="text-black mt-0 lg:ml-12">
+        <div className="order-2 lg:order-1 text-black mt-0 lg:ml-12">
           {title && (
             <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold leading-tight mt-2">
               {title}
@@ -337,7 +337,7 @@ const WebinarSection: React.FC<HeroSectionProps> = ({
         </div>
 
         {/* Dynamic Event Form */}
-       
+          <div className="order-1 lg:order-2">
           {eventId ? (
             <DynamicEventForm
               formId={formId}
@@ -351,6 +351,7 @@ const WebinarSection: React.FC<HeroSectionProps> = ({
               Registration form not configured.
             </div>
           )}
+          </div>
         </div>
 
 
