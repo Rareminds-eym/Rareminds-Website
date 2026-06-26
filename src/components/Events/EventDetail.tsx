@@ -15,7 +15,7 @@ import {
   XCircle,
   Zap
 } from 'lucide-react';
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -477,6 +477,13 @@ const EventDetail: React.FC = () => {
     }
   };
 
+  const hasAbout = useMemo(() => {
+    const text = event?.eventSections?.find(s => s.section_key === 'about')?.content?.text;
+    if (!text) return false;
+    const stripped = DOMPurify.sanitize(text).replace(/<[^>]*>/g, '').replace(/&nbsp;/g, ' ').trim();
+    return stripped.length > 0;
+  }, [event?.eventSections]);
+
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-cyan-50 flex items-center justify-center relative overflow-hidden">
@@ -786,12 +793,6 @@ const EventDetail: React.FC = () => {
 
           {/* Layout: 8/4 when main sections exist, 2x2 cards + full-width content when they don't */}
           {(() => {
-          const hasAbout = (() => {
-          const text = event.eventSections?.find(s => s.section_key === 'about')?.content?.text;
-          if (!text) return false;
-          const stripped = DOMPurify.sanitize(text).replace(/<[^>]*>/g, '').replace(/&nbsp;/g, ' ').trim();
-          return stripped.length > 0;
-          })();
             const hasHighlights = (() => {
               const items = event.eventSections?.find(s => s.section_key === 'highlights')?.content?.items as Array<{ text: string }> | undefined;
               return !!(items && items.length > 0);

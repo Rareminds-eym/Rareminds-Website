@@ -76,8 +76,8 @@ const Index: React.FC<HeaderProps> = ({ navbarOpen, setNavbarOpen }) => {
                   <div className="relative h-12 mt-1">
                     <div
                       className={`flex items-center gap-2 transition-all duration-500 ease-in-out will-change-transform ${
-  (isEventsPage || isEventDetailPage) && isScrolled ? `${HEADER_OFFSET_CLASS} ${SIDEBAR_WIDTH_CLASS}` : 'mt-0 ml-0'
-}`}
+                     (isEventsPage || isEventDetailPage) && isScrolled ? `${HEADER_OFFSET_CLASS} ${SIDEBAR_WIDTH_CLASS}` : 'mt-0 ml-0'
+                }`}
                     >
                       <button
                           onClick={toggleMenu}
@@ -102,7 +102,7 @@ const Index: React.FC<HeaderProps> = ({ navbarOpen, setNavbarOpen }) => {
             </div>
 
             {/* Fullscreen Menu Overlay - hidden on event details page */}
-            {isMenuOpen && (
+            {isMenuOpen && !isEventDetailPage && (
                 <div className="fixed inset-0 bg-black/90  text-white z-40 flex items-center justify-center">
                     <div className="relative w-full h-full">
                         <div className="container mx-auto py-36">
