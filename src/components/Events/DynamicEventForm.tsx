@@ -375,7 +375,7 @@ const DynamicEventForm: React.FC<DynamicEventFormProps> = ({
 
   return (
     <div className="bg-white rounded-2xl shadow-lg p-6 md:p-8">
-      <h2 className="text-2xl font-bold text-gray-900 mb-2">
+      <h2 className="text-2xl font-bold text-gray-900 mb-8">
         {form?.title || 'Event Registration'}
       </h2>
       {form?.description && (

@@ -18,21 +18,19 @@ const Index: React.FC<HeaderProps> = ({ navbarOpen, setNavbarOpen }) => {
     const SCROLL_THRESHOLD_PX = 10;
     
     // Layout constants for header positioning
-    const HEADER_OFFSET_CLASS = '-mt-16';  // matches header height
-    const SIDEBAR_WIDTH_CLASS = 'ml-72';    // matches sidebar width
+    const HEADER_OFFSET_CLASS = 'lg:-mt-16';  // matches header height
+    const SIDEBAR_WIDTH_CLASS = 'lg:ml-72';    // matches sidebar width
 
    React.useEffect(() => {
-    let rafId: number | null = null;
     let isMounted = true;
 
     const onScroll = () => {
-        if (rafId !== null) return; // already scheduled, skip
-        rafId = requestAnimationFrame(() => {
-            if (isMounted) {
-                setIsScrolled(window.scrollY > SCROLL_THRESHOLD_PX);
-            }
-            rafId = null;
-        });
+             if (!isMounted) return;
+    setIsScrolled(prev => {
+        if (!prev && window.scrollY > 10) return true;
+        if (prev && window.scrollY === 0) return false;
+        return prev;
+    });
     };
 
     window.addEventListener('scroll', onScroll, { passive: true });
@@ -40,10 +38,6 @@ const Index: React.FC<HeaderProps> = ({ navbarOpen, setNavbarOpen }) => {
     return () => {
         isMounted = false;
         window.removeEventListener('scroll', onScroll);
-        if (rafId !== null) {
-            cancelAnimationFrame(rafId);
-            rafId = null;
-        }
     };
 }, []);
 
@@ -74,11 +68,11 @@ const Index: React.FC<HeaderProps> = ({ navbarOpen, setNavbarOpen }) => {
                 </div>
 
                 {/* Menu Button and Skill Passport - slides beside logo when scrolled */}
-                {!isEventDetailPage && (
+                {(
                   <div className="relative h-12 mt-1">
                     <div
                       className={`flex items-center gap-2 transition-all duration-500 ease-in-out will-change-transform ${
-  isEventsPage && isScrolled ? `${HEADER_OFFSET_CLASS} ${SIDEBAR_WIDTH_CLASS}` : 'mt-0 ml-0'
+  (isEventsPage || isEventDetailPage) && isScrolled ? `${HEADER_OFFSET_CLASS} ${SIDEBAR_WIDTH_CLASS}` : 'mt-0 ml-0'
 }`}
                     >
                       <button
@@ -87,15 +81,15 @@ const Index: React.FC<HeaderProps> = ({ navbarOpen, setNavbarOpen }) => {
                           aria-label="Menu"
                           aria-expanded={isMenuOpen}
                       >
-                          <Menu className='rotate-90'/>
-                          <span className="font-medium">MENU</span>
+                          <Menu className='rotate-90 w-4 h-4 sm:w-6 sm:h-6'/>
+                          <span className="font-medium text-sm sm:text-base">MENU</span>
                       </button>
                       <a
                           href="https://skillpassport.rareminds.in/"
-                          className="bg-black text-white px-6 py-2 rounded-full flex items-center justify-center w-auto relative z-40 font-medium animate-glow group hover:bg-gray-50 hover:text-black transition"
+                          className="bg-black text-white px-6 py-2 rounded-full flex items-center justify-center w-auto whitespace-nowrap relative z-40 font-medium text-sm sm:text-base animate-glow group hover:bg-gray-50 hover:text-black transition"
                           style={{ minWidth: 0 }}
                       >
-                          <Briefcase size={22} className="mr-2" />
+                          <Briefcase size={14} className="mr-1.5 sm:mr-2 w-4 h-4 sm:w-6 sm:h-6 flex-shrink-0 text-white hover:text-black" />
                           Skill Passport
                       </a>
                     </div>
@@ -104,7 +98,7 @@ const Index: React.FC<HeaderProps> = ({ navbarOpen, setNavbarOpen }) => {
             </div>
 
             {/* Fullscreen Menu Overlay - hidden on event details page */}
-            {isMenuOpen && !isEventDetailPage && (
+            {isMenuOpen && (
                 <div className="fixed inset-0 bg-black/90  text-white z-40 flex items-center justify-center">
                     <div className="relative w-full h-full">
                         <div className="container mx-auto py-36">

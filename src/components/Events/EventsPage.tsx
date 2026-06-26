@@ -19,7 +19,7 @@ interface GalleryStyles extends React.CSSProperties {
 const EventsPage: React.FC = () => {
   const { events, loading, error } = useOptimizedEvents();
   const { toast } = useToast();
-  const [filteredEvents, setFilteredEvents] = useState<Event[]>([]);
+  const [filteredEvents, setFilteredEvents] = useState<Event[] | null>(null);
   const [showRegistrationModal, setShowRegistrationModal] = React.useState(false);
   // Banner carousel logic (hooks must be top-level)
   const banners = events
@@ -40,10 +40,9 @@ const EventsPage: React.FC = () => {
     }, 2000);
     return () => clearInterval(timer);
   }, [banners.length]);
+  // Reset filtered events when the source events change (e.g. after load/refetch)
   React.useEffect(() => {
-    if (events) {
-      setFilteredEvents(events);
-    }
+    setFilteredEvents(null); // null = "no filter applied, show all"
   }, [events]);
 
   const EVENTS_PER_PAGE = 4;
@@ -54,8 +53,11 @@ const EventsPage: React.FC = () => {
     setCurrentPage(1);
   }, []);
 
-  const totalPages = Math.ceil(filteredEvents.length / EVENTS_PER_PAGE);
-  const paginatedEvents = filteredEvents.slice(
+  // Use filteredEvents if a filter has been applied, otherwise show all events
+  const displayedEvents = filteredEvents ?? events;
+
+  const totalPages = Math.ceil(displayedEvents.length / EVENTS_PER_PAGE);
+  const paginatedEvents = displayedEvents.slice(
     (currentPage - 1) * EVENTS_PER_PAGE,
     currentPage * EVENTS_PER_PAGE
   );
@@ -488,7 +490,7 @@ const EventsPage: React.FC = () => {
                   exit={{ opacity: 0, y: 20 }}
                   transition={{ type: 'spring', stiffness: 300, damping: 30 }}
                 >
-                  {filteredEvents.length > 0 ? (
+                  {displayedEvents.length > 0 ? (
                     <motion.div
                       className="flex gap-4 overflow-x-auto no-scrollbar px-2 pb-2"
                       style={{ WebkitOverflowScrolling: 'touch' }}
@@ -496,7 +498,7 @@ const EventsPage: React.FC = () => {
                       animate={{ opacity: 1 }}
                       transition={{ delay: 0.1 }}
                     >
-                      {filteredEvents.map((event, index) => {
+                      {displayedEvents.map((event, index) => {
                         // Formatting functions and price logic inside map
                         const formatDate = (dateString: string) => {
                           if (!dateString) return '';
@@ -666,7 +668,7 @@ const EventsPage: React.FC = () => {
               {/* Desktop: Event Cards 2x2 Grid */}
               <div className="hidden md:block md:col-span-2">
                 <div style={{ paddingTop: '24px' }}>
-                  {filteredEvents.length > 0 ? (
+                  {displayedEvents.length > 0 ? (
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
                       {paginatedEvents.map((event, index) => (
                         <EventCard key={event.id || index} event={event} />

@@ -279,12 +279,12 @@ const WebinarSection: React.FC<HeroSectionProps> = ({
         </div>
       )}
 
-      <div className="max-w-full mx-auto px-4 sm:px-6 grid lg:grid-cols-2 gap-8 lg:gap-12">
+      <div className="max-w-full mx-auto px-4 sm:px-6 grid lg:grid-cols-2 gap-8 lg:gap-12 mt-16">
 
         {/* Left Content */}
-        <div className="text-black mt-4 lg:mt-28 lg:ml-12">
+        <div className="text-black mt-0 lg:ml-12">
           {title && (
-            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold leading-tight mt-4 lg:mt-8">
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold leading-tight mt-2">
               {title}
             </h1>
           )}
@@ -307,7 +307,7 @@ const WebinarSection: React.FC<HeroSectionProps> = ({
           )}
 
           {(eventDate || eventTime || location || price !== undefined) && (
-            <div className="mt-6 lg:mt-8 flex flex-wrap gap-2 lg:gap-3">
+            <div className="mt-6 lg:mt-8 flex flex-col gap-2 lg:gap-3 w-64">
               {eventDate && (
                 <span className="inline-flex items-center gap-2 px-3 py-2 rounded-xl bg-white border border-gray-200 text-xs sm:text-sm text-gray-800">
                   <CalendarDaysIcon className="text-gray-500 shrink-0 w-4 h-4" />

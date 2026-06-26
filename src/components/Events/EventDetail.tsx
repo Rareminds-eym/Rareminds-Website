@@ -613,7 +613,7 @@ const EventDetail: React.FC = () => {
       <div className="absolute bottom-20 right-10 w-96 h-96 bg-gradient-to-r from-cyan-400/10 to-blue-400/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }}></div>
 
       {/* Modern Floating Navigation - Properly Aligned */}
-      <div className="sticky top-6 z-50 mb-6 sm:mb-0">
+      <div className="relative mt-2 -mb-5 sm:mt-4">
         <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
           <div className="flex flex-row justify-between items-center gap-2 sm:gap-0" style={{ zIndex: 10 }}>
             <button
@@ -786,7 +786,12 @@ const EventDetail: React.FC = () => {
 
           {/* Layout: 8/4 when main sections exist, 2x2 cards + full-width content when they don't */}
           {(() => {
-            const hasAbout = !!event.eventSections?.find(s => s.section_key === 'about')?.content?.text?.trim();
+          const hasAbout = (() => {
+          const text = event.eventSections?.find(s => s.section_key === 'about')?.content?.text;
+          if (!text) return false;
+          const stripped = sanitizeHtml(text).replace(/<[^>]*>/g, '').replace(/&nbsp;/g, ' ').trim();
+          return stripped.length > 0;
+          })();
             const hasHighlights = (() => {
               const items = event.eventSections?.find(s => s.section_key === 'highlights')?.content?.items as Array<{ text: string }> | undefined;
               return !!(items && items.length > 0);
