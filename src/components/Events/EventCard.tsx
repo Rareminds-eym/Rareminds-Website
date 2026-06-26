@@ -62,21 +62,34 @@ const EventCard: React.FC<EventCardProps> = ({ event, compact = false }) => {
     >
       {/* Event Image */}
       <div className="relative h-40 sm:h-48 overflow-hidden bg-gray-100 flex-shrink-0">
-        <img
-          src={
-            isMobile && event.media_metadata?.mobile_featured_image
-              ? event.media_metadata.mobile_featured_image
-              : event.media_metadata?.featured_image || event.media_metadata?.event_banner || fallbackImage
+        {(() => {
+          const src = isMobile && event.media_metadata?.mobile_featured_image
+            ? event.media_metadata.mobile_featured_image
+            : event.media_metadata?.featured_image || event.media_metadata?.event_banner;
+
+          if (!src || imgError) {
+            // No image available — show branded placeholder
+            return (
+              <div className="w-full h-full flex items-center justify-center bg-gray-50">
+                <img
+                  src={fallbackImage}
+                  alt="Rareminds"
+                  className="w-32 h-32 object-contain"
+                />
+              </div>
+            );
           }
-          alt={event.title}
-          className={
-          imgError
-              ? 'w-32 h-32 object-contain mx-auto mt-12'
-              : 'w-full h-full object-cover object-center transition-transform duration-300 group-hover:scale-105'
-          }
-          onLoad={() => setImgError(false)}
-          onError={() => setImgError(true)}
-        />
+
+          return (
+            <img
+              src={src}
+              alt={event.title}
+              className="w-full h-full object-cover object-center transition-transform duration-300 group-hover:scale-105"
+              onLoad={() => setImgError(false)}
+              onError={() => setImgError(true)}
+            />
+          );
+        })()}
         <div className="absolute top-2 right-2">
           <span className={`px-2 py-0.5 rounded-full text-xs font-medium capitalize ${getStatusColor(event.status)}`}>{event.status}</span>
         </div>
