@@ -272,7 +272,7 @@ function logWarningOnce(key: string, message: string): void {
   const lastWarned = warningCache.get(key);
   
   if (!lastWarned || (now - lastWarned) > WARNING_COOLDOWN_MS) {
-    console.warn(message);
+    console.warn(`[Register] ${message}`);
     warningCache.set(key, now);
     
     // Eviction strategy: remove stale entries first, then oldest 20% if still over limit
@@ -594,16 +594,18 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
     let finalFirstName = '';
     let finalLastName = '';
 
-    if (first_name && last_name) {
-      finalFirstName = first_name;
-      finalLastName = last_name;
-    } else if (first_name) {
-      // first_name may contain a full name — split if multi-word
+    const hasFirst = first_name && first_name.trim().length > 0;
+    const hasLast = last_name && last_name.trim().length > 0;
+    const hasFull = full_name && full_name.trim().length > 0;
+
+    if (hasFirst && hasLast) {
+      finalFirstName = first_name.trim();
+      finalLastName = last_name.trim();
+    } else if (hasFirst) {
       [finalFirstName, finalLastName] = splitName(first_name);
-    } else if (full_name) {
+    } else if (hasFull) {
       [finalFirstName, finalLastName] = splitName(full_name);
     } else {
-      // No name data at all — reject the registration
       return new Response(JSON.stringify({ 
         error: 'Name is required for registration',
         message: 'Please provide at least a full name or first name'
@@ -636,11 +638,12 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
       });
     }
 
-    // Validate phone number exists
-    if (!phone || phone.trim() === '') {
+    // Validate phone number exists and has minimum digits
+    const phoneDigits = phone ? phone.replace(REGEX_NON_DIGIT, '') : '';
+    if (!phone || phone.trim() === '' || phoneDigits.length < 7) {
       return new Response(JSON.stringify({ 
         error: 'Phone number is required for registration',
-        message: 'Please provide a valid phone number'
+        message: 'Please provide a valid phone number with at least 7 digits'
       }), {
         status: 400,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' }
@@ -914,7 +917,7 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
         : displayFields.join(', ');
       
       console.warn(
-        `Skipped ${skippedFields.length} invalid Zoho field(s) for event ${event_id}: ${fieldsList}`
+        `[Register] Skipped ${skippedFields.length} invalid Zoho field(s) for event ${event_id}: ${fieldsList}`
       );
     }
     
@@ -948,7 +951,7 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
         
         // Log implicit consent usage for compliance audit trail
         console.warn(
-          `COMPLIANCE: Implicit WhatsApp consent applied for event ${event_id}. ` +
+          `[Register] COMPLIANCE: Implicit WhatsApp consent applied for event ${event_id}. ` +
           `Form ${form_id || 'unknown'} lacks explicit opt-in field. Update form before ${WORKAROUND_REMOVAL_DATE.toISOString().split('T')[0]}.`
         );
       }

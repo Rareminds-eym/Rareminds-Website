@@ -32,6 +32,7 @@ export const useOptimizedEvents = () => {
         .select(`
           id,
           created_by,
+          created_at,
           title,
           event_date,
           event_time,
@@ -49,7 +50,7 @@ export const useOptimizedEvents = () => {
           content_metadata,
           location_metadata
         `)
-        .order('event_date', { ascending: true })
+        .order('created_at', { ascending: false })
         .limit(50)
         .abortSignal(controller.signal);
 
@@ -69,6 +70,7 @@ export const useOptimizedEvents = () => {
       const expandedEvents: Event[] = data.map(row => ({
         id:                   row.id,
         created_by:           row.created_by,
+        created_at:           row.created_at,
         title:                row.title,
         event_date:           row.event_date,
         event_time:           row.event_time,

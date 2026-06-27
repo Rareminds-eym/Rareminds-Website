@@ -197,7 +197,7 @@ const WebinarSection: React.FC<HeroSectionProps> = ({
       console.log('[Registration] Payment verified:', { paymentId: paymentDetails.razorpay_payment_id, orderId: paymentDetails.order_id, registrationId });
 
       // Send registration data to worker for Zoho CRM integration
-      await sendRegistrationToWorker(paymentDetails.razorpay_payment_id);
+      await sendRegistrationToWorker(paymentDetails.razorpay_payment_id, formAnswers ?? undefined);
 
       // Close payment modal and show success message
       setShowPaymentModal(false);
@@ -279,12 +279,12 @@ const WebinarSection: React.FC<HeroSectionProps> = ({
         </div>
       )}
 
-      <div className="max-w-full mx-auto px-4 sm:px-6 grid lg:grid-cols-2 gap-8 lg:gap-12">
+      <div className="max-w-full mx-auto px-4 sm:px-6 flex flex-col lg:grid lg:grid-cols-2 gap-8 lg:gap-12 mt-16">
 
         {/* Left Content */}
-        <div className="text-black mt-4 lg:mt-28 lg:ml-12">
+        <div className="order-2 lg:order-1 text-black mt-0 lg:ml-12">
           {title && (
-            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold leading-tight mt-4 lg:mt-8">
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold leading-tight mt-2">
               {title}
             </h1>
           )}
@@ -307,7 +307,7 @@ const WebinarSection: React.FC<HeroSectionProps> = ({
           )}
 
           {(eventDate || eventTime || location || price !== undefined) && (
-            <div className="mt-6 lg:mt-8 flex flex-wrap gap-2 lg:gap-3">
+            <div className="mt-6 lg:mt-8 flex flex-col gap-2 lg:gap-3 max-w-xs">
               {eventDate && (
                 <span className="inline-flex items-center gap-2 px-3 py-2 rounded-xl bg-white border border-gray-200 text-xs sm:text-sm text-gray-800">
                   <CalendarDaysIcon className="text-gray-500 shrink-0 w-4 h-4" />
@@ -337,7 +337,7 @@ const WebinarSection: React.FC<HeroSectionProps> = ({
         </div>
 
         {/* Dynamic Event Form */}
-       
+          <div className="order-1 lg:order-2">
           {eventId ? (
             <DynamicEventForm
               formId={formId}
@@ -351,6 +351,7 @@ const WebinarSection: React.FC<HeroSectionProps> = ({
               Registration form not configured.
             </div>
           )}
+          </div>
         </div>
 
 
