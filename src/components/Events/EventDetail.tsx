@@ -1488,6 +1488,7 @@ const EventDetail: React.FC = () => {
                   eventType={event.event_type}
                   eventId={event.id}
                   eventName={event.title}
+                  duration={event.duration}
                   onRegisterClick={() => {
                     if (process.env.NODE_ENV === 'development') {
                       console.log('🎯 EventDetail: onRegisterClick called - opening registration modal');
