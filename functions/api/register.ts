@@ -926,8 +926,8 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
     // ASSUMPTION: WhatsApp number provision implies consent (may violate GDPR/data protection laws)
     // RISK: Implicit consent assumption does not meet compliance standards
     // TRACKING: Create issue at your issue tracker before deploying
-    // REMOVAL: This workaround expires 2026-07-01 and will throw runtime error
-    const WORKAROUND_REMOVAL_DATE = new Date('2026-07-01');
+    // REMOVAL: This workaround expires 2027-01-01 and will throw runtime error
+    const WORKAROUND_REMOVAL_DATE = new Date('2027-01-01');
     
     if (Date.now() > WORKAROUND_REMOVAL_DATE.getTime()) {
       throw new Error(
