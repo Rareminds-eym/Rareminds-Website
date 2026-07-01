@@ -20,6 +20,7 @@ interface HeroSectionProps {
   eventId?: string;
   eventName?: string;
   formId?: string | null; // ID of the custom form to render
+  duration?: number; // Duration in minutes
 }
 
 const WebinarSection: React.FC<HeroSectionProps> = ({
@@ -32,6 +33,7 @@ const WebinarSection: React.FC<HeroSectionProps> = ({
   eventId,
   eventName,
   formId,
+  duration, // Duration in minutes
 }) => {
   const title       = content?.title;
   const description = content?.description;
@@ -167,6 +169,22 @@ const WebinarSection: React.FC<HeroSectionProps> = ({
       minute: "2-digit",
       hour12: true,
     });
+  };
+
+  // Format duration from minutes to human-readable format
+  const formatDuration = (minutes?: number) => {
+    if (!minutes) return null;
+    
+    const hours = Math.floor(minutes / 60);
+    const mins = minutes % 60;
+    
+    if (hours === 0) {
+      return `${mins} min`;
+    } else if (mins === 0) {
+      return `${hours} hr`;
+    } else {
+      return `${hours} hr ${mins} min`;
+    }
   };
 
   // Handle payment success
@@ -306,7 +324,7 @@ const WebinarSection: React.FC<HeroSectionProps> = ({
             </ul>
           )}
 
-          {(eventDate || eventTime || location || price !== undefined) && (
+          {(eventDate || eventTime || location || duration || price !== undefined) && (
             <div className="mt-6 lg:mt-8 flex flex-col gap-2 lg:gap-3 max-w-xs">
               {eventDate && (
                 <span className="inline-flex items-center gap-2 px-3 py-2 rounded-xl bg-white border border-gray-200 text-xs sm:text-sm text-gray-800">
@@ -318,6 +336,12 @@ const WebinarSection: React.FC<HeroSectionProps> = ({
                 <span className="inline-flex items-center gap-2 px-3 py-2 rounded-xl bg-white border border-gray-200 text-xs sm:text-sm text-gray-800">
                   <ClockIcon className="text-gray-500 shrink-0 w-4 h-4" />
                   {formatTime(eventTime)} IST
+                </span>
+              )}
+              {duration && (
+                <span className="inline-flex items-center gap-2 px-3 py-2 rounded-xl bg-white border border-gray-200 text-xs sm:text-sm text-gray-800">
+                  <ClockIcon className="text-gray-500 shrink-0 w-4 h-4" />
+                  Duration: {formatDuration(duration)}
                 </span>
               )}
               {location && (

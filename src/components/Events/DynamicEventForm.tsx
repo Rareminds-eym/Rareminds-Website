@@ -231,7 +231,7 @@ const DynamicEventForm: React.FC<DynamicEventFormProps> = ({
   };
 
   // Render individual field
-  const renderField = (field: FormField) => {
+  const renderField = (field: FormField, index: number, allFields: FormField[]) => {
     const hasError = !!errors[field.field_name];
     const errorMessage = errors[field.field_name]?.message as string | undefined;
 
@@ -241,12 +241,15 @@ const DynamicEventForm: React.FC<DynamicEventFormProps> = ({
         : 'border-gray-300 focus:border-blue-500 focus:ring-blue-200'
     } focus:ring-2 focus:outline-none transition-colors`;
 
+    // All fields full-width for consistent layout
+    const gridSpan = 'col-span-full';
+
     switch (field.field_type) {
       case 'text':
       case 'email':
       case 'tel':
         return (
-          <div key={field.id} className="mb-4">
+          <div key={field.id} className={gridSpan}>
             <label htmlFor={field.field_name} className="block text-sm font-medium text-gray-700 mb-2">
               {field.field_label}
               {field.is_required && <span className="text-red-500 ml-1">*</span>}
@@ -266,7 +269,7 @@ const DynamicEventForm: React.FC<DynamicEventFormProps> = ({
 
       case 'textarea':
         return (
-          <div key={field.id} className="mb-4 col-span-full">
+          <div key={field.id} className={gridSpan}>
             <label htmlFor={field.field_name} className="block text-sm font-medium text-gray-700 mb-2">
               {field.field_label}
               {field.is_required && <span className="text-red-500 ml-1">*</span>}
@@ -286,7 +289,7 @@ const DynamicEventForm: React.FC<DynamicEventFormProps> = ({
 
       case 'select':
         return (
-          <div key={field.id} className="mb-4 col-span-full">
+          <div key={field.id} className={gridSpan}>
             <label htmlFor={field.field_name} className="block text-sm font-medium text-gray-700 mb-2">
               {field.field_label}
               {field.is_required && <span className="text-red-500 ml-1">*</span>}
@@ -311,7 +314,7 @@ const DynamicEventForm: React.FC<DynamicEventFormProps> = ({
 
       case 'checkbox':
         return (
-          <div key={field.id} className="mb-4 col-span-full">
+          <div key={field.id} className={gridSpan}>
             <div className="flex items-start">
               <input
                 id={field.field_name}
@@ -382,18 +385,18 @@ const DynamicEventForm: React.FC<DynamicEventFormProps> = ({
         <p className="text-gray-600 mb-6">{form.description}</p>
       )}
 
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {fields.map(field => renderField(field))}
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
+          {fields.map((field, index) => renderField(field, index, fields))}
         </div>
 
         {submitError && (
-          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
+          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mt-6">
             {submitError}
           </div>
         )}
 
-        <div className="flex gap-3 pt-4 border-t">
+        <div className="flex gap-3 pt-6 mt-6 border-t">
           {onCancel && (
             <button
               type="button"
