@@ -516,12 +516,9 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
     // Log incoming request details
     logger.info('Incoming request', {
       event_id,
-      form_id: form_id || '(not set)',
       event_type,
       event_name,
-      answerCount: answers ? Object.keys(answers).length : 0,
-      hasPaymentId: !!payment_id,
-      total_amount
+      hasPaymentId: !!payment_id
     });
 
     // Validate required fields
@@ -621,8 +618,6 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
 
     // Log extracted core fields for debugging
     logger.info('Extracted fields', {
-      email,
-      phone,
       country
     });
 
@@ -969,9 +964,7 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
         ? `${displayFields.join(', ')}, ...and ${remainingCount} more`
         : displayFields.join(', ');
       
-      logger.warn(`Skipped ${skippedFields.length} invalid Zoho field(s) for event ${event_id}`, {
-        fields: fieldsList
-      });
+      logger.warn(`Skipped ${skippedFields.length} invalid Zoho field(s) for event ${event_id}`);
     }
     
     // WhatsApp Opt-In is now handled explicitly by all forms
@@ -1010,8 +1003,6 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
       // Log webhook submission details
       logger.info('Sending to Zoho webhook', {
         event_id,
-        email: zohoPayload["Email"],
-        phone: zohoPayload["Phone"],
         has_payment: !!zohoPayload["Payment Id"]
       });
 
@@ -1051,7 +1042,7 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
     }
 
     // Return success
-    logger.info('Registration complete', { event_id, email });
+    logger.info('Registration complete', { event_id });
     return new Response(JSON.stringify({
       success: true,
       message: 'Registration processed and sent to Zoho CRM'
