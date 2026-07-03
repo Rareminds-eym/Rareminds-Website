@@ -17,6 +17,7 @@
  */
 
 import { FIELD_MAPPING, PROTECTED_REQUIRED_FIELDS, convertToZohoFieldName, ZOHO_PAYLOAD_KEYS, ZohoPayloadKey } from '../constants/fieldMappings';
+import Logger from '../utils/logger';
 
 interface Env {
   ZOHO_FLOW_WEBHOOK_URL: string;
@@ -43,9 +44,15 @@ interface RegisterRequest {
 interface ZohoPayload {
   // Exact Zoho CRM webhook fields (no duplicates)
   'Amount': string;
+  'Approx Student Strength': string;
+  'Board': string;
+  'City': string;
+  'Client Category': string;
   'Comments': string;
   'Company Name': string;
   'Date Of Birth': string;
+  'Decision Maker Name': string;
+  'Decision Maker Role': string;
   'Department Stream': string;
   'District': string;
   'Email': string;
@@ -55,7 +62,9 @@ interface ZohoPayload {
   'Event Type': string;
   'First Name': string;
   'Form Id': string;
+  'Grades Upto': string;
   'How Did You Hear About Us': string;
+  'Industry': string;
   'Institution University Name': string;
   'Job Title': string;
   'Last Name': string;
@@ -72,6 +81,7 @@ interface ZohoPayload {
   'Preferred Language': string;
   'Preferred Time': string;
   'Razorpay Payment Id': string;
+  'Recommended Pilot Grade': string;
   'Referral Code': string;
   'Registration Date': string;
   'Registration Timestamp': string;
@@ -80,7 +90,9 @@ interface ZohoPayload {
   'Subject You Teach': string;
   'Teaching Level': string;
   'Total Amount': string;
+  'University College': string;
   'Webinar Name': string;
+  'Website': string;
   'Whatsapp Number': string;
   'WhatsApp Opt-In': boolean | null;  // Note: Zoho uses hyphen, not space
   'Years Of Experience': string;
@@ -125,9 +137,15 @@ function assignToZohoPayload(
   // TypeScript verifies each assignment matches the interface definition
   switch (key) {
     case 'Amount': payload['Amount'] = value; break;
+    case 'Approx Student Strength': payload['Approx Student Strength'] = value; break;
+    case 'Board': payload['Board'] = value; break;
+    case 'City': payload['City'] = value; break;
+    case 'Client Category': payload['Client Category'] = value; break;
     case 'Comments': payload['Comments'] = value; break;
     case 'Company Name': payload['Company Name'] = value; break;
     case 'Date Of Birth': payload['Date Of Birth'] = value; break;
+    case 'Decision Maker Name': payload['Decision Maker Name'] = value; break;
+    case 'Decision Maker Role': payload['Decision Maker Role'] = value; break;
     case 'Department Stream': payload['Department Stream'] = value; break;
     case 'District': payload['District'] = value; break;
     case 'Email': payload['Email'] = value; break;
@@ -137,7 +155,9 @@ function assignToZohoPayload(
     case 'Event Type': payload['Event Type'] = value; break;
     case 'First Name': payload['First Name'] = value; break;
     case 'Form Id': payload['Form Id'] = value; break;
+    case 'Grades Upto': payload['Grades Upto'] = value; break;
     case 'How Did You Hear About Us': payload['How Did You Hear About Us'] = value; break;
+    case 'Industry': payload['Industry'] = value; break;
     case 'Institution University Name': payload['Institution University Name'] = value; break;
     case 'Job Title': payload['Job Title'] = value; break;
     case 'Last Name': payload['Last Name'] = value; break;
@@ -154,6 +174,7 @@ function assignToZohoPayload(
     case 'Preferred Language': payload['Preferred Language'] = value; break;
     case 'Preferred Time': payload['Preferred Time'] = value; break;
     case 'Razorpay Payment Id': payload['Razorpay Payment Id'] = value; break;
+    case 'Recommended Pilot Grade': payload['Recommended Pilot Grade'] = value; break;
     case 'Referral Code': payload['Referral Code'] = value; break;
     case 'Registration Date': payload['Registration Date'] = value; break;
     case 'Registration Timestamp': payload['Registration Timestamp'] = value; break;
@@ -162,7 +183,9 @@ function assignToZohoPayload(
     case 'Subject You Teach': payload['Subject You Teach'] = value; break;
     case 'Teaching Level': payload['Teaching Level'] = value; break;
     case 'Total Amount': payload['Total Amount'] = value; break;
+    case 'University College': payload['University College'] = value; break;
     case 'Webinar Name': payload['Webinar Name'] = value; break;
+    case 'Website': payload['Website'] = value; break;
     case 'Whatsapp Number': payload['Whatsapp Number'] = value; break;
     case 'Years Of Experience': payload['Years Of Experience'] = value; break;
     // 'WhatsApp Opt-In' already handled above
@@ -267,12 +290,13 @@ const MAX_CACHE_SIZE = 100;
 const WARNING_COOLDOWN_MS = 60000; // 1 minute cooldown per unique warning
 
 // Helper to log warnings with rate limiting
-function logWarningOnce(key: string, message: string): void {
+function logWarningOnce(key: string, message: string, context?: string): void {
   const now = Date.now();
   const lastWarned = warningCache.get(key);
   
   if (!lastWarned || (now - lastWarned) > WARNING_COOLDOWN_MS) {
-    console.warn(`[Register] ${message}`);
+    const logger = new Logger(context || 'Register');
+    logger.warn(message);
     warningCache.set(key, now);
     
     // Eviction strategy: remove stale entries first, then oldest 20% if still over limit
@@ -454,6 +478,9 @@ class FieldMatcher {
 export async function onRequestPost(context: { request: Request; env: Env }) {
   const { request, env } = context;
   
+  // Initialize logger
+  const logger = new Logger('Register');
+  
   // Create fresh field matcher instance per request
   const fieldMatcher = new FieldMatcher();
 
@@ -477,7 +504,7 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
     body = await request.json();
     
     if (!body || typeof body !== 'object' || Array.isArray(body)) {
-      console.warn('[Register] Invalid request body');
+      logger.warn('Invalid request body');
       return new Response(JSON.stringify({ error: 'Invalid request body' }), {
         status: 400,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' }
@@ -486,16 +513,16 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
     
     const { answers, event_id, form_id, event_type, event_name, payment_id, total_amount } = body;
 
-    console.log('[Register] Incoming request:', JSON.stringify({
-      event_id, form_id: form_id || '(not set)', event_type, event_name,
-      answerCount: answers ? Object.keys(answers).length : 0,
-      answerKeys: answers ? Object.keys(answers) : [],
-      hasPaymentId: !!payment_id, total_amount
-    }));
+    // Log incoming request details
+    logger.info('Incoming request', {
+      event_type,
+      event_name,
+      hasPaymentId: !!payment_id
+    });
 
     // Validate required fields
     if (!answers || typeof answers !== 'object') {
-      console.warn('[Register] Invalid answers field');
+      logger.warn('Invalid answers field');
       return new Response(JSON.stringify({ error: 'Invalid answers field' }), {
         status: 400,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' }
@@ -503,7 +530,11 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
     }
 
     if (!event_id || !event_type || !event_name) {
-      console.warn('[Register] Missing required fields:', { event_id, event_type, event_name });
+      logger.warn('Missing required fields', { 
+        has_event_id: !!event_id, 
+        has_event_type: !!event_type, 
+        has_event_name: !!event_name 
+      });
       return new Response(JSON.stringify({ error: 'Missing required fields' }), {
         status: 400,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' }
@@ -512,7 +543,7 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
 
     // Validate event_type
     if (!['free', 'paid'].includes(event_type)) {
-      console.warn('[Register] Invalid event_type:', event_type);
+      logger.warn('Invalid event_type');
       return new Response(JSON.stringify({ error: 'event_type must be "free" or "paid"' }), {
         status: 400,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' }
@@ -521,7 +552,7 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
 
     // Validate payment_id for paid events
     if (event_type === 'paid' && !payment_id) {
-      console.warn('[Register] Paid event missing payment_id');
+      logger.warn('Paid event missing payment_id');
       return new Response(JSON.stringify({ error: 'payment_id required for paid events' }), {
         status: 400,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' }
@@ -580,9 +611,8 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
       'nationality', 'Nationality', 'nation', 'location_country'
     ]) || 'India'; // Default to India if no country specified
 
-    console.log('[Register] Extracted fields:', JSON.stringify({
-      first_name, last_name, full_name, email, phone, whatsappNumber, country
-    }));
+    // Removed logging of extracted fields to prevent sensitive data exposure
+    // Country information is not logged
 
     // Smart name processing for Zoho CRM requirements
     // Helper to split a name string into [first, last] parts
@@ -796,24 +826,35 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
       "Total Amount": '0',
       
       // Optional fields (will be populated from form data)
+      "Approx Student Strength": '',
+      "Board": '',
+      "City": '',
+      "Client Category": '',
+      "Comments": '',
       "Company Name": '',
-      "Job Title": '',
+      "Date Of Birth": '',
+      "Decision Maker Name": '',
+      "Decision Maker Role": '',
       "Department Stream": '',
+      "District": '',
+      "Grades Upto": '',
+      "How Did You Hear About Us": '',
+      "Industry": '',
+      "Institution University Name": '',
+      "Job Title": '',
+      "Linkedin Profile": '',
+      "Preferred Date": '',
+      "Preferred Language": '',
+      "Preferred Time": '',
+      "Recommended Pilot Grade": '',
+      "Referral Code": '',
+      "School College Institution Name": '',
+      "State": '',
       "Subject You Teach": '',
       "Teaching Level": '',
-      "Years Of Experience": '',
-      "School College Institution Name": '',
-      "Institution University Name": '',
-      "State": '',
-      "District": '',
-      "How Did You Hear About Us": '',
-      "Preferred Date": '',
-      "Preferred Time": '',
-      "Preferred Language": '',
-      "Linkedin Profile": '',
-      "Referral Code": '',
-      "Date Of Birth": '',
-      "Comments": ''
+      "University College": '',
+      "Website": '',
+      "Years Of Experience": ''
     };
 
     // Intelligent field processing with robust mapping and typo tolerance
@@ -910,57 +951,19 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
     
     // Log skipped fields with truncation to first 10 fields
     if (skippedFields.length > 0) {
-      const displayFields = skippedFields.slice(0, 10);
-      const remainingCount = skippedFields.length - 10;
-      const fieldsList = remainingCount > 0 
-        ? `${displayFields.join(', ')}, ...and ${remainingCount} more`
-        : displayFields.join(', ');
-      
-      console.warn(
-        `[Register] Skipped ${skippedFields.length} invalid Zoho field(s) for event ${event_id}: ${fieldsList}`
-      );
+      logger.warn(`Skipped ${skippedFields.length} invalid Zoho field(s)`, {
+        field_count: skippedFields.length
+      });
     }
     
-    // COMPLIANCE WORKAROUND - Temporary fallback with enforced removal date
-    // CONTEXT: Legacy forms without explicit WhatsApp Opt-In checkbox
-    // ASSUMPTION: WhatsApp number provision implies consent (may violate GDPR/data protection laws)
-    // RISK: Implicit consent assumption does not meet compliance standards
-    // TRACKING: Create issue at your issue tracker before deploying
-    // REMOVAL: This workaround expires 2027-01-01 and will throw runtime error
-    const WORKAROUND_REMOVAL_DATE = new Date('2027-01-01');
-    
-    if (Date.now() > WORKAROUND_REMOVAL_DATE.getTime()) {
-      throw new Error(
-        'COMPLIANCE VIOLATION: Implicit consent workaround expired. ' +
-        'All forms must include explicit WhatsApp Opt-In field. ' +
-        'Remove this workaround code and verify all active forms send opt-in values.'
-      );
-    }
-    
-    if (zohoPayload["WhatsApp Opt-In"] === null) {
-      const hasWhatsAppNumber = zohoPayload["Whatsapp Number"] && zohoPayload["Whatsapp Number"].trim() !== '';
-      const hasEmail = zohoPayload["Email"] && zohoPayload["Email"].trim() !== '';
-      const hasName = zohoPayload["First Name"] && zohoPayload["First Name"].trim() !== '';
-      
-      // Only apply workaround if user provided WhatsApp number (implicit consent indicator)
-      // This should be removed once all forms properly send explicit opt-in values
-      if (hasWhatsAppNumber && hasEmail && hasName) {
-        zohoPayload["WhatsApp Opt-In"] = true;
-        zohoPayload["Opt In Source"] = 'Website Form (Legacy Implicit)';
-        zohoPayload["Opt In Time"] = registrationTimestamp;
-        
-        // Log implicit consent usage for compliance audit trail
-        console.warn(
-          `[Register] COMPLIANCE: Implicit WhatsApp consent applied for event ${event_id}. ` +
-          `Form ${form_id || 'unknown'} lacks explicit opt-in field. Update form before ${WORKAROUND_REMOVAL_DATE.toISOString().split('T')[0]}.`
-        );
-      }
-    }
+    // WhatsApp Opt-In is now handled explicitly by all forms
+    // No fallback needed - forms must include WhatsApp opt-in checkbox
 
     // Note: First Name is already protected via PROTECTED_REQUIRED_FIELDS in the field processing loop above
     
     // Update payment fields with proper Zoho field names
-    if (event_type === 'paid' && payment_id) {
+    // Use explicit check for non-empty string
+    if (event_type === 'paid' && payment_id && payment_id !== '') {
       zohoPayload["Payment Id"] = payment_id;
       zohoPayload["Razorpay Payment Id"] = payment_id;
       zohoPayload["Payment Status"] = 'completed';
@@ -973,7 +976,7 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
 
     // Send to Zoho Flow webhook
     if (!env.ZOHO_FLOW_WEBHOOK_URL) {
-      console.log('[Register] ZOHO_FLOW_WEBHOOK_URL not configured, skipping Zoho submission');
+      logger.info('ZOHO_FLOW_WEBHOOK_URL not configured, skipping Zoho submission');
       return new Response(JSON.stringify({
         success: true,
         message: 'Registration processed (Zoho webhook not configured)'
@@ -983,16 +986,13 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
       });
     }
 
-    console.log('[Register] Sending to Zoho Flow webhook:', JSON.stringify({
-      event_id,
-      name: zohoPayload["First Name"],
-      email: zohoPayload["Email"],
-      phone: zohoPayload["Phone"],
-      payloadKeyCount: Object.keys(zohoPayload).filter(k => zohoPayload[k as keyof ZohoPayload]).length,
-    }));
-
     try {
       const webhookUrl = env.ZOHO_FLOW_WEBHOOK_URL;
+
+      // Log webhook submission details
+      logger.info('Sending to Zoho webhook', {
+        has_payment: !!zohoPayload["Payment Id"]
+      });
 
       // Send POST request with JSON body
       const response = await fetch(webhookUrl, {
@@ -1008,25 +1008,22 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
 
       if (!response.ok) {
         // Log webhook failures for monitoring (non-blocking)
-        console.warn(`[Register] Zoho webhook failed: ${response.status} ${response.statusText}`, {
-          event_id,
-          status: response.status,
-          response: responseText.substring(0, 200)
+        logger.warn('Zoho webhook failed', {
+          status: response.status
         });
       } else {
-        console.log('[Register] Zoho webhook success:', responseText.substring(0, 200));
+        logger.debug('Zoho webhook success');
       }
 
     } catch (error) {
       // Log webhook errors for monitoring (non-blocking)
-      console.error('[Register] Zoho webhook request failed:', {
-        event_id,
+      logger.error('Zoho webhook request failed', {
         error: error instanceof Error ? error.message : 'Unknown error'
       });
     }
 
     // Return success
-    console.log('[Register] Registration complete:', { event_id, email });
+    logger.info('Registration complete');
     return new Response(JSON.stringify({
       success: true,
       message: 'Registration processed and sent to Zoho CRM'
@@ -1036,9 +1033,7 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
     });
 
   } catch (error) {
-    console.error('[Register] Internal error:', {
-      event_id: body?.event_id || 'unknown',
-      event_name: body?.event_name || 'unknown',
+    logger.error('Internal error', {
       error: error instanceof Error ? error.message : 'Unknown error',
       stack: error instanceof Error ? error.stack : undefined
     });
