@@ -6,9 +6,8 @@
 type LogLevel = 'debug' | 'info' | 'warn' | 'error';
 
 interface LogContext {
-  [key: string]: string | number | boolean | null | undefined | object;
+  [key: string]: string | number | boolean | null | undefined | Record<string, unknown>;
 }
-
 class Logger {
   private context: string;
   private enableDebug: boolean;

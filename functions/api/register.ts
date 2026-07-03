@@ -1023,13 +1023,11 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
         logger.warn('Zoho webhook failed', {
           event_id,
           status: response.status,
-          statusText: response.statusText,
-          response: responseText.substring(0, 200)
+          statusText: response.statusText
         });
       } else {
-        logger.info('Zoho webhook success', {
-          event_id,
-          response: responseText.substring(0, 200)
+        logger.debug('Zoho webhook success', {
+          event_id
         });
       }
 
