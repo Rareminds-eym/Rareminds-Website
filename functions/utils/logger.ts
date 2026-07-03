@@ -22,7 +22,11 @@ class Logger {
     const baseLog = `[${timestamp}] [${level.toUpperCase()}] [${this.context}] ${message}`;
     
     if (data && Object.keys(data).length > 0) {
-      return `${baseLog} ${JSON.stringify(data)}`;
+      try {
+        return `${baseLog} ${JSON.stringify(data)}`;
+      } catch {
+        return `${baseLog} [non-serializable data]`;
+      }
     }
     
     return baseLog;

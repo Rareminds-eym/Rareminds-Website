@@ -531,7 +531,11 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
     }
 
     if (!event_id || !event_type || !event_name) {
-      logger.warn('Missing required fields', { event_id, event_type, event_name });
+      logger.warn('Missing required fields', { 
+        has_event_id: !!event_id, 
+        has_event_type: !!event_type, 
+        has_event_name: !!event_name 
+      });
       return new Response(JSON.stringify({ error: 'Missing required fields' }), {
         status: 400,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' }
@@ -540,7 +544,7 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
 
     // Validate event_type
     if (!['free', 'paid'].includes(event_type)) {
-      logger.warn('Invalid event_type', { event_type });
+      logger.warn('Invalid event_type', { event_id });
       return new Response(JSON.stringify({ error: 'event_type must be "free" or "paid"' }), {
         status: 400,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' }
@@ -560,7 +564,8 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
     if (event_type === 'paid' && payment_id === '') {
       logger.error('CRITICAL: payment_id is empty string for paid event', {
         event_id,
-        event_type
+        event_type,
+        has_payment_id: !!payment_id
       });
     }
 
@@ -618,7 +623,7 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
 
     // Log extracted core fields for debugging
     logger.info('Extracted fields', {
-      country
+      has_country: !!country
     });
 
     // Smart name processing for Zoho CRM requirements
@@ -958,13 +963,10 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
     
     // Log skipped fields with truncation to first 10 fields
     if (skippedFields.length > 0) {
-      const displayFields = skippedFields.slice(0, 10);
-      const remainingCount = skippedFields.length - 10;
-      const fieldsList = remainingCount > 0 
-        ? `${displayFields.join(', ')}, ...and ${remainingCount} more`
-        : displayFields.join(', ');
-      
-      logger.warn(`Skipped ${skippedFields.length} invalid Zoho field(s) for event ${event_id}`);
+      logger.warn(`Skipped ${skippedFields.length} invalid Zoho field(s)`, {
+        event_id,
+        field_count: skippedFields.length
+      });
     }
     
     // WhatsApp Opt-In is now handled explicitly by all forms
@@ -1022,8 +1024,7 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
         // Log webhook failures for monitoring (non-blocking)
         logger.warn('Zoho webhook failed', {
           event_id,
-          status: response.status,
-          statusText: response.statusText
+          status: response.status
         });
       } else {
         logger.debug('Zoho webhook success', {
