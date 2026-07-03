@@ -199,6 +199,7 @@ const WebinarSection: React.FC<HeroSectionProps> = ({
         .from('event_registrations')
         .update({ 
           payment_status: 'completed',
+          payment_id: paymentDetails.razorpay_payment_id,  // Store payment ID
           razorpay_payment_id: paymentDetails.razorpay_payment_id,
           order_id: paymentDetails.order_id,
           payment_date: paymentDetails.payment_date,
