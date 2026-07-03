@@ -559,15 +559,6 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' }
       });
     }
-    
-    // CRITICAL DEBUG: Check if payment_id is empty string for paid events
-    if (event_type === 'paid' && payment_id === '') {
-      logger.error('CRITICAL: payment_id is empty string for paid event', {
-        event_id,
-        event_type,
-        has_payment_id: !!payment_id
-      });
-    }
 
     // Enhanced field extraction using optimized utility
     const extractFieldFuzzy = (answers: Record<string, unknown>, possibleKeys: string[]): string => {

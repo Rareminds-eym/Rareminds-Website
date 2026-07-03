@@ -6,7 +6,7 @@
 type LogLevel = 'debug' | 'info' | 'warn' | 'error';
 
 interface LogContext {
-  [key: string]: string | number | boolean | null | undefined | Record<string, unknown>;
+  [key: string]: string | number | boolean | null | undefined;
 }
 class Logger {
   private context: string;
@@ -35,18 +35,13 @@ class Logger {
   debug(message: string, data?: LogContext): void {
     if (this.enableDebug) {
       const formattedMessage = this.formatMessage('debug', message, data);
-      // Debug logs use console.debug in production environments
-      if (typeof console.debug === 'function') {
-        console.debug(formattedMessage);
-      }
+      console.debug(formattedMessage);
     }
   }
 
   info(message: string, data?: LogContext): void {
     const formattedMessage = this.formatMessage('info', message, data);
-    if (typeof console.info === 'function') {
-      console.info(formattedMessage);
-    }
+    console.info(formattedMessage);
   }
 
   warn(message: string, data?: LogContext): void {
