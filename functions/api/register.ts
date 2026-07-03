@@ -563,9 +563,7 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
     if (event_type === 'paid' && payment_id === '') {
       logger.error('CRITICAL: payment_id is empty string for paid event', {
         event_id,
-        event_type,
-        payment_id_type: typeof payment_id,
-        payment_id_value: JSON.stringify(payment_id)
+        event_type
       });
     }
 
@@ -621,26 +619,11 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
       'nationality', 'Nationality', 'nation', 'location_country'
     ]) || 'India'; // Default to India if no country specified
 
-    // Extract Lead Source from form
-    const leadSource = extractFieldFuzzy(answers, [
-      'lead_source', 'leadSource', 'Lead Source', 'source', 'Source',
-      'heard_from', 'heardFrom', 'how_did_you_hear', 'howDidYouHear',
-      'referral_source', 'referralSource', 'campaign_source', 'campaignSource'
-    ]);
-
-    // Extract Opt In Source from form
-    const optInSource = extractFieldFuzzy(answers, [
-      'opt_in_source', 'optInSource', 'Opt In Source', 'optin_source',
-      'consent_source', 'consentSource', 'whatsapp_source', 'whatsappSource'
-    ]);
-
     // Log extracted core fields for debugging
     logger.info('Extracted fields', {
       email,
       phone,
-      country,
-      leadSource: leadSource || '(empty)',
-      optInSource: optInSource || '(empty)'
+      country
     });
 
     // Smart name processing for Zoho CRM requirements
@@ -1029,8 +1012,7 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
         event_id,
         email: zohoPayload["Email"],
         phone: zohoPayload["Phone"],
-        payment_id: zohoPayload["Payment Id"] || '(empty)',
-        payment_status: zohoPayload["Payment Status"]
+        has_payment: !!zohoPayload["Payment Id"]
       });
 
       // Send POST request with JSON body
