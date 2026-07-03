@@ -515,7 +515,6 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
 
     // Log incoming request details
     logger.info('Incoming request', {
-      event_id,
       event_type,
       event_name,
       hasPaymentId: !!payment_id
@@ -544,7 +543,7 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
 
     // Validate event_type
     if (!['free', 'paid'].includes(event_type)) {
-      logger.warn('Invalid event_type', { event_id });
+      logger.warn('Invalid event_type');
       return new Response(JSON.stringify({ error: 'event_type must be "free" or "paid"' }), {
         status: 400,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' }
@@ -612,10 +611,8 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
       'nationality', 'Nationality', 'nation', 'location_country'
     ]) || 'India'; // Default to India if no country specified
 
-    // Log extracted core fields for debugging
-    logger.info('Extracted fields', {
-      has_country: !!country
-    });
+    // Removed logging of extracted fields to prevent sensitive data exposure
+    // Country information is not logged
 
     // Smart name processing for Zoho CRM requirements
     // Helper to split a name string into [first, last] parts
@@ -955,7 +952,6 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
     // Log skipped fields with truncation to first 10 fields
     if (skippedFields.length > 0) {
       logger.warn(`Skipped ${skippedFields.length} invalid Zoho field(s)`, {
-        event_id,
         field_count: skippedFields.length
       });
     }
@@ -995,7 +991,6 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
 
       // Log webhook submission details
       logger.info('Sending to Zoho webhook', {
-        event_id,
         has_payment: !!zohoPayload["Payment Id"]
       });
 
@@ -1014,25 +1009,21 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
       if (!response.ok) {
         // Log webhook failures for monitoring (non-blocking)
         logger.warn('Zoho webhook failed', {
-          event_id,
           status: response.status
         });
       } else {
-        logger.debug('Zoho webhook success', {
-          event_id
-        });
+        logger.debug('Zoho webhook success');
       }
 
     } catch (error) {
       // Log webhook errors for monitoring (non-blocking)
       logger.error('Zoho webhook request failed', {
-        event_id,
         error: error instanceof Error ? error.message : 'Unknown error'
       });
     }
 
     // Return success
-    logger.info('Registration complete', { event_id });
+    logger.info('Registration complete');
     return new Response(JSON.stringify({
       success: true,
       message: 'Registration processed and sent to Zoho CRM'
@@ -1043,8 +1034,6 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
 
   } catch (error) {
     logger.error('Internal error', {
-      event_id: body?.event_id || 'unknown',
-      event_name: body?.event_name || 'unknown',
       error: error instanceof Error ? error.message : 'Unknown error',
       stack: error instanceof Error ? error.stack : undefined
     });
