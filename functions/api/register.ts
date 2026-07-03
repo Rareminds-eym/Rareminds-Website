@@ -513,6 +513,17 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
     
     const { answers, event_id, form_id, event_type, event_name, payment_id, total_amount } = body;
 
+    // Log incoming request details
+    logger.info('Incoming request', {
+      event_id,
+      form_id: form_id || '(not set)',
+      event_type,
+      event_name,
+      answerCount: answers ? Object.keys(answers).length : 0,
+      hasPaymentId: !!payment_id,
+      total_amount
+    });
+
     // Validate required fields
     if (!answers || typeof answers !== 'object') {
       logger.warn('Invalid answers field');
@@ -609,6 +620,28 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
       'country', 'Country', 'COUNTRY', 'country_code', 'countryCode',
       'nationality', 'Nationality', 'nation', 'location_country'
     ]) || 'India'; // Default to India if no country specified
+
+    // Extract Lead Source from form
+    const leadSource = extractFieldFuzzy(answers, [
+      'lead_source', 'leadSource', 'Lead Source', 'source', 'Source',
+      'heard_from', 'heardFrom', 'how_did_you_hear', 'howDidYouHear',
+      'referral_source', 'referralSource', 'campaign_source', 'campaignSource'
+    ]);
+
+    // Extract Opt In Source from form
+    const optInSource = extractFieldFuzzy(answers, [
+      'opt_in_source', 'optInSource', 'Opt In Source', 'optin_source',
+      'consent_source', 'consentSource', 'whatsapp_source', 'whatsappSource'
+    ]);
+
+    // Log extracted core fields for debugging
+    logger.info('Extracted fields', {
+      email,
+      phone,
+      country,
+      leadSource: leadSource || '(empty)',
+      optInSource: optInSource || '(empty)'
+    });
 
     // Smart name processing for Zoho CRM requirements
     // Helper to split a name string into [first, last] parts
@@ -990,6 +1023,15 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
 
     try {
       const webhookUrl = env.ZOHO_FLOW_WEBHOOK_URL;
+
+      // Log webhook submission details
+      logger.info('Sending to Zoho webhook', {
+        event_id,
+        email: zohoPayload["Email"],
+        phone: zohoPayload["Phone"],
+        payment_id: zohoPayload["Payment Id"] || '(empty)',
+        payment_status: zohoPayload["Payment Status"]
+      });
 
       // Send POST request with JSON body
       const response = await fetch(webhookUrl, {
