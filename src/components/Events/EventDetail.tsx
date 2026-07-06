@@ -22,6 +22,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useOptimizedEvents } from '../../hooks/Events/useOptimizedEvents';
 import { eventInterestedService } from '../../services/eventInterestedService';
 import { Event as AppEvent } from '../../types/Events/event';
+import { trackEvent, ANALYTICS_EVENTS } from '../../utils/analytics';
 
 import Carousel from './Carousel';
 import EventContactForm from './EventContactForm';
@@ -310,6 +311,23 @@ const EventDetail: React.FC = () => {
 
     loadFullDetails();
   }, [minimalEvent, fullEventData, loadingFullDetails, loadFullEventDetails]);
+
+  // Track event_detail_view once when event data is first available
+  const hasTrackedDetailView = React.useRef(false);
+  React.useEffect(() => {
+    if (event && event.id && !hasTrackedDetailView.current) {
+      hasTrackedDetailView.current = true;
+      trackEvent(ANALYTICS_EVENTS.EVENT_DETAIL_VIEW, {
+        event_id: event.id,
+        event_name: event.title,
+        event_category: event.category,
+        event_status: event.status,
+        event_price: event.price ?? 0,
+        event_date: event.event_date,
+        page_path: window.location.pathname,
+      });
+    }
+  }, [event]);
 
   // Interest tracking state
   const [interestCount, setInterestCount] = React.useState(0);

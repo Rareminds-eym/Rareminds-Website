@@ -1,9 +1,10 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import type { FormField, FormWithFields } from '../../types/dynamicForm';
 import { getFormById } from '../../services/dynamicFormService';
+import { trackEvent, ANALYTICS_EVENTS } from '../../utils/analytics';
 
 interface DynamicEventFormProps {
   formId?: string | null;
@@ -19,14 +20,35 @@ const DynamicEventForm: React.FC<DynamicEventFormProps> = ({
   onCancel
 }) => {
   const [form, setForm] = useState<FormWithFields | null>(null);
-  const [isLoading, setIsLoading] = useState(true); // Always start loading
+  const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [fetchError, setFetchError] = useState<string | null>(null);
 
+  // Analytics: track start once on first field focus; track each field once
+  const hasTrackedStart = useRef(false);
+  const interactedFields = useRef<Set<string>>(new Set());
+
+  const handleFieldFocus = (fieldName: string) => {
+    if (!hasTrackedStart.current) {
+      hasTrackedStart.current = true;
+      trackEvent(ANALYTICS_EVENTS.EVENT_REGISTRATION_START, {
+        event_id: eventId,
+        form_id: formId ?? undefined,
+      });
+    }
+    if (!interactedFields.current.has(fieldName)) {
+      interactedFields.current.add(fieldName);
+      trackEvent(ANALYTICS_EVENTS.REGISTRATION_FIELD_INTERACTION, {
+        event_id: eventId,
+        field_name: fieldName,
+      });
+    }
+  };
+
   // Use form fields from database only
   const fields = form?.fields || [];
-  
+
   // Debug logging (only in development)
   useEffect(() => {
     if (form && fields.length > 0 && process.env.NODE_ENV === 'development') {
@@ -36,7 +58,7 @@ const DynamicEventForm: React.FC<DynamicEventFormProps> = ({
         total: fields.length
       });
     }
-  }, [form?.id]); // Only log when form changes
+  }, [form?.id]);
 
   // Build dynamic Zod schema from fields
   const validationSchema = useMemo(() => {
@@ -54,7 +76,7 @@ const DynamicEventForm: React.FC<DynamicEventFormProps> = ({
             fieldSchema = fieldSchema.optional();
           }
           break;
-        
+
         case 'tel':
           fieldSchema = z.string().regex(/^[+]?[(]?[0-9]{1,4}[)]?[-\s./0-9]*$/, 'Please enter a valid phone number');
           if (field.is_required) {
@@ -63,7 +85,7 @@ const DynamicEventForm: React.FC<DynamicEventFormProps> = ({
             fieldSchema = fieldSchema.optional();
           }
           break;
-        
+
         case 'select':
           if (field.options && field.options.length > 0) {
             if (field.is_required) {
@@ -74,18 +96,18 @@ const DynamicEventForm: React.FC<DynamicEventFormProps> = ({
               fieldSchema = z.enum(field.options as [string, ...string[]]).optional();
             }
           } else {
-            fieldSchema = field.is_required 
+            fieldSchema = field.is_required
               ? z.string().min(1, `${field.field_label} is required`)
               : z.string().optional();
           }
           break;
-        
+
         case 'checkbox':
-          fieldSchema = field.is_required 
+          fieldSchema = field.is_required
             ? z.boolean().refine(val => val === true, 'This field must be checked')
             : z.boolean().optional();
           break;
-        
+
         case 'textarea':
           fieldSchema = z.string();
           if (field.is_required) {
@@ -94,7 +116,7 @@ const DynamicEventForm: React.FC<DynamicEventFormProps> = ({
             fieldSchema = fieldSchema.optional();
           }
           break;
-        
+
         case 'text':
         default:
           fieldSchema = z.string();
@@ -123,13 +145,13 @@ const DynamicEventForm: React.FC<DynamicEventFormProps> = ({
     resolver: zodResolver(validationSchema)
   });
 
-  // Fetch form data - REQUIRED
+  // Fetch form data
   useEffect(() => {
     if (process.env.NODE_ENV === 'development') {
       console.log('DynamicEventForm: formId prop received:', formId);
       console.log('DynamicEventForm: eventId prop received:', eventId);
     }
-    
+
     if (!formId) {
       if (process.env.NODE_ENV === 'development') {
         console.error('DynamicEventForm: No formId provided - cannot load form');
@@ -145,13 +167,13 @@ const DynamicEventForm: React.FC<DynamicEventFormProps> = ({
       }
       setIsLoading(true);
       setFetchError(null);
-      
+
       try {
         const formData = await getFormById(formId);
         if (process.env.NODE_ENV === 'development') {
           console.log('DynamicEventForm: Form data received:', formData);
         }
-        
+
         if (!formData) {
           if (process.env.NODE_ENV === 'development') {
             console.error('DynamicEventForm: Form not found for ID:', formId);
@@ -189,25 +211,26 @@ const DynamicEventForm: React.FC<DynamicEventFormProps> = ({
     setIsSubmitting(true);
     setSubmitError(null);
 
+    // Fire before the API request — user has actively submitted the form
+    trackEvent(ANALYTICS_EVENTS.EVENT_REGISTRATION_SUBMIT, {
+      event_id: eventId,
+      form_id: formId ?? undefined,
+    });
+
     try {
-      // Ensure all checkbox fields are included with boolean values
-      // react-hook-form only includes checked checkboxes, so we need to add unchecked ones
       const completeData: Record<string, unknown> = { ...data };
-      
+
       fields.forEach(field => {
         if (field.field_type === 'checkbox') {
-          // If checkbox is not in data, it means it's unchecked
           if (!(field.field_name in completeData)) {
             completeData[field.field_name] = false;
           } else {
-            // Convert checkbox value to proper boolean
-            // react-hook-form might send true, "on", or other values
             const value = completeData[field.field_name];
             completeData[field.field_name] = value === true || value === 'on' || value === 'true';
           }
         }
       });
-      
+
       console.log('[DynamicEventForm] Submitting form data:', {
         fieldCount: fields.length,
         formId,
@@ -219,7 +242,7 @@ const DynamicEventForm: React.FC<DynamicEventFormProps> = ({
       await onSubmitSuccess?.(completeData);
 
       console.log('[DynamicEventForm] Form submitted successfully');
-      
+
       reset();
       setIsSubmitting(false);
     } catch (error: unknown) {
@@ -230,18 +253,16 @@ const DynamicEventForm: React.FC<DynamicEventFormProps> = ({
     }
   };
 
-  // Render individual field
-  const renderField = (field: FormField, index: number, allFields: FormField[]) => {
+  const renderField = (field: FormField, _index: number, _allFields: FormField[]) => {
     const hasError = !!errors[field.field_name];
     const errorMessage = errors[field.field_name]?.message as string | undefined;
 
     const baseInputClass = `w-full px-4 py-3 rounded-lg border ${
-      hasError 
-        ? 'border-red-500 focus:border-red-600 focus:ring-red-200' 
+      hasError
+        ? 'border-red-500 focus:border-red-600 focus:ring-red-200'
         : 'border-gray-300 focus:border-blue-500 focus:ring-blue-200'
     } focus:ring-2 focus:outline-none transition-colors`;
 
-    // All fields full-width for consistent layout
     const gridSpan = 'col-span-full';
 
     switch (field.field_type) {
@@ -258,6 +279,7 @@ const DynamicEventForm: React.FC<DynamicEventFormProps> = ({
               id={field.field_name}
               type={field.field_type}
               {...register(field.field_name)}
+              onFocus={() => handleFieldFocus(field.field_name)}
               className={baseInputClass}
               placeholder={`Enter ${field.field_label.toLowerCase()}`}
             />
@@ -277,6 +299,7 @@ const DynamicEventForm: React.FC<DynamicEventFormProps> = ({
             <textarea
               id={field.field_name}
               {...register(field.field_name)}
+              onFocus={() => handleFieldFocus(field.field_name)}
               className={baseInputClass}
               placeholder={`Enter ${field.field_label.toLowerCase()}`}
               rows={4}
@@ -297,11 +320,12 @@ const DynamicEventForm: React.FC<DynamicEventFormProps> = ({
             <select
               id={field.field_name}
               {...register(field.field_name)}
+              onFocus={() => handleFieldFocus(field.field_name)}
               className={baseInputClass}
             >
               <option value="">Select {field.field_label.toLowerCase()}</option>
-              {field.options?.map((option, index) => (
-                <option key={index} value={option}>
+              {field.options?.map((option, optIdx) => (
+                <option key={optIdx} value={option}>
                   {option}
                 </option>
               ))}
@@ -312,7 +336,8 @@ const DynamicEventForm: React.FC<DynamicEventFormProps> = ({
           </div>
         );
 
-      case 'checkbox':
+      case 'checkbox': {
+        const isWhatsappOptIn = field.field_name === 'whatsapp_opt_in';
         return (
           <div key={field.id} className={gridSpan}>
             <div className="flex items-start">
@@ -320,6 +345,16 @@ const DynamicEventForm: React.FC<DynamicEventFormProps> = ({
                 id={field.field_name}
                 type="checkbox"
                 {...register(field.field_name)}
+                onChange={(e) => {
+                  register(field.field_name).onChange(e);
+                  if (isWhatsappOptIn) {
+                    trackEvent(ANALYTICS_EVENTS.WHATSAPP_OPT_IN, {
+                      event_id: eventId,
+                      opted_in: e.target.checked,
+                    });
+                  }
+                }}
+                onFocus={() => handleFieldFocus(field.field_name)}
                 className="mt-1 h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
               />
               <label htmlFor={field.field_name} className="ml-3 text-sm text-gray-700 cursor-pointer">
@@ -332,6 +367,7 @@ const DynamicEventForm: React.FC<DynamicEventFormProps> = ({
             )}
           </div>
         );
+      }
 
       default:
         return null;
@@ -354,7 +390,6 @@ const DynamicEventForm: React.FC<DynamicEventFormProps> = ({
     );
   }
 
-  // Show error if form couldn't be loaded
   if (fetchError || !form || fields.length === 0) {
     return (
       <div className="bg-white rounded-2xl shadow-lg p-8">
