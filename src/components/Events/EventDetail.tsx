@@ -200,32 +200,16 @@ const EventDetail: React.FC = () => {
   const [fullEventData, setFullEventData] = React.useState<AppEvent | null>(null);
   const [loadingFullDetails, setLoadingFullDetails] = React.useState(false);
   
-  // Debug: Log when modalOpen changes
-  React.useEffect(() => {
-    if (process.env.NODE_ENV === 'development') {
-      console.log('ðŸŽ­ EventDetail: Registration modal state changed to:', modalOpen);
-    }
-  }, [modalOpen]);
   
   // Global message listener for Zoho form (in case HeroSection isn't rendered)
   React.useEffect(() => {
-    if (process.env.NODE_ENV === 'development') {
-      console.log('ðŸŒ EventDetail: Setting up global message listener for Zoho forms');
-    }
     
     const handleGlobalMessage = (event: MessageEvent) => {
       if (event.data && event.data.type === 'ZOHO_IFRAME_LOADED') {
-        if (process.env.NODE_ENV === 'development') {
-          console.log('âœ… EventDetail Global: Iframe loaded and communication working!');
-        }
         return;
       }
       
       if (event.data && event.data.type === 'ZOHO_FORM_SUBMITTING') {
-        if (process.env.NODE_ENV === 'development') {
-          console.log('ðŸŒ EventDetail: Received ZOHO_FORM_SUBMITTING at global level:', event.data);
-          console.log('ðŸŽ« EventDetail: Opening registration modal from global listener');
-        }
         setModalOpen(true);
       }
     };
@@ -1508,9 +1492,6 @@ const EventDetail: React.FC = () => {
                   eventName={event.title}
                   duration={event.duration}
                   onRegisterClick={() => {
-                    if (process.env.NODE_ENV === 'development') {
-                      console.log('ðŸŽ¯ EventDetail: onRegisterClick called - opening registration modal');
-                    }
                     setModalOpen(true);
                   }}
                 />
