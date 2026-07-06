@@ -20,9 +20,6 @@ export const trackEvent = (
     const dl = window as unknown as { dataLayer: Record<string, unknown>[] };
     dl.dataLayer = dl.dataLayer || [];
     dl.dataLayer.push({ event: eventName, ...eventData });
-    if (process.env.NODE_ENV === 'development') {
-      console.log('[Analytics]', eventName, eventData);
-    }
   } catch {
     // Never break the app for analytics
   }
