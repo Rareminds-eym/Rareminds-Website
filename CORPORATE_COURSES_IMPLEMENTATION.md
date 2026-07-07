@@ -1,5 +1,5 @@
 # Corporate Training Programs as Courses - Implementation Complete
-
+ 
 ## Overview
 Successfully transformed the Corporate Training Programs into a course card grid layout, matching the Universities module UI pattern.
 
