@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useRef } from 'react';
+﻿import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -25,7 +25,7 @@ const DynamicEventForm: React.FC<DynamicEventFormProps> = ({
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [fetchError, setFetchError] = useState<string | null>(null);
 
-  // Analytics: track start once on first field focus; track each field once
+  // Analytics: track registration start once on first field focus; each field once
   const hasTrackedStart = useRef(false);
   const interactedFields = useRef<Set<string>>(new Set());
 
@@ -48,17 +48,6 @@ const DynamicEventForm: React.FC<DynamicEventFormProps> = ({
 
   // Use form fields from database only
   const fields = form?.fields || [];
-
-  // Debug logging (only in development)
-  useEffect(() => {
-    if (form && fields.length > 0 && process.env.NODE_ENV === 'development') {
-      console.log('📝 Form loaded:', {
-        title: form.title,
-        fields: fields.map(f => f.field_name),
-        total: fields.length
-      });
-    }
-  }, [form?.id]);
 
   // Build dynamic Zod schema from fields
   const validationSchema = useMemo(() => {
@@ -138,6 +127,7 @@ const DynamicEventForm: React.FC<DynamicEventFormProps> = ({
 
   const {
     register,
+    watch,
     handleSubmit,
     formState: { errors },
     reset
@@ -145,58 +135,55 @@ const DynamicEventForm: React.FC<DynamicEventFormProps> = ({
     resolver: zodResolver(validationSchema)
   });
 
+  // Track whatsapp_opt_in via watch + useEffect (react-hook-form recommended pattern).
+  // No manual onChange needed on the checkbox — RHF owns the input fully.
+  // prevWhatsappOptIn guards against firing on initial render when value first resolves.
+  const whatsappOptInValue = watch('whatsapp_opt_in' as keyof FormValues);
+  const prevWhatsappOptIn = useRef<boolean | undefined>(undefined);
+  useEffect(() => {
+    // Field not present in this form — do nothing
+    if (whatsappOptInValue === undefined) return;
+    // First time the value is seen: record it but do not fire analytics
+    if (prevWhatsappOptIn.current === undefined) {
+      prevWhatsappOptIn.current = Boolean(whatsappOptInValue);
+      return;
+    }
+    // Only fire when the value actually changes (user interaction)
+    if (Boolean(whatsappOptInValue) === prevWhatsappOptIn.current) return;
+    prevWhatsappOptIn.current = Boolean(whatsappOptInValue);
+    trackEvent(ANALYTICS_EVENTS.WHATSAPP_OPT_IN, {
+      event_id: eventId,
+      opted_in: Boolean(whatsappOptInValue),
+    });
+  }, [whatsappOptInValue, eventId]);
+
   // Fetch form data
   useEffect(() => {
-    if (process.env.NODE_ENV === 'development') {
-      console.log('DynamicEventForm: formId prop received:', formId);
-      console.log('DynamicEventForm: eventId prop received:', eventId);
-    }
-
     if (!formId) {
-      if (process.env.NODE_ENV === 'development') {
-        console.error('DynamicEventForm: No formId provided - cannot load form');
-      }
       setFetchError('No form configured for this event. Please contact the event organizer.');
       setIsLoading(false);
       return;
     }
 
     const fetchForm = async () => {
-      if (process.env.NODE_ENV === 'development') {
-        console.log('DynamicEventForm: Fetching form data for formId:', formId);
-      }
       setIsLoading(true);
       setFetchError(null);
 
       try {
         const formData = await getFormById(formId);
-        if (process.env.NODE_ENV === 'development') {
-          console.log('DynamicEventForm: Form data received:', formData);
-        }
 
         if (!formData) {
-          if (process.env.NODE_ENV === 'development') {
-            console.error('DynamicEventForm: Form not found for ID:', formId);
-          }
           setFetchError('Registration form not found. Please contact the event organizer.');
           setForm(null);
         } else if (!formData.fields || formData.fields.length === 0) {
-          if (process.env.NODE_ENV === 'development') {
-            console.error('DynamicEventForm: Form has no fields');
-          }
           setFetchError('Registration form is empty. Please contact the event organizer.');
           setForm(null);
         } else {
-          if (process.env.NODE_ENV === 'development') {
-            console.log('DynamicEventForm: Setting form with', formData.fields.length, 'fields');
-          }
           setForm(formData);
           setFetchError(null);
         }
       } catch (error) {
-        if (process.env.NODE_ENV === 'development') {
-          console.error('DynamicEventForm: Error fetching form:', error);
-        }
+        console.error('DynamicEventForm: Error fetching form:', error);
         setFetchError('Failed to load registration form. Please try again or contact support.');
         setForm(null);
       } finally {
@@ -231,17 +218,7 @@ const DynamicEventForm: React.FC<DynamicEventFormProps> = ({
         }
       });
 
-      console.log('[DynamicEventForm] Submitting form data:', {
-        fieldCount: fields.length,
-        formId,
-        eventId,
-        answerKeys: Object.keys(completeData),
-        answerValues: JSON.stringify(completeData)
-      });
-
       await onSubmitSuccess?.(completeData);
-
-      console.log('[DynamicEventForm] Form submitted successfully');
 
       reset();
       setIsSubmitting(false);
@@ -324,8 +301,8 @@ const DynamicEventForm: React.FC<DynamicEventFormProps> = ({
               className={baseInputClass}
             >
               <option value="">Select {field.field_label.toLowerCase()}</option>
-              {field.options?.map((option, optIdx) => (
-                <option key={optIdx} value={option}>
+              {field.options?.map((option) => (
+                <option key={option} value={option}>
                   {option}
                 </option>
               ))}
@@ -336,8 +313,7 @@ const DynamicEventForm: React.FC<DynamicEventFormProps> = ({
           </div>
         );
 
-      case 'checkbox': {
-        const isWhatsappOptIn = field.field_name === 'whatsapp_opt_in';
+      case 'checkbox':
         return (
           <div key={field.id} className={gridSpan}>
             <div className="flex items-start">
@@ -345,15 +321,6 @@ const DynamicEventForm: React.FC<DynamicEventFormProps> = ({
                 id={field.field_name}
                 type="checkbox"
                 {...register(field.field_name)}
-                onChange={(e) => {
-                  register(field.field_name).onChange(e);
-                  if (isWhatsappOptIn) {
-                    trackEvent(ANALYTICS_EVENTS.WHATSAPP_OPT_IN, {
-                      event_id: eventId,
-                      opted_in: e.target.checked,
-                    });
-                  }
-                }}
                 onFocus={() => handleFieldFocus(field.field_name)}
                 className="mt-1 h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
               />
@@ -367,7 +334,6 @@ const DynamicEventForm: React.FC<DynamicEventFormProps> = ({
             )}
           </div>
         );
-      }
 
       default:
         return null;
