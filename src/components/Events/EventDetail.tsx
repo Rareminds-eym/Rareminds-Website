@@ -1,4 +1,4 @@
-import DOMPurify from 'dompurify';
+﻿import DOMPurify from 'dompurify';
 import type { Config } from 'dompurify';
 import { safeGetItem, safeSetItem } from '@/lib/localStorage';
 import {
@@ -22,6 +22,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useOptimizedEvents } from '../../hooks/Events/useOptimizedEvents';
 import { eventInterestedService } from '../../services/eventInterestedService';
 import { Event as AppEvent } from '../../types/Events/event';
+import { trackEvent, ANALYTICS_EVENTS } from '@/utils/analytics';
 
 import Carousel from './Carousel';
 import EventContactForm from './EventContactForm';
@@ -199,32 +200,16 @@ const EventDetail: React.FC = () => {
   const [fullEventData, setFullEventData] = React.useState<AppEvent | null>(null);
   const [loadingFullDetails, setLoadingFullDetails] = React.useState(false);
   
-  // Debug: Log when modalOpen changes
-  React.useEffect(() => {
-    if (process.env.NODE_ENV === 'development') {
-      console.log('🎭 EventDetail: Registration modal state changed to:', modalOpen);
-    }
-  }, [modalOpen]);
   
   // Global message listener for Zoho form (in case HeroSection isn't rendered)
   React.useEffect(() => {
-    if (process.env.NODE_ENV === 'development') {
-      console.log('🌐 EventDetail: Setting up global message listener for Zoho forms');
-    }
     
     const handleGlobalMessage = (event: MessageEvent) => {
       if (event.data && event.data.type === 'ZOHO_IFRAME_LOADED') {
-        if (process.env.NODE_ENV === 'development') {
-          console.log('✅ EventDetail Global: Iframe loaded and communication working!');
-        }
         return;
       }
       
       if (event.data && event.data.type === 'ZOHO_FORM_SUBMITTING') {
-        if (process.env.NODE_ENV === 'development') {
-          console.log('🌐 EventDetail: Received ZOHO_FORM_SUBMITTING at global level:', event.data);
-          console.log('🎫 EventDetail: Opening registration modal from global listener');
-        }
         setModalOpen(true);
       }
     };
@@ -310,6 +295,23 @@ const EventDetail: React.FC = () => {
 
     loadFullDetails();
   }, [minimalEvent, fullEventData, loadingFullDetails, loadFullEventDetails]);
+
+  // Track event_detail_view once when event data is first available
+  const hasTrackedDetailView = React.useRef<boolean>(false);
+  React.useEffect(() => {
+    if (event && event.id && hasTrackedDetailView.current === false) {
+      hasTrackedDetailView.current = true;
+      trackEvent(ANALYTICS_EVENTS.EVENT_DETAIL_VIEW, {
+        event_id: event.id,
+        event_name: event.title,
+        event_category: event.category,
+        event_status: event.status,
+        event_price: event.price ?? 0,
+        event_date: event.event_date,
+        page_path: typeof window !== 'undefined' ? window.location.pathname : '',
+      });
+    }
+  }, [event, trackEvent]);
 
   // Interest tracking state
   const [interestCount, setInterestCount] = React.useState(0);
@@ -590,7 +592,7 @@ const EventDetail: React.FC = () => {
               <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 bg-slate-50/80">
                 <div>
                   <h2 className="text-xl font-semibold text-slate-900">Send an Enquiry</h2>
-                  <p className="text-sm text-slate-500">We’ll get back to you shortly about {event.title}</p>
+                  <p className="text-sm text-slate-500">Weâ€™ll get back to you shortly about {event.title}</p>
                 </div>
                 <button
                   type="button"
@@ -598,7 +600,7 @@ const EventDetail: React.FC = () => {
                   className="text-slate-400 hover:text-red-500 transition-colors"
                   aria-label="Close enquiry form"
                 >
-                  <span className="text-2xl leading-none">×</span>
+                  <span className="text-2xl leading-none">Ã—</span>
                 </button>
               </div>
               <div className="px-6 py-6">
@@ -745,7 +747,7 @@ const EventDetail: React.FC = () => {
                           : 'border-red-400 bg-white text-red-500 hover:bg-red-50'
                           }`}
                       >
-                        {userAlreadyInterested ? "✓ Already Interested" : "I'm Interested"}
+                        {userAlreadyInterested ? "âœ“ Already Interested" : "I'm Interested"}
                       </button>
                     </div>
                   </div>
@@ -878,7 +880,7 @@ const EventDetail: React.FC = () => {
                     })()}
                   </div>
                   <div className="flex items-center gap-3">
-                    <button aria-label="Decrease quantity" onClick={rc ? undefined : () => setQuantity(q => Math.max(1, q - 1))} disabled={rc} className={`w-8 h-8 rounded-full text-lg leading-none flex items-center justify-center ${rc ? 'bg-gray-200 text-gray-400 cursor-not-allowed' : 'bg-slate-100 hover:bg-slate-200 text-slate-700'}`}>−</button>
+                    <button aria-label="Decrease quantity" onClick={rc ? undefined : () => setQuantity(q => Math.max(1, q - 1))} disabled={rc} className={`w-8 h-8 rounded-full text-lg leading-none flex items-center justify-center ${rc ? 'bg-gray-200 text-gray-400 cursor-not-allowed' : 'bg-slate-100 hover:bg-slate-200 text-slate-700'}`}>âˆ’</button>
                     <span className={`min-w-[1.5rem] text-center font-semibold ${rc ? 'text-gray-400' : 'text-slate-700'}`}>{String(quantity).padStart(2, '0')}</span>
                     <button aria-label="Increase quantity" onClick={rc ? undefined : () => setQuantity(q => Math.min(99, q + 1))} disabled={rc} className={`w-8 h-8 rounded-full text-lg leading-none flex items-center justify-center ${rc ? 'bg-gray-200 text-gray-400 cursor-not-allowed' : 'bg-slate-100 hover:bg-slate-200 text-slate-700'}`}>+</button>
                   </div>
@@ -939,7 +941,7 @@ const EventDetail: React.FC = () => {
             ) : null;
 
             if (hasMainContent && hasRichLeftContent) {
-              // ── 8/4 when sidebar has content, full-width when it doesn't ──
+              // â”€â”€ 8/4 when sidebar has content, full-width when it doesn't â”€â”€
               return (
                 <div className="grid grid-cols-1 xl:grid-cols-12 gap-6 md:gap-8 xl:gap-12">
                   {/* Left: main content */}
@@ -1065,7 +1067,7 @@ const EventDetail: React.FC = () => {
                             )}
                           </div>
                           {hasAnyDescription ? (
-                            /* Horizontal layout — one full-width card per speaker, scrollable */
+                            /* Horizontal layout â€” one full-width card per speaker, scrollable */
                             <div ref={speakersScrollRef} className="flex gap-6 overflow-x-auto snap-x snap-mandatory pb-2 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]" style={{ scrollBehavior: 'smooth' }}>
                               {speakersList.map((spk, id) => (
                                 <div key={id} className="min-w-full snap-start">
@@ -1094,7 +1096,7 @@ const EventDetail: React.FC = () => {
                               ))}
                             </div>
                           ) : (
-                            /* Vertical card layout — original style, horizontal scroll rail */
+                            /* Vertical card layout â€” original style, horizontal scroll rail */
                             <div ref={speakersScrollRef} className="relative flex gap-6 overflow-x-auto pb-2 snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]" style={{ scrollBehavior: 'smooth' }}>
                               {speakersList.map((spk, id) => (
                                 <div key={id} className="min-w-[280px] max-w-[300px] w-[300px] snap-start">
@@ -1211,7 +1213,7 @@ const EventDetail: React.FC = () => {
 
                   </div>{/* end xl:col-span-8 */}
 
-                  {/* Right: sidebar — col-span-4, only when sidebar has real data */}
+                  {/* Right: sidebar â€” col-span-4, only when sidebar has real data */}
                   {hasSidebarContent && (
                     <div className="xl:col-span-4 space-y-8 hidden xl:block">
                       <div className="sticky top-36 space-y-8">
@@ -1222,7 +1224,7 @@ const EventDetail: React.FC = () => {
                       </div>
                     </div>
                   )}
-                  {/* Mobile sidebar — only when sidebar has real data */}
+                  {/* Mobile sidebar â€” only when sidebar has real data */}
                   {hasSidebarContent && (
                     <div className="xl:hidden space-y-4">
                       {hasInfoData && infoCard}
@@ -1234,7 +1236,7 @@ const EventDetail: React.FC = () => {
                 </div>
               );
             } else if (hasMainContent && !hasRichLeftContent) {
-              // ── MAIN CONTENT but NOT rich (e.g. only About/Highlights without Speakers/Gallery/Sponsors) ──
+              // â”€â”€ MAIN CONTENT but NOT rich (e.g. only About/Highlights without Speakers/Gallery/Sponsors) â”€â”€
               return (
                 <>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8">
@@ -1425,7 +1427,7 @@ const EventDetail: React.FC = () => {
                 </>
               );
             } else {
-              // ── NO MAIN CONTENT: 2x2 cards grid + full-width About ──
+              // â”€â”€ NO MAIN CONTENT: 2x2 cards grid + full-width About â”€â”€
               return (
                 <>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8">
@@ -1490,9 +1492,6 @@ const EventDetail: React.FC = () => {
                   eventName={event.title}
                   duration={event.duration}
                   onRegisterClick={() => {
-                    if (process.env.NODE_ENV === 'development') {
-                      console.log('🎯 EventDetail: onRegisterClick called - opening registration modal');
-                    }
                     setModalOpen(true);
                   }}
                 />
@@ -1500,7 +1499,7 @@ const EventDetail: React.FC = () => {
             )}
             <TrustStatsSection content={event.eventSections?.find(s => s.section_key === 'stats')?.content} />
             <TeacherTrainersSection content={event.eventSections?.find(s => s.section_key === 'features')?.content} />
-            {/* Speakers section — webinar only, shown here after trainers */}
+            {/* Speakers section â€” webinar only, shown here after trainers */}
             {event.category?.toLowerCase() === 'webinar' && (() => {
               const speakersItems = (event.eventSections?.find(s => s.section_key === 'speakers')?.content?.items ?? []) as Array<{ name: string; photo: string; description?: string; role?: string; linkedin?: string }>;
               const speakersList = speakersItems.map(sd => ({
@@ -1537,7 +1536,7 @@ const EventDetail: React.FC = () => {
                     )}
                   </div>
 
-                  {/* Scrollable rail — one card = full width */}
+                  {/* Scrollable rail â€” one card = full width */}
                   <div
                     ref={speakersScrollRef}
                     className="flex gap-6 overflow-x-auto snap-x snap-mandatory pb-2 scrollbar-hide [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
@@ -1621,7 +1620,7 @@ const EventDetail: React.FC = () => {
                           <button className="w-full text-left py-4 sm:py-6 flex items-center justify-between focus:outline-none group hover:bg-gray-50/30 transition-colors duration-200" onClick={() => toggleFaq(id)}>
                             <span className="text-lg sm:text-xl text-gray-900 pr-6 sm:pr-8 leading-tight">{faqItem.question}</span>
                             <div className="flex-shrink-0 w-7 h-7 sm:w-8 sm:h-8 border-2 border-gray-400 rounded-sm flex items-center justify-center bg-white group-hover:border-gray-600 transition-colors duration-200">
-                              <span className="text-lg sm:text-xl font-normal text-gray-600 group-hover:text-gray-800">{openFaqIdx === id ? '−' : '+'}</span>
+                              <span className="text-lg sm:text-xl font-normal text-gray-600 group-hover:text-gray-800">{openFaqIdx === id ? 'âˆ’' : '+'}</span>
                             </div>
                           </button>
                           {openFaqIdx === id && (<div className="pb-4 sm:pb-6"><p className="text-gray-700 leading-relaxed text-base md:text-lg">{faqItem.answer}</p></div>)}
