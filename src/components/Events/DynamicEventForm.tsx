@@ -140,6 +140,13 @@ const DynamicEventForm: React.FC<DynamicEventFormProps> = ({
   // prevWhatsappOptIn guards against firing on initial render when value first resolves.
   const whatsappOptInValue = watch('whatsapp_opt_in' as keyof FormValues);
   const prevWhatsappOptIn = useRef<boolean | undefined>(undefined);
+  // Reset the ref when the event changes so the initial-value guard
+  // runs fresh and a stale value from a previous event cannot trigger
+  // a false WHATSAPP_OPT_IN event on the new form.
+  useEffect(() => {
+    prevWhatsappOptIn.current = undefined;
+  }, [eventId]);
+
   useEffect(() => {
     // Field not present in this form — do nothing
     if (whatsappOptInValue === undefined) return;
