@@ -1,4 +1,4 @@
-import React from "react";
+﻿import React from "react";
 import ReactDOM from "react-dom/client";
 import { RouterProvider } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
@@ -16,6 +16,24 @@ import "./App.css";
 import { Provider } from "react-redux";
 import { store } from "./store";
 import { AuthProvider } from "./context/AuthContext";
+
+// Initialize GTM from environment variable before React renders.
+// window.dataLayer is pre-initialized in index.html so no events are lost.
+const gtmId = import.meta.env.VITE_GTM_ID as string | undefined;
+
+if (gtmId) {
+  // Guard against duplicate initialization (e.g. HMR in development)
+  if (!window.google_tag_manager?.[gtmId]) {
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
+    const script = document.createElement('script');
+    script.async = true;
+    script.src = `https://www.googletagmanager.com/gtm.js?id=${gtmId}`;
+    document.head.appendChild(script);
+  }
+} else if (import.meta.env.DEV) {
+  console.warn('[GTM] VITE_GTM_ID is not set. GTM will not be initialized.');
+}
 
 // Create a client with optimized caching for smooth back navigation
 const queryClient = new QueryClient({
