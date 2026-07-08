@@ -29,9 +29,9 @@ declare global {
 // window.dataLayer is pre-initialized in index.html so no events are lost.
 const gtmId = import.meta.env.VITE_GTM_ID as string | undefined;
 
-if (gtmId && typeof gtmId === 'string' && gtmId.trim()) {
+if (gtmId && gtmId.trim()) {
   // Guard against duplicate initialization (e.g. HMR in development)
-  if (!window.google_tag_manager?.[gtmId]) {
+  if (!window.google_tag_manager || !window.google_tag_manager[gtmId]) {
     window.dataLayer = window.dataLayer || [];
     window.dataLayer.push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
     const script = document.createElement('script');
