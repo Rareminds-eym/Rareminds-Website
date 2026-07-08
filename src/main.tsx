@@ -1,4 +1,4 @@
-﻿import React from "react";
+mport React from "react";
 import ReactDOM from "react-dom/client";
 import { RouterProvider } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
@@ -27,9 +27,9 @@ declare global {
 
 // Initialize GTM from environment variable before React renders.
 // window.dataLayer is pre-initialized in index.html so no events are lost.
-const gtmId = import.meta.env.VITE_GTM_ID;
+const gtmId = import.meta.env.VITE_GTM_ID as string | undefined;
 
-if (gtmId) {
+if (gtmId && typeof gtmId === 'string' && gtmId.trim()) {
   // Guard against duplicate initialization (e.g. HMR in development)
   if (!window.google_tag_manager?.[gtmId]) {
     window.dataLayer = window.dataLayer || [];
@@ -70,6 +70,3 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
     </HelmetProvider>
   </React.StrictMode>
 );
-
-
-
