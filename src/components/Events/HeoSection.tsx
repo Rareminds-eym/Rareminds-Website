@@ -6,14 +6,15 @@ import PaymentModal from "./PaymentModal";
 import DynamicEventForm from "./DynamicEventForm";
 import { supabase } from "../../lib/supabase";
 
+// HeroSection props interface - Updated to support optional event dates
 interface HeroSectionProps {
   content?: {
     title?: string;
     description?: string;
     benefits?: string[];
   };
-  eventDate?: string;
-  eventTime?: string;
+  eventDate?: string | null;
+  eventTime?: string | null;
   location?: string;
   price?: number;
   eventType?: EventType;
@@ -21,6 +22,7 @@ interface HeroSectionProps {
   eventName?: string;
   formId?: string | null; // ID of the custom form to render
   duration?: number; // Duration in minutes
+  onRegisterClick?: () => void; // Optional callback when register action is triggered
 }
 
 const WebinarSection: React.FC<HeroSectionProps> = ({
@@ -34,6 +36,7 @@ const WebinarSection: React.FC<HeroSectionProps> = ({
   eventName,
   formId,
   duration, // Duration in minutes
+  onRegisterClick, // Optional callback
 }) => {
   const title       = content?.title;
   const description = content?.description;
@@ -152,7 +155,7 @@ const WebinarSection: React.FC<HeroSectionProps> = ({
     }
   };
 
-  const formatDate = (dateString?: string) => {
+  const formatDate = (dateString?: string | null) => {
     if (!dateString) return null;
     return new Date(dateString).toLocaleDateString("en-US", {
       weekday: "long",
@@ -162,7 +165,7 @@ const WebinarSection: React.FC<HeroSectionProps> = ({
     });
   };
 
-  const formatTime = (timeString?: string) => {
+  const formatTime = (timeString?: string | null) => {
     if (!timeString) return null;
     return new Date(`2000-01-01T${timeString}`).toLocaleTimeString("en-US", {
       hour: "numeric",

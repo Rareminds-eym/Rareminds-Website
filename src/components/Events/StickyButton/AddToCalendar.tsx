@@ -2,6 +2,7 @@ import React from "react";
 import { Calendar, X, ExternalLink } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Event } from '../../../types/Events/event';
+import { useToast } from '@/hooks/use-toast';
  
 interface AddToCalendarProps {
     isVisible: boolean;
@@ -9,39 +10,85 @@ interface AddToCalendarProps {
     currentEvent?: Event;
 }
 
-const formatDateForCalendar = (dateStr: string | null | undefined, timeStr: string | null | undefined) => {
-    // If no date provided, use today's date
-    const date = dateStr || new Date().toISOString().split('T')[0];
-    // Combine date and time for calendar formatting
-    const eventDate = new Date(`${date}T${timeStr || '00:00:00'}`);
-    return eventDate.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
+const formatDateForCalendar = (dateStr: string | null | undefined, timeStr: string | null | undefined): string | null => {
+    // Validate that we have a date
+    if (!dateStr) {
+        return null;
+    }
+    
+    try {
+        // Combine date and time for calendar formatting
+        const eventDate = new Date(`${dateStr}T${timeStr || '00:00:00'}`);
+        
+        // Validate the date is valid
+        if (isNaN(eventDate.getTime())) {
+            return null;
+        }
+        
+        return eventDate.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
+    } catch {
+        return null;
+    }
 };
 
-const formatEndDateForCalendar = (dateStr: string | null | undefined, timeStr: string | null | undefined, duration: number) => {
-    const date = dateStr || new Date().toISOString().split('T')[0];
-    const eventDate = new Date(`${date}T${timeStr || '00:00:00'}`);
-    // duration is now INTEGER minutes
-    const minutes = typeof duration === 'number' && duration > 0 ? duration : 60;
-    eventDate.setMinutes(eventDate.getMinutes() + minutes);
-    return eventDate.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
+const formatEndDateForCalendar = (dateStr: string | null | undefined, timeStr: string | null | undefined, duration: number): string | null => {
+    if (!dateStr) {
+        return null;
+    }
+    
+    try {
+        const eventDate = new Date(`${dateStr}T${timeStr || '00:00:00'}`);
+        
+        if (isNaN(eventDate.getTime())) {
+            return null;
+        }
+        
+        // duration is now INTEGER minutes
+        const minutes = typeof duration === 'number' && duration > 0 ? duration : 60;
+        eventDate.setMinutes(eventDate.getMinutes() + minutes);
+        return eventDate.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
+    } catch {
+        return null;
+    }
 };
 
 export const AddToCalendar: React.FC<AddToCalendarProps> = ({ isVisible, onClose, currentEvent }) => {
+    const { toast } = useToast();
+    
     if (!currentEvent) return null;
 
+    // Check if event has a confirmed date
+    const hasValidDate = !!currentEvent.event_date;
     const startDate = formatDateForCalendar(currentEvent.event_date, currentEvent.event_time);
     const endDate = formatEndDateForCalendar(currentEvent.event_date, currentEvent.event_time, currentEvent.duration);
     
-    // Clean HTML from description for calendar
-    const cleanDescription = (currentEvent.description ?? '').replace(/<[^>]*>/g, '').substring(0, 200) + '...';
+    // Get description from event sections (about section) or use empty string
+    const aboutSection = currentEvent.eventSections?.find(s => s.section_key === 'about');
+    const description = aboutSection?.content?.text || currentEvent.title;
+    const cleanDescription = description.replace(/<[^>]*>/g, '').substring(0, 200);
     
+    const handleCalendarAction = (action: () => void) => {
+        if (!hasValidDate || !startDate || !endDate) {
+            toast({
+                title: "Event Date Not Available",
+                description: "This event doesn't have a confirmed date yet. Calendar entry cannot be created.",
+                variant: "destructive"
+            });
+            return;
+        }
+        
+        action();
+    };
+
     const generateGoogleCalendarUrl = () => {
+        if (!startDate || !endDate) return '#';
+        
         const params = new URLSearchParams({
             action: 'TEMPLATE',
             text: currentEvent.title,
             dates: `${startDate}/${endDate}`,
             details: cleanDescription,
-            location: currentEvent.location,
+            location: currentEvent.location_metadata?.address || '',
             trp: 'false',
             sprop: 'website:rareminds.com'
         });
@@ -49,12 +96,14 @@ export const AddToCalendar: React.FC<AddToCalendarProps> = ({ isVisible, onClose
     };
 
     const generateOutlookUrl = () => {
+        if (!startDate || !endDate) return '#';
+        
         const params = new URLSearchParams({
             subject: currentEvent.title,
             startdt: startDate,
             enddt: endDate,
             body: cleanDescription,
-            location: currentEvent.location,
+            location: currentEvent.location_metadata?.address || '',
             allday: 'false',
             uid: currentEvent.id || 'event-' + Date.now()
         });
@@ -62,6 +111,8 @@ export const AddToCalendar: React.FC<AddToCalendarProps> = ({ isVisible, onClose
     };
 
     const generateICSFile = () => {
+        if (!startDate || !endDate) return;
+        
         const icsContent = [
             'BEGIN:VCALENDAR',
             'VERSION:2.0',
@@ -72,8 +123,8 @@ export const AddToCalendar: React.FC<AddToCalendarProps> = ({ isVisible, onClose
             `DTEND:${endDate}`,
             `SUMMARY:${currentEvent.title}`,
             `DESCRIPTION:${cleanDescription}`,
-            `LOCATION:${currentEvent.location}`,
-            `ORGANIZER:CN=${currentEvent.organizer_name}:MAILTO:${currentEvent.organizer_email}`,
+            `LOCATION:${currentEvent.location_metadata?.address || ''}`,
+            ...(currentEvent.organizer_metadata?.name ? [`ORGANIZER:CN=${currentEvent.organizer_metadata.name}:MAILTO:${currentEvent.organizer_metadata.email || ''}`] : []),
             'STATUS:CONFIRMED',
             'BEGIN:VALARM',
             'TRIGGER:-PT15M',
@@ -104,7 +155,7 @@ export const AddToCalendar: React.FC<AddToCalendarProps> = ({ isVisible, onClose
                     <path fill="#ea4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
                 </svg>
             ),
-            onClick: () => window.open(generateGoogleCalendarUrl(), '_blank'),
+            onClick: () => handleCalendarAction(() => window.open(generateGoogleCalendarUrl(), '_blank')),
             color: 'bg-blue-50 hover:bg-blue-100 border-blue-200'
         },
         {
@@ -114,7 +165,7 @@ export const AddToCalendar: React.FC<AddToCalendarProps> = ({ isVisible, onClose
                     <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
                 </svg>
             ),
-            onClick: generateICSFile,
+            onClick: () => handleCalendarAction(generateICSFile),
             color: 'bg-gray-50 hover:bg-gray-100 border-gray-200'
         },
         {
@@ -125,7 +176,7 @@ export const AddToCalendar: React.FC<AddToCalendarProps> = ({ isVisible, onClose
                     <path fill="#0078d4" d="M13 3.5a8.5 8.5 0 0 0-3 16.4c.5.1 1-.3 1-.8V17c-2.4-.6-3-2.4-3-2.4-.4-.9-.9-1.2-.9-1.2-.7-.5.1-.5.1-.5.8.1 1.2.8 1.2.8.7 1.3 1.9.9 2.3.7.1-.5.3-.9.5-1.1-1.8-.2-3.7-.9-3.7-4 0-.9.3-1.6.8-2.1-.1-.2-.4-1 .1-2.1 0 0 .7-.2 2.2.8.6-.2 1.3-.3 2-.3s1.4.1 2 .3c1.5-1 2.2-.8 2.2-.8.4 1.1.2 1.9.1 2.1.5.6.8 1.2.8 2.1 0 3.1-1.9 3.8-3.7 4 .3.3.6.8.6 1.5v2.2c0 .5.5.9 1 .8A8.5 8.5 0 0 0 13 3.5z"/>
                 </svg>
             ),
-            onClick: () => window.open(generateOutlookUrl(), '_blank'),
+            onClick: () => handleCalendarAction(() => window.open(generateOutlookUrl(), '_blank')),
             color: 'bg-indigo-50 hover:bg-indigo-100 border-indigo-200'
         }
     ];
@@ -153,7 +204,7 @@ export const AddToCalendar: React.FC<AddToCalendarProps> = ({ isVisible, onClose
                         </button>
                     </div>
 
-                    <div className="mb-4 p-4 bg-red-50 rounded-lg border border-red-100">
+                    <div className={`mb-4 p-4 rounded-lg border-2 ${hasValidDate ? 'bg-red-50 border-red-100' : 'bg-amber-50 border-amber-200'}`}>
                         <h4 className="font-semibold text-gray-900 mb-1">{currentEvent.title}</h4>
                         <p className="text-sm text-gray-600">
                             {currentEvent.event_date ? new Date(currentEvent.event_date).toLocaleDateString('en-US', {
@@ -161,10 +212,15 @@ export const AddToCalendar: React.FC<AddToCalendarProps> = ({ isVisible, onClose
                                 year: 'numeric',
                                 month: 'long',
                                 day: 'numeric'
-                            }) : 'Date TBD'} {currentEvent.event_time ? `at ${currentEvent.event_time}` : ''}
+                            }) : '📅 Date TBD'} {currentEvent.event_time ? `at ${currentEvent.event_time}` : ''}
                         </p>
+                        {!hasValidDate && (
+                            <p className="text-sm text-amber-700 mt-2 font-medium">
+                                ⚠️ Event date not confirmed yet
+                            </p>
+                        )}
                         <p className="text-sm text-gray-600 mt-1">
-                            📍 {currentEvent.location} | ⏱️ {currentEvent.duration}
+                            📍 {currentEvent.location_metadata?.address || 'Location TBD'} | ⏱️ {currentEvent.duration ? `${Math.floor(currentEvent.duration / 60)}h${currentEvent.duration % 60 > 0 ? ` ${currentEvent.duration % 60}m` : ''}` : 'Duration TBD'}
                         </p>
                     </div>
                    
@@ -179,19 +235,25 @@ export const AddToCalendar: React.FC<AddToCalendarProps> = ({ isVisible, onClose
                                 transition={{ delay: index * 0.1 }}
                                 onClick={() => {
                                     option.onClick();
-                                    onClose();
+                                    if (hasValidDate) {
+                                        onClose();
+                                    }
                                 }}
-                                className={`w-full p-3 rounded-lg border-2 ${option.color} transition-all duration-200 flex items-center gap-3 hover:scale-[1.02]`}
+                                disabled={!hasValidDate}
+                                className={`w-full p-3 rounded-lg border-2 ${option.color} transition-all duration-200 flex items-center gap-3 ${hasValidDate ? 'hover:scale-[1.02] cursor-pointer' : 'opacity-50 cursor-not-allowed'}`}
                             >
                                 {option.icon}
                                 <span className="font-medium text-gray-700">{option.name}</span>
-                                <ExternalLink className="w-4 h-4 ml-auto text-gray-500" />
+                                {hasValidDate && <ExternalLink className="w-4 h-4 ml-auto text-gray-500" />}
+                                {!hasValidDate && <span className="ml-auto text-xs text-gray-500">Date TBD</span>}
                             </motion.button>
                         ))}
                     </div>
                    
                     <p className="mt-4 text-xs text-gray-500 text-center">
-                        Event will be added with a 15-minute reminder
+                        {hasValidDate 
+                            ? 'Event will be added with a 15-minute reminder' 
+                            : 'Calendar options will be available once the event date is confirmed'}
                     </p>
                 </motion.div>
             )}
