@@ -80,10 +80,10 @@ const SingleEventCountdown: React.FC<SingleEventCountdownProps> = ({
       const timeLeft = calculateTimeLeft(event.registration_deadline!);
       const now = new Date();
       const deadlineDate = parseDeadlineEndOfDay(event.registration_deadline!);
-      const eventDate = new Date(event.event_date);
+      const eventDate = event.event_date ? new Date(event.event_date) : new Date();
       
       const isRegistrationDeadlinePassed = deadlineDate.getTime() <= now.getTime();
-      const isEventPassed = eventDate.getTime() <= now.getTime();
+      const isEventPassed = event.event_date ? eventDate.getTime() <= now.getTime() : false;
       const isOpen = !isRegistrationDeadlinePassed && !isEventPassed;
 
       setTimeLeft(timeLeft);
@@ -106,22 +106,32 @@ const SingleEventCountdown: React.FC<SingleEventCountdownProps> = ({
   };
 
   // Format date for display
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', {
-      month: 'short',
-      day: 'numeric',
-      year: 'numeric'
-    }).toUpperCase();
+  const formatDate = (dateString: string | null | undefined) => {
+    if (!dateString) return 'DATE TBD';
+    try {
+      const date = new Date(dateString);
+      return date.toLocaleDateString('en-US', {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric'
+      }).toUpperCase();
+    } catch {
+      return 'DATE TBD';
+    }
   };
 
   // Format event date like "SEP 21, 2025" (uses event_date column only)
-  const formatEventDate = (dateString: string) => {
-    const dt = new Date(dateString);
-    const day = dt.getDate();
-    const month = dt.toLocaleDateString('en-US', { month: 'short' }).toUpperCase();
-    const year = dt.getFullYear();
-    return `${month} ${String(day).padStart(2, '0')}, ${year}`;
+  const formatEventDate = (dateString: string | null | undefined) => {
+    if (!dateString) return 'DATE TBD';
+    try {
+      const dt = new Date(dateString);
+      const day = dt.getDate();
+      const month = dt.toLocaleDateString('en-US', { month: 'short' }).toUpperCase();
+      const year = dt.getFullYear();
+      return `${month} ${String(day).padStart(2, '0')}, ${year}`;
+    } catch {
+      return 'DATE TBD';
+    }
   };
 
   // If no registration deadline, don't show countdown

@@ -4,7 +4,7 @@ import { AlertCircle, MapPin } from 'lucide-react';
 interface RegistrationStatusBannerProps {
   event: {
     registration_deadline?: string;
-    event_date: string;
+    event_date?: string | null;
     location: string;
     registration_status?: 'open' | 'closed' | 'full' | 'waitlist';
     status: 'upcoming' | 'ongoing' | 'completed' | 'cancelled';
@@ -143,7 +143,7 @@ const RegistrationStatusBanner: React.FC<RegistrationStatusBannerProps> = ({
             <span className="text-sm">{event.location.split(',')[0]?.trim()}</span>
           </div>
           <div className="text-sm text-gray-500 mt-1">
-            Event: {formatDate(new Date(event.event_date))}
+            Event: {event.event_date ? formatDate(new Date(event.event_date)) : 'Date TBD'}
           </div>
         </div>
       </div>

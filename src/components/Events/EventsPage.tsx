@@ -503,24 +503,32 @@ const EventsPage: React.FC = () => {
                     >
                       {displayedEvents.map((event, index) => {
                         // Formatting functions and price logic inside map
-                        const formatDate = (dateString: string) => {
-                          if (!dateString) return '';
-                          return new Date(dateString).toLocaleDateString('en-US', {
-                            year: 'numeric',
-                            month: 'long',
-                            day: 'numeric',
-                          });
+                        const formatDate = (dateString: string | null | undefined) => {
+                          if (!dateString) return 'Date TBD';
+                          try {
+                            return new Date(dateString).toLocaleDateString('en-US', {
+                              year: 'numeric',
+                              month: 'long',
+                              day: 'numeric',
+                            });
+                          } catch {
+                            return 'Date TBD';
+                          }
                         };
-                        const formatTime = (timeString: string) => {
-                          if (!timeString) return '';
-                          const [hours, minutes] = timeString.split(':');
-                          const date = new Date();
-                          date.setHours(parseInt(hours), parseInt(minutes));
-                          return date.toLocaleTimeString('en-US', {
-                            hour: 'numeric',
-                            minute: '2-digit',
-                            hour12: true,
-                          });
+                        const formatTime = (timeString: string | null | undefined) => {
+                          if (!timeString) return 'Time TBD';
+                          try {
+                            const [hours, minutes] = timeString.split(':');
+                            const date = new Date();
+                            date.setHours(parseInt(hours), parseInt(minutes));
+                            return date.toLocaleTimeString('en-US', {
+                              hour: 'numeric',
+                              minute: '2-digit',
+                              hour12: true,
+                            });
+                          } catch {
+                            return 'Time TBD';
+                          }
                         };
                         let priceDisplay: string;
                         const priceVal = event.price ?? 0;

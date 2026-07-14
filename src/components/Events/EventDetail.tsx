@@ -430,21 +430,31 @@ const EventDetail: React.FC = () => {
     }
   };
 
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-      weekday: 'long'
-    });
+  const formatDate = (dateString: string | null | undefined) => {
+    if (!dateString) return 'Date TBD';
+    try {
+      return new Date(dateString).toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        weekday: 'long'
+      });
+    } catch {
+      return 'Date TBD';
+    }
   };
 
-  const formatTime = (timeString: string) => {
-    return new Date(`2000-01-01T${timeString}`).toLocaleTimeString('en-US', {
-      hour: 'numeric',
-      minute: '2-digit',
-      hour12: true
-    });
+  const formatTime = (timeString: string | null | undefined) => {
+    if (!timeString) return 'Time TBD';
+    try {
+      return new Date(`2000-01-01T${timeString}`).toLocaleTimeString('en-US', {
+        hour: 'numeric',
+        minute: '2-digit',
+        hour12: true
+      });
+    } catch {
+      return 'Time TBD';
+    }
   };
 
   const getStatusColor = (status: string) => {
@@ -828,7 +838,8 @@ const EventDetail: React.FC = () => {
             const getRegStatus = () => {
               if (!event.registration_deadline) return { isClosed: true, buttonText: 'NO REGISTRATION DEADLINE' };
               const now = new Date();
-              const isOpen = parseDeadlineEndOfDay(event.registration_deadline).getTime() > now.getTime() && new Date(event.event_date).getTime() > now.getTime();
+              const eventDateCheck = event.event_date ? new Date(event.event_date).getTime() > now.getTime() : true;
+              const isOpen = parseDeadlineEndOfDay(event.registration_deadline).getTime() > now.getTime() && eventDateCheck;
               return { isClosed: !isOpen, buttonText: isOpen ? 'REGISTER NOW' : 'REGISTRATION CLOSED' };
             };
             const regStatus = getRegStatus();

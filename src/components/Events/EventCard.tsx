@@ -31,12 +31,17 @@ const EventCard: React.FC<EventCardProps> = ({ event, compact = false }) => {
   useEffect(() => {
     setImgError(false);
   }, [event.media_metadata?.featured_image, event.media_metadata?.mobile_featured_image, event.media_metadata?.event_banner]);
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-    });
+  const formatDate = (dateString: string | null | undefined) => {
+    if (!dateString) return 'Date TBD';
+    try {
+      return new Date(dateString).toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+      });
+    } catch {
+      return 'Date TBD';
+    }
   };
 
   const getStatusColor = (status: string) => {
@@ -132,7 +137,7 @@ const EventCard: React.FC<EventCardProps> = ({ event, compact = false }) => {
         <div className={`space-y-1 ${compact ? 'mb-2' : 'mb-3'}`}>
           <div className="flex items-center text-xs text-gray-500">
             <Calendar className="w-4 h-4 mr-1 flex-shrink-0" />
-            <span>{formatDate(event.event_date)} at {event.event_time}</span>
+            <span>{formatDate(event.event_date)}{event.event_time ? ` at ${event.event_time}` : ''}</span>
           </div>
           <div className="flex items-center text-xs text-gray-500">
             <MapPin className="w-4 h-4 mr-1 flex-shrink-0" />

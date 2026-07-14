@@ -283,7 +283,7 @@ const EventContactForm: React.FC<EventContactFormProps> = ({
                 </option>
                 {availableEvents.map((event) => (
                   <option key={event.id} value={event.id}>
-                    {event.title} - {new Date(event.event_date).toLocaleDateString()}
+                    {event.title} - {event.event_date ? new Date(event.event_date).toLocaleDateString() : 'Date TBD'}
                   </option>
                 ))}
               </select>

@@ -71,8 +71,8 @@ export interface Event {
 
   // Core flat columns
   title: string;
-  event_date: string;
-  event_time: string;
+  event_date?: string | null; // Optional: Can be NULL if date not yet determined
+  event_time?: string | null; // Optional: Can be NULL if time not yet determined
   duration: number;           // INTEGER — total minutes (e.g. 4320 = 3 days)
   category: string;           // event_category_enum: Workshop | Webinar | Seminar | Conference | Training | Bootcamp | Hackathon | Other
   price?: number;             // NUMERIC(10,2) — e.g. 2999.00, or 0 for free

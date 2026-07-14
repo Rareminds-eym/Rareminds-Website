@@ -9,14 +9,17 @@ interface AddToCalendarProps {
     currentEvent?: Event;
 }
 
-const formatDateForCalendar = (dateStr: string, timeStr: string) => {
+const formatDateForCalendar = (dateStr: string | null | undefined, timeStr: string | null | undefined) => {
+    // If no date provided, use today's date
+    const date = dateStr || new Date().toISOString().split('T')[0];
     // Combine date and time for calendar formatting
-    const eventDate = new Date(`${dateStr}T${timeStr || '00:00:00'}`);
+    const eventDate = new Date(`${date}T${timeStr || '00:00:00'}`);
     return eventDate.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
 };
 
-const formatEndDateForCalendar = (dateStr: string, timeStr: string, duration: number) => {
-    const eventDate = new Date(`${dateStr}T${timeStr || '00:00:00'}`);
+const formatEndDateForCalendar = (dateStr: string | null | undefined, timeStr: string | null | undefined, duration: number) => {
+    const date = dateStr || new Date().toISOString().split('T')[0];
+    const eventDate = new Date(`${date}T${timeStr || '00:00:00'}`);
     // duration is now INTEGER minutes
     const minutes = typeof duration === 'number' && duration > 0 ? duration : 60;
     eventDate.setMinutes(eventDate.getMinutes() + minutes);
@@ -153,12 +156,12 @@ export const AddToCalendar: React.FC<AddToCalendarProps> = ({ isVisible, onClose
                     <div className="mb-4 p-4 bg-red-50 rounded-lg border border-red-100">
                         <h4 className="font-semibold text-gray-900 mb-1">{currentEvent.title}</h4>
                         <p className="text-sm text-gray-600">
-                            {new Date(currentEvent.event_date).toLocaleDateString('en-US', {
+                            {currentEvent.event_date ? new Date(currentEvent.event_date).toLocaleDateString('en-US', {
                                 weekday: 'long',
                                 year: 'numeric',
                                 month: 'long',
                                 day: 'numeric'
-                            })} at {currentEvent.event_time}
+                            }) : 'Date TBD'} {currentEvent.event_time ? `at ${currentEvent.event_time}` : ''}
                         </p>
                         <p className="text-sm text-gray-600 mt-1">
                             📍 {currentEvent.location} | ⏱️ {currentEvent.duration}
