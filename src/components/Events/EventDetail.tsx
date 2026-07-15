@@ -839,8 +839,21 @@ const EventDetail: React.FC = () => {
             const getRegStatus = () => {
               if (!event.registration_deadline) return { isClosed: true, buttonText: 'NO REGISTRATION DEADLINE' };
               const now = new Date();
-              const eventDateCheck = event.event_date ? new Date(event.event_date).getTime() > now.getTime() : true;
-              const isOpen = parseDeadlineEndOfDay(event.registration_deadline).getTime() > now.getTime() && eventDateCheck;
+              
+              // Validate registration deadline
+              const registrationDeadline = parseDeadlineEndOfDay(event.registration_deadline);
+              const hasValidFutureDeadline = 
+                !Number.isNaN(registrationDeadline.getTime()) &&
+                registrationDeadline.getTime() > now.getTime();
+              
+              // Validate event date
+              const parsedEventDate = event.event_date ? new Date(event.event_date) : null;
+              const hasValidFutureEventDate =
+                parsedEventDate !== null &&
+                !Number.isNaN(parsedEventDate.getTime()) &&
+                parsedEventDate.getTime() > now.getTime();
+              
+              const isOpen = hasValidFutureDeadline && hasValidFutureEventDate;
               return { isClosed: !isOpen, buttonText: isOpen ? 'REGISTER NOW' : 'REGISTRATION CLOSED' };
             };
             const regStatus = getRegStatus();
