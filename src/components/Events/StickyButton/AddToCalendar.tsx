@@ -80,6 +80,27 @@ export const AddToCalendar: React.FC<AddToCalendarProps> = ({ isVisible, onClose
         action();
     };
 
+    const openCalendarWindow = (url: string, calendarName: string): void => {
+        if (!url || url === '#') {
+            toast({
+                title: "Unable to Open Calendar",
+                description: `${calendarName} could not be opened because the calendar URL is unavailable.`,
+                variant: "destructive"
+            });
+            return;
+        }
+
+        const openedWindow = window.open(url, '_blank', 'noopener,noreferrer');
+
+        if (!openedWindow) {
+            toast({
+                title: "Popup Blocked",
+                description: `Please allow popups in your browser to open ${calendarName}.`,
+                variant: "destructive"
+            });
+        }
+    };
+
     const generateGoogleCalendarUrl = () => {
         if (!startDate || !endDate) return '#';
         
@@ -155,7 +176,9 @@ export const AddToCalendar: React.FC<AddToCalendarProps> = ({ isVisible, onClose
                     <path fill="#ea4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
                 </svg>
             ),
-            onClick: () => handleCalendarAction(() => window.open(generateGoogleCalendarUrl(), '_blank')),
+            onClick: () => handleCalendarAction(() => 
+                openCalendarWindow(generateGoogleCalendarUrl(), 'Google Calendar')
+            ),
             color: 'bg-blue-50 hover:bg-blue-100 border-blue-200'
         },
         {
@@ -176,7 +199,9 @@ export const AddToCalendar: React.FC<AddToCalendarProps> = ({ isVisible, onClose
                     <path fill="#0078d4" d="M13 3.5a8.5 8.5 0 0 0-3 16.4c.5.1 1-.3 1-.8V17c-2.4-.6-3-2.4-3-2.4-.4-.9-.9-1.2-.9-1.2-.7-.5.1-.5.1-.5.8.1 1.2.8 1.2.8.7 1.3 1.9.9 2.3.7.1-.5.3-.9.5-1.1-1.8-.2-3.7-.9-3.7-4 0-.9.3-1.6.8-2.1-.1-.2-.4-1 .1-2.1 0 0 .7-.2 2.2.8.6-.2 1.3-.3 2-.3s1.4.1 2 .3c1.5-1 2.2-.8 2.2-.8.4 1.1.2 1.9.1 2.1.5.6.8 1.2.8 2.1 0 3.1-1.9 3.8-3.7 4 .3.3.6.8.6 1.5v2.2c0 .5.5.9 1 .8A8.5 8.5 0 0 0 13 3.5z"/>
                 </svg>
             ),
-            onClick: () => handleCalendarAction(() => window.open(generateOutlookUrl(), '_blank')),
+            onClick: () => handleCalendarAction(() => 
+                openCalendarWindow(generateOutlookUrl(), 'Outlook Calendar')
+            ),
             color: 'bg-indigo-50 hover:bg-indigo-100 border-indigo-200'
         }
     ];
