@@ -520,7 +520,7 @@ const EventsPage: React.FC = () => {
                           try {
                             const [hours, minutes] = timeString.split(':');
                             const date = new Date();
-                            date.setHours(parseInt(hours), parseInt(minutes));
+                            date.setHours(Number.parseInt(hours, 10), Number.parseInt(minutes, 10));
                             return date.toLocaleTimeString('en-US', {
                               hour: 'numeric',
                               minute: '2-digit',

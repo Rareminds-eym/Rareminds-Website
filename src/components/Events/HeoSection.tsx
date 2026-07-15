@@ -149,7 +149,7 @@ const WebinarSection: React.FC<HeroSectionProps> = ({
           setFormAnswers(null);
         }, 3000);
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('[Registration] Exception:', err);
       throw err;
     }

@@ -77,9 +77,11 @@ const SingleEventCountdown: React.FC<SingleEventCountdownProps> = ({
     }
 
     const updateCountdown = () => {
-      const timeLeft = calculateTimeLeft(event.registration_deadline!);
+      if (!event.registration_deadline) return;
+      
+      const timeLeft = calculateTimeLeft(event.registration_deadline);
       const now = new Date();
-      const deadlineDate = parseDeadlineEndOfDay(event.registration_deadline!);
+      const deadlineDate = parseDeadlineEndOfDay(event.registration_deadline);
       const eventDate = event.event_date ? new Date(event.event_date) : new Date();
       
       const isRegistrationDeadlinePassed = deadlineDate.getTime() <= now.getTime();

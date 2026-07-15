@@ -21,7 +21,7 @@ const formatDateForCalendar = (dateStr: string | null | undefined, timeStr: stri
         const eventDate = new Date(`${dateStr}T${timeStr || '00:00:00'}`);
         
         // Validate the date is valid
-        if (isNaN(eventDate.getTime())) {
+        if (Number.isNaN(eventDate.getTime())) {
             return null;
         }
         
@@ -39,7 +39,7 @@ const formatEndDateForCalendar = (dateStr: string | null | undefined, timeStr: s
     try {
         const eventDate = new Date(`${dateStr}T${timeStr || '00:00:00'}`);
         
-        if (isNaN(eventDate.getTime())) {
+        if (Number.isNaN(eventDate.getTime())) {
             return null;
         }
         

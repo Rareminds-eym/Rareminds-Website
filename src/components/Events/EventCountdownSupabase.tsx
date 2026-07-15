@@ -137,7 +137,7 @@ const EventCountdownCard: React.FC<EventCountdownCardProps> = ({
     try {
       const [hours, minutes] = timeString.split(':');
       const date = new Date();
-      date.setHours(parseInt(hours), parseInt(minutes));
+      date.setHours(Number.parseInt(hours, 10), Number.parseInt(minutes, 10));
       return date.toLocaleTimeString('en-US', {
         hour: 'numeric',
         minute: '2-digit',
@@ -243,7 +243,7 @@ const EventCountdownCard: React.FC<EventCountdownCardProps> = ({
       {/* Registration Deadline Info */}
       <div className="mt-6 text-center">
         <p className="text-sm text-gray-600">
-          ⏰ <span className="font-bold text-orange-600">Registration closes on {formatDate(event.registration_deadline!)} by 11:59 PM</span>
+          ⏰ <span className="font-bold text-orange-600">Registration closes on {event.registration_deadline ? formatDate(event.registration_deadline) : 'TBD'} by 11:59 PM</span>
         </p>
         <p className="text-xs text-gray-500 mt-1">
           Don't miss your chance to be part of this amazing event!
