@@ -430,7 +430,7 @@ const EventDetail: React.FC = () => {
     }
   };
 
-  const formatDate = (dateString: string | null | undefined) => {
+  const formatDate = (dateString: string | null | undefined): string => {
     if (!dateString) return 'Date TBD';
     try {
       return new Date(dateString).toLocaleDateString('en-US', {
@@ -444,7 +444,7 @@ const EventDetail: React.FC = () => {
     }
   };
 
-  const formatTime = (timeString: string | null | undefined) => {
+  const formatTime = (timeString: string | null | undefined): string => {
     if (!timeString) return 'Time TBD';
     try {
       return new Date(`2000-01-01T${timeString}`).toLocaleTimeString('en-US', {
@@ -680,7 +680,20 @@ const EventDetail: React.FC = () => {
                       <div className="absolute top-3 left-3 sm:top-4 sm:left-4 z-20">
                         <button
                           type="button"
-                          onClick={() => window.open(event.media_metadata?.teaser_video ?? '', '_blank', 'noopener,noreferrer')}
+                          onClick={() => {
+                            const teaserVideoUrl = event.media_metadata?.teaser_video;
+                            
+                            if (!teaserVideoUrl || teaserVideoUrl.trim() === '') {
+                              toast.error('Teaser video is not available.', {
+                                position: 'bottom-right',
+                                autoClose: 3000,
+                                hideProgressBar: true,
+                              });
+                              return;
+                            }
+                            
+                            window.open(teaserVideoUrl, '_blank', 'noopener,noreferrer');
+                          }}
                           className="flex items-center gap-1.5 sm:gap-2 px-2.5 py-1.5 sm:px-4 sm:py-2 bg-red-600/90 hover:bg-red-700/90 text-white rounded-md sm:rounded-lg text-xs sm:text-sm font-semibold transition-all duration-300 hover:scale-105 backdrop-blur-sm border border-red-400/30"
                         >
                           <svg className="w-3 h-3 sm:w-4 sm:h-4" fill="currentColor" viewBox="0 0 20 20">

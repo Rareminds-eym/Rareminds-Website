@@ -134,35 +134,43 @@ export const AddToCalendar: React.FC<AddToCalendarProps> = ({ isVisible, onClose
     const generateICSFile = () => {
         if (!startDate || !endDate) return;
         
-        const icsContent = [
-            'BEGIN:VCALENDAR',
-            'VERSION:2.0',
-            'PRODID:-//Rareminds//Event Calendar//EN',
-            'BEGIN:VEVENT',
-            `UID:${currentEvent.id || 'event-' + Date.now()}@rareminds.com`,
-            `DTSTART:${startDate}`,
-            `DTEND:${endDate}`,
-            `SUMMARY:${currentEvent.title}`,
-            `DESCRIPTION:${cleanDescription}`,
-            `LOCATION:${currentEvent.location_metadata?.address || ''}`,
-            ...(currentEvent.organizer_metadata?.name ? [`ORGANIZER:CN=${currentEvent.organizer_metadata.name}:MAILTO:${currentEvent.organizer_metadata.email || ''}`] : []),
-            'STATUS:CONFIRMED',
-            'BEGIN:VALARM',
-            'TRIGGER:-PT15M',
-            'ACTION:DISPLAY',
-            'DESCRIPTION:Event reminder',
-            'END:VALARM',
-            'END:VEVENT',
-            'END:VCALENDAR'
-        ].join('\r\n');
+        try {
+            const icsContent = [
+                'BEGIN:VCALENDAR',
+                'VERSION:2.0',
+                'PRODID:-//Rareminds//Event Calendar//EN',
+                'BEGIN:VEVENT',
+                `UID:${currentEvent.id || 'event-' + Date.now()}@rareminds.com`,
+                `DTSTART:${startDate}`,
+                `DTEND:${endDate}`,
+                `SUMMARY:${currentEvent.title}`,
+                `DESCRIPTION:${cleanDescription}`,
+                `LOCATION:${currentEvent.location_metadata?.address || ''}`,
+                ...(currentEvent.organizer_metadata?.name ? [`ORGANIZER:CN=${currentEvent.organizer_metadata.name}:MAILTO:${currentEvent.organizer_metadata.email || ''}`] : []),
+                'STATUS:CONFIRMED',
+                'BEGIN:VALARM',
+                'TRIGGER:-PT15M',
+                'ACTION:DISPLAY',
+                'DESCRIPTION:Event reminder',
+                'END:VALARM',
+                'END:VEVENT',
+                'END:VCALENDAR'
+            ].join('\r\n');
 
-        const blob = new Blob([icsContent], { type: 'text/calendar' });
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = `${currentEvent.title.replace(/[^a-z0-9]/gi, '_')}.ics`;
-        link.click();
-        URL.revokeObjectURL(url);
+            const blob = new Blob([icsContent], { type: 'text/calendar' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `${currentEvent.title.replace(/[^a-z0-9]/gi, '_')}.ics`;
+            link.click();
+            URL.revokeObjectURL(url);
+        } catch (error) {
+            toast({
+                title: "Download Failed",
+                description: "Unable to generate calendar file. Please try again.",
+                variant: "destructive"
+            });
+        }
     };
 
     const calendarOptions = [

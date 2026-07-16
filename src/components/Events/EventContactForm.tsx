@@ -281,11 +281,20 @@ const EventContactForm: React.FC<EventContactFormProps> = ({
                 <option value="">
                   {loadingEvents ? 'Loading events...' : 'Select an event'}
                 </option>
-                {availableEvents.map((event) => (
-                  <option key={event.id} value={event.id}>
-                    {event.title} - {event.event_date ? new Date(event.event_date).toLocaleDateString() : 'Date TBD'}
-                  </option>
-                ))}
+                {availableEvents.map((event) => {
+                  let dateDisplay = 'Date TBD';
+                  if (event.event_date) {
+                    const parsedDate = new Date(event.event_date);
+                    dateDisplay = Number.isNaN(parsedDate.getTime()) 
+                      ? 'Invalid Date' 
+                      : parsedDate.toLocaleDateString();
+                  }
+                  return (
+                    <option key={event.id} value={event.id}>
+                      {event.title} - {dateDisplay}
+                    </option>
+                  );
+                })}
               </select>
               {loadingEvents && (
                 <Loader2 className="absolute right-3 top-3 w-5 h-5 animate-spin text-gray-400" />

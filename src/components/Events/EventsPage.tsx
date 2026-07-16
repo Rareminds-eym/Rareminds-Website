@@ -16,6 +16,55 @@ interface GalleryStyles extends React.CSSProperties {
   '--duration': string;
 }
 
+// Pure helper functions moved outside component for performance
+const formatDate = (dateString: string | null | undefined): string => {
+  if (!dateString) return 'Date TBD';
+  try {
+    return new Date(dateString).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    });
+  } catch {
+    return 'Date TBD';
+  }
+};
+
+const formatTime = (timeString: string | null | undefined): string => {
+  if (!timeString) return 'Time TBD';
+  try {
+    const parts = timeString.split(':');
+    if (parts.length < 2) return 'Time TBD';
+    
+    const [hoursString, minutesString] = parts;
+    if (!hoursString || !minutesString) return 'Time TBD';
+    
+    const hours = Number.parseInt(hoursString, 10);
+    const minutes = Number.parseInt(minutesString, 10);
+    
+    if (
+      Number.isNaN(hours) ||
+      Number.isNaN(minutes) ||
+      hours < 0 ||
+      hours > 23 ||
+      minutes < 0 ||
+      minutes > 59
+    ) {
+      return 'Time TBD';
+    }
+    
+    const date = new Date();
+    date.setHours(hours, minutes);
+    return date.toLocaleTimeString('en-US', {
+      hour: 'numeric',
+      minute: '2-digit',
+      hour12: true,
+    });
+  } catch {
+    return 'Time TBD';
+  }
+};
+
 const EventsPage: React.FC = () => {
   const { events, loading, error } = useOptimizedEvents();
   const { toast } = useToast();
@@ -502,34 +551,7 @@ const EventsPage: React.FC = () => {
                       transition={{ delay: 0.1 }}
                     >
                       {displayedEvents.map((event, index) => {
-                        // Formatting functions and price logic inside map
-                        const formatDate = (dateString: string | null | undefined) => {
-                          if (!dateString) return 'Date TBD';
-                          try {
-                            return new Date(dateString).toLocaleDateString('en-US', {
-                              year: 'numeric',
-                              month: 'long',
-                              day: 'numeric',
-                            });
-                          } catch {
-                            return 'Date TBD';
-                          }
-                        };
-                        const formatTime = (timeString: string | null | undefined) => {
-                          if (!timeString) return 'Time TBD';
-                          try {
-                            const [hours, minutes] = timeString.split(':');
-                            const date = new Date();
-                            date.setHours(Number.parseInt(hours, 10), Number.parseInt(minutes, 10));
-                            return date.toLocaleTimeString('en-US', {
-                              hour: 'numeric',
-                              minute: '2-digit',
-                              hour12: true,
-                            });
-                          } catch {
-                            return 'Time TBD';
-                          }
-                        };
+                        // Price logic
                         let priceDisplay: string;
                         const priceVal = event.price ?? 0;
                         if (priceVal === 0) {
