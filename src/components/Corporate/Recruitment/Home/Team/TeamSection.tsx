@@ -5,32 +5,15 @@ import { Link } from "react-router-dom";
 const teamMembers = [
   {
     name: "Visakh Madhu",
-    photo: "https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Corporate/Recruitment/Index/Team/Visakh.webp",
+    photo: "https://media.rareminds.in/Visakh.webp",
     designation: "Director HR",
     linkedin: "https://www.linkedin.com/in/visakh-madhu-6599b614a/",
     mission: "Help business succeed by aligning people and strategy.",
     bg: "bg-[#EFDECD]",
   },
   {
-    name: "RONNIE Poulose",
-    photo: "https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Corporate/Recruitment/Index/Team/Ronnie.webp",
-    designation: "Head of Recruitment, BD & Delivery",
-    linkedin: "https://www.linkedin.com/in/ronniepoulose/",
-    mission:
-      "Rareminds to reach Globally and to be a Pan India and International Brand.",
-    bg: "bg-[#D0F0C0]",
-  },
-  {
-    name: "Rohit Bhandiye",
-    photo: "https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Corporate/Recruitment/Index/Team/Rohit.webp",
-    designation: "Senior Recruiter",
-    linkedin: "https://www.linkedin.com/in/rohit-bhandiye-267a0719/",
-    mission: "Rareminds to be a Global Brand.",
-    bg: "bg-[#FFE789]",
-  },
-  {
     name: "Subiksha Karthikeyan",
-    photo: "https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Corporate/Recruitment/Index/Team/Subiksha.webp",
+    photo: "https://media.rareminds.in/Subiksha.webp",
     designation: "Talent Acquisition Executive",
     linkedin: "https://www.linkedin.com/in/subiksha-k/",
     mission: "Connecting exceptional talent with transformative opportunities.",
@@ -38,12 +21,29 @@ const teamMembers = [
   },
   {
     name: "Varalakshmi M",
-    photo: "https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Corporate/Recruitment/Index/Team/Varalakshmi.webp",
+    photo: "https://media.rareminds.in/Varalakshmi.webp",
     designation: "Recruitment Executive",
     linkedin: "https://www.linkedin.com/in/varalakshmi-m-183001278/",
     mission:
       "Rareminds connect the word professionals to make them more productive & Successful.",
     bg: "bg-[#E3DCD4]",
+  },
+  {
+    name: "Krishna R",
+    photo: "https://media.rareminds.in/Krishna.webp",
+    designation: "Recruitment Executive",
+    linkedin: "https://www.linkedin.com/in/krishna-r-003b5b260/",
+    mission:
+      "Building strong talent pipelines that contribute to the growth of our clients and Rareminds.",
+    bg: "bg-[#D0F0C0]",
+  },
+  {
+    name: "Swetha S",
+    photo: "https://media.rareminds.in/Swetha.webp",
+    designation: "Recruitment Executive",
+    linkedin: "https://www.linkedin.com/in/swetha-s-191b782b6/",
+    mission: "Turning hiring needs into the right talent, quickly and effectively.",
+    bg: "bg-[#FFE789]",
   },
 ];
 
