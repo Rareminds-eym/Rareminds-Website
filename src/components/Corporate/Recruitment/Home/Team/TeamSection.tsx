@@ -50,7 +50,7 @@ const teamMembers = [
 const TeamSection = () => {
   return (
     <section className="pb-[160px] pt-[60px] relative overflow-hidden object-none object-bottom bg-no-repeat bg-white">
-      <div className="absolute flex w-full h-[100%] bg-[url(https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Corporate/Recruitment/Index/Team/team-bg.webp)] opacity-5"></div>
+      <div className="absolute flex w-full h-[100%] bg-[url(https://media.rareminds.in/team-bg.webp)] opacity-5"></div>
 
       <div className="container mx-auto relative z-10">
         <motion.div
@@ -79,7 +79,7 @@ const TeamSection = () => {
               transition={{ duration: 0.5, delay: index * 0.1 }}
               viewport={{ once: true }}
               className={`relative group lg:row-span-4 ${
-                index % 2 == 1 ? "lg:row-start-2" : "lg:row-start-1"
+                index % 2 === 1 ? "lg:row-start-2" : "lg:row-start-1"
               }`}
             >
               <div
@@ -97,11 +97,7 @@ const TeamSection = () => {
                   <p className="text-center">{member.mission}</p>
                 </div>
 
-                <div
-                  className={`absolute ${
-                    index == -1 ? "bottom-[-60px]" : "bottom-[-100px]"
-                  } scale-150`}
-                >
+                <div className="absolute bottom-[-100px] scale-150">
                   <img
                     src={member.photo}
                     alt={member.name}
@@ -112,6 +108,7 @@ const TeamSection = () => {
               <Link
                 to={member.linkedin}
                 target="_blank"
+                rel="noopener noreferrer"
                 className="absolute bottom-0 translate-y-1/2 left-1/2 -translate-x-1/2 text-center mt-2 w-min mx-auto"
               >
                 <div className="bg-[#1F2937] w-min rounded-full p-3">
