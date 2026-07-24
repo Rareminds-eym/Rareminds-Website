@@ -83,7 +83,7 @@ const TeamSection = () => {
               }`}
             >
               <div
-                className={`relative ${member.bg} rounded-full flex flex-col h-[450px] sm:h-[500px] overflow-hidden group`}
+                className={`relative ${member.bg} rounded-full flex flex-col h-[450px] sm:h-[480px] md:h-[460px] lg:h-[500px] overflow-hidden group`}
               >
                 <div className="p-5 flex flex-col group-hover:opacity-0 transition-all duration-300">
                   <p className="text-lg font-bold text-center mt-10">
@@ -92,12 +92,12 @@ const TeamSection = () => {
                   <p className="mt-1 text-center">{member.designation}</p>
                 </div>
 
-                <div className="absolute pt-[50px] top-0 p-5 w-full h-[200px] opacity-0 group-hover:opacity-100 transition-all duration-300">
-                  <p className="text-center font-bold">Mission</p>
-                  <p className="text-center">{member.mission}</p>
+                <div className="absolute pt-8 sm:pt-10 md:pt-9 lg:pt-[50px] top-0 px-3 sm:px-6 md:px-6 lg:px-5 w-full h-[150px] sm:h-[170px] md:h-[160px] lg:h-[200px] opacity-0 group-hover:opacity-100 transition-all duration-300 overflow-hidden">
+                  <p className="text-sm md:text-sm lg:text-base text-center font-bold">Mission</p>
+                  <p className="mt-1 text-xs md:text-sm lg:text-base text-center leading-snug">{member.mission}</p>
                 </div>
 
-                <div className="absolute bottom-[-100px] scale-150">
+                <div className="absolute bottom-[-60px] sm:bottom-[-70px] md:bottom-[-65px] lg:bottom-[-100px] scale-100 sm:scale-110 md:scale-105 lg:scale-150">
                   <img
                     src={member.photo}
                     alt={member.name}
