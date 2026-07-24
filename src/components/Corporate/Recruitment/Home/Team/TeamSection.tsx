@@ -1,6 +1,12 @@
 import { motion } from "framer-motion";
-import { Users, Linkedin } from "lucide-react";
+import { Linkedin, Users } from "lucide-react";
 import { Link } from "react-router-dom";
+
+const missionBubbleClasses =
+  "absolute pt-8 sm:pt-10 md:pt-9 lg:pt-[50px] top-0 px-3 sm:px-6 md:px-6 lg:px-5 w-full h-[150px] sm:h-[170px] md:h-[160px] lg:h-[200px] opacity-0 group-hover:opacity-100 transition-all duration-300 overflow-hidden";
+
+const imageWrapperClasses =
+  "absolute bottom-[-60px] sm:bottom-[-70px] md:bottom-[-65px] lg:bottom-[-100px] scale-100 sm:scale-110 md:scale-105 lg:scale-150";
 
 const teamMembers = [
   {
@@ -92,12 +98,12 @@ const TeamSection = () => {
                   <p className="mt-1 text-center">{member.designation}</p>
                 </div>
 
-                <div className="absolute pt-8 sm:pt-10 md:pt-9 lg:pt-[50px] top-0 px-3 sm:px-6 md:px-6 lg:px-5 w-full h-[150px] sm:h-[170px] md:h-[160px] lg:h-[200px] opacity-0 group-hover:opacity-100 transition-all duration-300 overflow-hidden">
+                <div className={missionBubbleClasses}>
                   <p className="text-sm lg:text-base text-center font-bold">Mission</p>
                   <p className="mt-1 text-xs md:text-sm lg:text-base text-center leading-snug">{member.mission}</p>
                 </div>
 
-                <div className="absolute bottom-[-60px] sm:bottom-[-70px] md:bottom-[-65px] lg:bottom-[-100px] scale-100 sm:scale-110 md:scale-105 lg:scale-150">
+                <div className={imageWrapperClasses}>
                   <img
                     src={member.photo}
                     alt={member.name}
