@@ -93,7 +93,7 @@ const TeamSection = () => {
                 </div>
 
                 <div className="absolute pt-8 sm:pt-10 md:pt-9 lg:pt-[50px] top-0 px-3 sm:px-6 md:px-6 lg:px-5 w-full h-[150px] sm:h-[170px] md:h-[160px] lg:h-[200px] opacity-0 group-hover:opacity-100 transition-all duration-300 overflow-hidden">
-                  <p className="text-sm md:text-sm lg:text-base text-center font-bold">Mission</p>
+                  <p className="text-sm lg:text-base text-center font-bold">Mission</p>
                   <p className="mt-1 text-xs md:text-sm lg:text-base text-center leading-snug">{member.mission}</p>
                 </div>
 
