@@ -6,7 +6,7 @@ const missionBubbleClasses =
   "absolute pt-6 sm:pt-10 min-[640px]:pt-8 md:pt-9 lg:pt-[50px] top-0 px-3 min-[520px]:px-6 min-[640px]:px-7 md:px-6 lg:px-5 w-full h-[200px] sm:h-[170px] min-[640px]:h-[150px] md:h-[160px] lg:h-[200px] opacity-0 group-hover:opacity-100 transition-all duration-300 overflow-hidden";
 
 const imageWrapperClasses =
-  "absolute bottom-0 min-[400px]:bottom-[-25px] min-[520px]:bottom-[-45px] min-[640px]:bottom-[-85px] md:bottom-[-65px] lg:bottom-[-100px] scale-100 min-[400px]:scale-95 min-[520px]:scale-90 min-[640px]:scale-[.85] md:scale-105 lg:scale-150";
+  "absolute bottom-[-20px] min-[400px]:bottom-[-25px] min-[520px]:bottom-[-45px] min-[640px]:bottom-[-85px] md:bottom-[-65px] lg:bottom-[-100px] scale-[.92] min-[400px]:scale-95 min-[520px]:scale-90 min-[640px]:scale-[.85] md:scale-105 lg:scale-150";
 
 const teamMembers = [
   {
@@ -89,7 +89,7 @@ const TeamSection = () => {
               }`}
             >
               <div
-                className={`relative ${member.bg} rounded-full flex flex-col h-[350px] min-[400px]:h-[400px] min-[520px]:h-[450px] sm:h-[480px] min-[640px]:h-[440px] md:h-[460px] lg:h-[500px] overflow-hidden group`}
+                className={`relative ${member.bg} rounded-full flex flex-col h-[380px] min-[400px]:h-[400px] min-[520px]:h-[450px] sm:h-[480px] min-[640px]:h-[440px] md:h-[460px] lg:h-[500px] overflow-hidden group`}
               >
                 <div className="p-5 min-[640px]:pt-3 flex flex-col group-hover:opacity-0 transition-all duration-300">
                   <p className="text-base min-[520px]:text-lg min-[640px]:text-base md:text-lg font-bold text-center mt-6 min-[520px]:mt-10 min-[640px]:mt-6">
