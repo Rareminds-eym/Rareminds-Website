@@ -254,13 +254,23 @@ const EventDetail: React.FC = () => {
   const [isMobile, setIsMobile] = React.useState(false);
   React.useEffect(() => {
     const mq = window.matchMedia('(max-width: 640px)');
-    const onChange = (e: MediaQueryListEvent) => setIsMobile(e.matches);
+    const onChange = (event: MediaQueryListEvent): void => {
+      setIsMobile(event.matches);
+    };
     setIsMobile(mq.matches);
-    if ((mq as any).addEventListener) (mq as any).addEventListener('change', onChange);
-    else (mq as any).addListener(onChange);
+    
+    // Use modern addEventListener API with feature detection
+    if (typeof mq.addEventListener === 'function') {
+      mq.addEventListener('change', onChange);
+      return () => {
+        mq.removeEventListener('change', onChange);
+      };
+    }
+    
+    // Fallback for legacy browsers
+    mq.addListener(onChange);
     return () => {
-      if ((mq as any).removeEventListener) (mq as any).removeEventListener('change', onChange);
-      else (mq as any).removeListener(onChange);
+      mq.removeListener(onChange);
     };
   }, []);
 
@@ -298,7 +308,7 @@ const EventDetail: React.FC = () => {
           if (fullData) {
             setFullEventData(fullData);
           }
-        } catch (err) {
+        } catch {
           toast.error('Could not load full event details. Showing limited info.', {
             position: 'bottom-right', autoClose: 4000, hideProgressBar: true,
           });
@@ -335,7 +345,7 @@ const EventDetail: React.FC = () => {
     try {
       const count = await eventInterestedService.getInterestedCount(event.id);
       setInterestCount(count);
-    } catch (error) {
+    } catch {
       toast.error('Failed to load interest count. Please refresh.', {
         position: 'bottom-right', autoClose: 3000, hideProgressBar: true,
       });
@@ -362,7 +372,7 @@ const EventDetail: React.FC = () => {
       try {
         const interests = JSON.parse(storedInterests);
         setUserAlreadyInterested(interests.includes(event.id));
-      } catch (error) {
+      } catch {
         toast.warn('Could not read your interest preferences. Resetting...', {
           position: 'bottom-right', autoClose: 3000,
         });
@@ -384,7 +394,7 @@ const EventDetail: React.FC = () => {
       if (storedInterests) {
         try {
           interests = JSON.parse(storedInterests);
-        } catch (error) {
+        } catch {
           toast.warn('Preference storage was corrupted. Resetting...', {
             position: 'bottom-right', autoClose: 2000,
           });
@@ -415,7 +425,7 @@ const EventDetail: React.FC = () => {
         if (storedInterests) {
           try {
             interests = JSON.parse(storedInterests);
-          } catch (parseError) {
+          } catch {
             toast.warn('Preference storage issue detected. Resetting...', {
               position: 'bottom-right', autoClose: 2000,
             });
@@ -431,30 +441,36 @@ const EventDetail: React.FC = () => {
   };
 
   const formatDate = (dateString: string | null | undefined): string => {
-    if (!dateString) return 'Date TBD';
-    try {
-      return new Date(dateString).toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-        weekday: 'long'
-      });
-    } catch {
+    if (!dateString?.trim()) return 'Date TBD';
+    
+    const date = new Date(dateString.trim());
+    
+    if (!Number.isFinite(date.getTime())) {
       return 'Date TBD';
     }
+    
+    return date.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      weekday: 'long'
+    });
   };
 
   const formatTime = (timeString: string | null | undefined): string => {
-    if (!timeString) return 'Time TBD';
-    try {
-      return new Date(`2000-01-01T${timeString}`).toLocaleTimeString('en-US', {
-        hour: 'numeric',
-        minute: '2-digit',
-        hour12: true
-      });
-    } catch {
+    if (!timeString?.trim()) return 'Time TBD';
+    
+    const date = new Date(`2000-01-01T${timeString.trim()}`);
+    
+    if (!Number.isFinite(date.getTime())) {
       return 'Time TBD';
     }
+    
+    return date.toLocaleTimeString('en-US', {
+      hour: 'numeric',
+      minute: '2-digit',
+      hour12: true
+    });
   };
 
   const getStatusColor = (status: string) => {
@@ -522,6 +538,7 @@ const EventDetail: React.FC = () => {
             <p className="text-sm text-gray-500 mb-6">{error}</p>
             <div className="flex flex-col gap-3 sm:flex-row sm:justify-center">
               <button
+                type="button"
                 onClick={() => refetch()}
                 className="group inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-2xl hover:from-blue-600 hover:to-blue-700 transition-all duration-300 transform hover:scale-105 hover:shadow-lg"
               >
@@ -755,6 +772,7 @@ const EventDetail: React.FC = () => {
 
                       {/* I'm Interested Button */}
                       <button
+                        type="button"
                         onClick={() => {
                           if (userAlreadyInterested) {
                             // Show a message that they're already interested
@@ -843,10 +861,11 @@ const EventDetail: React.FC = () => {
 
             // Shared sidebar card JSX used in both layouts
             const parseDeadlineEndOfDay = (dateStr: string): Date => {
-              if (!dateStr) return new Date(0);
+              if (!dateStr) return new Date(NaN);
               const match = /^(\d{4})-(\d{2})-(\d{2})/.exec(String(dateStr));
-              if (!match) return new Date(dateStr);
+              if (!match) return new Date(NaN);
               const y = parseInt(match[1], 10), m = parseInt(match[2], 10), d = parseInt(match[3], 10);
+              if (!Number.isFinite(y) || !Number.isFinite(m) || !Number.isFinite(d)) return new Date(NaN);
               return new Date(y, (m || 1) - 1, d || 1, 23, 59, 59, 999);
             };
             const getRegStatus = () => {
@@ -856,14 +875,14 @@ const EventDetail: React.FC = () => {
               // Validate registration deadline
               const registrationDeadline = parseDeadlineEndOfDay(event.registration_deadline);
               const hasValidFutureDeadline = 
-                !Number.isNaN(registrationDeadline.getTime()) &&
+                Number.isFinite(registrationDeadline.getTime()) &&
                 registrationDeadline.getTime() > now.getTime();
               
               // Validate event date
               const parsedEventDate = event.event_date ? new Date(event.event_date) : null;
               const hasValidFutureEventDate =
                 parsedEventDate !== null &&
-                !Number.isNaN(parsedEventDate.getTime()) &&
+                Number.isFinite(parsedEventDate.getTime()) &&
                 parsedEventDate.getTime() > now.getTime();
               
               const isOpen = hasValidFutureDeadline && hasValidFutureEventDate;
@@ -916,9 +935,21 @@ const EventDetail: React.FC = () => {
                     })()}
                   </div>
                   <div className="flex items-center gap-3">
-                    <button aria-label="Decrease quantity" onClick={rc ? undefined : () => setQuantity(q => Math.max(1, q - 1))} disabled={rc} className={`w-8 h-8 rounded-full text-lg leading-none flex items-center justify-center ${rc ? 'bg-gray-200 text-gray-400 cursor-not-allowed' : 'bg-slate-100 hover:bg-slate-200 text-slate-700'}`}>−</button>
+                    <button
+                      type="button"
+                      aria-label="Decrease quantity"
+                      onClick={rc ? undefined : () => setQuantity(q => Math.max(1, q - 1))}
+                      disabled={rc}
+                      className={`w-8 h-8 rounded-full text-lg leading-none flex items-center justify-center ${rc ? 'bg-gray-200 text-gray-400 cursor-not-allowed' : 'bg-slate-100 hover:bg-slate-200 text-slate-700'}`}
+                    >−</button>
                     <span className={`min-w-[1.5rem] text-center font-semibold ${rc ? 'text-gray-400' : 'text-slate-700'}`}>{String(quantity).padStart(2, '0')}</span>
-                    <button aria-label="Increase quantity" onClick={rc ? undefined : () => setQuantity(q => Math.min(99, q + 1))} disabled={rc} className={`w-8 h-8 rounded-full text-lg leading-none flex items-center justify-center ${rc ? 'bg-gray-200 text-gray-400 cursor-not-allowed' : 'bg-slate-100 hover:bg-slate-200 text-slate-700'}`}>+</button>
+                    <button
+                      type="button"
+                      aria-label="Increase quantity"
+                      onClick={rc ? undefined : () => setQuantity(q => Math.min(99, q + 1))}
+                      disabled={rc}
+                      className={`w-8 h-8 rounded-full text-lg leading-none flex items-center justify-center ${rc ? 'bg-gray-200 text-gray-400 cursor-not-allowed' : 'bg-slate-100 hover:bg-slate-200 text-slate-700'}`}
+                    >+</button>
                   </div>
                 </div>
                 <div className="my-5 border-t border-slate-200" />
@@ -937,8 +968,18 @@ const EventDetail: React.FC = () => {
                   </span>
                 </div>
                 <div className="space-y-3 mt-6">
-                  <button onClick={rc ? undefined : () => setModalOpen(true)} disabled={rc} className={`w-full font-semibold py-4 rounded-2xl transition-all duration-300 ${rc ? 'bg-gray-400 cursor-not-allowed text-gray-600' : 'bg-indigo-600 hover:bg-indigo-700 text-white active:scale-[0.99]'}`}>{regStatus.buttonText}</button>
-                  <button onClick={rc ? undefined : () => setContactModalOpen(true)} disabled={rc} className={`w-full py-4 font-semibold rounded-2xl transition-all duration-300 ${rc ? 'bg-red-300 cursor-not-allowed text-red-100' : 'bg-red-600 hover:bg-red-700 text-white active:scale-[0.99]'}`}>Enquiry</button>
+                  <button
+                    type="button"
+                    onClick={rc ? undefined : () => setModalOpen(true)}
+                    disabled={rc}
+                    className={`w-full font-semibold py-4 rounded-2xl transition-all duration-300 ${rc ? 'bg-gray-400 cursor-not-allowed text-gray-600' : 'bg-indigo-600 hover:bg-indigo-700 text-white active:scale-[0.99]'}`}
+                  >{regStatus.buttonText}</button>
+                  <button
+                    type="button"
+                    onClick={rc ? undefined : () => setContactModalOpen(true)}
+                    disabled={rc}
+                    className={`w-full py-4 font-semibold rounded-2xl transition-all duration-300 ${rc ? 'bg-red-300 cursor-not-allowed text-red-100' : 'bg-red-600 hover:bg-red-700 text-white active:scale-[0.99]'}`}
+                  >Enquiry</button>
                 </div>
               </div>
             );
@@ -998,6 +1039,7 @@ const EventDetail: React.FC = () => {
                               </div>
                               {/* Share Button */}
                               <button
+                                type="button"
                                 onClick={() => {
                                   if (navigator.share) {
                                     navigator.share({
@@ -1093,17 +1135,27 @@ const EventDetail: React.FC = () => {
                             <h2 className="rm-section-title">{speakersList.length === 1 ? 'Speaker' : 'Speakers'}</h2>
                             {speakersList.length > 1 && (
                               <div className="flex items-center gap-3">
-                                <button aria-label="Previous" onClick={() => scrollSpeakers('left')} className="w-10 h-10 rounded-full bg-white border border-gray-200 flex items-center justify-center text-slate-700 hover:bg-slate-50 shadow-sm">
+                                <button
+                                  type="button"
+                                  aria-label="Previous"
+                                  onClick={() => scrollSpeakers('left')}
+                                  className="w-10 h-10 rounded-full bg-white border border-gray-200 flex items-center justify-center text-slate-700 hover:bg-slate-50 shadow-sm"
+                                >
                                   <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" /></svg>
                                 </button>
-                                <button aria-label="Next" onClick={() => scrollSpeakers('right')} className="w-10 h-10 rounded-full bg-white border border-gray-200 flex items-center justify-center text-slate-700 hover:bg-slate-50 shadow-sm">
+                                <button
+                                  type="button"
+                                  aria-label="Next"
+                                  onClick={() => scrollSpeakers('right')}
+                                  className="w-10 h-10 rounded-full bg-white border border-gray-200 flex items-center justify-center text-slate-700 hover:bg-slate-50 shadow-sm"
+                                >
                                   <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" /></svg>
                                 </button>
                               </div>
                             )}
                           </div>
                           {hasAnyDescription ? (
-                            /* Horizontal layout — one full-width card per speaker, scrollable */
+/* Horizontal layout — one full-width card per speaker, scrollable */
                             <div ref={speakersScrollRef} className="flex gap-6 overflow-x-auto snap-x snap-mandatory pb-2 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]" style={{ scrollBehavior: 'smooth' }}>
                               {speakersList.map((spk, id) => (
                                 <div key={id} className="min-w-full snap-start">
@@ -1116,7 +1168,12 @@ const EventDetail: React.FC = () => {
                                         <h3 className="text-base font-bold text-slate-900 leading-tight">{spk.name}</h3>
                                         <p className="text-[#5B6CF6] text-sm font-medium mt-0.5">{spk.title}</p>
                                         {spk.linkedIn && (
-                                          <button className="mt-2 w-8 h-8 rounded-full bg-[#0A66C2] flex items-center justify-center hover:brightness-110 transition-all shadow-sm" onClick={() => window.open(spk.linkedIn, '_blank')} aria-label="View LinkedIn profile">
+                                          <button
+                                            type="button"
+                                            className="mt-2 w-8 h-8 rounded-full bg-[#0A66C2] flex items-center justify-center hover:brightness-110 transition-all shadow-sm"
+                                            onClick={() => window.open(spk.linkedIn, '_blank')}
+                                            aria-label="View LinkedIn profile"
+                                          >
                                             <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" /></svg>
                                           </button>
                                         )}
@@ -1211,6 +1268,7 @@ const EventDetail: React.FC = () => {
                           {(isMobile ? galleryItems.length > 4 : galleryItems.length > 10) && (
                             <div className="mt-6 text-center">
                               <button
+                                type="button"
                                 aria-expanded={showAllGallery}
                                 onClick={() => setShowAllGallery(prev => !prev)}
                                 className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-2xl hover:from-blue-600 hover:to-indigo-600 transition-all duration-300 transform hover:scale-105"
@@ -1281,19 +1339,31 @@ const EventDetail: React.FC = () => {
                     {hasOrganizerData && organizerCard}
                     {hasLocationData && mapCard}
                   </div>
-                  <div className="space-y-6">
-                    {(hasAbout || hasHighlights) && (
-                      <div className="rm-card p-4 sm:p-8 lg:p-10">
-                        {hasAbout && (
-                          <>
-                            <div className="flex items-start justify-between mb-4 sm:mb-8">
-                              <div className="flex items-center gap-3 sm:gap-4">
-                                <h2 className="rm-section-title">About The Event</h2>
-                                <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium capitalize ${getStatusColor(event.status)}`}>
-                                  {getStatusIcon(event.status)}<span className="ml-2">{event.status}</span>
-                                </span>
-                              </div>
-                              <button onClick={() => { if (navigator.share) { navigator.share({ title: event.title, text: `Check out this event: ${event.title}`, url: window.location.href }); } else { navigator.clipboard.writeText(window.location.href); alert('Link copied to clipboard!'); } }} className="flex items-center gap-2 px-3 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-colors duration-200 shrink-0" title="Share this event">
+<div className="space-y-6">
+                      {(hasAbout || hasHighlights) && (
+                        <div className="rm-card p-4 sm:p-8 lg:p-10">
+                          {hasAbout && (
+                            <>
+                              <div className="flex items-start justify-between mb-4 sm:mb-8">
+                                <div className="flex items-center gap-3 sm:gap-4">
+                                  <h2 className="rm-section-title">About The Event</h2>
+                                  <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium capitalize ${getStatusColor(event.status)}`}>
+                                    {getStatusIcon(event.status)}<span className="ml-2">{event.status}</span>
+                                  </span>
+                                </div>
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    if (navigator.share) {
+                                      navigator.share({ title: event.title, text: `Check out this event: ${event.title}`, url: window.location.href });
+                                    } else {
+                                      navigator.clipboard.writeText(window.location.href);
+                                      alert('Link copied to clipboard!');
+                                    }
+                                  }}
+                                  className="flex items-center gap-2 px-3 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-colors duration-200 shrink-0"
+                                  title="Share this event"
+                                >
                                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z" /></svg>
                               </button>
                             </div>
@@ -1340,8 +1410,22 @@ const EventDetail: React.FC = () => {
                             <h2 className="rm-section-title">{speakersList.length === 1 ? 'Speaker' : 'Speakers'}</h2>
                             {speakersList.length > 1 && (
                               <div className="flex items-center gap-3">
-                                <button aria-label="Previous" onClick={() => scrollSpeakers('left')} className="w-10 h-10 rounded-full bg-white border border-gray-200 flex items-center justify-center text-slate-700 hover:bg-slate-50 shadow-sm"><svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" /></svg></button>
-                                <button aria-label="Next" onClick={() => scrollSpeakers('right')} className="w-10 h-10 rounded-full bg-white border border-gray-200 flex items-center justify-center text-slate-700 hover:bg-slate-50 shadow-sm"><svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" /></svg></button>
+                                <button
+                                  type="button"
+                                  aria-label="Previous"
+                                  onClick={() => scrollSpeakers('left')}
+                                  className="w-10 h-10 rounded-full bg-white border border-gray-200 flex items-center justify-center text-slate-700 hover:bg-slate-50 shadow-sm"
+                                >
+                                  <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" /></svg>
+                                </button>
+                                <button
+                                  type="button"
+                                  aria-label="Next"
+                                  onClick={() => scrollSpeakers('right')}
+                                  className="w-10 h-10 rounded-full bg-white border border-gray-200 flex items-center justify-center text-slate-700 hover:bg-slate-50 shadow-sm"
+                                >
+                                  <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" /></svg>
+                                </button>
                               </div>
                             )}
                           </div>
@@ -1358,7 +1442,12 @@ const EventDetail: React.FC = () => {
                                         <h3 className="text-base font-bold text-slate-900 leading-tight">{spk.name}</h3>
                                         <p className="text-[#5B6CF6] text-sm font-medium mt-0.5">{spk.title}</p>
                                         {spk.linkedIn && (
-                                          <button className="mt-2 w-8 h-8 rounded-full bg-[#0A66C2] flex items-center justify-center hover:brightness-110 transition-all shadow-sm" onClick={() => window.open(spk.linkedIn, '_blank')} aria-label="View LinkedIn profile">
+                                          <button
+                                            type="button"
+                                            className="mt-2 w-8 h-8 rounded-full bg-[#0A66C2] flex items-center justify-center hover:brightness-110 transition-all shadow-sm"
+                                            onClick={() => window.open(spk.linkedIn, '_blank')}
+                                            aria-label="View LinkedIn profile"
+                                          >
                                             <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" /></svg>
                                           </button>
                                         )}
@@ -1432,7 +1521,12 @@ const EventDetail: React.FC = () => {
                           </div>
                           {(isMobile ? galleryItems.length > 4 : galleryItems.length > 10) && (
                             <div className="mt-6 text-center">
-                              <button aria-expanded={showAllGallery} onClick={() => setShowAllGallery(prev => !prev)} className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-2xl hover:from-blue-600 hover:to-indigo-600 transition-all duration-300 transform hover:scale-105">
+                              <button
+                                type="button"
+                                aria-expanded={showAllGallery}
+                                onClick={() => setShowAllGallery(prev => !prev)}
+                                className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-2xl hover:from-blue-600 hover:to-indigo-600 transition-all duration-300 transform hover:scale-105"
+                              >
                                 {showAllGallery ? 'Show Less' : (isMobile ? 'View More' : `View All ${galleryItems.length} Images`)}
                                 <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
                               </button>
@@ -1485,7 +1579,19 @@ const EventDetail: React.FC = () => {
                                   {getStatusIcon(event.status)}<span className="ml-2">{event.status}</span>
                                 </span>
                               </div>
-                              <button onClick={() => { if (navigator.share) { navigator.share({ title: event.title, text: `Check out this event: ${event.title}`, url: window.location.href }); } else { navigator.clipboard.writeText(window.location.href); alert('Link copied to clipboard!'); } }} className="flex items-center gap-2 px-3 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-colors duration-200 shrink-0" title="Share this event">
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  if (navigator.share) {
+                                    navigator.share({ title: event.title, text: `Check out this event: ${event.title}`, url: window.location.href });
+                                  } else {
+                                    navigator.clipboard.writeText(window.location.href);
+                                    alert('Link copied to clipboard!');
+                                  }
+                                }}
+                                className="flex items-center gap-2 px-3 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-colors duration-200 shrink-0"
+                                title="Share this event"
+                              >
                                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z" /></svg>
                               </button>
                             </div>
@@ -1555,24 +1661,26 @@ const EventDetail: React.FC = () => {
                     <h2 className="rm-section-title text-center w-full">
                       {speakersList.length === 1 ? 'Speaker' : 'Speakers'}
                     </h2>
-                    {speakersList.length > 1 && (
-                      <div className="hidden md:flex items-center gap-3">
-                        <button
-                          aria-label="Previous"
-                          onClick={() => speakersScrollRef.current?.scrollBy({ left: -600, behavior: 'smooth' })}
-                          className="w-10 h-10 rounded-full bg-white border border-gray-200 flex items-center justify-center text-slate-700 hover:bg-slate-50 shadow-sm"
-                        >
-                          <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" /></svg>
-                        </button>
-                        <button
-                          aria-label="Next"
-                          onClick={() => speakersScrollRef.current?.scrollBy({ left: 600, behavior: 'smooth' })}
-                          className="w-10 h-10 rounded-full bg-white border border-gray-200 flex items-center justify-center text-slate-700 hover:bg-slate-50 shadow-sm"
-                        >
-                          <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" /></svg>
-                        </button>
-                      </div>
-                    )}
+{speakersList.length > 1 && (
+                              <div className="hidden md:flex items-center gap-3">
+                                <button
+                                  type="button"
+                                  aria-label="Previous"
+                                  onClick={() => scrollSpeakers('left')}
+                                  className="w-10 h-10 rounded-full bg-white border border-gray-200 flex items-center justify-center text-slate-700 hover:bg-slate-50 shadow-sm"
+                                >
+                                  <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" /></svg>
+                                </button>
+                                <button
+                                  type="button"
+                                  aria-label="Next"
+                                  onClick={() => scrollSpeakers('right')}
+                                  className="w-10 h-10 rounded-full bg-white border border-gray-200 flex items-center justify-center text-slate-700 hover:bg-slate-50 shadow-sm"
+                                >
+                                  <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" /></svg>
+                                </button>
+                              </div>
+                            )}
                   </div>
 
                   {/* Scrollable rail — one card = full width */}
@@ -1597,15 +1705,16 @@ const EventDetail: React.FC = () => {
                             <div className="text-center sm:text-left">
                               <h3 className="text-base font-bold text-slate-900 leading-tight">{spk.name}</h3>
                               <p className="text-[#5B6CF6] text-sm font-medium mt-0.5">{spk.role}</p>
-                              {spk.linkedIn && (
-                                <button
-                                  className="mt-2 w-8 h-8 rounded-full bg-[#0A66C2] flex items-center justify-center hover:brightness-110 transition-all shadow-sm"
-                                  onClick={() => window.open(spk.linkedIn, '_blank')}
-                                  aria-label="View LinkedIn profile"
-                                >
-                                  <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" /></svg>
-                                </button>
-                              )}
+{spk.linkedIn && (
+                                          <button
+                                            type="button"
+                                            className="mt-2 w-8 h-8 rounded-full bg-[#0A66C2] flex items-center justify-center hover:brightness-110 transition-all shadow-sm"
+                                            onClick={() => window.open(spk.linkedIn, '_blank')}
+                                            aria-label="View LinkedIn profile"
+                                          >
+                                            <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" /></svg>
+                                          </button>
+                                        )}
                             </div>
                           </div>
                           {/* Right: description */}
@@ -1623,6 +1732,7 @@ const EventDetail: React.FC = () => {
                   {speakersList.length > 1 && (
                     <div className="md:hidden flex justify-center gap-3 mt-4">
                       <button
+                        type="button"
                         aria-label="Previous"
                         onClick={() => speakersScrollRef.current?.scrollBy({ left: -600, behavior: 'smooth' })}
                         className="w-10 h-10 rounded-full bg-white border border-gray-200 flex items-center justify-center text-slate-700 hover:bg-slate-50"
@@ -1630,6 +1740,7 @@ const EventDetail: React.FC = () => {
                         <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" /></svg>
                       </button>
                       <button
+                        type="button"
                         aria-label="Next"
                         onClick={() => speakersScrollRef.current?.scrollBy({ left: 600, behavior: 'smooth' })}
                         className="w-10 h-10 rounded-full bg-white border border-gray-200 flex items-center justify-center text-slate-700 hover:bg-slate-50"
@@ -1656,7 +1767,11 @@ const EventDetail: React.FC = () => {
                     <div className="max-w-4xl mx-auto">
                       {faqItems.map((faqItem, id) => (
                         <div key={id}>
-                          <button className="w-full text-left py-4 sm:py-6 flex items-center justify-between focus:outline-none group hover:bg-gray-50/30 transition-colors duration-200" onClick={() => toggleFaq(id)}>
+                          <button
+                            type="button"
+                            className="w-full text-left py-4 sm:py-6 flex items-center justify-between focus:outline-none group hover:bg-gray-50/30 transition-colors duration-200"
+                            onClick={() => toggleFaq(id)}
+                          >
                             <span className="text-lg sm:text-xl text-gray-900 pr-6 sm:pr-8 leading-tight">{faqItem.question}</span>
                             <div className="flex-shrink-0 w-7 h-7 sm:w-8 sm:h-8 border-2 border-gray-400 rounded-sm flex items-center justify-center bg-white group-hover:border-gray-600 transition-colors duration-200">
                               <span className="text-lg sm:text-xl font-normal text-gray-600 group-hover:text-gray-800">{openFaqIdx === id ? '−' : '+'}</span>

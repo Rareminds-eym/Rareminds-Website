@@ -261,10 +261,21 @@ const HeroSection = ({ onDemoClick }: { onDemoClick: () => void }) => {
 
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    // Guard against duplicate submissions while a request is already in flight,
+    // or when the form was already successfully submitted with a successful download.
+    if (loading || (submitted && !downloadError)) return;
     setLoading(true);
     setError(null);
     setDownloadError(false);
-    
+
+    // Use native browser validity check first (covers required, maxLength, type=email, etc.)
+    const formEl = (e.target as HTMLFormElement);
+    if (!formEl.checkValidity()) {
+      formEl.reportValidity();
+      setLoading(false);
+      return;
+    }
+
     // Validate email format
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
     if (!emailRegex.test(form.email.trim())) {
@@ -272,15 +283,16 @@ const HeroSection = ({ onDemoClick }: { onDemoClick: () => void }) => {
       setLoading(false);
       return;
     }
-    
-    // Validate phone format
-    const phoneRegex = /^[+]?[\d\s\-()]{7,15}$/;
-    if (!phoneRegex.test(form.phone.trim())) {
-      setError('Please enter a valid phone number.');
+
+    // Normalize phone (strip spaces, dashes, parentheses) then validate
+    const normalizedPhone = form.phone.trim().replace(/[\s\-()]/g, '');
+    const phoneRegex = /^\+?\d{7,15}$/;
+    if (!phoneRegex.test(normalizedPhone)) {
+      setError('Please enter a valid phone number (7–15 digits).');
       setLoading(false);
       return;
     }
-    
+
     try {
       await submitFormToDatabase(form);
       // Don't set submitted here - wait for download to complete
@@ -334,7 +346,11 @@ const HeroSection = ({ onDemoClick }: { onDemoClick: () => void }) => {
   const submitButtonClassName = `bg-[#E32A18] hover:bg-[#cc2515] px-7 py-3 rounded-lg font-semibold transition-all duration-300 text-white w-full mt-2 ${isSubmitDisabled ? 'opacity-50 cursor-not-allowed' : ''}`;
 
   return (
-    <section id="resume-checklist-download" className="relative w-auto min-h-[640px] md:min-h-[640px] overflow-hidden m-4 md:m-6 rounded-2xl shadow-sm bg-[#EDF2F9]">
+    <section
+      id="resume-checklist-download"
+      className="relative w-auto min-h-[640px] md:min-h-[640px] overflow-hidden m-4 md:m-6 rounded-2xl shadow-sm bg-[#EDF2F9]"
+      style={{ scrollMarginTop: '100px' }}
+    >
       <div className="absolute inset-0 z-0">
         <AnimatePresence>
           <motion.img

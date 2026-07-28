@@ -11,6 +11,8 @@ export interface EventWithCountdown extends Event {
   };
   isRegistrationOpen: boolean;
   isRegistrationDeadlinePassed: boolean;
+  hasValidEventDate: boolean;
+  eventDate: Date | null;
 }
 
 // Parse registration_deadline and ALWAYS treat it as end-of-day local time (11:59:59.999)
@@ -25,6 +27,14 @@ function parseDeadlineEndOfDay(dateStr: string): Date {
   const d = parseInt(match[3], 10);
   // Construct local date at 23:59:59.999
   return new Date(y, (m || 1) - 1, d || 1, 23, 59, 59, 999);
+}
+
+// Parse event_date safely - returns Date | null
+// Does not create fake fallback dates; null means "date unavailable"
+function parseEventDate(dateStr?: string | null): Date | null {
+  if (!dateStr) return null;
+  const parsed = new Date(dateStr);
+  return Number.isFinite(parsed.getTime()) ? parsed : null;
 }
 
 export const useEventCountdown = () => {
@@ -74,10 +84,14 @@ export const useEventCountdown = () => {
         const timeLeft = calculateTimeLeft(event.registration_deadline);
         const now = new Date();
         const deadlineDate = parseDeadlineEndOfDay(event.registration_deadline);
-        const eventDate = new Date(event.event_date);
+        
+        // Parse event_date safely without silent fallback
+        const eventDate = parseEventDate(event.event_date);
+        const hasValidEventDate = eventDate !== null;
         
         const isRegistrationDeadlinePassed = deadlineDate.getTime() <= now.getTime();
-        const isEventPassed = eventDate.getTime() <= now.getTime();
+        // Only mark event as passed if we have a valid event date
+        const isEventPassed = eventDate ? eventDate.getTime() <= now.getTime() : false;
         const isRegistrationOpen = !isRegistrationDeadlinePassed && !isEventPassed;
 
         return {
@@ -92,6 +106,8 @@ export const useEventCountdown = () => {
           timeLeft,
           isRegistrationOpen,
           isRegistrationDeadlinePassed,
+          hasValidEventDate,
+          eventDate,
         };
       });
 
@@ -112,10 +128,14 @@ export const useEventCountdown = () => {
         const timeLeft = calculateTimeLeft(event.registration_deadline);
         const now = new Date();
         const deadlineDate = parseDeadlineEndOfDay(event.registration_deadline);
-        const eventDate = new Date(event.event_date);
+        
+        // Parse event_date safely without silent fallback
+        const eventDate = parseEventDate(event.event_date);
+        const hasValidEventDate = eventDate !== null;
         
         const isRegistrationDeadlinePassed = deadlineDate.getTime() <= now.getTime();
-        const isEventPassed = eventDate.getTime() <= now.getTime();
+        // Only mark event as passed if we have a valid event date
+        const isEventPassed = eventDate ? eventDate.getTime() <= now.getTime() : false;
         const isRegistrationOpen = !isRegistrationDeadlinePassed && !isEventPassed;
 
         return {
@@ -123,6 +143,8 @@ export const useEventCountdown = () => {
           timeLeft,
           isRegistrationOpen,
           isRegistrationDeadlinePassed,
+          hasValidEventDate,
+          eventDate,
         };
       })
     );
@@ -144,7 +166,10 @@ export const useEventCountdown = () => {
   // Get events with upcoming deadlines (within next 7 days)
   const urgentEvents = events.filter(event => {
     if (!event.isRegistrationOpen) return false;
-    const deadline = parseDeadlineEndOfDay(event.registration_deadline!);
+    // Runtime guard: even though the query filters non-null registration_deadline,
+    // we check here to avoid query-parsing coupling
+    if (!event.registration_deadline) return false;
+    const deadline = parseDeadlineEndOfDay(event.registration_deadline);
     const sevenDaysFromNow = new Date();
     sevenDaysFromNow.setDate(sevenDaysFromNow.getDate() + 7);
     return deadline.getTime() <= sevenDaysFromNow.getTime();

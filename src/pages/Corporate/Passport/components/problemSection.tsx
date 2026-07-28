@@ -25,38 +25,68 @@ export const ProblemSection = ({ onDemoClick }: { onDemoClick: () => void }) => 
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Guard against duplicate submissions while a request is in flight or already done.
+    if (loading || submitted) return;
+
+    // Native browser validity check covers required, maxLength, type=email, etc.
+    const formEl = e.target as HTMLFormElement;
+    if (!formEl.checkValidity()) {
+      formEl.reportValidity();
+      return;
+    }
+
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+    if (!emailRegex.test(form.email.trim())) {
+      setError('Please enter a valid email address.');
+      return;
+    }
+
+    // Normalize phone (strip spaces, dashes, parentheses) then validate
+    const normalizedPhone = form.phone.trim().replace(/[\s\-()]/g, '');
+    const phoneRegex = /^\+?\d{7,15}$/;
+    if (!phoneRegex.test(normalizedPhone)) {
+      setError('Please enter a valid phone number (7–15 digits).');
+      return;
+    }
+
     setLoading(true);
     setError(null);
+
     try {
-      const { error } = await supabase.from('pdf_downloads').insert([{
+      const { error: dbError } = await supabase.from('pdf_downloads').insert([{
         ...form,
         download_type: 'Habit Card'
       }]);
-      if (error) {
+
+      if (dbError) {
+        // DB insert failed — do NOT trigger download
         setError('Failed to submit. Please try again.');
-        setSubmitted(false);
-      } else {
-        setSubmitted(true);
-        // Start download after successful submit
-        const link = document.createElement('a');
-        link.href = '/passport/pdf/Habit Card_Website.pdf';
-        link.download = 'Habit-Card.pdf';
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
+        return;
       }
-    } catch (err) {
+
+      // Insert succeeded — mark submitted and trigger download
+      setSubmitted(true);
+      const link = document.createElement('a');
+      link.href = '/passport/pdf/Habit Card_Website.pdf';
+      link.download = 'Habit-Card.pdf';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } catch {
       setError('Unexpected error. Please try again.');
-      setSubmitted(false);
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
+
   const problems = [
     {
       icon: BadgeCheck,
       title: "Skills Without Proof",
       description:
-        "70% of graduates lack visible, validated job-ready skills. Training happens everywhere — but without standardized records, employers can’t verify capability beyond a resume.",
+        "70% of graduates lack visible, validated job-ready skills. Training happens everywhere — but without standardized records, employers can't verify capability beyond a resume.",
       circleBg: "bg-indigo-500",
       iconColor: "text-white",
     },
@@ -64,7 +94,7 @@ export const ProblemSection = ({ onDemoClick }: { onDemoClick: () => void }) => 
       icon: FileBarChart2,
       title: "Data Without Context",
       description:
-        "Traditional systems track attendance, not ability. Time and completion data don’t tell who can do what. Organizations waste hours screening for skills they already trained for.",
+        "Traditional systems track attendance, not ability. Time and completion data don't tell who can do what. Organizations waste hours screening for skills they already trained for.",
       circleBg: "bg-rose-500",
       iconColor: "text-white",
     },
@@ -79,15 +109,19 @@ export const ProblemSection = ({ onDemoClick }: { onDemoClick: () => void }) => 
   ];
 
   return (
-    <section id="habit-card-download" className="py-20 bg-[#F9FAFB]">
+    <section
+      id="habit-card-download"
+      className="py-20 bg-[#F9FAFB]"
+      style={{ scrollMarginTop: '100px' }}
+    >
       <div className="container mx-auto px-6 text-center">
         {/* Section Title */}
         <h2 className="text-3xl md:text-4xl font-extrabold text-[#000000] mb-4">
-          It’s Not the Employability Gap — It’s the{" "}
+          It's Not the Employability Gap — It's the{" "}
           <span className="text-[#E32A18]">Visibility Gap.</span>
         </h2>
         <p className="text-sm md:text-base text-gray-500 mb-16">
-          The right talent isn’t found through resumes — it’s revealed through skills.
+          The right talent isn't found through resumes — it's revealed through skills.
         </p>
 
         {/* Problem Cards */}
@@ -119,7 +153,7 @@ export const ProblemSection = ({ onDemoClick }: { onDemoClick: () => void }) => 
 
         {/* Small italic line + CTA */}
         <p className="text-sm text-gray-500 italic mt-12 mb-6">
-          It's time to change how skills are recognized & resources are managed.
+          It's time to change how skills are recognized &amp; resources are managed.
         </p>
 
         <div className="flex justify-center gap-4 flex-wrap">
@@ -142,8 +176,8 @@ export const ProblemSection = ({ onDemoClick }: { onDemoClick: () => void }) => 
         {showForm && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
             <form className="bg-white rounded-xl p-6 shadow-2xl max-w-2xl w-full relative max-h-[90vh] overflow-y-auto" autoComplete="off" onSubmit={handleSubmit}>
-              <button 
-                type="button" 
+              <button
+                type="button"
                 onClick={() => setShowForm(false)}
                 className="absolute top-4 right-4 text-gray-600 hover:text-red-500 text-3xl font-bold focus:outline-none z-10"
                 aria-label="Close form"
@@ -153,33 +187,33 @@ export const ProblemSection = ({ onDemoClick }: { onDemoClick: () => void }) => 
               <h3 className="text-2xl font-bold text-gray-800 mb-4">Download Habit Card</h3>
               <div className="flex flex-col sm:flex-row gap-4 mb-4">
                 <div className="flex-1">
-                  <label className="block text-gray-700 font-semibold mb-2">Your Name</label>
-                  <input type="text" name="name" value={form.name} onChange={handleChange} placeholder="Full Name" className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E32A18] text-black bg-white" />
+                  <label htmlFor="hc-name" className="block text-gray-700 font-semibold mb-2">Your Name</label>
+                  <input id="hc-name" type="text" name="name" value={form.name} onChange={handleChange} placeholder="Full Name" required maxLength={100} className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E32A18] text-black bg-white" />
                 </div>
                 <div className="flex-1">
-                  <label className="block text-gray-700 font-semibold mb-2">Company</label>
-                  <input type="text" name="company" value={form.company} onChange={handleChange} placeholder="Company Name" className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E32A18] text-black bg-white" />
-                </div>
-              </div>
-              <div className="flex flex-col sm:flex-row gap-4 mb-4">
-                <div className="flex-1">
-                  <label className="block text-gray-700 font-semibold mb-2">Email Address</label>
-                  <input type="email" name="email" value={form.email} onChange={handleChange} placeholder="name@company.com" className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E32A18] text-black bg-white" />
-                </div>
-                <div className="flex-1">
-                  <label className="block text-gray-700 font-semibold mb-2">Phone Number</label>
-                  <input type="tel" name="phone" value={form.phone} onChange={handleChange} placeholder="+91 98765 43210" className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E32A18] text-black bg-white" />
+                  <label htmlFor="hc-company" className="block text-gray-700 font-semibold mb-2">Company</label>
+                  <input id="hc-company" type="text" name="company" value={form.company} onChange={handleChange} placeholder="Company Name" required maxLength={100} className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E32A18] text-black bg-white" />
                 </div>
               </div>
               <div className="flex flex-col sm:flex-row gap-4 mb-4">
                 <div className="flex-1">
-                  <label className="block text-gray-700 font-semibold mb-2">Role to Hire</label>
-                  <input type="text" name="role" value={form.role} onChange={handleChange} placeholder="Job Title/Position" className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E32A18] text-black bg-white" />
+                  <label htmlFor="hc-email" className="block text-gray-700 font-semibold mb-2">Email Address</label>
+                  <input id="hc-email" type="email" name="email" value={form.email} onChange={handleChange} placeholder="name@company.com" required maxLength={255} className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E32A18] text-black bg-white" />
+                </div>
+                <div className="flex-1">
+                  <label htmlFor="hc-phone" className="block text-gray-700 font-semibold mb-2">Phone Number</label>
+                  <input id="hc-phone" type="tel" name="phone" value={form.phone} onChange={handleChange} placeholder="+91 98765 43210" required maxLength={20} className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E32A18] text-black bg-white" />
+                </div>
+              </div>
+              <div className="flex flex-col sm:flex-row gap-4 mb-4">
+                <div className="flex-1">
+                  <label htmlFor="hc-role" className="block text-gray-700 font-semibold mb-2">Role to Hire</label>
+                  <input id="hc-role" type="text" name="role" value={form.role} onChange={handleChange} placeholder="Job Title/Position" required maxLength={100} className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E32A18] text-black bg-white" />
                 </div>
               </div>
               <div className="mb-4">
-                <label className="block text-gray-700 font-semibold mb-2">Message</label>
-                <textarea name="message" value={form.message} onChange={handleChange} placeholder="Tell us about your hiring needs or challenges" className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E32A18] text-black bg-white resize-none" rows={3} />
+                <label htmlFor="hc-message" className="block text-gray-700 font-semibold mb-2">Message</label>
+                <textarea id="hc-message" name="message" value={form.message} onChange={handleChange} placeholder="Tell us about your hiring needs or challenges" required maxLength={1000} className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E32A18] text-black bg-white resize-none" rows={3} />
               </div>
               {error && <p className="text-red-600 mb-2">{error}</p>}
               {submitted && <p className="text-green-600 mb-2">Thank you! Your download will start now.</p>}

@@ -21,15 +21,40 @@ interface TimeLeft {
 
 // Parse registration_deadline and ALWAYS treat it as end-of-day local time (11:59:59.999)
 function parseDeadlineEndOfDay(dateStr: string): Date {
-  if (!dateStr) return new Date(0);
-  // Extract just the date portion (YYYY-MM-DD) even if a time exists
-  const match = /^(\d{4})-(\d{2})-(\d{2})/.exec(String(dateStr));
-  if (!match) return new Date(dateStr); // fallback
-  const y = parseInt(match[1], 10);
-  const m = parseInt(match[2], 10);
-  const d = parseInt(match[3], 10);
-  // Construct local date at 23:59:59.999
-  return new Date(y, (m || 1) - 1, d || 1, 23, 59, 59, 999);
+  if (!dateStr?.trim()) {
+    return new Date(Number.NaN);
+  }
+  
+  const match = /^(\d{4})-(\d{2})-(\d{2})/.exec(dateStr.trim());
+  
+  if (!match) {
+    return new Date(Number.NaN);
+  }
+  
+  const year = Number.parseInt(match[1], 10);
+  const month = Number.parseInt(match[2], 10);
+  const day = Number.parseInt(match[3], 10);
+  
+  const date = new Date(
+    year,
+    month - 1,
+    day,
+    23,
+    59,
+    59,
+    999
+  );
+  
+  // Validate calendar correctness (reject impossible dates like 2025-02-30)
+  if (
+    date.getFullYear() !== year ||
+    date.getMonth() !== month - 1 ||
+    date.getDate() !== day
+  ) {
+    return new Date(Number.NaN);
+  }
+  
+  return date;
 }
 
 const SingleEventCountdown: React.FC<SingleEventCountdownProps> = ({
@@ -72,20 +97,22 @@ const SingleEventCountdown: React.FC<SingleEventCountdownProps> = ({
 
   useEffect(() => {
     if (!event.registration_deadline) {
+      setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
       setIsRegistrationOpen(false);
       return;
     }
 
     const updateCountdown = () => {
-      if (!event.registration_deadline) return;
-      
       const timeLeft = calculateTimeLeft(event.registration_deadline);
       const now = new Date();
       const deadlineDate = parseDeadlineEndOfDay(event.registration_deadline);
-      const eventDate = event.event_date ? new Date(event.event_date) : new Date();
+      
+      // Parse and validate event_date without unsafe fallback
+      const parsedEventDate = event.event_date ? new Date(event.event_date) : null;
+      const eventDate = parsedEventDate && Number.isFinite(parsedEventDate.getTime()) ? parsedEventDate : null;
       
       const isRegistrationDeadlinePassed = deadlineDate.getTime() <= now.getTime();
-      const isEventPassed = event.event_date ? eventDate.getTime() <= now.getTime() : false;
+      const isEventPassed = eventDate ? eventDate.getTime() <= now.getTime() : false;
       const isOpen = !isRegistrationDeadlinePassed && !isEventPassed;
 
       setTimeLeft(timeLeft);

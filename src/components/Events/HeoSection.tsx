@@ -155,9 +155,18 @@ const WebinarSection: React.FC<HeroSectionProps> = ({
     }
   };
 
-  const formatDate = (dateString?: string | null) => {
-    if (!dateString) return null;
-    return new Date(dateString).toLocaleDateString("en-US", {
+  const formatDate = (dateString?: string | null): string | null => {
+    if (!dateString?.trim()) {
+      return null;
+    }
+    
+    const date = new Date(dateString.trim());
+    
+    if (!Number.isFinite(date.getTime())) {
+      return null;
+    }
+    
+    return date.toLocaleDateString("en-US", {
       weekday: "long",
       day: "numeric",
       month: "long",
@@ -165,9 +174,18 @@ const WebinarSection: React.FC<HeroSectionProps> = ({
     });
   };
 
-  const formatTime = (timeString?: string | null) => {
-    if (!timeString) return null;
-    return new Date(`2000-01-01T${timeString}`).toLocaleTimeString("en-US", {
+  const formatTime = (timeString?: string | null): string | null => {
+    if (!timeString?.trim()) {
+      return null;
+    }
+    
+    const date = new Date(`2000-01-01T${timeString.trim()}`);
+    
+    if (!Number.isFinite(date.getTime())) {
+      return null;
+    }
+    
+    return date.toLocaleTimeString("en-US", {
       hour: "numeric",
       minute: "2-digit",
       hour12: true,
@@ -385,8 +403,8 @@ const WebinarSection: React.FC<HeroSectionProps> = ({
       {/* Sticky bottom bar — mobile only */}
       {price !== undefined && (
         <div className="fixed bottom-0 left-0 right-0 z-50 lg:hidden">
-          <a
-            href="#webinar-form"
+          <button
+            type="button"
             onClick={(e) => {
               e.preventDefault();
               document.getElementById("webinar-form")?.scrollIntoView({ behavior: "smooth" });
@@ -394,7 +412,7 @@ const WebinarSection: React.FC<HeroSectionProps> = ({
             className="flex items-center justify-center gap-2 w-full py-4 bg-indigo-600 hover:bg-indigo-600 text-white font-bold text-base shadow-lg transition-colors"
           >
             {price === 0 ? "Reserve My Free Seat →" : `Reserve My Seat — ₹${price} →`}
-          </a>
+          </button>
         </div>
       )}
 
@@ -419,7 +437,7 @@ const WebinarSection: React.FC<HeroSectionProps> = ({
           <div className="bg-white rounded-2xl p-8 shadow-2xl max-w-md mx-4">
             <div className="text-center">
               <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                 </svg>
               </div>

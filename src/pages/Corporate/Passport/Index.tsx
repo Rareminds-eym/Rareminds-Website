@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import HeroSection from "./components/HeroSection";
 import { ProblemSection } from "./components/problemSection";
 import SolutionSection from "./components/SolutionSection";
@@ -17,6 +18,46 @@ import Seo from "@/components/Govt/Seo/Seo";
 
 const Passport = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const location = useLocation();
+
+  /**
+   * Hash-scroll handler.
+   * Uses a bounded requestAnimationFrame retry (up to MAX_ATTEMPTS frames) so
+   * the target section is guaranteed to be found even when sections mount
+   * asynchronously on slower devices.
+   * decodeURIComponent is wrapped in try-catch to guard against malformed hashes.
+   * Does NOT trigger any automatic .click() on the target element.
+   */
+  useEffect(() => {
+    if (!location.hash) return;
+
+    let rawId: string;
+    try {
+      rawId = decodeURIComponent(location.hash.slice(1));
+    } catch {
+      // Malformed percent-encoding — ignore silently.
+      return;
+    }
+
+    if (!rawId) return;
+
+    const MAX_ATTEMPTS = 20;
+    let attempts = 0;
+
+    const tryScroll = () => {
+      const element = document.getElementById(rawId);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        return;
+      }
+      attempts += 1;
+      if (attempts < MAX_ATTEMPTS) {
+        requestAnimationFrame(tryScroll);
+      }
+    };
+
+    requestAnimationFrame(tryScroll);
+  }, [location.pathname, location.hash]);
 
   const seoData = {
     title: "Skill Passport for Corporates | Build Agile, Global-Ready Teams | Rareminds Pvt. Ltd.",

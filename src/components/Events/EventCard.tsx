@@ -17,13 +17,23 @@ const EventCard: React.FC<EventCardProps> = ({ event, compact = false }) => {
   // Track mobile viewport to use appropriate image
   useEffect(() => {
     const mq = window.matchMedia('(max-width: 640px)');
-    const onChange = (e: MediaQueryListEvent) => setIsMobile(e.matches);
+    const onChange = (event: MediaQueryListEvent): void => {
+      setIsMobile(event.matches);
+    };
     setIsMobile(mq.matches);
-    if ((mq as any).addEventListener) (mq as any).addEventListener('change', onChange);
-    else (mq as any).addListener(onChange);
+    
+    // Use modern addEventListener API with feature detection
+    if (typeof mq.addEventListener === 'function') {
+      mq.addEventListener('change', onChange);
+      return () => {
+        mq.removeEventListener('change', onChange);
+      };
+    }
+    
+    // Fallback for legacy browsers
+    mq.addListener(onChange);
     return () => {
-      if ((mq as any).removeEventListener) (mq as any).removeEventListener('change', onChange);
-      else (mq as any).removeListener(onChange);
+      mq.removeListener(onChange);
     };
   }, []);
 
@@ -137,17 +147,17 @@ const EventCard: React.FC<EventCardProps> = ({ event, compact = false }) => {
         <div className={`space-y-1 ${compact ? 'mb-2' : 'mb-3'}`}>
           <div className="flex items-center text-xs text-gray-500">
             <Calendar className="w-4 h-4 mr-1 flex-shrink-0" />
-            <span>{formatDate(event.event_date)}{event.event_time ? ` at ${event.event_time}` : ''}</span>
+            <span>{formatDate(event.event_date)}{event.event_time?.trim() ? ` at ${event.event_time.trim()}` : ''}</span>
           </div>
           <div className="flex items-center text-xs text-gray-500">
             <MapPin className="w-4 h-4 mr-1 flex-shrink-0" />
             <span>{event.location_metadata?.address}</span>
           </div>
 
-          {event.duration && (
+          {event.duration != null && (
             <div className="flex items-center gap-1 text-sm text-gray-500">
               <Clock className="w-4 h-4" />
-              <span>{event.duration}</span>
+              <span>{event.duration} minutes</span>
             </div>
           )}
 

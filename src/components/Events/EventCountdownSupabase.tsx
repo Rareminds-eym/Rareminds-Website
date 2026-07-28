@@ -46,6 +46,7 @@ const EventCountdownSupabase: React.FC<EventCountdownSupabaseProps> = ({
             <p className="text-lg font-semibold text-red-700 mb-2">Failed to load events</p>
             <p className="text-sm text-red-600 mb-4">{error}</p>
             <button
+              type="button"
               onClick={refetch}
               className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
             >
@@ -134,10 +135,24 @@ const EventCountdownCard: React.FC<EventCountdownCardProps> = ({
   // Format time for display
   const formatTime = (timeString: string | null | undefined) => {
     if (!timeString) return 'Time TBD';
+    
+    // Validate format: accept HH:mm or HH:mm:ss
+    const timePattern = /^(\d{1,2}):(\d{2})(?::\d{2})?$/;
+    const match = timePattern.exec(timeString);
+    
+    if (!match) return 'Time TBD';
+    
+    const hours = Number.parseInt(match[1], 10);
+    const minutes = Number.parseInt(match[2], 10);
+    
+    // Validate ranges: hours 0-23, minutes 0-59
+    if (hours < 0 || hours > 23 || minutes < 0 || minutes > 59) {
+      return 'Time TBD';
+    }
+    
     try {
-      const [hours, minutes] = timeString.split(':');
       const date = new Date();
-      date.setHours(Number.parseInt(hours, 10), Number.parseInt(minutes, 10));
+      date.setHours(hours, minutes);
       return date.toLocaleTimeString('en-US', {
         hour: 'numeric',
         minute: '2-digit',

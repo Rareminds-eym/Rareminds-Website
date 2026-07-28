@@ -18,51 +18,50 @@ interface GalleryStyles extends React.CSSProperties {
 
 // Pure helper functions moved outside component for performance
 const formatDate = (dateString: string | null | undefined): string => {
-  if (!dateString) return 'Date TBD';
-  try {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-    });
-  } catch {
+  if (!dateString?.trim()) return 'Date TBD';
+  
+  const date = new Date(dateString.trim());
+  
+  if (!Number.isFinite(date.getTime())) {
     return 'Date TBD';
   }
+  
+  return date.toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
 };
 
 const formatTime = (timeString: string | null | undefined): string => {
-  if (!timeString) return 'Time TBD';
-  try {
-    const parts = timeString.split(':');
-    if (parts.length < 2) return 'Time TBD';
-    
-    const [hoursString, minutesString] = parts;
-    if (!hoursString || !minutesString) return 'Time TBD';
-    
-    const hours = Number.parseInt(hoursString, 10);
-    const minutes = Number.parseInt(minutesString, 10);
-    
-    if (
-      Number.isNaN(hours) ||
-      Number.isNaN(minutes) ||
-      hours < 0 ||
-      hours > 23 ||
-      minutes < 0 ||
-      minutes > 59
-    ) {
-      return 'Time TBD';
-    }
-    
-    const date = new Date();
-    date.setHours(hours, minutes);
-    return date.toLocaleTimeString('en-US', {
-      hour: 'numeric',
-      minute: '2-digit',
-      hour12: true,
-    });
-  } catch {
+  if (!timeString?.trim()) return 'Time TBD';
+  
+  const match = /^(\d{1,2}):(\d{2})$/.exec(timeString.trim());
+  
+  if (!match) {
     return 'Time TBD';
   }
+  
+  const hours = Number.parseInt(match[1], 10);
+  const minutes = Number.parseInt(match[2], 10);
+  
+  if (
+    hours < 0 ||
+    hours > 23 ||
+    minutes < 0 ||
+    minutes > 59
+  ) {
+    return 'Time TBD';
+  }
+  
+  const date = new Date();
+  date.setHours(hours, minutes);
+  
+  return date.toLocaleTimeString('en-US', {
+    hour: 'numeric',
+    minute: '2-digit',
+    hour12: true,
+  });
 };
 
 const EventsPage: React.FC = () => {
@@ -209,17 +208,18 @@ const EventsPage: React.FC = () => {
         <div className="text-center max-w-md mx-auto px-6">
           <div className="bg-white rounded-2xl shadow-lg p-8 border border-red-100">
             <div className="w-16 h-16 mx-auto mb-4 bg-red-100 rounded-full flex items-center justify-center">
-              <svg className="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
             </div>
             <h2 className="text-2xl font-bold text-gray-900 mb-2">Error Loading Events</h2>
             <p className="text-gray-600 mb-6">{error}</p>
             <button
+              type="button"
               onClick={() => window.location.reload()}
               className="inline-flex items-center px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-semibold transition-colors"
             >
-              <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
               </svg>
               Try Again
@@ -249,6 +249,7 @@ const EventsPage: React.FC = () => {
           >
             <span className="text-lg font-bold text-gray-900">Categories</span>
             <button
+              type="button"
               className="p-2 rounded-full hover:bg-gray-100 active:bg-gray-200 transition-colors"
               aria-label="Open Filters"
               onClick={() => setShowMobileRightFilter(true)}
@@ -308,6 +309,7 @@ const EventsPage: React.FC = () => {
                 <Filter className="w-5 h-5" /> Filters
               </h3>
               <button
+                type="button"
                 onClick={() => setShowMobileRightFilter(false)}
                 className="text-gray-400 hover:text-gray-700 rounded-full p-2"
                 aria-label="Close Filters"
@@ -319,6 +321,7 @@ const EventsPage: React.FC = () => {
               <EventFilters events={events} onFilteredEvents={handleFilteredEvents} />
             </div>
             <button
+              type="button"
               className="mt-6 w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-xl text-lg shadow active:scale-95 transition-all"
               onClick={() => setShowMobileRightFilter(false)}
             >
@@ -402,6 +405,7 @@ const EventsPage: React.FC = () => {
                   View Details
                 </a>
                 <button
+                  type="button"
                   onClick={() => setShowRegistrationModal(true)}
                   className="px-6 py-3 rounded-2xl bg-white/90 text-blue-700 font-semibold shadow hover:bg-blue-50 transition-colors text-base"
                 >
@@ -411,6 +415,7 @@ const EventsPage: React.FC = () => {
               {/* Mobile: stacked full-width buttons (only Register) */}
               <div className="absolute bottom-16 left-1/2 -translate-x-1/2 w-[90%] flex flex-col gap-3 z-20 md:hidden">
                 <button
+                  type="button"
                   onClick={() => setShowRegistrationModal(true)}
                   className="w-full py-2 rounded-xl bg-white/90 text-blue-700 font-bold shadow hover:bg-blue-50 transition-colors text-base"
                 >
@@ -434,6 +439,7 @@ const EventsPage: React.FC = () => {
               {banners.map((_, idx) => (
                 <button
                   key={idx}
+                  type="button"
                   className={`w-3 h-3 rounded-full border-2 border-white transition-all duration-300 ${current === idx ? 'bg-blue-500 scale-125' : 'bg-white/40'}`}
                   onClick={() => setCurrent(idx)}
                   aria-label={`Go to banner ${idx + 1}`}
@@ -590,8 +596,8 @@ const EventsPage: React.FC = () => {
                               {/* Time row with clock icon and duration */}
                               {event.event_time && (
                                 <div className="flex items-center gap-2 text-xs text-gray-600 mb-1">
-                                  <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" /><path d="M12 6v6l4 2" /></svg>
-                                  <span>{formatTime(event.event_time)}{event.duration ? ` • ${event.duration}` : ''}</span>
+                                  <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="10" /><path d="M12 6v6l4 2" /></svg>
+                                  <span>{formatTime(event.event_time)}{event.duration != null ? ` • ${event.duration} minutes` : ''}</span>
                                 </div>
                               )}
                               <div className="flex items-center gap-1 text-xs text-gray-500 mb-1">
@@ -601,19 +607,19 @@ const EventsPage: React.FC = () => {
                               {/* Attendees (capacity) */}
                               {event.content_metadata?.capacity != null && (
                                 <div className="flex items-center gap-1 text-xs text-gray-600 mb-1">
-                                  <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M17 20h5v-2a4 4 0 00-3-3.87M9 20H4v-2a4 4 0 013-3.87m9-5a4 4 0 11-8 0 4 4 0 018 0zm6 6v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2a2 2 0 012-2h2a2 2 0 012 2z" /></svg>
+                                  <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path strokeLinecap="round" strokeLinejoin="round" d="M17 20h5v-2a4 4 0 00-3-3.87M9 20H4v-2a4 4 0 013-3.87m9-5a4 4 0 11-8 0 4 4 0 018 0zm6 6v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2a2 2 0 012-2h2a2 2 0 012 2z" /></svg>
                                   <span>{event.content_metadata.capacity} Attendees</span>
                                 </div>
                               )}
                               {/* Price */}
                               <div className="flex items-center gap-1 text-xs text-blue-600 mb-1">
-                                <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 8c-1.657 0-3 1.343-3 3s1.343 3 3 3 3-1.343 3-3-1.343-3-3-3zm0 0V4m0 12v4" /></svg>
+                                <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path strokeLinecap="round" strokeLinejoin="round" d="M12 8c-1.657 0-3 1.343-3 3s1.343 3 3 3 3-1.343 3-3-1.343-3-3-3zm0 0V4m0 12v4" /></svg>
                                 <span>{priceDisplay}</span>
                               </div>
                               {/* Location with map link */}
                               {event.location_metadata?.address && (
                                 <div className="flex items-center gap-1 text-xs text-blue-700 mb-1">
-                                  <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 20.9a2 2 0 01-2.828 0l-4.243-4.243a8 8 0 1111.314 0z" /><circle cx="12" cy="10" r="3" /></svg>
+                                  <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 20.9a2 2 0 01-2.828 0l-4.243-4.243a8 8 0 1111.314 0z" /><circle cx="12" cy="10" r="3" /></svg>
                                   <a
                                     href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(event.location_metadata.address)}`}
                                     target="_blank"
@@ -678,6 +684,7 @@ const EventsPage: React.FC = () => {
                   <Filter className="w-5 h-5" /> Filters
                 </h3>
                 <button
+                  type="button"
                   onClick={() => setShowMobileRightFilter(false)}
                   className="text-gray-400 hover:text-gray-700 rounded-full p-2"
                   aria-label="Close Filters"
@@ -689,6 +696,7 @@ const EventsPage: React.FC = () => {
                 <EventFilters events={events} onFilteredEvents={handleFilteredEvents} />
               </div>
               <button
+                type="button"
                 className="mt-6 w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-xl text-lg shadow active:scale-95 transition-all"
                 onClick={() => setShowMobileRightFilter(false)}
               >
@@ -738,12 +746,13 @@ const EventsPage: React.FC = () => {
       {/* Back to Top Button */}
       {showTopBtn && (
         <button
+          type="button"
           onClick={handleBackToTop}
           className="hidden md:flex fixed bottom-8 right-8 z-50 bg-blue-600 hover:bg-blue-700 text-white rounded-full shadow-lg p-3 transition-colors items-center justify-center"
           title="Back to Top"
           aria-label="Back to Top"
         >
-          <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" /></svg>
+          <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true" focusable="false"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" /></svg>
         </button>
       )}
       {/* Mobile filter drawer animation */}
