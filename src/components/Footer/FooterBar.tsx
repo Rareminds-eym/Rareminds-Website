@@ -3,6 +3,7 @@ import { Icon } from "@iconify/react";
 import { motion } from "framer-motion";
 import { Facebook, Instagram, Linkedin, Youtube } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
+
 import { supabase } from "@/lib/supabaseClient";
 const socialIcons = [
 	{
@@ -64,8 +65,8 @@ const FooterBar: React.FC<FooterBarProps> = ({ hideServices }) => {
 					} else {
 						setSuccessMessage("Thank you for subscribing");
 					}
-				} catch {
-					setSuccessMessage("Error subscribing. Please try again.");
+				} catch (err) {
+					setSuccessMessage(err instanceof Error ? err.message : "Error subscribing. Please try again.");
 				}
 				setTimeout(() => setSuccessMessage(null), 2000);
 			}
