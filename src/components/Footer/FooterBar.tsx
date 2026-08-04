@@ -1,12 +1,9 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Icon } from "@iconify/react";
 import { motion } from "framer-motion";
 import { Facebook, Instagram, Linkedin, Youtube } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
-import { safeGetItem } from "@/lib/localStorage";
 import { supabase } from "@/lib/supabaseClient";
-
-
 const socialIcons = [
 	{
 		id: 1,
@@ -44,35 +41,11 @@ interface FooterBarProps {
 	hideServices?: boolean;
 }
 
-interface ServiceItem {
-	ContentSlug: string;
-	Heading1: string;
-}
-
-interface ServiceData {
-	serviceData: ServiceItem[];
-}
-
 const FooterBar: React.FC<FooterBarProps> = ({ hideServices }) => {
-	const [_serviceData, setServiceData] = useState<ServiceData>({ serviceData: [] });
 	const [subscriberEmail, setSubscriberEmail] = useState<string | null>(null);
 	const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
-	const userType = safeGetItem("currentUserType");
 	const navigate = useNavigate();
-
-	useEffect(() => {
-		// Mock data instead of API call
-		const mockServiceData = {
-			serviceData: [
-				{ ContentSlug: "recruitment", Heading1: "Recruitment" },
-				{ ContentSlug: "executive-search", Heading1: "Executive Search" },
-				{ ContentSlug: "contract-staffing", Heading1: "Contract Staffing" },
-				{ ContentSlug: "talent-assessment", Heading1: "Talent Assessment" },
-			],
-		};
-		setServiceData(mockServiceData);
-	}, [userType]);
 
 	const submitSubscription = async () => {
 		if (subscriberEmail) {
