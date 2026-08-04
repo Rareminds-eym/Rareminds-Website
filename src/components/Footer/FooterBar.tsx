@@ -66,7 +66,13 @@ const FooterBar: React.FC<FooterBarProps> = ({ hideServices }) => {
 						setSuccessMessage("Thank you for subscribing");
 					}
 				} catch (err) {
-					setSuccessMessage(err instanceof Error ? err.message : "Error subscribing. Please try again.");
+					const message =
+						err instanceof Error
+							? err.message
+							: typeof err === "string"
+								? err
+								: "Error subscribing. Please try again.";
+					setSuccessMessage(message);
 				}
 				setTimeout(() => setSuccessMessage(null), 2000);
 			}
