@@ -512,10 +512,10 @@ const FooterBar: React.FC<FooterBarProps> = ({ hideServices }) => {
 						<li>
 							<span className="font-semibold">Phone:</span>
 							<a
-								href="tel:+919562481100"
+								href="tel:+918296061534"
 								className="ml-2 text-sm hover:text-red-400 transition-colors inline-block"
 							>
-								+91 95624 81100
+								+91 82960 61534
 							</a>
 						</li>
 						<li>
