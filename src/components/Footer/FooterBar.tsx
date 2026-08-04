@@ -1,10 +1,11 @@
-import { safeGetItem } from "@/lib/localStorage";
-import { supabase } from "@/lib/supabaseClient";
+import { useEffect, useState } from "react";
 import { Icon } from "@iconify/react";
 import { motion } from "framer-motion";
 import { Facebook, Instagram, Linkedin, Youtube } from "lucide-react";
-import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { safeGetItem } from "@/lib/localStorage";
+import { supabase } from "@/lib/supabaseClient";
+
 
 const socialIcons = [
 	{
@@ -43,8 +44,17 @@ interface FooterBarProps {
 	hideServices?: boolean;
 }
 
+interface ServiceItem {
+	ContentSlug: string;
+	Heading1: string;
+}
+
+interface ServiceData {
+	serviceData: ServiceItem[];
+}
+
 const FooterBar: React.FC<FooterBarProps> = ({ hideServices }) => {
-	const [serviceData, setServiceData] = useState<any>({});
+	const [_serviceData, setServiceData] = useState<ServiceData>({ serviceData: [] });
 	const [subscriberEmail, setSubscriberEmail] = useState<string | null>(null);
 	const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
@@ -81,7 +91,7 @@ const FooterBar: React.FC<FooterBarProps> = ({ hideServices }) => {
 					} else {
 						setSuccessMessage("Thank you for subscribing");
 					}
-				} catch (err) {
+				} catch {
 					setSuccessMessage("Error subscribing. Please try again.");
 				}
 				setTimeout(() => setSuccessMessage(null), 2000);
@@ -202,16 +212,14 @@ const FooterBar: React.FC<FooterBarProps> = ({ hideServices }) => {
 					</h2>
 					<ul className="flex flex-wrap gap-x-6 gap-y-2 items-center">
 						{window.location.pathname.startsWith("/government") ? (
-							<>
-								<li>
-									<Link
-										to="/school/projects/"
-										className="hover:text-red-400 transition-colors"
-									>
-										Skilling & Building Capacity
-									</Link>
-								</li>
-							</>
+							<li>
+								<Link
+									to="/school/projects/"
+									className="hover:text-red-400 transition-colors"
+								>
+									Skilling & Building Capacity
+								</Link>
+							</li>
 						) : isCorporateTraining ? (
 							<>
 								<li>
