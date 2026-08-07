@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Menu, X, AlignJustify } from "lucide-react";
+import BrandLogo from "../BrandLogo/BrandLogo";
 
 const GovernmentHeader: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -13,9 +14,7 @@ const GovernmentHeader: React.FC = () => {
     <header className="fixed top-0 left-0 w-full z-50 bg-white border-b shadow-sm">
       <div className="container mx-auto h-[80px] px-4 py-4 flex justify-between items-center">
         {/* Left: Logo */}
-        <Link to="/" className="text-xl font-bold text-blue-600">
-          <img src="/RareMinds.webp" alt="Rareminds Logo" width={200}/>
-        </Link>
+        <BrandLogo brandName="" />
 
         {/* Right: Government & Blogs Buttons */}
         <div className="hidden md:flex gap-3 items-center">

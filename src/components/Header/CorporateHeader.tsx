@@ -3,6 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import { Home, BookOpen, Newspaper, Phone, BookAIcon } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Icon } from "@iconify/react";
+import BrandLogo from "../BrandLogo/BrandLogo";
 
 const CorporateHeader: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -92,9 +93,7 @@ const CorporateHeader: React.FC = () => {
     <header className="fixed top-0 left-0 w-full z-50 bg-white/90 backdrop-blur-md border-b">
       <div className="container mx-auto h-[80px] px-4 py-4 flex justify-between items-center">
         {/* Left: Logo */}
-        <Link to="/" className="text-xl font-bold text-blue-600 relative z-50">
-          <img src="/RareMinds.webp" alt="Rareminds Logo" width={200} />
-        </Link>
+        <BrandLogo brandName="" linkClassName="relative z-50" />
 
         {/* Right: Navigation Buttons */}
         <div className="flex gap-5">

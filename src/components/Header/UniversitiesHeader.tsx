@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Menu, X, HomeIcon, BookOpen, Briefcase, Users, School, GraduationCap, AlertTriangle, Zap, BookAIcon } from "lucide-react";
+import BrandLogo from "../BrandLogo/BrandLogo";
 
 
 const verticalOptions = [
@@ -94,9 +95,7 @@ const UniversitiesHeader: React.FC = () => {
     <header className="fixed top-0 left-0 w-full z-50 bg-white border-b shadow-sm">
       <div className="container mx-auto h-[80px] px-4 py-4 flex justify-between items-center">
         {/* Logo */}
-        <Link to="/" className="text-xl font-bold text-blue-600 flex items-center">
-          <img src="/RareMinds.webp" alt="Rareminds Logo" width={200} />
-        </Link>
+        <BrandLogo brandName="" />
         <div className="flex items-center gap-6">
           {/* Trainers CTA Button with glow animation */}
           <a

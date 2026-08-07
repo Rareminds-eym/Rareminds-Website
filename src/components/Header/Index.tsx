@@ -1,6 +1,7 @@
 import React, { useState, Dispatch, SetStateAction } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, Briefcase } from 'lucide-react';
+import BrandLogo from '../BrandLogo/BrandLogo';
 
 interface HeaderProps {
     navbarOpen: boolean;
@@ -30,9 +31,7 @@ const Index: React.FC<HeaderProps> = ({ navbarOpen, setNavbarOpen }) => {
                 {/* Logo and social icons */}
                 <div className="flex justify-between items-center">
                     <div className="flex items-center gap-3">
-                        <Link to="/">
-                            <img src="/RareMinds.webp" className="w-64" />
-                        </Link>
+                        <BrandLogo brandName="" />
                         {/* Buttons beside logo — desktop only, events pages only */}
                         {isEventsPage && (
                             <div className="hidden lg:flex items-center gap-2">
