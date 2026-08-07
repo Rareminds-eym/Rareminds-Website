@@ -24,7 +24,7 @@ const GovernmentHeader: React.FC = () => {
           >
             Government
           </Link>
-          <button
+          <button type="button"
             onClick={toggleFullMenu}
             className="px-3 py-2 rounded-full text-gray-800 hover:bg-gray-100 transition-colors"
           >
@@ -33,7 +33,7 @@ const GovernmentHeader: React.FC = () => {
         </div>
 
         {/* Mobile Menu Button */}
-        <button onClick={toggleMenu} className="md:hidden text-gray-700">
+        <button type="button" onClick={toggleMenu} className="md:hidden text-gray-700">
           {isOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
       </div>
@@ -48,7 +48,7 @@ const GovernmentHeader: React.FC = () => {
           >
             Government
           </Link>
-          <button
+          <button type="button"
             onClick={toggleFullMenu}
             className="block w-full text-center text-gray-800 px-6 py-2 rounded-md transition"
           >
@@ -60,7 +60,7 @@ const GovernmentHeader: React.FC = () => {
       {/* Full Screen Menu */}
       {isMenuOpen && (
         <div className="fixed top-0 left-0 w-full h-full font-extrabold bg-white z-40 flex flex-col pl-[10%] pt-[10%] items-start justify-start">
-          <button
+          <button type="button"
             onClick={toggleFullMenu}
             className="absolute top-4 right-4 text-gray-700"
           >

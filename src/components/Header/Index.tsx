@@ -35,7 +35,7 @@ const Index: React.FC<HeaderProps> = ({ navbarOpen, setNavbarOpen }) => {
                         {/* Buttons beside logo — desktop only, events pages only */}
                         {isEventsPage && (
                             <div className="hidden lg:flex items-center gap-2">
-                                <button
+                                <button type="button"
                                     onClick={toggleMenu}
                                     className="bg-black text-white px-6 py-2 space-x-1 rounded-full flex items-center justify-center w-auto relative z-50"
                                     aria-label="Menu"
@@ -63,7 +63,7 @@ const Index: React.FC<HeaderProps> = ({ navbarOpen, setNavbarOpen }) => {
                 {/* Menu Button and Skill Passport — hidden on desktop for events pages (shown beside logo instead) */}
                 <div className={`relative h-12 mt-1 ${isEventsPage ? 'lg:hidden' : ''}`}>
                     <div className="flex items-center gap-2">
-                      <button
+                      <button type="button"
                           onClick={toggleMenu}
                           className="bg-black text-white px-6 py-2 space-x-1 rounded-full flex items-center justify-center w-auto relative z-50"
                           aria-label="Menu"

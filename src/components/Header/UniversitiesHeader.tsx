@@ -112,7 +112,7 @@ const UniversitiesHeader: React.FC = () => {
             </span>
           </a>
           {/* Menu Button */}
-          <button
+          <button type="button"
             ref={buttonRef}
             onClick={handleMenuButtonClick}
             className="text-gray-700 p-2 rounded hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 transition md:flex"
@@ -139,7 +139,7 @@ const UniversitiesHeader: React.FC = () => {
               <div className="text-xs font-bold text-gray-500 mb-2 tracking-widest">NAVIGATION</div>
               <div className="grid grid-cols-3 gap-3">
                 {verticalOptions.map((option) => (
-                  <button
+                  <button type="button"
                     key={option.label}
                     onClick={() => handleSelect(option)}
                     className="flex flex-col items-center gap-1 p-3 rounded-lg border hover:bg-blue-50 transition shadow-sm"
@@ -157,7 +157,7 @@ const UniversitiesHeader: React.FC = () => {
               <div className="text-xs font-bold text-gray-500 mb-2 tracking-widest">COMMON PAGES</div>
               <div className="grid grid-cols-3 gap-3">
                 {commonOptions.map((option) => (
-                  <button
+                  <button type="button"
                     key={option.label}
                     onClick={() => handleSelect(option)}
                     className={`flex flex-col items-center gap-1 p-3 rounded-lg border hover:bg-blue-50 transition shadow-sm group ${option.isTrainers ? 'animate-glow border-cyan-400' : ''}`}
@@ -177,7 +177,7 @@ const UniversitiesHeader: React.FC = () => {
               </div>
             </div>
             {/* Home Button */}
-            <button
+            <button type="button"
               onClick={() => { setIsMenuOpen(false); navigate("/"); }}
               className="mt-4 mb-2 flex items-center gap-2 px-4 py-2 rounded-lg bg-blue-100 text-blue-700 font-semibold hover:bg-blue-200 transition mx-auto"
               style={{ width: 'calc(100% - 2rem)' }}

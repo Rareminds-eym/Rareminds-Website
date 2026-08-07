@@ -44,7 +44,7 @@ const CorporateHeader: React.FC = () => {
     isOpen: boolean;
     toggle: () => void;
   }) => (
-    <motion.button
+    <motion.button type="button"
       id="corporate-menu-btn"
       onClick={toggle}
       className="relative z-50 w-10 h-10 flex items-center justify-center rounded-full bg-gray-50 hover:bg-gray-100 transition-colors"

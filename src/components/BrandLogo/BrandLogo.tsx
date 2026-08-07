@@ -5,7 +5,7 @@ import { cn } from "../../lib/utils";
 export const BRAND_LOGO_PATH = "/RareMinds-ISO-Logo.webp";
 
 export interface BrandLogoProps {
-  /** Extra classes on the logo <img> (default "w-64 h-auto"). */
+  /** Extra classes on the logo <img> (default "w-40 h-auto sm:w-64"). */
   logoClassName?: string;
   /** Extra classes appended to the wrapping <Link>. */
   linkClassName?: string;
@@ -31,12 +31,13 @@ export default function BrandLogo({
   return (
     <Link
       to={to}
+      aria-label={brandName ? undefined : alt}
       className={cn("flex items-center gap-2 text-xl font-bold", linkClassName)}
     >
       <img
         src={BRAND_LOGO_PATH}
         alt={alt}
-        className={cn("w-64 h-auto", logoClassName)}
+        className={cn("w-40 h-auto sm:w-64", logoClassName)}
         decoding="async"
         fetchPriority="high"
       />
