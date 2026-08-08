@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+﻿import React, { useState } from "react";
 import { CalendarDaysIcon, ClockIcon, MapPinIcon, TagIcon } from "@heroicons/react/24/outline";
 import { Ticket, BadgeIndianRupee } from "lucide-react";
 import type { EventType } from "../../types/Events/event";
 import PaymentModal from "./PaymentModal";
 import DynamicEventForm from "./DynamicEventForm";
 import { supabase } from "../../lib/supabase";
+import { trackEvent, ANALYTICS_EVENTS } from '../../utils/analytics';
 
 interface HeroSectionProps {
   content?: {
@@ -139,7 +140,26 @@ const WebinarSection: React.FC<HeroSectionProps> = ({
       } else {
         console.log('[Registration] Free event, sending to Zoho worker');
         await sendRegistrationToWorker(null, formData);
-        
+
+        trackEvent(ANALYTICS_EVENTS.EVENT_REGISTRATION_SUCCESS, {
+          // Event metadata
+          event_id: eventId,
+          event_name: eventName,
+          registration_id: String(data.id),
+          event_type: 'free',
+          // Registration form values
+          first_name: formData.first_name || formData.firstName || formData.first || '',
+          last_name: formData.last_name || formData.lastName || formData.last || formData.surname || '',
+          designation: formData.designation || formData.job_title || formData.jobTitle || '',
+          mobile_number: formData.mobile_number || formData.mobile || formData.phone || formData.phone_number || formData.phoneNumber || formData.mobileNumber || '',
+          email_address: formData.email_address || formData.email || formData.emailAddress || formData.Email || '',
+          city: formData.city || '',
+          state: formData.state || '',
+          whatsapp_opt_in: formData.whatsapp_opt_in ?? formData.whatsappOptin ?? formData.whatsapp_consent ?? false,
+          client_category: formData.client_category || formData.clientCategory || undefined,
+          district: formData.district || undefined,
+        });
+
         setRegistrationSuccess(true);
         setTimeout(() => {
           setRegistrationSuccess(false);
@@ -148,6 +168,11 @@ const WebinarSection: React.FC<HeroSectionProps> = ({
       }
     } catch (err: any) {
       console.error('[Registration] Exception:', err);
+      trackEvent(ANALYTICS_EVENTS.EVENT_REGISTRATION_FAILED, {
+        event_id: eventId,
+        event_name: eventName,
+        error_message: err instanceof Error ? err.message : String(err),
+      });
       throw err;
     }
   };
@@ -199,6 +224,7 @@ const WebinarSection: React.FC<HeroSectionProps> = ({
         .from('event_registrations')
         .update({ 
           payment_status: 'completed',
+          payment_id: paymentDetails.razorpay_payment_id,  // Store payment ID
           razorpay_payment_id: paymentDetails.razorpay_payment_id,
           order_id: paymentDetails.order_id,
           payment_date: paymentDetails.payment_date,
@@ -216,6 +242,27 @@ const WebinarSection: React.FC<HeroSectionProps> = ({
 
       // Send registration data to worker for Zoho CRM integration
       await sendRegistrationToWorker(paymentDetails.razorpay_payment_id, formAnswers ?? undefined);
+
+      const paidFormData = formAnswers ?? {};
+      trackEvent(ANALYTICS_EVENTS.EVENT_REGISTRATION_SUCCESS, {
+        // Event metadata
+        event_id: eventId,
+        event_name: eventName,
+        registration_id: String(registrationId),
+        event_type: 'paid',
+        payment_id: paymentDetails.razorpay_payment_id,
+        // Registration form values
+        first_name: paidFormData.first_name || paidFormData.firstName || paidFormData.first || '',
+        last_name: paidFormData.last_name || paidFormData.lastName || paidFormData.last || paidFormData.surname || '',
+        designation: paidFormData.designation || paidFormData.job_title || paidFormData.jobTitle || '',
+        mobile_number: paidFormData.mobile_number || paidFormData.mobile || paidFormData.phone || paidFormData.phone_number || paidFormData.phoneNumber || paidFormData.mobileNumber || '',
+        email_address: paidFormData.email_address || paidFormData.email || paidFormData.emailAddress || paidFormData.Email || '',
+        city: paidFormData.city || '',
+        state: paidFormData.state || '',
+        whatsapp_opt_in: paidFormData.whatsapp_opt_in ?? paidFormData.whatsappOptin ?? paidFormData.whatsapp_consent ?? false,
+        client_category: paidFormData.client_category || paidFormData.clientCategory || undefined,
+        district: paidFormData.district || undefined,
+      });
 
       // Close payment modal and show success message
       setShowPaymentModal(false);
@@ -292,8 +339,8 @@ const WebinarSection: React.FC<HeroSectionProps> = ({
             ? <Ticket className="w-4 h-4 shrink-0" />
             : <BadgeIndianRupee className="w-4 h-4 shrink-0" />}
           {price === 0
-            ? "This webinar is completely Free — Register now to secure your spot!"
-            : `Registration Fee: ₹${price} — Reserve your seat today!`}
+            ? "This webinar is completely Free â€” Register now to secure your spot!"
+            : `Registration Fee: â‚¹${price} â€” Reserve your seat today!`}
         </div>
       )}
 
@@ -317,7 +364,7 @@ const WebinarSection: React.FC<HeroSectionProps> = ({
             <ul className="mt-6 lg:mt-8 space-y-3">
               {benefits.map((benefit, index) => (
                 <li key={index} className="flex items-start gap-2 text-sm sm:text-base">
-                  <span className="text-gray-900 text-xl mt-0.5">•</span>
+                  <span className="text-gray-900 text-xl mt-0.5">â€¢</span>
                   <span>{benefit}</span>
                 </li>
               ))}
@@ -353,7 +400,7 @@ const WebinarSection: React.FC<HeroSectionProps> = ({
               {price !== undefined && (
                 <span className="inline-flex items-center gap-2 px-3 py-2 rounded-xl bg-white border border-gray-200 text-xs sm:text-sm text-gray-800">
                   <TagIcon className="text-gray-500 shrink-0 w-4 h-4" />
-                  {price === 0 ? "Free" : `₹${price}`}
+                  {price === 0 ? "Free" : `â‚¹${price}`}
                 </span>
               )}
             </div>
@@ -379,7 +426,7 @@ const WebinarSection: React.FC<HeroSectionProps> = ({
         </div>
 
 
-      {/* Sticky bottom bar — mobile only */}
+      {/* Sticky bottom bar â€” mobile only */}
       {price !== undefined && (
         <div className="fixed bottom-0 left-0 right-0 z-50 lg:hidden">
           <a
@@ -390,7 +437,7 @@ const WebinarSection: React.FC<HeroSectionProps> = ({
             }}
             className="flex items-center justify-center gap-2 w-full py-4 bg-indigo-600 hover:bg-indigo-600 text-white font-bold text-base shadow-lg transition-colors"
           >
-            {price === 0 ? "Reserve My Free Seat →" : `Reserve My Seat — ₹${price} →`}
+            {price === 0 ? "Reserve My Free Seat â†’" : `Reserve My Seat â€” â‚¹${price} â†’`}
           </a>
         </div>
       )}
