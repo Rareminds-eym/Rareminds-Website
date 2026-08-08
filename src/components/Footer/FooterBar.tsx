@@ -1,11 +1,10 @@
-import { safeGetItem } from "@/lib/localStorage";
-import { supabase } from "@/lib/supabaseClient";
+import { useState } from "react";
 import { Icon } from "@iconify/react";
 import { motion } from "framer-motion";
 import { Facebook, Instagram, Linkedin, Youtube } from "lucide-react";
-import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
+import { supabase } from "@/lib/supabaseClient";
 const socialIcons = [
 	{
 		id: 1,
@@ -44,25 +43,10 @@ interface FooterBarProps {
 }
 
 const FooterBar: React.FC<FooterBarProps> = ({ hideServices }) => {
-	const [serviceData, setServiceData] = useState<any>({});
 	const [subscriberEmail, setSubscriberEmail] = useState<string | null>(null);
 	const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
-	const userType = safeGetItem("currentUserType");
 	const navigate = useNavigate();
-
-	useEffect(() => {
-		// Mock data instead of API call
-		const mockServiceData = {
-			serviceData: [
-				{ ContentSlug: "recruitment", Heading1: "Recruitment" },
-				{ ContentSlug: "executive-search", Heading1: "Executive Search" },
-				{ ContentSlug: "contract-staffing", Heading1: "Contract Staffing" },
-				{ ContentSlug: "talent-assessment", Heading1: "Talent Assessment" },
-			],
-		};
-		setServiceData(mockServiceData);
-	}, [userType]);
 
 	const submitSubscription = async () => {
 		if (subscriberEmail) {
@@ -82,7 +66,13 @@ const FooterBar: React.FC<FooterBarProps> = ({ hideServices }) => {
 						setSuccessMessage("Thank you for subscribing");
 					}
 				} catch (err) {
-					setSuccessMessage("Error subscribing. Please try again.");
+					const message =
+						err instanceof Error
+							? err.message
+							: typeof err === "string"
+								? err
+								: "Error subscribing. Please try again.";
+					setSuccessMessage(message);
 				}
 				setTimeout(() => setSuccessMessage(null), 2000);
 			}
@@ -202,16 +192,14 @@ const FooterBar: React.FC<FooterBarProps> = ({ hideServices }) => {
 					</h2>
 					<ul className="flex flex-wrap gap-x-6 gap-y-2 items-center">
 						{window.location.pathname.startsWith("/government") ? (
-							<>
-								<li>
-									<Link
-										to="/school/projects/"
-										className="hover:text-red-400 transition-colors"
-									>
-										Skilling & Building Capacity
-									</Link>
-								</li>
-							</>
+							<li>
+								<Link
+									to="/school/projects/"
+									className="hover:text-red-400 transition-colors"
+								>
+									Skilling & Building Capacity
+								</Link>
+							</li>
 						) : isCorporateTraining ? (
 							<>
 								<li>
@@ -512,10 +500,10 @@ const FooterBar: React.FC<FooterBarProps> = ({ hideServices }) => {
 						<li>
 							<span className="font-semibold">Phone:</span>
 							<a
-								href="tel:+919562481100"
+								href="tel:+918296061534"
 								className="ml-2 text-sm hover:text-red-400 transition-colors inline-block"
 							>
-								+91 95624 81100
+								+91 82960 61534
 							</a>
 						</li>
 						<li>

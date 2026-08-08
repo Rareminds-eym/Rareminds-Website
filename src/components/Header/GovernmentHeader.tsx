@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Menu, X, AlignJustify } from "lucide-react";
+import BrandLogo from "../BrandLogo/BrandLogo";
 
 const GovernmentHeader: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -13,9 +14,7 @@ const GovernmentHeader: React.FC = () => {
     <header className="fixed top-0 left-0 w-full z-50 bg-white border-b shadow-sm">
       <div className="container mx-auto h-[80px] px-4 py-4 flex justify-between items-center">
         {/* Left: Logo */}
-        <Link to="/" className="text-xl font-bold text-blue-600">
-          <img src="/RareMinds.webp" alt="Rareminds Logo" width={200}/>
-        </Link>
+        <BrandLogo brandName="" />
 
         {/* Right: Government & Blogs Buttons */}
         <div className="hidden md:flex gap-3 items-center">
@@ -25,7 +24,7 @@ const GovernmentHeader: React.FC = () => {
           >
             Government
           </Link>
-          <button
+          <button type="button"
             onClick={toggleFullMenu}
             className="px-3 py-2 rounded-full text-gray-800 hover:bg-gray-100 transition-colors"
           >
@@ -34,7 +33,7 @@ const GovernmentHeader: React.FC = () => {
         </div>
 
         {/* Mobile Menu Button */}
-        <button onClick={toggleMenu} className="md:hidden text-gray-700">
+        <button type="button" onClick={toggleMenu} className="md:hidden text-gray-700">
           {isOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
       </div>
@@ -49,7 +48,7 @@ const GovernmentHeader: React.FC = () => {
           >
             Government
           </Link>
-          <button
+          <button type="button"
             onClick={toggleFullMenu}
             className="block w-full text-center text-gray-800 px-6 py-2 rounded-md transition"
           >
@@ -61,7 +60,7 @@ const GovernmentHeader: React.FC = () => {
       {/* Full Screen Menu */}
       {isMenuOpen && (
         <div className="fixed top-0 left-0 w-full h-full font-extrabold bg-white z-40 flex flex-col pl-[10%] pt-[10%] items-start justify-start">
-          <button
+          <button type="button"
             onClick={toggleFullMenu}
             className="absolute top-4 right-4 text-gray-700"
           >

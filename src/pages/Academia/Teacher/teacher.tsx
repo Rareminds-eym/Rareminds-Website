@@ -95,7 +95,7 @@ const School = () => {
         <meta property="og:title" content="Bilingual NEP 2020-Aligned School Programs | Rareminds School Services" />
         <meta property="og:description" content="Bilingual, NEP 2020-aligned school programs that strengthen communication, digital skills, and career paths designed for practical, classroom-ready impact." />
         <meta property="og:type" content="website" />
-        <meta property="og:image" content="https://rareminds.com/RareMinds.webp" />
+        <meta property="og:image" content="https://rareminds.com/RareMinds-ISO-Logo.webp" />
         <meta property="og:url" content="https://rareminds.com/academia/teacher" />
         <script type="application/ld+json">
           {`

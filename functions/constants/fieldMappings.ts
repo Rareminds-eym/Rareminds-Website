@@ -13,9 +13,15 @@
 // Valid Zoho payload keys - SINGLE SOURCE OF TRUTH
 export const ZOHO_PAYLOAD_KEYS = [
   'Amount',
+  'Approx Student Strength',
+  'Board',
+  'City',
+  'Client Category',
   'Comments',
   'Company Name',
   'Date Of Birth',
+  'Decision Maker Name',
+  'Decision Maker Role',
   'Department Stream',
   'District',
   'Email',
@@ -25,7 +31,9 @@ export const ZOHO_PAYLOAD_KEYS = [
   'Event Type',
   'First Name',
   'Form Id',
+  'Grades Upto',
   'How Did You Hear About Us',
+  'Industry',
   'Institution University Name',
   'Job Title',
   'Last Name',
@@ -42,6 +50,7 @@ export const ZOHO_PAYLOAD_KEYS = [
   'Preferred Language',
   'Preferred Time',
   'Razorpay Payment Id',
+  'Recommended Pilot Grade',
   'Referral Code',
   'Registration Date',
   'Registration Timestamp',
@@ -50,7 +59,9 @@ export const ZOHO_PAYLOAD_KEYS = [
   'Subject You Teach',
   'Teaching Level',
   'Total Amount',
+  'University College',
   'Webinar Name',
+  'Website',
   'Whatsapp Number',
   'WhatsApp Opt-In',
   'Years Of Experience'
@@ -174,6 +185,67 @@ export const FIELD_MAPPING: Record<string, ZohoPayloadKey> = {
   'districtname': 'District',
   'area': 'District',
   
+  // CITY FIELDS
+  'city': 'City',
+  'cityname': 'City',
+  'town': 'City',
+  
+  // CLIENT CATEGORY
+  'clientcategory': 'Client Category',
+  'category': 'Client Category',
+  'clienttype': 'Client Category',
+  'customertype': 'Client Category',
+  
+  // UNIVERSITY/COLLEGE
+  'universitycollege': 'University College',
+  'universityorcollege': 'University College',
+  
+  // INDUSTRY
+  'industry': 'Industry',
+  'sector': 'Industry',
+  'businesssector': 'Industry',
+  'industrytype': 'Industry',
+  
+  // BOARD
+  'board': 'Board',
+  'educationboard': 'Board',
+  'schoolboard': 'Board',
+  'affiliatedboard': 'Board',
+  
+  // STUDENT STRENGTH
+  'studentstrength': 'Approx Student Strength',
+  'approxstudentstrength': 'Approx Student Strength',
+  'numberofstudents': 'Approx Student Strength',
+  'totalstudents': 'Approx Student Strength',
+  
+  // GRADES
+  'gradesupto': 'Grades Upto',
+  'grades': 'Grades Upto',
+  'highestgrade': 'Grades Upto',
+  'maxgrade': 'Grades Upto',
+  
+  // RECOMMENDED GRADE
+  'recommendedpilotgrade': 'Recommended Pilot Grade',
+  'pilotgrade': 'Recommended Pilot Grade',
+  'suggestedgrade': 'Recommended Pilot Grade',
+  
+  // DECISION MAKER
+  'decisionmakername': 'Decision Maker Name',
+  'dmname': 'Decision Maker Name',
+  'contactpersonname': 'Decision Maker Name',
+  
+  'decisionmakerrole': 'Decision Maker Role',
+  'dmrole': 'Decision Maker Role',
+  'contactpersonrole': 'Decision Maker Role',
+  'contactpersondesignation': 'Decision Maker Role',
+  
+  // WEBSITE
+  'website': 'Website',
+  'websiteurl': 'Website',
+  'url': 'Website',
+  'companywebsite': 'Website',
+  'schoolwebsite': 'Website',
+  
   // PERSONAL FIELDS
   'dob': 'Date Of Birth',
   'dateofbirth': 'Date Of Birth',
@@ -233,5 +305,8 @@ export const PROTECTED_REQUIRED_FIELDS: ZohoPayloadKey[] = [
   'Email Address',
   'Phone',
   'Mobile Number',
-  'Name'
+  'Name',
+  'Payment Id',
+  'Razorpay Payment Id',
+  'Payment Status'
 ];
