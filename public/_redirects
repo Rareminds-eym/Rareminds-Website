@@ -1,1 +1,4 @@
-/*    /index.html   200
+/institutions            /universities            301
+/institutions/services   /universities/fdp        301
+/institutions/fdp        /universities/fdp        301
+/*                       /index.html              200

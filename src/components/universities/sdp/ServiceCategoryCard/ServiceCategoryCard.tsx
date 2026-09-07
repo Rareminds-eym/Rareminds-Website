@@ -822,7 +822,7 @@ export default function ServicePage() {
               <ArrowLeft className="w-5 h-5"/>
               Back to Services
             </motion.button>
-            <h1 className="pt-3 text-3xl md:text-3xl font-bold text-white mb-2 drop-shadow">{service.name}</h1>
+            <h1 className="pt-3 text-3xl md:text-3xl font-bold text-white mb-2">{service.name}</h1>
             {service.subtitle && (
               <p className="pt-3 text-lg text-white/90">{service.subtitle}</p>
             )}

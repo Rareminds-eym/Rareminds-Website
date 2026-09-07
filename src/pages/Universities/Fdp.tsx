@@ -9,11 +9,13 @@ import FDPSolutions from '@/components/universities/fdp/FDPSolutions';
 import ContactSection from '@/components/universities/Contact/ContactSection';
 import UpcomingEvents from '@/components/universities/fdp/UpcomingEvents';
 import FloatingActionButtonfdp from '@/components/universities/fdp/FloatingActionfdp';
+import FDPButton from '@/components/universities/sdp/FDPButton';
 
 
 export default function FDP() {
   return (
     <div className="pt-20">
+      <FDPButton />
       <HeroSection />
       <FloatingActionButtonfdp />
       <ProgramsSection />

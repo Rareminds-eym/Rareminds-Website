@@ -315,7 +315,7 @@ const HackathonResults: React.FC = () => {
                   slug === 'capathon' ? '/Hackathon/banner_gmp.jpg' :
                     slug === 'codecare-2-0' ? '/Hackathon/banner_mc.jpg' :
                       slug === 'safe-bite-2-0' ? '/Hackathon/banner_fsqm.jpg' :
-                        '/Hackathon/banner.jpg'
+                        '/Hackathon/banner_gmp.jpg'
                 }
                 alt={`${slug} hackathon banner`}
                 className="w-full h-full object-cover object-center"

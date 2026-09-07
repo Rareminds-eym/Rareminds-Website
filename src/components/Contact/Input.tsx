@@ -1523,7 +1523,7 @@ const ContactPage: React.FC = () => {
         </svg>
 
         {/* Heading */}
-        <h1 className="absolute top-9 left-1/2 transform -translate-x-1/2 text-black text-lg sm:text-7xl md:text-5xl font-semibold z-10 text-center drop-shadow-md">
+        <h1 className="absolute top-9 left-1/2 transform -translate-x-1/2 text-black text-lg sm:text-7xl md:text-5xl font-semibold z-10 text-center">
           Contact Us
         </h1>
       </div>

@@ -4,11 +4,11 @@ import { Link, useLocation } from 'react-router-dom';
 
 export default function FDPButton() {
   const location = useLocation();
-  const isFDPPage = location.pathname === '/institutions/services';
+  const isFDPPage = location.pathname.startsWith('/universities/fdp') || location.pathname.startsWith('/institutions/fdp');
 
   const buttonText = isFDPPage ? 'Back to home page' : 'For Institutions';
   const subText = isFDPPage ? 'Click to return home' : 'Click to explore programs';
-  const targetLink = isFDPPage ? '/institutions' : '/institutions/services';
+  const targetLink = isFDPPage ? '/universities' : '/universities/fdp';
 
   return (
     <Link to={targetLink}>

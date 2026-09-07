@@ -90,7 +90,7 @@ const serviceCards = [
     id: "04",
     title: "Domain Specific Classification Programs",
     image: "/institutions/vectors/insticons/4.png",
-    link: "/institutions/domain-specific-programs",
+    link: "/universities/domain-specific-programs",
     banner: "/institutions/images/services/domain-specific-banner.jpg",
   },
   {
@@ -139,7 +139,7 @@ const CommunicationPersonalityDevelopment = () => {
               <ArrowLeft className="w-5 h-5" />
               Back to Services
             </motion.button>
-            <h1 className="pt-3 text-3xl md:text-3xl font-bold text-white mb-2 drop-shadow">
+            <h1 className="pt-3 text-3xl md:text-3xl font-bold text-white mb-2">
               Communication and Personality Development
             </h1>
             <p className="pt-3 text-lg text-white/90">

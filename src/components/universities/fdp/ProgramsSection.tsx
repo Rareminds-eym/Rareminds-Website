@@ -72,14 +72,22 @@ const programs = [
 ];
 
 // Simple button component for "Learn More"
-function ProgramLearnMoreButton({ link }: { link: string }) {
+function ProgramLearnMoreButton({ link }: { link?: string }) {
+  const scrollToContact = () => {
+    const el = document.getElementById('contact-section');
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
-    <Link
-      to={link}
-      className="mt-auto inline-block bg-white text-indigo-700 font-semibold px-4 py-2 rounded-lg shadow hover:bg-indigo-50 transition-colors text-center"
+    <button
+      type="button"
+      onClick={scrollToContact}
+      className="mt-auto inline-block bg-white text-indigo-700 font-semibold px-4 py-2 rounded-lg shadow hover:bg-indigo-50 transition-colors text-center cursor-pointer"
     >
       Learn More
-    </Link>
+    </button>
   );
 }
 

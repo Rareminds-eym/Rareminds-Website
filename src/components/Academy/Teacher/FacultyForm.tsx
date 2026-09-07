@@ -50,7 +50,7 @@ const FacultyForm=()=> {
     <div className="faculty-bg flex items-center justify-center px-2 ">
       <div className="glass-card-container w-full max-w-xl mx-auto flex flex-col bg-gray-200 rounded-md gap-6 p-4 sm:p-8">
         <div className="flex flex-col items-center gap-4">
-          <h1 className="text-black text-center md:text-2xl text-lg font-semibold drop-shadow-[0_2px_6px_rgba(0,0,0,0.35)]">
+          <h1 className="text-black text-center md:text-2xl text-lg font-semibold">
             Your Faculty is Your Brand. Let&apos;s Invest in Them.
           </h1>
           <div className="flex w-full gap-3 flex-col md:flex-row">
