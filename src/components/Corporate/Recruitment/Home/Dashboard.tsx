@@ -4,8 +4,8 @@ import { motion } from "framer-motion";
 
 const Dashboard: React.FC = () => {
   return (
-    <div className="bg-white bg-cover py-8 md:py-16 px-4 md:px-8 text-center">
-      <div className="text-center mb-8 md:mb-16 relative">
+    <section className="bg-white bg-cover py-16 md:py-20 px-4 md:px-8 text-center">
+      <div className="text-center mb-12 md:mb-16 relative">
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -13,7 +13,7 @@ const Dashboard: React.FC = () => {
           transition={{ duration: 0.5 }}
         >
           <div className="flex justify-center items-center">
-            <div className="bg-corporate-black text-white w-14 h-14 rounded-[20px] mx-auto mb-3 flex items-center justify-center transform rotate-6">
+            <div className="bg-corporate-black text-white w-16 h-16 rounded-[25px] mx-auto mb-4 flex items-center justify-center transform rotate-6">
               <Icon
                 icon="hugeicons:analytics-up"
                 className="text-[32px]"
@@ -23,12 +23,12 @@ const Dashboard: React.FC = () => {
               />
             </div>
           </div>
-          <h2 className="text-2xl md:text-4xl font-bold mb-3 text-corporate-black px-4">
+          <h2 className="text-3xl md:text-5xl font-bold mb-4 text-corporate-black px-4">
             Your dashboard. Your reports. Your outcomes.
             <br className="hidden md:block" />
             Delivered periodically.
           </h2>
-          <p className="text-corporate-grey text-sm md:text-base max-w-2xl mx-auto px-4">
+          <p className="text-corporate-grey text-lg max-w-3xl mx-auto px-4">
             Complete transparency with real-time tracking and comprehensive
             reporting
           </p>
@@ -92,7 +92,7 @@ const Dashboard: React.FC = () => {
           </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 

@@ -74,6 +74,9 @@ const TeamSection = () => {
           <h2 className="text-3xl md:text-5xl font-bold mb-4 text-corporate-black">
             Meet the Minds Behind the Rareminds
           </h2>
+          <p className="text-corporate-grey max-w-3xl mx-auto text-lg text-center mt-2">
+            The talent advisors and recruitment specialists driving precision hiring for India’s leading enterprises.
+          </p>
         </motion.div>
 
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-x-5 gap-y-8 lg:gap-8 max-w-6xl mx-auto">

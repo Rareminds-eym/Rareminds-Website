@@ -44,6 +44,18 @@ const ProcessSection = () => {
           <div className="absolute top-1/2 left-1/2 -translate-x-[50%] -translate-y-[50%]">
             <ProcessSVGMob className="scale-[0.8] xl:scale-110" />
           </div>
+          <button
+            className="absolute left-1/2 -translate-x-[50%] bottom-6 corporate-btn-1"
+            onClick={() => {
+              const contactSection = document.getElementById('contact');
+              if (contactSection) {
+                contactSection.scrollIntoView({ behavior: 'smooth' });
+              }
+            }}
+            type="button"
+          >
+            Start Your Talent Journey
+          </button>
         </div>
       </div>
 

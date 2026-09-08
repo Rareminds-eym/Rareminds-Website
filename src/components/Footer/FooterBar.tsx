@@ -103,7 +103,7 @@ const FooterBar: React.FC<FooterBarProps> = ({ hideServices }) => {
 
 	return (
 		<div
-			className="relative bg-[url('https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/general/footer.webp')] text-white font-medium"
+			className={`relative bg-[url('https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/general/footer.webp')] text-white font-medium ${isCorporate || isCorporateTraining ? "footer-corporate" : ""}`}
 			id="footer"
 		>
 			<div className="absolute w-full h-full bg-black/90"></div>

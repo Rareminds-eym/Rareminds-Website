@@ -82,32 +82,34 @@ const Corporate: React.FC = () => {
         <FullScreenCarousel slides={slides} />
       </section>
 
-      <div id="why-rareminds">
-        <WhyRareminds />
-      </div>
-      <div id="services">
-        <ServicesSection />
-      </div>
-      <div id="industries">
-        <IndustriesSection />
-      </div>
-      <div id="testimonials">
-        <TestimonialsSection />
-      </div>
-      <div id="case-studies">
-        <CaseStudiesSection />
-      </div>
-      <div id="process">
-        <ProcessSection />
-      </div>
-      <div id="team">
-        <TeamSection />
-      </div>
-      <div id="dashboard" className="bg-white relative">
-        <Dashboard />
-      </div>
-      <div id="contact">
-        <ContactSection />
+      <div className="relative z-10">
+        <div id="why-rareminds">
+          <WhyRareminds />
+        </div>
+        <div id="services">
+          <ServicesSection />
+        </div>
+        <div id="industries">
+          <IndustriesSection />
+        </div>
+        <div id="testimonials">
+          <TestimonialsSection />
+        </div>
+        <div id="case-studies">
+          <CaseStudiesSection />
+        </div>
+        <div id="process">
+          <ProcessSection />
+        </div>
+        <div id="team">
+          <TeamSection />
+        </div>
+        <div id="dashboard" className="bg-white relative">
+          <Dashboard />
+        </div>
+        <div id="contact" className="bg-white relative">
+          <ContactSection />
+        </div>
       </div>
     </>
   );

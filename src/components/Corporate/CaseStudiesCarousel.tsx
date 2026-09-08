@@ -59,7 +59,7 @@ const CaseStudiesCarousel = ({ caseStudies }: { caseStudies: CaseStudy[] }) => {
                       </motion.div>
 
                       <div className="space-y-4">
-                        <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 max-h-72 overflow-y-auto modern-scrollbar text-left pr-3">
+                        <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 max-h-72 overflow-y-auto modern-scrollbar-dark text-left pr-3">
                           <TrendingUp size={24} className="mb-2" />
                           <h4 className="font-semibold mb-1 text-left">
                             Key Outcomes
@@ -180,13 +180,14 @@ const CaseStudiesCarousel = ({ caseStudies }: { caseStudies: CaseStudy[] }) => {
         <motion.button
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
+          type="button"
           onClick={handlePrev}
-          className="bg-white text-corporate-black hover:bg-gray-50 px-6 py-3 rounded-lg shadow-md transition-all duration-300 flex items-center gap-2 group"
+          className="corporate-btn-2 flex items-center gap-2 group cursor-pointer"
         >
           <Icon
             icon="ph:arrow-left"
-            width="24"
-            height="24"
+            width="20"
+            height="20"
             className="group-hover:-translate-x-1 transition-transform duration-300"
           />
           <span>Previous</span>
@@ -194,14 +195,15 @@ const CaseStudiesCarousel = ({ caseStudies }: { caseStudies: CaseStudy[] }) => {
         <motion.button
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
+          type="button"
           onClick={handleNext}
-          className="bg-white text-corporate-black hover:bg-gray-50 px-6 py-3 rounded-lg shadow-md transition-all duration-300 flex items-center gap-2 group"
+          className="corporate-btn-2 flex items-center gap-2 group cursor-pointer"
         >
           <span>Next</span>
           <Icon
             icon="ph:arrow-right"
-            width="24"
-            height="24"
+            width="20"
+            height="20"
             className="group-hover:translate-x-1 transition-transform duration-300"
           />
         </motion.button>
