@@ -2,7 +2,6 @@ import { motion } from 'framer-motion';
 import { Download, FileSpreadsheet, PhoneCall, Rocket, BadgeCheck, Users, X } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabaseClient';
-import ContactSection from '@/components/institutions/Contact/ContactSection';
 
 const API_BASE_URL = "https://rareminds.in";
     
@@ -52,7 +51,7 @@ const banners = [
     subtitle: "Build your future, with expert-led modules in trending domains.",
     video: "https://player.vimeo.com/external/370467553.hd.mp4?...",
     poster: "/institutions/images/Banners/sdp/Banner3.jpeg",
-    mobilePoster: "/institutions/images/Banners/sdp/Banner3_mobile.jpg",
+    mobilePoster: "/institutions/images/Banners/sdp/Banner3.jpeg",
     alt: "Student planning for a long-term career",
     cta: [
       {
@@ -406,7 +405,7 @@ function HeroMobile() {
         {/* Text overlay */}
         <div className="absolute top-0 left-0 w-full px-4 pt-6 z-20">
           <motion.h1
-            className="text-xl font-bold mb-3 leading-tight text-black drop-shadow-lg"
+            className="text-xl font-bold mb-3 leading-tight text-black"
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
@@ -418,7 +417,7 @@ function HeroMobile() {
             ))}
           </motion.h1>
           <motion.p
-            className="text-medium mb-2 text-black drop-shadow"
+            className="text-medium mb-2 text-black"
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.2 }}

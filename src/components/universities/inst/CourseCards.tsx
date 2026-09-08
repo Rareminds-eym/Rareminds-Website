@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { Globe, Briefcase, Bookmark } from "lucide-react";
 import React, { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, Link } from "react-router-dom";
 
 const courses = [
 	{
@@ -37,7 +37,7 @@ const courses = [
 	{
 		id: "04",
 		title: "Domain Specific Classification Programs",
-		image: "//vectors/insticons/4.png",
+		image: "/institutions/vectors/insticons/4.png",
 		subCards: [
 			{ label: "Domain", icon: <Globe size={20} /> },
 			{ label: "Classification", icon: <Briefcase size={20} /> },
@@ -128,10 +128,13 @@ const CourseCards = () => {
 
 	useEffect(() => {
 		if (location.hash === "#coursecards") {
-			const el = document.getElementById("coursecards");
-			if (el) {
-				el.scrollIntoView({ behavior: "smooth" });
-			}
+			const timer = setTimeout(() => {
+				const el = document.getElementById("coursecards");
+				if (el) {
+					el.scrollIntoView({ behavior: "smooth" });
+				}
+			}, 100);
+			return () => clearTimeout(timer);
 		}
 	}, [location]);
 
@@ -283,33 +286,37 @@ const CourseCards = () => {
 								</motion.div>
 
 								{/* Learn More Button */}
-								<motion.a
-									href={
-										course.id === "01"
-											? "/universities/fdp"
-											: course.id === "02"
-											? "/universities/communication-personality-development"
-											: course.id === "03"
-											? "/universities/mental-health-counseling-fdp"
-											: course.id === "04"
-											? "/universities/domain-specific-programs"
-											: course.id === "05"
-											? "/universities/leadership-career-growth"
-											: course.id === "06"
-											? "/universities/institutional-value-added-services"
-											: "#"
-									}
-									className="absolute bottom-8 left-[-80px] w-[160px] bg-white shadow-md rounded-xl p-2 flex items-center gap-3 transition-transform duration-300 text-blue-600 hover:text-blue-800"
+								<motion.div
 									initial={{ opacity: 0, x: -50 }}
 									animate={{ opacity: 1, x: 0 }}
 									transition={{ delay: 0.2 }}
+									className="absolute bottom-8 left-[-80px] w-[160px]"
 									style={{ transform: "translateZ(20px)" }}
 								>
-									<div className="w-8 h-8 bg-blue-200 rounded-full flex items-center justify-center text-blue-600">
-										<Bookmark size={20} />
-									</div>
-									<span className="text-sm font-medium">Learn More</span>
-								</motion.a>
+									<Link
+										to={
+											course.id === "01"
+												? "/universities/fdp"
+												: course.id === "02"
+												? "/universities/communication-personality-development"
+												: course.id === "03"
+												? "/universities/mental-health-counseling-fdp"
+												: course.id === "04"
+												? "/universities/domain-specific-programs"
+												: course.id === "05"
+												? "/universities/leadership-career-growth"
+												: course.id === "06"
+												? "/universities/institutional-value-added-services"
+												: "#"
+										}
+										className="bg-white shadow-md rounded-xl p-2 flex items-center gap-3 transition-transform duration-300 text-blue-600 hover:text-blue-800"
+									>
+										<div className="w-8 h-8 bg-blue-200 rounded-full flex items-center justify-center text-blue-600">
+											<Bookmark size={20} />
+										</div>
+										<span className="text-sm font-medium">Learn More</span>
+									</Link>
+								</motion.div>
 							</motion.div>
 						))
 					)}

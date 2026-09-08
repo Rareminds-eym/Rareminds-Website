@@ -133,7 +133,7 @@ const InstitutionalValueAdded = () => {
               <ArrowLeft className="w-5 h-5" />
               Back to Services
             </motion.button>
-            <h1 className="pt-3 text-3xl md:text-3xl font-bold text-white mb-2 drop-shadow">
+            <h1 className="pt-3 text-3xl md:text-3xl font-bold text-white mb-2">
               Institutional Value-Added Services – Universities
             </h1>
             <p className="pt-3 text-lg text-white/90">

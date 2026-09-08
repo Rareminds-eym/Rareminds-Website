@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Home, BookOpen, Newspaper, Phone, BookAIcon } from "lucide-react";
+import { Home, BookOpen, Newspaper, Phone, BookAIcon, Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Icon } from "@iconify/react";
 import BrandLogo from "../BrandLogo/BrandLogo";
 
 const CorporateHeader: React.FC = () => {
@@ -56,7 +55,7 @@ const CorporateHeader: React.FC = () => {
         transition={{ duration: 0.2 }}
         className="absolute"
       >
-        <Icon icon="mdi:menu" width={24} height={24} />
+        <Menu className="w-6 h-6 text-gray-800" />
       </motion.span>
       <motion.span
         initial={false}
@@ -64,7 +63,7 @@ const CorporateHeader: React.FC = () => {
         transition={{ duration: 0.2 }}
         className="absolute"
       >
-        <Icon icon="mdi:close" width={24} height={24} />
+        <X className="w-6 h-6 text-gray-800" />
       </motion.span>
     </motion.button>
   );

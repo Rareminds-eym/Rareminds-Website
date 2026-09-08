@@ -1,4 +1,4 @@
-﻿import DOMPurify from 'dompurify';
+import DOMPurify from 'dompurify';
 import type { Config } from 'dompurify';
 import { safeGetItem, safeSetItem } from '@/lib/localStorage';
 import {
@@ -685,7 +685,7 @@ const EventDetail: React.FC = () => {
 
                     {/* Event Title - Bottom Left of Image */}
                     <div className="absolute bottom-4 left-4 right-4 sm:bottom-6 sm:left-6 sm:right-auto">
-                      <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-white leading-tight sm:leading-[1.1] tracking-tight drop-shadow-xl">
+                      <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-white leading-tight sm:leading-[1.1] tracking-tight">
                         {event.title || "Event Name"}
                       </h1>
                     </div>

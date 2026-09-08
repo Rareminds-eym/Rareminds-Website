@@ -9,7 +9,7 @@ const testimonials = [
     role: 'Principal, Engineering College',
     quote: 'The transformation in our students\' confidence is remarkable.',
     image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?fit=crop&w=120&h=120',
-    videoThumbnail: "/institutions/vectors/Thumbnail1.jpg",
+    videoThumbnail: "/institutions/vectors/Thumbnail1.webp",
     videoSrc: "institutions/videos/video1.mp4",
   },
   {
@@ -17,7 +17,7 @@ const testimonials = [
     role: 'TPO, Technology Institute',
     quote: 'Placement rates increased by 45% within one semester.',
     image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?fit=crop&w=120&h=120',
-    videoThumbnail: "/institutions/vectors/Thumbnail2.jpg",
+    videoThumbnail: "/institutions/vectors/Thumbnail2.webp",
     videoSrc: "institutions/videos/video2.mp4",
   },
   {
@@ -25,7 +25,7 @@ const testimonials = [
     role: 'Final Year Student',
     quote: 'The industry exposure helped me secure my dream job.',
     image: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?fit=crop&w=120&h=120',
-    videoThumbnail: "/institutions/vectors/Thumbnail3.jpg",
+    videoThumbnail: "/institutions/vectors/Thumbnail3.webp",
     videoSrc: "institutions/videos/video3.mp4",
   },
   {
@@ -33,29 +33,15 @@ const testimonials = [
     role: 'Principal, Engineering College',
     quote: 'The transformation in our students\' confidence is remarkable.',
     image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?fit=crop&w=120&h=120',
-    videoThumbnail: "/institutions/vectors/Thumbnail1.jpg",
+    videoThumbnail: "/institutions/vectors/Thumbnail1.webp",
     videoSrc: "institutions/videos/video1.mp4",
   },
 ];
 
 export default function Testimonials() {
   const [selectedVideo, setSelectedVideo] = useState<string | null>(null);
-  const [scrollIndex, setScrollIndex] = useState(0);
 
   const videoTestimonials = testimonials.filter(t => t.videoSrc);
-
-  // Auto-scroll quote carousel every 4 seconds
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setScrollIndex((prev) => (prev + 1) % Math.ceil(testimonials.length / 3));
-    }, 4000);
-    return () => clearInterval(interval);
-  }, []);
-
-  const visibleQuotes = testimonials.slice(scrollIndex * 3, scrollIndex * 3 + 3);
-  if (visibleQuotes.length < 3) {
-    visibleQuotes.push(...testimonials.slice(0, 3 - visibleQuotes.length));
-  }
 
   return (
     <section className="py-16 bg-white relative">
@@ -96,6 +82,10 @@ export default function Testimonials() {
                 <img
                   src={testimonial.videoThumbnail}
                   alt={`${testimonial.name}'s testimonial`}
+                  loading="lazy"
+                  decoding="async"
+                  width={400}
+                  height={192}
                   className="w-full h-48 object-cover rounded-xl shadow-md"
                 />
                 <div className="absolute inset-0 bg-black bg-opacity-40 group-hover:bg-opacity-20 transition-all rounded-xl flex items-center justify-center">

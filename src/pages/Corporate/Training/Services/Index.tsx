@@ -282,7 +282,7 @@ const ServicesPage: React.FC = () => {
                             transition={{ duration: 0.6 }}
                             className="max-w-2xl sm:max-w-4xl mx-auto text-center text-white"
                         >
-                            <h2 className="text-2xl sm:text-3xl font-bold mb-4 sm:mb-6 leading-tight drop-shadow-lg">
+                            <h2 className="text-2xl sm:text-3xl font-bold mb-4 sm:mb-6 leading-tight">
                                 Ready to Elevate Your Team's Performance?
                             </h2>
                             <p className="text-base sm:text-xl mb-8 sm:mb-12 opacity-90">

@@ -111,7 +111,7 @@ const ContactSection = () => {
   };
 
   return (
-    <section className="section py-24 relative overflow-hidden bg-gradient-to-br from-blue-50 to-red-50 text-gray-800 bg-white">
+    <section className="section py-24 relative overflow-hidden bg-white bg-gradient-to-br from-blue-50 via-white to-gray-50 text-gray-800 z-10">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}

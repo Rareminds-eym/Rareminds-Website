@@ -9,7 +9,7 @@ const testimonials = [
     role: 'Periyar Arts & Science College',
     quote: 'The transformation in our students\' confidence is remarkable.',
     image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?fit=crop&w=120&h=120',
-    videoThumbnail: "/institutions/vectors/Thumbnail1.jpg",
+    videoThumbnail: "/institutions/vectors/Thumbnail1.webp",
     videoSrc: "https://www.youtube.com/watch?v=zInPOXMjHpQ&list=PLAlZD4FN5Oyo5qBMptFnzMYplEqog7MnW",
   },
   {
@@ -17,7 +17,7 @@ const testimonials = [
     role: 'Naidu College , Cuddalore',
     quote: 'Placement rates increased by 45% within one semester.',
     image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?fit=crop&w=120&h=120',
-    videoThumbnail: "/institutions/vectors/Thumbnail2.jpg",
+    videoThumbnail: "/institutions/vectors/Thumbnail2.webp",
     videoSrc: "https://www.youtube.com/watch?v=w5HmwkOF92E&list=PLAlZD4FN5Oyo5qBMptFnzMYplEqog7MnW&index=3",
   },
 ];

@@ -36,12 +36,26 @@ const ProcessSection = () => {
           <img
             src="https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Corporate/Recruitment/Index/Process/bg-mobile.webp"
             className="object-center w-full h-[852px]"
+            loading="lazy"
+            decoding="async"
             width={400}
             alt="A vibrant yellow background with the icons of a bulb, scratches and lines suitable for designing other elements."
           />
           <div className="absolute top-1/2 left-1/2 -translate-x-[50%] -translate-y-[50%]">
             <ProcessSVGMob className="scale-[0.8] xl:scale-110" />
           </div>
+          <button
+            className="absolute left-1/2 -translate-x-[50%] bottom-6 corporate-btn-1"
+            onClick={() => {
+              const contactSection = document.getElementById('contact');
+              if (contactSection) {
+                contactSection.scrollIntoView({ behavior: 'smooth' });
+              }
+            }}
+            type="button"
+          >
+            Start Your Talent Journey
+          </button>
         </div>
       </div>
 
@@ -49,6 +63,8 @@ const ProcessSection = () => {
         <img
           src="https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Corporate/Recruitment/Index/Process/process-bg.webp"
           className="w-full h-[720px] object-cover"
+          loading="lazy"
+          decoding="async"
           height={626}
           alt="A vibrant yellow background with the icons of a bulb, scratches and lines suitable for designing other elements."
         />

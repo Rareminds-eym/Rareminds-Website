@@ -11,7 +11,7 @@ import CorporatesNeededSection from "./components/CorporatesNeededSection";
 import TechDataAssuranceSection from "./components/TechDataAssuranceSection";
 import { BookDemo } from "@/components/Corporate/BookDemo";
 // import { CookieConsent } from "@/components/Corporate/CookieConsent";
-import { HelmetProvider } from "react-helmet-async";
+import { Helmet } from "react-helmet-async";
 import Seo from "@/components/Govt/Seo/Seo";
 
 
@@ -24,12 +24,30 @@ const Passport = () => {
       "Use Skill Passport by Rareminds Pvt. Ltd. to assess, benchmark, and upskill your workforce. Build leadership and compliance-ready teams for global expansion.",
     keywords:
       "Skill Passport, Rareminds Pvt. Ltd., corporate training, leadership development, workforce readiness, HR analytics, employee upskilling, talent mapping, global teams, talent development",
-    canonicalUrl: "https://rareminds.in/skill-passport/corporates"
+    canonicalUrl: "https://rareminds.in/corporate/skill-passport"
   };
 
   return (
-    <HelmetProvider>
+    <>
       <Seo {...seoData} />
+      <Helmet>
+        <link
+          rel="preload"
+          as="image"
+          type="image/webp"
+          href="/passport/Home-page-banner_mobile_1.webp"
+          media="(max-width: 767px)"
+          fetchPriority="high"
+        />
+        <link
+          rel="preload"
+          as="image"
+          type="image/webp"
+          href="/passport/Home-page-banner_1.webp"
+          media="(min-width: 768px)"
+          fetchPriority="high"
+        />
+      </Helmet>
       {/* <CookieConsent pageName="Skill Passport" /> */}
       <BookDemo isVisible={isModalOpen} onClose={() => setIsModalOpen(false)} />
       <div className="relative w-full">
@@ -53,7 +71,7 @@ const Passport = () => {
           onWaitlistClick={() => setIsModalOpen(true)}
         />
       </div>
-    </HelmetProvider>
+    </>
   );
 };
 

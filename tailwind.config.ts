@@ -184,11 +184,14 @@ export default {
         },
         corporate: {
           primary: "#107DFE",
+          'primary-light': "#DBEAFE",
           secondary: "#04DEBF",
           accent: "#F64A89",
           black: "#000000",
           purple: "#4F2D91",
-          yellow: "#F4B128"
+          'purple-light': "#7D64FF",
+          yellow: "#F4B128",
+          grey: "#5A6A7E",
         },
       },
       borderRadius: {

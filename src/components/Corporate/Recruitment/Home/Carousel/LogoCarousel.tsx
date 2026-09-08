@@ -48,6 +48,8 @@ const LogoCarousel: React.FC<LogoCarouselProps> = ({ logos }) => (
               <img
                 src={`https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Corporate/Recruitment/Index/ClientLogos/${logo}`}
                 alt={`logo-${index}`}
+                loading="lazy"
+                decoding="async"
                 height={40}
                 width={85}
                 className="h-[30px] sm:h-[40px] min-w-[70px] sm:min-w-[85px] object-contain transition-all"

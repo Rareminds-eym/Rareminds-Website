@@ -42,9 +42,9 @@ const BlogListing = () => {
   useEffect(() => {
     let subcategory = "all";
 
-    if (location.pathname.includes("/institutions/blogs")) {
+    if (location.pathname.includes("/universities/sdp/blogs") || location.pathname.includes("/universities/blogs") || location.pathname.includes("/institutions/blogs")) {
       subcategory = "SDP";
-    } else if (location.pathname.includes("/institutions/fdp/blogs")) {
+    } else if (location.pathname.includes("/universities/fdp/blogs") || location.pathname.includes("/institutions/fdp/blogs")) {
       subcategory = "FDP";
     }
     
@@ -96,9 +96,9 @@ const BlogListing = () => {
     // Determine if we need to enforce a specific subcategory based on the URL path
     let enforceSubcategory: string | null = null;
     
-    if (location.pathname.includes("/institutions/blogs")) {
+    if (location.pathname.includes("/universities/sdp/blogs") || location.pathname.includes("/universities/blogs") || location.pathname.includes("/institutions/blogs")) {
       enforceSubcategory = "SDP";
-    } else if (location.pathname.includes("/institutions/fdp/blogs")) {
+    } else if (location.pathname.includes("/universities/fdp/blogs") || location.pathname.includes("/institutions/fdp/blogs")) {
       enforceSubcategory = "FDP";
     }
     

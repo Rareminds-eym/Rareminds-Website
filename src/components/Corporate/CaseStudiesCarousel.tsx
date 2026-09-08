@@ -38,7 +38,7 @@ const CaseStudiesCarousel = ({ caseStudies }: { caseStudies: CaseStudy[] }) => {
           {caseStudies.map((currentCase, idx) => (
             <div key={`case-${idx}`} className="flex-[0_0_100%] px-2 md:px-6">
               <div className="bg-white rounded-3xl overflow-hidden border border-corporate-black/40 w-full max-w-6xl mx-auto">
-                <div className="grid grid-cols-1 lg:grid-cols-3 min-h-[70vh]">
+                <div className="grid grid-cols-1 lg:grid-cols-3">
                   {/* Left Panel */}
                   <div className="bg-gradient-to-br from-corporate-purple to-corporate-purple/60 text-white p-8 flex flex-col justify-between">
                     <div>
@@ -59,7 +59,7 @@ const CaseStudiesCarousel = ({ caseStudies }: { caseStudies: CaseStudy[] }) => {
                       </motion.div>
 
                       <div className="space-y-4">
-                        <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 max-h-40 overflow-y-auto modern-scrollbar text-left">
+                        <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 max-h-72 overflow-y-auto modern-scrollbar-dark text-left pr-3">
                           <TrendingUp size={24} className="mb-2" />
                           <h4 className="font-semibold mb-1 text-left">
                             Key Outcomes
@@ -96,14 +96,14 @@ const CaseStudiesCarousel = ({ caseStudies }: { caseStudies: CaseStudy[] }) => {
                   </div>
 
                   {/* Right Panel */}
-                  <div className="col-span-2 p-8">
-                    <div className="grid grid-cols-1 h-full gap-6 text-left">
+                  <div className="col-span-2 p-8 flex flex-col justify-between gap-6">
+                    <div className="grid grid-cols-1 gap-6 text-left">
                       <motion.div
                         key={`client-${idx}`}
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.4 }}
-                        className="bg-corporate-black/5 p-6 rounded-xl border border-corporate-primary-light/20 max-h-32 overflow-y-auto modern-scrollbar text-left"
+                        className="bg-corporate-black/5 p-6 rounded-xl border border-corporate-primary-light/20 max-h-40 overflow-y-auto modern-scrollbar text-left"
                       >
                         <h4 className="text-corporate-black font-bold mb-3 flex items-center gap-2 text-left">
                           <span className="bg-[#7d64ff]/10 p-2 mr-1 rounded-lg">
@@ -121,7 +121,7 @@ const CaseStudiesCarousel = ({ caseStudies }: { caseStudies: CaseStudy[] }) => {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.4, delay: 0.1 }}
-                        className="bg-corporate-black/5 p-6 rounded-xl border border-corporate-primary-light/20 max-h-32 overflow-y-auto modern-scrollbar text-left"
+                        className="bg-corporate-black/5 p-6 rounded-xl border border-corporate-primary-light/20 max-h-48 overflow-y-auto modern-scrollbar text-left"
                       >
                         <h4 className="text-corporate-black font-bold mb-3 flex items-center gap-2 text-left">
                           <span className="bg-[#7d64ff]/10 p-2 mr-1 rounded-lg">
@@ -139,7 +139,7 @@ const CaseStudiesCarousel = ({ caseStudies }: { caseStudies: CaseStudy[] }) => {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.4, delay: 0.2 }}
-                        className="bg-corporate-black/5 p-6 rounded-xl flex flex-col justify-between border border-corporate-primary-light/20 max-h-40 overflow-y-auto modern-scrollbar text-left"
+                        className="bg-corporate-black/5 p-6 rounded-xl flex flex-col justify-between border border-corporate-primary-light/20 max-h-72 overflow-y-auto modern-scrollbar text-left"
                       >
                         <div>
                           <h4 className="text-corporate-black font-bold mb-3 flex items-center gap-2 text-left">
@@ -180,13 +180,14 @@ const CaseStudiesCarousel = ({ caseStudies }: { caseStudies: CaseStudy[] }) => {
         <motion.button
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
+          type="button"
           onClick={handlePrev}
-          className="bg-white text-corporate-black hover:bg-gray-50 px-6 py-3 rounded-lg shadow-md transition-all duration-300 flex items-center gap-2 group"
+          className="corporate-btn-2 flex items-center gap-2 group cursor-pointer"
         >
           <Icon
             icon="ph:arrow-left"
-            width="24"
-            height="24"
+            width="20"
+            height="20"
             className="group-hover:-translate-x-1 transition-transform duration-300"
           />
           <span>Previous</span>
@@ -194,14 +195,15 @@ const CaseStudiesCarousel = ({ caseStudies }: { caseStudies: CaseStudy[] }) => {
         <motion.button
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
+          type="button"
           onClick={handleNext}
-          className="bg-white text-corporate-black hover:bg-gray-50 px-6 py-3 rounded-lg shadow-md transition-all duration-300 flex items-center gap-2 group"
+          className="corporate-btn-2 flex items-center gap-2 group cursor-pointer"
         >
           <span>Next</span>
           <Icon
             icon="ph:arrow-right"
-            width="24"
-            height="24"
+            width="20"
+            height="20"
             className="group-hover:translate-x-1 transition-transform duration-300"
           />
         </motion.button>

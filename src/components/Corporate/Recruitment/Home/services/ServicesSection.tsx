@@ -141,7 +141,7 @@ const ServicesSection = () => {
             <h2 className="text-3xl md:text-5xl font-bold mb-4 text-corporate-black">
               Services We Offer
             </h2>
-            <p className="text-corporate-grey max-w-3xl mx-auto">
+            <p className="text-corporate-grey max-w-3xl mx-auto text-lg">
               At Rareminds, we provide precision recruitment solutions tailored
               for fast-growing companies, enterprise teams, and industry
               leaders.
@@ -184,7 +184,7 @@ const ServicesSection = () => {
                       <img
                         src="https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Corporate/Recruitment/Index/Services/service-bg.png"
                         alt="Curved Background"
-                        className="w-"
+                        className="w-auto"
                         width="384"
                         height={230}
                       />
