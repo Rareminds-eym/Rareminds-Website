@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, Suspense, lazy } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Plus,
@@ -7,10 +7,11 @@ import {
   Calendar,
   Download,
 } from "lucide-react";
-import FAQChatbot from "./ChatBot/FAQChatbot";
-import { ChatButton } from "./ChatButton";
-import { BookDemo } from "./BookDemo";
 import { useLocation, useNavigate } from "react-router-dom";
+
+const FAQChatbot = lazy(() => import("./ChatBot/FAQChatbot"));
+const ChatButton = lazy(() => import("./ChatButton").then((m) => ({ default: m.ChatButton })));
+const BookDemo = lazy(() => import("./BookDemo").then((m) => ({ default: m.BookDemo })));
 
 interface MenuItem {
   id: string;
@@ -28,23 +29,26 @@ const FloatingActionMenu = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  // Open menu when user scrolls near the bottom (before footer)
+  // Open menu when user scrolls near the bottom (before footer) with rAF throttling
   useEffect(() => {
+    let ticking = false;
     const handleScroll = () => {
-      const scrollY = window.scrollY || window.pageYOffset;
-      const windowHeight = window.innerHeight;
-      const docHeight = document.documentElement.scrollHeight;
-      const footer = document.querySelector("#footer");
-      const footerHeight = footer
-        ? (footer as HTMLElement).offsetHeight + 10
-        : 120; // fallback if no footer
-      if (scrollY + windowHeight >= docHeight - footerHeight) {
-        setIsOpen(true);
-      } else {
-        setIsOpen(false);
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const scrollY = window.scrollY || window.pageYOffset;
+          const windowHeight = window.innerHeight;
+          const docHeight = document.documentElement.scrollHeight;
+          const footer = document.querySelector("#footer");
+          const footerHeight = footer
+            ? (footer as HTMLElement).offsetHeight + 10
+            : 120; // fallback if no footer
+          setIsOpen(scrollY + windowHeight >= docHeight - footerHeight);
+          ticking = false;
+        });
+        ticking = true;
       }
     };
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
@@ -246,26 +250,36 @@ const FloatingActionMenu = () => {
         )}
       </AnimatePresence>
       {isOpenFaq && (
-        <div className="fixed inset-0 z-[9999] flex items-end justify-end">
-          {/* Overlay background for closing */}
-          <div
-            className="absolute inset-0 bg-black/20"
-            onClick={() => setIsOpenFaq(false)}
-          />
-          <div className="relative z-10" onClick={(e) => e.stopPropagation()}>
-            <FAQChatbot open={isOpenFaq} onClose={() => setIsOpenFaq(false)} />
+        <Suspense fallback={null}>
+          <div className="fixed inset-0 z-[9999] flex items-end justify-end">
+            {/* Overlay background for closing */}
+            <div
+              className="absolute inset-0 bg-black/20"
+              onClick={() => setIsOpenFaq(false)}
+            />
+            <div className="relative z-10" onClick={(e) => e.stopPropagation()}>
+              <FAQChatbot open={isOpenFaq} onClose={() => setIsOpenFaq(false)} />
+            </div>
           </div>
-        </div>
+        </Suspense>
       )}
 
       {/* Chat Button */}
-      <ChatButton isVisible={showChat} onClose={() => setShowChat(false)} />
+      {showChat && (
+        <Suspense fallback={null}>
+          <ChatButton isVisible={showChat} onClose={() => setShowChat(false)} />
+        </Suspense>
+      )}
 
       {/* Book Demo */}
-      <BookDemo
-        isVisible={showBookDemo}
-        onClose={() => setShowBookDemo(false)}
-      />
+      {showBookDemo && (
+        <Suspense fallback={null}>
+          <BookDemo
+            isVisible={showBookDemo}
+            onClose={() => setShowBookDemo(false)}
+          />
+        </Suspense>
+      )}
     </div>
   );
 };

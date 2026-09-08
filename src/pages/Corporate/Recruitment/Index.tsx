@@ -18,7 +18,7 @@ const Corporate: React.FC = () => {
         "<span class='corporate-heading-highlight'>Don’t Just Hire.</span> <br/>Build High-Performing Teams",
       subheading:
         "Smart, scalable recruitment solutions trusted by 250+ corporates",
-      img: "https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Corporate/Recruitment/Index/Hero/BuildHigh.webp",
+      img: "/Corporate/Images/Recruitment/BuildHigh.webp",
       alt: "A split image showcasing a single person working on one side vs a group of professionals working together, full of energy.",
     },
     {
@@ -63,8 +63,22 @@ const Corporate: React.FC = () => {
           name="description"
           content="Rareminds Pvt. Ltd. delivers fast, scalable, and data-driven recruitment solutions across India and globally—20+ industries, 500K+ hires, and 250+ clients worldwide."
         />
+        <link
+          rel="preload"
+          as="image"
+          type="image/webp"
+          href="/Corporate/Images/Recruitment/header-bg.webp"
+          fetchPriority="high"
+        />
+        <link
+          rel="preload"
+          as="image"
+          type="image/webp"
+          href="/Corporate/Images/Recruitment/BuildHigh.webp"
+          fetchPriority="high"
+        />
       </Helmet>
-      <section className="bg-[url('https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Corporate/Recruitment/Index/Hero/header-bg.webp')] sticky top-[80px] w-full overflow-hidden">
+      <section className="bg-[url('/Corporate/Images/Recruitment/header-bg.webp')] sticky top-[80px] w-full overflow-hidden">
         <FullScreenCarousel slides={slides} />
       </section>
 

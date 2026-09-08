@@ -111,11 +111,11 @@ const UniversitiesPassport = lazy(() => import("./pages/Universities/Passport/In
 
 
 const BlogListing = lazy(() => import("./components/universities/Blogs/BlogListing"));
-import CommunicationPersonalityDevelopment from "./components/universities/inst/CommunicationPersonalityDevelopment";
-import MentalHealthCounselingFDP from "./components/universities/inst/MentalHealthCounselingFDP";
-import DomainSpecificPrograms from "./components/universities/inst/DomainSpecificPrograms";
-import LeadershipCareerGrowth from "./components/universities/inst/LeadershipCareerGrowth";
-import InstitutionalValueAdded from "./components/universities/inst/InstitutionalValueAdded";
+const CommunicationPersonalityDevelopment = lazy(() => import("./components/universities/inst/CommunicationPersonalityDevelopment"));
+const MentalHealthCounselingFDP = lazy(() => import("./components/universities/inst/MentalHealthCounselingFDP"));
+const DomainSpecificPrograms = lazy(() => import("./components/universities/inst/DomainSpecificPrograms"));
+const LeadershipCareerGrowth = lazy(() => import("./components/universities/inst/LeadershipCareerGrowth"));
+const InstitutionalValueAdded = lazy(() => import("./components/universities/inst/InstitutionalValueAdded"));
 // New Projects components
 const NewProjects = lazy(() => import("./components/Projects/project.tsx"));
 const NewProjectDetail = lazy(() => import("./components/Projects/ProjectDetailNew.tsx"));
@@ -219,6 +219,10 @@ const router = createBrowserRouter([
     errorElement: <ErrorBoundary />,
     children: [
       {
+        path: "/corporate",
+        element: <Navigate to="/corporate/recruitment" replace />,
+      },
+      {
         path: "/corporate/recruitment",
         element: withSuspense(Corporate),
       },
@@ -274,10 +278,6 @@ const router = createBrowserRouter([
       {
         path: "/corporate/recruitment/services",
         element: withSuspense(ServicesPage),
-      },
-      {
-        path: "/corporate/training/services",
-        element: withSuspense(CorporateTrainingServicesPage),
       },
     ],
   },
@@ -488,23 +488,23 @@ const router = createBrowserRouter([
       },
       {
         path: "/universities/communication-personality-development",
-        element: <CommunicationPersonalityDevelopment />,
+        element: withSuspense(CommunicationPersonalityDevelopment),
       },
       {
         path: "/universities/mental-health-counseling-fdp",
-        element: <MentalHealthCounselingFDP />,
+        element: withSuspense(MentalHealthCounselingFDP),
       },
       {
         path: "/universities/domain-specific-programs",
-        element: <DomainSpecificPrograms />,
+        element: withSuspense(DomainSpecificPrograms),
       },
       {
         path: "/universities/leadership-career-growth",
-        element: <LeadershipCareerGrowth />,
+        element: withSuspense(LeadershipCareerGrowth),
       },
       {
         path: "/universities/institutional-value-added-services",
-        element: <InstitutionalValueAdded />,
+        element: withSuspense(InstitutionalValueAdded),
       },
       // Blog routes
       {

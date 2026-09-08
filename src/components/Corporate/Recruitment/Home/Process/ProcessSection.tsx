@@ -36,6 +36,8 @@ const ProcessSection = () => {
           <img
             src="https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Corporate/Recruitment/Index/Process/bg-mobile.webp"
             className="object-center w-full h-[852px]"
+            loading="lazy"
+            decoding="async"
             width={400}
             alt="A vibrant yellow background with the icons of a bulb, scratches and lines suitable for designing other elements."
           />
@@ -49,6 +51,8 @@ const ProcessSection = () => {
         <img
           src="https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Corporate/Recruitment/Index/Process/process-bg.webp"
           className="w-full h-[720px] object-cover"
+          loading="lazy"
+          decoding="async"
           height={626}
           alt="A vibrant yellow background with the icons of a bulb, scratches and lines suitable for designing other elements."
         />

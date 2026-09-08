@@ -37,7 +37,9 @@ export default function BrandLogo({
       <img
         src={BRAND_LOGO_PATH}
         alt={alt}
-        className={cn("w-40 h-auto sm:w-64", logoClassName)}
+        width="256"
+        height="76"
+        className={cn("w-40 h-auto sm:w-64 aspect-[4258/1263]", logoClassName)}
         decoding="async"
         fetchPriority="high"
       />

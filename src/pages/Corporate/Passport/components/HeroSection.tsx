@@ -4,17 +4,17 @@ import { supabase } from "../../../../lib/supabase";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect, useRef } from "react";
 
-const banner1 = "/passport/Home-page-banner_1.png";
-const banner2 = "/passport/Home-page-banner_2.png";
-const banner3 = "/passport/Home-page-banner_3.png";
-const banner4 = "/passport/Home-page-banner_4.png";
-const banner5 = "/passport/Home-page-banner_5.png";
+const banner1 = "/passport/Home-page-banner_1.webp";
+const banner2 = "/passport/Home-page-banner_2.webp";
+const banner3 = "/passport/Home-page-banner_3.webp";
+const banner4 = "/passport/Home-page-banner_4.webp";
+const banner5 = "/passport/Home-page-banner_5.webp";
 
-const mobileBanner1 = "/passport/Home-page-banner_mobile_1.png";
-const mobileBanner2 = "/passport/Home-page-banner_mobile_2.png";
-const mobileBanner3 = "/passport/Home-page-banner_mobile_3.png";
-const mobileBanner4 = "/passport/Home-page-banner_mobile_4.png";
-const mobileBanner5 = "/passport/Home-page-banner_mobile_5.png";
+const mobileBanner1 = "/passport/Home-page-banner_mobile_1.webp";
+const mobileBanner2 = "/passport/Home-page-banner_mobile_2.webp";
+const mobileBanner3 = "/passport/Home-page-banner_mobile_3.webp";
+const mobileBanner4 = "/passport/Home-page-banner_mobile_4.webp";
+const mobileBanner5 = "/passport/Home-page-banner_mobile_5.webp";
 
 const desktopSlides = [
   {
@@ -66,7 +66,9 @@ const HeroSection = ({ onDemoClick }: { onDemoClick: () => void }) => {
   const [showForm, setShowForm] = useState(false);
   const formTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const [current, setCurrent] = useState(0);
-  const [isMobile, setIsMobile] = useState(false);
+  const [isMobile, setIsMobile] = useState(() =>
+    typeof window !== "undefined" ? window.innerWidth < 768 : false
+  );
   const [form, setForm] = useState({
     name: "",
     company: "",
@@ -336,17 +338,18 @@ const HeroSection = ({ onDemoClick }: { onDemoClick: () => void }) => {
   return (
     <section id="resume-checklist-download" className="relative w-auto min-h-[640px] md:min-h-[640px] overflow-hidden m-4 md:m-6 rounded-2xl shadow-sm bg-[#EDF2F9]">
       <div className="absolute inset-0 z-0">
-        <AnimatePresence>
+        <AnimatePresence initial={false}>
           <motion.img
             key={slides[current].image}
             src={slides[current].image}
             alt="Hero Banner"
-            loading="lazy"
+            fetchPriority="high"
+            decoding="async"
             className="w-full h-full object-cover absolute"
-            initial={{ opacity: 0 }}
+            initial={current === 0 ? { opacity: 1 } : { opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 1.2, ease: "easeInOut" }}
+            transition={{ duration: current === 0 ? 0.2 : 0.8, ease: "easeInOut" }}
           />
         </AnimatePresence>
       </div>
