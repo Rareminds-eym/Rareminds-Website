@@ -568,14 +568,7 @@ const PartnerCard: React.FC<PartnerCardProps> = ({ image, name }) => (
         alt={name}
         className="object-contain h-10 w-auto max-w-full "
         onError={e => {
-          // Only fallback for local images, not external URLs
-          if (image.startsWith('/institutions/logos/')) {
-            e.currentTarget.src = '/institutions/logos/logo1.png';
-          } else if (image.startsWith('/Corporate/Images/')) {
-            e.currentTarget.src = '/Corporate/Images/logo1.png';
-          } else if (image.startsWith('/Govt-Images/Logos/')) {
-            e.currentTarget.src = '/Govt-Images/Logos/logo1.png';
-          }
+          e.currentTarget.style.display = 'none';
         }}
       />
     </div>

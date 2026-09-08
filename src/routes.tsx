@@ -1,4 +1,4 @@
-import { createBrowserRouter, Outlet } from "react-router-dom";
+import { createBrowserRouter, Outlet, Navigate } from "react-router-dom";
 import { lazy, Suspense } from "react";
 import LoaderComponent from "./components/LoaderComponent";
 import ErrorBoundary from "./components/ErrorBoundary";
@@ -46,6 +46,9 @@ const AcademiaBlogs = lazy(() => import("./pages/Academia/Blogs/index"));
 const Student = lazy(() => import("./pages/Academia/Student/student"));
 const School = lazy(() => import("./pages/Academia/Teacher/teacher.tsx"));
 const Universities = lazy(() => import("./pages/Universities/Index"));
+const UniversitiesServices = lazy(
+  () => import("./pages/Universities/UniversitiesServices")
+);
 const ServiceCategoriesPage = lazy(() => import("./pages/Universities/sdp/ServiceCategoriesPage"));
 const FDP = lazy(() => import("./pages/Universities/Fdp"));
 const ServiceCategoryCard = lazy(
@@ -108,11 +111,11 @@ const UniversitiesPassport = lazy(() => import("./pages/Universities/Passport/In
 
 
 const BlogListing = lazy(() => import("./components/universities/Blogs/BlogListing"));
-import CommunicationPersonalityDevelopment from "./components/universities/inst/CommunicationPersonalityDevelopment";
-import MentalHealthCounselingFDP from "./components/universities/inst/MentalHealthCounselingFDP";
-import DomainSpecificPrograms from "./components/universities/inst/DomainSpecificPrograms";
-import LeadershipCareerGrowth from "./components/universities/inst/LeadershipCareerGrowth";
-import InstitutionalValueAdded from "./components/universities/inst/InstitutionalValueAdded";
+const CommunicationPersonalityDevelopment = lazy(() => import("./components/universities/inst/CommunicationPersonalityDevelopment"));
+const MentalHealthCounselingFDP = lazy(() => import("./components/universities/inst/MentalHealthCounselingFDP"));
+const DomainSpecificPrograms = lazy(() => import("./components/universities/inst/DomainSpecificPrograms"));
+const LeadershipCareerGrowth = lazy(() => import("./components/universities/inst/LeadershipCareerGrowth"));
+const InstitutionalValueAdded = lazy(() => import("./components/universities/inst/InstitutionalValueAdded"));
 // New Projects components
 const NewProjects = lazy(() => import("./components/Projects/project.tsx"));
 const NewProjectDetail = lazy(() => import("./components/Projects/ProjectDetailNew.tsx"));
@@ -216,6 +219,10 @@ const router = createBrowserRouter([
     errorElement: <ErrorBoundary />,
     children: [
       {
+        path: "/corporate",
+        element: <Navigate to="/corporate/recruitment" replace />,
+      },
+      {
         path: "/corporate/recruitment",
         element: withSuspense(Corporate),
       },
@@ -271,10 +278,6 @@ const router = createBrowserRouter([
       {
         path: "/corporate/recruitment/services",
         element: withSuspense(ServicesPage),
-      },
-      {
-        path: "/corporate/training/services",
-        element: withSuspense(CorporateTrainingServicesPage),
       },
     ],
   },
@@ -452,6 +455,10 @@ const router = createBrowserRouter([
         element: withSuspense(Universities),
       },
       {
+        path: "/universities/services",
+        element: withSuspense(UniversitiesServices),
+      },
+      {
         path: "/universities/sdp/:institutionType/categories",
         element: withSuspense(ServiceCategoriesPage),
       },
@@ -481,23 +488,23 @@ const router = createBrowserRouter([
       },
       {
         path: "/universities/communication-personality-development",
-        element: <CommunicationPersonalityDevelopment />,
+        element: withSuspense(CommunicationPersonalityDevelopment),
       },
       {
         path: "/universities/mental-health-counseling-fdp",
-        element: <MentalHealthCounselingFDP />,
+        element: withSuspense(MentalHealthCounselingFDP),
       },
       {
         path: "/universities/domain-specific-programs",
-        element: <DomainSpecificPrograms />,
+        element: withSuspense(DomainSpecificPrograms),
       },
       {
         path: "/universities/leadership-career-growth",
-        element: <LeadershipCareerGrowth />,
+        element: withSuspense(LeadershipCareerGrowth),
       },
       {
         path: "/universities/institutional-value-added-services",
-        element: <InstitutionalValueAdded />,
+        element: withSuspense(InstitutionalValueAdded),
       },
       // Blog routes
       {
@@ -527,6 +534,100 @@ const router = createBrowserRouter([
       {
        path: "/universities/skill-passport",
         element: withSuspense(UniversitiesPassport),
+      },
+      // Legacy redirects from /institutions to /universities
+      {
+        path: "/institutions",
+        element: <Navigate to="/universities" replace />,
+      },
+      {
+        path: "/institutions/services",
+        element: <Navigate to="/universities/fdp" replace />,
+      },
+      {
+        path: "/institutions/fdp",
+        element: <Navigate to="/universities/fdp" replace />,
+      },
+      {
+        path: "/institutions/blogs",
+        element: <Navigate to="/universities/blogs" replace />,
+      },
+      {
+        path: "/institutions/blogs/:slug",
+        element: <Navigate to="/universities/blogs" replace />,
+      },
+      {
+        path: "/institutions/sdp/blogs",
+        element: <Navigate to="/universities/sdp/blogs" replace />,
+      },
+      {
+        path: "/institutions/sdp/blogs/:slug",
+        element: <Navigate to="/universities/sdp/blogs" replace />,
+      },
+      {
+        path: "/institutions/fdp/blogs",
+        element: <Navigate to="/universities/fdp/blogs" replace />,
+      },
+      {
+        path: "/institutions/fdp/blogs/:slug",
+        element: <Navigate to="/universities/fdp/blogs" replace />,
+      },
+      {
+        path: "/institutions/communication-personality-development",
+        element: <Navigate to="/universities/communication-personality-development" replace />,
+      },
+      {
+        path: "/institutions/mental-health-counseling-fdp",
+        element: <Navigate to="/universities/mental-health-counseling-fdp" replace />,
+      },
+      {
+        path: "/institutions/domain-specific-programs",
+        element: <Navigate to="/universities/domain-specific-programs" replace />,
+      },
+      {
+        path: "/institutions/leadership-career-growth",
+        element: <Navigate to="/universities/leadership-career-growth" replace />,
+      },
+      {
+        path: "/institutions/institutional-value-added-services",
+        element: <Navigate to="/universities/institutional-value-added-services" replace />,
+      },
+      {
+        path: "/institutions/skill-passport",
+        element: <Navigate to="/universities/skill-passport" replace />,
+      },
+      // Additional fallback redirects for legacy links
+      {
+        path: "/academia",
+        element: <Navigate to="/school" replace />,
+      },
+      {
+        path: "/school/projects",
+        element: <Navigate to="/school/projects/" replace />,
+      },
+      {
+        path: "/programs/:slug",
+        element: <Navigate to="/universities/fdp" replace />,
+      },
+      {
+        path: "/programs",
+        element: <Navigate to="/universities/fdp" replace />,
+      },
+      {
+        path: "/faculty/*",
+        element: <Navigate to="/universities/fdp" replace />,
+      },
+      {
+        path: "/skill-development",
+        element: <Navigate to="/universities" replace />,
+      },
+      {
+        path: "/campus-corporate",
+        element: <Navigate to="/universities" replace />,
+      },
+      {
+        path: "/counseling",
+        element: <Navigate to="/universities" replace />,
       }
     ],
   },

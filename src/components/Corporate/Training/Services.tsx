@@ -13,7 +13,8 @@ import {
   FileSpreadsheet,
 } from "lucide-react";
 import { Link } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useMemo } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { getCorporateServiceCategories } from "@/services/sdp/courseService";
 
 type Service = {
@@ -103,6 +104,8 @@ const ServiceCard = ({
             <img
               src={service.image}
               alt={"Illustration of a book with symbols, icons, and corporate professionals interacting around gears and charts."}
+              loading="lazy"
+              decoding="async"
               className="w-full h-full object-cover"
             />
             <div className="absolute inset-0 bg-[#222B33] opacity-50" />
@@ -139,25 +142,18 @@ const ServiceCard = ({
 };
 
 export default function Services() {
-  const [services, setServices] = useState<Service[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { data: rawData = [], isLoading: loading } = useQuery({
+    queryKey: ['corporate-service-categories'],
+    queryFn: getCorporateServiceCategories,
+    staleTime: 5 * 60 * 1000,
+  });
 
-  useEffect(() => {
-    const fetchServices = async () => {
-      setLoading(true);
-      const data = await getCorporateServiceCategories();
-      
-      // Map data to include icon components
-      const mappedServices = data.map((service: any) => ({
-        ...service,
-        icon: iconMap[service.icon] || BookOpen
-      }));
-      
-      setServices(mappedServices);
-      setLoading(false);
-    };
-    fetchServices();
-  }, []);
+  const services = useMemo(() => {
+    return (rawData as any[]).map((service: any) => ({
+      ...service,
+      icon: iconMap[service.icon] || BookOpen,
+    }));
+  }, [rawData]);
 
   return (
     <section className="py-8 sm:py-12 lg:py-16 relative overflow-hidden">

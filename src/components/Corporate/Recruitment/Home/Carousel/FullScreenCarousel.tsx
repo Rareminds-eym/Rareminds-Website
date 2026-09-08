@@ -211,8 +211,14 @@ const FullScreenCarousel: React.FC<FullScreenCarouselProps> = ({
                       alt={slides[activeIndex].alt}
                       height={400}
                       width={400}
+                      fetchPriority={activeIndex === 0 ? "high" : "auto"}
+                      decoding="async"
                       className="w-[300px] h-[300px] lg:w-[400px] lg:h-[400px] max-w-xl mx-auto lg:max-w-none object-cover rounded-lg absolute"
-                      initial={{ opacity: 0, scale: 0.85, rotate: 8, filter: 'blur(6px)' }}
+                      initial={
+                        activeIndex === 0
+                          ? { opacity: 0.95, scale: 1, rotate: 0 }
+                          : { opacity: 0, scale: 0.85, rotate: 8, filter: 'blur(6px)' }
+                      }
                       animate={{ opacity: 1, scale: 1, rotate: 0, filter: 'blur(0px)' }}
                       exit={{ opacity: 0, scale: 0.85, rotate: -8, filter: 'blur(6px)' }}
                       transition={{ duration: 0.7, ease: [0.4, 0, 0.2, 1] }}

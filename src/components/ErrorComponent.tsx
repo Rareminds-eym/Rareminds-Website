@@ -31,7 +31,7 @@ const ErrorComponent: React.FC<ErrorComponentProps> = ({
               <Search className="h-16 w-16 text-red-400" />
             </span>
           </div>
-          <h1 className="text-7xl md:text-9xl font-extrabold text-red-500 mb-4 drop-shadow-lg">404</h1>
+          <h1 className="text-7xl md:text-9xl font-extrabold text-red-500 mb-4">404</h1>
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Page Not Found</h2>
           <p className="text-lg md:text-xl text-gray-600 mb-10 max-w-xl mx-auto">{message}</p>
           <Link to="/">

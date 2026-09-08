@@ -26,7 +26,9 @@ const SearchAndFilter = ({
   const location = useLocation();
   
   // Determine if we're in a path that requires a specific subcategory
-  const isFixedSubcategoryPath = location.pathname.includes("/institutions/blogs") || 
+  const isFixedSubcategoryPath = location.pathname.includes("/universities/blogs") || 
+                               location.pathname.includes("/universities/fdp/blogs") ||
+                               location.pathname.includes("/institutions/blogs") || 
                                location.pathname.includes("/institutions/fdp/blogs");
 
   useEffect(() => {

@@ -78,10 +78,10 @@ const HeroCarousel: React.FC<HeroCarouselProps> = ({
 
             {/* Text content */}
             <div className="relative z-10 flex flex-col justify-center h-full max-w-3xl px-6 md:px-12 text-white">
-              <h1 className="text-4xl md:text-6xl font-bold mb-4 whitespace-pre-line drop-shadow-lg">
+              <h1 className="text-4xl md:text-6xl font-bold mb-4 whitespace-pre-line">
                 {service.headline}
               </h1>
-              <p className="text-lg md:text-xl mb-8 drop-shadow-md max-w-xl">
+              <p className="text-lg md:text-xl mb-8 max-w-xl">
                 {service.subtext}
               </p>
               <button

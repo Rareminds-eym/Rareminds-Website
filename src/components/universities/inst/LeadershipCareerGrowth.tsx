@@ -126,14 +126,14 @@ const LeadershipCareerGrowth = () => {
         <div className="absolute inset-0 flex items-center">
           <div className="container mx-auto px-6">
             <motion.button
-              onClick={() => navigate("/institutions/services#coursecards")}
+              onClick={() => navigate("/universities/services#coursecards")}
               whileHover={{ x: -5 }}
               className="text-white text-base mb-4 flex items-center gap-2 font-medium"
             >
               <ArrowLeft className="w-5 h-5" />
               Back to Services
             </motion.button>
-            <h1 className="pt-3 text-3xl md:text-3xl font-bold text-white mb-2 drop-shadow">
+            <h1 className="pt-3 text-3xl md:text-3xl font-bold text-white mb-2">
               Leadership & Career Growth – Universities
             </h1>
             <p className="pt-3 text-lg text-white/90">

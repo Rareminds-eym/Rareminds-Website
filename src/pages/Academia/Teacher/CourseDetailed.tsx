@@ -215,11 +215,11 @@ export default function CourseDetailed() {
                 <ArrowLeft className="w-4 h-4" />
                 Back to Courses
               </button>
-              <h1 className="text-3xl md:text-4xl font-bold text-white mb-2 drop-shadow-lg">
+              <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">
                 {course.name}
               </h1>
               {course.subtitle && (
-                <p className="text-lg text-white/90 drop-shadow">{course.subtitle}</p>
+                <p className="text-lg text-white/90">{course.subtitle}</p>
               )}
             </div>
           </div>
@@ -264,11 +264,11 @@ export default function CourseDetailed() {
       <ArrowLeft className="w-4 h-4" />
       Back to Courses
     </button>
-    <h1 className="text-3xl md:text-4xl font-bold text-black mb-2 drop-shadow-lg">
+    <h1 className="text-3xl md:text-4xl font-bold text-black mb-2">
       {course.name}
     </h1>
     {course.subtitle && (
-      <p className="text-lg text-black/90 drop-shadow">{course.subtitle}</p>
+      <p className="text-lg text-black/90">{course.subtitle}</p>
     )}
   </div>
 </div>
@@ -535,11 +535,11 @@ export default function CourseDetailed() {
                 <ArrowLeft className="w-4 h-4" />
                 Back to Courses
               </button>
-              <h1 className="text-3xl md:text-4xl font-bold text-black mb-2 drop-shadow-lg">
+              <h1 className="text-3xl md:text-4xl font-bold text-black mb-2">
                 {course.name}
               </h1>
               {course.subtitle && (
-                <p className="text-lg text-black/90 drop-shadow">{course.subtitle}</p>
+                <p className="text-lg text-black/90">{course.subtitle}</p>
               )}
             </div>
           </div>
