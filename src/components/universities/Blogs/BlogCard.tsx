@@ -34,8 +34,8 @@ const BlogCard = ({ post }: BlogCardProps) => {
 
   // Set the link based on the current section
   const blogDetailLink = isFacultySection
-    ? `/institutions/blogs/${post.slug}`
-    : `/institutions/fdp/blogs/${post.slug}`;
+    ? `/universities/blogs/${post.slug}`
+    : `/universities/fdp/blogs/${post.slug}`;
 
   return (
     <Link to={blogDetailLink} className="block group focus:outline-none">

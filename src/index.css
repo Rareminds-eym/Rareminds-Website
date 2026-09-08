@@ -86,11 +86,15 @@
   }
 
   .corporate-btn-2 {
-    @apply border-2 border-black font-semibold py-2 px-5 rounded-[6px] shadow-[3px_4px_0px_0px_rgba(0,0,0,1)] w-max mx-auto sm:mx-0 flex items-center;
+    @apply bg-white text-black hover:bg-gray-50 border-2 border-black font-semibold py-2 px-5 rounded-[6px] shadow-[3px_4px_0px_0px_rgba(0,0,0,1)] w-max mx-auto sm:mx-0 flex items-center transition-all;
   }
 
   .corporate-heading-highlight {
     @apply bg-[#107DFE] px-2 shadow-[7px_7px_0px_0px_rgba(0,0,0,1)] text-white mr-1;
+  }
+
+  .footer-corporate a:hover {
+    color: #107DFE !important;
   }
 
   .gradient-text {
@@ -329,29 +333,76 @@
   animation: pulse-smooth 1.2s cubic-bezier(0.4,0,0.6,1) infinite;
 }
 
-/* === Modern Scrollbar === */
+/* === Global Clean Scrollbar === */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f8fafc;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 9999px;
+  transition: background 0.2s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* === Modern Component Scrollbar (Light / Neutral Cards) === */
 .modern-scrollbar {
   scrollbar-width: thin;
-  scrollbar-color: #bdbdbd #f3f4f6;
+  scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
 }
 
 .modern-scrollbar::-webkit-scrollbar {
-  width: 12px;
-  background: #f3f4f6;
-  border-radius: 12px;
+  width: 5px;
+  height: 5px;
+  background: transparent;
+}
+
+.modern-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
 }
 
 .modern-scrollbar::-webkit-scrollbar-thumb {
-  background: linear-gradient(135deg, #bdbdbd 60%, #e0e0e0 100%);
-  border-radius: 12px;
-  min-height: 32px;
-  border: 2px solid #f3f4f6;
-  box-shadow: 0 2px 8px 0 rgba(189, 189, 189, 0.18);
-  transition: background 0.2s;
+  background: rgba(0, 0, 0, 0.18);
+  border-radius: 9999px;
+  transition: background 0.2s ease;
 }
 
 .modern-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(135deg, #9e9e9e 60%, #bdbdbd 100%);
+  background: rgba(16, 125, 254, 0.6);
+}
+
+/* === Modern Component Scrollbar (Dark / Purple / Accent Cards) === */
+.modern-scrollbar-dark {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+}
+
+.modern-scrollbar-dark::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+  background: transparent;
+}
+
+.modern-scrollbar-dark::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.modern-scrollbar-dark::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 9999px;
+  transition: background 0.2s ease;
+}
+
+.modern-scrollbar-dark::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.6);
 }
 
 /* === Blog Content Custom Styling === */

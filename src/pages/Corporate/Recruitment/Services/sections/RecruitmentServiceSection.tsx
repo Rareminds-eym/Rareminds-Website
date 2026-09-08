@@ -67,7 +67,7 @@ const RecruitmentServiceSection: React.FC<RecruitmentServiceSectionProps> = ({
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.7 }}
-            className="text-3xl md:text-5xl font-bold text-corporate-black mb-6 drop-shadow-lg"
+            className="text-3xl md:text-5xl font-bold text-corporate-black mb-6"
           >
             {foundService.title}
           </motion.h1>

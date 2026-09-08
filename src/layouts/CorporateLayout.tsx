@@ -11,11 +11,11 @@ interface CorporateLayoutProps {
 const CorporateLayout: React.FC<CorporateLayoutProps> = ({ children }) => {
   usePageTracking();
   return (
-    <div className="flex h-screen flex-col">
+    <div className="flex min-h-screen flex-col">
       {/* Use CorporateHeader for vertical-specific navigation */}
       <CorporateHeader />
 
-      <main className="flex-1 mt-[80px]">{children}</main>
+      <main className="flex-1 mt-[80px] min-h-[85vh]">{children}</main>
       {/* <FAQChatbot /> */}
       <FloatingActionMenu />
       {/* Optional: include FooterBar if needed */}

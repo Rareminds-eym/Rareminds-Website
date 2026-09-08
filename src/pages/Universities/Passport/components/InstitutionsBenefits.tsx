@@ -317,8 +317,7 @@ export default function InstitutionsBenefits() {
               </div>
             </div>
 
-            {/* 🔹 Added white text shadow for clarity */}
-            <p className="text-[#2c3e50] font-semibold text-[15px] leading-snug mr-5 drop-shadow-[0_2px_6px_rgba(255,255,255,0.9)]">
+            <p className="text-[#2c3e50] font-semibold text-[15px] leading-snug mr-5">
               {title}
             </p>
           </div>
@@ -335,7 +334,7 @@ export default function InstitutionsBenefits() {
             <div className="inline-flex items-center justify-center h-11 w-11 rounded-xl bg-red-50 text-[#E32A18]">
               <Icon className="h-6 w-6" />
             </div>
-            <p className="text-[#2c3e50] font-semibold text-[15px] leading-snug drop-shadow-[0_2px_6px_rgba(255,255,255,0.9)]">
+            <p className="text-[#2c3e50] font-semibold text-[15px] leading-snug">
               {title}
             </p>
           </div>

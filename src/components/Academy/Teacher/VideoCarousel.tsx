@@ -202,14 +202,14 @@ const TestimonialVideoCarousel = () => {
                     
                     {/* Name Label */}
                     <div className="text-white relative z-10">
-                      <div className="text-sm font-light tracking-wide opacity-90 drop-shadow-lg">
+                      <div className="text-sm font-light tracking-wide opacity-90">
                         {testimonial.role}
                       </div>
                     </div>
                     
                     {/* Content */}
                     <div className="text-white text-center relative z-10">
-                      <p className="text-lg leading-relaxed font-light drop-shadow-lg">
+                      <p className="text-lg leading-relaxed font-light">
                         "{testimonial.content}"
                       </p>
                     </div>

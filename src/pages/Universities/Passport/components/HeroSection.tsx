@@ -431,7 +431,7 @@ const HeroSection = ({ onDemoClick }: { onDemoClick: () => void }) => {
                     ? "auto"
                     : "auto",
                 }}
-                className={`font-extrabold leading-snug md:leading-tight mb-6 tracking-tight text-black drop-shadow-md ${
+                className={`font-extrabold leading-snug md:leading-tight mb-6 tracking-tight text-black ${
                   isMobile
                     ? "text-center"
                     : currentSlide.align === "left"
@@ -498,8 +498,8 @@ const HeroSection = ({ onDemoClick }: { onDemoClick: () => void }) => {
                 setSubmitted(true);
                 // Start download after successful submit
                 const link = document.createElement('a');
-                link.href = '/path/to/your/file.pdf'; // Replace with actual file path
-                link.download = 'SkillPassport-Brochure.pdf'; // Replace with actual filename
+                link.href = '/institutions/pdfs/Brochure.pdf';
+                link.download = 'SkillPassport-Brochure.pdf';
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);

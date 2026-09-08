@@ -79,9 +79,9 @@ const BlogDetail = () => {
   
   // Determine which subcategory to fetch based on URL path
   const getSubcategoryFromPath = () => {
-    if (location.pathname.includes("/institution/sdp/blogs")) {
+    if (location.pathname.includes("/universities/sdp/blogs") || location.pathname.includes("/institutions/sdp/blogs") || location.pathname.includes("/institution/sdp/blogs")) {
       return "SDP";
-    } else if (location.pathname.includes("/institution/fdp/blogs")) {
+    } else if (location.pathname.includes("/universities/fdp/blogs") || location.pathname.includes("/institutions/fdp/blogs") || location.pathname.includes("/institution/fdp/blogs")) {
       return "FDP";
     }
     return null;
@@ -321,7 +321,7 @@ const BlogDetail = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between">
             <Link
-              to={location.pathname.includes("/institutions/blogs") ? "/institutions/sdp/blogs" : "/institutions/fdp/blogs"}
+              to={location.pathname.includes("/fdp/blogs") ? "/universities/fdp/blogs" : "/universities/sdp/blogs"}
               className="inline-flex items-center gap-2 text-gray-600 hover:text-red-500 transition-colors group"
             >
               <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />

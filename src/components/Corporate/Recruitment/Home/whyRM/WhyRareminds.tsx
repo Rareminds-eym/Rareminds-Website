@@ -134,10 +134,10 @@ const WhyRareminds = () => {
             <div className="bg-corporate-black text-white w-16 h-16 rounded-[25px] mx-auto mb-4 flex items-center justify-center transform rotate-6">
               <ShieldCheck size={32} />
             </div>
-            <h2 className="text-3xl md:text-5xl font-bold mb-4 bg-clip-text text-transparent bg-corporate-black">
+            <h2 className="text-3xl md:text-5xl font-bold mb-4 text-corporate-black">
               Trusted. Proven. Scalable.
             </h2>
-            <p className="text-corporate-grey max-w-3xl mx-auto">
+            <p className="text-corporate-grey max-w-3xl mx-auto text-lg">
               We blend human expertise with data-driven insights to deliver
               recruitment that's trusted, proven, and scalable.
             </p>
