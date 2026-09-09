@@ -105,6 +105,7 @@
     "ts-node": "^10.9.2",
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.8.3",
+    "supabase": "2.109.1",
     "vite": "^6.3.5",
     "wrangler": "^4.101.0"
   },
