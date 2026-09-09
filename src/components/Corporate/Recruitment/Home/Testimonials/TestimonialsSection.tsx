@@ -75,6 +75,10 @@ const TestimonialsSection = () => {
 								<img
 									src={testimonial.img}
 									alt={`${testimonial.company} logo`}
+									width={index === 0 || index === 2 ? 150 : 56}
+									height={56}
+									loading="lazy"
+									decoding="async"
 									className={`h-14 object-contain bg-white ${
 										index === 0 || index === 2 ? "w-[150px]" : "w-14"
 									}`}

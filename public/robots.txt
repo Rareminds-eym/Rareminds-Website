@@ -1,0 +1,25 @@
+User-agent: *
+Allow: /
+
+# Explicitly allow AI agents and crawlers for agentic browsing
+User-agent: GPTBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+# Sitemap
+Sitemap: https://rareminds.in/sitemap.xml
+
+# LLM / AI Documentation Discovery
+# See https://llmstxt.org/
+# LLMs-txt: https://rareminds.in/llms.txt

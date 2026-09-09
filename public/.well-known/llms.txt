@@ -1,0 +1,32 @@
+# Rareminds
+
+> Rareminds provides comprehensive end-to-end recruitment solutions, executive search, campus hiring, training, and university programs across India and globally.
+
+Rareminds bridges the gap between industry and academia, offering tailored talent acquisition services, technical hiring, leadership search, behavioral and psychometric assessments, faculty development programs, and enterprise workforce scaling.
+
+## Recruitment Services
+
+- [Corporate Recruitment Overview](https://rareminds.in/corporate/recruitment): Scalable, data-driven corporate recruitment solutions trusted by 250+ clients worldwide.
+- [Technical Hiring](https://rareminds.in/corporate/recruitment/services/technical-hiring): Specialized tech recruitment for top developers, engineers, and IT specialists.
+- [Bulk Hiring](https://rareminds.in/corporate/recruitment/services/bulk-hiring): High-volume recruiting solutions for fast-paced growth sectors.
+- [Leadership Hiring](https://rareminds.in/corporate/recruitment/services/leadership-hiring): Executive search and CXO hiring for transformation-driven enterprises.
+- [Behavioral & Culture Fit Assessments](https://rareminds.in/corporate/recruitment/services/behavioral-culture-fit-assessments): Scientific evaluations to assess team alignment and organizational culture fit.
+- [Project-Based Hiring](https://rareminds.in/corporate/recruitment/services/project-based-hiring): Agile staffing and contract recruitment solutions tailored for project timelines.
+- [RPO Services](https://rareminds.in/corporate/recruitment/services/rpo-services): Comprehensive Recruitment Process Outsourcing managing end-to-end hiring funnels.
+- [Campus Hiring](https://rareminds.in/corporate/recruitment/services/campus-hiring): Pan-India campus talent acquisition drives connecting enterprises with high-caliber graduates.
+- [Psychometric Testing](https://rareminds.in/corporate/recruitment/services/psychometric-testing): Cognitive, aptitude, and personality assessments powering objective talent decisions.
+- [Diversity Hiring](https://rareminds.in/corporate/recruitment/services/diversity-hiring): Inclusive talent sourcing and placement strategies supporting organizational DEI objectives.
+- [Talent Mapping](https://rareminds.in/corporate/recruitment/services/talent-mapping): Market intelligence, competitor bench insights, and strategic talent landscape research.
+- [Interview-as-a-Service](https://rareminds.in/corporate/recruitment/services/interview-as-a-service): On-demand expert technical panels conducting structured, bias-free candidate interviews.
+- [Pre-Onboarding Support](https://rareminds.in/corporate/recruitment/services/pre-onboarding-support): Continuous candidate engagement ensuring high offer-to-joining ratios.
+
+## Higher Education & University Programs
+
+- [Universities & Institutional Services](https://rareminds.in/universities): Industry-aligned institutional training, employability enhancement, and campus placements.
+- [Faculty Development Programs (FDP)](https://rareminds.in/universities/fdp): Professional development programs upskilling higher education faculty and researchers.
+- [Academy Programs](https://rareminds.in/academy): Student certification and career transition pathways.
+
+## Optional
+
+- [About Rareminds](https://rareminds.in/about): Company background, leadership team, and organizational mission.
+- [Contact Rareminds](https://rareminds.in/contact): Get in touch with our recruitment consultants and institutional program advisors.
