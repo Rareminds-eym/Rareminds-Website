@@ -197,6 +197,8 @@ const ServicesSection = () => {
                         className="w-auto"
                         width="384"
                         height={230}
+                        loading="lazy"
+                        decoding="async"
                       />
                     </div>
                   </div>

@@ -110,6 +110,8 @@ const TeamSection = () => {
                   <img
                     src={member.photo}
                     alt={member.name}
+                    width={250}
+                    height={350}
                     loading="lazy"
                     decoding="async"
                     className="grayscale group-hover:grayscale-0 transition-all duration-300 group-hover:scale-110"

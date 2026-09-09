@@ -47,7 +47,7 @@ const LogoCarousel: React.FC<LogoCarouselProps> = ({ logos }) => (
             <div className="flex justify-center">
               <img
                 src={`https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Corporate/Recruitment/Index/ClientLogos/${logo}`}
-                alt={`logo-${index}`}
+                alt={`${logo.replace(/\.[^/.]+$/, "").replace(/[-_]/g, " ")} logo`}
                 loading="lazy"
                 decoding="async"
                 height={40}
