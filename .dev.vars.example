@@ -2,3 +2,7 @@
 # Copy to .dev.vars and provide local values. Never prefix these with VITE_.
 SUPABASE_URL=https://your-project.supabase.co
 SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
+
+# Optional: event registration webhook for Zoho CRM integration.
+# Leave unset to skip forwarding; set your actual webhook URL to enable it.
+# ZOHO_FLOW_WEBHOOK_URL=https://flow.zoho.com/api/webhooks/trigger/your-webhook
