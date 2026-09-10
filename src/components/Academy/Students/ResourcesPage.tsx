@@ -186,13 +186,13 @@ const resources: Resource[] = [
 
 </div>
     {/* Button */}
-    <a
-  href="#"
-  onClick={e => { e.preventDefault(); handleDownloadClick(resources[0]); }}
+    <button
+  type="button"
+  onClick={() => handleDownloadClick(resources[0])}
   className="w-[160px] absolute bottom-2 right-2 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded text-center"
 >
   Download PDF
-</a>
+</button>
   </div>
 
   <div className="relative w-[300px] h-[auto] rounded-md overflow-hidden">
@@ -218,13 +218,13 @@ const resources: Resource[] = [
 
 </div>
     {/* Button */}
-    <a
-  href="#"
-  onClick={e => { e.preventDefault(); handleDownloadClick(resources[1]); }}
+    <button
+  type="button"
+  onClick={() => handleDownloadClick(resources[1])}
   className="w-[160px] absolute bottom-2 right-2 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded text-center"
 >
   Download PDF
-</a>
+</button>
   </div>
 
 
@@ -269,13 +269,13 @@ const resources: Resource[] = [
 
 </div>
     {/* Button */}
-    <a
-  href="#"
-  onClick={e => { e.preventDefault(); handleDownloadClick(resources[2]); }}
+    <button
+  type="button"
+  onClick={() => handleDownloadClick(resources[2])}
   className="w-[160px] absolute bottom-2 right-2 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded text-center"
 >
   Download PDF
-</a>
+</button>
   </div>
 
 
@@ -316,13 +316,13 @@ const resources: Resource[] = [
 
 </div>
     {/* Button */}
-    <a
-  href="#"
-  onClick={e => { e.preventDefault(); handleDownloadClick(resources[3]); }}
+    <button
+  type="button"
+  onClick={() => handleDownloadClick(resources[3])}
   className="w-[160px] absolute bottom-2 right-2 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded text-center"
 >
   Download PDF
-</a>
+</button>
   </div>
   </div>
 </div>
@@ -337,6 +337,7 @@ const resources: Resource[] = [
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4">
           <div className="bg-white rounded-lg shadow-lg max-w-md w-full p-6 relative">
             <button
+              type="button"
               onClick={() => { setModalOpen(false); setDownloadReady(false); }}
               className="absolute top-2 right-2 text-gray-600 hover:text-gray-900"
               aria-label="Close modal"

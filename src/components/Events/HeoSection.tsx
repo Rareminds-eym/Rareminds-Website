@@ -66,8 +66,6 @@ const WebinarSection: React.FC<HeroSectionProps> = ({
       const phone = formData.phone || formData.mobile || formData.phone_number || formData.phoneNumber || formData.mobileNumber || formData.mobile_number || '';
       const organization = formData.organization || formData.company || formData.university || formData.institution_university_name || '';
 
-      console.log('[Registration] Attempt:', JSON.stringify({ eventId, name, email, phone, organization, eventType }));
-
       // Find email field dynamically if standard field names don't match
       if (!email) {
         const emailKey = Object.keys(formData).find(key => 
@@ -97,21 +95,17 @@ const WebinarSection: React.FC<HeroSectionProps> = ({
       });
       const isPaidEvent = registration.payment_status === 'pending';
 
-      console.log('[Registration] Saved through BFF:', { id: registration.id, eventId, email: finalEmail });
-
       // Store form answers for later use in worker call
       setFormAnswers(formData);
 
       if (isPaidEvent) {
         if (!registration.payment_token) throw new Error('Payment authorization was not issued.');
-        console.log('[Registration] Paid event, showing payment modal:', { registrationId: registration.id, name, email: finalEmail });
         setRegistrationId(registration.id);
         setPaymentAmount(registration.total_amount);
         setPaymentToken(registration.payment_token);
         setUserDetails({ name, email: finalEmail, phone });
         setShowPaymentModal(true);
       } else {
-        console.log('[Registration] Free event, sending to Zoho worker');
         await sendRegistrationToWorker(null, formData);
 
         trackEvent(ANALYTICS_EVENTS.EVENT_REGISTRATION_SUCCESS, {
@@ -193,8 +187,6 @@ const WebinarSection: React.FC<HeroSectionProps> = ({
     }
 
     try {
-      console.log('[Registration] Payment persisted by BFF:', { paymentId: paymentDetails.razorpay_payment_id, orderId: paymentDetails.order_id, registrationId });
-
       // Send registration data to worker for Zoho CRM integration
       await sendRegistrationToWorker(paymentDetails.razorpay_payment_id, formAnswers ?? undefined);
 
@@ -243,15 +235,6 @@ const WebinarSection: React.FC<HeroSectionProps> = ({
   const sendRegistrationToWorker = async (paymentId: string | null, answers?: Record<string, any>) => {
     try {
       const finalAnswers = answers ?? formAnswers ?? {};
-      console.log('[Registration] Sending to /api/register:', JSON.stringify({
-        eventId,
-        formId,
-        eventType,
-        eventName,
-        paymentId,
-        answerKeys: Object.keys(finalAnswers),
-        answerCount: Object.keys(finalAnswers).length
-      }));
 
       const payload = {
         answers: finalAnswers,
@@ -275,8 +258,7 @@ const WebinarSection: React.FC<HeroSectionProps> = ({
         const errorData = await response.json().catch(() => ({}));
         console.error('[Registration] /api/register failed:', { status: response.status, error: errorData });
       } else {
-        const responseData = await response.json().catch(() => ({}));
-        console.log('[Registration] /api/register success:', responseData);
+        await response.json().catch(() => ({}));
       }
     } catch (error) {
       console.error('[Registration] /api/register network error:', error);
