@@ -46,7 +46,7 @@ const IndustriesSection = () => {
         transition={{ duration: 0.5, delay: 0.2 }}
         className="my-10 text-center flex justify-center"
       >
-        <button onClick={scrollToCaseStudies} className="corporate-btn-1">
+        <button type="button" onClick={scrollToCaseStudies} className="corporate-btn-1">
           See Our Impact Stories{" "}
           <Icon
             icon="cil:arrow-right"

@@ -1,0 +1,4 @@
+# Server-only variables for `wrangler pages dev`.
+# Copy to .dev.vars and provide local values. Never prefix these with VITE_.
+SUPABASE_URL=https://your-project.supabase.co
+SUPABASE_SERVICE_ROLE_KEY=your_service_role_key

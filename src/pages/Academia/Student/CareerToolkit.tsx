@@ -216,7 +216,7 @@ const CareerToolkit = () => {
           className="relative overflow-hidden rounded-2xl"
         >
           <div className="absolute inset-0 bg-gradient-to-br from-red-900 to-red-600 opacity-90"></div>
-          <div className="absolute inset-0 bg-[url('/career-pattern.svg')] opacity-10"></div>
+          <div className="absolute inset-0 opacity-10 [background-image:radial-gradient(circle_at_center,white_1px,transparent_1px)] [background-size:24px_24px]"></div>
           <div className="absolute top-0 right-0 w-64 h-64 bg-red-500/20 rounded-full filter blur-3xl"></div>
           <div className="absolute bottom-0 left-1/4 w-64 h-64 bg-red-800/30 rounded-full filter blur-3xl"></div>
           

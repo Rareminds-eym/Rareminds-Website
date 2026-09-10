@@ -160,11 +160,21 @@ const ServicesSection = () => {
               key={index}
             >
               <div className="relative h-[230px]">
-                <Link to={`/corporate/recruitment/services/${service.link}`}>
+                <Link
+                  to={`/corporate/recruitment/services/${service.link}`}
+                  aria-label={`Learn more about ${service.title} services`}
+                >
                   <div className="mx-auto w-max relative group">
                     <div className="absolute flex items-center top-1/2 left-1/2 -translate-x-1/2 w-max group-hover:top-0 group-hover:left-0 group-hover:translate-x-0 group-hover:translate-y-0 transition-all duration-300">
-                      <div className="h-[50px] w-[50px] group-hover:h-[42px] group-hover:w-[42px] p-2 bg-corporate-yellow rounded-[15px] transition-all duration-300">
-                        <img src={service.icon} />
+                      <div className="h-[50px] w-[50px] group-hover:h-[42px] group-hover:w-[42px] p-2 bg-corporate-yellow rounded-[15px] transition-all duration-300 flex items-center justify-center">
+                        <img
+                          src={service.icon}
+                          alt={`${service.title} icon`}
+                          width={34}
+                          height={34}
+                          loading="lazy"
+                          decoding="async"
+                        />
                       </div>
                       <h3 className="ml-3 font-semibold text-lg max-w-[225px] leading-5 text-center group-hover:text-left transition-all duration-300">
                         {service.title}
@@ -187,6 +197,8 @@ const ServicesSection = () => {
                         className="w-auto"
                         width="384"
                         height={230}
+                        loading="lazy"
+                        decoding="async"
                       />
                     </div>
                   </div>

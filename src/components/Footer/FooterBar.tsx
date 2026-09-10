@@ -532,8 +532,10 @@ const FooterBar: React.FC<FooterBarProps> = ({ hideServices }) => {
 						className="space-y-3"
 					>
 						<input
+							id="newsletter-email"
 							type="email"
 							placeholder="Email address"
+							aria-label="Email address for newsletter"
 							className="p-3 w-full bg-rareminds-dark/50 border border-red-400/30 text-black rounded focus:outline-none focus:ring-2 focus:ring-red-500"
 							onChange={(e) => {
 								setSuccessMessage(null);

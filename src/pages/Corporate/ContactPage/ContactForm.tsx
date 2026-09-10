@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { Send, Mail, PenTool } from "lucide-react";
 import { supabase } from "@/lib/supabaseClient";
 import { useToast } from "@/hooks/use-toast";
+import { sendEmailNotification } from "@/services/emailBff";
 
 interface FormData {
   fullName: string;
@@ -73,15 +74,7 @@ const ContactForm: React.FC = () => {
 
       if (dbError) throw dbError;
 
-      // Send email notification
-      const { error: functionError } = await supabase.functions.invoke(
-        "send-contact-email",
-        {
-          body: { record: data },
-        }
-      );
-
-      if (functionError) throw functionError;
+      await sendEmailNotification("corporate-contact", data as Record<string, unknown>);
 
       toast({
         title: "Message Sent!",
@@ -183,7 +176,9 @@ const ContactForm: React.FC = () => {
                 <div className="space-y-4">
                   <div className="flex flex-wrap items-center gap-x-2 gap-y-3 text-gray-700 leading-relaxed">
                     <span>I am</span>
+                    <label className="sr-only" htmlFor="corporate-contact-full-name">Full name</label>
                     <input
+                      id="corporate-contact-full-name"
                       type="text"
                       name="fullName"
                       value={formData.fullName}
@@ -193,7 +188,9 @@ const ContactForm: React.FC = () => {
                       placeholder="your name"
                     />
                     <span>, working as a</span>
+                    <label className="sr-only" htmlFor="corporate-contact-job-title">Job title</label>
                     <input
+                      id="corporate-contact-job-title"
                       type="text"
                       name="jobTitle"
                       value={formData.jobTitle}
@@ -203,7 +200,9 @@ const ContactForm: React.FC = () => {
                       placeholder="your role"
                     />
                     <span>at</span>
+                    <label className="sr-only" htmlFor="corporate-contact-company">Company</label>
                     <input
+                      id="corporate-contact-company"
                       type="text"
                       name="company"
                       value={formData.company}
@@ -217,7 +216,9 @@ const ContactForm: React.FC = () => {
 
                   <div className="flex flex-wrap items-center gap-x-2 gap-y-3 text-gray-700 leading-relaxed">
                     <span>Reach me at</span>
+                    <label className="sr-only" htmlFor="corporate-contact-email">Email</label>
                     <input
+                      id="corporate-contact-email"
                       type="email"
                       name="email"
                       value={formData.email}
@@ -227,7 +228,9 @@ const ContactForm: React.FC = () => {
                       placeholder="your.email@domain.com"
                     />
                     <span>, or at</span>
+                    <label className="sr-only" htmlFor="corporate-contact-phone">Phone</label>
                     <input
+                      id="corporate-contact-phone"
                       type="tel"
                       name="phone"
                       value={formData.phone}
@@ -243,7 +246,9 @@ const ContactForm: React.FC = () => {
                 <div className="mt-6 space-y-3">
                   <p className="text-gray-700 font-medium">Here's what I'd like to share:</p>
                   <div className="relative">
+                    <label className="sr-only" htmlFor="corporate-contact-message">Message</label>
                     <textarea
+                      id="corporate-contact-message"
                       name="message"
                       value={formData.message}
                       onChange={handleChange}

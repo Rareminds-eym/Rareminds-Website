@@ -27,8 +27,6 @@ const caseStudies = [
   },
 ];
 
-// Use correct API base URL for dev/prod
-const API_BASE_URL ="https://rareminds.in";
 
 
 export default function CaseStudies() {
@@ -45,7 +43,7 @@ const sendEmail = async (
   pdfUrl: string,
   institution: string
 ) => {
-  const response = await fetch(`${API_BASE_URL}/api/send-pdf`, {
+  const response = await fetch('/api/send-pdf', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ name, email, pdfUrl, institution }),

@@ -220,6 +220,10 @@ const CaseStudy = () => {
   // const navigate = useNavigate();
 
 
+  useEffect(() => {
+    if (caseStudy) window.scrollTo(0, 0);
+  }, [caseStudy]);
+
   if (!caseStudy) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-100">
@@ -232,11 +236,6 @@ const CaseStudy = () => {
       </div>
     );
   }
-
-
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
   return (
     <div className="min-h-screen bg-gray-50">
       <Helmet>

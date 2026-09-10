@@ -1057,10 +1057,10 @@ const EventDetail: React.FC = () => {
                             <h2 className="rm-section-title">{speakersList.length === 1 ? 'Speaker' : 'Speakers'}</h2>
                             {speakersList.length > 1 && (
                               <div className="flex items-center gap-3">
-                                <button aria-label="Previous" onClick={() => scrollSpeakers('left')} className="w-10 h-10 rounded-full bg-white border border-gray-200 flex items-center justify-center text-slate-700 hover:bg-slate-50 shadow-sm">
+                                <button type="button" aria-label="Previous" onClick={() => scrollSpeakers('left')} className="w-10 h-10 rounded-full bg-white border border-gray-200 flex items-center justify-center text-slate-700 hover:bg-slate-50 shadow-sm">
                                   <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" /></svg>
                                 </button>
-                                <button aria-label="Next" onClick={() => scrollSpeakers('right')} className="w-10 h-10 rounded-full bg-white border border-gray-200 flex items-center justify-center text-slate-700 hover:bg-slate-50 shadow-sm">
+                                <button type="button" aria-label="Next" onClick={() => scrollSpeakers('right')} className="w-10 h-10 rounded-full bg-white border border-gray-200 flex items-center justify-center text-slate-700 hover:bg-slate-50 shadow-sm">
                                   <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" /></svg>
                                 </button>
                               </div>
@@ -1080,7 +1080,7 @@ const EventDetail: React.FC = () => {
                                         <h3 className="text-base font-bold text-slate-900 leading-tight">{spk.name}</h3>
                                         <p className="text-[#5B6CF6] text-sm font-medium mt-0.5">{spk.title}</p>
                                         {spk.linkedIn && (
-                                          <button className="mt-2 w-8 h-8 rounded-full bg-[#0A66C2] flex items-center justify-center hover:brightness-110 transition-all shadow-sm" onClick={() => window.open(spk.linkedIn, '_blank')} aria-label="View LinkedIn profile">
+                                          <button type="button" className="mt-2 w-8 h-8 rounded-full bg-[#0A66C2] flex items-center justify-center hover:brightness-110 transition-all shadow-sm" onClick={() => window.open(spk.linkedIn, '_blank')} aria-label="View LinkedIn profile">
                                             <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" /></svg>
                                           </button>
                                         )}
@@ -1108,9 +1108,9 @@ const EventDetail: React.FC = () => {
                                         </div>
                                         {spk.linkedIn && (
                                           <div className="absolute right-3 top-3">
-                                            <div className="w-10 h-10 rounded-full flex items-center justify-center cursor-pointer bg-[#0A66C2] hover:brightness-110 shadow-md" onClick={() => window.open(spk.linkedIn, '_blank')} aria-label="View LinkedIn profile" role="button">
+                                            <button type="button" className="w-10 h-10 rounded-full flex items-center justify-center cursor-pointer bg-[#0A66C2] hover:brightness-110 shadow-md" onClick={() => window.open(spk.linkedIn, '_blank')} aria-label="View LinkedIn profile">
                                               <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" /></svg>
-                                            </div>
+                                            </button>
                                           </div>
                                         )}
                                       </div>
@@ -1147,15 +1147,17 @@ const EventDetail: React.FC = () => {
                           <div className={`${showAllGallery ? 'max-h-[700px] overflow-y-auto pr-2 custom-scrollbar' : ''}`}>
                             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6">
                               {(showAllGallery ? galleryItems : galleryItems.slice(0, Math.min(isMobile ? 4 : 10, galleryItems.length))).map((image, id) => (
-                                <div
+                                <button
+                                  type="button"
                                   key={id}
+                                  aria-label={`View event gallery image ${id + 1}`}
                                   className="relative group cursor-pointer overflow-hidden rounded-2xl transition-all duration-300 transform hover:scale-105 ring-1 ring-gray-200/50"
                                   onClick={() => handleGalleryImageClick(image)}
                                 >
                                   <div className="aspect-square">
                                     <img
                                       src={image}
-                                      alt={`Event gallery image ${id + 1}`}
+                                      alt={`Event gallery ${id + 1}`}
                                       className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
                                       onError={(e) => {
                                         (e.target as HTMLImageElement).src = '/api/placeholder/400/400';
@@ -1167,7 +1169,7 @@ const EventDetail: React.FC = () => {
                                       View Full Size
                                     </span>
                                   </div>
-                                </div>
+                                </button>
                               ))}
                             </div>
                           </div>
@@ -1175,6 +1177,7 @@ const EventDetail: React.FC = () => {
                           {(isMobile ? galleryItems.length > 4 : galleryItems.length > 10) && (
                             <div className="mt-6 text-center">
                               <button
+                                type="button"
                                 aria-expanded={showAllGallery}
                                 onClick={() => setShowAllGallery(prev => !prev)}
                                 className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-2xl hover:from-blue-600 hover:to-indigo-600 transition-all duration-300 transform hover:scale-105"
@@ -1304,8 +1307,8 @@ const EventDetail: React.FC = () => {
                             <h2 className="rm-section-title">{speakersList.length === 1 ? 'Speaker' : 'Speakers'}</h2>
                             {speakersList.length > 1 && (
                               <div className="flex items-center gap-3">
-                                <button aria-label="Previous" onClick={() => scrollSpeakers('left')} className="w-10 h-10 rounded-full bg-white border border-gray-200 flex items-center justify-center text-slate-700 hover:bg-slate-50 shadow-sm"><svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" /></svg></button>
-                                <button aria-label="Next" onClick={() => scrollSpeakers('right')} className="w-10 h-10 rounded-full bg-white border border-gray-200 flex items-center justify-center text-slate-700 hover:bg-slate-50 shadow-sm"><svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" /></svg></button>
+                                <button type="button" aria-label="Previous" onClick={() => scrollSpeakers('left')} className="w-10 h-10 rounded-full bg-white border border-gray-200 flex items-center justify-center text-slate-700 hover:bg-slate-50 shadow-sm"><svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" /></svg></button>
+                                <button type="button" aria-label="Next" onClick={() => scrollSpeakers('right')} className="w-10 h-10 rounded-full bg-white border border-gray-200 flex items-center justify-center text-slate-700 hover:bg-slate-50 shadow-sm"><svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" /></svg></button>
                               </div>
                             )}
                           </div>
@@ -1322,7 +1325,7 @@ const EventDetail: React.FC = () => {
                                         <h3 className="text-base font-bold text-slate-900 leading-tight">{spk.name}</h3>
                                         <p className="text-[#5B6CF6] text-sm font-medium mt-0.5">{spk.title}</p>
                                         {spk.linkedIn && (
-                                          <button className="mt-2 w-8 h-8 rounded-full bg-[#0A66C2] flex items-center justify-center hover:brightness-110 transition-all shadow-sm" onClick={() => window.open(spk.linkedIn, '_blank')} aria-label="View LinkedIn profile">
+                                          <button type="button" className="mt-2 w-8 h-8 rounded-full bg-[#0A66C2] flex items-center justify-center hover:brightness-110 transition-all shadow-sm" onClick={() => window.open(spk.linkedIn, '_blank')} aria-label="View LinkedIn profile">
                                             <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" /></svg>
                                           </button>
                                         )}
@@ -1349,9 +1352,9 @@ const EventDetail: React.FC = () => {
                                         </div>
                                         {spk.linkedIn && (
                                           <div className="absolute right-3 top-3">
-                                            <div className="w-10 h-10 rounded-full flex items-center justify-center cursor-pointer bg-[#0A66C2] hover:brightness-110 shadow-md" onClick={() => window.open(spk.linkedIn, '_blank')} aria-label="View LinkedIn profile" role="button">
+                                            <button type="button" className="w-10 h-10 rounded-full flex items-center justify-center cursor-pointer bg-[#0A66C2] hover:brightness-110 shadow-md" onClick={() => window.open(spk.linkedIn, '_blank')} aria-label="View LinkedIn profile">
                                               <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" /></svg>
-                                            </div>
+                                            </button>
                                           </div>
                                         )}
                                       </div>
@@ -1383,20 +1386,20 @@ const EventDetail: React.FC = () => {
                           <div className={`${showAllGallery ? 'max-h-[700px] overflow-y-auto pr-2 custom-scrollbar' : ''}`}>
                             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6">
                               {(showAllGallery ? galleryItems : galleryItems.slice(0, Math.min(isMobile ? 4 : 10, galleryItems.length))).map((image, id) => (
-                                <div key={id} className="relative group cursor-pointer overflow-hidden rounded-2xl transition-all duration-300 transform hover:scale-105 ring-1 ring-gray-200/50" onClick={() => handleGalleryImageClick(image)}>
+                                <button type="button" key={id} aria-label={`View event gallery image ${id + 1}`} className="relative group cursor-pointer overflow-hidden rounded-2xl transition-all duration-300 transform hover:scale-105 ring-1 ring-gray-200/50" onClick={() => handleGalleryImageClick(image)}>
                                   <div className="aspect-square">
-                                    <img src={image} alt={`Event gallery image ${id + 1}`} className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110" onError={(e) => { (e.target as HTMLImageElement).src = '/api/placeholder/400/400'; }} />
+                                    <img src={image} alt={`Event gallery ${id + 1}`} className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110" onError={(e) => { (e.target as HTMLImageElement).src = '/api/placeholder/400/400'; }} />
                                   </div>
                                   <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-2">
                                     <span className="text-white text-xs font-medium bg-black/30 px-2.5 py-1 rounded-full backdrop-blur-sm">View Full Size</span>
                                   </div>
-                                </div>
+                                </button>
                               ))}
                             </div>
                           </div>
                           {(isMobile ? galleryItems.length > 4 : galleryItems.length > 10) && (
                             <div className="mt-6 text-center">
-                              <button aria-expanded={showAllGallery} onClick={() => setShowAllGallery(prev => !prev)} className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-2xl hover:from-blue-600 hover:to-indigo-600 transition-all duration-300 transform hover:scale-105">
+                              <button type="button" aria-expanded={showAllGallery} onClick={() => setShowAllGallery(prev => !prev)} className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-2xl hover:from-blue-600 hover:to-indigo-600 transition-all duration-300 transform hover:scale-105">
                                 {showAllGallery ? 'Show Less' : (isMobile ? 'View More' : `View All ${galleryItems.length} Images`)}
                                 <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
                               </button>

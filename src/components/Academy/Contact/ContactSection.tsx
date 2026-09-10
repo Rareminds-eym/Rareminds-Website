@@ -14,6 +14,7 @@ import {
 import { Icon } from "@iconify/react";
 import { useToast } from "@/hooks/use-toast";
 import { useLocation } from "react-router-dom";
+import { sendEmailNotification } from "@/services/emailBff";
 
 const AcademyContactSection = () => {
   const location = useLocation();
@@ -63,24 +64,10 @@ const AcademyContactSection = () => {
         throw error;
       }
 
-      // Call Supabase Edge Function for email notification
-      const emailResponse = await fetch(
-        'https://itvhjkgfafikpqmuunlh.supabase.co/functions/v1/super-handler',
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
-          },
-          body: JSON.stringify({
-            record: submission // Your function expects a 'record' property
-          }),
-        }
-      );
-      if (!emailResponse.ok) {
-        const errorData = await emailResponse.json();
-        console.error('Email function error:', errorData);
-        // Optional: Log this error to your error tracking system
+      try {
+        await sendEmailNotification('academy-enquiry', submission);
+      } catch (emailError) {
+        console.error('Email notification error:', emailError);
       }
 
       toast({

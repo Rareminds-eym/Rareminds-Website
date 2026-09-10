@@ -456,6 +456,7 @@ const HeroSection = ({ onDemoClick }: { onDemoClick: () => void }) => {
                 transition={{ delay: 0.4, duration: 0.8 }}
               >
                 <button
+                  type="button"
                   onClick={onDemoClick}
                   className="bg-[#E32A18] hover:bg-[#cc2515] px-6 sm:px-8 py-3 sm:py-3.5 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center gap-2 shadow-lg text-white w-full sm:w-auto"
                 >
@@ -463,6 +464,7 @@ const HeroSection = ({ onDemoClick }: { onDemoClick: () => void }) => {
                 </button>
 
                 <button
+                  type="button"
                   onClick={() => setShowForm(true)}
                   className="bg-white hover:bg-gray-50 border-2 border-[#E32A18] text-[#E32A18] hover:text-[#cc2515] px-6 sm:px-8 py-3 sm:py-3.5 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center gap-2 shadow-lg w-full sm:w-auto"
                 >
@@ -520,27 +522,27 @@ const HeroSection = ({ onDemoClick }: { onDemoClick: () => void }) => {
             </button>
             <div className="flex flex-col sm:flex-row gap-4 mb-4">
               <div className="flex-1">
-                <label className="block text-gray-700 font-semibold mb-2">Full Name</label>
-                <input type="text" name="name" value={form.name} onChange={handleChange} placeholder="Full Name" className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E32A18] text-black bg-white" />
+                <label htmlFor="passport-name" className="block text-gray-700 font-semibold mb-2">Full Name</label>
+                <input id="passport-name" type="text" name="name" value={form.name} onChange={handleChange} placeholder="Full Name" className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E32A18] text-black bg-white" />
               </div>
               <div className="flex-1">
-                <label className="block text-gray-700 font-semibold mb-2">University Name</label>
-                <input type="text" name="company" value={form.company} onChange={handleChange} placeholder="University Name" className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E32A18] text-black bg-white" />
+                <label htmlFor="passport-university" className="block text-gray-700 font-semibold mb-2">University Name</label>
+                <input id="passport-university" type="text" name="company" value={form.company} onChange={handleChange} placeholder="University Name" className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E32A18] text-black bg-white" />
               </div>
             </div>
             <div className="flex flex-col sm:flex-row gap-4 mb-4">
               <div className="flex-1">
-                <label className="block text-gray-700 font-semibold mb-2">Email Address</label>
-                <input type="email" name="email" value={form.email} onChange={handleChange} placeholder="name@university.com" className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E32A18] text-black bg-white" />
+                <label htmlFor="passport-email" className="block text-gray-700 font-semibold mb-2">Email Address</label>
+                <input id="passport-email" type="email" name="email" value={form.email} onChange={handleChange} placeholder="name@university.com" className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E32A18] text-black bg-white" />
               </div>
               <div className="flex-1">
-                <label className="block text-gray-700 font-semibold mb-2">Course Applied for</label>
-                <input type="text" name="role" value={form.role} onChange={handleChange} placeholder="Course Name" className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E32A18] text-black bg-white" />
+                <label htmlFor="passport-course" className="block text-gray-700 font-semibold mb-2">Course Applied for</label>
+                <input id="passport-course" type="text" name="role" value={form.role} onChange={handleChange} placeholder="Course Name" className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E32A18] text-black bg-white" />
               </div>
             </div>
             <div className="mb-4">
-              <label className="block text-gray-700 font-semibold mb-2">Message</label>
-              <textarea name="message" value={form.message} onChange={handleChange} placeholder="Message" className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E32A18] text-black bg-white resize-none" rows={3} />
+              <label htmlFor="passport-message" className="block text-gray-700 font-semibold mb-2">Message</label>
+              <textarea id="passport-message" name="message" value={form.message} onChange={handleChange} placeholder="Message" className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E32A18] text-black bg-white resize-none" rows={3} />
             </div>
             {error && <p className="text-red-600 mb-2">{error}</p>}
             {submitted && <p className="text-green-600 mb-2">Thank you! Your download will start now.</p>}
