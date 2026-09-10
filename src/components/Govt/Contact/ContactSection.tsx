@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import { Icon } from "@iconify/react";
 import { useToast } from "../../../hooks/use-toast";
+import { sendEmailNotification } from "@/services/emailBff";
 import { AiFillYoutube,AiFillLinkedin } from "react-icons/ai";
 import { FaXTwitter,FaFacebookF } from "react-icons/fa6";
 
@@ -79,25 +80,11 @@ const ContactSection = () => {
         throw error;
       }
 
-      const emailResponse = await fetch(
-      'https://itvhjkgfafikpqmuunlh.supabase.co/functions/v1/Government_email_function',
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
-        },
-        body: JSON.stringify({
-          record: submission // Your function expects a 'record' property
-        }),
+      try {
+        await sendEmailNotification('government-enquiry', submission);
+      } catch (emailError) {
+        console.error('Email notification error:', emailError);
       }
-    );
-
-    if (!emailResponse.ok) {
-      const errorData = await emailResponse.json();
-      console.error('Email function error:', errorData);
-      // Optional: Log this error to your error tracking system
-    }
 
       toast({
         title: "Message Sent!",

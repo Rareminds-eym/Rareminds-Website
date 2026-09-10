@@ -1364,13 +1364,14 @@
 
 
 import React from "react";
-import bannerBg from "../../assets/bannergif.gif";
+import bannerBg from "../../assets/contact-banner.webp";
 import leftCardBg from "../../assets/Banner10.png";
 import mobileCardBg from "../../assets/Mobileversion.png";
 import { FaEnvelope, FaPhone, FaMapMarkerAlt, FaClock } from "react-icons/fa";
 import { supabase } from "@/lib/supabaseClient";
 import { useToast } from "@/hooks/use-toast";
 import { useState } from "react";
+import { sendEmailNotification } from "@/services/emailBff";
 const ContactPage: React.FC = () => {
    const { toast } = useToast();
 
@@ -1458,27 +1459,23 @@ const ContactPage: React.FC = () => {
         return;
       }
 
-      // Send email notification
-      const { error: emailError } = await supabase.functions.invoke('contact-form-email', {
-        body: {
+      try {
+        await sendEmailNotification('general-contact', {
           name: formData.name,
           email: formData.email,
           role: formData.role || 'Not specified',
           phone: formData.phone || 'Not provided',
-          message: formData.message
-        }
-      });
-
-      if (emailError) {
+          message: formData.message,
+        });
+        toast({
+          title: "Message sent successfully",
+          description: "Thank you for contacting Rareminds Pvt. Ltd.! We'll be in touch soon.",
+        });
+      } catch (emailError) {
         console.error('Email notification error:', emailError);
         toast({
           title: "Message received",
           description: "Your message was saved but email notification failed. We'll still contact you soon!",
-        });
-      } else {
-        toast({
-          title: "Message sent successfully",
-          description: "Thank you for contacting Rareminds Pvt. Ltd.! We'll be in touch soon.",
         });
       }
       

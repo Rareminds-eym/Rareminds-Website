@@ -30,15 +30,6 @@ export default function CorporateCoursesPage() {
   const navigate = useNavigate();
   const { serviceSlug } = useParams<{ serviceSlug: string }>();
   
-  if (!serviceSlug) {
-    return (
-      <ErrorComponent
-        title="404 - Service Not Found"
-        message="The service you are looking for does not exist or is not available."
-      />
-    );
-  }
-
   const [courses, setCourses] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(0);
@@ -56,7 +47,7 @@ export default function CorporateCoursesPage() {
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  const serviceName = slugToCategory(serviceSlug);
+  const serviceName = serviceSlug ? slugToCategory(serviceSlug) : '';
 
   // Track filter signature to detect changes
   const prevFilterSignatureRef = useRef('');
@@ -67,6 +58,8 @@ export default function CorporateCoursesPage() {
 
   // Close dropdown when clicking outside
   useEffect(() => {
+    if (!serviceSlug) return;
+
     const handleClickOutside = (event: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
         setOpenDropdown(null);
@@ -78,6 +71,8 @@ export default function CorporateCoursesPage() {
 
   // Fetch courses from Supabase
   useEffect(() => {
+    if (!serviceSlug) return;
+
     let isMounted = true;
 
     const fetchCourses = async () => {
@@ -172,6 +167,15 @@ export default function CorporateCoursesPage() {
       levels: Array.from(levels)
     };
   }, [courses]);
+
+  if (!serviceSlug) {
+    return (
+      <ErrorComponent
+        title="404 - Service Not Found"
+        message="The service you are looking for does not exist or is not available."
+      />
+    );
+  }
 
   // Clear all filters
   const clearAllFilters = () => {

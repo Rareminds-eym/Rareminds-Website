@@ -2,6 +2,7 @@ import React from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { motion } from "framer-motion";
 import { Autoplay, FreeMode } from "swiper/modules";
+import "swiper/css";
 
 interface LogoCarouselProps {
   logos: string[];

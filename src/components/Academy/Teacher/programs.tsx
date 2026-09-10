@@ -5,7 +5,7 @@ import CareerCounsellingBlueprint from './CareerCounsellingBlueprint';
 import NEPChecklist from './NEPChecklist';
 import { useToast } from '@/hooks/use-toast';
 
-const programs = () => {
+const Programs = () => {
   const [activeSection, setActiveSection] = useState<number | null>(null);
   const { toast } = useToast();
   
@@ -411,4 +411,4 @@ const programs = () => {
   );
 };
 
-export default programs;
+export default Programs;

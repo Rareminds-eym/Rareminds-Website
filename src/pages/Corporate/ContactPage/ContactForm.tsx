@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { Send, Mail, PenTool } from "lucide-react";
 import { supabase } from "@/lib/supabaseClient";
 import { useToast } from "@/hooks/use-toast";
+import { sendEmailNotification } from "@/services/emailBff";
 
 interface FormData {
   fullName: string;
@@ -73,15 +74,7 @@ const ContactForm: React.FC = () => {
 
       if (dbError) throw dbError;
 
-      // Send email notification
-      const { error: functionError } = await supabase.functions.invoke(
-        "send-contact-email",
-        {
-          body: { record: data },
-        }
-      );
-
-      if (functionError) throw functionError;
+      await sendEmailNotification("corporate-contact", data as Record<string, unknown>);
 
       toast({
         title: "Message Sent!",

@@ -96,7 +96,7 @@ const resources: Resource[] = [
         }
   
         // Send email
-        const response = await fetch('https://email-sender-ssmu.onrender.com/send-pdf', {
+        const response = await fetch('/api/send-pdf', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -105,7 +105,7 @@ const resources: Resource[] = [
             name: name.trim(),
             email: email.trim(),
             phone: phone.trim(),
-            resourceTitle: selectedResource.title,
+            institution: selectedResource.title,
             pdfUrl: selectedResource.pdfLink
           }),
         });

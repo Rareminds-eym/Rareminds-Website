@@ -62,7 +62,7 @@ export default function CaseStudies() {
 			if (supabaseError) throw supabaseError;
 
 			// Send email
-			const response = await fetch('https://email-sender-ssmu.onrender.com/send-pdf', {
+			const response = await fetch('/api/send-pdf', {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',
@@ -71,7 +71,7 @@ export default function CaseStudies() {
 					email: formData.email,
 					name: formData.name,
 					phone: formData.phone,
-					resourceTitle: selectedPdf.institution,
+					institution: selectedPdf.institution,
 					pdfUrl: selectedPdf.url,
 				}),
 			});

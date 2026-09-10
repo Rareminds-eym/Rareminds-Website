@@ -1,6 +1,7 @@
 import { Download, Calendar } from "lucide-react";
 import { useState } from "react";
 import { supabase } from "../../../../lib/supabase";
+import { sendEmailNotification } from "@/services/emailBff";
 
 export const CTASection = ({ onDemoClick, onWaitlistClick }: { onDemoClick: () => void, onWaitlistClick: () => void }) => {
   const [showForm, setShowForm] = useState(false);
@@ -35,6 +36,10 @@ export const CTASection = ({ onDemoClick, onWaitlistClick }: { onDemoClick: () =
         setError('Failed to submit. Please try again.');
         setSubmitted(false);
       } else {
+        await sendEmailNotification('download-notification', {
+          ...form,
+          download_type: 'Daily Learning',
+        }).catch((emailError) => console.error('Download notification failed:', emailError));
         setSubmitted(true);
         // Start download after successful submit
         const link = document.createElement('a');
