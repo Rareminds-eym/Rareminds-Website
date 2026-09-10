@@ -3,7 +3,7 @@ import { useState } from "react";
 import { supabase } from "../../../../lib/supabase";
 import { sendEmailNotification } from "@/services/emailBff";
 
-export const CTASection = ({ onDemoClick, onWaitlistClick }: { onDemoClick: () => void, onWaitlistClick: () => void }) => {
+export const CTASection = ({ onDemoClick }: { onDemoClick: () => void }) => {
   const [showForm, setShowForm] = useState(false);
   const [form, setForm] = useState({
     name: "",
@@ -49,7 +49,7 @@ export const CTASection = ({ onDemoClick, onWaitlistClick }: { onDemoClick: () =
         link.click();
         document.body.removeChild(link);
       }
-    } catch (err) {
+    } catch {
       setError('Unexpected error. Please try again.');
       setSubmitted(false);
     }

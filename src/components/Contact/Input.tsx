@@ -1530,8 +1530,9 @@ const ContactPage: React.FC = () => {
       className="contact-form absolute top-[16%] left-[20%] w-[440px] bg-white rounded-2xl shadow-xl p-4 flex flex-col justify-between z-20">
         <div className="space-y-3">
           <div>
-            <label className="block text-gray-700 font-medium mb-1">Name</label>
+            <label htmlFor="contact-name" className="block text-gray-700 font-medium mb-1">Name</label>
             <input
+              id="contact-name"
               type="text"
               name="name"
               value={formData.name}
@@ -1542,8 +1543,9 @@ const ContactPage: React.FC = () => {
           </div>
 
           <div>
-            <label className="block text-gray-700 font-medium mb-1">Email</label>
+            <label htmlFor="contact-email" className="block text-gray-700 font-medium mb-1">Email</label>
             <input
+              id="contact-email"
               name="email"
               value={formData.email}
               onChange={handleChange}
@@ -1554,8 +1556,9 @@ const ContactPage: React.FC = () => {
           </div>
 
           <div>
-            <label className="block text-gray-700 font-medium mb-1">Role</label>
+            <label htmlFor="contact-role" className="block text-gray-700 font-medium mb-1">Role</label>
             <select
+              id="contact-role"
               name="role"
               value={formData.role}
               onChange={handleChange}
@@ -1577,8 +1580,9 @@ const ContactPage: React.FC = () => {
           </div>
 
           <div>
-            <label className="block text-gray-700 font-medium mb-1">Phone</label>
+            <label htmlFor="contact-phone" className="block text-gray-700 font-medium mb-1">Phone</label>
             <input
+              id="contact-phone"
               type="tel"
               name="phone"
               value={formData.phone}
@@ -1589,8 +1593,9 @@ const ContactPage: React.FC = () => {
           </div>
 
           <div>
-            <label className="block text-gray-700 font-medium mb-1">Message</label>
+            <label htmlFor="contact-message" className="block text-gray-700 font-medium mb-1">Message</label>
             <textarea
+              id="contact-message"
               name="message"
               value={formData.message}
               onChange={handleChange}
