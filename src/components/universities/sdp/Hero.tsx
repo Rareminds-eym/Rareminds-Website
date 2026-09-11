@@ -3,7 +3,6 @@ import { Download, FileSpreadsheet, PhoneCall, Rocket, BadgeCheck, Users, X } fr
 import { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabaseClient';
 
-const API_BASE_URL = "https://rareminds.in";
     
 
 const banners = [
@@ -105,7 +104,7 @@ function scrollToSection(id: string) {
 }
 
 function sendEmail(name: string, email: string, pdfUrl: string, institution: string) {
-  return fetch(`${API_BASE_URL}/api/send-pdf`, {
+  return fetch('/api/send-pdf', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ name, email, pdfUrl, institution }),

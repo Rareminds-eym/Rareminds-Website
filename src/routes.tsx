@@ -1,4 +1,4 @@
-import { createBrowserRouter, Outlet, Navigate } from "react-router-dom";
+import { createBrowserRouter, Outlet, Navigate, useParams } from "react-router-dom";
 import { lazy, Suspense } from "react";
 import LoaderComponent from "./components/LoaderComponent";
 import ErrorBoundary from "./components/ErrorBoundary";
@@ -128,6 +128,11 @@ const withSuspense = (Component: React.LazyExoticComponent<React.FC<{}>>) => (
     <Component />{" "}
   </Suspense>
 );
+
+const LegacyBlogRedirect = ({ basePath }: { basePath: string }) => {
+  const { slug } = useParams<{ slug: string }>();
+  return <Navigate to={`${basePath}/${encodeURIComponent(slug ?? "")}`} replace />;
+};
 
 const router = createBrowserRouter([
   {
@@ -400,7 +405,7 @@ const router = createBrowserRouter([
         element: withSuspense(CaseStudy),
       },
       {
-        path: "/school/student/course/:courseId", // Individual course detail
+        path: "/school/student/course/id/:courseId", // Legacy numeric-ID course detail
         element: <CourseDetailedPage />,
         errorElement: <ErrorBoundary />,
       },
@@ -554,7 +559,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/institutions/blogs/:slug",
-        element: <Navigate to="/universities/blogs" replace />,
+        element: <LegacyBlogRedirect basePath="/universities/blogs" />,
       },
       {
         path: "/institutions/sdp/blogs",
@@ -562,7 +567,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/institutions/sdp/blogs/:slug",
-        element: <Navigate to="/universities/sdp/blogs" replace />,
+        element: <LegacyBlogRedirect basePath="/universities/sdp/blogs" />,
       },
       {
         path: "/institutions/fdp/blogs",
@@ -570,7 +575,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/institutions/fdp/blogs/:slug",
-        element: <Navigate to="/universities/fdp/blogs" replace />,
+        element: <LegacyBlogRedirect basePath="/universities/fdp/blogs" />,
       },
       {
         path: "/institutions/communication-personality-development",

@@ -29,22 +29,6 @@ export default function StudentCoursesListingPage() {
   const [searchParams] = useSearchParams();
   const educationLevel = searchParams.get('level') || '';
   
-  if (!serviceSlug) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold mb-4 text-gray-900">Service not found</h1>
-          <button
-            onClick={() => navigate(-1)}
-            className="text-gray-700 hover:text-gray-900 font-medium"
-          >
-            Go back
-          </button>
-        </div>
-      </div>
-    );
-  }
-
   const [courses, setCourses] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(0);
@@ -63,7 +47,7 @@ export default function StudentCoursesListingPage() {
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  const serviceName = slugToCategory(serviceSlug);
+  const serviceName = serviceSlug ? slugToCategory(serviceSlug) : '';
 
   // Track filter signature to detect changes
   const prevFilterSignatureRef = useRef('');
@@ -82,6 +66,8 @@ export default function StudentCoursesListingPage() {
 
   // Close dropdown when clicking outside
   useEffect(() => {
+    if (!serviceSlug) return;
+
     const handleClickOutside = (event: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
         setOpenDropdown(null);
@@ -93,6 +79,8 @@ export default function StudentCoursesListingPage() {
 
   // Fetch courses from Supabase
   useEffect(() => {
+    if (!serviceSlug) return;
+
     let isMounted = true;
 
     const fetchCourses = async () => {
@@ -204,6 +192,23 @@ export default function StudentCoursesListingPage() {
       levels: Array.from(levels)
     };
   }, [courses]);
+
+  if (!serviceSlug) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold mb-4 text-gray-900">Service not found</h1>
+          <button
+            type="button"
+            onClick={() => navigate(-1)}
+            className="text-gray-700 hover:text-gray-900 font-medium"
+          >
+            Go back
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   // Clear all filters
   const clearAllFilters = () => {

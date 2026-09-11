@@ -2,7 +2,6 @@ import React, { ReactNode } from "react";
 import FooterBar from "@/components/Footer/FooterBar"; // Optional: remove if not needed
 import Header from "@/components/Header/UniversitiesHeader"; // Updated to CorporateHeader
 import { usePageTracking } from "@/hooks/usePageTracking";
-import FloatingActionMenu from "@/components/Corporate/FloatingAction";
 
 interface InstitutionsLayoutProps {
   children: ReactNode;
@@ -18,7 +17,6 @@ const UniversitiesLayout: React.FC<InstitutionsLayoutProps> = ({
       <Header />
 
       <main className="flex-1">{children}</main>
-      <FloatingActionMenu />
       {/* Optional: include FooterBar if needed */}
       {/* Optional: include FooterBar if needed */}
       <FooterBar />

@@ -68,7 +68,6 @@ const Passport = () => {
         />
         <CTASection
           onDemoClick={() => setIsModalOpen(true)}
-          onWaitlistClick={() => setIsModalOpen(true)}
         />
       </div>
     </>

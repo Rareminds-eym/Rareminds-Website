@@ -2,6 +2,7 @@ import { Card } from "@/components/ui/card";
 import { ArrowRight, BadgeCheck, FileBarChart2, EyeOff, Download } from "lucide-react";
 import { useState } from "react";
 import { supabase } from "../../../../lib/supabase";
+import { sendEmailNotification } from "@/services/emailBff";
 
 export const ProblemSection = ({ onDemoClick }: { onDemoClick: () => void }) => {
   const [showForm, setShowForm] = useState(false);
@@ -36,6 +37,10 @@ export const ProblemSection = ({ onDemoClick }: { onDemoClick: () => void }) => 
         setError('Failed to submit. Please try again.');
         setSubmitted(false);
       } else {
+        await sendEmailNotification('download-notification', {
+          ...form,
+          download_type: 'Habit Card',
+        }).catch((emailError) => console.error('Download notification failed:', emailError));
         setSubmitted(true);
         // Start download after successful submit
         const link = document.createElement('a');

@@ -110,10 +110,9 @@ const FloatingActionMenu = () => {
     // On mobile, stack items vertically above the FAB for maximum visibility
     const isMobile = windowWidth < 640; // sm breakpoint
     if (isMobile) {
-      const spacing = 60; // px between items
+      const spacing = 64; // px between item centers
       const bottomOffset = 24; // px from bottom of screen
       const fabHeight = 56; // FAB button height
-      const sideMargin = 24; // px from right edge of screen
       const maxHeight = (typeof window !== 'undefined' ? window.innerHeight : 800) - bottomOffset - fabHeight - 20; // 20px safety margin
       
       // Calculate position ensuring it doesn't go off-screen
@@ -132,15 +131,9 @@ const FloatingActionMenu = () => {
       };
     }
 
-    // Desktop/tablet: arrange items on an arc
-    const isSmallMobile = windowWidth < 400; // extra small screens
-    let radius = 80;
-
-    // Slightly reduce radius on smaller tablets
-    if (windowWidth < 768) radius = 70;
-    if (isSmallMobile) radius = 55;
-
-    const angle = (index * (80 / (total - 1)) - 10) * (Math.PI / 100);
+    // Desktop/tablet: evenly space items from the left to the top of the FAB.
+    const radius = 80;
+    const angle = total > 1 ? (index / (total - 1)) * (Math.PI / 2) : 0;
     return {
       x: -Math.cos(angle) * radius,
       y: -Math.sin(angle) * radius,
@@ -241,7 +234,7 @@ const FloatingActionMenu = () => {
       }
 
       // Send email
-      const response = await fetch('https://email-sender-ssmu.onrender.com/send-pdf', {
+      const response = await fetch('/api/send-pdf', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -250,7 +243,7 @@ const FloatingActionMenu = () => {
           name: name.trim(),
           email: email.trim(),
           phone: phone.trim(),
-          resourceTitle: selectedResource.title,
+          institution: selectedResource.title,
           pdfUrl: selectedResource.pdfLink
         }),
       });
@@ -352,7 +345,7 @@ const FloatingActionMenu = () => {
       )}
 
       <div 
-        className={`fixed z-50 ${
+        className={`fixed z-50 w-14 h-14 ${
           windowWidth < 640 
             ? windowWidth < 375 
               ? 'bottom-6 right-3' // Extra small phones (12px margin)
@@ -361,11 +354,6 @@ const FloatingActionMenu = () => {
                 : 'bottom-6 right-6' // Regular mobile (24px margin)
             : 'bottom-6 right-4 sm:right-8 md:bottom-10 md:right-16' // Tablet and desktop
         }`}
-        style={{
-          minWidth: '56px', // Ensure container is at least as wide as the FAB
-          minHeight: windowWidth < 640 ? '300px' : '100px', // Extra height for mobile vertical stack
-          maxWidth: windowWidth < 640 ? 'calc(100vw - 16px)' : 'auto', // Prevent overflow on mobile
-        }}
       >
         <AnimatePresence>
           {isOpen && (
@@ -396,12 +384,13 @@ const FloatingActionMenu = () => {
                       stiffness: 200,
                       damping: 20,
                     }}
-                    className="absolute bottom-0 right-0"
+                    className="absolute bottom-1 right-1"
                   >
                     <motion.button
                       whileHover={{ scale: 1.1 }}
                       whileTap={{ scale: 0.9 }}
                       onClick={() => handleMenuItemClick(item)}
+                      aria-label={item.label}
                       className="w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center text-gray-700 hover:bg-gray-50 transition-colors group relative"
                       title={windowWidth >= 640 ? item.label : undefined} // Native tooltip for mobile
                     >
@@ -431,6 +420,8 @@ const FloatingActionMenu = () => {
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
           onClick={toggleMenu}
+          aria-label={isOpen ? 'Close actions menu' : 'Open actions menu'}
+          aria-expanded={isOpen}
           className={`w-14 h-14 border-2 border-red-200 bg-gradient-to-r from-red-400 to-red-600 rounded-full flex items-center justify-center text-white hover:from-red-600 hover:to-red-300 transition-all duration-200 ${
             !isOpen && 'animate-bounce'
           } shadow-xl shadow-red-400/50`}

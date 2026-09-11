@@ -182,7 +182,7 @@ const FullScreenCarousel: React.FC<FullScreenCarouselProps> = ({
                   </div>
                   {/* Buttons - no animation wrapper */}
                   <div className="flex flex-col sm:flex-row gap-4 mt-6 justify-center lg:justify-start">
-                    <button className="corporate-btn-1" onClick={handleScrollToContact}>
+                    <button type="button" className="corporate-btn-1" onClick={handleScrollToContact}>
                       Request Talent Now
                       <Icon
                         icon="cil:arrow-right"
@@ -191,7 +191,7 @@ const FullScreenCarousel: React.FC<FullScreenCarouselProps> = ({
                         className="ml-2"
                       />
                     </button>
-                    <button className="corporate-btn-2" onClick={handleScrollToServices}>
+                    <button type="button" className="corporate-btn-2" onClick={handleScrollToServices}>
                       Explore Our Solutions
                       <Icon
                         icon="line-md:compass-loop"
@@ -232,6 +232,7 @@ const FullScreenCarousel: React.FC<FullScreenCarouselProps> = ({
           <div className="flex flex-col gap-3 absolute right-6 top-1/2 -translate-y-1/2 z-20">
             {slides.map((_, idx) => (
               <button
+                type="button"
                 key={idx}
                 onClick={() => handleDotClick(idx)}
                 className={`w-3 h-3 rounded-full transition-all duration-300 ${
@@ -249,26 +250,27 @@ const FullScreenCarousel: React.FC<FullScreenCarouselProps> = ({
       {isOnCorporatePage && <LogoCarousel logos={logos} />}
       {/* Arrow down button */}
       <div className="hidden lg:block container">
-        <div
+        <button
+          type="button"
           onClick={handleScrollDown}
-          className="w-max absolute bottom-[80px] cursor-pointer transition-opacity z-10 ml-4 md:ml-8 lg:ml-14"
-          aria-label="Scroll down"
+          className="w-max absolute bottom-[80px] cursor-pointer transition-opacity z-10 ml-4 md:ml-8 lg:ml-14 bg-transparent border-0 p-0 focus:outline-none focus:ring-2 focus:ring-corporate-yellow rounded-full"
+          aria-label="Scroll down to content"
         >
           <img
             src="https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Corporate/Recruitment/Index/Hero/scroll.png"
             width="100"
             height="100"
-            alt="Scroll down"
+            alt="Scroll down icon"
             className="scroll-rotate"
           />
           <img
             src={arrowDown}
             width="62"
             height="62"
-            alt="Scroll down"
+            alt="Scroll down arrow"
             className="absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2"
           />
-        </div>
+        </button>
       </div>
     </div>
   );

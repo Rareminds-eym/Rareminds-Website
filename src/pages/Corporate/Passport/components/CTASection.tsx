@@ -1,8 +1,9 @@
 import { Download, Calendar } from "lucide-react";
 import { useState } from "react";
 import { supabase } from "../../../../lib/supabase";
+import { sendEmailNotification } from "@/services/emailBff";
 
-export const CTASection = ({ onDemoClick, onWaitlistClick }: { onDemoClick: () => void, onWaitlistClick: () => void }) => {
+export const CTASection = ({ onDemoClick }: { onDemoClick: () => void }) => {
   const [showForm, setShowForm] = useState(false);
   const [form, setForm] = useState({
     name: "",
@@ -35,6 +36,10 @@ export const CTASection = ({ onDemoClick, onWaitlistClick }: { onDemoClick: () =
         setError('Failed to submit. Please try again.');
         setSubmitted(false);
       } else {
+        await sendEmailNotification('download-notification', {
+          ...form,
+          download_type: 'Daily Learning',
+        }).catch((emailError) => console.error('Download notification failed:', emailError));
         setSubmitted(true);
         // Start download after successful submit
         const link = document.createElement('a');
@@ -44,7 +49,7 @@ export const CTASection = ({ onDemoClick, onWaitlistClick }: { onDemoClick: () =
         link.click();
         document.body.removeChild(link);
       }
-    } catch (err) {
+    } catch {
       setError('Unexpected error. Please try again.');
       setSubmitted(false);
     }

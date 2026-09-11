@@ -5,11 +5,12 @@ import { z } from 'zod';
 import type { FormField, FormWithFields } from '../../types/dynamicForm';
 import { getFormById } from '../../services/dynamicFormService';
 import { trackEvent, ANALYTICS_EVENTS } from '../../utils/analytics';
+import { sendEmailOtp, verifyEmailOtp } from '../../services/emailBff';
 
 interface DynamicEventFormProps {
   formId?: string | null;
   eventId: string;
-  onSubmitSuccess?: (formData: Record<string, unknown>) => void | Promise<void>;
+  onSubmitSuccess?: (formData: Record<string, unknown>, verificationProof: string) => void | Promise<void>;
   onCancel?: () => void;
 }
 
@@ -24,6 +25,11 @@ const DynamicEventForm: React.FC<DynamicEventFormProps> = ({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [fetchError, setFetchError] = useState<string | null>(null);
+  const [pendingSubmission, setPendingSubmission] = useState<Record<string, unknown> | null>(null);
+  const [verificationEmail, setVerificationEmail] = useState('');
+  const [otp, setOtp] = useState('');
+  const [otpSent, setOtpSent] = useState(false);
+  const [verifyingOtp, setVerifyingOtp] = useState(false);
 
   // Analytics: track registration start once on first field focus; each field once
   const hasTrackedStart = useRef(false);
@@ -205,7 +211,6 @@ const DynamicEventForm: React.FC<DynamicEventFormProps> = ({
     setIsSubmitting(true);
     setSubmitError(null);
 
-    // Fire before the API request — user has actively submitted the form
     trackEvent(ANALYTICS_EVENTS.EVENT_REGISTRATION_SUBMIT, {
       event_id: eventId,
       form_id: formId ?? undefined,
@@ -213,28 +218,56 @@ const DynamicEventForm: React.FC<DynamicEventFormProps> = ({
 
     try {
       const completeData: Record<string, unknown> = { ...data };
-
       fields.forEach(field => {
         if (field.field_type === 'checkbox') {
-          if (!(field.field_name in completeData)) {
-            completeData[field.field_name] = false;
-          } else {
-            const value = completeData[field.field_name];
-            completeData[field.field_name] = value === true || value === 'on' || value === 'true';
-          }
+          const value = completeData[field.field_name];
+          completeData[field.field_name] = value === true || value === 'on' || value === 'true';
         }
       });
 
-      await onSubmitSuccess?.(completeData);
+      const emailField = fields.find((field) => field.field_type === 'email');
+      const emailValue = emailField ? completeData[emailField.field_name] : completeData.email;
+      const email = typeof emailValue === 'string' ? emailValue.trim().toLowerCase() : '';
+      if (!email || !/^\S+@\S+\.\S+$/.test(email)) throw new Error('A valid email field is required for registration.');
 
-      reset();
-      setIsSubmitting(false);
+      await sendEmailOtp(email);
+      setPendingSubmission(completeData);
+      setVerificationEmail(email);
+      setOtp('');
+      setOtpSent(true);
     } catch (error: unknown) {
       console.error('Submit error:', error);
-      const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred. Please try again.';
-      setSubmitError(errorMessage);
+      setSubmitError(error instanceof Error ? error.message : 'An unexpected error occurred. Please try again.');
+    } finally {
       setIsSubmitting(false);
     }
+  };
+
+  const verifyAndSubmit = async () => {
+    if (!pendingSubmission || !/^\d{4}$/.test(otp)) return;
+    setVerifyingOtp(true);
+    setSubmitError(null);
+    try {
+      const proof = await verifyEmailOtp(verificationEmail, otp);
+      await onSubmitSuccess?.(pendingSubmission, proof);
+      reset();
+      setPendingSubmission(null);
+      setVerificationEmail('');
+      setOtp('');
+      setOtpSent(false);
+    } catch (error: unknown) {
+      setSubmitError(error instanceof Error ? error.message : 'Unable to verify email and register.');
+    } finally {
+      setVerifyingOtp(false);
+    }
+  };
+
+  const editSubmission = () => {
+    setPendingSubmission(null);
+    setVerificationEmail('');
+    setOtp('');
+    setOtpSent(false);
+    setSubmitError(null);
   };
 
   const renderField = (field: FormField, _index: number, _allFields: FormField[]) => {
@@ -394,44 +427,63 @@ const DynamicEventForm: React.FC<DynamicEventFormProps> = ({
       )}
 
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
-          {fields.map((field, index) => renderField(field, index, fields))}
-        </div>
+        {!otpSent ? (
+          <>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
+              {fields.map((field, index) => renderField(field, index, fields))}
+            </div>
 
-        {submitError && (
-          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mt-6">
-            {submitError}
+            {submitError && (
+              <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mt-6">
+                {submitError}
+              </div>
+            )}
+
+            <div className="flex gap-3 pt-6 mt-6 border-t">
+              {onCancel && (
+                <button type="button" onClick={onCancel} className="flex-1 px-6 py-3 border border-gray-300 text-gray-700 font-semibold rounded-lg hover:bg-gray-50 transition-colors">
+                  Cancel
+                </button>
+              )}
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className={`${onCancel ? 'flex-1' : 'w-full'} px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed`}
+              >
+                {isSubmitting ? 'Sending verification code…' : 'Verify email & register'}
+              </button>
+            </div>
+          </>
+        ) : (
+          <div className="space-y-4">
+            <div className="bg-blue-50 border border-blue-200 text-blue-800 px-4 py-3 rounded-lg">
+              Enter the 4-digit verification code sent to <strong>{verificationEmail}</strong>.
+            </div>
+            <input
+              type="text"
+              inputMode="numeric"
+              aria-label="Four-digit verification code"
+              value={otp}
+              onChange={(event) => setOtp(event.target.value.replace(/\D/g, '').slice(0, 4))}
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg text-center text-2xl tracking-widest font-bold"
+              placeholder="0000"
+              maxLength={4}
+            />
+            {submitError && (
+              <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
+                {submitError}
+              </div>
+            )}
+            <div className="flex gap-3">
+              <button type="button" onClick={editSubmission} disabled={verifyingOtp} className="flex-1 px-6 py-3 border border-gray-300 text-gray-700 font-semibold rounded-lg">
+                Edit details
+              </button>
+              <button type="button" onClick={verifyAndSubmit} disabled={verifyingOtp || otp.length !== 4} className="flex-1 px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg disabled:opacity-50">
+                {verifyingOtp ? 'Registering…' : 'Verify & register'}
+              </button>
+            </div>
           </div>
         )}
-
-        <div className="flex gap-3 pt-6 mt-6 border-t">
-          {onCancel && (
-            <button
-              type="button"
-              onClick={onCancel}
-              className="flex-1 px-6 py-3 border border-gray-300 text-gray-700 font-semibold rounded-lg hover:bg-gray-50 transition-colors"
-            >
-              Cancel
-            </button>
-          )}
-          <button
-            type="submit"
-            disabled={isSubmitting}
-            className={`${onCancel ? 'flex-1' : 'w-full'} px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center`}
-          >
-            {isSubmitting ? (
-              <>
-                <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                </svg>
-                Submitting...
-              </>
-            ) : (
-              'Register'
-            )}
-          </button>
-        </div>
       </form>
     </div>
   );

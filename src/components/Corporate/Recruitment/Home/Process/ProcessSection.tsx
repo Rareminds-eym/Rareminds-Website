@@ -65,6 +65,7 @@ const ProcessSection = () => {
           className="w-full h-[720px] object-cover"
           loading="lazy"
           decoding="async"
+          width={1920}
           height={626}
           alt="A vibrant yellow background with the icons of a bulb, scratches and lines suitable for designing other elements."
         />

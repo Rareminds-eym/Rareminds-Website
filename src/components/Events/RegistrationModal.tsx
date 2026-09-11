@@ -1,8 +1,9 @@
 
 import React, { useState } from "react";
-import { createClient } from '@supabase/supabase-js';
 import { CheckCircle, Mail, Clock } from 'lucide-react';
 import PaymentModal from './PaymentModal';
+import { sendEmailOtp, verifyEmailOtp } from '@/services/emailBff';
+import { createEventRegistration } from '@/services/eventRegistrationBff';
 
 type RegistrationModalProps = {
   open: boolean;
@@ -15,11 +16,6 @@ type RegistrationModalProps = {
 };
 
 const RegistrationModal: React.FC<RegistrationModalProps> = ({ open, onClose, eventId, eventName, eventPrice = 0, ticketQuantity = 1, pricePerTicket }) => {
-  // Modal state tracking
-  React.useEffect(() => {
-    // Track modal open state for cleanup
-  }, [open, eventId, eventName, eventPrice]);
-
   React.useEffect(() => {
     if (open) {
       document.body.style.overflow = 'hidden';
@@ -40,66 +36,78 @@ const RegistrationModal: React.FC<RegistrationModalProps> = ({ open, onClose, ev
   const [submitError, setSubmitError] = useState("");
   const [showPayment, setShowPayment] = useState(false);
   const [registrationId, setRegistrationId] = useState<number | null>(null);
+  const [paymentAmount, setPaymentAmount] = useState(0);
+  const [paymentToken, setPaymentToken] = useState<string | null>(null);
   const [isFormValid, setIsFormValid] = useState(false);
   
   // OTP verification states
   const [emailVerified, setEmailVerified] = useState(false);
+  const [verificationProof, setVerificationProof] = useState<string | null>(null);
   const [otpSent, setOtpSent] = useState(false);
   const [otp, setOtp] = useState("");
   const [sendingOtp, setSendingOtp] = useState(false);
   const [verifyingOtp, setVerifyingOtp] = useState(false);
   const [otpError, setOtpError] = useState("");
   const [resendCooldown, setResendCooldown] = useState(0);
+  const sessionRef = React.useRef(0);
+  const closeTimerRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const extractSupabaseFunctionError = (error: unknown) => {
-    if (typeof error === "object" && error !== null) {
-      const typedError = error as {
-        status?: number;
-        message?: string;
-        name?: string;
-        context?: {
-          error?: string;
-          status?: number;
-          response?: { status?: number };
-        };
-      };
+  const resetForm = React.useCallback(() => {
+    setName("");
+    setEmail("");
+    setPhone("");
+    setOrganization("");
+    setErrors({});
+    setSubmitError("");
+    setIsFormValid(false);
+    setShowPayment(false);
+    setRegistrationId(null);
+    setPaymentAmount(0);
+    setPaymentToken(null);
+    setEmailVerified(false);
+    setVerificationProof(null);
+    setOtpSent(false);
+    setOtp("");
+    setOtpError("");
+    setResendCooldown(0);
+    setSubmitting(false);
+    setSendingOtp(false);
+    setVerifyingOtp(false);
+  }, []);
 
-      const contextStatus = typedError.context?.response?.status ?? typedError.context?.status;
-      const contextMessage = typedError.context?.error;
-
-      const status = contextStatus ?? typedError.status;
-      let parsedMessage = typeof (contextMessage ?? typedError.message) === "string"
-        ? (contextMessage ?? typedError.message) ?? ""
-        : "";
-
-      if (parsedMessage) {
-        try {
-          const parsed = JSON.parse(parsedMessage) as Record<string, unknown>;
-          if (typeof parsed.error === "string") {
-            parsedMessage = parsed.error;
-          } else if (typeof parsed.message === "string") {
-            parsedMessage = parsed.message;
-          }
-        } catch {
-          // Ignore JSON parse failures
-        }
-      }
-
-      return { status, message: parsedMessage, name: typedError.name };
+  const clearCloseTimer = React.useCallback(() => {
+    if (closeTimerRef.current) {
+      clearTimeout(closeTimerRef.current);
+      closeTimerRef.current = null;
     }
+  }, []);
 
-    if (error instanceof Error) {
-      return { status: undefined, message: error.message, name: error.name };
+  const handleClose = React.useCallback(() => {
+    sessionRef.current += 1;
+    clearCloseTimer();
+    setSuccess(false);
+    resetForm();
+    onClose();
+  }, [clearCloseTimer, onClose, resetForm]);
+
+  const scheduleClose = React.useCallback(() => {
+    clearCloseTimer();
+    const session = sessionRef.current;
+    closeTimerRef.current = setTimeout(() => {
+      if (sessionRef.current === session) handleClose();
+    }, 1500);
+  }, [clearCloseTimer, handleClose]);
+
+  React.useEffect(() => {
+    sessionRef.current += 1;
+    clearCloseTimer();
+    if (!open) {
+      setSuccess(false);
+      resetForm();
     }
+    return clearCloseTimer;
+  }, [clearCloseTimer, open, resetForm]);
 
-    return { status: undefined, message: "", name: undefined };
-  };
-
-  // Supabase client (must be before early return)
-  const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || "";
-  const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY || "";
-  const supabase = createClient(supabaseUrl, supabaseKey);
-  
   // Resend cooldown timer (must be before early return)
   React.useEffect(() => {
     if (resendCooldown > 0) {
@@ -137,141 +145,43 @@ const RegistrationModal: React.FC<RegistrationModalProps> = ({ open, onClose, ev
       return;
     }
 
+    const session = sessionRef.current;
     setSendingOtp(true);
     setOtpError("");
 
     try {
-      if (process.env.NODE_ENV === 'development') {
-        console.log("🚀 Sending OTP to:", email.trim());
-      }
-      
-      const { data, error } = await supabase.functions.invoke("send-otp-email", {
-        body: { email: email.trim() }
-      });
-
-      if (process.env.NODE_ENV === 'development') {
-        console.log("📧 OTP Response - Data:", data);
-        console.log("❌ OTP Response - Error:", error);
-        console.log("📊 Full Response:", { data, error });
-      }
-
-      if (error) {
-        if (process.env.NODE_ENV === 'development') {
-          console.error("OTP send error:", error);
-        }
-        const { message, status, name } = extractSupabaseFunctionError(error);
-        const normalizedMessage = message?.toLowerCase() ?? "";
-
-        if (process.env.NODE_ENV === 'development') {
-          console.log("🔍 Extracted Error Details:", { message, status, name, normalizedMessage });
-        }
-
-        if (status === 404 || normalizedMessage.includes("not found")) {
-          setOtpError("⚠️ Email verification service is not available. Please contact support.");
-        } else if (
-          normalizedMessage.includes("failed to fetch") ||
-          normalizedMessage.includes("cors") ||
-          normalizedMessage.includes("network") ||
-          name === "AbortError" ||
-          name === "FunctionsFetchError"
-        ) {
-          setOtpError("⚠️ Cannot connect to email service. Please check your internet connection and try again.");
-        } else if (normalizedMessage.includes("email service not configured")) {
-          setOtpError("⚠️ Email service is not configured. Please contact support.");
-        } else {
-          setOtpError(message || "Failed to send OTP. Please try again or contact support.");
-        }
-        return;
-      }
-
-      if (process.env.NODE_ENV === 'development') {
-        console.log("✅ Checking data.success:", data?.success);
-        console.log("📝 Data content:", JSON.stringify(data, null, 2));
-      }
-
-      if (data?.success) {
-        setOtpSent(true);
-        setResendCooldown(60); // 60 seconds cooldown
-      } else {
-        if (process.env.NODE_ENV === 'development') {
-          console.log("❌ OTP send failed:", data?.error);
-        }
-        setOtpError(data?.error || "Failed to send OTP. Please try again.");
-      }
+      await sendEmailOtp(email.trim());
+      if (sessionRef.current !== session) return;
+      setOtpSent(true);
+      setResendCooldown(60);
     } catch (error) {
-      if (process.env.NODE_ENV === 'development') {
-        console.error("OTP send exception:", error);
-      }
-      const { message } = extractSupabaseFunctionError(error);
-
-      if (message?.toLowerCase().includes("failed to fetch")) {
-        setOtpError("⚠️ Cannot connect to email service. The edge functions may not be deployed. See DEPLOY_NOW.md");
-      } else {
-        setOtpError(message || "Failed to send OTP. Please try again or contact support.");
-      }
+      if (sessionRef.current !== session) return;
+      setOtpError(error instanceof Error ? error.message : "Failed to send OTP. Please try again.");
     } finally {
-      setSendingOtp(false);
+      if (sessionRef.current === session) setSendingOtp(false);
     }
   };
 
   const verifyOtp = async () => {
-    if (!otp.trim() || otp.trim().length !== 4) {
+    if (!/^\d{4}$/.test(otp.trim())) {
       setOtpError("Please enter the 4-digit OTP");
       return;
     }
 
+    const session = sessionRef.current;
     setVerifyingOtp(true);
     setOtpError("");
 
     try {
-      const { data, error } = await supabase.functions.invoke("verify-otp", {
-        body: {
-          email: email.trim(),
-          otp: otp.trim()
-        }
-      });
-
-      if (error) {
-        if (process.env.NODE_ENV === 'development') {
-          console.error("OTP verification error:", error);
-        }
-        const { message, status, name } = extractSupabaseFunctionError(error);
-        const normalizedMessage = message?.toLowerCase() ?? "";
-
-        if (status === 404 || normalizedMessage.includes("not found")) {
-          setOtpError("⚠️ Email verification not deployed yet. Please deploy the edge functions first. See DEPLOY_NOW.md");
-        } else if (
-          normalizedMessage.includes("failed to fetch") ||
-          normalizedMessage.includes("cors") ||
-          normalizedMessage.includes("network") ||
-          name === "AbortError"
-        ) {
-          setOtpError("⚠️ Cannot connect to email service. The edge functions may not be deployed. See DEPLOY_NOW.md");
-        } else {
-          setOtpError(message || "Failed to verify OTP. Please try again.");
-        }
-        return;
-      }
-
-      if (data?.success) {
-        setEmailVerified(true);
-        setOtpError("");
-      } else {
-        setOtpError(data?.error || "Invalid or expired OTP");
-      }
+      const proof = await verifyEmailOtp(email.trim(), otp.trim());
+      if (sessionRef.current !== session) return;
+      setVerificationProof(proof);
+      setEmailVerified(true);
     } catch (error) {
-      if (process.env.NODE_ENV === 'development') {
-        console.error("OTP verification exception:", error);
-      }
-      const { message } = extractSupabaseFunctionError(error);
-
-      if (message?.toLowerCase().includes("failed to fetch")) {
-        setOtpError("⚠️ Cannot connect to email service. The edge functions may not be deployed. See DEPLOY_NOW.md");
-      } else {
-        setOtpError(message || "Failed to verify OTP. Please try again.");
-      }
+      if (sessionRef.current !== session) return;
+      setOtpError(error instanceof Error ? error.message : "Invalid or expired OTP");
     } finally {
-      setVerifyingOtp(false);
+      if (sessionRef.current === session) setVerifyingOtp(false);
     }
   };
   
@@ -295,103 +205,66 @@ const RegistrationModal: React.FC<RegistrationModalProps> = ({ open, onClose, ev
     }
     
     if (validate()) {
+      const session = sessionRef.current;
       setSubmitting(true);
       try {
-        const registrationData = {
+        if (!verificationProof) throw new Error('Please verify your email again.');
+
+        const registration = await createEventRegistration({
           event_id: eventId,
-          event_name: eventName,
-          name,
           email,
+          name,
           phone,
           organization,
           quantity: ticketQuantity,
-          total_amount: eventPrice > 0 ? Math.round(eventPrice * 100) : null, // Convert to paise for Razorpay
-          payment_status: eventPrice > 0 ? 'pending' : 'not_required'
-        };
-        
-        if (process.env.NODE_ENV === 'development') {
-          console.log('🚀 Inserting registration data:', registrationData);
-        }
-        
-        const { data, error } = await supabase.from('event_registrations').insert(registrationData).select().single();
-        
-        if (error) {
-          if (process.env.NODE_ENV === 'development') {
-            console.error('Registration error:', error);
-          }
-          setSubmitError(error.message);
+          verification_proof: verificationProof,
+        });
+        if (sessionRef.current !== session) return;
+
+        if (registration.payment_status === 'pending') {
+          if (!registration.payment_token) throw new Error('Payment authorization was not issued.');
+          setRegistrationId(registration.id);
+          setPaymentAmount(registration.total_amount);
+          setPaymentToken(registration.payment_token);
+          setShowPayment(true);
         } else {
-          if (process.env.NODE_ENV === 'development') {
-            console.log('Registration successful:', data);
-          }
-          if (eventPrice > 0) {
-            // Show payment modal for paid events
-            setRegistrationId(data.id);
-            setShowPayment(true);
-          } else {
-            // Free event - show success immediately
-            setSuccess(true);
-            resetForm();
-            setTimeout(() => {
-              setSuccess(false);
-              onClose();
-            }, 1500);
-          }
+          setSuccess(true);
+          resetForm();
+          scheduleClose();
         }
       } catch (err) {
+        if (sessionRef.current !== session) return;
         if (process.env.NODE_ENV === 'development') {
           console.error('Registration catch error:', err);
         }
         setSubmitError("Failed to submit registration. Please try again.");
       } finally {
-        setSubmitting(false);
+        if (sessionRef.current === session) setSubmitting(false);
       }
     }
   };
 
   const handlePaymentSuccess = async () => {
-    if (registrationId == null) {
-      if (process.env.NODE_ENV === 'development') {
-        console.error('Missing registration ID during payment success handling');
-      }
-      return;
-    }
-
-    try {
-      const { error } = await supabase
-        .from('event_registrations')
-        .update({ payment_status: 'completed', payment_verified_at: new Date().toISOString() })
-        .eq('id', registrationId);
-
-      if (error) {
-        throw error;
-      }
-
-      setShowPayment(false);
-      setSuccess(true);
-      resetForm();
-      setTimeout(() => {
-        setSuccess(false);
-        onClose();
-      }, 1500);
-    } catch (err) {
-      if (process.env.NODE_ENV === 'development') {
-        console.error('Failed to update payment status:', err);
-      }
-      setSubmitError('Payment succeeded, but updating the registration record failed. Please contact support.');
-    }
+    setShowPayment(false);
+    setSuccess(true);
+    resetForm();
+    scheduleClose();
   };
 
   const handlePaymentClose = () => {
-    setShowPayment(false);
-    // Optionally, you might want to delete the registration if payment is cancelled
+    handleClose();
   };
 
   return (
     <>
       <div className="fixed inset-0 z-[100] flex items-center justify-center" style={backdropStyle}>
-        <div className="bg-white rounded-2xl p-4 sm:p-8 shadow-2xl w-full max-w-xs sm:max-w-md relative">
-          <h2 className="text-2xl font-bold mb-6 text-center">Register for Event</h2>
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="registration-dialog-title"
+          className="bg-white rounded-2xl p-4 sm:p-8 shadow-2xl w-full max-w-xs sm:max-w-md relative"
+        >
+          <h2 id="registration-dialog-title" className="text-2xl font-bold mb-6 text-center">Register for Event</h2>
           {eventPrice > 0 && (
             <div className="bg-indigo-50 border border-indigo-200 rounded-lg p-3 mb-4">
               <p className="text-indigo-700 text-sm text-center">
@@ -412,9 +285,10 @@ const RegistrationModal: React.FC<RegistrationModalProps> = ({ open, onClose, ev
             <form onSubmit={handleSubmit} className="space-y-4">
               {/* Email Verification Section */}
               <div>
-                <label className="block font-medium mb-1">Email Address</label>
+                <label htmlFor="registration-email" className="block font-medium mb-1">Email Address</label>
                 <div className="relative">
                   <input 
+                    id="registration-email"
                     type="email" 
                     value={email} 
                     onChange={e => setEmail(e.target.value)} 
@@ -461,6 +335,8 @@ const RegistrationModal: React.FC<RegistrationModalProps> = ({ open, onClose, ev
                         <div className="relative">
                           <input
                             type="text"
+                            inputMode="numeric"
+                            aria-label="Four-digit verification code"
                             value={otp}
                             onChange={e => setOtp(e.target.value.replace(/\D/g, '').slice(0, 4))}
                             placeholder="Enter 4-digit OTP"
@@ -509,9 +385,10 @@ const RegistrationModal: React.FC<RegistrationModalProps> = ({ open, onClose, ev
               {emailVerified && (
                 <>
                   <div>
-                    <label className="block font-medium mb-1">Name of Attendee</label>
+                    <label htmlFor="registration-name" className="block font-medium mb-1">Name of Attendee</label>
                     <div className="relative">
                       <input 
+                        id="registration-name"
                         type="text" 
                         value={name} 
                         onChange={e => setName(e.target.value)} 
@@ -531,9 +408,10 @@ const RegistrationModal: React.FC<RegistrationModalProps> = ({ open, onClose, ev
                   </div>
                   
                   <div>
-                    <label className="block font-medium mb-1">Phone Number</label>
+                    <label htmlFor="registration-phone" className="block font-medium mb-1">Phone Number</label>
                     <div className="relative">
                       <input 
+                        id="registration-phone"
                         type="tel" 
                         value={phone} 
                         onChange={e => setPhone(e.target.value)} 
@@ -553,9 +431,10 @@ const RegistrationModal: React.FC<RegistrationModalProps> = ({ open, onClose, ev
                   </div>
                   
                   <div>
-                    <label className="block font-medium mb-1">University / Company Name</label>
+                    <label htmlFor="registration-organization" className="block font-medium mb-1">University / Company Name</label>
                     <div className="relative">
                       <input 
+                        id="registration-organization"
                         type="text" 
                         value={organization} 
                         onChange={e => setOrganization(e.target.value)} 
@@ -593,7 +472,14 @@ const RegistrationModal: React.FC<RegistrationModalProps> = ({ open, onClose, ev
               )}
             </form>
           )}
-          <button className="absolute top-4 right-4 text-slate-500 hover:text-red-500 text-xl" onClick={onClose}>&times;</button>
+          <button
+            type="button"
+            aria-label="Close registration dialog"
+            className="absolute top-4 right-4 text-slate-500 hover:text-red-500 text-xl"
+            onClick={handleClose}
+          >
+            &times;
+          </button>
         </div>
       </div>
 
@@ -603,8 +489,9 @@ const RegistrationModal: React.FC<RegistrationModalProps> = ({ open, onClose, ev
         onClose={handlePaymentClose}
         onSuccess={handlePaymentSuccess}
         registrationId={registrationId}
+        paymentToken={paymentToken}
         eventName={eventName}
-        amount={eventPrice}
+        amount={paymentAmount}
         ticketQuantity={ticketQuantity}
         pricePerTicket={pricePerTicket}
         userDetails={{

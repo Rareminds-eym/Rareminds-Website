@@ -1,6 +1,7 @@
 // Icons: FaCalendarAlt (Enquiry button), FaDownload (Download button), FaRedo (Retry download button)
 import { FaCalendarAlt, FaDownload, FaRedo } from "react-icons/fa";
 import { supabase } from "../../../../lib/supabase";
+import { sendEmailNotification } from "@/services/emailBff";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect, useRef } from "react";
 
@@ -285,6 +286,10 @@ const HeroSection = ({ onDemoClick }: { onDemoClick: () => void }) => {
     
     try {
       await submitFormToDatabase(form);
+      await sendEmailNotification('download-notification', {
+        ...form,
+        download_type: 'Resume Checklist',
+      }).catch((emailError) => console.error('Download notification failed:', emailError));
       // Don't set submitted here - wait for download to complete
     } catch (err) {
       if (err instanceof Error && err.message === 'FORM_SUBMISSION_FAILED') {

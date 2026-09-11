@@ -2,6 +2,7 @@ import React from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { motion } from "framer-motion";
 import { Autoplay, FreeMode } from "swiper/modules";
+import "swiper/css";
 
 interface LogoCarouselProps {
   logos: string[];
@@ -47,7 +48,7 @@ const LogoCarousel: React.FC<LogoCarouselProps> = ({ logos }) => (
             <div className="flex justify-center">
               <img
                 src={`https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Corporate/Recruitment/Index/ClientLogos/${logo}`}
-                alt={`logo-${index}`}
+                alt={`${logo.replace(/\.[^/.]+$/, "").replace(/[-_]/g, " ")} logo`}
                 loading="lazy"
                 decoding="async"
                 height={40}

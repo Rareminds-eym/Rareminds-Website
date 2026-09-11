@@ -6,6 +6,7 @@ import { Phone, Mail, MapPin, Send, CheckCircle2 } from "lucide-react";
 import { Icon } from "@iconify/react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/lib/supabaseClient";
+import { sendEmailNotification } from "@/services/emailBff";
 
 const ContactSection = () => {
   const { toast } = useToast();
@@ -57,18 +58,7 @@ const ContactSection = () => {
         throw dbError;
       }
 
-      // Then, trigger the email function
-      const { error: functionError } = await supabase.functions.invoke(
-        "send-recruitment-email",
-        {
-          body: { record: data },
-        }
-      );
-
-      if (functionError) {
-        console.error("Supabase function error:", functionError);
-        throw functionError;
-      }
+      await sendEmailNotification("recruitment-enquiry", data as Record<string, unknown>);
 
       toast({
         title: "Message Sent!",

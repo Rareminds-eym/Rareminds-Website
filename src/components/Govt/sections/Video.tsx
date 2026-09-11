@@ -1,5 +1,4 @@
-import { generateKeySync } from 'crypto';
-import { useState, useRef, MouseEvent } from 'react';
+import { useState, useRef, MouseEvent, KeyboardEvent } from 'react';
 import Modal from 'react-modal';
 
 const contentData = [
@@ -114,7 +113,16 @@ const Video = () => {
               <div
                 key={index}
                 className="flex-none h-48 w-64 sm:h-60 sm:w-80 md:w-96 cursor-pointer transform transition-transform hover:scale-105 group"
+                role="button"
+                tabIndex={0}
+                aria-label={`Play ${item.title} video`}
                 onClick={() => openModal(item.video)}
+                onKeyDown={(event: KeyboardEvent<HTMLDivElement>) => {
+                  if (event.key === 'Enter' || event.key === ' ') {
+                    event.preventDefault();
+                    openModal(item.video);
+                  }
+                }}
               >
                 <div className="aspect-w-16 aspect-h-9 rounded-lg overflow-hidden shadow-lg relative">
                   <img
@@ -179,7 +187,9 @@ const Video = () => {
           <div className="absolute top-0 left-0 right-0 h-12 bg-black/40 backdrop-blur-sm rounded-t-xl flex items-center justify-between px-4 z-10 border-b-4 border-white/30">
             <h3 className="text-white/90 font-medium truncate">Now Playing</h3>
             <button
+              type="button"
               onClick={closeModal}
+              aria-label="Close video dialog"
               className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-white/10 transition-colors"
             >
               <svg className="w-6 h-6 text-white/90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -192,6 +202,8 @@ const Video = () => {
           <div className="aspect-video w-full rounded-xl overflow-hidden">
             <iframe
               src={selectedVideo}
+              title="Rareminds video"
+              loading="lazy"
               className="w-full h-full"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen

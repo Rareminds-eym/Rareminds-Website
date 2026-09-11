@@ -1364,13 +1364,14 @@
 
 
 import React from "react";
-import bannerBg from "../../assets/bannergif.gif";
+import bannerBg from "../../assets/contact-banner.webp";
 import leftCardBg from "../../assets/Banner10.png";
 import mobileCardBg from "../../assets/Mobileversion.png";
 import { FaEnvelope, FaPhone, FaMapMarkerAlt, FaClock } from "react-icons/fa";
 import { supabase } from "@/lib/supabaseClient";
 import { useToast } from "@/hooks/use-toast";
 import { useState } from "react";
+import { sendEmailNotification } from "@/services/emailBff";
 const ContactPage: React.FC = () => {
    const { toast } = useToast();
 
@@ -1458,27 +1459,23 @@ const ContactPage: React.FC = () => {
         return;
       }
 
-      // Send email notification
-      const { error: emailError } = await supabase.functions.invoke('contact-form-email', {
-        body: {
+      try {
+        await sendEmailNotification('general-contact', {
           name: formData.name,
           email: formData.email,
           role: formData.role || 'Not specified',
           phone: formData.phone || 'Not provided',
-          message: formData.message
-        }
-      });
-
-      if (emailError) {
+          message: formData.message,
+        });
+        toast({
+          title: "Message sent successfully",
+          description: "Thank you for contacting Rareminds Pvt. Ltd.! We'll be in touch soon.",
+        });
+      } catch (emailError) {
         console.error('Email notification error:', emailError);
         toast({
           title: "Message received",
           description: "Your message was saved but email notification failed. We'll still contact you soon!",
-        });
-      } else {
-        toast({
-          title: "Message sent successfully",
-          description: "Thank you for contacting Rareminds Pvt. Ltd.! We'll be in touch soon.",
         });
       }
       
@@ -1533,8 +1530,9 @@ const ContactPage: React.FC = () => {
       className="contact-form absolute top-[16%] left-[20%] w-[440px] bg-white rounded-2xl shadow-xl p-4 flex flex-col justify-between z-20">
         <div className="space-y-3">
           <div>
-            <label className="block text-gray-700 font-medium mb-1">Name</label>
+            <label htmlFor="contact-name" className="block text-gray-700 font-medium mb-1">Name</label>
             <input
+              id="contact-name"
               type="text"
               name="name"
               value={formData.name}
@@ -1545,8 +1543,9 @@ const ContactPage: React.FC = () => {
           </div>
 
           <div>
-            <label className="block text-gray-700 font-medium mb-1">Email</label>
+            <label htmlFor="contact-email" className="block text-gray-700 font-medium mb-1">Email</label>
             <input
+              id="contact-email"
               name="email"
               value={formData.email}
               onChange={handleChange}
@@ -1557,8 +1556,9 @@ const ContactPage: React.FC = () => {
           </div>
 
           <div>
-            <label className="block text-gray-700 font-medium mb-1">Role</label>
+            <label htmlFor="contact-role" className="block text-gray-700 font-medium mb-1">Role</label>
             <select
+              id="contact-role"
               name="role"
               value={formData.role}
               onChange={handleChange}
@@ -1580,8 +1580,9 @@ const ContactPage: React.FC = () => {
           </div>
 
           <div>
-            <label className="block text-gray-700 font-medium mb-1">Phone</label>
+            <label htmlFor="contact-phone" className="block text-gray-700 font-medium mb-1">Phone</label>
             <input
+              id="contact-phone"
               type="tel"
               name="phone"
               value={formData.phone}
@@ -1592,8 +1593,9 @@ const ContactPage: React.FC = () => {
           </div>
 
           <div>
-            <label className="block text-gray-700 font-medium mb-1">Message</label>
+            <label htmlFor="contact-message" className="block text-gray-700 font-medium mb-1">Message</label>
             <textarea
+              id="contact-message"
               name="message"
               value={formData.message}
               onChange={handleChange}

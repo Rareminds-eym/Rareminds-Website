@@ -58,9 +58,9 @@ const CurrentBlogs = () => {
     fetchStudentBlogs();
   }, []);
   return (
-    <section className="py-12 bg-white relative z-10" style={{ backdropFilter: 'none', WebkitBackdropFilter: 'none' }}>
-      <div className="container mx-auto px-4 relative">
-         <h2 className="font-playfair text-3xl md:text-4xl font-bold text-center mb-16 px-4 md:px-8 py-4 relative z-20">
+    <section className="w-full min-w-0 py-12 bg-white relative z-10" style={{ backdropFilter: 'none', WebkitBackdropFilter: 'none' }}>
+      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+         <h2 className="font-playfair text-3xl md:text-4xl font-bold text-center mb-10 px-4 md:px-8 py-4 relative z-20">
             Current <span className="text-red-600">Student</span> Blogs
           </h2> 
         
@@ -76,10 +76,7 @@ const CurrentBlogs = () => {
               {blogPosts.map((post) => (
                 <div 
                   key={post.id} 
-                  className={`w-full ${blogPosts.length === 1 ? 'md:w-2/3 lg:w-1/3' : 'md:w-[calc(50%-1rem)] lg:w-[calc(33.333%-1.33rem)]'}`}
-                  style={{
-                    maxWidth: blogPosts.length === 1 ? '500px' : undefined
-                  }}
+                  className={`w-full min-w-0 max-w-[500px] ${blogPosts.length > 1 ? 'md:w-[calc((100%_-_2rem)/2)] lg:w-[calc((100%_-_4rem)/3)]' : ''}`}
                 >
                   <BlogCard post={post} />
                 </div>
@@ -95,52 +92,50 @@ const CurrentBlogs = () => {
 // BlogCard Component
 const BlogCard = ({ post }: { post: BlogPost }) => {
   return (
-    <Link to={`/school/student/blogs/${post.slug}`} className="block group focus:outline-none  ">
+    <Link to={`/school/student/blogs/${post.slug}`} className="block h-full min-w-0 group rounded-2xl focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-red-600">
       <article className="blog-card shadow-lg border rounded-2xl overflow-hidden bg-white hover:shadow-2xl transition-shadow duration-300 cursor-pointer h-full flex flex-col">
-        <div className="relative overflow-hidden">
+        <div className="relative overflow-hidden shrink-0">
           <img
             src={post.featured_image || '/default-blog-image.jpg'}
             alt={post.title}
             className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-110 group-hover:brightness-90"
           />
-          <div className="absolute top-4 left-4">
-            <span className="category-badge flex flex-wrap gap-1">
-              {Array.isArray(post.tags) && post.tags.length > 0
-                ? post.tags.map((tag, idx) => (
-                    <span key={idx} className="bg-red-500/80 text-white px-2 py-1 rounded-3xl mr-1 mb-1 text-xs font-semibold shadow">
-                      {tag}
-                    </span>
-                  ))
-                : null}
-            </span>
-          </div>
         </div>
-        <div className="p-6 flex-grow flex flex-col">
-          <h3 className="font-playfair text-xl font-bold text-gray-900 mb-3 group-hover:text-red-600 transition-colors duration-200 line-clamp-2">
+        <div className="p-5 sm:p-6 min-w-0 flex-grow flex flex-col">
+          {Array.isArray(post.tags) && post.tags.length > 0 && (
+            <div className="flex flex-wrap gap-2 mb-4">
+              {post.tags.map((tag, idx) => (
+                <span key={idx} className="max-w-full break-words bg-red-50 text-red-700 px-3 py-1 rounded-2xl text-xs font-semibold">
+                  {tag}
+                </span>
+              ))}
+            </div>
+          )}
+          <h3 className="font-playfair text-xl font-bold text-gray-900 mb-3 group-hover:text-red-600 transition-colors duration-200 break-words">
             {post.title}
           </h3>
-          <p className="text-gray-600 mb-4 line-clamp-3 leading-relaxed flex-grow">
+          <p className="text-gray-600 mb-4 line-clamp-3 break-words leading-relaxed flex-grow">
             {post.excerpt}
           </p>
-          <div className="flex items-center justify-between text-xs text-gray-500 mt-auto">
-            <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-gray-500 mt-auto">
+            <div className="flex min-w-0 items-center gap-2">
               {post.author_name && (
                 <>
-                  <User className="w-3 h-3" />
-                  <span>{post.author_name}</span>
+                  <User className="w-3 h-3 shrink-0" />
+                  <span className="break-words min-w-0">{post.author_name}</span>
                 </>
               )}
             </div>
-            <div className="flex items-center gap-2">
-              {post.read_time && (
+            {Boolean(post.read_time) && (
+              <div className="flex items-center gap-2 whitespace-nowrap">
                 <>
                   <Clock className="w-3 h-3" />
                   <span>{post.read_time} min</span>
                 </>
-              )}
-            </div>
-            <div className="flex items-center gap-1">
-              <Calendar className="w-3 h-3" />
+              </div>
+            )}
+            <div className="flex items-center gap-1 whitespace-nowrap">
+              <Calendar className="w-3 h-3 shrink-0" />
               <span>{new Date(post.publish_date).toLocaleDateString()}</span>
             </div>
           </div>

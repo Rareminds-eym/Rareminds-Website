@@ -8,13 +8,12 @@ import {
   Award,
   ArrowRight,
   Download,
-  FileSpreadsheet,
   LucideIcon
 } from 'lucide-react';
 import { useRef, useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import Modal from 'react-modal';
-import { submitBlueprintRequest, submitCourseListRequest } from '@/services/sdp/enrollmentService';
+import { submitCourseListRequest } from '@/services/sdp/enrollmentService';
 import { getServices, serviceHasCourses } from '@/services/sdp/courseService';
 import ExpandableText from '@/components/universities/sdp/shared/ExpandableText';
 
@@ -102,19 +101,6 @@ export default function Services() {
     fetchServicesData();
   }, [institutionType]);
 
-  // Modal state
-  const [modalOpen, setModalOpen] = useState(false);
-  const [form, setForm] = useState({
-    name: '',
-    phone: '',
-    email: '',
-    location: '', 
-    university: ''
-  });
-  const [sending, setSending] = useState(false);
-  const [success, setSuccess] = useState(false);
-  const [error, setError] = useState('');
-
   // Modal state for Course List
   const [courseModalOpen, setCourseModalOpen] = useState(false);
   const [courseForm, setCourseForm] = useState({ name: '', email: '' });
@@ -122,35 +108,8 @@ export default function Services() {
   const [courseSuccess, setCourseSuccess] = useState(false);
   const [courseError, setCourseError] = useState('');
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
   const handleCourseChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCourseForm({ ...courseForm, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setSending(true);
-    setError('');
-    try {
-      await submitBlueprintRequest(form);
-      setSuccess(true);
-      setTimeout(() => {
-        setModalOpen(false);
-        setSuccess(false);
-        setForm({
-          name: '',
-          phone: '',
-          email: '',
-          location: '',
-          university: ''
-        });
-      }, 2000);
-    } catch (err: any) {
-      setError(err.message || 'Failed to send blueprint. Try again.');
-    }
-    setSending(false);
   };
 
   // Handle Course List download automation
@@ -306,120 +265,12 @@ export default function Services() {
               <Download className="inline-block mr-2 h-5 w-5" />
               Download Course List
             </motion.button>
-            {/* Blueprint Request */}
-            <motion.button
-              type="button"
-              onClick={() => setModalOpen(true)}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="button-secondary py-2 flex items-center"
-            >
-              <FileSpreadsheet className="inline-block mr-2 h-5 w-5" />
-              Request Blueprint
-            </motion.button>
           </div>
         </motion.div>
       </motion.div>
       </div>
 
-      {/* Modal for Request Blueprint */}
-      <Modal
-    isOpen={modalOpen}
-    onRequestClose={() => {
-      setModalOpen(false);
-      setSuccess(false);
-      setForm({
-        name: '',
-        phone: '',
-        email: '',
-        location: '',
-        university: ''
-      });
-      setError('');
-    }}
-    className="bg-white rounded-lg p-8 max-w-md mx-auto mt-24 shadow-lg relative z-[9999]"
-    overlayClassName="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-[9998]"
-  >
-    <button
-      className="absolute top-2 right-2 text-gray-500"
-      onClick={() => {
-        setModalOpen(false);
-        setSuccess(false);
-        setForm({
-          name: '',
-          phone: '',
-          email: '',
-          location: '',
-          university: ''
-        });
-        setError('');
-      }}
-    >
-      ×
-    </button>
-    <h2 className="text-lg font-bold mb-4">Request Blueprint</h2>
-    {success ? (
-      <div className="text-green-600">
-        Blueprint sent to your email!
-      </div>
-    ) : (
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <input
-          name="name"
-          value={form.name}
-          onChange={handleChange}
-          required
-          placeholder="Your Name"
-          className="w-full border px-3 py-2 rounded"
-        />
-        <input
-          name="phone"
-          value={form.phone}
-          onChange={handleChange}
-          required
-          placeholder="Phone Number"
-          className="w-full border px-3 py-2 rounded"
-        />
-        <input
-          name="email"
-          value={form.email}
-          onChange={handleChange}
-          required
-          type="email"
-          placeholder="Email ID"
-          className="w-full border px-3 py-2 rounded"
-        />
-        <input
-          name="university"
-          value={form.university}
-          onChange={handleChange}
-          required
-          placeholder="University Name"
-          className="w-full border px-3 py-2 rounded"
-        />
-        <input
-          name="location"
-          value={form.location}
-          onChange={handleChange}
-          required
-          placeholder="Location"
-          className="w-full border px-3 py-2 rounded"
-        />
-        {error && (
-          <p className="text-red-500 text-sm text-center">{error}</p>
-        )}
-        <button
-          type="submit"
-          disabled={sending}
-          className="w-full bg-blue-600 text-white py-2 rounded font-semibold"
-        >
-          {sending ? 'Sending...' : 'Request & Send PDF'}
-        </button>
-      </form>
-    )}
-  </Modal>
-
-  {/* Modal for Course List Download */}
+      {/* Modal for Course List Download */}
   <Modal
     isOpen={courseModalOpen}
     onRequestClose={() => {
