@@ -46,6 +46,7 @@ const CorporateHeader: React.FC = () => {
     <motion.button type="button"
       id="corporate-menu-btn"
       onClick={toggle}
+      aria-label={isOpen ? "Close navigation menu" : "Open navigation menu"}
       className="relative z-50 w-10 h-10 flex items-center justify-center rounded-full bg-gray-50 hover:bg-gray-100 transition-colors"
       whileTap={{ scale: 0.95 }}
     >

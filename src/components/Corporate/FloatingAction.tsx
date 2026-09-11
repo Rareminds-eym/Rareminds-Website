@@ -196,6 +196,7 @@ const FloatingActionMenu = () => {
                     whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.9 }}
                     onClick={() => handleMenuItemClick(item)}
+                    aria-label={item.label}
                     className="w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center text-gray-700 hover:bg-gray-50 transition-colors group relative"
                     onMouseEnter={() => setHoveredIndex(index)}
                     onMouseLeave={() => setHoveredIndex(null)}
@@ -226,6 +227,7 @@ const FloatingActionMenu = () => {
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
         onClick={toggleMenu}
+        aria-label={isOpen ? "Close quick actions menu" : "Open quick actions menu"}
         className={`w-14 h-14 bg-[#434343] rounded-full shadow-lg flex items-center justify-center text-white hover:from-blue-600 hover:to-purple-700 transition-all duration-200 ${
           !isOpen && "animate-bounce"
         }`}

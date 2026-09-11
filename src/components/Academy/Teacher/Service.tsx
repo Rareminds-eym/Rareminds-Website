@@ -1,4 +1,4 @@
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion, useScroll } from 'framer-motion';
 import { 
   GraduationCap,
   Briefcase,
@@ -13,6 +13,7 @@ import {
 import { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Modal from 'react-modal';
+import { sendEmailNotification } from '@/services/emailBff';
 
 // Make sure this matches your app's root element
 if (typeof document !== "undefined") {
@@ -135,24 +136,28 @@ const customStyles = {
   },
 };
 
-const sendEmail = async (formData: any) => {
-  try {
-    console.log('Form data submitted:', formData);
-    alert("Request submitted successfully! We'll get back to you soon.");
-  } catch (err) {
-    console.error("Error:", err);
-    alert("An error occurred. Please try again.");
-  }
+const sendEmail = async (formData: { name: string; email: string; schoolName: string; message: string }) => {
+  await sendEmailNotification('teacher-service-enquiry', {
+    ...formData,
+    submitted_at: new Date().toISOString(),
+  });
+  alert("Request submitted successfully! We'll get back to you soon.");
 };
 
-const sendCourseListEmail = async (email: string) => {
-  try {
-    console.log('Course list requested for:', email);
-    alert("Course list request submitted! Check your email soon.");
-  } catch (err) {
-    console.error("Error:", err);
-    alert("An error occurred. Please try again.");
-  }
+const sendCourseListEmail = async (email: string, name: string) => {
+  const response = await fetch('/api/send-pdf', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      name: name.trim() || 'Teacher',
+      email,
+      institution: 'Teacher Development Program',
+      pdfUrl: '/institutions/pdfs/Course_List.pdf',
+    }),
+  });
+  const result = await response.json().catch(() => ({})) as { error?: string };
+  if (!response.ok) throw new Error(result.error || 'Unable to send course list');
+  alert("Course list sent! Check your email.");
 };
 
 export default function Services() {
@@ -183,14 +188,24 @@ export default function Services() {
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
-    await sendEmail(formData);
-    closeModal();
+    try {
+      await sendEmail(formData);
+      closeModal();
+    } catch (error) {
+      console.error('Teacher service enquiry failed:', error);
+      alert('An error occurred. Please try again.');
+    }
   };
 
   const handleCourseListDownload = async (e: any) => {
     e.preventDefault();
-    await sendCourseListEmail(formData.email);
-    closeCourseModal();
+    try {
+      await sendCourseListEmail(formData.email, formData.name);
+      closeCourseModal();
+    } catch (error) {
+      console.error('Course list email failed:', error);
+      alert('An error occurred. Please try again.');
+    }
   };
 
   return (
@@ -223,16 +238,9 @@ export default function Services() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-16 max-w-6xl mx-auto">
           {services.map((service, index) => {
-            const yOffset = useTransform(
-              scrollYProgress,
-              [index / services.length, (index + 1) / services.length],
-              [50, -50]
-            );
-
             return (
               <motion.div
                 key={index}
-                style={{ y: yOffset }}
                 className="relative group cursor-pointer"
                 onClick={() => navigate(`/service/${service.id}`)}
               >

@@ -1,14 +1,6 @@
 // Enrollment and form submission services
 import { supabase } from '@/lib/supabaseClient';
 
-export interface BlueprintRequest {
-  name: string;
-  phone: string;
-  email: string;
-  location: string;
-  university: string;
-}
-
 export interface CourseListRequest {
   name: string;
   email: string;
@@ -33,7 +25,7 @@ const sendPdfEmail = async (
   location?: string,
   university?: string
 ) => {
-  const response = await fetch('https://rareminds.in/api/send-pdf', {
+  const response = await fetch('/api/send-pdf', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
@@ -51,26 +43,6 @@ const sendPdfEmail = async (
     throw new Error(data.error || 'Failed to send email');
   }
   return data;
-};
-
-// Submit blueprint request
-export const submitBlueprintRequest = async (data: BlueprintRequest) => {
-  // Store in Supabase
-  const { error: supabaseError } = await supabase
-    .from('blueprint_requests')
-    .insert([data]);
-  
-  if (supabaseError) throw supabaseError;
-
-  // Send email with PDF
-  await sendPdfEmail(
-    data.name,
-    data.email,
-    '/institutions/pdfs/Blueprint.pdf',
-    data.university,
-    data.location,
-    data.university
-  );
 };
 
 // Submit course list request

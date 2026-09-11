@@ -1,5 +1,6 @@
 import { supabase } from '../lib/supabaseClient';
 import type { EventContactFormData } from '../components/Events/EventContactForm';
+import { sendEmailNotification } from './emailBff';
 
 export interface Event {
   id: string;
@@ -241,47 +242,17 @@ export class EventContactService {
    */
   static async sendEnquiryEmails(enquiryData: EventContact): Promise<void> {
     try {
-      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-      const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
-
-      if (!supabaseUrl || !supabaseKey) {
-        throw new Error('Supabase configuration not found');
-      }
-
       console.log('🚀 Triggering automated email for enquiry:', enquiryData.id);
-
-      const response = await fetch(`${supabaseUrl}/functions/v1/send-event-enquiry-email`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${supabaseKey}`,
-        },
-        body: JSON.stringify({
-          record: {
-            id: enquiryData.id,
-            event_id: enquiryData.event_id,
-            event_title: enquiryData.event_title,
-            name: enquiryData.name,
-            email: enquiryData.email,
-            phone: enquiryData.phone,
-            organization: enquiryData.organization,
-            created_at: enquiryData.created_at
-          }
-        }),
+      await sendEmailNotification('event-enquiry', {
+        id: enquiryData.id,
+        event_id: enquiryData.event_id,
+        event_title: enquiryData.event_title,
+        name: enquiryData.name,
+        email: enquiryData.email,
+        phone: enquiryData.phone,
+        organization: enquiryData.organization,
+        created_at: enquiryData.created_at,
       });
-
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        throw new Error(`Email service responded with ${response.status}: ${errorData.message || response.statusText}`);
-      }
-
-      const result = await response.json();
-      console.log('📬 Email service response:', result);
-
-      if (!result.success) {
-        console.warn('⚠️ Email sending had issues:', result.message);
-        // Log but don't throw - partial success is acceptable
-      }
     } catch (error) {
       console.error('❌ Failed to trigger automated emails:', error);
       throw error;

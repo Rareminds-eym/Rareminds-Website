@@ -59,6 +59,10 @@ const Dashboard: React.FC = () => {
             <img
               src="https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Corporate/Recruitment/Index/Dashboard/dashboard-preview-3.webp"
               alt="Image of Dashboard showing data and image of recruitment steps and stages of recruitment services using AI."
+              width={600}
+              height={375}
+              loading="lazy"
+              decoding="async"
               className="rounded-lg w-full drop-shadow-lg"
             />
           </div>
@@ -87,6 +91,10 @@ const Dashboard: React.FC = () => {
             <img
               src="https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Corporate/Recruitment/Index/Dashboard/dashboard-preview-2.webp"
               alt="Image of a Smart Learning Management Dashboard showing bar graphs, figures, charts, attendance and time spent."
+              width={600}
+              height={375}
+              loading="lazy"
+              decoding="async"
               className="rounded-lg w-full drop-shadow-lg"
             />
           </div>

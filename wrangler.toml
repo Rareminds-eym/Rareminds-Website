@@ -2,10 +2,26 @@ name = "rareminds-website"
 compatibility_date = "2026-05-25"
 compatibility_flags = ["nodejs_compat"]
 
-# Payment worker service binding for Pages Functions.
-# Local dev equivalent:
-# wrangler pages dev dist --port 8788 --service PAYMENT_WORKER=razorpay-api
 [[services]]
 binding = "PAYMENT_WORKER"
 service = "razorpay-api"
-entrypoint = "PaymentService"
+
+[[services]]
+binding = "EMAIL_SERVICE"
+service = "shared-email-api"
+entrypoint = "EmailService"
+
+[[ratelimits]]
+name = "EMAIL_RATE_LIMITER"
+namespace_id = "10031"
+simple = { limit = 20, period = 60 }
+
+[[ratelimits]]
+name = "EMAIL_OTP_RATE_LIMITER"
+namespace_id = "10032"
+simple = { limit = 5, period = 60 }
+
+[[ratelimits]]
+name = "PAYMENT_RATE_LIMITER"
+namespace_id = "10033"
+simple = { limit = 10, period = 60 }

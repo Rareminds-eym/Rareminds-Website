@@ -130,7 +130,7 @@ const Fdpcalender = ({ Facultytocontact }: FdpcalenderProps) => {
         }
   
         // Send email
-        const response = await fetch('https://email-sender-ssmu.onrender.com/send-pdf', {
+        const response = await fetch('/api/send-pdf', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -139,7 +139,7 @@ const Fdpcalender = ({ Facultytocontact }: FdpcalenderProps) => {
             name: name.trim(),
             email: email.trim(),
             phone: phone.trim(),
-            resourceTitle: selectedResource.title,
+            institution: selectedResource.title,
             pdfUrl: selectedResource.pdfLink
           }),
         });

@@ -34,7 +34,7 @@ const FloatingActionMenu = () => {
 
   // Email automation for Course List
   const sendCourseListEmail = async (name: string, email: string) => {
-    const response = await fetch('https://rareminds.in/api/send-pdf', {
+    const response = await fetch('/api/send-pdf', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -59,9 +59,10 @@ const FloatingActionMenu = () => {
     setCourseSending(true);
     setCourseError('');
     try {
-      await supabase.from('course_list_requests').insert([
+      const { error } = await supabase.from('course_list_requests').insert([
         { name: courseForm.name, email: courseForm.email }
       ]);
+      if (error) throw error;
       await sendCourseListEmail(courseForm.name, courseForm.email);
       setCourseSuccess(true);
       setTimeout(() => {

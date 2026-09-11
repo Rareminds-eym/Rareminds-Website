@@ -13,6 +13,7 @@ import {
 import { Icon } from "@iconify/react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/lib/supabaseClient";
+import { sendEmailNotification } from "@/services/emailBff";
 
 const ContactSection = () => {
   const { toast } = useToast();
@@ -64,18 +65,7 @@ const ContactSection = () => {
         throw dbError;
       }
 
-      // Optionally, trigger an email function here if needed
-      const { error: functionError } = await supabase.functions.invoke(
-        "send-training-email",
-        {
-          body: { record: data },
-        }
-      );
-
-      if (functionError) {
-        console.error("Supabase function error:", functionError);
-        throw functionError;
-      }
+      await sendEmailNotification("training-enquiry", data as Record<string, unknown>);
 
       toast({
         title: "Message Sent!",

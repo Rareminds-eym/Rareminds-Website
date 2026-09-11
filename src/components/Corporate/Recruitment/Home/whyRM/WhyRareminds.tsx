@@ -155,7 +155,8 @@ const WhyRareminds = () => {
                 <div className="relative w-[389px] h-[224px]">
                   <img
                     src="https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Corporate/Recruitment/Index/whyRM/shape.webp"
-                    alt="Shape"
+                    alt=""
+                    aria-hidden="true"
                     width={389}
                     height={224}
                     className="absolute mb-4"
@@ -191,7 +192,9 @@ const WhyRareminds = () => {
           src="https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Corporate/Recruitment/Index/whyRM/matrics-bg.webp"
           width={1920}
           height={1080}
-          alt="road image"
+          loading="lazy"
+          decoding="async"
+          alt="Rareminds recruitment journey and metrics timeline background"
           className="relative w-full h-full z-0"
         />
         <div
@@ -229,6 +232,8 @@ const WhyRareminds = () => {
                 <img
                   src={block.src}
                   alt={block.alt}
+                  loading="lazy"
+                  decoding="async"
                   onMouseEnter={() => setHoveredIndex(index)}
                   onMouseLeave={() => setHoveredIndex(null)}
                   className="hover:cursor-pointer"

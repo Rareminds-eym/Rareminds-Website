@@ -12,6 +12,24 @@ const LeadershipPrograms = () => {
   const { serviceSlug, programId } = useParams<{ serviceSlug: string; programId: string }>();
   const navigate = useNavigate();
   const service = services.find((s) => s.id === serviceSlug);
+  const programs = service?.programs ?? [];
+
+  const initialProgram = programId
+    ? programs.find((program) => program.id === programId) ?? programs[0]
+    : programs[0];
+  const [activeProgram, setActiveProgram] = useState(initialProgram?.id ?? '');
+  const location = useLocation();
+
+  useEffect(() => {
+    if (!service || !programs[0]) return;
+
+    if (programId) {
+      const program = programs.find((candidate) => candidate.id === programId);
+      if (program) setActiveProgram(program.id);
+    } else {
+      setActiveProgram(programs[0].id);
+    }
+  }, [location, programId, programs, service]);
 
   if (!service) {
     return (
@@ -22,28 +40,7 @@ const LeadershipPrograms = () => {
     );
   }
 
-  const { heroTitle, heroSubtitle, programs } = service;
-  
-  // Find the specific program if programId is provided
-  const initialProgram = programId 
-    ? programs.find(p => p.id === programId) || programs[0]
-    : programs[0];
-    
-  const [activeProgram, setActiveProgram] = useState(initialProgram.id);
-
-  const location = useLocation();
-
-  useEffect(() => {
-    if (programId) {
-      const program = programs.find(p => p.id === programId);
-      if (program) {
-        setActiveProgram(program.id);
-      }
-    } else {
-      setActiveProgram(programs[0].id);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [location, programId]);
+  const { heroTitle, heroSubtitle } = service;
 
   const handleBack = () => {
     navigate(-1);

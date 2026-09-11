@@ -2,14 +2,29 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/RMLogo.webp" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/webp" href="/RMLogo.webp" />
+    <meta
+      name="description"
+      content="Rareminds delivers fast, scalable, and data-driven recruitment solutions across India and globally—20+ industries, 500K+ hires, and 250+ clients worldwide."
+    />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://itvhjkgfafikpqmuunlh.supabase.co" crossorigin />
+    <!-- Non-render-blocking Google Fonts -->
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" />
     <link
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
       rel="stylesheet"
+      media="print"
+      onload="this.media='all'"
     />
+    <noscript>
+      <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet"
+      />
+    </noscript>
     <title>Rareminds</title>
     <!-- Google tag (gtag.js) -->
     <script
@@ -29,39 +44,69 @@
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
     
-    <!-- Zoho SalesIQ Widget -->
+    <!-- Zoho SalesIQ Widget (Optimized: Lazy-loaded on interaction or idle to protect Core Web Vitals & TBT) -->
     <script>
       window.$zoho = window.$zoho || {};
       $zoho.salesiq = $zoho.salesiq || {
         ready: function () {}
       };
       
-      // Store original ready function
       var originalReady = $zoho.salesiq.ready;
-      
-      // Override with new function that calls original
       $zoho.salesiq.ready = function() {
-        originalReady();
+        if (typeof originalReady === 'function') {
+          originalReady();
+        }
         
-        const urlParams = new URLSearchParams(window.location.search);
-        const openChat = urlParams.get('openChat');
+        var urlParams = new URLSearchParams(window.location.search);
+        var openChat = urlParams.get('openChat');
         
         if (openChat === 'true' || openChat === '1') {
           setTimeout(function() {
-            $zoho.salesiq.floatwindow.visible('show');
+            if ($zoho.salesiq && $zoho.salesiq.floatwindow) {
+              $zoho.salesiq.floatwindow.visible('show');
+            }
           }, 500);
         } else {
-          // Explicitly close the chat if parameter is not present
           setTimeout(function() {
-            $zoho.salesiq.floatwindow.visible('hide');
+            if ($zoho.salesiq && $zoho.salesiq.floatwindow) {
+              $zoho.salesiq.floatwindow.visible('hide');
+            }
           }, 500);
         }
       };
+
+      function loadZohoSalesIQ() {
+        if (window._zohoLoaded || document.getElementById('zsiqscript')) return;
+        window._zohoLoaded = true;
+        var script = document.createElement('script');
+        script.id = 'zsiqscript';
+        script.src = 'https://salesiq.zohopublic.in/widget?wc=siq85740827d442fdfad727c23eb50d61276e1e478af9841b5169a99498fc35da01';
+        script.defer = true;
+        document.body.appendChild(script);
+      }
+
+      var urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get('openChat') === 'true' || urlParams.get('openChat') === '1') {
+        loadZohoSalesIQ();
+      } else {
+        var userInteractionEvents = ['scroll', 'touchstart', 'pointerdown', 'keydown'];
+        var triggerLoad = function() {
+          loadZohoSalesIQ();
+          userInteractionEvents.forEach(function(ev) {
+            window.removeEventListener(ev, triggerLoad, { passive: true });
+          });
+        };
+        userInteractionEvents.forEach(function(ev) {
+          window.addEventListener(ev, triggerLoad, { once: true, passive: true });
+        });
+        if ('requestIdleCallback' in window) {
+          window.requestIdleCallback(function() {
+            setTimeout(loadZohoSalesIQ, 3500);
+          });
+        } else {
+          setTimeout(loadZohoSalesIQ, 4000);
+        }
+      }
     </script>
-    <script
-      id="zsiqscript"
-      src="https://salesiq.zohopublic.in/widget?wc=siq85740827d442fdfad727c23eb50d61276e1e478af9841b5169a99498fc35da01"
-      defer
-    ></script>
   </body>
 </html>

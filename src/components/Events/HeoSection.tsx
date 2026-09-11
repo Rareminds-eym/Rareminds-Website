@@ -4,8 +4,8 @@ import { Ticket, BadgeIndianRupee } from "lucide-react";
 import type { EventType } from "../../types/Events/event";
 import PaymentModal from "./PaymentModal";
 import DynamicEventForm from "./DynamicEventForm";
-import { supabase } from "../../lib/supabase";
 import { trackEvent, ANALYTICS_EVENTS } from '../../utils/analytics';
+import { createEventRegistration } from '../../services/eventRegistrationBff';
 
 interface HeroSectionProps {
   content?: {
@@ -44,11 +44,13 @@ const WebinarSection: React.FC<HeroSectionProps> = ({
   const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [registrationSuccess, setRegistrationSuccess] = useState(false);
   const [registrationId, setRegistrationId] = useState<number | null>(null);
+  const [paymentAmount, setPaymentAmount] = useState(0);
+  const [paymentToken, setPaymentToken] = useState<string | null>(null);
   const [userDetails, setUserDetails] = useState<{ name: string; email: string; phone: string } | null>(null);
   const [formAnswers, setFormAnswers] = useState<Record<string, any> | null>(null);
 
   // Handle form submission success
-  const handleFormSubmitSuccess = async (formData: Record<string, any>) => {
+  const handleFormSubmitSuccess = async (formData: Record<string, any>, verificationProof: string) => {
     if (!eventId) {
       console.error('[Registration] Missing event ID');
       throw new Error('Event information is missing. Please refresh the page and try again.');
@@ -63,8 +65,6 @@ const WebinarSection: React.FC<HeroSectionProps> = ({
       const email = formData.email || formData.email_address || formData.emailAddress || formData.Email || '';
       const phone = formData.phone || formData.mobile || formData.phone_number || formData.phoneNumber || formData.mobileNumber || formData.mobile_number || '';
       const organization = formData.organization || formData.company || formData.university || formData.institution_university_name || '';
-
-      console.log('[Registration] Attempt:', JSON.stringify({ eventId, name, email, phone, organization, eventType }));
 
       // Find email field dynamically if standard field names don't match
       if (!email) {
@@ -84,68 +84,35 @@ const WebinarSection: React.FC<HeroSectionProps> = ({
         throw new Error(`Email is required for registration`);
       }
 
-      // Check if user already registered for this event
-      const { data: existingRegistration, error: checkError } = await supabase
-        .from('event_registrations')
-        .select('id, payment_status')
-        .eq('event_id', eventId)
-        .eq('email', finalEmail)
-        .maybeSingle();
-
-      if (checkError) {
-        console.error('[Registration] Duplicate check error:', checkError);
-      }
-
-      if (existingRegistration) {
-        throw new Error('You have already registered for this event. Please check your email for confirmation.');
-      }
-
-      // Check if this is a paid event
-      const isPaidEvent = eventType === 'paid' && price && price > 0;
-
-      // Save registration to database
-      const registrationData = {
+      const registration = await createEventRegistration({
         event_id: eventId,
-        event_name: eventName || '',
-        name,
         email: finalEmail,
+        name,
         phone,
         organization,
         quantity: 1,
-        total_amount: isPaidEvent ? price : null,
-        payment_status: isPaidEvent ? 'pending' : 'not_required'
-      };
-
-      const { data, error } = await supabase
-        .from('event_registrations')
-        .insert(registrationData)
-        .select()
-        .single();
-
-      if (error) {
-        console.error('[Registration] Supabase insert error:', error);
-        throw new Error('Failed to save registration. Please try again.');
-      }
-
-      console.log('[Registration] Saved to Supabase:', { id: data.id, eventId, email: finalEmail });
+        verification_proof: verificationProof,
+      });
+      const isPaidEvent = registration.payment_status === 'pending';
 
       // Store form answers for later use in worker call
       setFormAnswers(formData);
 
       if (isPaidEvent) {
-        console.log('[Registration] Paid event, showing payment modal:', { registrationId: data.id, name, email: finalEmail });
-        setRegistrationId(data.id);
+        if (!registration.payment_token) throw new Error('Payment authorization was not issued.');
+        setRegistrationId(registration.id);
+        setPaymentAmount(registration.total_amount);
+        setPaymentToken(registration.payment_token);
         setUserDetails({ name, email: finalEmail, phone });
         setShowPaymentModal(true);
       } else {
-        console.log('[Registration] Free event, sending to Zoho worker');
         await sendRegistrationToWorker(null, formData);
 
         trackEvent(ANALYTICS_EVENTS.EVENT_REGISTRATION_SUCCESS, {
           // Event metadata
           event_id: eventId,
           event_name: eventName,
-          registration_id: String(data.id),
+          registration_id: String(registration.id),
           event_type: 'free',
           // Registration form values
           first_name: formData.first_name || formData.firstName || formData.first || '',
@@ -220,26 +187,6 @@ const WebinarSection: React.FC<HeroSectionProps> = ({
     }
 
     try {
-      const { error } = await supabase
-        .from('event_registrations')
-        .update({ 
-          payment_status: 'completed',
-          payment_id: paymentDetails.razorpay_payment_id,  // Store payment ID
-          razorpay_payment_id: paymentDetails.razorpay_payment_id,
-          order_id: paymentDetails.order_id,
-          payment_date: paymentDetails.payment_date,
-          payment_verified_at: new Date().toISOString()
-        })
-        .eq('id', registrationId)
-        .select();
-
-      if (error) {
-        console.error('[Registration] Failed to update payment status:', error);
-        throw new Error('Failed to save payment details to database');
-      }
-
-      console.log('[Registration] Payment verified:', { paymentId: paymentDetails.razorpay_payment_id, orderId: paymentDetails.order_id, registrationId });
-
       // Send registration data to worker for Zoho CRM integration
       await sendRegistrationToWorker(paymentDetails.razorpay_payment_id, formAnswers ?? undefined);
 
@@ -272,6 +219,8 @@ const WebinarSection: React.FC<HeroSectionProps> = ({
       setTimeout(() => {
         setRegistrationSuccess(false);
         setRegistrationId(null);
+        setPaymentAmount(0);
+        setPaymentToken(null);
         setUserDetails(null);
         setFormAnswers(null);
       }, 3000);
@@ -286,15 +235,6 @@ const WebinarSection: React.FC<HeroSectionProps> = ({
   const sendRegistrationToWorker = async (paymentId: string | null, answers?: Record<string, any>) => {
     try {
       const finalAnswers = answers ?? formAnswers ?? {};
-      console.log('[Registration] Sending to /api/register:', JSON.stringify({
-        eventId,
-        formId,
-        eventType,
-        eventName,
-        paymentId,
-        answerKeys: Object.keys(finalAnswers),
-        answerCount: Object.keys(finalAnswers).length
-      }));
 
       const payload = {
         answers: finalAnswers,
@@ -318,8 +258,7 @@ const WebinarSection: React.FC<HeroSectionProps> = ({
         const errorData = await response.json().catch(() => ({}));
         console.error('[Registration] /api/register failed:', { status: response.status, error: errorData });
       } else {
-        const responseData = await response.json().catch(() => ({}));
-        console.log('[Registration] /api/register success:', responseData);
+        await response.json().catch(() => ({}));
       }
     } catch (error) {
       console.error('[Registration] /api/register network error:', error);
@@ -413,8 +352,8 @@ const WebinarSection: React.FC<HeroSectionProps> = ({
             <DynamicEventForm
               formId={formId}
               eventId={eventId}
-              onSubmitSuccess={async (formData) => {
-                await handleFormSubmitSuccess(formData);
+              onSubmitSuccess={async (formData, verificationProof) => {
+                await handleFormSubmitSuccess(formData, verificationProof);
               }}
             />
           ) : (
@@ -449,8 +388,9 @@ const WebinarSection: React.FC<HeroSectionProps> = ({
           onClose={handlePaymentClose}
           onSuccess={handlePaymentSuccess}
           registrationId={registrationId}
+          paymentToken={paymentToken}
           eventName={eventName}
-          amount={price || 0}
+          amount={paymentAmount}
           ticketQuantity={1}
           pricePerTicket={price}
           userDetails={userDetails}

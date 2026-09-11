@@ -110,6 +110,8 @@ const TeamSection = () => {
                   <img
                     src={member.photo}
                     alt={member.name}
+                    width={250}
+                    height={350}
                     loading="lazy"
                     decoding="async"
                     className="grayscale group-hover:grayscale-0 transition-all duration-300 group-hover:scale-110"
@@ -120,10 +122,11 @@ const TeamSection = () => {
                 to={member.linkedin}
                 target="_blank"
                 rel="noopener noreferrer"
+                aria-label={`Connect with ${member.name} on LinkedIn`}
                 className="absolute bottom-0 translate-y-1/2 left-1/2 -translate-x-1/2 text-center mt-2 w-min mx-auto"
               >
                 <div className="bg-[#1F2937] w-min rounded-full p-3">
-                  <Linkedin className="text-white" />
+                  <Linkedin className="text-white" aria-hidden="true" />
                 </div>
               </Link>
             </motion.div>

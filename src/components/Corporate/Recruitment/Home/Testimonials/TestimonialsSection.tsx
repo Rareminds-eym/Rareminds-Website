@@ -75,6 +75,10 @@ const TestimonialsSection = () => {
 								<img
 									src={testimonial.img}
 									alt={`${testimonial.company} logo`}
+									width={index === 0 || index === 2 ? 150 : 56}
+									height={56}
+									loading="lazy"
+									decoding="async"
 									className={`h-14 object-contain bg-white ${
 										index === 0 || index === 2 ? "w-[150px]" : "w-14"
 									}`}
@@ -100,9 +104,9 @@ const TestimonialsSection = () => {
 							</div>
 							<div className="flex items-center gap-4 mt-auto pt-6 border-t border-corporate-primary-light/20">
 								<div className="flex-grow text-center">
-									<h4 className="font-semibold text-corporate-black text-lg">
+									<h3 className="font-semibold text-corporate-black text-lg">
 										{testimonial.author}
-									</h4>
+									</h3>
 									<p className="text-sm text-gray-500 mt-1">
 										{testimonial.position}
 									</p>

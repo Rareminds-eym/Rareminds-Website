@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { Button } from '../UI/button';
-import { Calendar, GraduationCap, ArrowRight, CheckSquare } from 'lucide-react';
+import { Calendar, GraduationCap, CheckSquare } from 'lucide-react';
 import CareerCounsellingBlueprint from './CareerCounsellingBlueprint';
 import NEPChecklist from './NEPChecklist';
 import { useToast } from '@/hooks/use-toast';
 
-const programs = () => {
+const Programs = () => {
   const [activeSection, setActiveSection] = useState<number | null>(null);
   const { toast } = useToast();
   
@@ -401,9 +401,9 @@ const programs = () => {
         <div className="container mx-auto text-center">
           <p>© 2025 Teacher Development Program. All rights reserved.</p>
           <div className="mt-4 text-sm opacity-75">
-            <a href="#" className="hover:underline mx-2">Terms & Conditions</a>
-            <a href="#" className="hover:underline mx-2">Privacy Policy</a>
-            <a href="#" className="hover:underline mx-2">Contact Us</a>
+            <a href="/terms" className="hover:underline mx-2">Terms & Conditions</a>
+            <a href="/privacy-policy" className="hover:underline mx-2">Privacy Policy</a>
+            <a href="/contact" className="hover:underline mx-2">Contact Us</a>
           </div>
         </div>
       </footer>
@@ -411,4 +411,4 @@ const programs = () => {
   );
 };
 
-export default programs;
+export default Programs;

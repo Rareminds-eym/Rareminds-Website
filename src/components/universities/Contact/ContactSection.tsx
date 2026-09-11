@@ -8,7 +8,6 @@ import {
   MapPin,
   Send,
   CheckCircle2,
-  ArrowRight,
   School,
   Contact,
   PhoneCall,
@@ -27,7 +26,7 @@ const ContactSection = () => {
     message: "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
+  const [submitted, setSubmitted] = useState<false | "sent" | "saved">(false);
   const formRef = useRef<HTMLFormElement>(null);
 
   const handleChange = (
@@ -44,59 +43,63 @@ const ContactSection = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
+    let persisted = false;
 
-    // Insert form data into Supabase table "demo_requests"
-    const { error } = await supabase.from("demo_requests").insert([
-      {
-        name: formData.name,
-        university: formData.university,
-        email: formData.email,
-        course: formData.course,
-        message: formData.message,
-      },
-    ]);
+    try {
+      const { error } = await supabase.from("demo_requests").insert([
+        {
+          name: formData.name,
+          university: formData.university,
+          email: formData.email,
+          course: formData.course,
+          message: formData.message,
+        },
+      ]);
 
-      // Send email to backend
-  try {
-    await fetch("https://rareminds.in/api/send-contact-email", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(formData),
-    });
-  } catch (err) {
-    // Optionally handle error (e.g., show a toast)
-  }
+      if (error) throw error;
+      persisted = true;
 
-    if (error) {
+      const response = await fetch("/api/send-contact-email", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+      const data = await response.json().catch(() => ({}));
+
+      if (!response.ok) {
+        throw new Error(typeof data.error === "string" ? data.error : "Failed to send contact email");
+      }
+
       toast({
-        title: "Submission Failed",
-        description: "There was an error submitting your request. Please try again.",
-        variant: "destructive",
+        title: "Message Sent!",
+        description:
+          "Thank you for reaching out. Our team will contact you shortly.",
       });
+      setSubmitted("sent");
+
+      setTimeout(() => {
+        setFormData({
+          name: "",
+          university: "",
+          email: "",
+          course: "",
+          message: "",
+        });
+        setSubmitted(false);
+        formRef.current?.reset();
+      }, 3000);
+    } catch {
+      toast({
+        title: persisted ? "Request Received" : "Submission Failed",
+        description: persisted
+          ? "Your request was saved, but the email notification was delayed. Please do not resubmit; our team can follow up from your saved request."
+          : "There was an error submitting your request. Please try again.",
+        variant: persisted ? "default" : "destructive",
+      });
+      if (persisted) setSubmitted("saved");
+    } finally {
       setIsSubmitting(false);
-      return;
     }
-
-    toast({
-      title: "Message Sent!",
-      description:
-        "Thank you for reaching out. Our team will contact you shortly.",
-    });
-
-    setSubmitted(true);
-    setIsSubmitting(false);
-
-    setTimeout(() => {
-      setFormData({
-        name: "",
-        university: "",
-        email: "",
-        course: "",
-        message: "",
-      });
-      setSubmitted(false);
-      if (formRef.current) formRef.current.reset();
-    }, 3000);
   };
 
   return (
@@ -297,10 +300,12 @@ const ContactSection = () => {
                         >
                           <CheckCircle2 size={32} className="mx-auto mb-2 text-green-600" />
                           <p className="font-medium text-green-800">
-                            Message sent successfully!
+                            {submitted === "sent" ? "Message sent successfully!" : "Request saved successfully!"}
                           </p>
                           <p className="text-sm text-green-700 mt-1">
-                            Our team will contact you shortly.
+                            {submitted === "sent"
+                              ? "Our team will contact you shortly."
+                              : "The notification was delayed; please do not resubmit."}
                           </p>
                         </motion.div>
                       )}

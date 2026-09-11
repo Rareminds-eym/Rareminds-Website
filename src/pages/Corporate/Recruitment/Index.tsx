@@ -89,9 +89,7 @@ const Corporate: React.FC = () => {
         <div id="services">
           <ServicesSection />
         </div>
-        <div id="industries">
-          <IndustriesSection />
-        </div>
+        <IndustriesSection />
         <div id="testimonials">
           <TestimonialsSection />
         </div>
