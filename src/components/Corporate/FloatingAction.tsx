@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, Suspense, lazy } from "react";
+import React, { useState, useEffect, useCallback, Suspense, lazy, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Plus,
@@ -8,156 +8,170 @@ import {
   Download,
 } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { initialSession, type Session } from "./ChatBot/engine";
 
 const FAQChatbot = lazy(() => import("./ChatBot/FAQChatbot"));
 const ChatButton = lazy(() => import("./ChatButton").then((m) => ({ default: m.ChatButton })));
 const BookDemo = lazy(() => import("./BookDemo").then((m) => ({ default: m.BookDemo })));
 
+type ActivePanel = "faq" | "chat" | "demo" | null;
+
 interface MenuItem {
   id: string;
   icon: React.ComponentType<any>;
   label: string;
-  onClick: () => void;
 }
 
-const FloatingActionMenu = () => {
+const FloatingActionMenu: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [isOpenFaq, setIsOpenFaq] = useState(false);
-  const [showChat, setShowChat] = useState(false);
-  const [showBookDemo, setShowBookDemo] = useState(false);
+  const [activePanel, setActivePanel] = useState<ActivePanel>(null);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const [session, setSession] = useState<Session>(initialSession);
+  const [chatDetails, setChatDetails] = useState({ name: "", email: "" });
+
+  const menuRef = useRef<HTMLDivElement>(null);
   const location = useLocation();
   const navigate = useNavigate();
 
-  // Open menu when user scrolls near the bottom (before footer) with rAF throttling
+  const defaultTopic = location.pathname.startsWith("/corporate/training")
+    ? "training"
+    : location.pathname.startsWith("/corporate/recruitment")
+    ? "recruitment"
+    : "all";
+
+  // Close active panel and menu on route changes
   useEffect(() => {
-    let ticking = false;
-    const handleScroll = () => {
-      if (!ticking) {
-        window.requestAnimationFrame(() => {
-          const scrollY = window.scrollY || window.pageYOffset;
-          const windowHeight = window.innerHeight;
-          const docHeight = document.documentElement.scrollHeight;
-          const footer = document.querySelector("#footer");
-          const footerHeight = footer
-            ? (footer as HTMLElement).offsetHeight + 10
-            : 120; // fallback if no footer
-          setIsOpen(scrollY + windowHeight >= docHeight - footerHeight);
-          ticking = false;
-        });
-        ticking = true;
+    setActivePanel(null);
+    setIsOpen(false);
+  }, [location.key]);
+
+  // Keyboard navigation: Escape key dismisses open menus and modals
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        if (activePanel) {
+          setActivePanel(null);
+        } else if (isOpen) {
+          setIsOpen(false);
+        }
       }
     };
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [activePanel, isOpen]);
 
-  const handleClick = useCallback(() => {
-    const isOnTrainingPage = location.pathname.startsWith(
-      "/corporate/training"
+  // Close floating speed-dial menu when clicking outside
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleClickOutside = (event: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [isOpen]);
+
+  // Robust observer-assisted scrolling to #contact section for the Download action
+  useEffect(() => {
+    if (!location.state?.corporateDownload) return;
+    const scrollToContact = () => {
+      const el = document.getElementById("contact");
+      if (!el) return false;
+      el.scrollIntoView({
+        behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches
+          ? "auto"
+          : "smooth",
+      });
+      return true;
+    };
+
+    if (scrollToContact()) return;
+    const observer = new MutationObserver(() => {
+      if (scrollToContact()) observer.disconnect();
+    });
+    observer.observe(document.body, { subtree: true, childList: true });
+    const timer = window.setTimeout(() => observer.disconnect(), 8000);
+    return () => {
+      observer.disconnect();
+      window.clearTimeout(timer);
+    };
+  }, [location.key, location.state]);
+
+  const handleDownloadClick = useCallback(() => {
+    setIsOpen(false);
+    setActivePanel(null);
+    navigate(
+      defaultTopic === "training" ? "/corporate/training" : "/corporate/recruitment",
+      { state: { corporateDownload: true } }
     );
-
-    if (isOnTrainingPage) {
-      navigate("/corporate/training");
-
-      setTimeout(() => {
-        const el = document.getElementById("contact");
-        if (el) {
-          el.scrollIntoView({ behavior: "smooth" });
-        }
-      }, 300);
-    } else {
-      // Navigate and scroll after DOM loads
-      navigate("/corporate/recruitment");
-
-      setTimeout(() => {
-        const el = document.getElementById("contact");
-        if (el) {
-          el.scrollIntoView({ behavior: "smooth" });
-        }
-      }, 300); // allow time for route to change and render
-    }
-  }, [location.pathname, navigate]);
+  }, [defaultTopic, navigate]);
 
   const menuItems: MenuItem[] = [
     {
       id: "download",
       icon: Download,
       label: "Download",
-      onClick: handleClick,
     },
     {
       id: "chat",
       icon: MessageCircle,
       label: "Chat",
-      onClick: () => {}, // Handled in handleMenuItemClick
     },
     {
       id: "demo",
       icon: Calendar,
       label: "Book a Demo",
-      onClick: () => {}, // Handled in handleMenuItemClick
     },
     {
       id: "faq",
       icon: HelpCircle,
       label: "FAQ",
-      onClick: () => {}, // Handled in handleMenuItemClick
     },
   ];
 
   const toggleMenu = () => {
-    setIsOpen(!isOpen);
+    setIsOpen((prev) => !prev);
   };
 
   const handleMenuItemClick = (item: MenuItem) => {
-    if (item.id === "chat") {
-      setShowChat(true);
-      setIsOpenFaq(false);
-      setShowBookDemo(false);
-    } else if (item.id === "faq") {
-      setIsOpenFaq(true);
-      setShowChat(false);
-      setShowBookDemo(false);
+    if (item.id === "download") {
+      handleDownloadClick();
+    } else if (item.id === "chat") {
+      setActivePanel("chat");
+      setIsOpen(false);
     } else if (item.id === "demo") {
-      setShowBookDemo(true);
-      setShowChat(false);
-      setIsOpenFaq(false);
-    } else {
-      item.onClick();
+      setActivePanel("demo");
+      setIsOpen(false);
+    } else if (item.id === "faq") {
+      setActivePanel("faq");
+      setIsOpen(false);
     }
-    setIsOpen(false);
   };
 
-  // Calculate positions for circular layout expanding to the left
+  const closePanel = () => {
+    setActivePanel(null);
+  };
+
+  // Circular layout positions expanding upward and to the left
   const getItemPosition = (index: number, total: number) => {
     const radius = 80;
-    const startAngle = -10; // Start from top-left
-    const angleStep = 90 / (total - 1); // Spread across 90 degrees
+    const startAngle = -10;
+    const angleStep = 90 / (total - 1);
     const angle = (startAngle + angleStep * index) * (Math.PI / 130);
 
     return {
-      x: -Math.cos(angle) * radius, // Negative to expand left
-      y: -Math.sin(angle) * radius, // Negative to go upward
+      x: -Math.cos(angle) * radius,
+      y: -Math.sin(angle) * radius,
     };
   };
 
   return (
-    <div className="fixed right-10 bottom-6 z-50">
-      {/* Menu Items */}
+    <div ref={menuRef} className="fixed right-10 bottom-6 z-50">
+      {/* Menu Items (Expanding Arc) */}
       <AnimatePresence>
         {isOpen && (
           <>
-            {/* Background overlay */}
-            {/* <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
-              className="fixed inset-0 bg-black/20 backdrop-blur-sm -z-10"
-              onClick={() => setIsOpen(false)}
-            /> */}
-
             {menuItems.map((item, index) => {
               const position = getItemPosition(index, menuItems.length);
               const IconComponent = item.icon;
@@ -165,24 +179,9 @@ const FloatingActionMenu = () => {
               return (
                 <motion.div
                   key={item.id}
-                  initial={{
-                    opacity: 0,
-                    scale: 0,
-                    x: 0,
-                    y: 0,
-                  }}
-                  animate={{
-                    opacity: 1,
-                    scale: 1,
-                    x: position.x,
-                    y: position.y,
-                  }}
-                  exit={{
-                    opacity: 0,
-                    scale: 0,
-                    x: 0,
-                    y: 0,
-                  }}
+                  initial={{ opacity: 0, scale: 0, x: 0, y: 0 }}
+                  animate={{ opacity: 1, scale: 1, x: position.x, y: position.y }}
+                  exit={{ opacity: 0, scale: 0, x: 0, y: 0 }}
                   transition={{
                     duration: 0.3,
                     delay: index * 0.05,
@@ -197,7 +196,7 @@ const FloatingActionMenu = () => {
                     whileTap={{ scale: 0.9 }}
                     onClick={() => handleMenuItemClick(item)}
                     aria-label={item.label}
-                    className="w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center text-gray-700 hover:bg-gray-50 transition-colors group relative"
+                    className="w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center text-gray-700 hover:bg-gray-50 transition-colors group relative focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-400"
                     onMouseEnter={() => setHoveredIndex(index)}
                     onMouseLeave={() => setHoveredIndex(null)}
                   >
@@ -209,7 +208,7 @@ const FloatingActionMenu = () => {
                           initial={{ opacity: 0, x: 10 }}
                           animate={{ opacity: 1, x: 0 }}
                           exit={{ opacity: 0, x: 10 }}
-                          className="absolute right-14 bg-gray-800 text-white px-2 py-1 rounded text-sm whitespace-nowrap transition-opacity"
+                          className="absolute right-14 bg-gray-800 text-white px-2 py-1 rounded text-sm whitespace-nowrap shadow-md pointer-events-none"
                         >
                           {item.label}
                         </motion.div>
@@ -222,14 +221,15 @@ const FloatingActionMenu = () => {
           </>
         )}
       </AnimatePresence>
+
       {/* Main Action Button */}
       <motion.button
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
         onClick={toggleMenu}
         aria-label={isOpen ? "Close quick actions menu" : "Open quick actions menu"}
-        className={`w-14 h-14 bg-[#434343] rounded-full shadow-lg flex items-center justify-center text-white hover:from-blue-600 hover:to-purple-700 transition-all duration-200 ${
-          !isOpen && "animate-bounce"
+        className={`w-14 h-14 bg-[#434343] rounded-full shadow-lg flex items-center justify-center text-white hover:bg-gray-700 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-600 ${
+          !isOpen ? "animate-bounce" : ""
         }`}
       >
         <motion.div
@@ -239,7 +239,8 @@ const FloatingActionMenu = () => {
           <Plus size={24} />
         </motion.div>
       </motion.button>
-      {/* Ripple effect */}
+
+      {/* Ripple effect on open */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
@@ -251,34 +252,53 @@ const FloatingActionMenu = () => {
           />
         )}
       </AnimatePresence>
-      {isOpenFaq && (
+
+      {/* Clean backdrop when any modal panel is active */}
+      <AnimatePresence>
+        {activePanel !== null && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="fixed inset-0 bg-black/25 backdrop-blur-sm z-40"
+            onClick={closePanel}
+          />
+        )}
+      </AnimatePresence>
+
+      {/* FAQ Chatbot Modal */}
+      {activePanel === "faq" && (
         <Suspense fallback={null}>
-          <div className="fixed inset-0 z-[9999] flex items-end justify-end">
-            {/* Overlay background for closing */}
-            <div
-              className="absolute inset-0 bg-black/20"
-              onClick={() => setIsOpenFaq(false)}
-            />
-            <div className="relative z-10" onClick={(e) => e.stopPropagation()}>
-              <FAQChatbot open={isOpenFaq} onClose={() => setIsOpenFaq(false)} />
-            </div>
-          </div>
+          <FAQChatbot
+            isVisible={activePanel === "faq"}
+            onClose={closePanel}
+            session={session}
+            setSession={setSession}
+            defaultTopic={defaultTopic}
+            onOpenChat={() => setActivePanel("chat")}
+          />
         </Suspense>
       )}
 
-      {/* Chat Button */}
-      {showChat && (
+      {/* Live WhatsApp Chat Modal */}
+      {activePanel === "chat" && (
         <Suspense fallback={null}>
-          <ChatButton isVisible={showChat} onClose={() => setShowChat(false)} />
+          <ChatButton
+            isVisible={activePanel === "chat"}
+            onClose={closePanel}
+            details={chatDetails}
+            setDetails={setChatDetails}
+          />
         </Suspense>
       )}
 
-      {/* Book Demo */}
-      {showBookDemo && (
+      {/* Book a Demo Modal */}
+      {activePanel === "demo" && (
         <Suspense fallback={null}>
           <BookDemo
-            isVisible={showBookDemo}
-            onClose={() => setShowBookDemo(false)}
+            isVisible={activePanel === "demo"}
+            onClose={closePanel}
           />
         </Suspense>
       )}

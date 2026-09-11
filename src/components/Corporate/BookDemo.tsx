@@ -4,47 +4,53 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useLocation } from "react-router-dom";
 
 interface BookDemoProps {
-    isVisible: boolean;
-    onClose: () => void;
+  isVisible: boolean;
+  onClose: () => void;
 }
 
 export const BookDemo: React.FC<BookDemoProps> = ({ isVisible, onClose }) => {
-    const location = useLocation();
-    const isOnCorporateSkillPassport = location.pathname === "/corporate/skill-passport";
+  const location = useLocation();
+  const isOnCorporateSkillPassport = location.pathname === "/corporate/skill-passport";
 
-    return (
-        <AnimatePresence>
-            {isVisible && (
-                <motion.div
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.8 }}
-                    className={`fixed z-50 bg-white rounded-xl shadow-2xl p-6 ${isOnCorporateSkillPassport ? "left-3 md:left-16 bottom-5 w-[300px] md:w-[600px]" : "bottom-20 right-10 w-[90vw] max-w-[600px]"}`}
-                >
-                    <div className="flex justify-between items-center mb-4">
-                        <div className="flex items-center gap-2">
-                            <Calendar className="h-5 w-5 text-blue-600" />
-                            <h3 className="text-lg font-semibold text-gray-900">Book a Demo</h3>
-                        </div>
-                        <button
-                            onClick={onClose}
-                            className="text-gray-500 hover:text-gray-700 transition-colors"
-                            aria-label="Close booking dialog"
-                        >
-                            <X className="h-5 w-5" />
-                        </button>
-                    </div>
+  return (
+    <AnimatePresence>
+      {isVisible && (
+        <motion.div
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 0.8 }}
+          className={`fixed z-50 bg-white rounded-xl shadow-2xl p-6 ${
+            isOnCorporateSkillPassport
+              ? "left-3 md:left-16 bottom-5 w-[300px] md:w-[600px]"
+              : "bottom-20 right-10 w-[90vw] max-w-[600px]"
+          }`}
+        >
+          <div className="flex justify-between items-center mb-4">
+            <div className="flex items-center gap-2">
+              <Calendar className="h-5 w-5 text-blue-600" />
+              <h3 className="text-lg font-semibold text-gray-900">Book a Demo</h3>
+            </div>
+            <button
+              onClick={onClose}
+              className="text-gray-500 hover:text-gray-700 transition-colors p-1"
+              aria-label="Close booking dialog"
+            >
+              <X className="h-5 w-5" />
+            </button>
+          </div>
 
-                    <iframe
-                        width="100%"
-                        height="500px"
-                        src="https://subashini-rareminds37.zohobookings.in/portal-embed#/rareminds"
-                        frameBorder="0"
-                        allowFullScreen
-                        title="Book a Demo"
-                    />
-                </motion.div>
-            )}
-        </AnimatePresence>
-    )
-} 
+          <iframe
+            width="100%"
+            height="500px"
+            src="https://subashini-rareminds37.zohobookings.in/portal-embed#/rareminds"
+            frameBorder="0"
+            allowFullScreen
+            title="Book a Demo"
+          />
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+};
+
+export default BookDemo;
