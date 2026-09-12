@@ -29,6 +29,7 @@ const FloatingActionMenu: React.FC = () => {
   const [session, setSession] = useState<Session>(initialSession);
   const [chatDetails, setChatDetails] = useState({ name: "", email: "" });
 
+  const userDismissedAtBottom = useRef(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const location = useLocation();
   const navigate = useNavigate();
@@ -43,6 +44,7 @@ const FloatingActionMenu: React.FC = () => {
   useEffect(() => {
     setActivePanel(null);
     setIsOpen(false);
+    userDismissedAtBottom.current = false;
   }, [location.key]);
 
   // Keyboard navigation: Escape key dismisses open menus and modals
@@ -52,6 +54,7 @@ const FloatingActionMenu: React.FC = () => {
         if (activePanel) {
           setActivePanel(null);
         } else if (isOpen) {
+          userDismissedAtBottom.current = true;
           setIsOpen(false);
         }
       }
@@ -65,12 +68,54 @@ const FloatingActionMenu: React.FC = () => {
     if (!isOpen) return;
     const handleClickOutside = (event: MouseEvent) => {
       if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        userDismissedAtBottom.current = true;
         setIsOpen(false);
       }
     };
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [isOpen]);
+
+  // Open menu automatically when user scrolls near the bottom (before footer)
+  useEffect(() => {
+    let ticking = false;
+    const handleScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const scrollY = window.scrollY || window.pageYOffset;
+          const windowHeight = window.innerHeight;
+          const docHeight = Math.max(
+            document.documentElement.scrollHeight,
+            document.body.scrollHeight
+          );
+          const footer = document.getElementById("footer");
+          const footerHeight = footer ? footer.offsetHeight + 10 : 120;
+          const isNearBottom = scrollY + windowHeight >= docHeight - footerHeight;
+
+          if (!activePanel) {
+            if (isNearBottom) {
+              // Only auto-open if the visitor hasn't intentionally dismissed it at the bottom
+              if (!userDismissedAtBottom.current) {
+                setIsOpen(true);
+              }
+            } else {
+              // Reset the dismissal lock once the visitor scrolls back up
+              userDismissedAtBottom.current = false;
+              setIsOpen(false);
+            }
+          }
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    // Check initial position on mount (e.g. direct deep link or page reload at bottom)
+    handleScroll();
+
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [activePanel]);
 
   // Robust observer-assisted scrolling to #contact section for the Download action
   useEffect(() => {
@@ -101,11 +146,24 @@ const FloatingActionMenu: React.FC = () => {
   const handleDownloadClick = useCallback(() => {
     setIsOpen(false);
     setActivePanel(null);
-    navigate(
-      defaultTopic === "training" ? "/corporate/training" : "/corporate/recruitment",
-      { state: { corporateDownload: true } }
-    );
-  }, [defaultTopic, navigate]);
+    const targetPath =
+      defaultTopic === "training" ? "/corporate/training" : "/corporate/recruitment";
+
+    // If already on the target page, scroll directly without triggering full route reload
+    if (location.pathname === targetPath) {
+      const el = document.getElementById("contact");
+      if (el) {
+        el.scrollIntoView({
+          behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches
+            ? "auto"
+            : "smooth",
+        });
+        return;
+      }
+    }
+
+    navigate(targetPath, { state: { corporateDownload: true } });
+  }, [defaultTopic, location.pathname, navigate]);
 
   const menuItems: MenuItem[] = [
     {
@@ -131,7 +189,16 @@ const FloatingActionMenu: React.FC = () => {
   ];
 
   const toggleMenu = () => {
-    setIsOpen((prev) => !prev);
+    setIsOpen((prev) => {
+      const next = !prev;
+      if (!next) {
+        // User explicitly closed it; prevent scroll from immediately forcing it open
+        userDismissedAtBottom.current = true;
+      } else {
+        userDismissedAtBottom.current = false;
+      }
+      return next;
+    });
   };
 
   const handleMenuItemClick = (item: MenuItem) => {

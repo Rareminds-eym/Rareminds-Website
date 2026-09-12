@@ -18,66 +18,178 @@ export const knowledgeReview = {
   nextReviewOn: '2026-12-11',
   businessApproval: 'Pending business review; no pricing or delivery commitments included',
 };
+
 export const corporateFAQs: FAQ[] = [
   {
-    id: 'recruitment-services', topic: 'recruitment',
+    id: 'recruitment-services',
+    topic: 'recruitment',
     question: 'Do you provide recruitment services?',
-    aliases: ['Can you help us hire employees?', 'We need recruitment support', 'What recruitment services do you offer?'],
-    keywords: ['recruitment', 'hiring', 'hire', 'recruiters'],
-    answer: 'Explore our corporate recruitment services and share the roles you need to fill with the recruitment team. They can discuss the scope and next steps for your organisation.',
+    aliases: [
+      'Can you help us hire employees?',
+      'We need recruitment support',
+      'What recruitment services do you offer?',
+      'Do you do campus recruitment?',
+      'Do you handle executive search?',
+      'Do you offer turnkey RPO?',
+      'Can you help us hire freshers or lateral talent?'
+    ],
+    keywords: [
+      'recruitment',
+      'hiring',
+      'hire',
+      'recruiters',
+      'campus',
+      'executive',
+      'search',
+      'rpo',
+      'staffing',
+      'lateral',
+      'freshers',
+      'talent',
+      'sla',
+      'turnaround'
+    ],
+    answer: 'Explore our corporate recruitment services and share the roles you need to fill with the recruitment team. We support lateral hiring, executive search, campus drives, and turnkey RPO across industries.',
     link: { label: 'Explore recruitment', href: '/corporate/recruitment' },
     source: 'src/pages/Corporate/Recruitment/Index.tsx',
   },
   {
-    id: 'recruitment-quote', topic: 'recruitment',
+    id: 'recruitment-quote',
+    topic: 'recruitment',
     question: 'How much does recruitment cost?',
-    aliases: ['Can I get a recruitment quote?', 'What are your hiring fees?'],
-    keywords: ['recruitment price', 'recruitment cost', 'hiring fees', 'recruitment quote'],
-    answer: 'Please share your hiring requirements with the recruitment team to discuss pricing. This assistant cannot confirm a fee or hiring timeline.',
+    aliases: [
+      'Can I get a recruitment quote?',
+      'What are your hiring fees?',
+      'What is your recruitment pricing?',
+      'What are your commercial terms?',
+      'How much do you charge for hiring?'
+    ],
+    keywords: [
+      'recruitment price',
+      'recruitment cost',
+      'hiring fees',
+      'recruitment quote',
+      'pricing',
+      'price',
+      'cost',
+      'fees',
+      'commercials',
+      'rates',
+      'budget',
+      'charge'
+    ],
+    answer: 'Please share your hiring requirements with the recruitment team to discuss pricing and commercial models. This assistant cannot confirm a fee or hiring timeline.',
     link: { label: 'Contact recruitment', href: '/corporate/recruitment/contact' },
     source: 'src/routes.tsx',
   },
   {
-    id: 'employee-training', topic: 'training',
+    id: 'employee-training',
+    topic: 'training',
     question: 'Can you train our employees?',
-    aliases: ['Do you offer corporate training?', 'What training programs do you offer?', 'What courses do you offer?'],
-    keywords: ['employee training', 'corporate training', 'staff training', 'upskilling', 'courses', 'programs'],
+    aliases: [
+      'Do you offer corporate training?',
+      'What training programs do you offer?',
+      'What courses do you offer?'
+    ],
+    keywords: [
+      'employee training',
+      'corporate training',
+      'staff training',
+      'upskilling',
+      'courses',
+      'programs',
+      'workshops',
+      'curriculum'
+    ],
     answer: 'Browse our corporate training catalogue to explore programs for your team. For help choosing a program, share your learning goals with the training team.',
     link: { label: 'Explore training programs', href: '/corporate/training/services' },
     source: 'src/components/Corporate/Training/Services.tsx',
   },
   {
-    id: 'leadership-training', topic: 'training',
+    id: 'leadership-training',
+    topic: 'training',
     question: 'Do you offer leadership training?',
-    aliases: ['Can you train new managers?', 'Do you have management courses?'],
-    keywords: ['leadership', 'managers', 'management', 'leadership courses'],
+    aliases: [
+      'Can you train new managers?',
+      'Do you have management courses?'
+    ],
+    keywords: [
+      'leadership',
+      'managers',
+      'management',
+      'leadership courses',
+      'executive training'
+    ],
     answer: 'Our published training content includes First-Time Manager to People Leader and Strategic Thinking and Decision Making. Ask the training team about the current program options for your managers.',
     link: { label: 'Discuss leadership training', href: '/corporate/training/contact' },
     source: 'src/pages/Corporate/Training/Services/serviceData.ts',
   },
   {
-    id: 'custom-training', topic: 'training',
+    id: 'custom-training',
+    topic: 'training',
     question: 'Can training be customised for our team?',
-    aliases: ['Can you customize a training program?', 'Do you offer customised courses?'],
-    keywords: ['custom', 'customized', 'customised', 'tailored', 'customisation', 'customization'],
+    aliases: [
+      'Can you customize a training program?',
+      'Do you offer customised courses?'
+    ],
+    keywords: [
+      'custom',
+      'customized',
+      'customised',
+      'tailored',
+      'customisation',
+      'customization',
+      'bespoke'
+    ],
     answer: 'Share your team’s learning goals with the training team to discuss program customisation. The team will confirm the scope that fits your requirements.',
     link: { label: 'Discuss your requirements', href: '/corporate/training/contact' },
     source: 'src/pages/Corporate/Training/Services/serviceData.ts',
   },
   {
-    id: 'training-delivery', topic: 'training',
+    id: 'training-delivery',
+    topic: 'training',
     question: 'How are courses delivered?',
-    aliases: ['How are your courses delivered?', 'Is training online or in person?', 'Can training be delivered remotely?'],
-    keywords: ['delivery', 'delivered', 'online', 'remote', 'onsite', 'in person'],
-    answer: 'Please check the delivery options for your selected program with the training team. This assistant cannot confirm a delivery format, location or schedule for your team.',
+    aliases: [
+      'How are your courses delivered?',
+      'Is training online or in person?',
+      'Can training be delivered remotely?'
+    ],
+    keywords: [
+      'delivery',
+      'delivered',
+      'online',
+      'remote',
+      'onsite',
+      'in person',
+      'hybrid',
+      'classroom'
+    ],
+    answer: 'Please check the delivery options for your selected program with the training team. We offer online, classroom, and hybrid corporate formats depending on team location.',
     link: { label: 'Check delivery options', href: '/corporate/training/contact' },
     source: 'src/routes.tsx',
   },
   {
-    id: 'training-quote', topic: 'training',
+    id: 'training-quote',
+    topic: 'training',
     question: 'How much does corporate training cost?',
-    aliases: ['Can I get a training quote?', 'What are your course fees?'],
-    keywords: ['training cost', 'training price', 'course fees', 'training quote'],
+    aliases: [
+      'Can I get a training quote?',
+      'What are your course fees?',
+      'What is your corporate training pricing?',
+      'What are your training commercials?'
+    ],
+    keywords: [
+      'training cost',
+      'training price',
+      'course fees',
+      'training quote',
+      'pricing',
+      'price',
+      'cost',
+      'commercials',
+      'rates',
+      'budget'
+    ],
     answer: 'Contact the training team with your program interests and team requirements to request pricing. This assistant cannot confirm prices, discounts or availability.',
     link: { label: 'Request training information', href: '/corporate/training/contact' },
     source: 'src/routes.tsx',
@@ -87,6 +199,7 @@ export const corporateFAQs: FAQ[] = [
 export function normalize(value: string): string {
   return value.normalize('NFKC').toLowerCase().replace(/[^\p{L}\p{N}\s]/gu, ' ').replace(/\s+/g, ' ').trim();
 }
+
 export function validateKnowledge(entries: FAQ[]): string[] {
   const errors: string[] = [];
   const ids = new Set<string>();
