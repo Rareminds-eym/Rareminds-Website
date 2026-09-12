@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { Briefcase } from "lucide-react";
 import TechnicalHiring from "@/assets/corporate/Home/services/TechnicalHiring.svg";
 import BulkHiring from "@/assets/corporate/Home/services/BulkHiring.svg";
@@ -16,6 +16,8 @@ import { Link } from "react-router-dom";
 import { Icon } from "@iconify/react";
 
 const ServicesSection = () => {
+  const shouldReduceMotion = useReducedMotion();
+
   const services = [
     {
       icon: TechnicalHiring,
@@ -118,20 +120,31 @@ const ServicesSection = () => {
     },
   ];
 
+  const handleContactClick = () => {
+    const contactSection = document.getElementById("contact");
+    if (contactSection) {
+      contactSection.scrollIntoView({
+        behavior: shouldReduceMotion ? "auto" : "smooth",
+      });
+      contactSection.setAttribute("tabindex", "-1");
+      contactSection.focus({ preventScroll: true });
+    }
+  };
+
   return (
     <section className="section relative bg-white">
       {/* Background elements */}
       <div className="absolute inset-0 bg-white z-0"></div>
-      <div className="absolute w-full h-full bg-[url('https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Corporate/Recruitment/Index/Services/bg.webp')] bg-center bg-cover opacity-[0.03]">
+      <div className="absolute w-full h-full bg-[url('https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Corporate/Recruitment/Index/Services/bg.webp')] bg-center bg-cover opacity-[0.03] pointer-events-none">
       </div>
 
-      <div className="max-w-[1300px] mx-auto relative z-10 py-20">
+      <div className="max-w-[1300px] mx-auto relative z-10 py-20 px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12 relative">
           <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: -20 }}
+            whileInView={shouldReduceMotion ? { opacity: 1 } : { opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
+            transition={{ duration: shouldReduceMotion ? 0.2 : 0.5 }}
           >
             <div className="flex justify-center items-center">
               <div className="bg-corporate-black text-white w-16 h-16 rounded-[25px] mx-auto mb-4 flex items-center justify-center transform rotate-6">
@@ -152,49 +165,55 @@ const ServicesSection = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-x-8 gap-y-10">
           {services.map((service, index) => (
             <motion.div
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: 40 }}
+              whileInView={shouldReduceMotion ? { opacity: 1 } : { opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.2 }}
-              transition={{ duration: 0.5, delay: 0.1 }}
+              transition={{
+                duration: shouldReduceMotion ? 0.2 : 0.5,
+                delay: shouldReduceMotion ? 0 : 0.1,
+              }}
               className="relative"
-              key={index}
+              key={service.link}
             >
-              <div className="relative h-[230px]">
+              <div className="relative h-[230px] max-w-full overflow-visible">
                 <Link
                   to={`/corporate/recruitment/services/${service.link}`}
                   aria-label={`Learn more about ${service.title} services`}
+                  className="block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-corporate-primary/80 focus-visible:ring-offset-2 rounded-2xl"
                 >
-                  <div className="mx-auto w-max relative group">
-                    <div className="absolute flex items-center top-1/2 left-1/2 -translate-x-1/2 w-max group-hover:top-0 group-hover:left-0 group-hover:translate-x-0 group-hover:translate-y-0 transition-all duration-300">
-                      <div className="h-[50px] w-[50px] group-hover:h-[42px] group-hover:w-[42px] p-2 bg-corporate-yellow rounded-[15px] transition-all duration-300 flex items-center justify-center">
+                  <div className="mx-auto w-max max-w-full relative group">
+                    <div className="absolute flex items-center top-1/2 left-1/2 -translate-x-1/2 w-max group-hover:top-0 group-hover:left-0 group-hover:translate-x-0 group-hover:translate-y-0 group-focus-visible:top-0 group-focus-visible:left-0 group-focus-visible:translate-x-0 group-focus-visible:translate-y-0 transition-all duration-300">
+                      <div className="h-[50px] w-[50px] group-hover:h-[42px] group-hover:w-[42px] group-focus-visible:h-[42px] group-focus-visible:w-[42px] p-2 bg-corporate-yellow rounded-[15px] transition-all duration-300 flex items-center justify-center flex-shrink-0">
                         <img
                           src={service.icon}
-                          alt={`${service.title} icon`}
+                          alt=""
+                          aria-hidden="true"
                           width={34}
                           height={34}
                           loading="lazy"
                           decoding="async"
                         />
                       </div>
-                      <h3 className="ml-3 font-semibold text-lg max-w-[225px] leading-5 text-center group-hover:text-left transition-all duration-300">
+                      <h3 className="ml-3 font-semibold text-lg max-w-[225px] leading-5 text-center group-hover:text-left group-focus-visible:text-left transition-all duration-300">
                         {service.title}
                       </h3>
                     </div>
-                    <div className="opacity-0 group-hover:opacity-100 transition-all duration-300 group-hover:block absolute top-[80px] left-[30px] max-w-[320px]">
+                    <div className="opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100 transition-all duration-300 group-hover:block group-focus-visible:block absolute top-[80px] left-[30px] max-w-[320px]">
                       <p className="font-[500]">{service.heading}</p>
                       <p className="text-corporate-grey mt-1 leading-5 text-sm">
                         {service.subheading}
                       </p>
                     </div>
-                    <div className="flex opacity-0 group-hover:opacity-100 transition-all duration-300 absolute bottom-[30px] left-[30px]  leading-5 text-[12px] max-w-[320px]">
+                    <div className="flex opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100 transition-all duration-300 absolute bottom-[30px] left-[30px] leading-5 text-[12px] max-w-[320px]">
                       <p className="min-w-max font-semibold">Key Industries:</p>
                       <p className="ml-1">{service.industries}</p>
                     </div>
-                    <div className="pt-1 w-max">
+                    <div className="pt-1 w-max max-w-full">
                       <img
                         src="https://itvhjkgfafikpqmuunlh.supabase.co/storage/v1/object/public/images/Corporate/Recruitment/Index/Services/service-bg.png"
-                        alt="Curved Background"
-                        className="w-auto"
+                        alt=""
+                        aria-hidden="true"
+                        className="w-auto max-w-full"
                         width="384"
                         height={230}
                         loading="lazy"
@@ -209,20 +228,18 @@ const ServicesSection = () => {
         </div>
 
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: 20 }}
+          whileInView={shouldReduceMotion ? { opacity: 1 } : { opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.2 }}
-          transition={{ duration: 0.5, delay: 0.1 + services.length * 0.08 }}
+          transition={{
+            duration: shouldReduceMotion ? 0.2 : 0.5,
+            delay: shouldReduceMotion ? 0 : 0.1 + services.length * 0.08,
+          }}
           className="mt-16 text-center flex justify-center"
         >
           <button
-            className="corporate-btn-1"
-            onClick={() => {
-              const contactSection = document.getElementById('contact');
-              if (contactSection) {
-                contactSection.scrollIntoView({ behavior: 'smooth' });
-              }
-            }}
+            className="corporate-btn-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-corporate-primary focus-visible:ring-offset-2"
+            onClick={handleContactClick}
             type="button"
           >
             Try us on your toughest role{' '}
