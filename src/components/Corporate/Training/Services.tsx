@@ -148,6 +148,7 @@ const ServiceCard = ({
 };
 
 const COURSE_LIST_PDF_URL = "/institutions/pdfs/Course_List.pdf";
+const EMAIL_REGEX = /\S+@\S+\.\S+/;
 
 const DownloadCourseListModal = ({ onClose }: { onClose: () => void }) => {
   const { toast } = useToast();
@@ -165,8 +166,7 @@ const DownloadCourseListModal = ({ onClose }: { onClose: () => void }) => {
     e.preventDefault();
     setError(null);
 
-    const emailRegex = /\S+@\S+\.\S+/;
-    if (!emailRegex.test(form.email)) {
+    if (!EMAIL_REGEX.test(form.email)) {
       setError("Please enter a valid email address.");
       return;
     }
@@ -332,8 +332,7 @@ const RequestBlueprintModal = ({ onClose }: { onClose: () => void }) => {
     e.preventDefault();
     setError(null);
 
-    const emailRegex = /\S+@\S+\.\S+/;
-    if (!emailRegex.test(form.email)) {
+    if (!EMAIL_REGEX.test(form.email)) {
       setError("Please enter a valid email address.");
       return;
     }
