@@ -1,5 +1,6 @@
 // export default AcademyHeader;
-import React, { useState } from "react";
+import type React from "react";
+import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Menu, X, AlignJustify } from "lucide-react";
 import BrandLogo from "../BrandLogo/BrandLogo";
@@ -14,21 +15,6 @@ const AcademyHeader: React.FC = () => {
 
   const isStudentPage = location.pathname.includes("/school/student");
   const isTeacherPage = location.pathname.includes("/school/teacher");
-  const isAcademiaMain = location.pathname === "/school";
-
-  let buttonLink = "";
-  let buttonText = "";
-
-  if (isStudentPage) {
-    buttonLink = "/school/teacher";
-    buttonText = "School";
-  } else if (isTeacherPage) {
-    buttonLink = "/school/student";
-    buttonText = "Student";
-  } else {
-    buttonLink = "/school/student";
-    buttonText = "Student";
-  }
 
   const showButtons = isStudentPage || isTeacherPage;
 

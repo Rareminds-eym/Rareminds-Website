@@ -163,8 +163,15 @@ const DownloadCourseListModal = ({ onClose }: { onClose: () => void }) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSubmitting(true);
     setError(null);
+
+    const emailRegex = /\S+@\S+\.\S+/;
+    if (!emailRegex.test(form.email)) {
+      setError("Please enter a valid email address.");
+      return;
+    }
+
+    setIsSubmitting(true);
 
     try {
       const { error: dbError } = await supabase.from("pdf_downloads").insert([
@@ -179,11 +186,14 @@ const DownloadCourseListModal = ({ onClose }: { onClose: () => void }) => {
 
       if (dbError) throw dbError;
 
-      await sendEmailNotification("download-notification", {
+      const emailFailed = await sendEmailNotification("download-notification", {
         name: form.name,
         email: form.email,
         download_type: "Course List",
-      }).catch((emailError) => console.error("Download notification failed:", emailError));
+      }).then(() => false).catch((emailError) => {
+        console.error("Download notification failed:", emailError);
+        return true;
+      });
 
       setSubmitted(true);
 
@@ -194,7 +204,10 @@ const DownloadCourseListModal = ({ onClose }: { onClose: () => void }) => {
       link.click();
       document.body.removeChild(link);
 
-      toast({
+      toast(emailFailed ? {
+        title: "Download started",
+        description: "Your download is starting now. We'll follow up by email shortly.",
+      } : {
         title: "Download started",
         description: "Your course list is downloading now.",
       });
@@ -317,8 +330,15 @@ const RequestBlueprintModal = ({ onClose }: { onClose: () => void }) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSubmitting(true);
     setError(null);
+
+    const emailRegex = /\S+@\S+\.\S+/;
+    if (!emailRegex.test(form.email)) {
+      setError("Please enter a valid email address.");
+      return;
+    }
+
+    setIsSubmitting(true);
 
     try {
       const submission = {
@@ -340,9 +360,17 @@ const RequestBlueprintModal = ({ onClose }: { onClose: () => void }) => {
 
       if (dbError) throw dbError;
 
-      await sendEmailNotification("training-enquiry", data as Record<string, unknown>);
+      const emailFailed = await sendEmailNotification("training-enquiry", data as Record<string, unknown>)
+        .then(() => false)
+        .catch((emailError) => {
+          console.error("Blueprint email notification failed:", emailError);
+          return true;
+        });
 
-      toast({
+      toast(emailFailed ? {
+        title: "Request Saved",
+        description: "Your request was saved. We'll follow up shortly — our confirmation email was delayed.",
+      } : {
         title: "Request Sent!",
         description: "Thank you for reaching out. Our team will send your blueprint shortly.",
       });
