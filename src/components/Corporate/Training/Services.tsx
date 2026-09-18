@@ -225,10 +225,8 @@ const DownloadCourseListModal = ({ onClose }: { onClose: () => void }) => {
   };
 
   return (
-    <button
-      type="button"
-      aria-label="Close modal"
-      className="fixed inset-0 bg-black/50 flex items-center justify-center z-[9998] p-4 w-full cursor-default text-left"
+    <div
+      className="fixed inset-0 bg-black/50 flex items-center justify-center z-[9998] p-4"
       onClick={onClose}
     >
       <motion.div
@@ -306,7 +304,7 @@ const DownloadCourseListModal = ({ onClose }: { onClose: () => void }) => {
           </>
         )}
       </motion.div>
-    </button>
+    </div>
   );
 };
 
@@ -391,10 +389,8 @@ const RequestBlueprintModal = ({ onClose }: { onClose: () => void }) => {
   };
 
   return (
-    <button
-      type="button"
-      aria-label="Close modal"
-      className="fixed inset-0 bg-black/50 flex items-center justify-center z-[9998] p-4 overflow-y-auto w-full cursor-default text-left"
+    <div
+      className="fixed inset-0 bg-black/50 flex items-center justify-center z-[9998] p-4 overflow-y-auto"
       onClick={onClose}
     >
       <motion.div
@@ -515,7 +511,7 @@ const RequestBlueprintModal = ({ onClose }: { onClose: () => void }) => {
           </>
         )}
       </motion.div>
-    </button>
+    </div>
   );
 };
 
