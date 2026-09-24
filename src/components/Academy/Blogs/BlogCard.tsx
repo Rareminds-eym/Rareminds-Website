@@ -44,7 +44,8 @@ const getDisplayTags = (tags: string[] | null | undefined, max = 2): string[] =>
 
 const BlogCard = ({ post }: BlogCardProps) => {
   const location = useLocation();
-  
+  const displayTags = getDisplayTags(post.tags);
+
   // Determine which section we're in for proper blog links
   let blogDetailLink = `/school/student/blogs/${post.slug}`; // Default to student
   
@@ -70,10 +71,10 @@ const BlogCard = ({ post }: BlogCardProps) => {
           />
           
         </div>
-        {getDisplayTags(post.tags).length > 0 && (
+        {displayTags.length > 0 && (
           <div className="mt-4 pt-1 px-3 overflow-x-auto whitespace-nowrap scrollbar-thin scrollbar-thumb-red-400 scrollbar-track-gray-200">
             <span className="category-badge flex flex-nowrap gap-1">
-              {getDisplayTags(post.tags).map((tag, idx) => (
+              {displayTags.map((tag, idx) => (
                 <span key={idx} className="bg-red-500/80 text-white px-2 py-1 rounded-3xl mr-1 mb-1 text-xs font-semibold shadow inline-block">
                   {tag}
                 </span>
