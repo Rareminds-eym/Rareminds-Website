@@ -122,7 +122,9 @@ const getResourceUrl = (value: string) => {
 
     const isAllowedR2File = url.protocol === 'https:'
       && url.hostname === 'media.rareminds.in'
-      && allowedR2Resources.has(url.pathname);
+      && allowedR2Resources.has(url.pathname)
+      && !url.search
+      && !url.hash;
     if (isAllowedR2File) return url.href;
 
     const match = /^\/file\/d\/([A-Za-z0-9_-]+)\/view$/.exec(url.pathname);

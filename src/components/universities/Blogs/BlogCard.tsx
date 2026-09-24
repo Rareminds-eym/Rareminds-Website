@@ -62,15 +62,17 @@ const BlogCard = ({ post }: BlogCardProps) => {
             alt={post.title}
             className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-110 group-hover:brightness-90"
           />
-          <div className="absolute top-4 left-4 right-4">
-            <span className="category-badge flex flex-wrap gap-1">
-              {getDisplayTags(post.tags).map((tag, idx) => (
-                <span key={idx} className="bg-red-500/80 text-white px-2 py-1 rounded-3xl mr-1 mb-1 text-xs font-semibold shadow max-w-[160px] truncate inline-block align-bottom">
-                  {tag}
-                </span>
-              ))}
-            </span>
-          </div>
+          {getDisplayTags(post.tags).length > 0 && (
+            <div className="absolute top-4 left-4 right-4">
+              <span className="category-badge flex flex-wrap gap-1">
+                {getDisplayTags(post.tags).map((tag, idx) => (
+                  <span key={idx} className="bg-red-500/80 text-white px-2 py-1 rounded-3xl mr-1 mb-1 text-xs font-semibold shadow max-w-[160px] truncate inline-block align-bottom">
+                    {tag}
+                  </span>
+                ))}
+              </span>
+            </div>
+          )}
         </div>
         <div className="p-6">
           <h3 className="font-playfair text-xl font-bold text-gray-900 mb-3 group-hover:text-red-600 transition-colors duration-200 line-clamp-2">
