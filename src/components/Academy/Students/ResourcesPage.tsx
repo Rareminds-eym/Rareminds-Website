@@ -24,19 +24,19 @@ const ResourcesPage = () => {
 const resources: Resource[] = [
    {
       title: "Career Counselling Blueprint (Grades 9–12)",
-      pdfLink: "https://drive.google.com/file/d/1HZR62_uyBC4kceBO3KV2KYYOzjwM1mfk/view?usp=drive_link",
+      pdfLink: "https://media.rareminds.in/pdfs/Career-Counselling-Blueprint-for-Grades-9-12.pdf",
     },
     {
       title: "Confidence & Goal Tracker PDF",
-      pdfLink: "https://drive.google.com/file/d/1TAhzScrKxOQ11hksIxakSkykL1-g3dc5/view?usp=drive_link",
+      pdfLink: "https://media.rareminds.in/pdfs/Confidence-Goal-Skill-8-12.pdf",
     },
     {
       title: "Spoken English Daily Practice Sheet",
-      pdfLink: "https://drive.google.com/file/d/1HhCH2W9OSzP1iBCHPc9VUqRG9PwBi9mn/view?usp=drive_link",
+      pdfLink: "https://media.rareminds.in/pdfs/30-DaySpokenEnglishPracticeSheet.pdf",
     },
     {
       title: "EEE Course Overview with Job Pathways",
-      pdfLink: "https://drive.google.com/file/d/12cQbhz1JSF-k1-vBEa02zWILkX4ulPWx/view?usp=drive_link",
+      pdfLink: "https://media.rareminds.in/pdfs/EEECourseOverviewwith-JobPathways.pdf",
     },
 ];
 

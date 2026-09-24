@@ -8,6 +8,8 @@ interface HeaderProps {
     setNavbarOpen: Dispatch<SetStateAction<boolean>>;
 }
 
+const ZOHO_RECRUIT_CAREERS_URL = 'https://rareminds.zohorecruit.in/jobs/Careers';
+
 const Index: React.FC<HeaderProps> = ({ navbarOpen, setNavbarOpen }) => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const location = useLocation();
@@ -21,6 +23,11 @@ const Index: React.FC<HeaderProps> = ({ navbarOpen, setNavbarOpen }) => {
 
     const handleLinkClick = () => {
         setIsMenuOpen(false);
+    };
+
+    const handleCareersClick = () => {
+        setIsMenuOpen(false);
+        window.location.href = ZOHO_RECRUIT_CAREERS_URL;
     };
 
     const isEventsPage = location.pathname === '/events' || isEventDetailPage;
@@ -102,7 +109,7 @@ const Index: React.FC<HeaderProps> = ({ navbarOpen, setNavbarOpen }) => {
                                     </span>
                                 </Link>
                                 <Link to="/events" onClick={handleLinkClick} className="text-2xl font-medium hover:text-blue-300">Events</Link>
-                                <Link to="/careers" onClick={handleLinkClick} className="text-2xl font-medium hover:text-blue-300">Careers</Link>
+                                <a href={ZOHO_RECRUIT_CAREERS_URL} onClick={(e) => { e.preventDefault(); handleCareersClick(); }} className="text-2xl font-medium hover:text-blue-300">Careers</a>
                                 <Link to="/blogs" onClick={handleLinkClick} className="text-2xl font-medium hover:text-blue-300">Blogs</Link>
                                 <Link to="/gallery" onClick={handleLinkClick} className="text-2xl font-medium hover:text-blue-300">Gallery</Link>
                                 <Link to="/contact" onClick={handleLinkClick} className="text-2xl font-medium hover:text-blue-300">Contact us</Link>

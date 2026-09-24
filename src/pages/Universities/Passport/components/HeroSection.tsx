@@ -292,10 +292,17 @@ const mobileSlides = [
   },
 ];
 
-const HeroSection = ({ onDemoClick }: { onDemoClick: () => void }) => {
+const HeroSection = ({
+  onDemoClick,
+  showForm,
+  setShowForm,
+}: {
+  onDemoClick: () => void;
+  showForm: boolean;
+  setShowForm: (value: boolean) => void;
+}) => {
   const [current, setCurrent] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
-  const [showForm, setShowForm] = useState(false);
   const [formTimeout, setFormTimeout] = useState<NodeJS.Timeout | null>(null);
   const [form, setForm] = useState({
     name: "",

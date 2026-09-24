@@ -26,6 +26,22 @@ interface BlogCardProps {
   post: BlogPost;
 }
 
+// Some posts have `tags` stored as a single long keyword-dump string
+// (comma- or multi-space-separated) instead of separate array entries,
+// e.g. ["Future of Jobs India, Hybrid Careers, AI and Employment, ..."].
+// Split any such entry into individual short tags before display, so a
+// card never renders one oversized pill regardless of how the data was
+// saved. Already-clean tags pass through unchanged.
+const getDisplayTags = (tags: string[] | null | undefined, max = 2): string[] => {
+  if (!Array.isArray(tags) || tags.length === 0) return [];
+
+  return tags
+    .flatMap((tag) => tag.split(/\s*,\s*|\s{2,}/))
+    .map((tag) => tag.trim())
+    .filter(Boolean)
+    .slice(0, max);
+};
+
 const BlogCard = ({ post }: BlogCardProps) => {
   const location = useLocation();
   
@@ -54,15 +70,13 @@ const BlogCard = ({ post }: BlogCardProps) => {
           />
           
         </div>
-        <div className="mt-2 overflow-x-auto whitespace-nowrap scrollbar-thin scrollbar-thumb-red-400 scrollbar-track-gray-200">
+        <div className="mt-4 pt-1 px-3 overflow-x-auto whitespace-nowrap scrollbar-thin scrollbar-thumb-red-400 scrollbar-track-gray-200">
             <span className="category-badge flex flex-nowrap gap-1">
-              {Array.isArray(post.tags) && post.tags.length > 0
-                ? post.tags.map((tag, idx) => (
-                    <span key={idx} className="bg-red-500/80 text-white px-2 py-1 rounded-3xl mr-1 mb-1 text-xs font-semibold shadow inline-block">
-                      {tag}
-                    </span>
-                  ))
-                : null}
+              {getDisplayTags(post.tags).map((tag, idx) => (
+                <span key={idx} className="bg-red-500/80 text-white px-2 py-1 rounded-3xl mr-1 mb-1 text-xs font-semibold shadow inline-block">
+                  {tag}
+                </span>
+              ))}
             </span>
           </div>
         <div className="p-6 flex-grow flex flex-col">

@@ -194,7 +194,7 @@ const FooterBar: React.FC<FooterBarProps> = ({ hideServices }) => {
 						{window.location.pathname.startsWith("/government") ? (
 							<li>
 								<Link
-									to="/school/projects/"
+									to="/success-stories"
 									className="hover:text-red-400 transition-colors"
 								>
 									Skilling & Building Capacity

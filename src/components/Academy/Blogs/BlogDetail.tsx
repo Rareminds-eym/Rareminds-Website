@@ -91,20 +91,14 @@ const BlogDetail = () => {
         
         // Get subcategory from URL path
         const subcategory = getSubcategoryFromPath();
-        
-        // Start building the query
-        let query = supabase
+
+        // Fetch by slug only; subcategory matching (with wildcard support)
+        // is applied afterward, mirroring BlogListing's filtering logic.
+        const { data: blogData, error: blogError } = await supabase
           .from('blog_posts')
           .select('*')
-          .eq('slug', slug);
-        
-        // Add subcategory filter if applicable
-        if (subcategory) {
-          query = query.eq('subcategory', subcategory);
-        }
-        
-        // Execute the query
-        const { data: blogData, error: blogError } = await query.single();
+          .eq('slug', slug)
+          .single();
 
         if (blogError) {
           console.error('Error fetching blog post:', blogError);
@@ -113,6 +107,17 @@ const BlogDetail = () => {
             description: "Failed to load blog post. Please try again.",
             variant: "destructive",
           });
+          return;
+        }
+
+        // Wildcard posts (category === '*') appear in every section, same as BlogListing.
+        // Otherwise, the post must match the current section's subcategory.
+        const isVisibleHere = !subcategory
+          || blogData?.category === '*'
+          || blogData?.subcategory === subcategory;
+
+        if (!isVisibleHere) {
+          setPost(null);
           return;
         }
 
@@ -292,9 +297,6 @@ const BlogDetail = () => {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.3, duration: 0.6 }}
                   >
-                    <span className="inline-block px-4 py-2 bg-black text-white rounded-full text-sm font-semibold mb-6 shadow-lg">
-                      {post.category}
-                    </span>
                     <h1 className="text-2xl sm:text-3xl lg:text-5xl font-bold text-gray-900 mb-6 !leading-tight">
                       {post.title}
                     </h1>

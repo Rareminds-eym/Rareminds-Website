@@ -479,10 +479,23 @@ export const getCorporateCoursesByCategory = async (
     if (hasSearch) {
       const words = trimmedSearch.split(/\s+/).filter(w => w.length > 0);
       const searchConditions = words.flatMap(word => {
-        const escaped = word.replace(/%/g, '\\%').replace(/_/g, '\\_');
+        // 1. Escape SQL LIKE wildcards so they're matched literally, not as patterns.
+        const likeEscaped = word.replace(/%/g, '\\%').replace(/_/g, '\\_');
+        // 2. Escape characters that are structurally significant to PostgREST's
+        //    filter syntax itself (".or() uses raw PostgREST syntax and values
+        //    must be properly sanitized" -- backslashes and double quotes must
+        //    be backslash-escaped so the value can be safely double-quoted).
+        const pgrestEscaped = likeEscaped.replace(/\\/g, '\\\\').replace(/"/g, '\\"');
+        // 3. Wrap the value (including the ilike wildcards) in double quotes.
+        //    PostgREST treats a double-quoted value as a single literal token,
+        //    so reserved characters inside it -- comma, parentheses, colon,
+        //    period, etc. -- are read as plain search text instead of being
+        //    parsed as filter syntax (e.g. the "," that previously split
+        //    ".or()" conditions and caused a PGRST100 parse error / 400).
+        const quoted = `"*${pgrestEscaped}*"`;
         return [
-          `title.ilike.*${escaped}*`,
-          `description.ilike.*${escaped}*`
+          `title.ilike.${quoted}`,
+          `description.ilike.${quoted}`
         ];
       }).join(',');
       query = query.or(searchConditions);

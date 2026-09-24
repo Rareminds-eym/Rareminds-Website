@@ -48,14 +48,17 @@ const allowedLocalResources = new Set([
 
 const allowedDriveFileIds = new Set([
   '18Q-Rd1ZTrXEjgLhW0EqTQO8K1xoC9aJ9',
-  '1HZR62_uyBC4kceBO3KV2KYYOzjwM1mfk',
-  '1TAhzScrKxOQ11hksIxakSkykL1-g3dc5',
-  '1HhCH2W9OSzP1iBCHPc9VUqRG9PwBi9mn',
-  '12cQbhz1JSF-k1-vBEa02zWILkX4ulPWx',
-  '1bmJoQdaW5oC0vZcuDs-iieFgOVCudl9q',
-  '1kK27P0N26CiREpZK9tRirJaJCyKv4Mh-',
   '113jMQrHdB9aTxtpFUtluf-o-go19l_QC',
-  '1FexjnvsqLziLlk71F2wU4I7apQWzK5i2',
+]);
+
+const allowedR2Resources = new Set([
+  '/pdfs/Career-Counselling-Blueprint-for-Grades-9-12.pdf',
+  '/pdfs/Confidence-Goal-Skill-8-12.pdf',
+  '/pdfs/30-DaySpokenEnglishPracticeSheet.pdf',
+  '/pdfs/EEECourseOverviewwith-JobPathways.pdf',
+  '/pdfs/NEP_Ready_School_Checklist.pdf',
+  '/pdfs/Weekend_Program.pdf',
+  '/pdfs/The3EProgram.pdf',
 ]);
 
 const corsHeaders = (request: Request) => {
@@ -116,6 +119,12 @@ const getResourceUrl = (value: string) => {
 
   try {
     const url = new URL(value);
+
+    const isAllowedR2File = url.protocol === 'https:'
+      && url.hostname === 'media.rareminds.in'
+      && allowedR2Resources.has(url.pathname);
+    if (isAllowedR2File) return url.href;
+
     const match = /^\/file\/d\/([A-Za-z0-9_-]+)\/view$/.exec(url.pathname);
     const isAllowedGoogleDriveFile = url.protocol === 'https:'
       && url.hostname === 'drive.google.com'
