@@ -125,9 +125,6 @@ const BlogDetail = () => {
 
         // Fetch related posts from the same category or subcategory
         if (blogData?.category) {
-          // Get subcategory from URL path
-          const subcategory = getSubcategoryFromPath();
-
           // Start building the query
           let relatedQuery = supabase
             .from('blog_posts')
@@ -147,9 +144,10 @@ const BlogDetail = () => {
               .eq('subcategory', subcategory)
               .eq('category', blogData.category);
           } else {
-            // If no specific subcategory, use broader category matching
+            // If no specific subcategory, use broader category matching.
+            // PostgREST .or() syntax is "column.eq.value", not "eq(column, value)".
             relatedQuery = relatedQuery
-              .or(`eq(category, ${blogData.category}),eq(subcategory, ${blogData.subcategory})`);
+              .or(`category.eq.${blogData.category},subcategory.eq.${blogData.subcategory}`);
           }
           
           // Execute the query

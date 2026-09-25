@@ -363,7 +363,7 @@ const CTAButton = ({ children, variant, onClick }: CTAButtonProps) => {
     : 'bg-red-500 text-white border-b-4 text-xs md:text-base border-red-300 hover:bg-red-600';
 
   return (
-    <button className={`${base} ${styles}`} onClick={onClick}>
+    <button type="button" className={`${base} ${styles}`} onClick={onClick}>
       {children}
     </button>
   );

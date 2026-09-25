@@ -123,7 +123,7 @@ const resources: Resource[] = [
     };
 
   return (
-    <div className="h-autopx-8 bg-white py-8 mt-8" data-aos="fade-down-right ">
+    <div className="h-auto px-8 bg-white py-8 mt-8" data-aos="fade-down-right ">
       <div className="container mx-auto px-4">
         <div className="max-w-4xl mx-auto mb-6">
           <h2 className="text-3xl text-center font-bold mb-2">Free Student Resource Pack – Instant Downloads
