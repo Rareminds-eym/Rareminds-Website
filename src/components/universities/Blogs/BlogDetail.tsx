@@ -63,6 +63,23 @@ interface BlogPost {
   updated_at: string;
 }
 
+// Some posts have `tags` stored as a single long keyword-dump string
+// (comma- or multi-space-separated) instead of separate array entries,
+// e.g. ["Future of Jobs India, Hybrid Careers, AI and Employment, ..."].
+// Split any such entry into individual short tags before display, so the
+// Tags section never renders one oversized pill regardless of how the
+// data was saved. Already-clean tags pass through unchanged.
+// Mirrors BlogCard.tsx's getDisplayTags(), without its `max` cap — a
+// detail page should show every tag, not just a preview slice.
+const getDisplayTags = (tags: string[] | null | undefined): string[] => {
+  if (!Array.isArray(tags) || tags.length === 0) return [];
+
+  return tags
+    .flatMap((tag) => tag.split(/\s*,\s*|\s{2,}/))
+    .map((tag) => tag.trim())
+    .filter(Boolean);
+};
+
 const BlogDetail = () => {
   const { slug } = useParams();
   const location = useLocation();
@@ -508,10 +525,10 @@ const BlogDetail = () => {
                 <div className="p-6 bg-white rounded-2xl border border-gray-100 shadow-sm">
                   <h4 className="font-bold text-gray-900 mb-4">Tags</h4>
                   <div className="flex flex-wrap gap-2">
-                    {post.tags?.map((tag: string, index: number) => (
+                    {getDisplayTags(post.tags).map((tag: string, index: number) => (
                       <span
                         key={index}
-                        className="px-3 py-1 bg-red-50 text-red-600 rounded-full text-sm font-medium border border-red-100"
+                        className="px-3 py-1 bg-red-50 text-red-600 rounded-full text-sm font-medium border border-red-100 max-w-full truncate"
                       >
                         {tag}
                       </span>

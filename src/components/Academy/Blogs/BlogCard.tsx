@@ -69,7 +69,7 @@ const BlogCard = ({ post }: BlogCardProps) => {
             alt={post.title}
             className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-110 group-hover:brightness-90"
           />
-          
+
         </div>
         {displayTags.length > 0 && (
           <div className="mt-4 pt-1 px-3 overflow-x-auto whitespace-nowrap scrollbar-thin scrollbar-thumb-red-400 scrollbar-track-gray-200">

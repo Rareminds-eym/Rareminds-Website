@@ -75,6 +75,23 @@ interface BlogPost {
   readonly updated_at: string;
 }
 
+// Some posts have `tags` stored as a single long keyword-dump string
+// (comma- or multi-space-separated) instead of separate array entries,
+// e.g. ["Future of Jobs India, Hybrid Careers, AI and Employment, ..."].
+// Split any such entry into individual short tags before display, so the
+// Tags section never renders one oversized pill regardless of how the
+// data was saved. Already-clean tags pass through unchanged.
+// Mirrors BlogCard.tsx's getDisplayTags(), without its `max` cap — a
+// detail page should show every tag, not just a preview slice.
+const getDisplayTags = (tags: string[] | null | undefined): string[] => {
+  if (!Array.isArray(tags) || tags.length === 0) return [];
+
+  return tags
+    .flatMap((tag) => tag.split(/\s*,\s*|\s{2,}/))
+    .map((tag) => tag.trim())
+    .filter(Boolean);
+};
+
 // Loading states enum for better type safety
 enum LoadingState {
   IDLE = 'idle',
@@ -286,9 +303,6 @@ const BlogDetail = () => {
         {/* Blog Title and Category below image */}
         <div className="w-full bg-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-4">
-            <span className="inline-block px-4 py-2 bg-blue-500 text-white rounded-full text-sm font-semibold mb-4 shadow-lg">
-              {post.category}
-            </span>
             <h1 className="text-2xl sm:text-3xl lg:text-5xl font-bold text-gray-900 mb-6 !leading-tight">
               {post.title}
             </h1>
@@ -635,14 +649,14 @@ const BlogSidebar = memo<BlogSidebarProps>(({ post }) => (
       </div>
 
       {/* Tags */}
-      {post.tags && post.tags.length > 0 && (
+      {getDisplayTags(post.tags).length > 0 && (
         <div className="p-6 bg-white rounded-2xl border border-gray-100 shadow-sm">
           <h4 className="font-bold text-gray-900 mb-4">Tags</h4>
           <div className="flex flex-wrap gap-2">
-            {post.tags.map((tag: string, index: number) => (
+            {getDisplayTags(post.tags).map((tag: string, index: number) => (
               <span
                 key={`${tag}-${index}`}
-                className="px-3 py-1 bg-blue-50 text-blue-600 rounded-full text-sm font-medium border border-blue-100"
+                className="px-3 py-1 bg-blue-50 text-blue-600 rounded-full text-sm font-medium border border-blue-100 max-w-full truncate"
               >
                 {tag}
               </span>

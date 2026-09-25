@@ -63,6 +63,23 @@ interface BlogPost {
   updated_at: string;
 }
 
+// Some posts have `tags` stored as a single long keyword-dump string
+// (comma- or multi-space-separated) instead of separate array entries,
+// e.g. ["Future of Jobs India, Hybrid Careers, AI and Employment, ..."].
+// Split any such entry into individual short tags before display, so the
+// Tags section never renders one oversized pill regardless of how the
+// data was saved. Already-clean tags pass through unchanged.
+// Mirrors BlogCard.tsx's getDisplayTags(), without its `max` cap — a
+// detail page should show every tag, not just a preview slice.
+const getDisplayTags = (tags: string[] | null | undefined): string[] => {
+  if (!Array.isArray(tags) || tags.length === 0) return [];
+
+  return tags
+    .flatMap((tag) => tag.split(/\s*,\s*|\s{2,}/))
+    .map((tag) => tag.trim())
+    .filter(Boolean);
+};
+
 const BlogDetail = () => {
   const { slug } = useParams();
   const location = useLocation();
@@ -265,9 +282,9 @@ const BlogDetail = () => {
                 variant="outline"
                 size="sm"
                 onClick={() => navigator.share && navigator.share({ title: post.title, url: currentUrl })}
-                className="border-red-200 text-red-600 hover:bg-red-50"
+                className="inline-flex items-center justify-center gap-2 rounded-md border-red-200 text-red-600 font-medium hover:bg-red-50"
               >
-                <Share2 className="w-4 h-4 mr-2" />
+                <Share2 className="w-4 h-4" />
                 Share
               </Button>
             </div>
@@ -468,10 +485,10 @@ const BlogDetail = () => {
                     Tags
                   </h4>
                   <div className="flex flex-wrap gap-2">
-                    {post.tags?.map((tag: string, index: number) => (
+                    {getDisplayTags(post.tags).map((tag: string, index: number) => (
                       <span
                         key={index}
-                        className="px-3 py-2 bg-white/20 hover:bg-white/30 text-white rounded-full text-sm font-medium border border-white/30 backdrop-blur-sm transition-all duration-200 cursor-pointer hover:scale-105"
+                        className="px-3 py-2 bg-white/20 hover:bg-white/30 text-white rounded-full text-sm font-medium border border-white/30 backdrop-blur-sm transition-all duration-200 cursor-pointer hover:scale-105 max-w-full truncate"
                       >
                         {tag}
                       </span>
