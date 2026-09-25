@@ -150,7 +150,7 @@ const ServiceCard = ({
 const COURSE_LIST_PDF_URL = "/institutions/pdfs/Course_List.pdf";
 const EMAIL_REGEX = /\S+@\S+\.\S+/;
 
-const DownloadCourseListModal = ({ onClose }: { onClose: () => void }) => {
+export const DownloadCourseListModal = ({ onClose }: { onClose: () => void }) => {
   const { toast } = useToast();
   const [form, setForm] = useState({ name: "", email: "" });
   const [isSubmitting, setIsSubmitting] = useState(false);

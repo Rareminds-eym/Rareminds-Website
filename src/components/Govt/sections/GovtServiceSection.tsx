@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { supabase } from '../../../lib/supabaseClient';
 import * as Toast from '@radix-ui/react-toast';
 import {Link} from 'react-router-dom';
+import { DownloadCourseListModal } from '@/components/Corporate/Training/Services';
 
 import {
   BookCheck,
@@ -370,6 +371,7 @@ const CTAButton = ({ children, variant, onClick }: CTAButtonProps) => {
 
 const GovServiceSection: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isCourseListModalOpen, setIsCourseListModalOpen] = useState(false);
   const services = [
     {
       icon: <BookCheck size={24} />,
@@ -438,12 +440,7 @@ const GovServiceSection: React.FC = () => {
         </div>
 
         <div className="flex flex-col sm:flex-row justify-center items-center gap-4 sm:gap-6 animate-fade-in max-w-2xl mx-auto">
-          <CTAButton variant="primary" onClick={() => {
-            const contactElement = document.getElementById('contact');
-            if (contactElement) {
-              contactElement.scrollIntoView({ behavior: 'smooth' });
-            }
-          }}>
+          <CTAButton variant="primary" onClick={() => setIsCourseListModalOpen(true)}>
             Download Full Course Catalog
           </CTAButton>
           <CTAButton variant="secondary" onClick={() => setIsModalOpen(true)}>
@@ -452,10 +449,14 @@ const GovServiceSection: React.FC = () => {
         </div>
       </div>
       
-      <BlueprintModal 
+      <BlueprintModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
       />
+
+      {isCourseListModalOpen && (
+        <DownloadCourseListModal onClose={() => setIsCourseListModalOpen(false)} />
+      )}
     </section>
   );
 };
