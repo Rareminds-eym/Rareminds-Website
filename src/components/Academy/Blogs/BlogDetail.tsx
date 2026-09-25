@@ -127,16 +127,22 @@ const BlogDetail = () => {
         if (blogData?.category) {
           // Get subcategory from URL path
           const subcategory = getSubcategoryFromPath();
-          
+
           // Start building the query
           let relatedQuery = supabase
             .from('blog_posts')
             .select('*')
             .neq('id', blogData.id)
             .limit(3);
-            
-          // Filter by both category and subcategory
-          if (subcategory) {
+
+          // Wildcard posts (category === '*') aren't tied to any single category,
+          // so filtering related posts by the literal '*' value would be meaningless.
+          // Skip category/subcategory filtering for wildcard posts and fall through
+          // to the most recent other posts instead.
+          if (blogData.category === '*') {
+            // No additional filter — relatedQuery already excludes this post and limits to 3.
+          } else if (subcategory) {
+            // Filter by both category and subcategory
             relatedQuery = relatedQuery
               .eq('subcategory', subcategory)
               .eq('category', blogData.category);

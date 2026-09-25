@@ -219,7 +219,7 @@
 import { FaCalendarAlt, FaDownload } from "react-icons/fa";
 import { supabase } from "../../../../lib/supabase";
 import { motion, AnimatePresence } from "framer-motion";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import banner1 from "../../../../../public/passport/banner 1.2.jpg";
 import banner2 from "../../../../../public/passport/BANNER 2.2.jpg";
 import banner3 from "../../../../../public/passport/Get-Your-Students-Discovered.png";
@@ -303,7 +303,7 @@ const HeroSection = ({
 }) => {
   const [current, setCurrent] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
-  const [formTimeout, setFormTimeout] = useState<NodeJS.Timeout | null>(null);
+  const formTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const [form, setForm] = useState({
     name: "",
     company: "",
@@ -339,25 +339,24 @@ const HeroSection = ({
     const newForm = { ...form, [e.target.name]: e.target.value };
     setForm(newForm);
     // If any field is filled, clear the timeout so form stays open
-    if (formTimeout && Object.values(newForm).some((v) => v.trim() !== "")) {
-      clearTimeout(formTimeout);
+    if (formTimeoutRef.current && Object.values(newForm).some((v) => v.trim() !== "")) {
+      clearTimeout(formTimeoutRef.current);
     }
   };
 
   // Start timeout when form is opened
   useEffect(() => {
     if (showForm && Object.values(form).every((v) => v.trim() === "")) {
-      if (formTimeout) clearTimeout(formTimeout);
-      const timeout = setTimeout(() => {
+      if (formTimeoutRef.current) clearTimeout(formTimeoutRef.current);
+      formTimeoutRef.current = setTimeout(() => {
         setShowForm(false);
       }, 10000);
-      setFormTimeout(timeout);
-    } else {
-      if (formTimeout) clearTimeout(formTimeout);
+    } else if (formTimeoutRef.current) {
+      clearTimeout(formTimeoutRef.current);
     }
     // Cleanup on unmount
     return () => {
-      if (formTimeout) clearTimeout(formTimeout);
+      if (formTimeoutRef.current) clearTimeout(formTimeoutRef.current);
     };
   }, [showForm, form]);
 
