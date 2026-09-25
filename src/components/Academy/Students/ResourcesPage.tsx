@@ -111,14 +111,23 @@ const resources: Resource[] = [
         });
   
         if (!response.ok) {
-          throw new Error('Failed to send email');
+          let message = 'Failed to send email';
+          try {
+            const errorData = await response.json();
+            if (errorData?.message) {
+              message = errorData.message;
+            }
+          } catch {
+            // Response body wasn't valid JSON; fall back to the generic message.
+          }
+          throw new Error(message);
         }
   
         setLoading(false);
         setModalOpen(false);
       } catch (err) {
         setLoading(false);
-        setErrorMsg("An error occurred. Please try again.");
+        setErrorMsg(err instanceof Error ? err.message : "An error occurred. Please try again.");
       }
     };
 
