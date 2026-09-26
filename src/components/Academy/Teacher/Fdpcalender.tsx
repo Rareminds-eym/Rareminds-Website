@@ -54,7 +54,7 @@ const tdpPrograms: TdpCard[] = [
     description: "Reimagining Education with Transformational Leadership",
     image: "/academy/Weekend Program -Reimagining Education with Transformational Leadership.svg",
     alt: " Icon of an empowered individual with raised arms, symbolizing student confidence, achievement, or career readiness",
-    pdfLink: "https://drive.google.com/file/d/1FexjnvsqLziLlk71F2wU4I7apQWzK5i2/view?usp=drive_link",
+    pdfLink: "https://media.rareminds.in/pdfs/Weekend_Program.pdf",
     features: [
       "NEP Framework and Objectives",
       "Technology Integration to accelerate future-forward learning.",

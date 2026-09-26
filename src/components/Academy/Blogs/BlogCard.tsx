@@ -26,9 +26,26 @@ interface BlogCardProps {
   post: BlogPost;
 }
 
+// Some posts have `tags` stored as a single long keyword-dump string
+// (comma- or multi-space-separated) instead of separate array entries,
+// e.g. ["Future of Jobs India, Hybrid Careers, AI and Employment, ..."].
+// Split any such entry into individual short tags before display, so a
+// card never renders one oversized pill regardless of how the data was
+// saved. Already-clean tags pass through unchanged.
+const getDisplayTags = (tags: string[] | null | undefined, max = 2): string[] => {
+  if (!Array.isArray(tags) || tags.length === 0) return [];
+
+  return tags
+    .flatMap((tag) => tag.split(/\s*,\s*|\s{2,}/))
+    .map((tag) => tag.trim())
+    .filter(Boolean)
+    .slice(0, max);
+};
+
 const BlogCard = ({ post }: BlogCardProps) => {
   const location = useLocation();
-  
+  const displayTags = getDisplayTags(post.tags);
+
   // Determine which section we're in for proper blog links
   let blogDetailLink = `/school/student/blogs/${post.slug}`; // Default to student
   
@@ -52,19 +69,19 @@ const BlogCard = ({ post }: BlogCardProps) => {
             alt={post.title}
             className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-110 group-hover:brightness-90"
           />
-          
+
         </div>
-        <div className="mt-2 overflow-x-auto whitespace-nowrap scrollbar-thin scrollbar-thumb-red-400 scrollbar-track-gray-200">
+        {displayTags.length > 0 && (
+          <div className="mt-4 pt-1 px-3 overflow-x-auto whitespace-nowrap scrollbar-thin scrollbar-thumb-red-400 scrollbar-track-gray-200">
             <span className="category-badge flex flex-nowrap gap-1">
-              {Array.isArray(post.tags) && post.tags.length > 0
-                ? post.tags.map((tag, idx) => (
-                    <span key={idx} className="bg-red-500/80 text-white px-2 py-1 rounded-3xl mr-1 mb-1 text-xs font-semibold shadow inline-block">
-                      {tag}
-                    </span>
-                  ))
-                : null}
+              {displayTags.map((tag, idx) => (
+                <span key={idx} className="bg-red-500/80 text-white px-2 py-1 rounded-3xl mr-1 mb-1 text-xs font-semibold shadow inline-block">
+                  {tag}
+                </span>
+              ))}
             </span>
           </div>
+        )}
         <div className="p-6 flex-grow flex flex-col">
           <h3 className="font-playfair text-xl font-bold text-gray-900 mb-3 group-hover:text-red-600 transition-colors duration-200 line-clamp-2">
             {post.title}

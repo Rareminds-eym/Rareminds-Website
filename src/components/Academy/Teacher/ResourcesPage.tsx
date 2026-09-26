@@ -27,14 +27,14 @@ const resources: Resource[] = [
     icon: "chart-line",
     title: "Our Career Counselling Blueprint for Grades 9–12",
     description: "Your Child’s Future Starts Today: Career Counselling Blueprint for Grades 9–12",
-    pdfLink: "https://drive.google.com/file/d/1HZR62_uyBC4kceBO3KV2KYYOzjwM1mfk/view?usp=drive_link",
+    pdfLink: "https://media.rareminds.in/pdfs/Career-Counselling-Blueprint-for-Grades-9-12.pdf",
     svgIconPath: "/academy/careerCounsellingBlueprint.svg",
   },
   {
     icon: "file-text",
     title: "Checklist: Is Your School NEP-Ready?",
     description: "A Quick Audit for Schools Moving toward 21st-Century Excellence.",
-    pdfLink: "https://drive.google.com/file/d/1kK27P0N26CiREpZK9tRirJaJCyKv4Mh-/view?usp=drive_link",
+    pdfLink: "https://media.rareminds.in/pdfs/NEP_Ready_School_Checklist.pdf",
     svgIconPath: "/academy/NEP-Ready School Checklist.svg",
   },
 ];
