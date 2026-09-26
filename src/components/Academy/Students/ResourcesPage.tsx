@@ -24,19 +24,19 @@ const ResourcesPage = () => {
 const resources: Resource[] = [
    {
       title: "Career Counselling Blueprint (Grades 9–12)",
-      pdfLink: "https://drive.google.com/file/d/1HZR62_uyBC4kceBO3KV2KYYOzjwM1mfk/view?usp=drive_link",
+      pdfLink: "https://media.rareminds.in/pdfs/Career-Counselling-Blueprint-for-Grades-9-12.pdf",
     },
     {
       title: "Confidence & Goal Tracker PDF",
-      pdfLink: "https://drive.google.com/file/d/1TAhzScrKxOQ11hksIxakSkykL1-g3dc5/view?usp=drive_link",
+      pdfLink: "https://media.rareminds.in/pdfs/Confidence-Goal-Skill-8-12.pdf",
     },
     {
       title: "Spoken English Daily Practice Sheet",
-      pdfLink: "https://drive.google.com/file/d/1HhCH2W9OSzP1iBCHPc9VUqRG9PwBi9mn/view?usp=drive_link",
+      pdfLink: "https://media.rareminds.in/pdfs/30-DaySpokenEnglishPracticeSheet.pdf",
     },
     {
       title: "EEE Course Overview with Job Pathways",
-      pdfLink: "https://drive.google.com/file/d/12cQbhz1JSF-k1-vBEa02zWILkX4ulPWx/view?usp=drive_link",
+      pdfLink: "https://media.rareminds.in/pdfs/EEECourseOverviewwith-JobPathways.pdf",
     },
 ];
 
@@ -111,19 +111,28 @@ const resources: Resource[] = [
         });
   
         if (!response.ok) {
-          throw new Error('Failed to send email');
+          let message = 'Failed to send email';
+          try {
+            const errorData = await response.json();
+            if (errorData?.message) {
+              message = errorData.message;
+            }
+          } catch {
+            // Response body wasn't valid JSON; fall back to the generic message.
+          }
+          throw new Error(message);
         }
   
         setLoading(false);
         setModalOpen(false);
       } catch (err) {
         setLoading(false);
-        setErrorMsg("An error occurred. Please try again.");
+        setErrorMsg(err instanceof Error ? err.message : "An error occurred. Please try again.");
       }
     };
 
   return (
-    <div className="h-autopx-8 bg-white py-8 mt-8" data-aos="fade-down-right ">
+    <div className="h-auto px-8 bg-white py-8 mt-8" data-aos="fade-down-right ">
       <div className="container mx-auto px-4">
         <div className="max-w-4xl mx-auto mb-6">
           <h2 className="text-3xl text-center font-bold mb-2">Free Student Resource Pack – Instant Downloads

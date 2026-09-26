@@ -87,21 +87,21 @@ const FloatingActionMenu = () => {
       case 'chat':
         setShowChat(!showChat);
         setShowBookDemo(false);
-        setActiveIcon(showChat ? Plus : WhatsAppIcon);
+        setActiveIcon(() => (showChat ? Plus : WhatsAppIcon));
         break;
       case 'demo':
         setShowBookDemo(!showBookDemo);
         setShowChat(false);
-        setActiveIcon(showBookDemo ? Plus : Calendar);
+        setActiveIcon(() => (showBookDemo ? Plus : Calendar));
         break;
       case 'download':
-        setActiveIcon(Download);
-        setTimeout(() => setActiveIcon(Plus), 1000);
+        setActiveIcon(() => Download);
+        setTimeout(() => setActiveIcon(() => Plus), 1000);
         item.onClick();
         break;
       default:
         item.onClick();
-        setActiveIcon(Plus);
+        setActiveIcon(() => Plus);
     }
     setIsOpen(false);
   };

@@ -26,6 +26,22 @@ interface BlogCardProps {
   post: BlogPost;
 }
 
+// Some posts have `tags` stored as a single long keyword-dump string
+// (comma- or multi-space-separated) instead of separate array entries,
+// e.g. ["Future of Jobs India, Hybrid Careers, AI and Employment, ..."].
+// Split any such entry into individual short tags before display, so a
+// card never renders one oversized pill regardless of how the data was
+// saved. Already-clean tags pass through unchanged.
+const getDisplayTags = (tags: string[] | null | undefined, max = 2): string[] => {
+  if (!Array.isArray(tags) || tags.length === 0) return [];
+
+  return tags
+    .flatMap((tag) => tag.split(/\s*,\s*|\s{2,}/))
+    .map((tag) => tag.trim())
+    .filter(Boolean)
+    .slice(0, max);
+};
+
 const BlogCard = ({ post }: BlogCardProps) => {
   const location = useLocation();
   
@@ -46,17 +62,17 @@ const BlogCard = ({ post }: BlogCardProps) => {
             alt={post.title}
             className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-110 group-hover:brightness-90"
           />
-          <div className="absolute top-4 left-4">
-            <span className="category-badge flex flex-wrap gap-1">
-              {Array.isArray(post.tags) && post.tags.length > 0
-                ? post.tags.map((tag, idx) => (
-                    <span key={idx} className="bg-red-500/80 text-white px-2 py-1 rounded-3xl mr-1 mb-1 text-xs font-semibold shadow">
-                      {tag}
-                    </span>
-                  ))
-                : null}
-            </span>
-          </div>
+          {getDisplayTags(post.tags).length > 0 && (
+            <div className="absolute top-4 left-4 right-4">
+              <span className="category-badge flex flex-wrap gap-1">
+                {getDisplayTags(post.tags).map((tag, idx) => (
+                  <span key={idx} className="bg-red-500/80 text-white px-2 py-1 rounded-3xl mr-1 mb-1 text-xs font-semibold shadow max-w-[160px] truncate inline-block align-bottom">
+                    {tag}
+                  </span>
+                ))}
+              </span>
+            </div>
+          )}
         </div>
         <div className="p-6">
           <h3 className="font-playfair text-xl font-bold text-gray-900 mb-3 group-hover:text-red-600 transition-colors duration-200 line-clamp-2">

@@ -64,6 +64,23 @@ interface BlogPost {
   updated_at: string;
 }
 
+// Some posts have `tags` stored as a single long keyword-dump string
+// (comma- or multi-space-separated) instead of separate array entries,
+// e.g. ["Future of Jobs India, Hybrid Careers, AI and Employment, ..."].
+// Split any such entry into individual short tags before display, so the
+// Tags section never renders one oversized pill regardless of how the
+// data was saved. Already-clean tags pass through unchanged.
+// Mirrors BlogCard.tsx's getDisplayTags(), without its `max` cap — a
+// detail page should show every tag, not just a preview slice.
+const getDisplayTags = (tags: string[] | null | undefined): string[] => {
+  if (!Array.isArray(tags) || tags.length === 0) return [];
+
+  return tags
+    .flatMap((tag) => tag.split(/\s*,\s*|\s{2,}/))
+    .map((tag) => tag.trim())
+    .filter(Boolean);
+};
+
 const BlogDetailGov = () => {
   const { slug } = useParams();
   const location = useLocation();
@@ -594,7 +611,7 @@ const BlogDetailGov = () => {
                       Tags
                     </h4>
                     <div className="flex flex-wrap gap-3">
-                      {post.tags?.map((tag: string, index: number) => (
+                      {getDisplayTags(post.tags).map((tag: string, index: number) => (
                         <motion.span
                           key={index}
                           initial={{ opacity: 0, scale: 0.8 }}
@@ -602,7 +619,7 @@ const BlogDetailGov = () => {
                           transition={{ delay: 0.9 + index * 0.1, duration: 0.3 }}
                           whileHover={{ scale: 1.1, y: -2 }}
                           whileTap={{ scale: 0.95 }}
-                          className="relative px-4 py-2 bg-white/20 hover:bg-white/30 text-white rounded-full text-sm font-semibold border border-white/40 backdrop-blur-md transition-all duration-300 cursor-pointer shadow-lg hover:shadow-xl group/tag"
+                          className="relative px-4 py-2 bg-white/20 hover:bg-white/30 text-white rounded-full text-sm font-semibold border border-white/40 backdrop-blur-md transition-all duration-300 cursor-pointer shadow-lg hover:shadow-xl group/tag max-w-full truncate"
                         >
                           <span className="relative z-10">{tag}</span>
                           <div className="absolute inset-0 bg-white/10 rounded-full opacity-0 group-hover/tag:opacity-100 transition-opacity duration-300"></div>

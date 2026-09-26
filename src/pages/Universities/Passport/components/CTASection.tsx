@@ -2,7 +2,15 @@ import { Button } from "@/components/ui/button";
 import { Users, Calendar } from "lucide-react";
 
 
-export const CTASection = ({ onDemoClick }: { onDemoClick: () => void }) => {
+export const CTASection = ({
+  onDemoClick,
+  onBrochureClick,
+  onContactClick,
+}: {
+  onDemoClick: () => void;
+  onBrochureClick: () => void;
+  onContactClick: () => void;
+}) => {
   return (
     <div>
       <div className="max-w-6xl mx-auto">
@@ -33,7 +41,7 @@ export const CTASection = ({ onDemoClick }: { onDemoClick: () => void }) => {
           <Button
             size="lg"
             className="bg-white text-black hover:bg-gray-100 px-6 py-5 rounded-full font-semibold flex items-center justify-center"
-            onClick={onDemoClick}
+            onClick={onContactClick}
           >
             <Users className="mr-2 h-5 w-5" />
             Talk to Our Academic Partner Team
@@ -43,7 +51,7 @@ export const CTASection = ({ onDemoClick }: { onDemoClick: () => void }) => {
           <Button
             size="lg"
             className="bg-[#FF6B6B] hover:bg-[#ff8787] text-white px-6 py-5 rounded-full font-semibold flex items-center justify-center"
-            onClick={onDemoClick}
+            onClick={onBrochureClick}
           >
             Download Institutional Brochure
           </Button>

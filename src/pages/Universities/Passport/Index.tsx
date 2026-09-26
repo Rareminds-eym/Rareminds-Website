@@ -17,8 +17,16 @@ import InstitutionsBenefits from "./components/InstitutionsBenefits";
 import BuiltSection from "./components/BuiltSection";
 import OutcomeSection from "./components/OutcomeSection";
 import UseSection from "./components/UseSection";
+import ContactSection from "@/components/universities/Contact/ContactSection";
 const Passport = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  // Shared with HeroSection and CTASection so both "Download" triggers
+  // open the same lead-capture form before downloading the brochure.
+  const [showBrochureForm, setShowBrochureForm] = useState(false);
+
+  const scrollToContact = () => {
+    document.getElementById("contact-section")?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
 
   const seoData = {
     title: "Skill Passport for Institutions | Empower Student Employability | Rareminds Pvt. Ltd.",
@@ -37,7 +45,11 @@ const Passport = () => {
       <BookDemo isVisible={isModalOpen} onClose={() => setIsModalOpen(false)} />
 
       <div className="relative w-full mt-24">
-        <HeroSection onDemoClick={() => setIsModalOpen(true)} />
+        <HeroSection
+          onDemoClick={() => setIsModalOpen(true)}
+          showForm={showBrochureForm}
+          setShowForm={setShowBrochureForm}
+        />
         <OverviewSection />
         <InstitutionsNeededSection
           onDemoClick={() => setIsModalOpen(true)}
@@ -57,8 +69,13 @@ const Passport = () => {
 
         {/* <TestimonialsSection /> */}
         <section className="bg-[#F9FAFB] py-20 px-6 text-center">
-          <CTASection onDemoClick={() => setIsModalOpen(true)}/>
+          <CTASection
+            onDemoClick={() => setIsModalOpen(true)}
+            onBrochureClick={() => setShowBrochureForm(true)}
+            onContactClick={scrollToContact}
+          />
         </section>
+        <ContactSection />
       </div>
      </HelmetProvider>
   );
