@@ -63,6 +63,23 @@ interface BlogPost {
   updated_at: string;
 }
 
+// Some posts have `tags` stored as a single long keyword-dump string
+// (comma- or multi-space-separated) instead of separate array entries,
+// e.g. ["Future of Jobs India, Hybrid Careers, AI and Employment, ..."].
+// Split any such entry into individual short tags before display, so the
+// Tags section never renders one oversized pill regardless of how the
+// data was saved. Already-clean tags pass through unchanged.
+// Mirrors BlogCard.tsx's getDisplayTags(), without its `max` cap — a
+// detail page should show every tag, not just a preview slice.
+const getDisplayTags = (tags: string[] | null | undefined): string[] => {
+  if (!Array.isArray(tags) || tags.length === 0) return [];
+
+  return tags
+    .flatMap((tag) => tag.split(/\s*,\s*|\s{2,}/))
+    .map((tag) => tag.trim())
+    .filter(Boolean);
+};
+
 const BlogDetail = () => {
   const { slug } = useParams();
   const location = useLocation();
@@ -91,20 +108,14 @@ const BlogDetail = () => {
         
         // Get subcategory from URL path
         const subcategory = getSubcategoryFromPath();
-        
-        // Start building the query
-        let query = supabase
+
+        // Fetch by slug only; subcategory matching (with wildcard support)
+        // is applied afterward, mirroring BlogListing's filtering logic.
+        const { data: blogData, error: blogError } = await supabase
           .from('blog_posts')
           .select('*')
-          .eq('slug', slug);
-        
-        // Add subcategory filter if applicable
-        if (subcategory) {
-          query = query.eq('subcategory', subcategory);
-        }
-        
-        // Execute the query
-        const { data: blogData, error: blogError } = await query.single();
+          .eq('slug', slug)
+          .single();
 
         if (blogError) {
           console.error('Error fetching blog post:', blogError);
@@ -116,29 +127,44 @@ const BlogDetail = () => {
           return;
         }
 
+        // Wildcard posts (category === '*') appear in every section, same as BlogListing.
+        // Otherwise, the post must match the current section's subcategory.
+        const isVisibleHere = !subcategory
+          || blogData?.category === '*'
+          || blogData?.subcategory === subcategory;
+
+        if (!isVisibleHere) {
+          setPost(null);
+          return;
+        }
+
         setPost(blogData);
 
         // Fetch related posts from the same category or subcategory
         if (blogData?.category) {
-          // Get subcategory from URL path
-          const subcategory = getSubcategoryFromPath();
-          
           // Start building the query
           let relatedQuery = supabase
             .from('blog_posts')
             .select('*')
             .neq('id', blogData.id)
             .limit(3);
-            
-          // Filter by both category and subcategory
-          if (subcategory) {
+
+          // Wildcard posts (category === '*') aren't tied to any single category,
+          // so filtering related posts by the literal '*' value would be meaningless.
+          // Skip category/subcategory filtering for wildcard posts and fall through
+          // to the most recent other posts instead.
+          if (blogData.category === '*') {
+            // No additional filter — relatedQuery already excludes this post and limits to 3.
+          } else if (subcategory) {
+            // Filter by both category and subcategory
             relatedQuery = relatedQuery
               .eq('subcategory', subcategory)
               .eq('category', blogData.category);
           } else {
-            // If no specific subcategory, use broader category matching
+            // If no specific subcategory, use broader category matching.
+            // PostgREST .or() syntax is "column.eq.value", not "eq(column, value)".
             relatedQuery = relatedQuery
-              .or(`eq(category, ${blogData.category}),eq(subcategory, ${blogData.subcategory})`);
+              .or(`category.eq.${blogData.category},subcategory.eq.${blogData.subcategory}`);
           }
           
           // Execute the query
@@ -256,9 +282,9 @@ const BlogDetail = () => {
                 variant="outline"
                 size="sm"
                 onClick={() => navigator.share && navigator.share({ title: post.title, url: currentUrl })}
-                className="border-red-200 text-red-600 hover:bg-red-50"
+                className="inline-flex items-center justify-center gap-2 rounded-md border-red-200 text-red-600 font-medium hover:bg-red-50"
               >
-                <Share2 className="w-4 h-4 mr-2" />
+                <Share2 className="w-4 h-4" />
                 Share
               </Button>
             </div>
@@ -292,9 +318,6 @@ const BlogDetail = () => {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.3, duration: 0.6 }}
                   >
-                    <span className="inline-block px-4 py-2 bg-black text-white rounded-full text-sm font-semibold mb-6 shadow-lg">
-                      {post.category}
-                    </span>
                     <h1 className="text-2xl sm:text-3xl lg:text-5xl font-bold text-gray-900 mb-6 !leading-tight">
                       {post.title}
                     </h1>
@@ -462,10 +485,10 @@ const BlogDetail = () => {
                     Tags
                   </h4>
                   <div className="flex flex-wrap gap-2">
-                    {post.tags?.map((tag: string, index: number) => (
+                    {getDisplayTags(post.tags).map((tag: string, index: number) => (
                       <span
                         key={index}
-                        className="px-3 py-2 bg-white/20 hover:bg-white/30 text-white rounded-full text-sm font-medium border border-white/30 backdrop-blur-sm transition-all duration-200 cursor-pointer hover:scale-105"
+                        className="px-3 py-2 bg-white/20 hover:bg-white/30 text-white rounded-full text-sm font-medium border border-white/30 backdrop-blur-sm transition-all duration-200 cursor-pointer hover:scale-105 max-w-full truncate"
                       >
                         {tag}
                       </span>

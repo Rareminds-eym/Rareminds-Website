@@ -26,7 +26,34 @@ interface BlogCardProps {
   post: BlogPost;
 }
 
+// Some posts have `tags` stored as a single long keyword-dump string
+// (comma- or multi-space-separated) instead of separate array entries,
+// e.g. ["Future of Jobs India, Hybrid Careers, AI and Employment, ..."].
+// Split any such entry into individual short tags before display, so a
+// card never renders one oversized pill regardless of how the data was
+// saved. Already-clean tags pass through unchanged.
+const getDisplayTags = (tags: string[] | null | undefined, max = 2): string[] => {
+  if (!Array.isArray(tags) || tags.length === 0) return [];
+
+  return tags
+    .flatMap((tag) => tag.split(/\s*,\s*|\s{2,}/))
+    .map((tag) => tag.trim())
+    .filter(Boolean)
+    .slice(0, max);
+};
+
+// `publish_date` is sometimes missing/empty on older posts. Guard against
+// rendering "Invalid Date" (or the 1/1/1970 epoch from a null/empty string)
+// so a card with no real date shows nothing instead of garbage text.
+const getFormattedPublishDate = (publishDate: string | null | undefined): string | null => {
+  if (!publishDate) return null;
+  const parsed = new Date(publishDate);
+  return Number.isNaN(parsed.getTime()) ? null : parsed.toLocaleDateString();
+};
+
 const BlogCard = ({ post }: BlogCardProps) => {
+  const displayTags = getDisplayTags(post.tags);
+  const formattedDate = getFormattedPublishDate(post.publish_date);
   return (
     <Link
       to={
@@ -47,43 +74,13 @@ const BlogCard = ({ post }: BlogCardProps) => {
         />
       </div>
       {/* Tags below the image */}
-      {Array.isArray(post.tags) && post.tags.length > 0 && (
+      {displayTags.length > 0 && (
         <div className="px-6 pt-3 pb-1">
-          <span
-            className="category-badge flex flex-nowrap gap-2 overflow-x-auto hide-scrollbar"
-            style={{ cursor: 'grab' }}
-            onMouseDown={e => {
-              const el = e.currentTarget;
-              let startX = e.pageX;
-              let scrollLeft = el.scrollLeft;
-              let isDragging = false;
-
-              const onMouseMove = (moveEvent: MouseEvent) => {
-                isDragging = true;
-                const x = moveEvent.pageX;
-                el.scrollLeft = scrollLeft - (x - startX);
-              };
-              const onMouseUp = () => {
-                el.style.cursor = 'grab';
-                window.removeEventListener('mousemove', onMouseMove);
-                window.removeEventListener('mouseup', onMouseUp);
-                setTimeout(() => { isDragging = false; }, 0);
-              };
-              el.style.cursor = 'grabbing';
-              window.addEventListener('mousemove', onMouseMove);
-              window.addEventListener('mouseup', onMouseUp);
-            }}
-            onClick={e => {
-              // Prevent click event if it was a drag
-              if (typeof window !== 'undefined' && window.getSelection()?.toString() === '') {
-                e.preventDefault();
-              }
-            }}
-          >
-            {post.tags.map((tag, idx) => (
+          <span className="category-badge flex flex-wrap gap-2">
+            {displayTags.map((tag, idx) => (
               <span
                 key={idx}
-                className="bg-red-500/80 text-white px-3 py-1 rounded-3xl text-xs font-semibold shadow whitespace-nowrap"
+                className="bg-red-500/80 text-white px-3 py-1 rounded-3xl text-xs font-semibold shadow max-w-full truncate inline-block"
               >
                 {tag}
               </span>
@@ -98,14 +95,16 @@ const BlogCard = ({ post }: BlogCardProps) => {
         <p className="text-gray-600 mb-4 line-clamp-3 leading-relaxed flex-1">
         {post.excerpt.length > 140 ? post.excerpt.slice(0, 140) + '...' : post.excerpt}
         </p>
-        <div className="flex items-center justify-between text-xs text-gray-500 flex-shrink-0 mt-auto">
+        <div className="flex items-center justify-between text-xs text-gray-500 flex-shrink-0 mt-auto pt-2 min-h-[1.5rem]">
         <div className="flex items-center gap-4">
           {/* Optionally add author or read time here */}
         </div>
-        <div className="flex items-center gap-1">
-          <Calendar className="w-4 h-4" />
-          <span>{new Date(post.publish_date).toLocaleDateString()}</span>
-        </div>
+        {formattedDate && (
+          <div className="flex items-center gap-1">
+            <Calendar className="w-4 h-4" />
+            <span>{formattedDate}</span>
+          </div>
+        )}
         </div>
       </div>
       </article>

@@ -35,6 +35,7 @@ export default function FDPSolutions() {
                 whileTap={{ scale: 0.95 }}
                 className="bg-blue-800/30 border border-blue-400/30 px-6 py-3 rounded-full font-semibold flex items-center gap-3 text-sm sm:text-base sm:px-28 sm:py-2"
                 href="/institutions/pdfs/FDP_Handbook.pdf"
+                download="FDP_Handbook.pdf"
               >
                 <Download className="w-5 h-5" />
                 Download Our FDP Handbook

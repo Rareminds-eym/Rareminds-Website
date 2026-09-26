@@ -1,5 +1,6 @@
 // export default AcademyHeader;
-import React, { useState } from "react";
+import type React from "react";
+import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Menu, X, AlignJustify } from "lucide-react";
 import BrandLogo from "../BrandLogo/BrandLogo";
@@ -14,21 +15,6 @@ const AcademyHeader: React.FC = () => {
 
   const isStudentPage = location.pathname.includes("/school/student");
   const isTeacherPage = location.pathname.includes("/school/teacher");
-  const isAcademiaMain = location.pathname === "/school";
-
-  let buttonLink = "";
-  let buttonText = "";
-
-  if (isStudentPage) {
-    buttonLink = "/school/teacher";
-    buttonText = "School";
-  } else if (isTeacherPage) {
-    buttonLink = "/school/student";
-    buttonText = "Student";
-  } else {
-    buttonLink = "/school/student";
-    buttonText = "Student";
-  }
 
   const showButtons = isStudentPage || isTeacherPage;
 
@@ -142,12 +128,12 @@ const AcademyHeader: React.FC = () => {
           </button>
 
           <Link
-            to="/school/projects"
+            to="/success-stories"
             className="text-xl text-gray-800 md:text-4xl py-2 hover:text-red-600 mb-4"
             onClick={() => setIsMenuOpen(false)}
           >
             Projects
-          </Link>      
+          </Link>
               <Link
             to={isStudentPage ? "/school/student/blogs" : isTeacherPage ? "/school/teacher/blogs" : "/school/blogs"}
             className="text-xl text-gray-800 md:text-4xl py-2 hover:text-red-600 mb-4"

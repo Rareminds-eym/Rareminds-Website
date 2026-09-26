@@ -66,13 +66,10 @@ const ServiceDetailPage = lazy(
 const CorporateTraining = lazy(
   () => import("./pages/Corporate/Training/Home/index.tsx")
 );
-const Contact = lazy(() => import("./pages/Government/Contact/Index"));
 const handleSubscribe = lazy(() => import("./pages/Academia/ComingSoon"));
 const CorporateCourseDetailPage = lazy(
   () => import("./pages/Corporate/Training/Services/CourseDetailPage.tsx")
 );
-const Projectlist = lazy(() => import("./pages/Academia/projects/projectlist"));
-const Naan = lazy(() => import("./pages/Academia/projects/[name]"));
 const CaseStudy = lazy(() => import("./pages/Academia/Teacher/CaseStudy.tsx"));
 const Academy_Course = lazy(
   () => import("./pages/Academia/Teacher/CourseDetailed.tsx")
@@ -305,11 +302,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/government/contact",
-        element: withSuspense(Contact),
-      },
-      {
-        path: "/school/projects/",
-        element: withSuspense(Projectlist),
+        element: <Navigate to="/government#contact" replace />,
       },
       {
         path: "/government/blogs",
@@ -394,11 +387,11 @@ const router = createBrowserRouter([
       },
       {
         path: "/school/projects/",
-        element: withSuspense(Projectlist),
+        element: <Navigate to="/success-stories" replace />,
       },
       {
         path: "/school/projects/:name",
-        element: withSuspense(Naan),
+        element: <Navigate to="/success-stories" replace />,
       },
       {
         path: "/school/case-study/:id",
@@ -608,7 +601,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/school/projects",
-        element: <Navigate to="/school/projects/" replace />,
+        element: <Navigate to="/success-stories" replace />,
       },
       {
         path: "/programs/:slug",

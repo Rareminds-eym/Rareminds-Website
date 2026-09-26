@@ -1,6 +1,12 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+
+const ZOHO_RECRUIT_CAREERS_URL = 'https://rareminds.zohorecruit.in/jobs/Careers';
 
 const Careers: React.FC = () => {
+  useEffect(() => {
+    window.location.replace(ZOHO_RECRUIT_CAREERS_URL);
+  }, []);
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center">
       <div className="text-center">
@@ -8,11 +14,8 @@ const Careers: React.FC = () => {
           Careers
         </h1>
         <p className="text-lg md:text-xl text-gray-600 mb-8">
-          Join our team and make a difference
+          Redirecting you to our open positions...
         </p>
-        <div className="max-w-2xl mx-auto text-gray-500">
-          <p>Exciting career opportunities await! Check back soon for open positions.</p>
-        </div>
       </div>
     </div>
   );

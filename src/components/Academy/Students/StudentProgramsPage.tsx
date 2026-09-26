@@ -60,7 +60,8 @@ const StudentProgramsPage = ({coursetocontact}:coursecardProps) => {
       leadText: "This NSDC-aligned program combines:",
       buttonText: "View EEE Program Curriculum",
       buttonIcon: <FileText className="h-4 w-4" />,
-      hasPdf: false,
+      hasPdf: true,
+      pdfUrl: "https://media.rareminds.in/pdfs/The3EProgram.pdf",
       readMoreUrl: "/school/coming-soon"
     }
   ];

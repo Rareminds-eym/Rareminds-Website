@@ -321,7 +321,7 @@ const Blogs: React.FC = () => {
               <>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
                   {paginationData.currentPosts.map((post: BlogPost) => (
-                    <div key={post.id} className="h-[400px] flex">
+                    <div key={post.id} className="min-h-[400px] flex">
                       <BlogCard post={post} />
                     </div>
                   ))}

@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   Laptop,
   Code,
@@ -11,11 +11,17 @@ import {
   BookOpen,
   Download,
   FileSpreadsheet,
+  CheckCircle2,
 } from "lucide-react";
 import { Link } from "react-router-dom";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { getCorporateServiceCategories } from "@/services/sdp/courseService";
+import { supabase } from "@/lib/supabaseClient";
+import { sendEmailNotification } from "@/services/emailBff";
+import { useToast } from "@/hooks/use-toast";
+import { Input } from "@/components/Corporate/Training/Contact/input";
+import { Textarea } from "@/components/Corporate/Training/Contact/textarea";
 
 type Service = {
   id: string;
@@ -141,7 +147,378 @@ const ServiceCard = ({
   );
 };
 
+const COURSE_LIST_PDF_URL = "/institutions/pdfs/Course_List.pdf";
+const EMAIL_REGEX = /\S+@\S+\.\S+/;
+
+export const DownloadCourseListModal = ({ onClose }: { onClose: () => void }) => {
+  const { toast } = useToast();
+  const [form, setForm] = useState({ name: "", email: "" });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError(null);
+
+    if (!EMAIL_REGEX.test(form.email)) {
+      setError("Please enter a valid email address.");
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      const { error: dbError } = await supabase.from("pdf_downloads").insert([
+        {
+          name: form.name,
+          email: form.email,
+          title: "Corporate Training Course List",
+          pdf_url: COURSE_LIST_PDF_URL,
+          download_type: "Course List",
+        },
+      ]);
+
+      if (dbError) throw dbError;
+
+      const emailFailed = await sendEmailNotification("download-notification", {
+        name: form.name,
+        email: form.email,
+        download_type: "Course List",
+      }).then(() => false).catch((emailError) => {
+        console.error("Download notification failed:", emailError);
+        return true;
+      });
+
+      setSubmitted(true);
+
+      const link = document.createElement("a");
+      link.href = COURSE_LIST_PDF_URL;
+      link.download = "Rareminds-Course-List.pdf";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      toast(emailFailed ? {
+        title: "Download started",
+        description: "Your download is starting now. We'll follow up by email shortly.",
+      } : {
+        title: "Download started",
+        description: "Your course list is downloading now.",
+      });
+    } catch (err) {
+      console.error("Error submitting course list request:", err);
+      setError("Something went wrong. Please try again.");
+      toast({
+        title: "Error",
+        description: "There was an error preparing your download. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  return (
+    <div
+      className="fixed inset-0 bg-black/50 flex items-center justify-center z-[9998] p-4"
+      onClick={onClose}
+    >
+      <motion.div
+        initial={{ opacity: 0, y: 20, scale: 0.95 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        exit={{ opacity: 0, y: 20, scale: 0.95 }}
+        className="relative bg-white rounded-2xl p-6 sm:p-8 shadow-2xl max-w-md w-full z-[9999]"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <button
+          type="button"
+          onClick={onClose}
+          className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-2xl leading-none"
+          aria-label="Close"
+        >
+          &times;
+        </button>
+
+        <h3 className="text-xl font-bold text-gray-900 mb-2">
+          Download Course List
+        </h3>
+
+        {submitted ? (
+          <div className="py-6 text-center">
+            <CheckCircle2 className="w-10 h-10 text-green-600 mx-auto mb-3" />
+            <p className="font-medium text-green-800">
+              Your download has started!
+            </p>
+            <p className="text-sm text-gray-600 mt-1">
+              If it didn't start automatically, check your browser's download bar.
+            </p>
+          </div>
+        ) : (
+          <>
+            <p className="text-sm text-gray-600 mb-5">
+              Share your details and we'll send you the full course catalog.
+            </p>
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div>
+                <label htmlFor="course-list-name" className="block text-sm font-medium text-gray-700 mb-1">
+                  Your Name
+                </label>
+                <Input
+                  id="course-list-name"
+                  name="name"
+                  value={form.name}
+                  onChange={handleChange}
+                  placeholder="Full Name"
+                  required
+                />
+              </div>
+              <div>
+                <label htmlFor="course-list-email" className="block text-sm font-medium text-gray-700 mb-1">
+                  Email Address
+                </label>
+                <Input
+                  id="course-list-email"
+                  name="email"
+                  type="email"
+                  value={form.email}
+                  onChange={handleChange}
+                  placeholder="you@company.com"
+                  required
+                />
+              </div>
+              {error && <p className="text-red-600 text-sm">{error}</p>}
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="button-primary w-full py-3 rounded-full font-semibold text-sm flex items-center justify-center gap-2 disabled:opacity-60"
+              >
+                {isSubmitting ? "Preparing download..." : "Download Now"}
+              </button>
+            </form>
+          </>
+        )}
+      </motion.div>
+    </div>
+  );
+};
+
+const RequestBlueprintModal = ({ onClose }: { onClose: () => void }) => {
+  const { toast } = useToast();
+  const [form, setForm] = useState({
+    name: "",
+    company: "",
+    email: "",
+    role: "",
+    message: "",
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError(null);
+
+    if (!EMAIL_REGEX.test(form.email)) {
+      setError("Please enter a valid email address.");
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      const submission = {
+        name: form.name,
+        company: form.company,
+        email: form.email,
+        role: form.role,
+        message: form.message
+          ? `[Blueprint request] ${form.message}`
+          : "[Blueprint request] Requested a training blueprint from the Corporate Training services page.",
+        submitted_at: new Date().toISOString(),
+      };
+
+      const { error: dbError, data } = await supabase
+        .from("training_forms")
+        .insert([submission])
+        .select()
+        .single();
+
+      if (dbError) throw dbError;
+
+      const emailFailed = await sendEmailNotification("training-enquiry", data as Record<string, unknown>)
+        .then(() => false)
+        .catch((emailError) => {
+          console.error("Blueprint email notification failed:", emailError);
+          return true;
+        });
+
+      toast(emailFailed ? {
+        title: "Request Saved",
+        description: "Your request was saved. We'll follow up shortly — our confirmation email was delayed.",
+      } : {
+        title: "Request Sent!",
+        description: "Thank you for reaching out. Our team will send your blueprint shortly.",
+      });
+
+      setSubmitted(true);
+    } catch (err) {
+      console.error("Error submitting blueprint request:", err);
+      setError("Something went wrong. Please try again.");
+      toast({
+        title: "Error",
+        description: "There was an error submitting your request. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  return (
+    <div
+      className="fixed inset-0 bg-black/50 flex items-center justify-center z-[9998] p-4 overflow-y-auto"
+      onClick={onClose}
+    >
+      <motion.div
+        initial={{ opacity: 0, y: 20, scale: 0.95 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        exit={{ opacity: 0, y: 20, scale: 0.95 }}
+        className="relative bg-white rounded-2xl p-6 sm:p-8 shadow-2xl max-w-lg w-full my-8 z-[9999]"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <button
+          type="button"
+          onClick={onClose}
+          className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-2xl leading-none"
+          aria-label="Close"
+        >
+          &times;
+        </button>
+
+        <h3 className="text-xl font-bold text-gray-900 mb-2">
+          Request Blueprint
+        </h3>
+
+        {submitted ? (
+          <div className="py-6 text-center">
+            <CheckCircle2 className="w-10 h-10 text-green-600 mx-auto mb-3" />
+            <p className="font-medium text-green-800">
+              Request sent successfully!
+            </p>
+            <p className="text-sm text-gray-600 mt-1">
+              Our team will reach out with your training blueprint shortly.
+            </p>
+          </div>
+        ) : (
+          <>
+            <p className="text-sm text-gray-600 mb-5">
+              Tell us a bit about your team and we'll put together a tailored training blueprint.
+            </p>
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label htmlFor="blueprint-name" className="block text-sm font-medium text-gray-700 mb-1">
+                    Your Name
+                  </label>
+                  <Input
+                    id="blueprint-name"
+                    name="name"
+                    value={form.name}
+                    onChange={handleChange}
+                    placeholder="Full Name"
+                    required
+                  />
+                </div>
+                <div>
+                  <label htmlFor="blueprint-company" className="block text-sm font-medium text-gray-700 mb-1">
+                    Company
+                  </label>
+                  <Input
+                    id="blueprint-company"
+                    name="company"
+                    value={form.company}
+                    onChange={handleChange}
+                    placeholder="Company Name"
+                    required
+                  />
+                </div>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label htmlFor="blueprint-email" className="block text-sm font-medium text-gray-700 mb-1">
+                    Email Address
+                  </label>
+                  <Input
+                    id="blueprint-email"
+                    name="email"
+                    type="email"
+                    value={form.email}
+                    onChange={handleChange}
+                    placeholder="you@company.com"
+                    required
+                  />
+                </div>
+                <div>
+                  <label htmlFor="blueprint-role" className="block text-sm font-medium text-gray-700 mb-1">
+                    Role to Train
+                  </label>
+                  <Input
+                    id="blueprint-role"
+                    name="role"
+                    value={form.role}
+                    onChange={handleChange}
+                    placeholder="Job Title/Position"
+                    required
+                  />
+                </div>
+              </div>
+              <div>
+                <label htmlFor="blueprint-message" className="block text-sm font-medium text-gray-700 mb-1">
+                  Message
+                </label>
+                <Textarea
+                  id="blueprint-message"
+                  name="message"
+                  value={form.message}
+                  onChange={handleChange}
+                  placeholder="Tell us about your training needs"
+                  className="min-h-[100px]"
+                />
+              </div>
+              {error && <p className="text-red-600 text-sm">{error}</p>}
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="button-secondary w-full py-3 rounded-full font-semibold text-sm flex items-center justify-center gap-2 disabled:opacity-60"
+              >
+                {isSubmitting ? "Sending..." : "Send Request"}
+              </button>
+            </form>
+          </>
+        )}
+      </motion.div>
+    </div>
+  );
+};
+
 export default function Services() {
+  const [isCourseListModalOpen, setIsCourseListModalOpen] = useState(false);
+  const [isBlueprintModalOpen, setIsBlueprintModalOpen] = useState(false);
+
   const { data: rawData = [], isLoading: loading } = useQuery({
     queryKey: ['corporate-service-categories'],
     queryFn: getCorporateServiceCategories,
@@ -224,10 +601,7 @@ export default function Services() {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               className="button-primary py-3 px-6 flex items-center gap-2 rounded-full font-semibold text-sm sm:text-base shadow-xl hover:shadow-2xl transition-all duration-300"
-              onClick={() => {
-                // Add download course list functionality
-                console.log('Download Course List clicked');
-              }}
+              onClick={() => setIsCourseListModalOpen(true)}
             >
               <Download className="w-4 h-4 sm:w-5 sm:h-5" />
               <span>Download Course List</span>
@@ -237,10 +611,7 @@ export default function Services() {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               className="button-secondary py-3 px-6 flex items-center gap-2 rounded-full font-semibold text-sm sm:text-base shadow-xl hover:shadow-2xl transition-all duration-300"
-              onClick={() => {
-                // Add request blueprint functionality
-                console.log('Request Blueprint clicked');
-              }}
+              onClick={() => setIsBlueprintModalOpen(true)}
             >
               <FileSpreadsheet className="w-4 h-4 sm:w-5 sm:h-5" />
               <span>Request Blueprint</span>
@@ -248,6 +619,15 @@ export default function Services() {
           </div>
         </motion.div>
       </div>
+
+      <AnimatePresence>
+        {isCourseListModalOpen && (
+          <DownloadCourseListModal onClose={() => setIsCourseListModalOpen(false)} />
+        )}
+        {isBlueprintModalOpen && (
+          <RequestBlueprintModal onClose={() => setIsBlueprintModalOpen(false)} />
+        )}
+      </AnimatePresence>
     </section>
   );
 }

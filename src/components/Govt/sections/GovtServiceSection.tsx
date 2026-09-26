@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { supabase } from '../../../lib/supabaseClient';
 import * as Toast from '@radix-ui/react-toast';
 import {Link} from 'react-router-dom';
+import { DownloadCourseListModal } from '@/components/Corporate/Training/Services';
 
 import {
   BookCheck,
@@ -362,7 +363,7 @@ const CTAButton = ({ children, variant, onClick }: CTAButtonProps) => {
     : 'bg-red-500 text-white border-b-4 text-xs md:text-base border-red-300 hover:bg-red-600';
 
   return (
-    <button className={`${base} ${styles}`} onClick={onClick}>
+    <button type="button" className={`${base} ${styles}`} onClick={onClick}>
       {children}
     </button>
   );
@@ -370,6 +371,7 @@ const CTAButton = ({ children, variant, onClick }: CTAButtonProps) => {
 
 const GovServiceSection: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isCourseListModalOpen, setIsCourseListModalOpen] = useState(false);
   const services = [
     {
       icon: <BookCheck size={24} />,
@@ -419,7 +421,7 @@ const GovServiceSection: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 xl:gap-4 mb-5 md:mb-10">
           {services.map((service, index) => (
             
-            <Link to={"/school/projects/"}
+            <Link to={"/success-stories"}
               key={index}
               className="p-3 md:p-4 rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-all duration-300 group animate-fade-in bg-white"
               style={{ animationDelay: `${index * 0.1}s` }}
@@ -438,12 +440,7 @@ const GovServiceSection: React.FC = () => {
         </div>
 
         <div className="flex flex-col sm:flex-row justify-center items-center gap-4 sm:gap-6 animate-fade-in max-w-2xl mx-auto">
-          <CTAButton variant="primary" onClick={() => {
-            const contactElement = document.getElementById('contact');
-            if (contactElement) {
-              contactElement.scrollIntoView({ behavior: 'smooth' });
-            }
-          }}>
+          <CTAButton variant="primary" onClick={() => setIsCourseListModalOpen(true)}>
             Download Full Course Catalog
           </CTAButton>
           <CTAButton variant="secondary" onClick={() => setIsModalOpen(true)}>
@@ -452,10 +449,14 @@ const GovServiceSection: React.FC = () => {
         </div>
       </div>
       
-      <BlueprintModal 
+      <BlueprintModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
       />
+
+      {isCourseListModalOpen && (
+        <DownloadCourseListModal onClose={() => setIsCourseListModalOpen(false)} />
+      )}
     </section>
   );
 };
