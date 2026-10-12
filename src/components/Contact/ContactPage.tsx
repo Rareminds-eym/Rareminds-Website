@@ -2,6 +2,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import { MapPin, X, ExternalLink, Mail, Phone } from 'lucide-react';
 import { ComposableMap, Geographies, Geography } from 'react-simple-maps';
 import RareMindsLogo from "../../assets/RareMindsLogo.svg";
+import { formatCompanyAddressLine } from "@/constants/companySettings";
+import { useCompanySettings } from "@/hooks/useCompanySettings";
 const geoUrl = "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json";
 // 🧠 Custom RareMinds Bulb Icon
 const RareMindsBulbIcon = ({ className }) => (
@@ -9,6 +11,16 @@ const RareMindsBulbIcon = ({ className }) => (
 );
 
 const InteractiveWorldMap = () => {
+  const {
+    settings: companySettings,
+    isLoading: companySettingsLoading,
+    errorMessage: companySettingsError,
+  } = useCompanySettings();
+  const bangaloreAddress = companySettingsLoading
+    ? 'Loading company settings...'
+    : companySettings
+      ? `${companySettings.office_address}, ${formatCompanyAddressLine(companySettings)}`
+      : companySettingsError || 'Company settings are unavailable.';
   const [showPopup, setShowPopup] = useState(false);
   const [hoveredLocation, setHoveredLocation] = useState(null);
   const [selectedLocation, setSelectedLocation] = useState(null);
@@ -20,7 +32,7 @@ const InteractiveWorldMap = () => {
   const intervalRef = useRef(null);
 
   const locations = [
-    { id: 'bangalore', name: 'RareMinds Bangalore', city: '231, 13th Cross Road, Hoysala Nagar, Indiranagar, Bangalore - 560038', country: 'India', position: { top: '53.4%', left: '68%' }, mapLink: 'https://www.google.com/maps/search/location+of+rareminds+in+bangalore/@12.9752479,77.631305,3232m/data=!3m2!1e3!4b1?entry=ttu&g_ep=EgoyMDI1MTAyOC4wIKXMDSoASAFQAw%3D%3D', email: 'marketing@rareminds.in', phone: '+91 9562481110' },
+    { id: 'bangalore', name: 'RareMinds Bangalore', city: bangaloreAddress, country: 'India', position: { top: '53.4%', left: '68%' }, mapLink: 'https://www.google.com/maps/search/location+of+rareminds+in+bangalore/@12.9752479,77.631305,3232m/data=!3m2!1e3!4b1?entry=ttu&g_ep=EgoyMDI1MTAyOC4wIKXMDSoASAFQAw%3D%3D', email: 'marketing@rareminds.in', phone: '+91 9562481110' },
     { id: 'goa', name: 'RareMinds Goa', city: 'Goa', country: 'India', position: { top: '53.5%', left: '67.3%' }, mapLink: 'https://www.google.com/maps/search/RareMinds+Goa+India', email: 'marketing@rareminds.in', phone: '+91 xxx xxx xxxx' },
     { id: 'delhi', name: 'RareMinds Delhi', city: 'Delhi', country: 'India', position: { top: '50%', left: '68.6%' }, mapLink: 'https://www.google.com/maps/search/RareMinds+Delhi+India', email: 'marketing@rareminds.in', phone: '+91 xxx xxx xxxx' },
     { id: 'mumbai', name: 'RareMinds Mumbai', city: 'Mumbai, Maharashtra', country: 'India', position: { top: '49.9%', left: '67.1%' }, mapLink: 'https://www.google.com/maps/search/RareMinds+Mumbai+India', email: 'marketing@rareminds.in', phone: '+91 xxx xxx xxxx' },
@@ -182,10 +194,7 @@ const InteractiveWorldMap = () => {
           : {}
       }
     >
-      {location.id === "bangalore"
-        ? `231, 13th Cross Road, Hoysala Nagar,
-Indiranagar, Bangalore - 560038`
-        : location.city}
+      {location.city}
     </div>
 
     {/* Details Link */}

@@ -1,9 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Helmet } from "react-helmet-async";
+import { formatCompanyAddressLine } from "@/constants/companySettings";
+import { useCompanySettings } from "@/hooks/useCompanySettings";
 
 const PrivacyPolicy = () => {
   const [activeSection, setActiveSection] = useState<number>(0);
+  const {
+    settings: companySettings,
+    isLoading: companySettingsLoading,
+    errorMessage: companySettingsError,
+  } = useCompanySettings();
 
   const sections = [
     "Information We Collect",
@@ -412,13 +419,17 @@ const PrivacyPolicy = () => {
                           <p className="text-gray-100">
                             Rareminds Pvt. Ltd.
                             <br />
-                            231, 13th Cross Rd, 2nd Stage,
-                            <br />
-                            Indira Nagar II Stage, Hoysala Nagar,
-                            <br />
-                            Indiranagar, Bengaluru,
-                            <br />
-                            Karnataka 560038
+                            {companySettingsLoading
+                              ? 'Loading company settings...'
+                              : companySettings
+                                ? companySettings.office_address
+                                : companySettingsError || 'Company settings are unavailable.'}
+                            {companySettings && (
+                              <>
+                                <br />
+                                {formatCompanyAddressLine(companySettings)}
+                              </>
+                            )}
                           </p>
                         </div>
                         <div className="space-y-4">

@@ -1,8 +1,9 @@
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { useQueryClient } from "@tanstack/react-query";
 import { cn } from "../../lib/utils";
-
-/** Single source of truth for the brand logo asset. */
-export const BRAND_LOGO_PATH = "/RareMinds-ISO-Logo.webp";
+import { useCompanySettings } from "../../hooks/useCompanySettings";
+import { supabase } from "../../lib/supabaseClient";
 
 export interface BrandLogoProps {
   /** Extra classes on the logo <img> (default "w-40 h-auto sm:w-64"). */
@@ -28,21 +29,59 @@ export default function BrandLogo({
   alt = "Rareminds Logo",
   to = "/",
 }: BrandLogoProps) {
+  const queryClient = useQueryClient();
+  const { settings, isLoading, errorMessage } = useCompanySettings();
+  const [logoLoadFailed, setLogoLoadFailed] = useState(false);
+  const settingsError = errorMessage || (!isLoading && !settings ? 'Company settings are unavailable.' : null);
+  const logoError = settings?.logo_url && logoLoadFailed ? 'Company logo could not be loaded.' : null;
+
+  // Subscribe to company_settings changes via Supabase Realtime
+  useEffect(() => {
+    const channel = supabase
+      .channel('company-settings-changes')
+      .on(
+        'postgres_changes',
+        {
+          event: 'UPDATE',
+          schema: 'public',
+          table: 'company_settings'
+        },
+        () => {
+          // Invalidate React Query cache to trigger refetch
+          queryClient.invalidateQueries({ queryKey: ['company-settings'] });
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [queryClient]);
+
   return (
     <Link
       to={to}
       aria-label={brandName ? undefined : alt}
       className={cn("flex items-center gap-2 text-xl font-bold", linkClassName)}
     >
-      <img
-        src={BRAND_LOGO_PATH}
-        alt={alt}
-        width="256"
-        height="76"
-        className={cn("w-40 h-auto sm:w-64 aspect-[4258/1263]", logoClassName)}
-        decoding="async"
-        fetchPriority="high"
-      />
+      {isLoading && (
+        <span className={cn("inline-block h-8 w-40 rounded bg-slate-100", logoClassName)} aria-label="Loading company logo" />
+      )}
+      {(settingsError || logoError) && !isLoading && (
+        <span className="text-sm font-semibold text-red-600">{settingsError || logoError}</span>
+      )}
+      {settings?.logo_url && !logoError && !isLoading && (
+        <img
+          src={settings.logo_url}
+          alt={alt}
+          width="256"
+          height="76"
+          className={cn("w-40 h-auto sm:w-64 aspect-[4258/1263]", logoClassName)}
+          decoding="async"
+          fetchPriority="high"
+          onError={() => setLogoLoadFailed(true)}
+        />
+      )}
       {brandName && <span className="text-xl font-bold">{brandName}</span>}
     </Link>
   );

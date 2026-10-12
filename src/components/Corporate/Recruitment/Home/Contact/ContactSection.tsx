@@ -7,9 +7,16 @@ import { Icon } from "@iconify/react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/lib/supabaseClient";
 import { sendEmailNotification } from "@/services/emailBff";
+import { formatCompanyAddressLine } from "@/constants/companySettings";
+import { useCompanySettings } from "@/hooks/useCompanySettings";
 
 const ContactSection = () => {
   const { toast } = useToast();
+  const {
+    settings: companySettings,
+    isLoading: companySettingsLoading,
+    errorMessage: companySettingsError,
+  } = useCompanySettings();
   const [formData, setFormData] = useState({
     name: "",
     company: "",
@@ -359,12 +366,17 @@ const ContactSection = () => {
                         Address
                       </h4>
                       <p className="text-gray-600 max-w-[300px]">
-                        231, 2nd stage, 13th Cross Road, Hoysala Nagar,
-                        Indiranagar
+                        {companySettingsLoading
+                          ? 'Loading company settings...'
+                          : companySettings
+                            ? companySettings.office_address
+                            : companySettingsError || 'Company settings are unavailable.'}
                       </p>
-                      <p className="text-gray-600">
-                        Bengaluru, Karnataka 560001
-                      </p>
+                      {companySettings && (
+                        <p className="text-gray-600">
+                          {formatCompanyAddressLine(companySettings)}
+                        </p>
+                      )}
                     </div>
                   </div>
                 </div>
