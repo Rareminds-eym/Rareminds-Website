@@ -1363,7 +1363,7 @@
 
 
 
-import React from "react";
+import type React from "react";
 import bannerBg from "../../assets/contact-banner.webp";
 import leftCardBg from "../../assets/Banner10.png";
 import mobileCardBg from "../../assets/Mobileversion.png";

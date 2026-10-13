@@ -73,7 +73,7 @@ const ContactSection = () => {
       };
 
 
-      const { error, data } = await supabase
+      const { error } = await supabase
         .from('government_form')
         .insert([submission])
         .select();

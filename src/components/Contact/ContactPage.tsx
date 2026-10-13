@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { MapPin, X, ExternalLink, Mail, Phone } from 'lucide-react';
 import { ComposableMap, Geographies, Geography } from 'react-simple-maps';
 import RareMindsLogo from "../../assets/RareMindsLogo.svg";

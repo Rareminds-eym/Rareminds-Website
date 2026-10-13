@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Helmet } from "react-helmet-async";
 import { formatCompanyAddressLine } from "@/constants/companySettings";
@@ -32,7 +32,7 @@ const PrivacyPolicy = () => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             // Extract the section number from the ID (e.g., "section-2" -> 2)
-            const sectionNumber = parseInt(entry.target.id.split("-")[1]);
+            const sectionNumber = parseInt(entry.target.id.split("-")[1], 10);
             setActiveSection(sectionNumber);
           }
         });
