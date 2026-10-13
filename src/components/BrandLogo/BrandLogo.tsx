@@ -65,7 +65,7 @@ export default function BrandLogo({
       className={cn("flex items-center gap-2 text-xl font-bold", linkClassName)}
     >
       {isLoading && (
-        <span className={cn("inline-block h-8 w-40 rounded bg-slate-100", logoClassName)} aria-label="Loading company logo" />
+        <span className={cn("inline-block h-8 w-40 rounded bg-slate-100", logoClassName)} role="status" aria-label="Loading company logo" />
       )}
       {(settingsError || logoError) && !isLoading && (
         <span className="text-sm font-semibold text-red-600">{settingsError || logoError}</span>

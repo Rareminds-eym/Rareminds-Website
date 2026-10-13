@@ -98,7 +98,7 @@ const PrivacyPolicy = () => {
               <div className="sticky top-8">
                 <nav className="space-y-1">
                   {sections.map((section, index) => (
-                    <button
+                    <button type="button"
                       key={index}
                       onClick={() => scrollToSection(index)}
                       className={`w-full text-left px-4 py-2 rounded-lg transition-all duration-200 ${
