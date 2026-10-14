@@ -15,10 +15,17 @@ import { Icon } from "@iconify/react";
 import { useToast } from "@/hooks/use-toast";
 import { useLocation } from "react-router-dom";
 import { sendEmailNotification } from "@/services/emailBff";
+import { formatCompanyAddressLine } from "@/constants/companySettings";
+import { useCompanySettings } from "@/hooks/useCompanySettings";
 
 const AcademyContactSection = () => {
   const location = useLocation();
   const { toast } = useToast();
+  const {
+    settings: companySettings,
+    isLoading: companySettingsLoading,
+    errorMessage: companySettingsError,
+  } = useCompanySettings();
   const [formData, setFormData] = useState({
     name: "",
     phone: "",
@@ -427,11 +434,17 @@ const AcademyContactSection = () => {
                         Address
                       </h4>
                       <p className="text-gray-600 max-w-[300px]">
-                        Rareminds 231, 13th Cross Rd, 2nd Stage, Indira Nagar II Stage, Hoysala Nagar, Indiranagar,
+                        {companySettingsLoading
+                          ? 'Loading company settings...'
+                          : companySettings
+                            ? `Rareminds ${companySettings.office_address}`
+                            : companySettingsError || 'Company settings are unavailable.'}
                       </p>
-                      <p className="text-gray-600">
-                         Bengaluru, Karnataka 560038
-                      </p>
+                      {companySettings && (
+                        <p className="text-gray-600">
+                          {formatCompanyAddressLine(companySettings)}
+                        </p>
+                      )}
                     </div>
                   </div>
                 </div>
