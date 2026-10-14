@@ -16,10 +16,8 @@ export const getEmailError = (input: string): string => {
   const [local, domain] = parts;
 
   if (local.length > 64) return "Email is too long before the @";
-  // letters/numbers, with single . _ % + - between them (no leading, trailing or double symbols)
   if (!/^[a-z0-9]+(?:[._%+-][a-z0-9]+)*$/.test(local))
     return "Email contains invalid characters";
-  // domain like gmail.com or mail.company.co.in
   if (!/^(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z]{2,24}$/.test(domain))
     return "Enter a valid email domain, e.g. gmail.com";
   if (DISPOSABLE_DOMAINS.includes(domain))
@@ -29,51 +27,69 @@ export const getEmailError = (input: string): string => {
 
 // ---------- NAME ----------
 const FAKE_NAMES = ["test", "xyz", "abc", "asdf", "qwerty", "name", "demo", "fake", "user", "admin", "na", "none"];
+const NAME_MAX = 50;
 
 export const getNameError = (input: string): string => {
   const name = input.trim().replace(/\s+/g, " ");
-  if (!name) return "Name is required";
-  if (name.length < 2 || name.length > 50) return "Name must be 2 to 50 characters";
-  // letters only; allows "R. Kumar", "Mary-Anne", "O'Neil"
-  if (!/^[A-Za-z]+\.?(?:[ '-][A-Za-z]+\.?)*$/.test(name))
-    return "Name can contain only letters, spaces, . ' -";
-  if (name.replace(/[^A-Za-z]/g, "").length < 2) return "Enter your full name";
-  if (/(.)\1{2,}/i.test(name)) return "Please enter your real name";
-  if (FAKE_NAMES.includes(name.toLowerCase())) return "Please enter your real name";
+  const length = Array.from(name).length;
+  if (length < 2) return "Enter a valid name";
+  if (length > NAME_MAX) return `Name is too long (max ${NAME_MAX})`;
+  if (!/^\p{L}+\.?(?:[ '’-]\p{L}+\.?)*$/u.test(name)) return "Enter a valid name";
+  if ((name.match(/\p{L}/gu) ?? []).length < 2) return "Enter a valid name";
+  if (/(\p{L})\1{2,}/iu.test(name)) return "Enter a valid name";
+  if (FAKE_NAMES.includes(name.toLowerCase())) return "Enter a valid name";
   return "";
 };
 
-// ---------- PHONE (India) ----------
+// ---------- PHONE (digits only, exactly 10) ----------
 export const getPhoneError = (input: string): string => {
-  let p = input.replace(/[\s-]/g, "");
-  if (!p) return "Phone number is required";
-
-  if (p.startsWith("+91")) p = p.slice(3);
-  else if (p.length === 12 && p.startsWith("91")) p = p.slice(2);
-  else if (p.length === 11 && p.startsWith("0")) p = p.slice(1);
-
-  if (!/^\d+$/.test(p)) return "Phone number can contain only digits";
-  if (p.length !== 10) return "Enter a 10-digit mobile number";
-  if (!/^[6-9]/.test(p)) return "Mobile number must start with 6, 7, 8 or 9";
-  if (new Set(p).size < 4) return "Enter a valid mobile number";
-  if ("01234567890".includes(p.slice(0, 6)) || "09876543210".includes(p.slice(0, 6)))
-    return "Enter a valid mobile number";
+  const phone = input.trim();
+  if (!/^\d{10}$/.test(phone)) return "Enter a valid mobile number";
+  if (!/^[6-9]/.test(phone)) return "Enter a valid mobile number";
+  if (/^(\d)\1{9}$/.test(phone)) return "Enter a valid mobile number";
   return "";
 };
 
-// ---------- MESSAGE ----------
+// ---------- MESSAGE (limit shown to the user; emoji and symbols allowed) ----------
+export const MESSAGE_MAX = 1000;
+
 export const getMessageError = (input: string): string => {
-  const msg = input.trim();
-  if (!msg) return "Message is required";
-  if (msg.length < 10) return "Message must be at least 10 characters";
-  if (msg.length > 1000) return "Message must be under 1000 characters";
-  if (/[<>]/.test(msg)) return "Message cannot contain < or >";
-  if (!/[A-Za-z]{3,}/.test(msg)) return "Please write a proper message";
-  if (/(.)\1{5,}/.test(msg)) return "Please write a proper message";
+  const length = Array.from(input.trim()).length;
+  if (length === 0) return "This field is required";
+  if (length > MESSAGE_MAX) return `Message is too long (max ${MESSAGE_MAX})`;
   return "";
 };
 
-// ---------- Simple true/false versions (keep your old code working) ----------
+// ---------- ONE CALL FOR A WHOLE FORM ----------
+export type FieldKey = "name" | "email" | "phone" | "role" | "message";
+export type FieldErrors = Partial<Record<FieldKey, string>>;
+
+const CHECKS: Record<FieldKey, (value: string) => string> = {
+  name: getNameError,
+  email: getEmailError,
+  phone: getPhoneError,
+  role: () => "",
+  message: getMessageError,
+};
+
+export const validateFields = (
+  values: Partial<Record<FieldKey, string>>,
+  optional: FieldKey[] = [],
+): FieldErrors => {
+  const errors: FieldErrors = {};
+  (Object.keys(values) as FieldKey[]).forEach((key) => {
+    const value = values[key] ?? "";
+    if (value.trim() === "") {
+      if (!optional.includes(key)) errors[key] = "This field is required";
+      return;
+    }
+    const message = CHECKS[key](value);
+    if (message) errors[key] = message;
+  });
+  return errors;
+};
+
+// ---------- true/false versions (keep older code working) ----------
 export const isValidEmail = (v: string) => getEmailError(v) === "";
 export const isValidName = (v: string) => getNameError(v) === "";
 export const isValidPhone = (v: string) => getPhoneError(v) === "";
