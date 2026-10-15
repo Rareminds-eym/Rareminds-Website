@@ -32,11 +32,9 @@ port = 54353
 api_url = "http://127.0.0.1:54351"
 openai_api_key = "env(OPENAI_API_KEY)"
 
-[local_smtp]
-enabled = false
-port = 54354
-smtp_port = 54355
-pop3_port = 54356
+   [inbucket]
+   enabled = true
+   port = 54354
 
 [storage]
 enabled = true
@@ -47,8 +45,8 @@ enabled = false
 
 [auth]
 enabled = true
-site_url = "http://127.0.0.1:3000"
-additional_redirect_urls = ["https://127.0.0.1:3000"]
+site_url = "http://localhost:5173"
+additional_redirect_urls = ["http://localhost:5173"]
 jwt_expiry = 3600
 enable_refresh_token_rotation = true
 refresh_token_reuse_interval = 10
@@ -64,6 +62,9 @@ secure_password_change = false
 max_frequency = "1s"
 otp_length = 6
 otp_expiry = 3600
+
+   [auth.rate_limit]
+   email_sent = 100
 
 [auth.sms]
 enable_signup = false
@@ -181,3 +182,20 @@ deno_version = 2
 
 [db.seed]
 sql_paths = ["./seed/*.sql"]
+
+[auth.email.smtp]
+enabled = false
+host = "host.docker.internal"
+port = 1025
+user = "local"
+pass = "local"
+admin_email = "admin@example.com"
+sender_name = "Rareminds local test"
+
+[auth.email.template.confirmation]
+subject = "Your verification code"
+content_path = "./supabase/templates/confirmation.html"
+
+[auth.email.template.magic_link]
+subject = "Your verification code"
+content_path = "./supabase/templates/magic_link.html"

@@ -77,8 +77,11 @@ const FooterBar: React.FC<FooterBarProps> = ({ hideServices }) => {
 
 			if (error) {
 				console.error("Subscribe error:", error.code, error.message, error.details);
-				const text = `${error.message ?? ""} ${error.details ?? ""}`.toLowerCase();
-				if (error.code === "23505" && text.includes("email")) {
+				const details = error.details ?? "";
+				const message = error.message ?? "";
+				const isEmailDuplicate =
+					/\(email\)=/i.test(details) || /email_(key|unique|idx)/i.test(message);
+				if (error.code === "23505" && isEmailDuplicate) {
 					setSuccessMessage("This email is already subscribed");
 				} else {
 					setSuccessMessage("Error subscribing. Please try again.");

@@ -1,0 +1,1 @@
+   drop policy "Allow anonymous form submissions" on public.contact_form;
