@@ -1360,22 +1360,45 @@
 // };
 
 // export default ContactPage;
-
-
-
 import type React from "react";
 import bannerBg from "../../assets/contact-banner.webp";
 import leftCardBg from "../../assets/Banner10.png";
 import mobileCardBg from "../../assets/Mobileversion.png";
-import { FaEnvelope, FaPhone, FaMapMarkerAlt, FaClock } from "react-icons/fa";
+import { FaEnvelope, FaPhone, FaMapMarkerAlt, FaClock, FaGoogle } from "react-icons/fa";
 import { supabase } from "@/lib/supabaseClient";
 import { useToast } from "@/hooks/use-toast";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import type { Session } from "@supabase/supabase-js";
 import { sendEmailNotification } from "@/services/emailBff";
 import { formatCompanyAddressLine } from "@/constants/companySettings";
 import { useCompanySettings } from "@/hooks/useCompanySettings";
+import {
+  validateFields,
+  getEmailError,
+  getNameError,
+  getPhoneError,
+  MESSAGE_MAX,
+  type FieldErrors,
+  type FieldKey,
+} from "@/utils/validators";
+
+// Email verification switch.
+// false = the form saves without a code (use this until your team has enabled
+//         email sending and Google in Supabase).
+// true  = the visitor must verify the email (code or Google) before sending.
+   const REQUIRE_EMAIL_VERIFICATION = true as boolean;
+
+// Stops the button from saying "Sending..." forever if the server never answers.
+const withTimeout = <T,>(promise: PromiseLike<T>, ms = 20000): Promise<T> =>
+  Promise.race([
+    Promise.resolve(promise),
+    new Promise<T>((_, reject) =>
+      setTimeout(() => reject(new Error("timeout")), ms)
+    ),
+  ]);
+
 const ContactPage: React.FC = () => {
-   const { toast } = useToast();
+  const { toast } = useToast();
   const {
     settings: companySettings,
     isLoading: companySettingsLoading,
@@ -1391,111 +1414,287 @@ const ContactPage: React.FC = () => {
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errors, setErrors] = useState<FieldErrors>({});
+  const [touched, setTouched] = useState<Partial<Record<FieldKey, boolean>>>({});
+  const [honeypot, setHoneypot] = useState("");
+  const messageCount = Array.from(formData.message.trim()).length;
+
+  // ---- email verification (code or Google) ----
+  const [verifiedEmail, setVerifiedEmail] = useState("");
+  const [otpSent, setOtpSent] = useState(false);
+  const [otp, setOtp] = useState("");
+  const [otpBusy, setOtpBusy] = useState(false);
+  const [otpMessage, setOtpMessage] = useState("");
+  const [resendIn, setResendIn] = useState(0);
+  const isEmailVerified =
+    verifiedEmail !== "" && verifiedEmail === formData.email.trim().toLowerCase();
+
+  // ---- live hints, shown right under the box being typed in ----
+  const markTouched = (key: FieldKey) =>
+    setTouched((prev) => ({ ...prev, [key]: true }));
+  const showHint = (key: FieldKey, value: string) =>
+    touched[key] === true || value !== "";
+
+  const hints: FieldErrors = {};
+  if (showHint("name", formData.name) && getNameError(formData.name) !== "") {
+    hints.name = "ENTER VALID NAME";
+  }
+  if (showHint("email", formData.email)) {
+    if (getEmailError(formData.email) !== "") {
+      hints.email = "ENTER VALID EMAIL";
+    } else if (REQUIRE_EMAIL_VERIFICATION && !isEmailVerified) {
+      hints.email = "VERIFY YOUR EMAIL WITH THE CODE";
+    }
+  }
+  if (showHint("phone", formData.phone) && getPhoneError(formData.phone) !== "") {
+    hints.phone = "ENTER VALID PHONE NUMBER";
+  }
+  if (touched.role === true && formData.role === "") {
+    hints.role = "SELECT YOUR ROLE";
+  }
+  const shown: FieldErrors = {
+    name: hints.name ?? errors.name,
+    email: hints.email ?? errors.email,
+    phone: hints.phone ?? errors.phone,
+    role: hints.role ?? errors.role,
+    message: errors.message,
+  };
+
+  // Pick up a session (for example after returning from Google)
+useEffect(() => {
+  const returningFromGoogle =
+    window.location.search.includes("code=") ||
+    window.location.hash.includes("access_token");
+
+  // Normal page load: forget any leftover login from an earlier visit
+  if (!returningFromGoogle) {
+    supabase.auth.signOut({ scope: "local" });
+    return;
+  }
+
+  const applySession = (session: Session | null) => {
+    const user = session?.user;
+    if (!user?.email || !user.email_confirmed_at) return;
+    const email = user.email.toLowerCase();
+    const meta = (user.user_metadata ?? {}) as { full_name?: string; name?: string };
+    setVerifiedEmail(email);
+    setFormData((prev) => ({
+      ...prev,
+      email: prev.email || email,
+      name: prev.name || meta.full_name || meta.name || "",
+    }));
+  };
+  supabase.auth.getSession().then(({ data }) => applySession(data.session));
+  const { data } = supabase.auth.onAuthStateChange((_event, session) =>
+    applySession(session)
+  );
+  return () => data.subscription.unsubscribe();
+}, []);
+
+  // Resend countdown
+  useEffect(() => {
+    if (resendIn <= 0) return;
+    const timer = setTimeout(() => setResendIn((s) => s - 1), 1000);
+    return () => clearTimeout(timer);
+  }, [resendIn]);
+
+  const sendOtp = async () => {
+    if (otpBusy || resendIn > 0) return;
+    const email = formData.email.trim().toLowerCase();
+    if (getEmailError(email) !== "") {
+      markTouched("email");
+      return;
+    }
+    setOtpBusy(true);
+    setOtpMessage("");
+    const { error } = await supabase.auth.signInWithOtp({
+      email,
+      options: { shouldCreateUser: true },
+    });
+    setOtpBusy(false);
+    if (error) {
+      console.error("OTP send error:", error.message);
+      setOtpMessage("Could not send the code. Please try again in a minute.");
+      return;
+    }
+    setOtpSent(true);
+    setOtp("");
+    setResendIn(60);
+    setOtpMessage("We sent a 6-digit code to your email. Enter it below.");
+  };
+
+  const confirmOtp = async () => {
+    if (otpBusy) return;
+    const email = formData.email.trim().toLowerCase();
+    if (!/^\d{6}$/.test(otp)) {
+      setOtpMessage("Enter the 6-digit code");
+      return;
+    }
+    setOtpBusy(true);
+    const { error } = await supabase.auth.verifyOtp({ email, token: otp, type: "email" });
+    setOtpBusy(false);
+    if (error) {
+      setOtpMessage("Wrong or expired code. Try again or resend.");
+      return;
+    }
+    setVerifiedEmail(email);
+    setOtpSent(false);
+    setOtp("");
+    setOtpMessage("");
+  };
+
+  const signInWithGoogle = async () => {
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: { redirectTo: `${window.location.origin}/contact-us` },
+    });
+    if (error) {
+      console.error("Google sign-in error:", error.message);
+      setOtpMessage("Google sign-in is not available right now.");
+    }
+  };
 
   // handle field change
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
+    // phone: digits only, at most 10
+    const next = name === "phone" ? value.replace(/\D/g, "").slice(0, 10) : value;
     setFormData((prev) => ({
       ...prev,
-      [name]: value,
+      [name]: next,
     }));
+    // remove the old red message for this field as soon as the visitor edits it
+    setErrors((prev) => ({ ...prev, [name as FieldKey]: undefined }));
+    if (name === "email") {
+      setOtpSent(false);
+      setOtp("");
+      setOtpMessage("");
+    }
   };
 
   // handle form submit
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (isSubmitting) return;
 
-    // Validate required fields
-    const errors = [];
-    if (!formData.name?.trim()) errors.push("Name");
-    if (!formData.email?.trim()) errors.push("Email");
-    if (!formData.message?.trim()) errors.push("Message");
-    
-    if (errors.length > 0) {
+    // 1) Check every field. The message is optional.
+    const found = validateFields(
+      {
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+        role: formData.role,
+        message: formData.message,
+      },
+      ["message"]
+    );
+    if (REQUIRE_EMAIL_VERIFICATION && !found.email && !isEmailVerified) {
+      found.email = "VERIFY YOUR EMAIL WITH THE CODE";
+    }
+    setErrors(found);
+    setTouched({ name: true, email: true, role: true, phone: true, message: true });
+    if (Object.keys(found).length > 0) return;
+
+    // 2) A bot filled the hidden field: pretend success and save nothing
+    if (honeypot.trim() !== "") {
       toast({
-        title: "Required fields missing",
-        description: `Please fill in: ${errors.join(", ")}`,
-        variant: "destructive"
+        title: "Message sent successfully",
+        description: "Thank you for contacting Rareminds Pvt. Ltd.! We'll be in touch soon.",
       });
+      setFormData({ name: "", email: "", role: "", phone: "", message: "" });
       return;
     }
-    
-    // Validate email format
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(formData.email)) {
-      toast({
-        title: "Invalid email",
-        description: "Please enter a valid email address",
-        variant: "destructive"
-      });
-      return;
-    }
+
+    // 3) Clean the values before saving
+    const clean = {
+      name: formData.name.trim().replace(/\s+/g, " "),
+      email: formData.email.trim().toLowerCase(),
+      role: formData.role,
+      phone: formData.phone.trim(),
+      message: formData.message.trim(),
+    };
 
     setIsSubmitting(true);
 
     try {
-      // First save to database
-      const { error: dbError } = await supabase
-        .from("contact_form")
-        .insert([{
-          name: formData.name,
-          email: formData.email,
-          role: formData.role || null,
-          phone: formData.phone || null,
-          message: formData.message
-        }]);
+      // 4) Save the enquiry first
+      const { error: dbError } = await withTimeout(
+        supabase.from("contact_form").insert([
+          {
+            name: clean.name,
+            email: clean.email,
+            role: clean.role || null,
+            phone: clean.phone || null,
+            message: clean.message || "Not provided",
+          },
+        ])
+      );
 
       if (dbError) {
         console.error("Supabase insert error:", dbError);
-        
-        if (dbError.code === '42P01') {
+
+        if (dbError.code === "42P01") {
           toast({
             title: "Setup required",
             description: "Contact form database table is not set up. Please contact support.",
-            variant: "destructive"
+            variant: "destructive",
           });
-        } else {
+        } else if (dbError.code === "42P01"){
           toast({
             title: "Submission failed",
             description: "Unable to save your message. Please try again later.",
-            variant: "destructive"
+            variant: "destructive",
           });
         }
         return;
       }
 
-      try {
-        await sendEmailNotification('general-contact', {
-          name: formData.name,
-          email: formData.email,
-          role: formData.role || 'Not specified',
-          phone: formData.phone || 'Not provided',
-          message: formData.message,
+      // 5) Notification in the background. A failure is only logged.
+      Promise.resolve()
+        .then(() =>
+          sendEmailNotification("general-contact", {
+            name: clean.name,
+            email: clean.email,
+            role: clean.role || "Not specified",
+            phone: clean.phone || "Not provided",
+            message: clean.message || "Not provided",
+          })
+        )
+        .catch((emailError) => {
+          console.error("Email notification error:", emailError);
         });
+
+      // 6) One success message, then clear the form
+      toast({
+        title: "Message sent successfully",
+        description: "Thank you for contacting Rareminds Pvt. Ltd.! We'll be in touch soon.",
+      });
+      setFormData({ name: "", email: "", role: "", phone: "", message: "" });
+      setErrors({});
+      setTouched({});setVerifiedEmail("");
+await supabase.auth.signOut();
+      setVerifiedEmail("");await supabase.auth.signOut();
+      setOtpSent(false);
+      setOtp("");
+      setOtpMessage("");
+    } catch (err) {
+      if (err instanceof Error && err.message === "timeout") {
         toast({
-          title: "Message sent successfully",
-          description: "Thank you for contacting Rareminds Pvt. Ltd.! We'll be in touch soon.",
+          title: "Taking too long",
+          description:
+            "The server did not answer in time. Your message may not have been sent. Please check your connection and try again.",
+          variant: "destructive",
         });
-      } catch (emailError) {
-        console.error('Email notification error:', emailError);
+      } else {
+        console.error("Unexpected error:", err);
         toast({
-          title: "Message received",
-          description: "Your message was saved but email notification failed. We'll still contact you soon!",
+          title: "Error",
+          description: "An unexpected error occurred. Please try again.",
+          variant: "destructive",
         });
       }
-      
-      // Clear form
-      setFormData({ name: "", email: "", role: "", phone: "", message: "" });
-
-    } catch (err) {
-      console.error("Unexpected error:", err);
-      toast({
-        title: "Error",
-        description: "An unexpected error occurred. Please try again.",
-        variant: "destructive"
-      });
     } finally {
       setIsSubmitting(false);
     }
@@ -1533,44 +1732,138 @@ const ContactPage: React.FC = () => {
       </div>
 
       {/* Contact Form */}
-      <form  onSubmit={handleSubmit}
-      className="contact-form absolute top-[16%] left-[20%] w-[440px] bg-white rounded-2xl shadow-xl p-4 flex flex-col justify-between z-20">
+      <form
+        noValidate
+        onSubmit={handleSubmit}
+        className="contact-form absolute top-[16%] left-[20%] w-[440px] bg-white rounded-2xl shadow-xl p-4 flex flex-col justify-between z-20"
+      >
         <div className="space-y-3">
+          {!isEmailVerified && (
+            <>
+              <button
+                type="button"
+                onClick={signInWithGoogle}
+                className="w-full h-[42px] border border-gray-300 rounded-md text-gray-700 font-medium flex items-center justify-center gap-2 hover:bg-gray-50"
+              >
+                <FaGoogle /> Continue with Google
+              </button>
+              <p className="text-center text-xs text-gray-500">
+                or verify your email with a code below
+              </p>
+            </>
+          )}
+
           <div>
-            <label htmlFor="contact-name" className="block text-gray-700 font-medium mb-1">Name</label>
+            <label htmlFor="contact-name" className="block text-gray-700 font-medium mb-1">
+              Name <span className="text-red-600">*</span>
+            </label>
             <input
               id="contact-name"
               type="text"
               name="name"
               value={formData.name}
               onChange={handleChange}
+              onBlur={() => markTouched("name")}
               placeholder="Enter your name"
-              className="w-full h-[45px] border border-gray-300 rounded-md px-4 py-1 focus:outline-none"
+              autoComplete="name"
+              aria-invalid={!!shown.name}
+              aria-describedby={shown.name ? "contact-name-error" : undefined}
+              className={`w-full h-[45px] border rounded-md px-4 py-1 focus:outline-none ${shown.name ? "border-red-500" : "border-gray-300"}`}
             />
+            {shown.name && (
+              <p id="contact-name-error" role="alert" className="text-red-600 text-xs mt-1 font-medium">
+                {shown.name}
+              </p>
+            )}
           </div>
 
           <div>
-            <label htmlFor="contact-email" className="block text-gray-700 font-medium mb-1">Email</label>
-            <input
-              id="contact-email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              type="email"
-              placeholder="Enter your email"
-              className="w-full h-[45px] border border-gray-300 rounded-md px-4 py-1 focus:outline-none"
-            />
+            <label htmlFor="contact-email" className="block text-gray-700 font-medium mb-1">
+              Email <span className="text-red-600">*</span>
+            </label>
+            <div className="flex gap-2">
+              <input
+                id="contact-email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                onBlur={() => markTouched("email")}
+                type="email"
+                maxLength={254}
+                autoComplete="email"
+                placeholder="Enter your email"
+                aria-invalid={!!shown.email}
+                aria-describedby={shown.email ? "contact-email-error" : undefined}
+                className={`flex-1 min-w-0 h-[45px] border rounded-md px-4 py-1 focus:outline-none ${shown.email ? "border-red-500" : "border-gray-300"}`}
+              />
+              {!isEmailVerified && (
+                <button
+                  type="button"
+                  onClick={sendOtp}
+                  disabled={otpBusy || resendIn > 0 || formData.email.trim() === ""}
+                  className="px-3 h-[45px] rounded-md bg-[#1D8AD1] text-white text-sm font-semibold whitespace-nowrap disabled:opacity-60"
+                >
+                  {otpBusy
+                    ? "Please wait..."
+                    : otpSent
+                      ? resendIn > 0
+                        ? `Resend in ${resendIn}s`
+                        : "Resend code"
+                      : "Send code"}
+                </button>
+              )}
+            </div>
+            {otpSent && !isEmailVerified && (
+              <div className="flex gap-2 mt-2">
+                <input
+                  inputMode="numeric"
+                  autoComplete="one-time-code"
+                  maxLength={6}
+                  value={otp}
+                  onChange={(e) => setOtp(e.target.value.replace(/\D/g, "").slice(0, 6))}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      e.preventDefault();
+                      confirmOtp();
+                    }
+                  }}
+                  placeholder="6-digit code"
+                  className="flex-1 min-w-0 h-[45px] border border-gray-300 rounded-md px-4 py-1 focus:outline-none"
+                />
+                <button
+                  type="button"
+                  onClick={confirmOtp}
+                  disabled={otpBusy}
+                  className="px-3 h-[45px] rounded-md bg-[#1D8AD1] text-white text-sm font-semibold disabled:opacity-60"
+                >
+                  Verify
+                </button>
+              </div>
+            )}
+            {otpMessage && !isEmailVerified && (
+              <p className="text-xs mt-1 text-gray-600">{otpMessage}</p>
+            )}
+            {isEmailVerified && <p className="text-xs mt-1 text-green-700">✓ Email verified</p>}
+            {shown.email && (
+              <p id="contact-email-error" role="alert" className="text-red-600 text-xs mt-1 font-medium">
+                {shown.email}
+              </p>
+            )}
           </div>
 
           <div>
-            <label htmlFor="contact-role" className="block text-gray-700 font-medium mb-1">Role</label>
+            <label htmlFor="contact-role" className="block text-gray-700 font-medium mb-1">
+              Role <span className="text-red-600">*</span>
+            </label>
             <select
               id="contact-role"
               name="role"
               value={formData.role}
               onChange={handleChange}
-              className="w-full h-[45px] border border-gray-300 rounded-md px-4 py-1 focus:outline-none bg-white"
-              defaultValue=""
+              onBlur={() => markTouched("role")}
+              aria-invalid={!!shown.role}
+              aria-describedby={shown.role ? "contact-role-error" : undefined}
+              className={`w-full h-[45px] border rounded-md px-4 py-1 focus:outline-none bg-white ${shown.role ? "border-red-500" : "border-gray-300"}`}
             >
               <option value="" disabled>
                 Select your role
@@ -1584,39 +1877,83 @@ const ContactPage: React.FC = () => {
               <option value="university">University</option>
               <option value="school">School</option>
             </select>
+            {shown.role && (
+              <p id="contact-role-error" role="alert" className="text-red-600 text-xs mt-1 font-medium">
+                {shown.role}
+              </p>
+            )}
           </div>
 
           <div>
-            <label htmlFor="contact-phone" className="block text-gray-700 font-medium mb-1">Phone</label>
+            <label htmlFor="contact-phone" className="block text-gray-700 font-medium mb-1">
+              Phone <span className="text-red-600">*</span>
+            </label>
             <input
               id="contact-phone"
               type="tel"
+              inputMode="numeric"
+              autoComplete="tel-national"
               name="phone"
               value={formData.phone}
               onChange={handleChange}
+              onBlur={() => markTouched("phone")}
               placeholder="Enter your phone number"
-              className="w-full h-[45px] border border-gray-300 rounded-md px-4 py-1 focus:outline-none"
+              aria-invalid={!!shown.phone}
+              aria-describedby={shown.phone ? "contact-phone-error" : undefined}
+              className={`w-full h-[45px] border rounded-md px-4 py-1 focus:outline-none ${shown.phone ? "border-red-500" : "border-gray-300"}`}
             />
+            {shown.phone && (
+              <p id="contact-phone-error" role="alert" className="text-red-600 text-xs mt-1 font-medium">
+                {shown.phone}
+              </p>
+            )}
           </div>
 
           <div>
-            <label htmlFor="contact-message" className="block text-gray-700 font-medium mb-1">Message</label>
+            <div className="flex justify-between items-center mb-1">
+              <label htmlFor="contact-message" className="block text-gray-700 font-medium">
+                Message <span className="text-gray-500 text-sm font-normal">(optional)</span>
+              </label>
+              <span className={`text-xs ${messageCount > MESSAGE_MAX ? "text-red-600" : "text-gray-500"}`}>
+                {messageCount}/{MESSAGE_MAX}
+              </span>
+            </div>
             <textarea
               id="contact-message"
               name="message"
               value={formData.message}
               onChange={handleChange}
               placeholder="Enter your message"
-              className="w-full h-[115px] border border-gray-300 rounded-md px-4 py-1 focus:outline-none resize-none"
+              aria-invalid={!!shown.message}
+              aria-describedby={shown.message ? "contact-message-error" : undefined}
+              className={`w-full h-[115px] border rounded-md px-4 py-1 focus:outline-none resize-none ${shown.message ? "border-red-500" : "border-gray-300"}`}
             ></textarea>
+            {shown.message && (
+              <p id="contact-message-error" role="alert" className="text-red-600 text-xs mt-1 font-medium">
+                {shown.message}
+              </p>
+            )}
           </div>
+
+          {/* Hidden trap field for bots. Real visitors never see or fill it. */}
+          <input
+            type="text"
+            name="website"
+            tabIndex={-1}
+            autoComplete="off"
+            aria-hidden="true"
+            value={honeypot}
+            onChange={(e) => setHoneypot(e.target.value)}
+            style={{ position: "absolute", left: "-9999px", opacity: 0 }}
+          />
         </div>
 
-        <button 
-        type="submit"
-        disabled={isSubmitting}
-        className="mt-6 mx-auto w-[250px] h-[45px] bg-[#1D8AD1] text-white font-semibold rounded-md hover:bg-red-700 transition-all block text-center">
-        {isSubmitting ? "Sending..." : "Send"}
+        <button
+          type="submit"
+          disabled={isSubmitting}
+          className="mt-6 mx-auto w-[250px] h-[45px] bg-[#1D8AD1] text-white font-semibold rounded-md hover:bg-red-700 transition-all block text-center"
+        >
+          {isSubmitting ? "Sending..." : "Send"}
         </button>
       </form>
 
@@ -1652,10 +1989,10 @@ const ContactPage: React.FC = () => {
               <FaMapMarkerAlt className="mt-1" />
               <span>
                 {companySettingsLoading
-                  ? 'Loading company settings...'
+                  ? "Loading company settings..."
                   : companySettings
                     ? companySettings.office_address
-                    : companySettingsError || 'Company settings are unavailable.'}
+                    : companySettingsError || "Company settings are unavailable."}
                 {companySettings && (
                   <>
                     <br />
