@@ -1,113 +1,24 @@
-import { useState, useRef } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Input } from "./input";
-import { Textarea } from "./textarea";
+import { motion } from "framer-motion";
 import {
   Phone,
   Mail,
   MapPin,
-  Send,
-  CheckCircle2,
   School,
   Contact,
   PhoneCall,
 } from "lucide-react";
 import { Icon } from "@iconify/react";
-import { useToast } from "@/hooks/use-toast";
-import { supabase } from "@/lib/supabaseClient"; 
 import { formatCompanyAddressLine } from "@/constants/companySettings";
 import { useCompanySettings } from "@/hooks/useCompanySettings";
+import VerticalForm from "@/components/forms/VerticalForm";
+import { institutionsForm } from "@/components/forms/verticalForms.config";
 
 const ContactSection = () => {
-  const { toast } = useToast();
   const {
     settings: companySettings,
     isLoading: companySettingsLoading,
     errorMessage: companySettingsError,
   } = useCompanySettings();
-  const [formData, setFormData] = useState({
-    name: "",
-    university: "",
-    email: "",
-    course: "",
-    message: "",
-  });
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitted, setSubmitted] = useState<false | "sent" | "saved">(false);
-  const formRef = useRef<HTMLFormElement>(null);
-
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const { name, value } = e.target;
-    // Fix for course field (input name should be "course" not "role")
-    setFormData((prev) => ({
-      ...prev,
-      [name === "role" ? "course" : name]: value,
-    }));
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    let persisted = false;
-
-    try {
-      const { error } = await supabase.from("demo_requests").insert([
-        {
-          name: formData.name,
-          university: formData.university,
-          email: formData.email,
-          course: formData.course,
-          message: formData.message,
-        },
-      ]);
-
-      if (error) throw error;
-      persisted = true;
-
-      const response = await fetch("/api/send-contact-email", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
-      const data = await response.json().catch(() => ({}));
-
-      if (!response.ok) {
-        throw new Error(typeof data.error === "string" ? data.error : "Failed to send contact email");
-      }
-
-      toast({
-        title: "Message Sent!",
-        description:
-          "Thank you for reaching out. Our team will contact you shortly.",
-      });
-      setSubmitted("sent");
-
-      setTimeout(() => {
-        setFormData({
-          name: "",
-          university: "",
-          email: "",
-          course: "",
-          message: "",
-        });
-        setSubmitted(false);
-        formRef.current?.reset();
-      }, 3000);
-    } catch {
-      toast({
-        title: persisted ? "Request Received" : "Submission Failed",
-        description: persisted
-          ? "Your request was saved, but the email notification was delayed. Please do not resubmit; our team can follow up from your saved request."
-          : "There was an error submitting your request. Please try again.",
-        variant: persisted ? "default" : "destructive",
-      });
-      if (persisted) setSubmitted("saved");
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
 
   return (
     <section id="contact-section" className="section py-12 relative overflow-hidden bg-gradient-to-br from-blue-50 via-pink-30 to-purple-30 text-gray-800 ">
@@ -142,183 +53,22 @@ const ContactSection = () => {
                   Book A Free University Demo Now.
                 </h3>
 
-                <form
-                  ref={formRef}
-                  onSubmit={handleSubmit}
+                <VerticalForm
+                  config={institutionsForm}
+                  showTitle={false}
                   className="space-y-6"
-                >
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 ">
-                    <div>
-                      <label
-                        htmlFor="name"
-                        className="block mb-2 font-medium text-gray-700 text-sm"
-                      >
-                        Name
-                      </label>
-                      <Input
-                        id="name"
-                        name="name"
-                        value={formData.name}
-                        onChange={handleChange}
-                        placeholder="Full Name"
-                        className="w-full bg-white/50 border-gray-200 text-gray-800 placeholder:text-gray-400"
-                        required
-                      />
-                    </div>
-                    <div>
-                      <label
-                        htmlFor="university"
-                        className="block mb-2 font-medium text-gray-700 text-sm"
-                      >
-                        University Name
-                      </label>
-                      <Input
-                        id="university"
-                        name="university"
-                        value={formData.university}
-                        onChange={handleChange}
-                        placeholder="University Name"
-                        className="w-full bg-white/50 border-gray-200 text-gray-800 placeholder:text-gray-400"
-                        required
-                      />
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                      <label
-                        htmlFor="email"
-                        className="block mb-2 font-medium text-gray-700 text-sm"
-                      >
-                        Email Address
-                      </label>
-                      <Input
-                        id="email"
-                        name="email"
-                        type="email"
-                        value={formData.email}
-                        onChange={handleChange}
-                        placeholder="name@university.com"
-                        className="w-full bg-white/50 border-gray-200 text-gray-800 placeholder:text-gray-400"
-                        required
-                      />
-                    </div>
-                    <div>
-                      <label
-                        htmlFor="course"
-                        className="block mb-4 font-medium text-gray-700 text-sm"
-                      >
-                        Course Applied for
-                      </label>
-                      <Input
-                        id="course"
-                        name="course"
-                        value={formData.course}
-                        onChange={handleChange}
-                        placeholder="Course Name"
-                        className="w-full bg-white/50 border-gray-200 text-gray-800 placeholder:text-gray-400"
-                        required
-                      />
-                    </div>
-                  </div>
-
-                  <div>
-                    <label
-                      htmlFor="message"
-                      className="block mb-2 font-medium text-gray-700 text-sm"
+                  buttonClassName="flex items-center px-4 py-2 bg-blue-900 text-white rounded-full font-medium shadow-md text-xs disabled:opacity-60"
+                  actionsClassName="flex flex-col sm:flex-row gap-4 justify-center items-center pt-4"
+                  actions={
+                    <a
+                      href="tel:+919902326951"
+                      className="flex items-center gap-2 px-4 py-2 bg-white text-blue-900 border border-blue-900 rounded-full font-medium shadow-md hover:bg-blue-50 text-xs"
                     >
-                      Message
-                    </label>
-                    <Textarea
-                      id="message"
-                      name="message"
-                      value={formData.message}
-                      onChange={handleChange}
-                      placeholder="Tell us about your university or course requirements"
-                      className="w-full min-h-[120px] bg-white/50 border-gray-200 text-gray-800 placeholder:text-gray-400"
-                      required
-                    />
-                  </div>
-
-                  <div className="pt-4">
-                    <AnimatePresence mode="wait">
-                      {!submitted ? (
-                        <motion.div
-                          key="button"
-                          initial={{ opacity: 1 }}
-                          exit={{ opacity: 0 }}
-                          className="flex flex-col sm:flex-row gap-4 justify-center items-center"
-                        >
-                          <button
-                            type="submit"
-                            disabled={isSubmitting}
-                            className="flex items-center px-4 py-2 bg-blue-900 text-white rounded-full font-medium shadow-md transition-all hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs "
-                          >
-                            {isSubmitting ? (
-                              <>
-                                <svg
-                                  className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  fill="none"
-                                  viewBox="0 0 24 24"
-                                >
-                                  <circle
-                                    className="opacity-25"
-                                    cx="12"
-                                    cy="12"
-                                    r="10"
-                                    stroke="currentColor"
-                                    strokeWidth="4"
-                                  ></circle>
-                                  <path
-                                    className="opacity-75"
-                                    fill="currentColor"
-                                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                                  ></path>
-                                </svg>
-                                Sending...
-                              </>
-                            ) : (
-                              <>
-                                <Send size={20} className="mr-2" />
-                                Submit Request
-                              </>
-                            )}
-                          </button>
-
-                          <motion.a
-                            whileHover={{ scale: 1.05 }}
-                            whileTap={{ scale: 0.95 }}
-                            href="tel:+919902326951"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="flex items-center gap-2 px-4 py-2 bg-white text-blue-900 border border-blue-900 rounded-full font-medium shadow-md hover:bg-blue-50 transition-colors text-xs"
-                          >
-                            <PhoneCall size={20} />
-                            Talk to a Strategist
-                          </motion.a>
-                        </motion.div>
-                      ) : (
-                        <motion.div
-                          key="success"
-                          initial={{ opacity: 0, y: 10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          className="bg-green-100 border border-green-300 rounded-xl p-4 text-center"
-                        >
-                          <CheckCircle2 size={32} className="mx-auto mb-2 text-green-600" />
-                          <p className="font-medium text-green-800">
-                            {submitted === "sent" ? "Message sent successfully!" : "Request saved successfully!"}
-                          </p>
-                          <p className="text-sm text-green-700 mt-1">
-                            {submitted === "sent"
-                              ? "Our team will contact you shortly."
-                              : "The notification was delayed; please do not resubmit."}
-                          </p>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                  </div>
-                </form>
+                      <PhoneCall size={20} />
+                      Talk to a Strategist
+                    </a>
+                  }
+                />
               </div>
             </div>
           </motion.div>

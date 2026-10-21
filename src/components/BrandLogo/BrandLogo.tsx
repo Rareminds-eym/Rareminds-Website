@@ -5,6 +5,8 @@ import { cn } from "../../lib/utils";
 import { useCompanySettings } from "../../hooks/useCompanySettings";
 import { supabase } from "../../lib/supabaseClient";
 
+let companySettingsChannelId = 0;
+
 export interface BrandLogoProps {
   /** Extra classes on the logo <img> (default "w-40 h-auto sm:w-64"). */
   logoClassName?: string;
@@ -38,7 +40,7 @@ export default function BrandLogo({
   // Subscribe to company_settings changes via Supabase Realtime
   useEffect(() => {
     const channel = supabase
-      .channel('company-settings-changes')
+      .channel(`company-settings-changes-${++companySettingsChannelId}`)
       .on(
         'postgres_changes',
         {

@@ -1369,7 +1369,7 @@ import { supabase } from "@/lib/supabaseClient";
 import { useToast } from "@/hooks/use-toast";
 import { useEffect, useState } from "react";
 import type { Session } from "@supabase/supabase-js";
-import { sendEmailNotification } from "@/services/emailBff";
+import { sendEmailNotification, sendEmailOtp, verifyEmailOtp } from "@/services/emailBff";
 import { formatCompanyAddressLine } from "@/constants/companySettings";
 import { useCompanySettings } from "@/hooks/useCompanySettings";
 import {
@@ -1386,7 +1386,7 @@ import {
 // false = the form saves without a code (use this until your team has enabled
 //         email sending and Google in Supabase).
 // true  = the visitor must verify the email (code or Google) before sending.
-   const REQUIRE_EMAIL_VERIFICATION = true as boolean;
+const REQUIRE_EMAIL_VERIFICATION = true as boolean;
 
 // Stops the button from saying "Sending..." forever if the server never answers.
 const withTimeout = <T,>(promise: PromiseLike<T>, ms = 20000): Promise<T> =>
@@ -1461,35 +1461,35 @@ const ContactPage: React.FC = () => {
   };
 
   // Pick up a session (for example after returning from Google)
-useEffect(() => {
-  const returningFromGoogle =
-    window.location.search.includes("code=") ||
-    window.location.hash.includes("access_token");
+  useEffect(() => {
+    const returningFromGoogle =
+      window.location.search.includes("code=") ||
+      window.location.hash.includes("access_token");
 
-  // Normal page load: forget any leftover login from an earlier visit
-  if (!returningFromGoogle) {
-    supabase.auth.signOut({ scope: "local" });
-    return;
-  }
+    // Normal page load: forget any leftover login from an earlier visit
+    if (!returningFromGoogle) {
+      supabase.auth.signOut({ scope: "local" });
+      return;
+    }
 
-  const applySession = (session: Session | null) => {
-    const user = session?.user;
-    if (!user?.email || !user.email_confirmed_at) return;
-    const email = user.email.toLowerCase();
-    const meta = (user.user_metadata ?? {}) as { full_name?: string; name?: string };
-    setVerifiedEmail(email);
-    setFormData((prev) => ({
-      ...prev,
-      email: prev.email || email,
-      name: prev.name || meta.full_name || meta.name || "",
-    }));
-  };
-  supabase.auth.getSession().then(({ data }) => applySession(data.session));
-  const { data } = supabase.auth.onAuthStateChange((_event, session) =>
-    applySession(session)
-  );
-  return () => data.subscription.unsubscribe();
-}, []);
+    const applySession = (session: Session | null) => {
+      const user = session?.user;
+      if (!user?.email || !user.email_confirmed_at) return;
+      const email = user.email.toLowerCase();
+      const meta = (user.user_metadata ?? {}) as { full_name?: string; name?: string };
+      setVerifiedEmail(email);
+      setFormData((prev) => ({
+        ...prev,
+        email: prev.email || email,
+        name: prev.name || meta.full_name || meta.name || "",
+      }));
+    };
+    supabase.auth.getSession().then(({ data }) => applySession(data.session));
+    const { data } = supabase.auth.onAuthStateChange((_event, session) =>
+      applySession(session)
+    );
+    return () => data.subscription.unsubscribe();
+  }, []);
 
   // Resend countdown
   useEffect(() => {
@@ -1498,6 +1498,7 @@ useEffect(() => {
     return () => clearTimeout(timer);
   }, [resendIn]);
 
+  // Sends the 4-digit code through the email-worker (/api/email/send-otp)
   const sendOtp = async () => {
     if (otpBusy || resendIn > 0) return;
     const email = formData.email.trim().toLowerCase();
@@ -1507,40 +1508,45 @@ useEffect(() => {
     }
     setOtpBusy(true);
     setOtpMessage("");
-    const { error } = await supabase.auth.signInWithOtp({
-      email,
-      options: { shouldCreateUser: true },
-    });
-    setOtpBusy(false);
-    if (error) {
-      console.error("OTP send error:", error.message);
-      setOtpMessage("Could not send the code. Please try again in a minute.");
-      return;
+    try {
+      await sendEmailOtp(email);
+      setOtpSent(true);
+      setOtp("");
+      setResendIn(60);
+      setOtpMessage("We sent a 4-digit code to your email. Enter it below.");
+    } catch (error) {
+      console.error("OTP send error:", error);
+      const msg = error instanceof Error ? error.message.toLowerCase() : "";
+      setOtpMessage(
+        msg.includes("too many") || msg.includes("rate")
+          ? "Too many requests. Wait a minute, then try again."
+          : "Could not send the code. Please try again in a minute."
+      );
+    } finally {
+      setOtpBusy(false);
     }
-    setOtpSent(true);
-    setOtp("");
-    setResendIn(60);
-    setOtpMessage("We sent a 6-digit code to your email. Enter it below.");
   };
 
+  // Checks the 4-digit code (/api/email/verify-otp)
   const confirmOtp = async () => {
     if (otpBusy) return;
     const email = formData.email.trim().toLowerCase();
-    if (!/^\d{6}$/.test(otp)) {
-      setOtpMessage("Enter the 6-digit code");
+    if (!/^\d{4}$/.test(otp)) {
+      setOtpMessage("Enter the 4-digit code");
       return;
     }
     setOtpBusy(true);
-    const { error } = await supabase.auth.verifyOtp({ email, token: otp, type: "email" });
-    setOtpBusy(false);
-    if (error) {
+    try {
+      await verifyEmailOtp(email, otp);
+      setVerifiedEmail(email);
+      setOtpSent(false);
+      setOtp("");
+      setOtpMessage("");
+    } catch {
       setOtpMessage("Wrong or expired code. Try again or resend.");
-      return;
+    } finally {
+      setOtpBusy(false);
     }
-    setVerifiedEmail(email);
-    setOtpSent(false);
-    setOtp("");
-    setOtpMessage("");
   };
 
   const signInWithGoogle = async () => {
@@ -1641,7 +1647,7 @@ useEffect(() => {
             description: "Contact form database table is not set up. Please contact support.",
             variant: "destructive",
           });
-        } else if (dbError.code === "42P01"){
+        } else {
           toast({
             title: "Submission failed",
             description: "Unable to save your message. Please try again later.",
@@ -1673,9 +1679,9 @@ useEffect(() => {
       });
       setFormData({ name: "", email: "", role: "", phone: "", message: "" });
       setErrors({});
-      setTouched({});setVerifiedEmail("");
-await supabase.auth.signOut();
-      setVerifiedEmail("");await supabase.auth.signOut();
+      setTouched({});
+      setVerifiedEmail("");
+      await supabase.auth.signOut();
       setOtpSent(false);
       setOtp("");
       setOtpMessage("");
@@ -1818,16 +1824,16 @@ await supabase.auth.signOut();
                 <input
                   inputMode="numeric"
                   autoComplete="one-time-code"
-                  maxLength={6}
+                  maxLength={4}
                   value={otp}
-                  onChange={(e) => setOtp(e.target.value.replace(/\D/g, "").slice(0, 6))}
+                  onChange={(e) => setOtp(e.target.value.replace(/\D/g, "").slice(0, 4))}
                   onKeyDown={(e) => {
                     if (e.key === "Enter") {
                       e.preventDefault();
                       confirmOtp();
                     }
                   }}
-                  placeholder="6-digit code"
+                  placeholder="4-digit code"
                   className="flex-1 min-w-0 h-[45px] border border-gray-300 rounded-md px-4 py-1 focus:outline-none"
                 />
                 <button

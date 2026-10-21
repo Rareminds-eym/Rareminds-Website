@@ -51,7 +51,7 @@ export const corporateForm: VerticalFormConfig = {
 // /universities
 export const institutionsForm: VerticalFormConfig = {
   vertical: "institutions",
-  notificationType: "academy-enquiry",
+  notificationType: "institution-enquiry",
   title: "Book A Free University Demo Now.",
   submitLabel: "Submit Request",
   successMessage: "Thanks! We'll get in touch to schedule your demo.",

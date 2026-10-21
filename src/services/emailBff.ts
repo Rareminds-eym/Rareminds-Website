@@ -7,6 +7,7 @@ export type EmailNotificationType =
   | 'teacher-service-enquiry'
   | 'academy-enquiry'
   | 'government-enquiry'
+  | 'institution-enquiry'
   | 'download-notification';
 
 type EmailBffResponse = {

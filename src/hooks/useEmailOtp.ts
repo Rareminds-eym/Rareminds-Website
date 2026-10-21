@@ -33,7 +33,7 @@ const friendlyError = (e: unknown, step: "send" | "verify"): string => {
 
 export function useEmailOtp(
   provider: OtpProvider = emailServiceOtpProvider,
-  { codeLength = 6, cooldownSeconds = 30, maxAttempts = 5 } = {},
+  { codeLength = 4, cooldownSeconds = 30, maxAttempts = 5 } = {},
 ) {
   const [status, setStatus] = useState<OtpStatus>("idle");
   const [error, setError] = useState("");
