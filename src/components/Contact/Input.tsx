@@ -1509,7 +1509,7 @@ const ContactPage: React.FC = () => {
     setOtpBusy(true);
     setOtpMessage("");
     try {
-      await sendEmailOtp(email);
+      await withTimeout(sendEmailOtp(email));
       setOtpSent(true);
       setOtp("");
       setResendIn(60);
@@ -1517,10 +1517,12 @@ const ContactPage: React.FC = () => {
     } catch (error) {
       console.error("OTP send error:", error);
       const msg = error instanceof Error ? error.message.toLowerCase() : "";
-      setOtpMessage(
+            setOtpMessage(
         msg.includes("too many") || msg.includes("rate")
           ? "Too many requests. Wait a minute, then try again."
-          : "Could not send the code. Please try again in a minute."
+          : msg.includes("timeout")
+            ? "The server is taking too long. Please try again."
+            : "Could not send the code. Please try again in a minute."
       );
     } finally {
       setOtpBusy(false);
@@ -1537,13 +1539,18 @@ const ContactPage: React.FC = () => {
     }
     setOtpBusy(true);
     try {
-      await verifyEmailOtp(email, otp);
+      await withTimeout(verifyEmailOtp(email, otp));
       setVerifiedEmail(email);
       setOtpSent(false);
       setOtp("");
       setOtpMessage("");
-    } catch {
-      setOtpMessage("Wrong or expired code. Try again or resend.");
+        } catch (error) {
+      const msg = error instanceof Error ? error.message.toLowerCase() : "";
+      setOtpMessage(
+        msg.includes("timeout") || msg.includes("failed to fetch") || msg.includes("network")
+          ? "Network problem. Check your connection and try again."
+          : "Wrong or expired code. Try again or resend."
+      );
     } finally {
       setOtpBusy(false);
     }
