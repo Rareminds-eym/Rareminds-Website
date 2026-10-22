@@ -232,7 +232,7 @@ const buildNotification = (type: NotificationType, record: Record<string, unknow
     const name = getString(record, 'name', 100, true);
     const phone = getString(record, 'phone', 50, true);
     const course = getString(record, 'course_intrest', 200, true);
-    const message = getString(record, 'message', 3000, true);
+    const message = getString(record, 'message', 3000);
     return {
       ...common,
       subject: `New Academy course enquiry: ${cleanSubjectValue(course)}`,
@@ -244,7 +244,7 @@ const buildNotification = (type: NotificationType, record: Record<string, unknow
     const name = getString(record, 'name', 100, true);
     const phone = getString(record, 'phone', 50, true);
     const address = getString(record, 'address', 500);
-    const message = getString(record, 'message', 3000, true);
+    const message = getString(record, 'message', 3000);
     return {
       ...common,
       subject: 'New Government Services Enquiry',

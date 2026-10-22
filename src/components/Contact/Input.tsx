@@ -1517,7 +1517,7 @@ const ContactPage: React.FC = () => {
     } catch (error) {
       console.error("OTP send error:", error);
       const msg = error instanceof Error ? error.message.toLowerCase() : "";
-            setOtpMessage(
+      setOtpMessage(
         msg.includes("too many") || msg.includes("rate")
           ? "Too many requests. Wait a minute, then try again."
           : msg.includes("timeout")
@@ -1544,7 +1544,7 @@ const ContactPage: React.FC = () => {
       setOtpSent(false);
       setOtp("");
       setOtpMessage("");
-        } catch (error) {
+    } catch (error) {
       const msg = error instanceof Error ? error.message.toLowerCase() : "";
       setOtpMessage(
         msg.includes("timeout") || msg.includes("failed to fetch") || msg.includes("network")

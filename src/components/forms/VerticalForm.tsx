@@ -131,10 +131,10 @@ export default function VerticalForm({
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     if (busy) return;
-           if (otp.status === "verifying") {
-         setFormError("Email verification in progress. Please wait.");
-         return;
-       }
+    if (otp.status === "verifying") {
+      setFormError("Email verification in progress. Please wait.");
+      return;
+    }
     setSubmitted(true);
     setFormError("");
 

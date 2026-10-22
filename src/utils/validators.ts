@@ -37,7 +37,7 @@ export const getNameError = (input: string): string => {
   if (!/^\p{L}+\.?(?:[ '’-]\p{L}+\.?)*$/u.test(name)) return "Enter a valid name";
   if ((name.match(/\p{L}/gu) ?? []).length < 2) return "Enter a valid name";
   // five or more consonants in a row ("dfyry") is keyboard mashing
-  if (/[^aeiouáàâäãåéèêëíìîïóòôöõúùûü\s.'’-]{5,}/i.test(name)) return "Enter a valid name";
+  if (/[^aeiouyáàâäãåéèêëíìîïóòôöõúùûü\s.'’-]{7,}/i.test(name)) return "Enter a valid name";
   if (/(\p{L})\1{2,}/iu.test(name)) return "Enter a valid name";
   if (FAKE_NAMES.includes(name.toLowerCase())) return "Enter a valid name";
   return "";
