@@ -43,6 +43,7 @@ type NotificationType =
   | 'teacher-service-enquiry'
   | 'academy-enquiry'
   | 'government-enquiry'
+  | 'institution-enquiry'
   | 'download-notification';
 
 const allowedOrigins = new Set([
@@ -51,6 +52,9 @@ const allowedOrigins = new Set([
   'http://localhost:5173',
   'http://localhost:8780',
   'http://localhost:8789',
+  'http://127.0.0.1:5173',
+  'http://127.0.0.1:8780',
+  'http://127.0.0.1:8789',
 ]);
 
 const corsHeaders = (request: Request) => {
@@ -105,7 +109,7 @@ const escapeHtml = (value: string) => value.replace(/[&<>'"]/g, (character) => (
 
 const getString = (record: Record<string, unknown>, key: string, maxLength: number, required = false) => {
   const value = record[key];
-  if (value == null && !required) return '';
+  if ((value == null || (typeof value === 'string' && !value.trim())) && !required) return '';
   if (typeof value !== 'string' || !value.trim() || value.trim().length > maxLength) {
     throw new HttpError(`${key} is invalid`, 400);
   }
@@ -212,11 +216,23 @@ const buildNotification = (type: NotificationType, record: Record<string, unknow
     };
   }
 
+    if (type === 'institution-enquiry') {
+    const name = getString(record, 'name', 100, true);
+    const university = getString(record, 'university', 200, true);
+    const course = getString(record, 'course', 200, true);
+    const message = getString(record, 'message', 3000);
+    return {
+      ...common,
+      subject: `New University demo request: ${cleanSubjectValue(university)}`,
+      html: `<h3>New University Demo Request</h3>${row('Name', name)}${row('Email', email)}${row('University', university)}${row('Course', course)}${row('Message', message, true)}${row('Submitted at', submittedAt)}`,
+    };
+  }
+  
   if (type === 'academy-enquiry') {
     const name = getString(record, 'name', 100, true);
     const phone = getString(record, 'phone', 50, true);
     const course = getString(record, 'course_intrest', 200, true);
-    const message = getString(record, 'message', 3000, true);
+    const message = getString(record, 'message', 3000);
     return {
       ...common,
       subject: `New Academy course enquiry: ${cleanSubjectValue(course)}`,
@@ -228,7 +244,7 @@ const buildNotification = (type: NotificationType, record: Record<string, unknow
     const name = getString(record, 'name', 100, true);
     const phone = getString(record, 'phone', 50, true);
     const address = getString(record, 'address', 500);
-    const message = getString(record, 'message', 3000, true);
+    const message = getString(record, 'message', 3000);
     return {
       ...common,
       subject: 'New Government Services Enquiry',
@@ -363,7 +379,7 @@ export async function onRequestPost(context: PagesContext) {
       const type = body.type;
       if (typeof type !== 'string' || ![
         'general-contact', 'corporate-contact', 'training-enquiry', 'recruitment-enquiry',
-        'event-enquiry', 'teacher-service-enquiry', 'academy-enquiry', 'government-enquiry', 'download-notification',
+        'event-enquiry', 'teacher-service-enquiry', 'academy-enquiry', 'government-enquiry', 'institution-enquiry', 'download-notification',
       ].includes(type)) {
         throw new HttpError('Unsupported notification type', 400);
       }

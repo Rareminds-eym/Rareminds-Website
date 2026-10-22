@@ -1,123 +1,57 @@
-import { useState, useRef } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Input } from "../../../components/Academy/UI/input";
-import { Textarea } from "../../../components/Academy/UI/textarea";
+import { motion } from "framer-motion";
 import { supabase } from "../../../lib/supabase";
-import {
-  Phone,
-  Mail,
-  MapPin,
-  Send,
-  CheckCircle2,
-  ArrowRight,
-} from "lucide-react";
+import { Phone, Mail, MapPin, Send } from "lucide-react";
 import { Icon } from "@iconify/react";
-import { useToast } from "@/hooks/use-toast";
 import { useLocation } from "react-router-dom";
 import { sendEmailNotification } from "@/services/emailBff";
 import { formatCompanyAddressLine } from "@/constants/companySettings";
 import { useCompanySettings } from "@/hooks/useCompanySettings";
+import VerticalForm, { type SubmitPayload, type SubmitResult } from "@/components/forms/VerticalForm";
+import { academiaForm } from "@/components/forms/verticalForms.config";
 
 const AcademyContactSection = () => {
   const location = useLocation();
-  const { toast } = useToast();
   const {
     settings: companySettings,
     isLoading: companySettingsLoading,
     errorMessage: companySettingsError,
   } = useCompanySettings();
-  const [formData, setFormData] = useState({
-    name: "",
-    phone: "",
-    email: "",
-    course: "",
-    message: "",
-  });
 
+  // Saves to the database first, then sends the email (same order as before)
+  const submitAcademia = async (payload: SubmitPayload): Promise<SubmitResult> => {
+    const v = payload.values;
+    // Insert data into Supabase (table: acdemia_form, fields: name, email, phone, course_intrest, message)
+    const submission = {
+      name: v.name,
+      email: v.email,
+      phone: v.phone,
+      course_intrest: v.course, // spelling matches the database column
+      message: v.optionalMessage ?? "",
+      submitted_at: new Date().toISOString(),
+    };
 
-
-  
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
-  const formRef = useRef<HTMLFormElement>(null);
-
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
+    const { error } = await supabase
+      .from("acdemia_form")
+      .insert([submission]);
+    if (error) {
+      console.error('Supabase error:', error.message, error.details, error.hint);
+      throw error;
+    }
 
     try {
-      // Insert data into Supabase (table: academia_form, fields: name, email, phone, course_intrest, message)
-      const submittedAt = new Date().toISOString();
-      const submission = {
-        name: formData.name,
-        email: formData.email,
-        phone: formData.phone,
-        course_intrest: formData.course, // corrected field name
-        message: formData.message,
-        submitted_at: submittedAt,
-      };
-      const { error } = await supabase
-        .from("acdemia_form")
-        .insert([submission]);
-      if (error) {
-        console.error('Supabase error:', error.message, error.details, error.hint);
-        throw error;
-      }
-
-      try {
-        await sendEmailNotification('academy-enquiry', submission);
-      } catch (emailError) {
-        console.error('Email notification error:', emailError);
-      }
-
-      toast({
-        title: "Inquiry Submitted!",
-        description:
-          "Thank you for your interest in our Academy. Our team will contact you shortly.",
+      await sendEmailNotification('academy-enquiry', {
+        ...submission,
+        verification_proof: payload.otpProof,
       });
-
-      setSubmitted(true);
-      setFormData({
-        name: "",
-        phone: "",
-        email: "",
-        course: "",
-        message: "",
-      });
-
-      if (formRef.current) formRef.current.reset();
-
-      setTimeout(() => {
-        setSubmitted(false);
-      }, 3000);
-    } catch (error) {
-      const supabaseError = error as any;
-      console.error("Error submitting form:", {
-        message: supabaseError.message,
-        details: supabaseError.details,
-        hint: supabaseError.hint,
-        error: supabaseError
-      });
-      toast({
-        title: "Error",
-        description: `There was an error submitting your inquiry.\n${supabaseError.message || ''}\n${supabaseError.details || ''}\n${supabaseError.hint || ''}`,
-        variant: "destructive",
-      });
-    } finally {
-      setIsSubmitting(false);
+    } catch (emailError) {
+      console.error('Email notification error:', emailError);
     }
   };
 
   // Social links based on path
   const isSchool = location.pathname.includes("/school/teacher");
   const isStudent = location.pathname.includes("/school/student");
+  type SocialLink = { href: string; icon: string; color: string; label: string; size?: number };
   const socialLinks = [
     {
       href: "https://www.linkedin.com/company/rareminds/",
@@ -162,11 +96,7 @@ const AcademyContactSection = () => {
       label: "YouTube",
       size: 40,
     },
-  ].filter(Boolean);
-
-
-
-  
+  ].filter((link): link is SocialLink => Boolean(link));
 
   return (
     <section
@@ -209,183 +139,17 @@ const AcademyContactSection = () => {
                   Request Course Information
                 </h3>
 
-                <form
-                  ref={formRef}
-                  onSubmit={handleSubmit}
-                  className="space-y-6"
-                >
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                      <label
-                        htmlFor="name"
-                        className="block mb-2 font-medium text-gray-700"
-                      >
-                        Your Name
-                      </label>
-                      <Input
-                        id="name"
-                        name="name"
-                        value={formData.name}
-                        onChange={handleChange}
-                        placeholder="Full Name"
-                        className="w-full bg-white/50 border-gray-200 text-gray-800 placeholder:text-gray-400"
-                        required
-                      />
-                    </div>
-                    <div>
-                      <label
-                        htmlFor="phone"
-                        className="block mb-2 font-medium text-gray-700"
-                      >
-                        Phone
-                      </label>
-                      <Input
-                        id="phone"
-                        name="phone"
-                        type="tel"
-                        value={formData.phone}
-                        onChange={handleChange}
-                        placeholder="Your phone number"
-                        className="w-full bg-white/50 border-gray-200 text-gray-800 placeholder:text-gray-400"
-                        required
-                      />
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                      <label
-                        htmlFor="email"
-                        className="block mb-2 font-medium text-gray-700"
-                      >
-                        Email Address
-                      </label>
-                      <Input
-                        id="email"
-                        name="email"
-                        type="email"
-                        value={formData.email}
-                        onChange={handleChange}
-                        placeholder="name@example.com"
-                        className="w-full bg-white/50 border-gray-200 text-gray-800 placeholder:text-gray-400"
-                        required
-                      />
-                    </div>
-                    <div>
-                      <label
-                        htmlFor="course"
-                        className="block mb-2 font-medium text-gray-700"
-                      >
-                        Course Interest
-                      </label>
-                      <Input
-                        id="course"
-                        name="course"
-                        value={formData.course}
-                        onChange={handleChange}
-                        placeholder="Which course are you interested in?"
-                        className="w-full bg-white/50 border-gray-200 text-gray-800 placeholder:text-gray-400"
-                        required
-                      />
-                    </div>
-                  </div>
-
-                  <div>
-                    <label
-                      htmlFor="message"
-                      className="block mb-2 font-medium text-gray-700"
-                    >
-                      Message
-                    </label>
-                    <Textarea
-                      id="message"
-                      name="message"
-                      value={formData.message}
-                      onChange={handleChange}
-                      placeholder="Tell us about your learning goals or any questions you have"
-                      className="w-full min-h-[120px] bg-white/50 border-gray-200 text-gray-800 placeholder:text-gray-400"
-                      required
-                    />
-                  </div>
-
-                  <div className="pt-4 pb-10">
-                    <AnimatePresence mode="wait">
-                      {!submitted ? (
-                        <motion.div
-                          key="button"
-                          initial={{ opacity: 1 }}
-                          exit={{ opacity: 0 }}
-                          className="flex flex-col sm:flex-row gap-4 flex-wrap"
-                        >
-                          <button
-                            type="submit"
-                            className="bg-red-500 hover:bg-red-600 text-white font-medium py-3 px-6 rounded-xl transition-all flex items-center justify-center"
-                            disabled={isSubmitting}
-                            onClick={() => {
-                              // Extra debug log for troubleshooting
-                              console.log('Submit button clicked', formData);
-                            }}
-                          >
-                            {isSubmitting ? (
-                              <span className="flex items-center">
-                                <svg
-                                  className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  fill="none"
-                                  viewBox="0 0 24 24"
-                                >
-                                  <circle
-                                    className="opacity-25"
-                                    cx="12"
-                                    cy="12"
-                                    r="10"
-                                    stroke="currentColor"
-                                    strokeWidth="4"
-                                  ></circle>
-                                  <path
-                                    className="opacity-75"
-                                    fill="currentColor"
-                                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                                  ></path>
-                                </svg>
-                                Sending...
-                              </span>
-                            ) : (
-                              <span className="flex items-center">
-                                Get Course Info{" "}
-                                <ArrowRight size={20} className="ml-2" />
-                              </span>
-                            )}
-                          </button>
-                        </motion.div>
-                      ) : (
-                        <motion.div
-                          key="success"
-                          initial={{ opacity: 0, y: 10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          className="bg-green-100 border border-green-300 rounded-xl p-4 text-center"
-                        >
-                          <CheckCircle2
-                            size={32}
-                            className="mx-auto mb-2 text-green-600"
-                          />
-                          <p className="font-medium text-green-800">
-                            Inquiry submitted successfully!
-                          </p>
-                          <p className="text-sm text-green-700 mt-1">
-                            Our team will contact you with course details soon.
-                          </p>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                  </div>
-                </form>
+                <VerticalForm
+                  config={academiaForm}
+                  showTitle={false}
+                  onSubmit={submitAcademia}
+                  className="pb-10"
+                  inputClassName="w-full rounded-md border bg-white/50 px-3 py-2 text-gray-800 placeholder:text-gray-400 outline-none focus:ring-2 disabled:opacity-60"
+                  labelClassName="mb-2 block font-medium text-gray-700"
+                  buttonClassName="mt-6 bg-red-500 hover:bg-red-600 text-white font-medium py-3 px-6 rounded-xl transition-all flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
+                />
               </div>
-
-
-              
             </div>
-            
           </motion.div>
 
           <motion.div

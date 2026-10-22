@@ -46,3 +46,6 @@ dist-ssr
 
 # Wrangler (Cloudflare Workers)
 .wrangler
+   
+supabase/.env
+   .dev.vars

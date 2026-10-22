@@ -1,8 +1,9 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { Icon } from "@iconify/react";
 import { motion } from "framer-motion";
 import { Facebook, Instagram, Linkedin, Youtube } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
+import { getEmailError } from "../../utils/validators";
 
 import { supabase } from "@/lib/supabaseClient";
 const socialIcons = [
@@ -48,37 +49,54 @@ const FooterBar: React.FC<FooterBarProps> = ({ hideServices }) => {
 
 	const navigate = useNavigate();
 
+	const [isSubmitting, setIsSubmitting] = useState(false);
+	const [honeypot, setHoneypot] = useState("");
+
 	const submitSubscription = async () => {
-		if (subscriberEmail) {
-			if (!/(.+)@(.+){2,}\.(.+){2,}/.test(subscriberEmail)) {
-				setSuccessMessage("Enter a valid email address");
-			} else {
-				try {
-					// Insert email and submitted_at into Supabase table 'footer_email'
-					const { error } = await supabase
-						.from("footer_email")
-						.insert([
-							{ email: subscriberEmail, submitted_at: new Date().toISOString() }
-						]);
-					if (error) {
-						setSuccessMessage("Error subscribing. Please try again.");
-					} else {
-						setSuccessMessage("Thank you for subscribing");
-					}
-				} catch (err) {
-					const message =
-						err instanceof Error
-							? err.message
-							: typeof err === "string"
-								? err
-								: "Error subscribing. Please try again.";
-					setSuccessMessage(message);
-				}
-				setTimeout(() => setSuccessMessage(null), 2000);
-			}
-		} else {
+		if (isSubmitting) return; // blocks double clicks
+		if (honeypot) return; // a bot filled the hidden field, so stop silently
+
+		const email = (subscriberEmail ?? "").trim().toLowerCase();
+
+		if (!email) {
 			setSuccessMessage("Please enter an email address");
+			return;
 		}
+
+		const emailError = getEmailError(email);
+		if (emailError) {
+			setSuccessMessage(emailError);
+			return;
+		}
+
+		setIsSubmitting(true);
+		try {
+			const { error } = await supabase
+				.from("footer_email")
+				.insert([{ email, submitted_at: new Date().toISOString() }]);
+
+			if (error) {
+				console.error("Subscribe error:", error.code, error.message, error.details);
+				const details = error.details ?? "";
+				const message = error.message ?? "";
+				const isEmailDuplicate =
+					/\(email\)=/i.test(details) || /email_(key|unique|idx)/i.test(message);
+				if (error.code === "23505" && isEmailDuplicate) {
+					setSuccessMessage("This email is already subscribed");
+				} else {
+					setSuccessMessage("Error subscribing. Please try again.");
+				}
+			} else {
+				setSuccessMessage("Thank you for subscribing");
+				setSubscriberEmail(null); // clears the box after success
+			}
+		} catch (err) {
+			console.error("Subscribe exception:", err);
+			setSuccessMessage("Error subscribing. Please try again.");
+		} finally {
+			setIsSubmitting(false);
+		}
+		setTimeout(() => setSuccessMessage(null), 4000);
 	};
 	// Handler for 'View All' click in corporate services
 	const handleViewAll = (
@@ -98,7 +116,7 @@ const FooterBar: React.FC<FooterBarProps> = ({ hideServices }) => {
 	// Determine if current page is corporate or corporate training
 	const isCorporate = window.location.pathname.startsWith("/corporate/recruitment");
 	const isCorporateTraining = window.location.pathname.startsWith("/corporate/training");
-	const Academia  = window.location.pathname.startsWith("/school");
+	const Academia = window.location.pathname.startsWith("/school");
 
 
 	return (
@@ -186,304 +204,304 @@ const FooterBar: React.FC<FooterBarProps> = ({ hideServices }) => {
 
 				{/* Our Services Section */}
 				{!hideServices && (
-				<div>
-					<h2 className="font-bold mb-4 uppercase tracking-wider text-lg">
-						Our Services
-					</h2>
-					<ul className="flex flex-wrap gap-x-6 gap-y-2 items-center">
-						{window.location.pathname.startsWith("/government") ? (
-							<li>
-								<Link
-									to="/success-stories"
-									className="hover:text-red-400 transition-colors"
-								>
-									Skilling & Building Capacity
-								</Link>
-							</li>
-						) : isCorporateTraining ? (
-							<>
+					<div>
+						<h2 className="font-bold mb-4 uppercase tracking-wider text-lg">
+							Our Services
+						</h2>
+						<ul className="flex flex-wrap gap-x-6 gap-y-2 items-center">
+							{window.location.pathname.startsWith("/government") ? (
 								<li>
 									<Link
-										to="/corporate/training/services/workplace-productivity"
+										to="/success-stories"
 										className="hover:text-red-400 transition-colors"
 									>
-										Workplace Productivity & Digital Fluency
+										Skilling & Building Capacity
 									</Link>
 								</li>
-								<li>
-									<Link
-										to="/corporate/training/services/tech-upskilling"
-										className="hover:text-red-400 transition-colors"
-									>
-										Tech Upskilling & Future Skills
-									</Link>
-								</li>
-								<li>
-									<Link
-										to="/corporate/training/services/behavioral-culture"
-										className="hover:text-red-400 transition-colors"
-									>
-										Behavioral & Organizational Culture Programs
-									</Link>
-								</li>
-								<li>
-									<Link
-										to="/corporate/training"
-										onClick={(e) => {
-											e.preventDefault();
-											navigate("/corporate/training");
-											setTimeout(() => {
-												const el = document.getElementById("services");
-												if (el) {
-													el.scrollIntoView({ behavior: "smooth" });
-												}
-											}, 350);
-										}}
-										className="hover:text-red-400 transition-colors font-semibold cursor-pointer"
-									>
-										View All
-									</Link>
-								</li>
-							</>
-						) : isCorporate ? (
-							<>
-								<li>
-									<Link
-										to="/corporate/recruitment/services/Interview-as-a-service"
-										className="hover:text-red-400 transition-colors"
-									>
-										Interview-as-a-service
-									</Link>
-								</li>
-								<li>
-									<Link
-										to="/corporate/recruitment/services/diversity-hiring"
-										className="hover:text-red-400 transition-colors"
-									>
-										Diversity Hiring
-									</Link>
-								</li>
-								<li>
-									<Link
-										to="/corporate/recruitment/services/pre-onboarding-support"
-										className="hover:text-red-400 transition-colors"
-									>
-										Pre-Onboarding Support
-									</Link>
-								</li>
-								<li>
-									<Link
-										to="/corporate/recruitment#services"
-										onClick={handleViewAll}
-										className="hover:text-red-400 transition-colors font-semibold cursor-pointer"
-									>
-										View All
-									</Link>
-								</li>
-							</>
-						) 
-						: Academia ? (
-							<ul className="space-y-3">
-								<li>
-									<Link
-										to="/school/teacher"
-										className="hover:text-red-400 transition-colors"
-									>
-										School
-									</Link>
-								</li>
-								<li>
-									<Link
-										to="/school/student"
-										className="hover:text-red-400 transition-colors"
-									>
-										Student
-									</Link>
-								</li>
-							</ul>
-						) : window.location.pathname.startsWith("/universities/fdp") ? (
-							<>
-								<li>
-									<Link
-										to="/universities/fdp"
-										className="hover:text-red-400 transition-colors"
-									>
-										Faculty Development Programs
-									</Link>
-								</li>
-								<li>
-									<Link
-										to="/universities/leadership-career-growth"
-										className="hover:text-red-400 transition-colors"
-									>
-										Leadership & Career Growth
-									</Link>
-								</li>
-								<li>
-									<Link
-										to="/universities/mental-health-counseling-fdp"
-										className="hover:text-red-400 transition-colors"
-									>
-										Mental Health & Counseling
-									</Link>
-								</li>
-								<li>
-									<Link
-										to="/universities/domain-specific-programs"
-										className="hover:text-red-400 transition-colors"
-									>
-										Domain Specific Programs
-									</Link>
-								</li>
-								<li>
-									<Link
-										to="/universities/communication-personality-development"
-										className="hover:text-red-400 transition-colors"
-									>
-										Communication & Personality
-									</Link>
-								</li>
-							</>
-						) : window.location.pathname.startsWith("/universities/services") ? (
-							<>
-								<li>
-									<Link
-										to="/universities/services"
-										className="hover:text-red-400 transition-colors"
-									>
-										Institutional Services
-									</Link>
-								</li>
-								<li>
-									<Link
-										to="/universities/communication-personality-development"
-										className="hover:text-red-400 transition-colors"
-									>
-										Communication & Personality
-									</Link>
-								</li>
-								<li>
-									<Link
-										to="/universities/mental-health-counseling-fdp"
-										className="hover:text-red-400 transition-colors"
-									>
-										Mental Health Counseling
-									</Link>
-								</li>
-								<li>
-									<Link
-										to="/universities/domain-specific-programs"
-										className="hover:text-red-400 transition-colors"
-									>
-										Domain Specific Programs
-									</Link>
-								</li>
-								<li>
-									<Link
-										to="/universities/leadership-career-growth"
-										className="hover:text-red-400 transition-colors"
-									>
-										Leadership & Career Growth
-									</Link>
-								</li>
-								<li>
-									<Link
-										to="/universities/institutional-value-added-services"
-										className="hover:text-red-400 transition-colors"
-									>
-										Value-Added Services
-									</Link>
-								</li>
-							</>
-						) : window.location.pathname.startsWith("/universities") ? (
-							<>
-								<li>
-									<Link
-										to="/universities#services-section"
-										className="hover:text-red-400 transition-colors"
-									>
-										Student Development Programs
-									</Link>
-								</li>
-								<li>
-									<Link
-										to="/universities/services"
-										className="hover:text-red-400 transition-colors"
-									>
-										Institutional Services
-									</Link>
-								</li>
-								<li>
-									<Link
-										to="/universities/fdp"
-										className="hover:text-red-400 transition-colors"
-									>
-										Faculty Development (FDP)
-									</Link>
-								</li>
-								<li>
-									<Link
-										to="/universities/skill-passport"
-										className="hover:text-red-400 transition-colors"
-									>
-										Skill Passport
-									</Link>
-								</li>
-								<li>
-									<Link
-										to="/universities/blogs"
-										className="hover:text-red-400 transition-colors"
-									>
-										Institutional Blogs
-									</Link>
-								</li>
-							</>
-						) : (
-							<>
-								<li>
-									<Link
-										to="/corporate/recruitment"
-										className="hover:text-red-400 transition-colors"
-									>
-										Corporate Recruitment
-									</Link>
-								</li>
-								<li>
-									<Link
-										to="/corporate/training"
-										className="hover:text-red-400 transition-colors"
-									>
-										Corporate Training
-									</Link>
-								</li>
-								<li>
-									<Link
-										to="/universities"
-										className="hover:text-red-400 transition-colors"
-									>
-										Universities & Institutions
-									</Link>
-								</li>
-								<li>
-									<Link
-										to="/universities/fdp"
-										className="hover:text-red-400 transition-colors"
-									>
-										Faculty Development (FDP)
-									</Link>
-								</li>
-								<li>
-									<Link
-										to="/school"
-										className="hover:text-red-400 transition-colors"
-									>
-										Academia
-									</Link>
-								</li>
-							</>
-						)}
-					</ul>
-				</div>
+							) : isCorporateTraining ? (
+								<>
+									<li>
+										<Link
+											to="/corporate/training/services/workplace-productivity"
+											className="hover:text-red-400 transition-colors"
+										>
+											Workplace Productivity & Digital Fluency
+										</Link>
+									</li>
+									<li>
+										<Link
+											to="/corporate/training/services/tech-upskilling"
+											className="hover:text-red-400 transition-colors"
+										>
+											Tech Upskilling & Future Skills
+										</Link>
+									</li>
+									<li>
+										<Link
+											to="/corporate/training/services/behavioral-culture"
+											className="hover:text-red-400 transition-colors"
+										>
+											Behavioral & Organizational Culture Programs
+										</Link>
+									</li>
+									<li>
+										<Link
+											to="/corporate/training"
+											onClick={(e) => {
+												e.preventDefault();
+												navigate("/corporate/training");
+												setTimeout(() => {
+													const el = document.getElementById("services");
+													if (el) {
+														el.scrollIntoView({ behavior: "smooth" });
+													}
+												}, 350);
+											}}
+											className="hover:text-red-400 transition-colors font-semibold cursor-pointer"
+										>
+											View All
+										</Link>
+									</li>
+								</>
+							) : isCorporate ? (
+								<>
+									<li>
+										<Link
+											to="/corporate/recruitment/services/Interview-as-a-service"
+											className="hover:text-red-400 transition-colors"
+										>
+											Interview-as-a-service
+										</Link>
+									</li>
+									<li>
+										<Link
+											to="/corporate/recruitment/services/diversity-hiring"
+											className="hover:text-red-400 transition-colors"
+										>
+											Diversity Hiring
+										</Link>
+									</li>
+									<li>
+										<Link
+											to="/corporate/recruitment/services/pre-onboarding-support"
+											className="hover:text-red-400 transition-colors"
+										>
+											Pre-Onboarding Support
+										</Link>
+									</li>
+									<li>
+										<Link
+											to="/corporate/recruitment#services"
+											onClick={handleViewAll}
+											className="hover:text-red-400 transition-colors font-semibold cursor-pointer"
+										>
+											View All
+										</Link>
+									</li>
+								</>
+							)
+								: Academia ? (
+									<ul className="space-y-3">
+										<li>
+											<Link
+												to="/school/teacher"
+												className="hover:text-red-400 transition-colors"
+											>
+												School
+											</Link>
+										</li>
+										<li>
+											<Link
+												to="/school/student"
+												className="hover:text-red-400 transition-colors"
+											>
+												Student
+											</Link>
+										</li>
+									</ul>
+								) : window.location.pathname.startsWith("/universities/fdp") ? (
+									<>
+										<li>
+											<Link
+												to="/universities/fdp"
+												className="hover:text-red-400 transition-colors"
+											>
+												Faculty Development Programs
+											</Link>
+										</li>
+										<li>
+											<Link
+												to="/universities/leadership-career-growth"
+												className="hover:text-red-400 transition-colors"
+											>
+												Leadership & Career Growth
+											</Link>
+										</li>
+										<li>
+											<Link
+												to="/universities/mental-health-counseling-fdp"
+												className="hover:text-red-400 transition-colors"
+											>
+												Mental Health & Counseling
+											</Link>
+										</li>
+										<li>
+											<Link
+												to="/universities/domain-specific-programs"
+												className="hover:text-red-400 transition-colors"
+											>
+												Domain Specific Programs
+											</Link>
+										</li>
+										<li>
+											<Link
+												to="/universities/communication-personality-development"
+												className="hover:text-red-400 transition-colors"
+											>
+												Communication & Personality
+											</Link>
+										</li>
+									</>
+								) : window.location.pathname.startsWith("/universities/services") ? (
+									<>
+										<li>
+											<Link
+												to="/universities/services"
+												className="hover:text-red-400 transition-colors"
+											>
+												Institutional Services
+											</Link>
+										</li>
+										<li>
+											<Link
+												to="/universities/communication-personality-development"
+												className="hover:text-red-400 transition-colors"
+											>
+												Communication & Personality
+											</Link>
+										</li>
+										<li>
+											<Link
+												to="/universities/mental-health-counseling-fdp"
+												className="hover:text-red-400 transition-colors"
+											>
+												Mental Health Counseling
+											</Link>
+										</li>
+										<li>
+											<Link
+												to="/universities/domain-specific-programs"
+												className="hover:text-red-400 transition-colors"
+											>
+												Domain Specific Programs
+											</Link>
+										</li>
+										<li>
+											<Link
+												to="/universities/leadership-career-growth"
+												className="hover:text-red-400 transition-colors"
+											>
+												Leadership & Career Growth
+											</Link>
+										</li>
+										<li>
+											<Link
+												to="/universities/institutional-value-added-services"
+												className="hover:text-red-400 transition-colors"
+											>
+												Value-Added Services
+											</Link>
+										</li>
+									</>
+								) : window.location.pathname.startsWith("/universities") ? (
+									<>
+										<li>
+											<Link
+												to="/universities#services-section"
+												className="hover:text-red-400 transition-colors"
+											>
+												Student Development Programs
+											</Link>
+										</li>
+										<li>
+											<Link
+												to="/universities/services"
+												className="hover:text-red-400 transition-colors"
+											>
+												Institutional Services
+											</Link>
+										</li>
+										<li>
+											<Link
+												to="/universities/fdp"
+												className="hover:text-red-400 transition-colors"
+											>
+												Faculty Development (FDP)
+											</Link>
+										</li>
+										<li>
+											<Link
+												to="/universities/skill-passport"
+												className="hover:text-red-400 transition-colors"
+											>
+												Skill Passport
+											</Link>
+										</li>
+										<li>
+											<Link
+												to="/universities/blogs"
+												className="hover:text-red-400 transition-colors"
+											>
+												Institutional Blogs
+											</Link>
+										</li>
+									</>
+								) : (
+									<>
+										<li>
+											<Link
+												to="/corporate/recruitment"
+												className="hover:text-red-400 transition-colors"
+											>
+												Corporate Recruitment
+											</Link>
+										</li>
+										<li>
+											<Link
+												to="/corporate/training"
+												className="hover:text-red-400 transition-colors"
+											>
+												Corporate Training
+											</Link>
+										</li>
+										<li>
+											<Link
+												to="/universities"
+												className="hover:text-red-400 transition-colors"
+											>
+												Universities & Institutions
+											</Link>
+										</li>
+										<li>
+											<Link
+												to="/universities/fdp"
+												className="hover:text-red-400 transition-colors"
+											>
+												Faculty Development (FDP)
+											</Link>
+										</li>
+										<li>
+											<Link
+												to="/school"
+												className="hover:text-red-400 transition-colors"
+											>
+												Academia
+											</Link>
+										</li>
+									</>
+								)}
+						</ul>
+					</div>
 				)}
 
 				{/* Contact us Section */}
@@ -518,13 +536,13 @@ const FooterBar: React.FC<FooterBarProps> = ({ hideServices }) => {
 						</li>
 					</ul>
 				</div>
-
 				{/* Newsletter Signup Section */}
 				<div>
 					<h2 className="font-bold mb-4 uppercase tracking-wider text-lg">
 						Sign up to our newsletter
 					</h2>
 					<form
+						noValidate
 						onSubmit={(e) => {
 							e.preventDefault();
 							submitSubscription();
@@ -533,23 +551,44 @@ const FooterBar: React.FC<FooterBarProps> = ({ hideServices }) => {
 					>
 						<input
 							id="newsletter-email"
+							name="email"
 							type="email"
+							required
+							maxLength={254}
+							autoComplete="email"
+							inputMode="email"
 							placeholder="Email address"
 							aria-label="Email address for newsletter"
+							aria-required="true"
+							value={subscriberEmail ?? ""}
 							className="p-3 w-full bg-rareminds-dark/50 border border-red-400/30 text-black rounded focus:outline-none focus:ring-2 focus:ring-red-500"
 							onChange={(e) => {
 								setSuccessMessage(null);
 								setSubscriberEmail(e.target.value);
 							}}
-							// ref={subscribeInput}
 						/>
+
+						{/* Hidden trap field for bots. Real users never see or fill it. */}
+						<input
+							type="text"
+							name="website"
+							tabIndex={-1}
+							autoComplete="off"
+							aria-hidden="true"
+							value={honeypot}
+							onChange={(e) => setHoneypot(e.target.value)}
+							style={{ position: "absolute", left: "-9999px", opacity: 0 }}
+						/>
+
 						<button
 							type="submit"
-							className="p-3 w-full bg-red-600 text-white font-bold rounded hover:bg-red-700 transition-colors"
+							disabled={isSubmitting}
+							className="p-3 w-full bg-red-600 text-white font-bold rounded hover:bg-red-700 transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
 						>
-							SUBSCRIBE
+							{isSubmitting ? "SUBSCRIBING..." : "SUBSCRIBE"}
 						</button>
 					</form>
+
 					{successMessage && (
 						<p className="text-white text-center mt-4 bg-red-500/20 p-2 rounded">
 							{successMessage}
