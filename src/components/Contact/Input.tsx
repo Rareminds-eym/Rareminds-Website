@@ -1363,7 +1363,7 @@
 
 
 
-import React from "react";
+import type React from "react";
 import bannerBg from "../../assets/contact-banner.webp";
 import leftCardBg from "../../assets/Banner10.png";
 import mobileCardBg from "../../assets/Mobileversion.png";
@@ -1372,8 +1372,15 @@ import { supabase } from "@/lib/supabaseClient";
 import { useToast } from "@/hooks/use-toast";
 import { useState } from "react";
 import { sendEmailNotification } from "@/services/emailBff";
+import { formatCompanyAddressLine } from "@/constants/companySettings";
+import { useCompanySettings } from "@/hooks/useCompanySettings";
 const ContactPage: React.FC = () => {
    const { toast } = useToast();
+  const {
+    settings: companySettings,
+    isLoading: companySettingsLoading,
+    errorMessage: companySettingsError,
+  } = useCompanySettings();
 
   const [formData, setFormData] = useState({
     name: "",
@@ -1644,11 +1651,17 @@ const ContactPage: React.FC = () => {
             <p className="flex items-start gap-3 text-left pl-3">
               <FaMapMarkerAlt className="mt-1" />
               <span>
-                231, 2nd stage, 13th Cross Road,
-                <br />
-                Hoysala Nagar, Indiranagar
-                <br />
-                Bengaluru, Karnataka 560001
+                {companySettingsLoading
+                  ? 'Loading company settings...'
+                  : companySettings
+                    ? companySettings.office_address
+                    : companySettingsError || 'Company settings are unavailable.'}
+                {companySettings && (
+                  <>
+                    <br />
+                    {formatCompanyAddressLine(companySettings)}
+                  </>
+                )}
               </span>
             </p>
 

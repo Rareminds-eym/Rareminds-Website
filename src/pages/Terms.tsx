@@ -1,9 +1,16 @@
-﻿import React, { useState, useEffect } from "react";
+﻿import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Helmet } from "react-helmet-async";
+import { formatCompanyAddressLine } from "@/constants/companySettings";
+import { useCompanySettings } from "@/hooks/useCompanySettings";
 
 const Terms = () => {
   const [activeSection, setActiveSection] = useState<number>(0);
+  const {
+    settings: companySettings,
+    isLoading: companySettingsLoading,
+    errorMessage: companySettingsError,
+  } = useCompanySettings();
 
   const sections = [
     "Eligibility",
@@ -24,7 +31,7 @@ const Terms = () => {
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            const sectionNumber = parseInt(entry.target.id.split('-')[1]);
+            const sectionNumber = parseInt(entry.target.id.split('-')[1], 10);
             setActiveSection(sectionNumber);
           }
         });
@@ -86,7 +93,7 @@ const Terms = () => {
               <div className="sticky top-8">
                 <nav className="space-y-1">
                   {sections.map((section, index) => (
-                    <button
+                    <button type="button"
                       key={index}
                       onClick={() => scrollToSection(index)}
                       className={`w-full text-left px-4 py-2 rounded-lg transition-all duration-200 ${
@@ -306,10 +313,17 @@ const Terms = () => {
                           <h3 className="font-semibold text-gray-300 mb-2">Address</h3>
                           <p className="text-gray-100">
                             Rareminds Pvt. Ltd.<br />
-                            231, 13th Cross Rd, 2nd Stage,<br />
-                            Indira Nagar II Stage, Hoysala Nagar,<br />
-                            Indiranagar, Bengaluru,<br />
-                            Karnataka 560038
+                            {companySettingsLoading
+                              ? 'Loading company settings...'
+                              : companySettings
+                                ? companySettings.office_address
+                                : companySettingsError || 'Company settings are unavailable.'}
+                            {companySettings && (
+                              <>
+                                <br />
+                                {formatCompanyAddressLine(companySettings)}
+                              </>
+                            )}
                           </p>
                         </div>
                         <div className="space-y-4">
