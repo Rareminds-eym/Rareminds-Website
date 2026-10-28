@@ -71,18 +71,18 @@ const FooterBar: React.FC<FooterBarProps> = ({ hideServices }) => {
 		}
 
 		setIsSubmitting(true);
-		try {
+				try {
 			      const dupCheck = await checkDuplicate("footer_email", { email });
             if (dupCheck.email) {
              setSuccessMessage("You have already subscribed with this email.");
              setIsSubmitting(false);
              return;
             }
-			const { error } = await supabase
-				.from("footer_email")
+					const { error } = await supabase
+						.from("footer_email")
 				.insert([{ email, submitted_at: new Date().toISOString() }]);
 
-			if (error) {
+					if (error) {
 				console.error("Subscribe error:", error.code, error.message, error.details);
 			    if (error.code === "23505") {
                    setSuccessMessage("You have already subscribed with this email.");
@@ -92,13 +92,13 @@ const FooterBar: React.FC<FooterBarProps> = ({ hideServices }) => {
 				if (error.code === "23505") {
 					setSuccessMessage("This email is already subscribed");
 				} else {
-					setSuccessMessage("Error subscribing. Please try again.");
+						setSuccessMessage("Error subscribing. Please try again.");
 				}
-			} else {
-				setSuccessMessage("Thank you for subscribing");
+					} else {
+						setSuccessMessage("Thank you for subscribing");
 				setSubscriberEmail(null); // clears the box after success
-			}
-		} catch (err) {
+					}
+				} catch (err) {
 			console.error("Subscribe exception:", err);
 			setSuccessMessage("Error subscribing. Please try again.");
 		} finally {
@@ -124,7 +124,7 @@ const FooterBar: React.FC<FooterBarProps> = ({ hideServices }) => {
 	// Determine if current page is corporate or corporate training
 	const isCorporate = window.location.pathname.startsWith("/corporate/recruitment");
 	const isCorporateTraining = window.location.pathname.startsWith("/corporate/training");
-	const Academia = window.location.pathname.startsWith("/school");
+	const Academia  = window.location.pathname.startsWith("/school");
 
 
 	return (
@@ -212,304 +212,304 @@ const FooterBar: React.FC<FooterBarProps> = ({ hideServices }) => {
 
 				{/* Our Services Section */}
 				{!hideServices && (
-					<div>
-						<h2 className="font-bold mb-4 uppercase tracking-wider text-lg">
-							Our Services
-						</h2>
-						<ul className="flex flex-wrap gap-x-6 gap-y-2 items-center">
-							{window.location.pathname.startsWith("/government") ? (
+				<div>
+					<h2 className="font-bold mb-4 uppercase tracking-wider text-lg">
+						Our Services
+					</h2>
+					<ul className="flex flex-wrap gap-x-6 gap-y-2 items-center">
+						{window.location.pathname.startsWith("/government") ? (
+							<li>
+								<Link
+									to="/success-stories"
+									className="hover:text-red-400 transition-colors"
+								>
+									Skilling & Building Capacity
+								</Link>
+							</li>
+						) : isCorporateTraining ? (
+							<>
 								<li>
 									<Link
-										to="/success-stories"
+										to="/corporate/training/services/workplace-productivity"
 										className="hover:text-red-400 transition-colors"
 									>
-										Skilling & Building Capacity
+										Workplace Productivity & Digital Fluency
 									</Link>
 								</li>
-							) : isCorporateTraining ? (
-								<>
-									<li>
-										<Link
-											to="/corporate/training/services/workplace-productivity"
-											className="hover:text-red-400 transition-colors"
-										>
-											Workplace Productivity & Digital Fluency
-										</Link>
-									</li>
-									<li>
-										<Link
-											to="/corporate/training/services/tech-upskilling"
-											className="hover:text-red-400 transition-colors"
-										>
-											Tech Upskilling & Future Skills
-										</Link>
-									</li>
-									<li>
-										<Link
-											to="/corporate/training/services/behavioral-culture"
-											className="hover:text-red-400 transition-colors"
-										>
-											Behavioral & Organizational Culture Programs
-										</Link>
-									</li>
-									<li>
-										<Link
-											to="/corporate/training"
-											onClick={(e) => {
-												e.preventDefault();
-												navigate("/corporate/training");
-												setTimeout(() => {
-													const el = document.getElementById("services");
-													if (el) {
-														el.scrollIntoView({ behavior: "smooth" });
-													}
-												}, 350);
-											}}
-											className="hover:text-red-400 transition-colors font-semibold cursor-pointer"
-										>
-											View All
-										</Link>
-									</li>
-								</>
-							) : isCorporate ? (
-								<>
-									<li>
-										<Link
-											to="/corporate/recruitment/services/Interview-as-a-service"
-											className="hover:text-red-400 transition-colors"
-										>
-											Interview-as-a-service
-										</Link>
-									</li>
-									<li>
-										<Link
-											to="/corporate/recruitment/services/diversity-hiring"
-											className="hover:text-red-400 transition-colors"
-										>
-											Diversity Hiring
-										</Link>
-									</li>
-									<li>
-										<Link
-											to="/corporate/recruitment/services/pre-onboarding-support"
-											className="hover:text-red-400 transition-colors"
-										>
-											Pre-Onboarding Support
-										</Link>
-									</li>
-									<li>
-										<Link
-											to="/corporate/recruitment#services"
-											onClick={handleViewAll}
-											className="hover:text-red-400 transition-colors font-semibold cursor-pointer"
-										>
-											View All
-										</Link>
-									</li>
-								</>
-							)
-								: Academia ? (
-									<ul className="space-y-3">
-										<li>
-											<Link
-												to="/school/teacher"
-												className="hover:text-red-400 transition-colors"
-											>
-												School
-											</Link>
-										</li>
-										<li>
-											<Link
-												to="/school/student"
-												className="hover:text-red-400 transition-colors"
-											>
-												Student
-											</Link>
-										</li>
-									</ul>
-								) : window.location.pathname.startsWith("/universities/fdp") ? (
-									<>
-										<li>
-											<Link
-												to="/universities/fdp"
-												className="hover:text-red-400 transition-colors"
-											>
-												Faculty Development Programs
-											</Link>
-										</li>
-										<li>
-											<Link
-												to="/universities/leadership-career-growth"
-												className="hover:text-red-400 transition-colors"
-											>
-												Leadership & Career Growth
-											</Link>
-										</li>
-										<li>
-											<Link
-												to="/universities/mental-health-counseling-fdp"
-												className="hover:text-red-400 transition-colors"
-											>
-												Mental Health & Counseling
-											</Link>
-										</li>
-										<li>
-											<Link
-												to="/universities/domain-specific-programs"
-												className="hover:text-red-400 transition-colors"
-											>
-												Domain Specific Programs
-											</Link>
-										</li>
-										<li>
-											<Link
-												to="/universities/communication-personality-development"
-												className="hover:text-red-400 transition-colors"
-											>
-												Communication & Personality
-											</Link>
-										</li>
-									</>
-								) : window.location.pathname.startsWith("/universities/services") ? (
-									<>
-										<li>
-											<Link
-												to="/universities/services"
-												className="hover:text-red-400 transition-colors"
-											>
-												Institutional Services
-											</Link>
-										</li>
-										<li>
-											<Link
-												to="/universities/communication-personality-development"
-												className="hover:text-red-400 transition-colors"
-											>
-												Communication & Personality
-											</Link>
-										</li>
-										<li>
-											<Link
-												to="/universities/mental-health-counseling-fdp"
-												className="hover:text-red-400 transition-colors"
-											>
-												Mental Health Counseling
-											</Link>
-										</li>
-										<li>
-											<Link
-												to="/universities/domain-specific-programs"
-												className="hover:text-red-400 transition-colors"
-											>
-												Domain Specific Programs
-											</Link>
-										</li>
-										<li>
-											<Link
-												to="/universities/leadership-career-growth"
-												className="hover:text-red-400 transition-colors"
-											>
-												Leadership & Career Growth
-											</Link>
-										</li>
-										<li>
-											<Link
-												to="/universities/institutional-value-added-services"
-												className="hover:text-red-400 transition-colors"
-											>
-												Value-Added Services
-											</Link>
-										</li>
-									</>
-								) : window.location.pathname.startsWith("/universities") ? (
-									<>
-										<li>
-											<Link
-												to="/universities#services-section"
-												className="hover:text-red-400 transition-colors"
-											>
-												Student Development Programs
-											</Link>
-										</li>
-										<li>
-											<Link
-												to="/universities/services"
-												className="hover:text-red-400 transition-colors"
-											>
-												Institutional Services
-											</Link>
-										</li>
-										<li>
-											<Link
-												to="/universities/fdp"
-												className="hover:text-red-400 transition-colors"
-											>
-												Faculty Development (FDP)
-											</Link>
-										</li>
-										<li>
-											<Link
-												to="/universities/skill-passport"
-												className="hover:text-red-400 transition-colors"
-											>
-												Skill Passport
-											</Link>
-										</li>
-										<li>
-											<Link
-												to="/universities/blogs"
-												className="hover:text-red-400 transition-colors"
-											>
-												Institutional Blogs
-											</Link>
-										</li>
-									</>
-								) : (
-									<>
-										<li>
-											<Link
-												to="/corporate/recruitment"
-												className="hover:text-red-400 transition-colors"
-											>
-												Corporate Recruitment
-											</Link>
-										</li>
-										<li>
-											<Link
-												to="/corporate/training"
-												className="hover:text-red-400 transition-colors"
-											>
-												Corporate Training
-											</Link>
-										</li>
-										<li>
-											<Link
-												to="/universities"
-												className="hover:text-red-400 transition-colors"
-											>
-												Universities & Institutions
-											</Link>
-										</li>
-										<li>
-											<Link
-												to="/universities/fdp"
-												className="hover:text-red-400 transition-colors"
-											>
-												Faculty Development (FDP)
-											</Link>
-										</li>
-										<li>
-											<Link
-												to="/school"
-												className="hover:text-red-400 transition-colors"
-											>
-												Academia
-											</Link>
-										</li>
-									</>
-								)}
-						</ul>
-					</div>
+								<li>
+									<Link
+										to="/corporate/training/services/tech-upskilling"
+										className="hover:text-red-400 transition-colors"
+									>
+										Tech Upskilling & Future Skills
+									</Link>
+								</li>
+								<li>
+									<Link
+										to="/corporate/training/services/behavioral-culture"
+										className="hover:text-red-400 transition-colors"
+									>
+										Behavioral & Organizational Culture Programs
+									</Link>
+								</li>
+								<li>
+									<Link
+										to="/corporate/training"
+										onClick={(e) => {
+											e.preventDefault();
+											navigate("/corporate/training");
+											setTimeout(() => {
+												const el = document.getElementById("services");
+												if (el) {
+													el.scrollIntoView({ behavior: "smooth" });
+												}
+											}, 350);
+										}}
+										className="hover:text-red-400 transition-colors font-semibold cursor-pointer"
+									>
+										View All
+									</Link>
+								</li>
+							</>
+						) : isCorporate ? (
+							<>
+								<li>
+									<Link
+										to="/corporate/recruitment/services/Interview-as-a-service"
+										className="hover:text-red-400 transition-colors"
+									>
+										Interview-as-a-service
+									</Link>
+								</li>
+								<li>
+									<Link
+										to="/corporate/recruitment/services/diversity-hiring"
+										className="hover:text-red-400 transition-colors"
+									>
+										Diversity Hiring
+									</Link>
+								</li>
+								<li>
+									<Link
+										to="/corporate/recruitment/services/pre-onboarding-support"
+										className="hover:text-red-400 transition-colors"
+									>
+										Pre-Onboarding Support
+									</Link>
+								</li>
+								<li>
+									<Link
+										to="/corporate/recruitment#services"
+										onClick={handleViewAll}
+										className="hover:text-red-400 transition-colors font-semibold cursor-pointer"
+									>
+										View All
+									</Link>
+								</li>
+							</>
+						) 
+						: Academia ? (
+							<ul className="space-y-3">
+								<li>
+									<Link
+										to="/school/teacher"
+										className="hover:text-red-400 transition-colors"
+									>
+										School
+									</Link>
+								</li>
+								<li>
+									<Link
+										to="/school/student"
+										className="hover:text-red-400 transition-colors"
+									>
+										Student
+									</Link>
+								</li>
+							</ul>
+						) : window.location.pathname.startsWith("/universities/fdp") ? (
+							<>
+								<li>
+									<Link
+										to="/universities/fdp"
+										className="hover:text-red-400 transition-colors"
+									>
+										Faculty Development Programs
+									</Link>
+								</li>
+								<li>
+									<Link
+										to="/universities/leadership-career-growth"
+										className="hover:text-red-400 transition-colors"
+									>
+										Leadership & Career Growth
+									</Link>
+								</li>
+								<li>
+									<Link
+										to="/universities/mental-health-counseling-fdp"
+										className="hover:text-red-400 transition-colors"
+									>
+										Mental Health & Counseling
+									</Link>
+								</li>
+								<li>
+									<Link
+										to="/universities/domain-specific-programs"
+										className="hover:text-red-400 transition-colors"
+									>
+										Domain Specific Programs
+									</Link>
+								</li>
+								<li>
+									<Link
+										to="/universities/communication-personality-development"
+										className="hover:text-red-400 transition-colors"
+									>
+										Communication & Personality
+									</Link>
+								</li>
+							</>
+						) : window.location.pathname.startsWith("/universities/services") ? (
+							<>
+								<li>
+									<Link
+										to="/universities/services"
+										className="hover:text-red-400 transition-colors"
+									>
+										Institutional Services
+									</Link>
+								</li>
+								<li>
+									<Link
+										to="/universities/communication-personality-development"
+										className="hover:text-red-400 transition-colors"
+									>
+										Communication & Personality
+									</Link>
+								</li>
+								<li>
+									<Link
+										to="/universities/mental-health-counseling-fdp"
+										className="hover:text-red-400 transition-colors"
+									>
+										Mental Health Counseling
+									</Link>
+								</li>
+								<li>
+									<Link
+										to="/universities/domain-specific-programs"
+										className="hover:text-red-400 transition-colors"
+									>
+										Domain Specific Programs
+									</Link>
+								</li>
+								<li>
+									<Link
+										to="/universities/leadership-career-growth"
+										className="hover:text-red-400 transition-colors"
+									>
+										Leadership & Career Growth
+									</Link>
+								</li>
+								<li>
+									<Link
+										to="/universities/institutional-value-added-services"
+										className="hover:text-red-400 transition-colors"
+									>
+										Value-Added Services
+									</Link>
+								</li>
+							</>
+						) : window.location.pathname.startsWith("/universities") ? (
+							<>
+								<li>
+									<Link
+										to="/universities#services-section"
+										className="hover:text-red-400 transition-colors"
+									>
+										Student Development Programs
+									</Link>
+								</li>
+								<li>
+									<Link
+										to="/universities/services"
+										className="hover:text-red-400 transition-colors"
+									>
+										Institutional Services
+									</Link>
+								</li>
+								<li>
+									<Link
+										to="/universities/fdp"
+										className="hover:text-red-400 transition-colors"
+									>
+										Faculty Development (FDP)
+									</Link>
+								</li>
+								<li>
+									<Link
+										to="/universities/skill-passport"
+										className="hover:text-red-400 transition-colors"
+									>
+										Skill Passport
+									</Link>
+								</li>
+								<li>
+									<Link
+										to="/universities/blogs"
+										className="hover:text-red-400 transition-colors"
+									>
+										Institutional Blogs
+									</Link>
+								</li>
+							</>
+						) : (
+							<>
+								<li>
+									<Link
+										to="/corporate/recruitment"
+										className="hover:text-red-400 transition-colors"
+									>
+										Corporate Recruitment
+									</Link>
+								</li>
+								<li>
+									<Link
+										to="/corporate/training"
+										className="hover:text-red-400 transition-colors"
+									>
+										Corporate Training
+									</Link>
+								</li>
+								<li>
+									<Link
+										to="/universities"
+										className="hover:text-red-400 transition-colors"
+									>
+										Universities & Institutions
+									</Link>
+								</li>
+								<li>
+									<Link
+										to="/universities/fdp"
+										className="hover:text-red-400 transition-colors"
+									>
+										Faculty Development (FDP)
+									</Link>
+								</li>
+								<li>
+									<Link
+										to="/school"
+										className="hover:text-red-400 transition-colors"
+									>
+										Academia
+									</Link>
+								</li>
+							</>
+						)}
+					</ul>
+				</div>
 				)}
 
 				{/* Contact us Section */}
