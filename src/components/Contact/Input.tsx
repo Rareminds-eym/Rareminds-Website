@@ -1370,8 +1370,10 @@ import { useToast } from "@/hooks/use-toast";
 import { useEffect, useState } from "react";
 import type { Session } from "@supabase/supabase-js";
 import { sendEmailNotification, sendEmailOtp, verifyEmailOtp } from "@/services/emailBff";
+import { usePhoneOtp } from "@/hooks/usePhoneOtp";
 import { formatCompanyAddressLine } from "@/constants/companySettings";
 import { useCompanySettings } from "@/hooks/useCompanySettings";
+import { checkDuplicate } from "@/utils/duplicateCheck";
 import {
   validateFields,
   getEmailError,
@@ -1382,11 +1384,17 @@ import {
   type FieldKey,
 } from "@/utils/validators";
 
+const DUP_EMAIL = "You have already submitted your details with this email.";
+const DUP_PHONE = "You have already submitted your details with this phone number.";
+
 // Email verification switch.
 // false = the form saves without a code (use this until your team has enabled
 //         email sending and Google in Supabase).
 // true  = the visitor must verify the email (code or Google) before sending.
 const REQUIRE_EMAIL_VERIFICATION = true as boolean;
+
+// Phone verification switch (SMS code). false = the phone box needs no code.
+const REQUIRE_PHONE_VERIFICATION = true as boolean;
 
 // Stops the button from saying "Sending..." forever if the server never answers.
 const withTimeout = <T,>(promise: PromiseLike<T>, ms = 20000): Promise<T> =>
@@ -1429,6 +1437,13 @@ const ContactPage: React.FC = () => {
   const isEmailVerified =
     verifiedEmail !== "" && verifiedEmail === formData.email.trim().toLowerCase();
 
+  // ---- phone verification (SMS code) ----
+  const phoneOtp = usePhoneOtp();
+  const [phoneCode, setPhoneCode] = useState("");
+  const isPhoneVerified = phoneOtp.isVerifiedFor(formData.phone);
+  const [dupErrors, setDupErrors] = useState<{ email?: string; phone?: string }>({});
+  const [phoneChecking, setPhoneChecking] = useState(false);
+
   // ---- live hints, shown right under the box being typed in ----
   const markTouched = (key: FieldKey) =>
     setTouched((prev) => ({ ...prev, [key]: true }));
@@ -1446,16 +1461,20 @@ const ContactPage: React.FC = () => {
       hints.email = "VERIFY YOUR EMAIL WITH THE CODE";
     }
   }
-  if (showHint("phone", formData.phone) && getPhoneError(formData.phone) !== "") {
-    hints.phone = "ENTER VALID PHONE NUMBER";
+  if (showHint("phone", formData.phone)) {
+    if (getPhoneError(formData.phone) !== "") {
+      hints.phone = "ENTER VALID PHONE NUMBER";
+    } else if (REQUIRE_PHONE_VERIFICATION && !isPhoneVerified) {
+      hints.phone = "VERIFY YOUR PHONE WITH THE CODE";
+    }
   }
   if (touched.role === true && formData.role === "") {
     hints.role = "SELECT YOUR ROLE";
   }
   const shown: FieldErrors = {
     name: hints.name ?? errors.name,
-    email: hints.email ?? errors.email,
-    phone: hints.phone ?? errors.phone,
+    email: dupErrors.email ?? hints.email ?? errors.email,
+    phone: dupErrors.phone ?? hints.phone ?? errors.phone,
     role: hints.role ?? errors.role,
     message: errors.message,
   };
@@ -1483,6 +1502,14 @@ const ContactPage: React.FC = () => {
         email: prev.email || email,
         name: prev.name || meta.full_name || meta.name || "",
       }));
+            checkDuplicate("contact_form", { email })
+        .then((dup) => {
+          if (dup.email) {
+            setVerifiedEmail("");
+            setDupErrors((p) => ({ ...p, email: DUP_EMAIL }));
+          }
+        })
+        .catch((err) => console.error("Duplicate check failed:", err));
     };
     supabase.auth.getSession().then(({ data }) => applySession(data.session));
     const { data } = supabase.auth.onAuthStateChange((_event, session) =>
@@ -1508,7 +1535,13 @@ const ContactPage: React.FC = () => {
     }
     setOtpBusy(true);
     setOtpMessage("");
+    setDupErrors((p) => ({ ...p, email: undefined }));
     try {
+      const dup = await withTimeout(checkDuplicate("contact_form", { email }));
+      if (dup.email) {
+        setDupErrors((p) => ({ ...p, email: DUP_EMAIL }));
+        return; // no code is sent
+      }
       await withTimeout(sendEmailOtp(email));
       setOtpSent(true);
       setOtp("");
@@ -1556,6 +1589,26 @@ const ContactPage: React.FC = () => {
     }
   };
 
+    const sendPhoneCode = async () => {
+    markTouched("phone");
+    if (getPhoneError(formData.phone) !== "") return;
+    setPhoneChecking(true);
+    setDupErrors((p) => ({ ...p, phone: undefined }));
+    try {
+      const dup = await withTimeout(checkDuplicate("contact_form", { phone: formData.phone }));
+      if (dup.phone) {
+        setDupErrors((p) => ({ ...p, phone: DUP_PHONE }));
+        return; // no SMS is sent
+      }
+      phoneOtp.sendCode(formData.phone);
+    } catch (err) {
+      console.error("Duplicate check failed:", err);
+      setDupErrors((p) => ({ ...p, phone: "We couldn't check your phone number. Please try again." }));
+    } finally {
+      setPhoneChecking(false);
+    }
+  };
+
   const signInWithGoogle = async () => {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
@@ -1580,10 +1633,18 @@ const ContactPage: React.FC = () => {
     }));
     // remove the old red message for this field as soon as the visitor edits it
     setErrors((prev) => ({ ...prev, [name as FieldKey]: undefined }));
-    if (name === "email") {
+     if (name === "email" || name === "phone") {
+      setDupErrors((prev) => ({ ...prev, [name]: undefined }));
+    }
+     if (name === "email") {
       setOtpSent(false);
       setOtp("");
       setOtpMessage("");
+    }
+    // changing the phone number after a code was sent/verified starts verification again
+    if (name === "phone" && phoneOtp.status !== "idle" && next !== phoneOtp.phone) {
+      phoneOtp.reset();
+      setPhoneCode("");
     }
   };
 
@@ -1605,6 +1666,9 @@ const ContactPage: React.FC = () => {
     );
     if (REQUIRE_EMAIL_VERIFICATION && !found.email && !isEmailVerified) {
       found.email = "VERIFY YOUR EMAIL WITH THE CODE";
+    }
+    if (REQUIRE_PHONE_VERIFICATION && !found.phone && !isPhoneVerified) {
+      found.phone = "VERIFY YOUR PHONE WITH THE CODE";
     }
     setErrors(found);
     setTouched({ name: true, email: true, role: true, phone: true, message: true });
@@ -1648,7 +1712,15 @@ const ContactPage: React.FC = () => {
       if (dbError) {
         console.error("Supabase insert error:", dbError);
 
-        if (dbError.code === "42P01") {
+        if (dbError.code === "23505") {
+                    const dupText = `${dbError.message} ${dbError.details ?? ""}`.toLowerCase();
+          toast({
+            title: "Already submitted",
+            description: dupText.includes("phone")
+              ? `${DUP_PHONE} We'll be in touch soon.`
+              : `${DUP_EMAIL} We'll be in touch soon.`,
+          });
+        } else if (dbError.code === "42P01") {
           toast({
             title: "Setup required",
             description: "Contact form database table is not set up. Please contact support.",
@@ -1688,6 +1760,8 @@ const ContactPage: React.FC = () => {
       setErrors({});
       setTouched({});
       setVerifiedEmail("");
+      phoneOtp.reset();
+      setPhoneCode("");
       await supabase.auth.signOut();
       setOtpSent(false);
       setOtp("");
@@ -1901,20 +1975,79 @@ const ContactPage: React.FC = () => {
             <label htmlFor="contact-phone" className="block text-gray-700 font-medium mb-1">
               Phone <span className="text-red-600">*</span>
             </label>
-            <input
-              id="contact-phone"
-              type="tel"
-              inputMode="numeric"
-              autoComplete="tel-national"
-              name="phone"
-              value={formData.phone}
-              onChange={handleChange}
-              onBlur={() => markTouched("phone")}
-              placeholder="Enter your phone number"
-              aria-invalid={!!shown.phone}
-              aria-describedby={shown.phone ? "contact-phone-error" : undefined}
-              className={`w-full h-[45px] border rounded-md px-4 py-1 focus:outline-none ${shown.phone ? "border-red-500" : "border-gray-300"}`}
-            />
+            <div className="flex gap-2">
+              <input
+                id="contact-phone"
+                type="tel"
+                inputMode="numeric"
+                autoComplete="tel-national"
+                name="phone"
+                value={formData.phone}
+                onChange={handleChange}
+                onBlur={() => markTouched("phone")}
+                placeholder="Enter your phone number"
+                aria-invalid={!!shown.phone}
+                aria-describedby={shown.phone ? "contact-phone-error" : undefined}
+                className={`flex-1 min-w-0 h-[45px] border rounded-md px-4 py-1 focus:outline-none ${shown.phone ? "border-red-500" : "border-gray-300"}`}
+              />
+              {REQUIRE_PHONE_VERIFICATION && !isPhoneVerified && (
+                <button
+                  type="button"
+                  onClick={sendPhoneCode}
+                disabled={
+                  phoneChecking ||
+                  phoneOtp.status === "sending" ||
+                  phoneOtp.status === "verifying" ||
+                  phoneOtp.cooldown > 0 ||
+                  formData.phone === ""
+                }
+                  className="px-3 h-[45px] rounded-md bg-[#1D8AD1] text-white text-sm font-semibold whitespace-nowrap disabled:opacity-60"
+                >
+                  {phoneChecking || phoneOtp.status === "sending"
+                    ? "Please wait..."
+                    : phoneOtp.status === "sent" || phoneOtp.status === "verifying"
+                      ? phoneOtp.cooldown > 0
+                        ? `Resend in ${phoneOtp.cooldown}s`
+                        : "Resend code"
+                      : "Send code"}
+                </button>
+              )}
+            </div>
+            {(phoneOtp.status === "sent" || phoneOtp.status === "verifying") && !isPhoneVerified && (
+              <div className="flex gap-2 mt-2">
+                <input
+                  inputMode="numeric"
+                  autoComplete="one-time-code"
+                  maxLength={phoneOtp.maxCodeLength}
+                  value={phoneCode}
+                  onChange={(e) =>
+                    setPhoneCode(e.target.value.replace(/\D/g, "").slice(0, phoneOtp.maxCodeLength))
+                  }
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      e.preventDefault();
+                      phoneOtp.verifyCode(phoneCode);
+                    }
+                  }}
+                  placeholder="Code from SMS"
+                  className="flex-1 min-w-0 h-[45px] border border-gray-300 rounded-md px-4 py-1 focus:outline-none"
+                />
+                <button
+                  type="button"
+                  onClick={() => phoneOtp.verifyCode(phoneCode)}
+                  disabled={
+                    phoneCode.length < phoneOtp.minCodeLength || phoneOtp.status === "verifying"
+                  }
+                  className="px-3 h-[45px] rounded-md bg-[#1D8AD1] text-white text-sm font-semibold disabled:opacity-60"
+                >
+                  {phoneOtp.status === "verifying" ? "Verifying..." : "Verify"}
+                </button>
+              </div>
+            )}
+            {phoneOtp.error && !isPhoneVerified && (
+              <p className="text-xs mt-1 text-red-600">{phoneOtp.error}</p>
+            )}
+            {isPhoneVerified && <p className="text-xs mt-1 text-green-700">✓ Phone verified</p>}
             {shown.phone && (
               <p id="contact-phone-error" role="alert" className="text-red-600 text-xs mt-1 font-medium">
                 {shown.phone}

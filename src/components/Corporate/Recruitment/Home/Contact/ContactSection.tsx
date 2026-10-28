@@ -6,6 +6,7 @@ import { sendEmailNotification } from "@/services/emailBff";
 import { formatCompanyAddressLine } from "@/constants/companySettings";
 import { useCompanySettings } from "@/hooks/useCompanySettings";
 import VerticalForm, { type SubmitPayload, type SubmitResult } from "@/components/forms/VerticalForm";
+import { duplicateFieldErrors } from "@/utils/duplicateCheck";
 import { corporateForm } from "@/components/forms/verticalForms.config";
 
 const ContactSection = () => {
@@ -32,21 +33,23 @@ const ContactSection = () => {
       .insert([submission])
       .select()
       .single();
+   
+  if (dbError) {
+     const dup = duplicateFieldErrors(dbError);
+     if (dup) return { fieldErrors: dup };
+     console.error("Supabase database error:", { message: dbError.message, details: dbError.details, hint: dbError.hint });
+     throw dbError;
+   }
 
-    if (dbError) {
-      console.error("Supabase database error:", {
-        message: dbError.message,
-        details: dbError.details,
-        hint: dbError.hint,
-      });
-      throw dbError;
-    }
-
-    await sendEmailNotification("recruitment-enquiry", {
-      ...(data as Record<string, unknown>),
-      verification_proof: payload.otpProof,
-    });
-  };
+   try {
+     await sendEmailNotification("recruitment-enquiry", {
+       ...(data as Record<string, unknown>),
+       verification_proof: payload.otpProof,
+     });
+   } catch (emailError) {
+     console.error("Email notification error:", emailError);
+   }
+   };
 
   return (
     <section className="section py-24 relative overflow-hidden bg-white bg-gradient-to-br from-blue-50 via-white to-gray-50 text-gray-800 z-10">

@@ -13,11 +13,14 @@ export type FieldConfig = {
 };
 
 export type VerticalFormConfig = {
-  vertical: "corporate" | "institutions" | "government" | "academia";
+  vertical: "corporate" | "trainer" | "institutions" | "government" | "academia";
+  table: "recruitment_forms" | "training_forms" | "demo_requests" | "government_form" | "acdemia_form";
   notificationType: EmailNotificationType;
   title: string;
   submitLabel: string;
   successMessage: string;
+  /** require an SMS code for the phone box (only works on forms that have a phone field) */
+  verifyPhone?: boolean;
   fields: FieldConfig[];
 };
 
@@ -35,6 +38,7 @@ const message = (placeholder: string): FieldConfig => ({
 // /corporate/recruitment
 export const corporateForm: VerticalFormConfig = {
   vertical: "corporate",
+  table: "recruitment_forms",
   notificationType: "recruitment-enquiry",
   title: "Request Talent Now",
   submitLabel: "Request Talent",
@@ -48,9 +52,27 @@ export const corporateForm: VerticalFormConfig = {
   ],
 };
 
+// /corporate/training
+export const corporateTrainingForm: VerticalFormConfig = {
+  vertical: "trainer",
+  table: "training_forms",
+  notificationType: "training-enquiry",
+  title: "Request Training Now",
+  submitLabel: "Request Training",
+  successMessage: "Thanks! Our training team will contact you shortly.",
+  fields: [
+    name,
+    { key: "company", label: "Company", placeholder: "Company Name", autoComplete: "organization" },
+    email("name@company.com"),
+    { key: "jobRole", label: "Role to Train", placeholder: "Job Title/Position" },
+    message("Tell us about your training needs or challenges"),
+  ],
+};
+
 // /universities
 export const institutionsForm: VerticalFormConfig = {
   vertical: "institutions",
+  table: "demo_requests",
   notificationType: "institution-enquiry",
   title: "Book A Free University Demo Now.",
   submitLabel: "Submit Request",
@@ -67,10 +89,12 @@ export const institutionsForm: VerticalFormConfig = {
 // /government
 export const governmentForm: VerticalFormConfig = {
   vertical: "government",
+  table: "government_form",
   notificationType: "government-enquiry",
   title: "Contact Us",
   submitLabel: "Submit",
   successMessage: "Thanks! We've received your request and will reply soon.",
+  verifyPhone: true,
   fields: [
     { ...name, label: "Full Name", placeholder: "John Doe" },
     { ...email("john.doe@example.com"), label: "Email Address" },
@@ -83,10 +107,12 @@ export const governmentForm: VerticalFormConfig = {
 // /school/teacher
 export const academiaForm: VerticalFormConfig = {
   vertical: "academia",
+  table: "acdemia_form",
   notificationType: "teacher-service-enquiry",
   title: "Request Course Information",
   submitLabel: "Get Course Info",
   successMessage: "Thanks! We'll send you the course details shortly.",
+  verifyPhone: true,
   fields: [
     { ...name, placeholder: "Full Name" },
     phone,
