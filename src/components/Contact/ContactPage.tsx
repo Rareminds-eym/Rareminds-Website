@@ -6,20 +6,9 @@ import { formatCompanyAddressLine } from "@/constants/companySettings";
 import { useCompanySettings } from "@/hooks/useCompanySettings";
 const geoUrl = "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json";
 // 🧠 Custom RareMinds Bulb Icon
-const RareMindsBulbIcon = ({ className }: { className?: string }) => (
+const RareMindsBulbIcon = ({ className }) => (
   <img src={RareMindsLogo} alt="RareMinds Logo" className={className} />
 );
-
-type OfficeLocation = {
-  id: string;
-  name: string;
-  city: string;
-  country: string;
-  position: { top: string; left: string };
-  mapLink: string;
-  email: string;
-  phone: string;
-};
 
 const InteractiveWorldMap = () => {
   const {
@@ -33,16 +22,16 @@ const InteractiveWorldMap = () => {
       ? `${companySettings.office_address}, ${formatCompanyAddressLine(companySettings)}`
       : companySettingsError || 'Company settings are unavailable.';
   const [showPopup, setShowPopup] = useState(false);
-  const [hoveredLocation, setHoveredLocation] = useState<string | null>(null);
-  const [selectedLocation, setSelectedLocation] = useState<OfficeLocation | null>(null);
+  const [hoveredLocation, setHoveredLocation] = useState(null);
+  const [selectedLocation, setSelectedLocation] = useState(null);
   const [autoIndex, setAutoIndex] = useState(0);
 
   // 🟢 Track animation state
   const [isPaused, setIsPaused] = useState(false);
   const [showAutoPopup, setShowAutoPopup] = useState(true); // ✅ Added to control popup visibility
-  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const intervalRef = useRef(null);
 
-  const locations: OfficeLocation[] = [
+  const locations = [
     { id: 'bangalore', name: 'RareMinds Bangalore', city: bangaloreAddress, country: 'India', position: { top: '53.4%', left: '68%' }, mapLink: 'https://www.google.com/maps/search/location+of+rareminds+in+bangalore/@12.9752479,77.631305,3232m/data=!3m2!1e3!4b1?entry=ttu&g_ep=EgoyMDI1MTAyOC4wIKXMDSoASAFQAw%3D%3D', email: 'marketing@rareminds.in', phone: '+91 9562481110' },
     { id: 'goa', name: 'RareMinds Goa', city: 'Goa', country: 'India', position: { top: '53.5%', left: '67.3%' }, mapLink: 'https://www.google.com/maps/search/RareMinds+Goa+India', email: 'marketing@rareminds.in', phone: '+91 xxx xxx xxxx' },
     { id: 'delhi', name: 'RareMinds Delhi', city: 'Delhi', country: 'India', position: { top: '50%', left: '68.6%' }, mapLink: 'https://www.google.com/maps/search/RareMinds+Delhi+India', email: 'marketing@rareminds.in', phone: '+91 xxx xxx xxxx' },
@@ -70,14 +59,14 @@ const InteractiveWorldMap = () => {
       setShowAutoPopup(true); // ✅ Show popup during animation
       setTimeout(() => setShowAutoPopup(false), 1400); // hide before next cycle
     }, 1500);
-    return () => clearInterval(intervalRef.current ?? undefined);
+    return () => clearInterval(intervalRef.current);
   }, [isPaused, locations.length]);
 
   // 🟢 Pause/resume handlers
-  const handleMouseEnter = (id: string) => {
+  const handleMouseEnter = (id) => {
     setHoveredLocation(id);
     setIsPaused(true);
-    clearInterval(intervalRef.current ?? undefined);
+    clearInterval(intervalRef.current);
   };
 
   const handleMouseLeave = () => {
@@ -85,7 +74,7 @@ const InteractiveWorldMap = () => {
     setIsPaused(false);
   };
 
-  const handleMarkerClick = (location: OfficeLocation) => {
+  const handleMarkerClick = (location) => {
     setSelectedLocation(location);
     setShowPopup(true);
   };

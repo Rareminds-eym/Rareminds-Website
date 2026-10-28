@@ -1,6 +1,7 @@
 import React, { useState } from "react";
+import AcademyHeader from "@/components/Header/AcademyHeader";
 import { Button } from "@/components/ui/button";
-import { ArrowDown, FileText, FlipHorizontal } from "lucide-react";
+import { ArrowDown, Calendar, Download, FileText, FlipHorizontal } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { coursesData } from "./Data/coursesData";
 import { Link } from "react-router-dom";
@@ -36,6 +37,7 @@ const Courses = () => {
 
   return (
     <>
+      <AcademyHeader />
       <div className="min-h-screen bg-gray-50 pt-20">
         {/* Heading Section */}
         <header className="pt-10 sm:pt-12 md:pt-16 pb-6 md:pb-8 px-4 text-center">
@@ -115,6 +117,7 @@ const ProgramCard = ({
   learningPoints, 
   leadText,
   hasPdf = false,
+  pdfUrl = "#",
   isMobile = false,
   readMoreUrl = "#",
   showLoginLink = false,
