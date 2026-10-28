@@ -15,9 +15,21 @@ interface SendEmailResponse {
 }
 
 interface Env {
-  EMAIL_SERVICE?: {
+   EMAIL_SERVICE?: {
     sendEmail(request: SendEmailRequest): Promise<SendEmailResponse>;
+    sendOTP(request: {
+      mobileNumber: string;
+      countryCode?: string;
+      flowType?: 'SMS' | 'WHATSAPP' | 'RCS';
+    }): Promise<{ success: boolean; verificationId?: string; timeout?: number }>;
+    verifyOTP(request: {
+      mobileNumber: string;
+      verificationId: string;
+      code: string;
+      countryCode?: string;
+    }): Promise<{ success: boolean; verified: boolean }>;
   };
+
   EMAIL_RATE_LIMITER?: {
     limit(options: { key: string }): Promise<{ success: boolean }>;
   };
@@ -43,6 +55,7 @@ type NotificationType =
   | 'teacher-service-enquiry'
   | 'academy-enquiry'
   | 'government-enquiry'
+  | 'institution-enquiry'
   | 'download-notification';
 
 const allowedOrigins = new Set([
@@ -51,6 +64,9 @@ const allowedOrigins = new Set([
   'http://localhost:5173',
   'http://localhost:8780',
   'http://localhost:8789',
+  'http://127.0.0.1:5173',
+  'http://127.0.0.1:8780',
+  'http://127.0.0.1:8789',
 ]);
 
 const corsHeaders = (request: Request) => {
@@ -105,7 +121,7 @@ const escapeHtml = (value: string) => value.replace(/[&<>'"]/g, (character) => (
 
 const getString = (record: Record<string, unknown>, key: string, maxLength: number, required = false) => {
   const value = record[key];
-  if (value == null && !required) return '';
+  if ((value == null || (typeof value === 'string' && !value.trim())) && !required) return '';
   if (typeof value !== 'string' || !value.trim() || value.trim().length > maxLength) {
     throw new HttpError(`${key} is invalid`, 400);
   }
@@ -212,11 +228,23 @@ const buildNotification = (type: NotificationType, record: Record<string, unknow
     };
   }
 
+    if (type === 'institution-enquiry') {
+    const name = getString(record, 'name', 100, true);
+    const university = getString(record, 'university', 200, true);
+    const course = getString(record, 'course', 200, true);
+    const message = getString(record, 'message', 3000);
+    return {
+      ...common,
+      subject: `New University demo request: ${cleanSubjectValue(university)}`,
+      html: `<h3>New University Demo Request</h3>${row('Name', name)}${row('Email', email)}${row('University', university)}${row('Course', course)}${row('Message', message, true)}${row('Submitted at', submittedAt)}`,
+    };
+  }
+  
   if (type === 'academy-enquiry') {
     const name = getString(record, 'name', 100, true);
     const phone = getString(record, 'phone', 50, true);
     const course = getString(record, 'course_intrest', 200, true);
-    const message = getString(record, 'message', 3000, true);
+    const message = getString(record, 'message', 3000);
     return {
       ...common,
       subject: `New Academy course enquiry: ${cleanSubjectValue(course)}`,
@@ -228,7 +256,7 @@ const buildNotification = (type: NotificationType, record: Record<string, unknow
     const name = getString(record, 'name', 100, true);
     const phone = getString(record, 'phone', 50, true);
     const address = getString(record, 'address', 500);
-    const message = getString(record, 'message', 3000, true);
+    const message = getString(record, 'message', 3000);
     return {
       ...common,
       subject: 'New Government Services Enquiry',
@@ -363,7 +391,7 @@ export async function onRequestPost(context: PagesContext) {
       const type = body.type;
       if (typeof type !== 'string' || ![
         'general-contact', 'corporate-contact', 'training-enquiry', 'recruitment-enquiry',
-        'event-enquiry', 'teacher-service-enquiry', 'academy-enquiry', 'government-enquiry', 'download-notification',
+        'event-enquiry', 'teacher-service-enquiry', 'academy-enquiry', 'government-enquiry', 'institution-enquiry', 'download-notification',
       ].includes(type)) {
         throw new HttpError('Unsupported notification type', 400);
       }
@@ -372,6 +400,34 @@ export async function onRequestPost(context: PagesContext) {
       return json(request, { success: true, message: 'Notification sent' });
     }
 
+        if (action === 'send-phone-otp' || action === 'verify-phone-otp') {
+      const phone = typeof body.phone === 'string' ? body.phone.replace(/\D/g, '') : '';
+      if (!/^[6-9]\d{9}$/.test(phone)) throw new HttpError('A valid 10-digit mobile number is required', 400);
+      const phoneKey = await hashRateLimitKey(phone);
+      await enforceRateLimit(env.EMAIL_OTP_RATE_LIMITER, `${action}:${phoneKey}`);
+      if (!env.EMAIL_SERVICE) throw new HttpError('Phone OTP service is not configured', 503);
+
+      if (action === 'send-phone-otp') {
+        const sent = await env.EMAIL_SERVICE
+          .sendOTP({ mobileNumber: phone, countryCode: '91', flowType: 'SMS' })
+          .catch(() => null);
+        if (!sent?.success || typeof sent.verificationId !== 'string') {
+          throw new HttpError('Unable to send code right now', 502);
+        }
+        return json(request, { success: true, message: 'OTP sent successfully', verificationId: sent.verificationId });
+      }
+
+      const verificationId = typeof body.verificationId === 'string' ? body.verificationId.trim() : '';
+      const code = typeof body.code === 'string' ? body.code.trim() : '';
+      if (!/^[a-zA-Z0-9_-]{1,100}$/.test(verificationId)) throw new HttpError('verificationId is invalid', 400);
+      if (!/^\d{4,6}$/.test(code)) throw new HttpError('Please enter the code from your SMS', 400);
+      const checked = await env.EMAIL_SERVICE
+        .verifyOTP({ mobileNumber: phone, verificationId, code, countryCode: '91' })
+        .catch(() => null);
+      if (!checked?.verified) return json(request, { success: false, error: 'Invalid or expired OTP' }, 400);
+      return json(request, { success: true, message: 'Phone verified successfully' });
+    }
+    
     const emailValue = typeof body.email === 'string' ? body.email.trim().toLowerCase() : '';
     if (!emailValue || emailValue.length > 254 || !isEmail(emailValue)) throw new HttpError('A valid email is required', 400);
 

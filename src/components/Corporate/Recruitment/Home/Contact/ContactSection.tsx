@@ -1,111 +1,55 @@
-import { useState, useRef } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Input } from "./input";
-import { Textarea } from "./textarea";
-import { Phone, Mail, MapPin, Send, CheckCircle2 } from "lucide-react";
+import { motion } from "framer-motion";
+import { Phone, Mail, MapPin, Send } from "lucide-react";
 import { Icon } from "@iconify/react";
-import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/lib/supabaseClient";
 import { sendEmailNotification } from "@/services/emailBff";
 import { formatCompanyAddressLine } from "@/constants/companySettings";
 import { useCompanySettings } from "@/hooks/useCompanySettings";
+import VerticalForm, { type SubmitPayload, type SubmitResult } from "@/components/forms/VerticalForm";
+import { duplicateFieldErrors } from "@/utils/duplicateCheck";
+import { corporateForm } from "@/components/forms/verticalForms.config";
 
 const ContactSection = () => {
-  const { toast } = useToast();
   const {
     settings: companySettings,
     isLoading: companySettingsLoading,
     errorMessage: companySettingsError,
   } = useCompanySettings();
-  const [formData, setFormData] = useState({
-    name: "",
-    company: "",
-    email: "",
-    role: "",
-    message: "",
-  });
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
-  const formRef = useRef<HTMLFormElement>(null);
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
+  // Saves to the database first, then sends the email (same order as before)
+  const submitRecruitment = async (payload: SubmitPayload): Promise<SubmitResult> => {
+    const v = payload.values;
+    const submission = {
+      name: v.name,
+      company: v.company,
+      email: v.email,
+      role: v.jobRole,
+      message: v.optionalMessage ?? "",
+      submitted_at: new Date().toISOString(),
+    };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
+    const { error: dbError, data } = await supabase
+      .from("recruitment_forms")
+      .insert([submission])
+      .select()
+      .single();
+   
+  if (dbError) {
+     const dup = duplicateFieldErrors(dbError);
+     if (dup) return { fieldErrors: dup };
+     console.error("Supabase database error:", { message: dbError.message, details: dbError.details, hint: dbError.hint });
+     throw dbError;
+   }
 
-    try {
-      // First, insert into Supabase
-      const submission = {
-        name: formData.name,
-        company: formData.company,
-        email: formData.email,
-        role: formData.role,
-        message: formData.message,
-        submitted_at: new Date().toISOString(),
-      };
-
-      const { error: dbError, data } = await supabase
-        .from("recruitment_forms")
-        .insert([submission])
-        .select()
-        .single();
-
-      if (dbError) {
-        console.error("Supabase database error:", {
-          message: dbError.message,
-          details: dbError.details,
-          hint: dbError.hint,
-        });
-        throw dbError;
-      }
-
-      await sendEmailNotification("recruitment-enquiry", data as Record<string, unknown>);
-
-      toast({
-        title: "Message Sent!",
-        description:
-          "Thank you for reaching out. Our team will contact you shortly.",
-      });
-
-      setSubmitted(true);
-      setFormData({
-        name: "",
-        company: "",
-        email: "",
-        role: "",
-        message: "",
-      });
-
-      if (formRef.current) formRef.current.reset();
-
-      setTimeout(() => {
-        setSubmitted(false);
-      }, 3000);
-    } catch (error) {
-      const supabaseError = error as any;
-      console.error("Error submitting form:", {
-        message: supabaseError.message,
-        details: supabaseError.details,
-        hint: supabaseError.hint,
-        error: supabaseError,
-      });
-      toast({
-        title: "Error",
-        description: `There was an error submitting your message.\n${
-          supabaseError.message || ""
-        }\n${supabaseError.details || ""}\n${supabaseError.hint || ""}`,
-        variant: "destructive",
-      });
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+   try {
+     await sendEmailNotification("recruitment-enquiry", {
+       ...(data as Record<string, unknown>),
+       verification_proof: payload.otpProof,
+     });
+   } catch (emailError) {
+     console.error("Email notification error:", emailError);
+   }
+   };
 
   return (
     <section className="section py-24 relative overflow-hidden bg-white bg-gradient-to-br from-blue-50 via-white to-gray-50 text-gray-800 z-10">
@@ -145,177 +89,14 @@ const ContactSection = () => {
                   Request Talent Now
                 </h3>
 
-                <form
-                  ref={formRef}
-                  onSubmit={handleSubmit}
-                  className="space-y-6"
-                >
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                      <label
-                        htmlFor="name"
-                        className="block mb-2 font-medium text-gray-700"
-                      >
-                        Your Name
-                      </label>
-                      <Input
-                        id="name"
-                        name="name"
-                        value={formData.name}
-                        onChange={handleChange}
-                        placeholder="Full Name"
-                        className="w-full bg-white/50 border-gray-200 text-gray-800 placeholder:text-gray-400"
-                        required
-                      />
-                    </div>
-                    <div>
-                      <label
-                        htmlFor="company"
-                        className="block mb-2 font-medium text-gray-700"
-                      >
-                        Company
-                      </label>
-                      <Input
-                        id="company"
-                        name="company"
-                        value={formData.company}
-                        onChange={handleChange}
-                        placeholder="Company Name"
-                        className="w-full bg-white/50 border-gray-200 text-gray-800 placeholder:text-gray-400"
-                        required
-                      />
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                      <label
-                        htmlFor="email"
-                        className="block mb-2 font-medium text-gray-700"
-                      >
-                        Email Address
-                      </label>
-                      <Input
-                        id="email"
-                        name="email"
-                        type="email"
-                        value={formData.email}
-                        onChange={handleChange}
-                        placeholder="name@company.com"
-                        className="w-full bg-white/50 border-gray-200 text-gray-800 placeholder:text-gray-400"
-                        required
-                      />
-                    </div>
-                    <div>
-                      <label
-                        htmlFor="role"
-                        className="block mb-2 font-medium text-gray-700"
-                      >
-                        Role to Hire
-                      </label>
-                      <Input
-                        id="role"
-                        name="role"
-                        value={formData.role}
-                        onChange={handleChange}
-                        placeholder="Job Title/Position"
-                        className="w-full bg-white/50 border-gray-200 text-gray-800 placeholder:text-gray-400"
-                        required
-                      />
-                    </div>
-                  </div>
-
-                  <div>
-                    <label
-                      htmlFor="message"
-                      className="block mb-2 font-medium text-gray-700"
-                    >
-                      Message
-                    </label>
-                    <Textarea
-                      id="message"
-                      name="message"
-                      value={formData.message}
-                      onChange={handleChange}
-                      placeholder="Tell us about your hiring needs or challenges"
-                      className="w-full min-h-[120px] bg-white/50 border-gray-200 text-gray-800 placeholder:text-gray-400"
-                      required
-                    />
-                  </div>
-
-                  <div className="pt-4">
-                    <AnimatePresence mode="wait">
-                      {!submitted ? (
-                        <motion.div
-                          key="button"
-                          initial={{ opacity: 1 }}
-                          exit={{ opacity: 0 }}
-                          className="flex flex-col sm:flex-row gap-4 flex-wrap"
-                        >
-                          <button
-                            type="submit"
-                            className="corporate-btn-1"
-                            disabled={isSubmitting}
-                          >
-                            {isSubmitting ? (
-                              <span className="flex items-center">
-                                <svg
-                                  className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  fill="none"
-                                  viewBox="0 0 24 24"
-                                >
-                                  <circle
-                                    className="opacity-25"
-                                    cx="12"
-                                    cy="12"
-                                    r="10"
-                                    stroke="currentColor"
-                                    strokeWidth="4"
-                                  ></circle>
-                                  <path
-                                    className="opacity-75"
-                                    fill="currentColor"
-                                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                                  ></path>
-                                </svg>
-                                Sending...
-                              </span>
-                            ) : (
-                              <span className="flex items-center">
-                                Request Talent{" "}
-                                <Icon
-                                  icon="cil:arrow-right"
-                                  height={20}
-                                  width={20}
-                                  className="ml-2"
-                                />
-                              </span>
-                            )}
-                          </button>
-                        </motion.div>
-                      ) : (
-                        <motion.div
-                          key="success"
-                          initial={{ opacity: 0, y: 10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          className="bg-green-100 border border-green-300 rounded-xl p-4 text-center"
-                        >
-                          <CheckCircle2
-                            size={32}
-                            className="mx-auto mb-2 text-green-600"
-                          />
-                          <p className="font-medium text-green-800">
-                            Message sent successfully!
-                          </p>
-                          <p className="text-sm text-green-700 mt-1">
-                            Our team will contact you shortly.
-                          </p>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                  </div>
-                </form>
+                <VerticalForm
+                  config={corporateForm}
+                  showTitle={false}
+                  onSubmit={submitRecruitment}
+                  inputClassName="w-full rounded-md border bg-white/50 px-3 py-2 text-gray-800 placeholder:text-gray-400 outline-none focus:ring-2 disabled:opacity-60"
+                  labelClassName="mb-2 block font-medium text-gray-700"
+                  buttonClassName="corporate-btn-1 mt-6 disabled:opacity-50 disabled:cursor-not-allowed"
+                />
               </div>
             </div>
           </motion.div>

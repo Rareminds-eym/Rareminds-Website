@@ -1,8 +1,10 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { Icon } from "@iconify/react";
 import { motion } from "framer-motion";
 import { Facebook, Instagram, Linkedin, Youtube } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
+import { getEmailError } from "../../utils/validators";
+import { checkDuplicate } from "@/utils/duplicateCheck";
 
 import { supabase } from "@/lib/supabaseClient";
 const socialIcons = [
@@ -48,37 +50,61 @@ const FooterBar: React.FC<FooterBarProps> = ({ hideServices }) => {
 
 	const navigate = useNavigate();
 
+	const [isSubmitting, setIsSubmitting] = useState(false);
+	const [honeypot, setHoneypot] = useState("");
+
 	const submitSubscription = async () => {
-		if (subscriberEmail) {
-			if (!/(.+)@(.+){2,}\.(.+){2,}/.test(subscriberEmail)) {
-				setSuccessMessage("Enter a valid email address");
-			} else {
+		if (isSubmitting) return; // blocks double clicks
+		if (honeypot) return; // a bot filled the hidden field, so stop silently
+
+		const email = (subscriberEmail ?? "").trim().toLowerCase();
+
+		if (!email) {
+			setSuccessMessage("Please enter an email address");
+			return;
+		}
+
+		const emailError = getEmailError(email);
+		if (emailError) {
+			setSuccessMessage(emailError);
+			return;
+		}
+
+		setIsSubmitting(true);
 				try {
-					// Insert email and submitted_at into Supabase table 'footer_email'
+			      const dupCheck = await checkDuplicate("footer_email", { email });
+            if (dupCheck.email) {
+             setSuccessMessage("You have already subscribed with this email.");
+             setIsSubmitting(false);
+             return;
+            }
 					const { error } = await supabase
 						.from("footer_email")
-						.insert([
-							{ email: subscriberEmail, submitted_at: new Date().toISOString() }
-						]);
+				.insert([{ email, submitted_at: new Date().toISOString() }]);
+
 					if (error) {
+				console.error("Subscribe error:", error.code, error.message, error.details);
+			    if (error.code === "23505") {
+                   setSuccessMessage("You have already subscribed with this email.");
+                   setIsSubmitting(false);
+                   return;
+                }
+				if (error.code === "23505") {
+					setSuccessMessage("This email is already subscribed");
+				} else {
 						setSuccessMessage("Error subscribing. Please try again.");
+				}
 					} else {
 						setSuccessMessage("Thank you for subscribing");
+				setSubscriberEmail(null); // clears the box after success
 					}
 				} catch (err) {
-					const message =
-						err instanceof Error
-							? err.message
-							: typeof err === "string"
-								? err
-								: "Error subscribing. Please try again.";
-					setSuccessMessage(message);
-				}
-				setTimeout(() => setSuccessMessage(null), 2000);
-			}
-		} else {
-			setSuccessMessage("Please enter an email address");
+			console.error("Subscribe exception:", err);
+			setSuccessMessage("Error subscribing. Please try again.");
+		} finally {
+			setIsSubmitting(false);
 		}
+		setTimeout(() => setSuccessMessage(null), 4000);
 	};
 	// Handler for 'View All' click in corporate services
 	const handleViewAll = (
@@ -518,13 +544,13 @@ const FooterBar: React.FC<FooterBarProps> = ({ hideServices }) => {
 						</li>
 					</ul>
 				</div>
-
 				{/* Newsletter Signup Section */}
 				<div>
 					<h2 className="font-bold mb-4 uppercase tracking-wider text-lg">
 						Sign up to our newsletter
 					</h2>
 					<form
+						noValidate
 						onSubmit={(e) => {
 							e.preventDefault();
 							submitSubscription();
@@ -533,23 +559,44 @@ const FooterBar: React.FC<FooterBarProps> = ({ hideServices }) => {
 					>
 						<input
 							id="newsletter-email"
+							name="email"
 							type="email"
+							required
+							maxLength={254}
+							autoComplete="email"
+							inputMode="email"
 							placeholder="Email address"
 							aria-label="Email address for newsletter"
+							aria-required="true"
+							value={subscriberEmail ?? ""}
 							className="p-3 w-full bg-rareminds-dark/50 border border-red-400/30 text-black rounded focus:outline-none focus:ring-2 focus:ring-red-500"
 							onChange={(e) => {
 								setSuccessMessage(null);
 								setSubscriberEmail(e.target.value);
 							}}
-							// ref={subscribeInput}
 						/>
+
+						{/* Hidden trap field for bots. Real users never see or fill it. */}
+						<input
+							type="text"
+							name="website"
+							tabIndex={-1}
+							autoComplete="off"
+							aria-hidden="true"
+							value={honeypot}
+							onChange={(e) => setHoneypot(e.target.value)}
+							style={{ position: "absolute", left: "-9999px", opacity: 0 }}
+						/>
+
 						<button
 							type="submit"
-							className="p-3 w-full bg-red-600 text-white font-bold rounded hover:bg-red-700 transition-colors"
+							disabled={isSubmitting}
+							className="p-3 w-full bg-red-600 text-white font-bold rounded hover:bg-red-700 transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
 						>
-							SUBSCRIBE
+							{isSubmitting ? "SUBSCRIBING..." : "SUBSCRIBE"}
 						</button>
 					</form>
+
 					{successMessage && (
 						<p className="text-white text-center mt-4 bg-red-500/20 p-2 rounded">
 							{successMessage}
