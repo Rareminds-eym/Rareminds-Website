@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { Facebook, Instagram, Linkedin, Youtube } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { getEmailError } from "../../utils/validators";
+import { checkDuplicate } from "@/utils/duplicateCheck";
 
 import { supabase } from "@/lib/supabaseClient";
 const socialIcons = [
@@ -71,16 +72,27 @@ const FooterBar: React.FC<FooterBarProps> = ({ hideServices }) => {
 
 		setIsSubmitting(true);
 		try {
+			      const dupCheck = await checkDuplicate("footer_email", { email });
+            if (dupCheck.email) {
+             setSuccessMessage("You have already subscribed with this email.");
+             setIsSubmitting(false);
+             return;
+            }
 			const { error } = await supabase
 				.from("footer_email")
 				.insert([{ email, submitted_at: new Date().toISOString() }]);
 
 			if (error) {
 				console.error("Subscribe error:", error.code, error.message, error.details);
+			    if (error.code === "23505") {
+                   setSuccessMessage("You have already subscribed with this email.");
+                   setIsSubmitting(false);
+                   return;
+                }
 				const details = error.details ?? "";
 				const message = error.message ?? "";
 				const isEmailDuplicate =
-					/\(email\)=/i.test(details) || /email_(key|unique|idx)/i.test(message);
+					/\(email\)=/i.test(details) || /email_(key|unique|idx)/i.test(message) || message === "already_submitted";
 				if (error.code === "23505" && isEmailDuplicate) {
 					setSuccessMessage("This email is already subscribed");
 				} else {

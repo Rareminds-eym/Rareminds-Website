@@ -2,15 +2,19 @@
 // One component for Corporate, Institutions, Government and Academia.
 // Styling uses plain Tailwind-style classes: swap the class strings (or pass `className`)
 // so it matches each page's existing look.
+import { checkDuplicate, duplicateFieldErrors } from "@/utils/duplicateCheck";
 import { useMemo, useRef, useState, type ChangeEvent, type FormEvent, type ReactNode } from "react";
 import { sendEmailNotification, type EmailNotificationType } from "@/services/emailBff";
+import { supabase } from "@/lib/supabaseClient";
 import { MESSAGE_MAX } from "@/utils/validators";
 import { normalizePhone, validateFields, type FieldErrors, type FieldKey } from "@/utils/verticalValidators";
 import { useEmailOtp } from "@/hooks/useEmailOtp";
+import { usePhoneOtp } from "@/hooks/usePhoneOtp";
 import type { FieldConfig, VerticalFormConfig } from "./verticalForms.config";
 
 export type SubmitPayload = {
   vertical: string;
+  table: string;
   notificationType: EmailNotificationType;
   values: Record<string, string>;
   otpProof: string;
@@ -18,16 +22,52 @@ export type SubmitPayload = {
 };
 export type SubmitResult = { fieldErrors?: FieldErrors } | void;
 
-/** Default submit: sends the enquiry through your existing email service */
-export async function submitViaEmailService(payload: SubmitPayload): Promise<SubmitResult> {
-  const { optionalMessage, ...rest } = payload.values;
-  await sendEmailNotification(payload.notificationType, {
-    ...rest,
-    message: optionalMessage ?? "",
-    vertical: payload.vertical,
-    verification_proof: payload.otpProof,
-  });
-}
+   const buildRow = (table: string, v: Record<string, string>, message: string) => {
+     switch (table) {
+       case "recruitment_forms":
+       case "training_forms":
+         return { table, data: { name: v.name, company: v.company, email: v.email, role: v.jobRole, message } };
+       case "demo_requests":
+         return { table, data: { name: v.name, university: v.university, email: v.email, course: v.course, message } };
+       case "government_form":
+         return { table, data: { name: v.name, email: v.email, phone: v.phone, address: v.address, message } };
+       default:
+         return { table: "acdemia_form", data: { name: v.name, email: v.email, phone: v.phone, course_intrest: v.course, message } };
+     }
+   };
+
+   /** Was this email/phone already submitted in this form's table? */
+      async function alreadySubmitted(table: string, column: "email" | "phone", value: string) {
+     const result = await checkDuplicate(table, column === "email" ? { email: value } : { phone: value });
+     return column === "email" ? result.email : result.phone;
+   }
+
+/** Default submit: saves the enquiry, then sends the notification email */
+   export async function submitViaEmailService(payload: SubmitPayload): Promise<SubmitResult> {
+     const { optionalMessage, ...rest } = payload.values;
+     const message = optionalMessage ?? "";
+
+     const row = buildRow(payload.table, rest, message);
+     const { error } = await supabase.from(row.table).insert([row.data]);
+     if (error) {
+       const dup = duplicateFieldErrors(error);
+       if (dup) return { fieldErrors: dup };
+       console.error("Insert failed:", error);
+       throw new Error("We couldn't save your request");
+     }
+
+     // saved already, so an email problem must not show the person an error
+     try {
+       await sendEmailNotification(payload.notificationType, {
+         ...rest,
+         message,
+         vertical: payload.vertical,
+         verification_proof: payload.otpProof,
+       });
+     } catch (emailError) {
+       console.error("Email notification failed:", emailError);
+     }
+   }
 
 const inputBase =
   "w-full rounded-lg border px-4 py-3 text-base outline-none focus:ring-2 disabled:opacity-60";
@@ -78,6 +118,9 @@ export default function VerticalForm({
   const startedAt = useRef(Date.now());
   const formRef = useRef<HTMLFormElement>(null);
   const otp = useEmailOtp();
+  const phoneOtp = usePhoneOtp();
+  const [phoneCode, setPhoneCode] = useState("");
+  const [checking, setChecking] = useState(false);
   const base = inputClassName ?? inputBase;
 
   const errors = useMemo(
@@ -85,6 +128,8 @@ export default function VerticalForm({
     [values, optional],
   );
   const verified = otp.isVerifiedFor(values.email ?? "");
+  const needsPhone = !!config.verifyPhone && keys.includes("phone");
+  const phoneVerified = !needsPhone || phoneOtp.isVerifiedFor(values.phone ?? "");
   const busy = status === "submitting";
 
   const focusField = (key: string) =>
@@ -100,6 +145,13 @@ export default function VerticalForm({
         (submitted && !verified ? "Verify your email with the code we send you" : "")
       );
     }
+    if (key === "phone" && needsPhone) {
+      return (
+        serverErrors.phone ||
+        errors.phone ||
+        (submitted && !phoneVerified ? "Verify your phone number with the code we send you" : "")
+      );
+    }
     return serverErrors[key] || errors[key] || "";
   };
 
@@ -112,6 +164,11 @@ export default function VerticalForm({
       otp.reset();
       setCode("");
     }
+    // changing the phone number after a code was sent/verified starts verification again
+    if (key === "phone" && phoneOtp.status !== "idle" && next !== phoneOtp.phone) {
+      phoneOtp.reset();
+      setPhoneCode("");
+    }
   };
 
   const handleBlur = (key: FieldKey) => {
@@ -119,26 +176,71 @@ export default function VerticalForm({
     setValues((v) => ({ ...v, [key]: (v[key] ?? "").trim().replace(/[ \t]+/g, " ") }));
   };
 
-  const handleSendCode = () => {
+   const handleSendCode = async () => {
     setTouched((t) => ({ ...t, email: true }));
     if (errors.email) {
       focusField("email");
       return;
     }
-    otp.sendCode(values.email);
+    setServerErrors(({ email: _e, ...rest }) => rest);
+    setChecking(true);
+    try {
+      // 1) Check FIRST: has this email already submitted?
+         if (await alreadySubmitted(config.table, "email", values.email)) {
+        setServerErrors((s) => ({
+          ...s,
+          email: "You have already submitted your details with this email.",
+        }));
+        return; // stop here, no code is sent
+      }
+      // 2) Only if it is new, send the code
+      otp.sendCode(values.email);
+    } catch (err) {
+      console.error("Email duplicate check failed:", err);
+      setServerErrors((s) => ({ ...s, email: "We couldn't check your email. Please try again." }));
+    } finally {
+      setChecking(false);
+    }
+  };
+
+  const handleSendPhoneCode = async () => {
+    setTouched((t) => ({ ...t, phone: true }));
+    if (errors.phone) {
+      focusField("phone");
+      return;
+    }
+    setServerErrors(({ phone: _p, ...rest }) => rest);
+    setChecking(true);
+    try {
+         if (await alreadySubmitted(config.table, "phone", values.phone)) {
+        setServerErrors((s) => ({
+          ...s,
+          phone: "You have already submitted your details with this phone number.",
+        }));
+        return;
+      }
+      phoneOtp.sendCode(values.phone);
+    } catch (err) {
+      console.error("Phone duplicate check failed:", err);
+      setServerErrors((s) => ({ ...s, phone: "We couldn't check your phone number. Please try again." }));
+    } finally {
+      setChecking(false);
+    }
   };
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     if (busy) return;
-    if (otp.status === "verifying") {
-      setFormError("Email verification in progress. Please wait.");
+    if (otp.status === "verifying" || phoneOtp.status === "verifying") {
+      setFormError("Verification in progress. Please wait.");
       return;
     }
     setSubmitted(true);
     setFormError("");
 
-    const firstBad = keys.find((k) => errors[k]) ?? (!verified ? "email" : undefined);
+    const firstBad =
+      keys.find((k) => errors[k]) ??
+      (!verified ? "email" : !phoneVerified ? "phone" : undefined);
     if (firstBad) {
       focusField(firstBad);
       return;
@@ -156,6 +258,7 @@ export default function VerticalForm({
       cleaned.email = cleaned.email.toLowerCase();
       const result = await onSubmit({
         vertical: config.vertical,
+        table: config.table,
         notificationType: config.notificationType,
         values: cleaned,
         otpProof: otp.proof ?? "",
@@ -231,10 +334,10 @@ export default function VerticalForm({
           <button
             type="button"
             onClick={handleSendCode}
-            disabled={otp.status === "sending" || busy}
+            disabled={otp.status === "sending" || busy || checking}
             className="rounded-lg border border-gray-400 px-4 py-2 text-sm font-medium disabled:opacity-60"
           >
-            {otp.status === "sending" ? "Sending code…" : "Send verification code"}
+            {checking ? "Checking…" : otp.status === "sending" ? "Sending code…" : "Send verification code"}
           </button>
         ) : (
           <div>
@@ -283,6 +386,70 @@ export default function VerticalForm({
     );
   };
 
+  const renderPhoneOtp = () => {
+    if (phoneVerified) return <p className="mt-2 text-sm text-green-700">✓ Phone verified</p>;
+    const codeId = `${config.vertical}-phone-otp`;
+    const waitingForCode = phoneOtp.status === "sent" || phoneOtp.status === "verifying";
+    return (
+      <div className="mt-2">
+        {!waitingForCode ? (
+          <button
+            type="button"
+            onClick={handleSendPhoneCode}
+            disabled={phoneOtp.status === "sending" || busy || checking}
+            className="rounded-lg border border-gray-400 px-4 py-2 text-sm font-medium disabled:opacity-60"
+          >
+            {checking ? "Checking…" : phoneOtp.status === "sending" ? "Sending code…" : "Send code by SMS"}
+          </button>
+        ) : (
+          <div>
+            <label htmlFor={codeId} className="mb-1 block text-sm">
+              Enter the code sent to +91 {phoneOtp.phone}
+            </label>
+            <div className="flex gap-2">
+              <input
+                id={codeId}
+                name="phoneOtp"
+                inputMode="numeric"
+                autoComplete="one-time-code"
+                value={phoneCode}
+                onChange={(e) =>
+                  setPhoneCode(e.target.value.replace(/\D/g, "").slice(0, phoneOtp.maxCodeLength))
+                }
+                aria-invalid={!!phoneOtp.error}
+                aria-describedby={phoneOtp.error ? `${codeId}-error` : undefined}
+                className={`${base} max-w-[12rem] tracking-widest ${phoneOtp.error ? "border-red-500 focus:ring-red-300" : "border-gray-300 focus:ring-blue-300"}`}
+              />
+              <button
+                type="button"
+                onClick={() => phoneOtp.verifyCode(phoneCode)}
+                disabled={phoneCode.length < phoneOtp.minCodeLength || phoneOtp.status === "verifying"}
+                className="rounded-lg bg-gray-900 px-4 py-2 text-sm font-medium text-white disabled:opacity-50"
+              >
+                {phoneOtp.status === "verifying" ? "Verifying…" : "Verify"}
+              </button>
+            </div>
+          </div>
+        )}
+        {phoneOtp.error && (
+          <p id={`${codeId}-error`} role="alert" className="mt-1 text-sm text-red-600">
+            {phoneOtp.error}
+          </p>
+        )}
+        {waitingForCode && (
+          <button
+            type="button"
+            onClick={() => phoneOtp.sendCode(values.phone)}
+            disabled={phoneOtp.cooldown > 0}
+            className="mt-1 text-sm underline disabled:no-underline disabled:opacity-60"
+          >
+            {phoneOtp.cooldown > 0 ? `Resend code in ${phoneOtp.cooldown}s` : "Resend code"}
+          </button>
+        )}
+      </div>
+    );
+  };
+
   return (
     <form ref={formRef} onSubmit={handleSubmit} noValidate className={className}>
       {showTitle && <h2 className="mb-6 text-2xl font-bold">{config.title}</h2>}
@@ -311,6 +478,7 @@ export default function VerticalForm({
                 )}
               </div>
               {f.key === "email" && renderOtp()}
+              {f.key === "phone" && needsPhone && renderPhoneOtp()}
             </div>
           );
         })}

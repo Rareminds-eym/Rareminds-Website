@@ -12,6 +12,7 @@ import { supabase } from "@/lib/supabaseClient";
 import { formatCompanyAddressLine } from "@/constants/companySettings";
 import { useCompanySettings } from "@/hooks/useCompanySettings";
 import VerticalForm, { type SubmitPayload, type SubmitResult } from "@/components/forms/VerticalForm";
+import { duplicateFieldErrors } from "@/utils/duplicateCheck";
 import { institutionsForm } from "@/components/forms/verticalForms.config";
 
 const ContactSection = () => {
@@ -33,7 +34,11 @@ const ContactSection = () => {
     };
 
     const { error } = await supabase.from("demo_requests").insert([request]);
-    if (error) throw error;
+      if (error) {
+      const dup = duplicateFieldErrors(error);
+      if (dup) return { fieldErrors: dup };
+      throw error;
+    }
 
     // The request is already saved here. If the email step fails we do not throw,
     // so the person is not asked to submit again (same idea as the old "saved" state).

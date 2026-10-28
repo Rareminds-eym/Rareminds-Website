@@ -6,7 +6,8 @@ import { useLocation } from "react-router-dom";
 import { sendEmailNotification } from "@/services/emailBff";
 import { formatCompanyAddressLine } from "@/constants/companySettings";
 import { useCompanySettings } from "@/hooks/useCompanySettings";
-import VerticalForm, { type SubmitPayload, type SubmitResult } from "@/components/forms/VerticalForm";
+import VerticalForm, {  type SubmitPayload, type SubmitResult } from "@/components/forms/VerticalForm";
+import { duplicateFieldErrors } from "@/utils/duplicateCheck";
 import { academiaForm } from "@/components/forms/verticalForms.config";
 
 const AcademyContactSection = () => {
@@ -33,7 +34,9 @@ const AcademyContactSection = () => {
     const { error } = await supabase
       .from("acdemia_form")
       .insert([submission]);
-    if (error) {
+      if (error) {
+      const dup = duplicateFieldErrors(error);
+      if (dup) return { fieldErrors: dup };
       console.error('Supabase error:', error.message, error.details, error.hint);
       throw error;
     }
