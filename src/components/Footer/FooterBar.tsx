@@ -89,11 +89,7 @@ const FooterBar: React.FC<FooterBarProps> = ({ hideServices }) => {
                    setIsSubmitting(false);
                    return;
                 }
-				const details = error.details ?? "";
-				const message = error.message ?? "";
-				const isEmailDuplicate =
-					/\(email\)=/i.test(details) || /email_(key|unique|idx)/i.test(message) || message === "already_submitted";
-				if (error.code === "23505" && isEmailDuplicate) {
+				if (error.code === "23505") {
 					setSuccessMessage("This email is already subscribed");
 				} else {
 					setSuccessMessage("Error subscribing. Please try again.");
