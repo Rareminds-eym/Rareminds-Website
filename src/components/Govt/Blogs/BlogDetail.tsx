@@ -85,9 +85,6 @@ const BlogDetailGov = () => {
   const [post, setPost] = useState<BlogPost | null>(null);
   const [relatedPosts, setRelatedPosts] = useState<BlogPost[]>([]);
   const [loading, setLoading] = useState(true);
-  const [] = useState("");
-  const [] = useState("");
-  const [] = useState("");
   
   // Determine which subcategory to fetch based on URL path
   const getSubcategoryFromPath = () => {

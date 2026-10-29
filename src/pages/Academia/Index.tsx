@@ -278,7 +278,7 @@
 // };
 
 // export default Academy;
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import MainLayout from "../../components/Academy/MainLayout";
@@ -286,7 +286,6 @@ import { useNavigate } from "react-router-dom";
 import VideoCarousel from "../../components/Academy/VideoCarousel";
 
 const Academia = ({ }: { userType?: "teacher" | "student" }) => {
-  const [] = useState<"teacher" | "student">("teacher");
 
   const navigate = useNavigate();
 

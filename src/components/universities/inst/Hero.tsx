@@ -150,7 +150,6 @@ function HeroMobile() {
 
 export default function Hero() {
   const [currentBanner, setCurrentBanner] = useState(0);
-  const [] = useState(false);
   const handleScrollDown = () => {
     window.scrollTo({
       top: window.innerHeight,

@@ -36,7 +36,6 @@ const faqItems: FaqItem[] = [
 ];
 
 const FaqAndContact = () => {
-  const [] = useState<string | null>(null);
   const [email, setEmail] = useState("");
 
 //   const handleSubmit = (e: React.FormEvent) => {

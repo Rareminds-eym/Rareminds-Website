@@ -85,9 +85,6 @@ const BlogDetail = () => {
   const [post, setPost] = useState<BlogPost | null>(null);
   const [relatedPosts, setRelatedPosts] = useState<BlogPost[]>([]);
   const [loading, setLoading] = useState(true);
-  const [] = useState("");
-  const [] = useState("");
-  const [] = useState("");
 
   // Debug: Log the slug
   console.log('BlogDetail slug:', slug);

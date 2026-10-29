@@ -45,7 +45,6 @@ const FloatingActionMenu = () => {
   const [phone, setPhone] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
   const [loading, setLoading] = useState(false);
-  const [] = useState(false);
   const [selectedResource, setSelectedResource] = useState<Resource | null>(null);
   const [windowWidth, setWindowWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1024);
   const [, setViewportWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1024);

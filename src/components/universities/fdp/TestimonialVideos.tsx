@@ -39,7 +39,6 @@ const testimonials = [
 ];
 
 export default function Testimonials() {
-  const [] = useState<string | null>(null);
   const [scrollIndex, setScrollIndex] = useState(0);
 
   const videoTestimonials = testimonials.filter(t => t.videoSrc);

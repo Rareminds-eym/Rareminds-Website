@@ -14,9 +14,6 @@ interface HeaderProps {
 const HeroBanner = ({  HeroToLogo, isBlurred }: HeaderProps) =>{
 
   const [activeServiceId, setActiveServiceId] = useState(servicesStudent[0].id);
-  const [] = useState(false);
-  const [] = useState(false);
-  const [] = useState(false);
   
 
   const activeService = servicesStudent.find(service => service.id === activeServiceId) || servicesStudent[0];

@@ -12,8 +12,6 @@ import { Toaster } from '../../../components/Academy/UI/toaster';
 import DashboardSection from "../../../components/Academy/Students/DashboardSection"
 import ContactSection from "../../../components/Academy/Contact/ContactSection"
 import CorporateHeader from "../../../components/Header/AcademyHeader"
-import { caseStudies } from '../../../components/Academy/Students/CaseStudy/caseStudies';
-import { CaseStudy as CaseStudyType } from '../../../components/Academy/Students/CaseStudy/caseStudy';
 // import CaseStudyDetail from '../../../components/Academy/Students/CaseStudy/CaseStudyDetail';
 // import FloatingActionMenu from '../../../components/Academy/Floatingbutton'
 import FloatingActionMenu from '../../../components/Academy/StickyButton/StickyButton/FloatingAction'
@@ -25,8 +23,6 @@ import CurrentBlogs from '../../../components/Academy/Students/Current_blogs'
 import ServicesSection from '../../../components/Academy/Students/ServicesSection'
 
 const Academy = ({ }: { userType?: "teacher" | "student" }) => {
-  const [] = useState<"teacher" | "student">("teacher");
-  const [] = useState<CaseStudyType>(caseStudies[0]);
   const [blurPercent, setBlurPercent] = useState(0);
 
       const contactRef = useRef<HTMLDivElement>(null);
