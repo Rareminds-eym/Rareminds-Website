@@ -1,20 +1,18 @@
-import { createBrowserRouter, Outlet, Navigate, useParams } from "react-router-dom";
 import { lazy, Suspense } from "react";
-import LoaderComponent from "./components/LoaderComponent";
-import ErrorBoundary from "./components/ErrorBoundary";
-import ScrollToTop from "./components/ScrollToTop";
-
-// Layouts
-import DefaultLayout from "./layouts/DefaultLayout";
-import CorporateLayout from "./layouts/CorporateLayout";
-import GovernmentLayout from "./layouts/GovernmentLayout";
-import AcademiaLayout from "./layouts/AcademiaLayout";
-import UniversitiesLayout from "./layouts/UniversitiesLayout";
-
+import { createBrowserRouter, Navigate, Outlet, useParams } from "react-router-dom";
+import CourseDetailedPage from "@/components/Academy/Students/CourseDetailedPage";
 // Direct imports for direct use in routes
 import BlogDetailAcademia from "./components/Academy/Blogs/BlogDetail";
+import ErrorBoundary from "./components/ErrorBoundary";
 import BlogDetailGov from "./components/Govt/Blogs/BlogDetail.tsx";
-import CourseDetailedPage from "@/components/Academy/Students/CourseDetailedPage";
+import LoaderComponent from "./components/LoaderComponent";
+import ScrollToTop from "./components/ScrollToTop";
+
+import AcademiaLayout from "./layouts/AcademiaLayout";
+import CorporateLayout from "./layouts/CorporateLayout";
+import DefaultLayout from "./layouts/DefaultLayout";
+import GovernmentLayout from "./layouts/GovernmentLayout";
+import UniversitiesLayout from "./layouts/UniversitiesLayout";
 
 
 // Lazy pages
@@ -119,7 +117,7 @@ const NewProjectDetail = lazy(() => import("./components/Projects/ProjectDetailN
 
 const InstitutionsBlogDetail = lazy(() => import("./components/universities/Blogs/BlogDetail"));
 
-const withSuspense = (Component: React.LazyExoticComponent<React.FC<{}>>) => (
+const withSuspense = (Component: React.LazyExoticComponent<React.ComponentType>) => (
   <Suspense fallback={<LoaderComponent />}>
     {" "}
     <Component />{" "}

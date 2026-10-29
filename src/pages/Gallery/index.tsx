@@ -1,8 +1,9 @@
-import React, { useEffect } from 'react';
+import type React from 'react';
+import { useEffect } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import AcademyHeader from '@/components/Header/AcademyHeader';
 import SectorBarrel from './SectorBarrel';
 import SectorGallery from './SectorGallery';
-import AcademyHeader from '@/components/Header/AcademyHeader';
 
 type GalleryProps = {
   /** Sector slug (e.g. "school-teachers"). When given directly (path routes),
@@ -43,6 +44,7 @@ const Gallery: React.FC<GalleryProps> = ({ sector: sectorProp }) => {
     }
   }, [legacySector, navigate]);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: scroll to top whenever the sector changes
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [sector]);

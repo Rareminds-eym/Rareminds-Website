@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { supabase } from "@/lib/supabaseClient";
 import { DEMO_SECTORS } from "@/data/galleryDemo";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { supabase } from "@/lib/supabaseClient";
 import "./galleryPage.css";
 
 /**
@@ -24,7 +24,7 @@ const OPEN_DELAY_MS = 500;
 
 /** Placeholder CDN paths in the seeds resolve to local design assets. */
 const localise = (url: string | null, slug: string) =>
-  url && url.includes("cdn.rareminds.in/gallery/sector-")
+  url?.includes("cdn.rareminds.in/gallery/sector-")
     ? `/gallery/sector-${slug}.jpg`
     : url;
 
@@ -84,9 +84,8 @@ const SectorBarrel: React.FC = () => {
     []
   );
 
-  // Auto-rotate (pauses on hover or after a click-fire). `active` in the
-  // deps restarts the countdown after every manual arrow click, so the
-  // barrel never snaps mid-view while a user is stepping through it.
+  // `active` intentionally restarts the timer after manual sector navigation.
+  // biome-ignore lint/correctness/useExhaustiveDependencies: Reset the rotation interval whenever the active sector changes.
   useEffect(() => {
     if (paused || selected || sectors.length < 2) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
@@ -131,11 +130,7 @@ const SectorBarrel: React.FC = () => {
     <section className="gallery-page">
       <h1 className="gallery-heading">Gallery</h1>
 
-      <div
-        className={`gallery-stage${isMobile ? " is-mobile" : ""}`}
-        onMouseEnter={() => setPaused(true)}
-        onMouseLeave={() => setPaused(false)}
-      >
+      <div className={`gallery-stage${isMobile ? " is-mobile" : ""}`}>
         {sectors.map((s, index) => {
           const offset = offsetOf(index);
           const distance = Math.abs(offset);
@@ -150,6 +145,8 @@ const SectorBarrel: React.FC = () => {
               type="button"
               aria-label={`Open the ${s.title} gallery`}
               onClick={() => openSector(index, s.slug)}
+              onMouseEnter={() => setPaused(true)}
+              onMouseLeave={() => setPaused(false)}
               className={`gallery-card${focused ? " is-focused" : ""}`}
               style={{
                 zIndex: 10 - distance,
@@ -200,7 +197,7 @@ const SectorBarrel: React.FC = () => {
         {paused && sector ? sector.title : "Hover a card to pause"}
       </p>
 
-      <div className="gallery-arrows" role="group" aria-label="Rotate the gallery barrel">
+      <nav className="gallery-arrows" aria-label="Rotate the gallery barrel">
         <button
           type="button"
           className="gallery-arrow"
@@ -233,7 +230,7 @@ const SectorBarrel: React.FC = () => {
             />
           </svg>
         </button>
-      </div>
+      </nav>
     </section>
   );
 };

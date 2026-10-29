@@ -1,4 +1,5 @@
-import React, { useState, Dispatch, SetStateAction } from 'react';
+import { useState } from 'react';
+import type { Dispatch, FC, SetStateAction } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, Briefcase } from 'lucide-react';
 import BrandLogo from '../BrandLogo/BrandLogo';
@@ -14,7 +15,7 @@ interface HeaderProps {
 
 const ZOHO_RECRUIT_CAREERS_URL = 'https://rareminds.zohorecruit.in/jobs/Careers';
 
-const Index: React.FC<HeaderProps> = ({ navbarOpen, setNavbarOpen }) => {
+const Index: FC<HeaderProps> = ({ navbarOpen, setNavbarOpen }) => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const location = useLocation();
     // Check if current path matches /events/:slug

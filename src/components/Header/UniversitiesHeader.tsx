@@ -1,16 +1,23 @@
-import React, { useState, useRef, useEffect } from "react";
+import type React from "react";
+import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Menu, X, HomeIcon, BookOpen, Briefcase, Users, School, GraduationCap, Zap, BookAIcon, Images } from "lucide-react";
 import BrandLogo from "../BrandLogo/BrandLogo";
 
+type NavigationOption = {
+  label: string;
+  path: string;
+  icon: React.ReactNode;
+  isTrainers?: boolean;
+};
 
-const verticalOptions = [
+const verticalOptions: NavigationOption[] = [
   { label: "SDP", path: "/universities", icon: <School size={22} /> },
   { label: "Universities", path: "/universities/services", icon: <Users size={22} /> },
   { label: "FDP", path: "/universities/fdp", icon: <GraduationCap size={22} /> },
 ];
 
-const commonOptions = [
+const commonOptions: NavigationOption[] = [
   { label: "Careers", path: "https://rareminds.zohorecruit.in/jobs/Careers", icon: <Briefcase size={22} /> },
   { label: "Trainers: Apply Now", path: "https://rareminds.zohorecruit.in/jobs/Trainers", icon: <Zap size={22} />, isTrainers: true },
   { label: "Blogs", path: "/universities/blogs", icon: <BookOpen size={22} /> },
@@ -65,7 +72,7 @@ const UniversitiesHeader: React.FC = () => {
     };
   }, [isMenuOpen]);
 
-  const handleSelect = (option: any) => {
+  const handleSelect = (option: NavigationOption) => {
     setIsMenuOpen(false);
     if (option.path) {
       if (option.path.startsWith('http')) {
@@ -128,7 +135,7 @@ const UniversitiesHeader: React.FC = () => {
           <div className="relative w-full md:w-[420px] bg-white border border-gray-200 rounded-xl shadow-2xl p-0">
             {/* Caret ^ */}
             <div className="absolute -top-3 right-6 md:right-6">
-              <svg width="32" height="16" viewBox="0 0 32 16"><polygon points="16,0 32,16 0,16" fill="#fff" stroke="#e5e7eb" /></svg>
+              <svg width="32" height="16" viewBox="0 0 32 16" aria-hidden="true"><polygon points="16,0 32,16 0,16" fill="#fff" stroke="#e5e7eb" /></svg>
             </div>
             {/* Navigation Section */}
             <div className="p-4 pb-2">

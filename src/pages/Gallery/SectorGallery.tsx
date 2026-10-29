@@ -1,4 +1,5 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import type React from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Check, ChevronDown, ChevronLeft, ChevronRight, ChevronUp, Maximize, Pause, Play, Search, X } from "lucide-react";
 import { motion } from "framer-motion";
@@ -30,6 +31,7 @@ import "./galleryPage.css";
 /* ------------------------------------------------------------------ */
 
 const PAGE_SIZE = 8; // the design grid shows 8 cards; "Load more" adds more
+const SKELETON_KEYS = Array.from({ length: PAGE_SIZE }, (_, i) => `skeleton-${i}`);
 
 export type SectorItem = {
   id: string;
@@ -245,10 +247,12 @@ const SectorGallery: React.FC<Props> = ({ sector }) => {
   }, [sector]);
 
   /* reset pagination whenever filters change */
+  // biome-ignore lint/correctness/useExhaustiveDependencies: Filter changes intentionally reset the current page.
   useEffect(() => setPage(1), [tab, query, topic, name, year, location]);
 
   /* the Categories dropdown navigates between sector galleries, so every
      filter starts clean on the newly opened sector */
+  // biome-ignore lint/correctness/useExhaustiveDependencies: Changing sectors intentionally resets all sector-specific filters.
   useEffect(() => {
     setPage(1);
     setTopic(null);
@@ -291,7 +295,9 @@ const SectorGallery: React.FC<Props> = ({ sector }) => {
   const options = useMemo(() => {
     const merge = (base: string[], extra: (string | null)[]) => {
       const set = new Set(base);
-      extra.forEach((v) => v && set.add(v));
+      extra.forEach((v) => {
+        if (v) set.add(v);
+      });
       return ["All", ...[...set]];
     };
     return {
@@ -426,7 +432,7 @@ const SectorGallery: React.FC<Props> = ({ sector }) => {
             ) : (
               pageItems.map((it, i) => (
                 <motion.article
-                  key={`${it.id}-${i}`}
+                  key={it.id}
                   initial={{ opacity: 0, y: 24 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: "-40px" }}
@@ -536,8 +542,8 @@ const SectorGallery: React.FC<Props> = ({ sector }) => {
 /* ------------------------------------------------------------------ */
 
 function skeletonGrid() {
-  return Array.from({ length: PAGE_SIZE }, (_, i) => (
-    <div key={i}>
+  return SKELETON_KEYS.map((key, i) => (
+    <div key={key}>
       <div className="g-skeleton" style={{ animationDelay: `${i * 0.09}s` }} />
       <div className="g-skeleton-title" style={{ animationDelay: `${i * 0.09}s` }} />
     </div>
@@ -1027,7 +1033,7 @@ const VideoPlayer: React.FC<{
   const seek = (e: React.MouseEvent<HTMLDivElement>) => {
     const v = ref.current;
     const track = e.currentTarget;
-    if (!v || !v.duration) return;
+    if (!v?.duration) return;
     const rect = track.getBoundingClientRect();
     const ratio = Math.min(Math.max((e.clientX - rect.left) / rect.width, 0), 1);
     v.currentTime = ratio * v.duration;
@@ -1055,6 +1061,7 @@ const VideoPlayer: React.FC<{
 
   return (
     <div className="g-lb-media" ref={wrapRef}>
+      {/* biome-ignore lint/a11y/useMediaCaption: The current gallery schema only supplies optional subtitle URLs, not caption tracks. */}
       <video
         ref={ref}
         src={src}
@@ -1062,6 +1069,7 @@ const VideoPlayer: React.FC<{
         preload="metadata"
         onEnded={() => setPlaying(false)}
       >
+        {/* Subtitle tracks are supplied by content authors when available. */}
         {subtitles ? <track kind="subtitles" src={subtitles} /> : null}
       </video>
 
@@ -1069,7 +1077,27 @@ const VideoPlayer: React.FC<{
         <button type="button" className="g-lc-btn" onClick={toggle} aria-label={playing ? "Pause" : "Play"}>
           {playing ? <Pause size={18} /> : <Play size={18} />}
         </button>
-        <div className="g-lc-track" onClick={seek} role="slider" aria-label="Seek">
+        <div
+          className="g-lc-track"
+          onClick={seek}
+          onKeyDown={(event) => {
+            const video = ref.current;
+            if (!video?.duration) return;
+            if (event.key === "ArrowLeft") video.currentTime = Math.max(0, video.currentTime - 5);
+            else if (event.key === "ArrowRight") video.currentTime = Math.min(video.duration, video.currentTime + 5);
+            else if (event.key === "Home") video.currentTime = 0;
+            else if (event.key === "End") video.currentTime = video.duration;
+            else return;
+            setCurrent(video.currentTime);
+          }}
+          role="slider"
+          tabIndex={0}
+          aria-label="Seek"
+          aria-valuemin={0}
+          aria-valuemax={total}
+          aria-valuenow={current}
+          aria-valuetext={`${timeFormat(current)} of ${timeFormat(total)}`}
+        >
           {total > 0 ? (
             <span className="g-lc-fill" style={{ width: `${(current / total) * 100}%` }} />
           ) : null}

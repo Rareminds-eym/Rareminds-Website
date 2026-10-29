@@ -1,8 +1,42 @@
-import React, { useState, useEffect } from "react";
+import type React from "react";
+import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Home, BookOpen, Newspaper, Phone, BookAIcon, Images, Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import BrandLogo from "../BrandLogo/BrandLogo";
+
+type MenuButtonProps = {
+  isOpen: boolean;
+  toggle: () => void;
+};
+
+const MenuButton: React.FC<MenuButtonProps> = ({ isOpen, toggle }) => (
+  <motion.button
+    type="button"
+    id="corporate-menu-btn"
+    onClick={toggle}
+    aria-label={isOpen ? "Close navigation menu" : "Open navigation menu"}
+    className="relative z-50 w-10 h-10 flex items-center justify-center rounded-full bg-gray-50 hover:bg-gray-100 transition-colors"
+    whileTap={{ scale: 0.95 }}
+  >
+    <motion.span
+      initial={false}
+      animate={{ opacity: isOpen ? 0 : 1, rotate: isOpen ? 90 : 0 }}
+      transition={{ duration: 0.2 }}
+      className="absolute"
+    >
+      <Menu className="w-6 h-6 text-gray-800" />
+    </motion.span>
+    <motion.span
+      initial={false}
+      animate={{ opacity: isOpen ? 1 : 0, rotate: isOpen ? 0 : -90 }}
+      transition={{ duration: 0.2 }}
+      className="absolute"
+    >
+      <X className="w-6 h-6 text-gray-800" />
+    </motion.span>
+  </motion.button>
+);
 
 const CorporateHeader: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -41,39 +75,6 @@ const CorporateHeader: React.FC = () => {
       },
     },
   };
-
-  const MenuButton = ({
-    isOpen,
-    toggle,
-  }: {
-    isOpen: boolean;
-    toggle: () => void;
-  }) => (
-    <motion.button type="button"
-      id="corporate-menu-btn"
-      onClick={toggle}
-      aria-label={isOpen ? "Close navigation menu" : "Open navigation menu"}
-      className="relative z-50 w-10 h-10 flex items-center justify-center rounded-full bg-gray-50 hover:bg-gray-100 transition-colors"
-      whileTap={{ scale: 0.95 }}
-    >
-      <motion.span
-        initial={false}
-        animate={{ opacity: isOpen ? 0 : 1, rotate: isOpen ? 90 : 0 }}
-        transition={{ duration: 0.2 }}
-        className="absolute"
-      >
-        <Menu className="w-6 h-6 text-gray-800" />
-      </motion.span>
-      <motion.span
-        initial={false}
-        animate={{ opacity: isOpen ? 1 : 0, rotate: isOpen ? 0 : -90 }}
-        transition={{ duration: 0.2 }}
-        className="absolute"
-      >
-        <X className="w-6 h-6 text-gray-800" />
-      </motion.span>
-    </motion.button>
-  );
 
   useEffect(() => {
     if (!isOpen) return;

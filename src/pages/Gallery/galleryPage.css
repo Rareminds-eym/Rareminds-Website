@@ -853,6 +853,13 @@
   transition: transform 0.5s ease;
 }
 
+.g-lb-media > img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
 .g-card:hover img {
   transform: scale(1.06);
 }
@@ -1006,13 +1013,6 @@
   border-radius: 14px;
   overflow: hidden;
   background: #111111;
-}
-
-.g-lb-media > img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  display: block;
 }
 
 .g-lb-media video {
