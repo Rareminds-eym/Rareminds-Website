@@ -74,6 +74,14 @@ const GovernmentHeader: React.FC = () => {
           >
             Blogs
           </Link>
+
+          <Link
+            to="/government/gallery"
+            className="text-xl text-gray-800 md:text-4xl py-2 hover:text-red-600 mb-4"
+            onClick={() => setIsMenuOpen(false)}
+          >
+            Gallery
+          </Link>
         </div>
       )}
     </header>

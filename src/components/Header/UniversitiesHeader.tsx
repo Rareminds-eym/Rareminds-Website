@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { Menu, X, HomeIcon, BookOpen, Briefcase, Users, School, GraduationCap, AlertTriangle, Zap, BookAIcon } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { Menu, X, HomeIcon, BookOpen, Briefcase, Users, School, GraduationCap, Zap, BookAIcon, Images } from "lucide-react";
 import BrandLogo from "../BrandLogo/BrandLogo";
 
 
@@ -15,12 +15,8 @@ const commonOptions = [
   { label: "Trainers: Apply Now", path: "https://rareminds.zohorecruit.in/jobs/Trainers", icon: <Zap size={22} />, isTrainers: true },
   { label: "Blogs", path: "/universities/blogs", icon: <BookOpen size={22} /> },
   { label: "Skill Passport", path: "/universities/skill-passport", icon: <BookAIcon size={22} /> },
+  { label: "Gallery", path: "/universities/gallery", icon: <Images size={22} /> },
 
-];
-
-const mobileOptions = [
-  ...verticalOptions.map((opt) => ({ ...opt, urgent: false })),
-  ...commonOptions,
 ];
 
 const UniversitiesHeader: React.FC = () => {

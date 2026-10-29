@@ -126,6 +126,15 @@ const withSuspense = (Component: React.LazyExoticComponent<React.FC<{}>>) => (
   </Suspense>
 );
 
+// Gallery sector routes (gallery_path values seeded in gallery_sectors --
+// they map 1:1 to the hyphenated sector slugs)
+const galleryAt = (slug: string) => (
+  <Suspense fallback={<LoaderComponent />}>
+    {" "}
+    <Gallery sector={slug} />{" "}
+  </Suspense>
+);
+
 const LegacyBlogRedirect = ({ basePath }: { basePath: string }) => {
   const { slug } = useParams<{ slug: string }>();
   return <Navigate to={`${basePath}/${encodeURIComponent(slug ?? "")}`} replace />;
@@ -192,6 +201,26 @@ const router = createBrowserRouter([
       {
         path: "/gallery",
         element: withSuspense(Gallery),
+      },
+      {
+        // Sector galleries as clean paths: /gallery/school-teachers,
+        // /gallery/school-students, /gallery/corporate-recruitment,
+        // /gallery/universities, /gallery/government. Legacy
+        // /gallery?sector=<slug> URLs redirect to these paths.
+        path: "/gallery/:sector",
+        element: withSuspense(Gallery),
+      },
+      {
+        path: "/corporate/recruitment/gallery",
+        element: galleryAt("corporate-recruitment"),
+      },
+      {
+        path: "/corporate/training/gallery",
+        element: galleryAt("corporate-training"),
+      },
+      {
+        path: "/universities/gallery",
+        element: galleryAt("universities"),
       },
       {
         path: "/about",
@@ -318,6 +347,10 @@ const router = createBrowserRouter([
           </Suspense>
         ),
       },
+      {
+        path: "/government/gallery",
+        element: galleryAt("government"),
+      },
     ],
   },
   {
@@ -352,6 +385,14 @@ const router = createBrowserRouter([
       {
         path: "/school/teacher",
         element: withSuspense(School),
+      },
+      {
+        path: "/school/teacher/gallery",
+        element: galleryAt("school-teachers"),
+      },
+      {
+        path: "/school/student/gallery",
+        element: galleryAt("school-students"),
       },
       {
         path: "/school/blogs",
