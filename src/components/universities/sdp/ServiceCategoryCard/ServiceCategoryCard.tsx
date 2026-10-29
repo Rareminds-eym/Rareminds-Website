@@ -10,7 +10,7 @@ import {
   School,
   Building2
 } from 'lucide-react';
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { getServices } from '@/services/sdp/courseService';
 
 // --- PROGRAM TABLES FOR EACH SERVICE ---
@@ -963,7 +963,7 @@ export default function ServicePage() {
                   }
                 }}
               >
-                {service.benefits.map((benefit, index) => (
+                {service.benefits.map((benefit: string, index: number) => (
                   <motion.li
                     key={index}
                     variants={{
@@ -1082,7 +1082,7 @@ export default function ServicePage() {
                     }
                   }}
                 >
-                  {service.benefits.map((benefit, index) => (
+                  {service.benefits.map((benefit: string, index: number) => (
                     <motion.li
                       key={index}
                       variants={{

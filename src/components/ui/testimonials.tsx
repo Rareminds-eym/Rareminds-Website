@@ -4,7 +4,7 @@ import React, { useState } from "react";
 interface Testimonial {
   text: string;
   name: string;
-  messgae:string;
+  message: string;
   role: string;
 }
 
@@ -33,7 +33,7 @@ export const TestimonialsColumn = (props: {
         {[
           ...new Array(2).fill(0).map((_, index) => (
             <React.Fragment key={index}>
-              {props.testimonials.map(({ text,  name, role }, i) => (
+              {props.testimonials.map(({ text, name, message, role }, i) => (
                 <div
                   key={i}
                   className="p-10 rounded-3xl border shadow-lg shadow-primary/10 max-w-xs w-full"

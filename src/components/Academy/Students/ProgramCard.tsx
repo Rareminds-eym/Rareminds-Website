@@ -19,7 +19,7 @@ import {
   }
   
  const ProgramCard =()=> {
-    const [api, setApi] = useState<any>();
+    const [, setApi] = useState<any>();
     const autoplayPlugin = Autoplay({ delay: 3000 });
   
     const Program = ({

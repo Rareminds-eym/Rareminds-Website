@@ -1,4 +1,4 @@
-import { BookOpen, Monitor, Target, School, FileText, Award, Clock, Sparkles } from 'lucide-react';
+import { BookOpen } from 'lucide-react';
 
 export const programs = [
   {

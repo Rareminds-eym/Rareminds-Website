@@ -79,7 +79,6 @@ const ServiceCarousel: React.FC<ServiceCarouselProps> = ({
   services, 
   activeServiceId,
   onServiceChange,
-  transitionDuration = 300,
   rotationInterval = 5000
 }) => {
   const [activeIndex, setActiveIndex] = useState(0);

@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 interface CarouselItem {
   id: number;
   type: 'video';
   url: string;
   title: string;
-  subtitle: String;
-  Calltoaction: String;
+  subtitle: string;
+  Calltoaction: string;
 }
 
 const carouselItems: CarouselItem[] = [
@@ -94,7 +94,7 @@ const VideoCarousel = () => {
             muted
             loop
             playsInline
-            alt={`Carousel item ${item.id}`}
+            aria-label={`Carousel item ${item.id}`}
           />
 
 <div className="absolute inset-0 flex flex-col items-center justify-center  text-center px-4 bg-black/10">

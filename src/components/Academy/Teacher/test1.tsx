@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { useInView } from "react-intersection-observer";
 import styles from "./test1.module.css";
 
 interface ProcessSVGProps extends React.SVGProps<SVGSVGElement> {}
 
-const Text1 = ({ ...props }: ProcessSVGProps) => {
+const Text1 = ({ }: ProcessSVGProps) => {
     const [hoveredIndex, setHoveredIndex] = useState<number>(0);
-    const [visibleGroups, setVisibleGroups] = useState<number>(0);
+    const [, setVisibleGroups] = useState<number>(0);
 
     // Uncomment if you want to use inView functionality
     // const { ref, inView } = useInView({

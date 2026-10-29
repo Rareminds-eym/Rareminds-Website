@@ -71,6 +71,11 @@ export interface Event {
 
   // Core flat columns
   title: string;
+  description?: string;
+  location?: string;
+  capacity?: number;
+  organizer_name?: string;
+  organizer_email?: string;
   event_date: string;
   event_time: string;
   duration: number;           // INTEGER — total minutes (e.g. 4320 = 3 days)

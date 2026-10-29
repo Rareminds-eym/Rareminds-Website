@@ -1,8 +1,7 @@
 
-import React, { useRef, useEffect } from 'react';
+import { useRef, useEffect } from 'react';
 import Text1 from './test1';
 import Text2 from './test2';
-import { cn } from '@/lib/utils';
 
 
 
@@ -28,7 +27,7 @@ useEffect(() => {
   const video = videoRef2.current;
   if (!video) return;
 
-  let timeoutId;
+  let timeoutId: ReturnType<typeof setTimeout>;
 
   const handleEnded = () => {
     // Pause and wait 60 seconds, then play again

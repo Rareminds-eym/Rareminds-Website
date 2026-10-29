@@ -1,5 +1,4 @@
-import React from "react";
-import TestimonialsQuotes from "./sdp/TestimonialQuotes";
+import { TestimonialsColumn as TestimonialsQuotes } from "../../Academy/UI/testimonials-column";
 import { motion } from "framer-motion";
 import testimonials from "@/utils/testimonials";
 
@@ -7,6 +6,14 @@ import testimonials from "@/utils/testimonials";
 const firstColumn = testimonials.slice(0, 3);
 const secondColumn = testimonials.slice(3, 6);
 const thirdColumn = testimonials.slice(6, 9);
+const toColumnTestimonials = (items: typeof testimonials) =>
+  items.map(({ text, image, name, role }) => ({
+    text,
+    image,
+    name,
+    role,
+    rating: 5,
+  }));
 
 const Testimonials = () => {
   return (
@@ -32,14 +39,14 @@ const Testimonials = () => {
         </motion.div>
 
         <div className="flex justify-center gap-6 mt-10 [mask-image:linear-gradient(to_bottom,transparent,black_25%,black_75%,transparent)] max-h-[740px] overflow-hidden">
-          <TestimonialsQuotes testimonials={firstColumn} duration={15} />
+          <TestimonialsQuotes testimonials={toColumnTestimonials(firstColumn)} duration={15} />
           <TestimonialsQuotes
-            testimonials={secondColumn}
+            testimonials={toColumnTestimonials(secondColumn)}
             className="hidden md:block"
             duration={19}
           />
           <TestimonialsQuotes
-            testimonials={thirdColumn}
+            testimonials={toColumnTestimonials(thirdColumn)}
             className="hidden lg:block"
             duration={17}
           />

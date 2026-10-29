@@ -131,7 +131,7 @@ export class EventContactService {
         name: formData.name,
         email: formData.email,
         phone: formData.phone,
-        organization: formData.organization || null,
+        organization: formData.organization || undefined,
       };
 
       const { data, error } = await supabase

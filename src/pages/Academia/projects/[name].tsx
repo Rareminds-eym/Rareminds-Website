@@ -4,11 +4,8 @@ import { Stats } from "../../../components/Academy/Project/naanMudhalvan/Stats";
 import { Future } from "../../../components/Academy/Project/naanMudhalvan/Future";
 import { CallToAction } from "../../../components/Academy/Project/naanMudhalvan/CallToAction";
 import { CourseSection } from "../../../components/Academy/Project/naanMudhalvan/CourseSection";
-import { naamMudhalvanCourses, otherCourses } from "../../../components/Academy/Project/Data/mockCourses";
-import { Timeline } from "../../../components/Academy/Project/naanMudhalvan/Timeline";
-import { MapSection } from "../../../components/Academy/Project/naanMudhalvan/MapSection";
-import { Header } from "../../../components/Academy/Project/naanMudhalvan/Header";
-import { Calendar, LucideProps, MapPin, Users } from "lucide-react";
+import { naamMudhalvanCourses } from "../../../components/Academy/Project/Data/mockCourses";
+import { Calendar, LucideProps } from "lucide-react";
 import { Disclaimer } from "../../../components/Academy/Project/naanMudhalvan/Disclaimer";
 import ClientsSection from "../../../components/Academy/Project/naanMudhalvan/ClientsSection";
 import { useState } from "react";
@@ -38,7 +35,7 @@ type PageData = {
 };
 
 function Naan() {
-  const [data, setData] = useState<PageData[]>([
+  const [data] = useState<PageData[]>([
     {
       page: "nm_2024",
       pname: "Naan Mudhalvan 2024 Upskilling Program (Powered by Rareminds)",

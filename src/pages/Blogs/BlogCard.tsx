@@ -1,5 +1,5 @@
-import { Link, useLocation } from "react-router-dom";
-import { Calendar, Clock, User } from "lucide-react";
+import { Link } from "react-router-dom";
+import { Calendar } from "lucide-react";
 
 // Supabase blog post interface
 interface BlogPost {

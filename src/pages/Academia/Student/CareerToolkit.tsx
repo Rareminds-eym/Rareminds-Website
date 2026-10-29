@@ -4,7 +4,7 @@ import { Button } from "../../../components/Academy/UI/button";
 import { Card, CardContent } from "@/components/ui/card";
 
 import { CheckCircle, BookOpen, GraduationCap, ExternalLink, Brain, Target, Lightbulb } from "lucide-react";
-import { motion } from "framer-motion";
+import { motion, type Variants } from "framer-motion";
 import PageHeader from "../../../components/ui/PageHeader";
 
 const CareerToolkit = () => {
@@ -68,7 +68,7 @@ const CareerToolkit = () => {
   ];
   
   // Animation variants for staggered animations
-  const containerVariants = {
+  const containerVariants: Variants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
@@ -78,7 +78,7 @@ const CareerToolkit = () => {
     }
   };
   
-  const itemVariants = {
+  const itemVariants: Variants = {
     hidden: { y: 20, opacity: 0 },
     visible: {
       y: 0,

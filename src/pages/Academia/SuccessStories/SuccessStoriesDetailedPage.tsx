@@ -125,8 +125,7 @@ function SuccessStoriesDetailedPage() {
   const transformedProject = {
     ...project,
     name: project.title,
-    imageUrl: project.imageUrl,
-    bannerUrl: project.bannerUrl || project.imageUrl
+    imageUrl: project.imageUrl
   };
 
   // Check if this is a coming soon program

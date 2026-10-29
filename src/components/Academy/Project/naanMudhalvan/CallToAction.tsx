@@ -1,5 +1,4 @@
-import React from 'react';
-import { BookOpen, Calendar, Mail, ArrowRight } from 'lucide-react';
+import { Calendar, Mail, ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const cards = [

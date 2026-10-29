@@ -2,14 +2,11 @@ import { useParams, Link, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabaseClient";
 import { Button } from "@/components/ui/button";
-import { Input } from "../../ui/input";
-import { Textarea } from "../../ui/textarea";
 import BlogCard from "./BlogCard";
-import { Calendar, Clock, User, ArrowLeft, CheckCircle, Share2, Eye, MessageCircle } from "lucide-react";
+import { Calendar, ArrowLeft, Share2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { motion } from "framer-motion";
 import GovernmentHeader from "@/components/Header/GovernmentHeader";
-import FloatingActionMenu from "@/components/Govt/StickyButton/FloatingAction";
 import styles from "./styles.module.css";
 import DOMPurify from 'dompurify';
 import type { Config } from 'dompurify';
@@ -88,9 +85,9 @@ const BlogDetailGov = () => {
   const [post, setPost] = useState<BlogPost | null>(null);
   const [relatedPosts, setRelatedPosts] = useState<BlogPost[]>([]);
   const [loading, setLoading] = useState(true);
-  const [commentName, setCommentName] = useState("");
-  const [commentEmail, setCommentEmail] = useState("");
-  const [commentText, setCommentText] = useState("");
+  const [] = useState("");
+  const [] = useState("");
+  const [] = useState("");
   
   // Determine which subcategory to fetch based on URL path
   const getSubcategoryFromPath = () => {
@@ -215,101 +212,7 @@ const BlogDetailGov = () => {
 
   const currentUrl = window.location.href;
 
-  const handleCommentSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    // Simulate comment submission
-    toast({
-      title: "Comment submitted!",
-      description: "Thank you for your feedback. We'll review your comment shortly.",
-    });
-    
-    // Clear form
-    setCommentName("");
-    setCommentEmail("");
-    setCommentText("");
-  };
 
-  const renderContent = (content: string) => {
-    const lines = content.trim().split('\n');
-    
-    return lines.map((line, index) => {
-      const trimmedLine = line.trim();
-      
-      if (!trimmedLine) {
-        return <br key={index} />;
-      }
-      
-      // Headers
-      if (trimmedLine.startsWith('# ')) {
-        return (
-          <h1 key={index} className="font-playfair text-4xl font-bold text-foreground mb-6 mt-8">
-            {trimmedLine.substring(2)}
-          </h1>
-        );
-      }
-      
-      if (trimmedLine.startsWith('## ')) {
-        return (
-          <h2 key={index} className="font-playfair text-3xl font-semibold text-foreground mb-4 mt-8">
-            {trimmedLine.substring(3)}
-          </h2>
-        );
-      }
-      
-      if (trimmedLine.startsWith('### ')) {
-        return (
-          <h3 key={index} className="font-playfair text-2xl font-semibold text-foreground mb-4 mt-6">
-            {trimmedLine.substring(4)}
-          </h3>
-        );
-      }
-      
-      // Blockquotes
-      if (trimmedLine.startsWith('> ')) {
-        return (
-          <blockquote key={index} className="border-l-4 border-primary pl-6 py-2 my-6 italic text-lg text-muted-foreground bg-sage-50/50 rounded-r-lg">
-            {trimmedLine.substring(2)}
-          </blockquote>
-        );
-      }
-      
-      // Bold subheadings
-      if (trimmedLine.startsWith('**') && trimmedLine.endsWith('**')) {
-        return (
-          <h4 key={index} className="font-semibold text-lg text-foreground mb-3 mt-4">
-            {trimmedLine.slice(2, -2)}
-          </h4>
-        );
-      }
-      
-      // Bullet points
-      if (trimmedLine.startsWith('• ') || trimmedLine.startsWith('- ')) {
-        return (
-          <li key={index} className="text-muted-foreground mb-2 ml-4">
-            {trimmedLine.substring(2)}
-          </li>
-        );
-      }
-      
-      // Numbered lists
-      if (/^\d+\./.test(trimmedLine)) {
-        const text = trimmedLine.replace(/^\d+\.\s*/, '');
-        return (
-          <li key={index} className="text-muted-foreground mb-2 ml-4 list-decimal">
-            {text}
-          </li>
-        );
-      }
-      
-      // Regular paragraphs
-      return (
-        <p key={index} className="text-muted-foreground mb-4 leading-relaxed">
-          {trimmedLine}
-        </p>
-      );
-    });
-  };
   return (
 
     <>

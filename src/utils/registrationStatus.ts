@@ -1,4 +1,3 @@
-import { Event } from '../types/Events/event';
 
 export interface RegistrationStatusResult {
   isClosed: boolean;

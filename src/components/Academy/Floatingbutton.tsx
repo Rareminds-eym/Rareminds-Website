@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Plus, HelpCircle, MessageCircle, Calendar, Download } from 'lucide-react';
-import FAQChatbot from "../../components/Academy/FAQChatbot";
+import FAQChatbot from "../../components/Academy/StickyButton/StickyButton/FAQChatbot";
 // import { ChatButton } from './ChatButton';
 
 interface MenuItem {
@@ -85,7 +85,10 @@ const FloatingActionMenu = () => {
 
   return (
     <>
-      <FAQChatbot isVisible={showFAQChatbot} /> 
+      <FAQChatbot
+        isVisible={showFAQChatbot}
+        onClose={() => setShowFAQChatbot(false)}
+      />
       {/* <ChatButton isVisible={showChat} onClose={() => setShowChat(false)} />  */}
       <div className="fixed bottom-24 right-16 z-50">
         {/* Menu Items */}

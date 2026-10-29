@@ -113,7 +113,7 @@
   }
 
 
-  const MainLayout = ({ children }: MainLayoutProps) => {
+  const MainLayout = ({ }: MainLayoutProps) => {
     const navigate = useNavigate();
     return (
       <div className="w-full min-h-screen flex flex-col">

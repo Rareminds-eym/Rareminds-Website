@@ -1,4 +1,3 @@
-import React from 'react';
 import { LightbulbIcon } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 

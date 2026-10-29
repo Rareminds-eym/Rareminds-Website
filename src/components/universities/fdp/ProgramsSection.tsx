@@ -1,6 +1,5 @@
 import { motion } from 'framer-motion';
 import { BookOpen, Monitor, Target, School, FileText, Award, Clock, Sparkles } from 'lucide-react';
-import { Link } from 'react-router-dom';
 
 const programs = [
   {
@@ -72,7 +71,7 @@ const programs = [
 ];
 
 // Simple button component for "Learn More"
-function ProgramLearnMoreButton({ link }: { link?: string }) {
+function ProgramLearnMoreButton({ }: { link?: string }) {
   const scrollToContact = () => {
     const el = document.getElementById('contact-section');
     if (el) {

@@ -18,9 +18,7 @@ interface TimeLeft {
 const EventCountdown: React.FC<EventCountdownProps> = ({ 
   eventDate, 
   eventTime, 
-  location, 
-  eventTitle 
-}) => {
+  location}) => {
   const [timeLeft, setTimeLeft] = useState<TimeLeft>({
     days: 0,
     hours: 0,

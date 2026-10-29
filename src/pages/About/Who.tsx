@@ -73,7 +73,6 @@
 
 // export default AboutEcosystem;
 
-import React from "react";
 import { MapPin, Users, Briefcase } from "lucide-react";
 import aboutImage from "../../assets/Who We Are” part of the About page 2 copy.jpg";
 import checkIcon from "../../assets/Checkmark.png";

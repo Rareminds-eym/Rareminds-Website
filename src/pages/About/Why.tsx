@@ -933,7 +933,6 @@
 // export default WhyChooseRareminds;
 
 
-import React from "react";
 
 import proven from "../../assets/Proven skill.webp";
 import government from "../../assets/govt trusted.webp";

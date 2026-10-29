@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useRef } from 'react';
+import { useState, useCallback, useRef } from 'react';
 import { GoogleMap, useLoadScript, Marker, InfoWindow } from '@react-google-maps/api';
 import { motion } from 'framer-motion';
 import { Search, Calendar, Users, MapPin } from 'lucide-react';

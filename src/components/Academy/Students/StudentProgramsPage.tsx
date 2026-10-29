@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Button } from "../UI/button";
 import { ArrowDown, Calendar, Download, FileText, FlipHorizontal } from "lucide-react";
 import { useIsMobile } from "../../../hooks/Academy/use-mobile";
@@ -142,7 +142,6 @@ const ProgramCard = ({
   learningPoints, 
   leadText,
   hasPdf = false,
-  pdfUrl = "#",
   isMobile = false,
   readMoreUrl = "#"
 }: ProgramCardProps) => {

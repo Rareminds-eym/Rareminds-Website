@@ -1,6 +1,6 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate, useParams } from 'react-router-dom';
-import { BookOpen, ArrowLeft, GraduationCap, Clock, Monitor, BarChart3, IndianRupee, X, ChevronDown, Check, Search, ArrowUpDown } from 'lucide-react';
+import { BookOpen, ArrowLeft, GraduationCap, Clock, Monitor, BarChart3, X, ChevronDown, Check, Search, ArrowUpDown } from 'lucide-react';
 import { useState, useEffect, useMemo, useRef } from 'react';
 import { getCoursesByServicePaginated, COURSES_PER_PAGE } from '@/services/sdp/courseService';
 import type { Course } from '@/types/sdp/course.types';

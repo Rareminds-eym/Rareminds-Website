@@ -1,4 +1,3 @@
-import { Download } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
 import { supabase } from "@/lib/supabaseClient"; // Adjust the import path as necessary

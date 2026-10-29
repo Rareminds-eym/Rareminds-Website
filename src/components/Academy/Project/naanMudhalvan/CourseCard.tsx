@@ -1,6 +1,4 @@
-import React from 'react';
 import { motion } from 'framer-motion';
-import { Clock, BookOpen } from 'lucide-react';
 import { Course } from '../types/course';
 
 interface CourseCardProps {

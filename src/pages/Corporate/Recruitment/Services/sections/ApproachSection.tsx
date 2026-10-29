@@ -1,7 +1,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { Icon } from "@iconify/react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 interface ApproachSectionProps {
   title?: string;

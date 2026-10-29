@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import AcademyHeader from "@/components/Header/AcademyHeader";
 import { Button } from "@/components/ui/button";
-import { ArrowDown, Calendar, Download, FileText, FlipHorizontal } from "lucide-react";
+import { ArrowDown, FileText, FlipHorizontal } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { coursesData } from "./Data/coursesData";
 import { Link } from "react-router-dom";
@@ -117,7 +117,6 @@ const ProgramCard = ({
   learningPoints, 
   leadText,
   hasPdf = false,
-  pdfUrl = "#",
   isMobile = false,
   readMoreUrl = "#",
   showLoginLink = false,

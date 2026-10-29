@@ -1494,9 +1494,6 @@ const EventDetail: React.FC = () => {
                   eventId={event.id}
                   eventName={event.title}
                   duration={event.duration}
-                  onRegisterClick={() => {
-                    setModalOpen(true);
-                  }}
                 />
               </div>
             )}

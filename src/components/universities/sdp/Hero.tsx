@@ -1,11 +1,28 @@
 import { motion } from 'framer-motion';
 import { Download, FileSpreadsheet, PhoneCall, Rocket, BadgeCheck, Users, X } from 'lucide-react';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, type ReactNode } from 'react';
 import { supabase } from '@/lib/supabaseClient';
 
-    
+type HeroCallToAction = {
+  text: string;
+  icon: ReactNode;
+  style: string;
+  pdfUrl?: string;
+  institution?: string;
+  href?: string;
+  target?: string;
+  rel?: string;
+};
 
-const banners = [
+const banners: Array<{
+  title: string;
+  subtitle: string;
+  video: string;
+  poster: string;
+  mobilePoster: string;
+  alt: string;
+  cta: HeroCallToAction[];
+}> = [
   {
     title: "Graduate With Skills That Pay!",
     subtitle: "Don't just pass exams.Get job-ready with our industry-aligned programs.",
@@ -482,7 +499,11 @@ function HeroMobile() {
             ) : btn.pdfUrl ? (
               <motion.button
                 key={i}
-                onClick={() => setModal({ open: true, pdfUrl: btn.pdfUrl, institution: btn.institution })}
+                onClick={() => {
+                  if (btn.pdfUrl) {
+                    setModal({ open: true, pdfUrl: btn.pdfUrl, institution: btn.institution ?? btn.text });
+                  }
+                }}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 className={btn.style + " w-full flex justify-center items-center"}
@@ -715,7 +736,11 @@ export default function Hero() {
                     ) : btn.pdfUrl ? (
                       <motion.button
                         key={i}
-                        onClick={() => setModal({ open: true, pdfUrl: btn.pdfUrl, institution: btn.institution })}
+                        onClick={() => {
+                          if (btn.pdfUrl) {
+                            setModal({ open: true, pdfUrl: btn.pdfUrl, institution: btn.institution ?? btn.text });
+                          }
+                        }}
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
                         className={btn.style}

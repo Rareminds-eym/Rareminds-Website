@@ -8,11 +8,7 @@ import {
   Phone,
   Mail,
   MapPin,
-  Send,
   CheckCircle2,
-  Facebook,
-  Twitter,
-  Youtube,
 } from "lucide-react";
 import { Icon } from "@iconify/react";
 import { useToast } from "../../../hooks/use-toast";

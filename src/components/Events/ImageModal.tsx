@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { X, ChevronLeft, ChevronRight, Download, Share2, Heart, ZoomIn, ZoomOut, RotateCw } from "lucide-react";
+import { X, ChevronLeft, ChevronRight, Download, Share2, ZoomIn, ZoomOut, RotateCw } from "lucide-react";
 
 interface ImageModalProps {
   image: string;

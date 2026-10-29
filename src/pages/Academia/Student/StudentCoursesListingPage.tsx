@@ -1,9 +1,8 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
-import { ArrowLeft, GraduationCap, Clock, Monitor, BarChart3, Search, ChevronDown, Check, ArrowUpDown, X, BookOpen, IndianRupee } from 'lucide-react';
+import { ArrowLeft, GraduationCap, Clock, Monitor, BarChart3, Search, ChevronDown, Check, ArrowUpDown, X } from 'lucide-react';
 import { useState, useEffect, useMemo, useRef } from 'react';
 import { getSchoolCoursesByCategory, slugToCategory, COURSES_PER_PAGE } from '@/services/school/schoolCourseService';
-import ExpandableText from '@/components/universities/sdp/shared/ExpandableText';
 import CorporateHeader from '@/components/Header/AcademyHeader';
 
 // Debounce hook

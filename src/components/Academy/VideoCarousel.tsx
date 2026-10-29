@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 
 interface CarouselItem {
   id: number;
@@ -57,7 +57,7 @@ const VideoCarousel = () => {
             muted
             loop
             playsInline
-            alt={`Carousel item ${item.id}`}
+            aria-label={`Carousel item ${item.id}`}
           />
         </div>
       ))}

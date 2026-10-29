@@ -1,15 +1,7 @@
-import React, { useState } from 'react';
-import { Button } from '../../UI/button';
+import { useState } from 'react';
 import { servicesStudent } from '../../UI/servicesStudent'; 
 import ServiceCarousel from './ServiceCarousel';
-import Schedule from './Schedule';
-import {  ArrowDown,ArrowRight, Download, Mail } from 'lucide-react';
-import { Dialog, DialogContent } from '../../UI/dialog';
-import EnquiryForm from './EnquiryForm';
-import DownloadForm from './DownloadForm';
-import FloatingActionButton from '../FAB/FloatingActionButton';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { useCallback } from 'react';
+import {  ArrowDown } from 'lucide-react';
 
 
 interface HeaderProps {
@@ -19,45 +11,23 @@ interface HeaderProps {
 }
 
 
-const HeroBanner = ({  HeroToContact,HeroToLogo, isBlurred }: HeaderProps) =>{
+const HeroBanner = ({  HeroToLogo, isBlurred }: HeaderProps) =>{
 
   const [activeServiceId, setActiveServiceId] = useState(servicesStudent[0].id);
-  const [showSchedule, setShowSchedule] = useState(false);
-  const [showEnquiry, setShowEnquiry] = useState(false);
-  const [showDownload, setShowDownload] = useState(false);
+  const [] = useState(false);
+  const [] = useState(false);
+  const [] = useState(false);
   
-    const location = useLocation();
-  const navigate = useNavigate();
 
   const activeService = servicesStudent.find(service => service.id === activeServiceId) || servicesStudent[0];
   
-  const handleServiceClick = (serviceId: string) => {
-    setActiveServiceId(serviceId);
-  };
   
 
-  const toggleSchedule = () => {
-    setShowSchedule(!showSchedule);
-  };
 
 
 
-    const scrollToSection = () => {
-      const section = document.getElementById('contact-section');
-      if (section) {
-        section.scrollIntoView({ behavior: 'smooth' });
-      }
-    };
   
-      const isSchoolPage = location.pathname === '/school/teacher';
   
-      const handleClick = useCallback(() => {
-        if (isSchoolPage) {
-          scrollToSection();
-        } else {
-          navigate('/school/teacher#contact-section');
-        }
-      }, [isSchoolPage, navigate]);
   
 
   return (

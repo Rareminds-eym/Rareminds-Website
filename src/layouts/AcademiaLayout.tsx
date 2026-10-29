@@ -1,17 +1,5 @@
 import React, { ReactNode } from "react";
 import FooterBar from "@/components/Footer/FooterBar"; // Optional: remove if not needed
-import Header from "@/components/Header/CorporateHeader"; // Updated to CorporateHeader// import {
-import { motion } from "framer-motion";
-import {
-  Phone,
-  FileText,
-  Mail,
-  MapPin,
-  Facebook,
-  Twitter,
-  Linkedin,
-  Instagram,
-} from "lucide-react";
 import { usePageTracking } from "@/hooks/usePageTracking";
 
 interface CorporateLayoutProps {

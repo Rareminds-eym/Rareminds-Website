@@ -1,43 +1,19 @@
 import { useState, useEffect } from "react";
-import React, { useRef } from "react";
+import { useRef } from "react";
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import { Helmet } from "react-helmet-async";
-import MainLayout from "../../../components/Academy/MainLayout";
-import MethodCard from "../../../components/Academy/Teacher/MethodCard";
-import MethodCardR from "../../../components/Academy/Students/MethodCard";
-import { Card } from "@/components/ui/card";
-import { Check } from "lucide-react";
-import StudentCardR from "../../../components/Academy/Students/StudentCard";
-import EducatorCard from "../../../components/Academy/Teacher/EducatorCard";
-import { Book, Calendar, Circle, Users } from "lucide-react";
-import StatsShowcase from "../../../components/Academy/Teacher/StatsShowcase";
-import ProgramCard from "../../../components/Academy/Students/ProgramCard";
-import FacultyTransformation from "../../../components/Academy/Teacher/FacultyTransformation";
-import Fdpcalender from "../../../components/Academy/Teacher/Fdpcalender";
-import FaqAndContact from "../../../components/Academy/Students/FaqAndContact";
-import FacultyForm from "../../../components/Academy/Teacher/FacultyForm";
 import ResourcesPage from "../../../components/Academy/Students/ResourcesPage";
-import ResourceDownloadForm from "../../../components/Academy/Teacher/ResourceDownloadForm";
 import Testimonialss from "../../../components/Academy/Students/Testimonials";
-import VideoCarousel from "../../../components/Academy/Students/VideoCarousel";
-import Testimonials from "../../../components/Academy/Students/testimonials/testimonials"
-import Programs from "../../../components/Academy/Students/Programs";
 import Logos from "../../../components/Academy/Students/Logos";
 import Problem from "../../../components/Academy/Students/Problem";
-import HeroBanner from '../../../components/Academy/Students/Herobanner/HeroBanner';
 import { Toaster } from '../../../components/Academy/UI/toaster';
-import CaseStudy from "../../../components/Academy/Students/educators/caseStudy";
-import StudentProgramsPage from "../../../components/Academy/Students/StudentProgramsPage";
-import  TestimonialsCarousel from '../../../components/Academy/Students/TestimonialsCarousel';
 // import FAQChatbot from '../../../components/Academy/FAQChatbot'
-import FDPButton from '../../../components/Academy/Students/FDPButton'
 import DashboardSection from "../../../components/Academy/Students/DashboardSection"
 import ContactSection from "../../../components/Academy/Contact/ContactSection"
 import CorporateHeader from "../../../components/Header/AcademyHeader"
 import { caseStudies } from '../../../components/Academy/Students/CaseStudy/caseStudies';
 import { CaseStudy as CaseStudyType } from '../../../components/Academy/Students/CaseStudy/caseStudy';
-import { Button } from '../../../components/Academy/UI/button';
 // import CaseStudyDetail from '../../../components/Academy/Students/CaseStudy/CaseStudyDetail';
 // import FloatingActionMenu from '../../../components/Academy/Floatingbutton'
 import FloatingActionMenu from '../../../components/Academy/StickyButton/StickyButton/FloatingAction'
@@ -48,9 +24,9 @@ import YouTubeFeed from '../../../components/Academy/Students/youtubelive'
 import CurrentBlogs from '../../../components/Academy/Students/Current_blogs'
 import ServicesSection from '../../../components/Academy/Students/ServicesSection'
 
-const Academy = ({ userType = "teacher" }: { userType?: "teacher" | "student" }) => {
-  const [activeTab, setActiveTab] = useState<"teacher" | "student">("teacher");
-  const [selectedCaseStudy, setSelectedCaseStudy] = useState<CaseStudyType>(caseStudies[0]);
+const Academy = ({ }: { userType?: "teacher" | "student" }) => {
+  const [] = useState<"teacher" | "student">("teacher");
+  const [] = useState<CaseStudyType>(caseStudies[0]);
   const [blurPercent, setBlurPercent] = useState(0);
 
       const contactRef = useRef<HTMLDivElement>(null);
@@ -64,12 +40,6 @@ const Academy = ({ userType = "teacher" }: { userType?: "teacher" | "student" })
   };
   
 
-  const stats = [
-    { icon: Book, value: "20,000+", label: "Teachers Trained" },
-    { icon: Users, value: "100+", label: "Schools Onboarded" },
-    { icon: Calendar, value: "250+", label: "Pilots Deployed" },
-    { icon: Circle, value: "92%", label: "Teachers Satisfaction Rate" },
-  ];
 
    useEffect (() =>{
     AOS.init({
@@ -84,17 +54,6 @@ const Academy = ({ userType = "teacher" }: { userType?: "teacher" | "student" })
      }, []);
    
 
-     const handleCaseStudySelect = (caseStudy: CaseStudyType) => {
-    setSelectedCaseStudy(caseStudy);
-    
-    // Scroll to detail section on mobile
-    if (window.innerWidth < 768) {
-      const detailSection = document.getElementById('case-study-detail');
-      if (detailSection) {
-        detailSection.scrollIntoView({ behavior: 'smooth' });
-      }
-    }
-  };
 
 
    useEffect(() => {

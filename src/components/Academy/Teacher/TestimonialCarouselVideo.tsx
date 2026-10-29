@@ -160,7 +160,7 @@ const TestimonialVideoCarousel = () => {
         </div>
         
         <div className="absolute inset-0 flex items-center justify-center perspective-1000">
-          {getVisibleTestimonials().map((testimonial, index) => {
+          {getVisibleTestimonials().map((testimonial) => {
             const { position } = testimonial;
             const isCenter = position === 0;
             const translateX = position * 120;

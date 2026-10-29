@@ -1,6 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 interface ContactSectionProps {
   title?: string;
@@ -11,7 +11,6 @@ const ContactSection: React.FC<ContactSectionProps> = ({
   title,
   description,
 }) => {
-  const navigate = useNavigate();
 
   return (
     <section className="relative w-full py-24 bg-yellow-400 bg-[repeating-linear-gradient(45deg,#facc15_0,#facc15_2px,transparent_2px,transparent_6px)] overflow-hidden">

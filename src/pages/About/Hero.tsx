@@ -95,7 +95,6 @@
 
 // export default HeroSection;
 
-import React from "react";
 import blueBg from "../../assets/The Powerhouse Behind banner 2.png"; // background image
 import peopleDiscussion from "../../assets/Vector Smart Object-01.png"; // right image
 

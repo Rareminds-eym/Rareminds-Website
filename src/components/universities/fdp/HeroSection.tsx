@@ -3,8 +3,20 @@ import { Download, CalendarCheck , MessageSquareMore, Users, School, Target, Awa
 import { useState, useEffect, useRef } from 'react';
 import CountUp from 'react-countup';
 
+type HeroCallToAction = {
+  text: string;
+  icon: React.ReactNode;
+  style: string;
+  href?: string;
+};
 
-const banners = [
+const banners: Array<{
+  title: string;
+  subtitle: string;
+  video: string;
+  poster: string;
+  cta: HeroCallToAction[];
+}> = [
   {
     title: "Empowered Faculty = Empowered Students",
     subtitle: "Train your teachers with cutting-edge tools and pedagogy.",
@@ -93,7 +105,7 @@ export default function HeroSection() {
   const [currentBanner, setCurrentBanner] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
   const statsRef = useRef(null);
-    const [isComingSoonOpen, setIsComingSoonOpen] = useState(false);
+    const [, setIsComingSoonOpen] = useState(false);
   const handleScrollDown = () => {
     window.scrollTo({
       top: window.innerHeight,

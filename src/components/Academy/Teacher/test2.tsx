@@ -1,7 +1,6 @@
 
 import React, { useState, useEffect } from "react";
 
-interface ProcessSVGProps extends React.SVGProps<SVGSVGElement> {}
 
 const Text2: React.FC = () => {
     const [hoveredIndex, setHoveredIndex] = useState<number>(0);

@@ -135,12 +135,20 @@
 //   );
 // }
 
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, type ElementType } from "react";
 import { PiGraduationCapFill } from "react-icons/pi";
 import { HiAcademicCap } from "react-icons/hi2";
 import { FaUsers, FaLaptopCode, FaChartLine } from "react-icons/fa";
 
-const AchievementCard = ({ icon: Icon, value, label, suffix = "", isPercentage = false }) => {
+interface AchievementCardProps {
+  icon: ElementType;
+  value: number;
+  label: string;
+  suffix?: string;
+  isPercentage?: boolean;
+}
+
+const AchievementCard = ({ icon: Icon, value, label, suffix = "" }: AchievementCardProps) => {
   const [count, setCount] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
   const cardRef = useRef(null);
@@ -181,7 +189,7 @@ const AchievementCard = ({ icon: Icon, value, label, suffix = "", isPercentage =
     return () => clearInterval(timer);
   }, [isVisible, value]);
 
-  const formatNumber = (num) => {
+  const formatNumber = (num: number) => {
     if (num >= 100000) {
       return (num / 100000).toFixed(1) + " Lakh";
     }

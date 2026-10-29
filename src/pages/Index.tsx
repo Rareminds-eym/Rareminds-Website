@@ -11,7 +11,7 @@ const Index = () => {
   const [partHover, setPartHover] = useState(false);
   const [activePart, setActivePart] = useState<UserType>("none");
 
-  const [content, setContent] = useState([
+  const [content] = useState([
     {
       heading: "Government collaborations",
       img: "2-crop.webp",

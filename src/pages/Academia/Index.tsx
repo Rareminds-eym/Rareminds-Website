@@ -278,53 +278,24 @@
 // };
 
 // export default Academy;
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import MainLayout from "../../components/Academy/MainLayout";
-import MethodCard from "../../components/Academy/Teacher/MethodCard";
-import MethodCardR from "../../components/Academy/Students/MethodCard";
-import { Card } from "@/components/ui/card";
-import { Check } from "lucide-react";
-import StudentCardR from "../../components/Academy/Students/StudentCard";
-import EducatorCard from "../../components/Academy/Teacher/EducatorCard";
-import { Book, Calendar, Circle, Users } from "lucide-react";
-import { useNavigate, useLocation } from "react-router-dom";
-import StatsShowcase from "../../components/Academy/Teacher/StatsShowcase";
-import ProgramCard from "../../components/Academy/Students/ProgramCard";
-import Logos from "../../components/Academy/Teacher/Logos";
-import FacultyTransformation from "../../components/Academy/Teacher/FacultyTransformation";
-import Fdpcalender from "../../components/Academy/Teacher/Fdpcalender";
-import FAQ from "../../components/Academy/Teacher/FAQ";
-import FacultyForm from "../../components/Academy/Teacher/FacultyForm";
-import ResourcesPage from "../../components/Academy/Teacher/ResourcesPage";
-import ResourceDownloadForm from "../../components/Academy/Teacher/ResourceDownloadForm";
-import Testimonials from "../../components/Academy/Teacher/TestimonialSlider";
-import TestimonialsStudent from "../../components/Academy/Students/Testimonials";
+import { useNavigate } from "react-router-dom";
 import VideoCarousel from "../../components/Academy/VideoCarousel";
 
-const Academia = ({ userType = "teacher" }: { userType?: "teacher" | "student" }) => {
-  const [activeTab, setActiveTab] = useState<"teacher" | "student">("teacher");
+const Academia = ({ }: { userType?: "teacher" | "student" }) => {
+  const [] = useState<"teacher" | "student">("teacher");
 
   const navigate = useNavigate();
 
-      const contactRef = useRef<HTMLDivElement>(null);
         
-      const location = useLocation();
   
   
-       const scrollToContact = () => {
-      contactRef.current?.scrollIntoView({ behavior: "smooth" });
-    };
   
 
     
-  const stats = [
-    { icon: Book, value: "20,000+", label: "Teachers Trained" },
-    { icon: Users, value: "100+", label: "Schools Onboarded" },
-    { icon: Calendar, value: "250+", label: "Pilots Deployed" },
-    { icon: Circle, value: "92%", label: "Teachers Satisfaction Rate" },
-  ];
 
    useEffect (() =>{
     AOS.init({

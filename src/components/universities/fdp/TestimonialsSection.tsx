@@ -113,7 +113,7 @@ const TestimonialsSection: React.FC = () => {
       </div>
 
       {/* Image scroll animation */}
-      <style jsx>{`
+      <style>{`
         @keyframes scroll-y {
           0% {
             transform: translateY(0%);

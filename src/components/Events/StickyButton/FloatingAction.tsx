@@ -28,7 +28,7 @@ const FloatingActionMenu: React.FC<FloatingActionMenuProps> = ({ currentEvent })
   const [isOpen, setIsOpen] = useState(false);
   const [showChat, setShowChat] = useState(false);
   const [showAddToCalendar, setShowAddToCalendar] = useState(false);
-  const [activeIcon, setActiveIcon] = useState<React.ComponentType<any>>(Plus);
+  const [, setActiveIcon] = useState<React.ComponentType<any>>(Plus);
 
   const menuItems: MenuItem[] = [
     {

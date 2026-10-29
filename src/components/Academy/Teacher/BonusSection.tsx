@@ -2,11 +2,6 @@ import React from 'react';
 import { Button } from '../UI/button';
 import { useToast } from '@/hooks/use-toast';
 
-interface TemplateItem {
-  title: string;
-  description: string;
-  icon: React.ReactNode;
-}
 
 const BonusSection: React.FC = () => {
   const { toast } = useToast();

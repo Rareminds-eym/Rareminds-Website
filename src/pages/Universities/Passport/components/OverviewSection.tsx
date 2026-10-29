@@ -66,7 +66,7 @@ const OverviewSection = () => {
         h.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
       );
       const highlightPattern = new RegExp(`(${escapedHighlights.join('|')})`, 'g');
-      const parts = item.body.split(highlightPattern);
+      const parts = (item.body ?? '').split(highlightPattern);
       
       return (
         <>

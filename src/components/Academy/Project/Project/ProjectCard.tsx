@@ -81,17 +81,15 @@
 //   );
 // };
 
-import React from 'react';
 import { ArrowRight, Clock, MapPin, School } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import type { Project } from '../../types/index';
+import type { Project } from '../types/index';
 
 interface ProjectCardProps {
   project: Project;
-  onClick: (project: Project) => void;
 }
 
-export const ProjectCard = ({ project, onClick }: ProjectCardProps) => {
+export const ProjectCard = ({ project }: ProjectCardProps) => {
   return (
     <div className="bg-white rounded-xl shadow-md overflow-hidden transition-transform hover:scale-[1.02] flex flex-col h-full">
       {/* Image Section */}

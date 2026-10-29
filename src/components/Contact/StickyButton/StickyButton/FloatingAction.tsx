@@ -45,10 +45,10 @@ const FloatingActionMenu = () => {
   const [phone, setPhone] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
   const [loading, setLoading] = useState(false);
-  const [downloadReady, setDownloadReady] = useState(false);
+  const [] = useState(false);
   const [selectedResource, setSelectedResource] = useState<Resource | null>(null);
   const [windowWidth, setWindowWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1024);
-  const [viewportWidth, setViewportWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1024);
+  const [, setViewportWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1024);
 
   const handleDownloadClick = (resource: Resource) => {
     setSelectedResource(resource);
@@ -113,7 +113,6 @@ const FloatingActionMenu = () => {
       const spacing = 60; // px between items
       const bottomOffset = 24; // px from bottom of screen
       const fabHeight = 56; // FAB button height
-      const sideMargin = 24; // px from right edge of screen
       const maxHeight = (typeof window !== 'undefined' ? window.innerHeight : 800) - bottomOffset - fabHeight - 20; // 20px safety margin
       
       // Calculate position ensuring it doesn't go off-screen

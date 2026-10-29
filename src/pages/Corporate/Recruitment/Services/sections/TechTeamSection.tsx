@@ -1,6 +1,5 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { ArrowUpRight, Users, Gauge, Award, Target } from "lucide-react";
 
 interface TechTeamSectionProps {
   title?: string;

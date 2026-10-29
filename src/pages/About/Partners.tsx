@@ -6,7 +6,7 @@ interface MarqueeRowProps {
   duration?: number;
 }
 
-const MarqueeRow: React.FC<MarqueeRowProps> = ({ logos, direction, duration = 15 }) => {
+const MarqueeRow: React.FC<MarqueeRowProps> = ({ logos, direction }) => {
   // Repeat logos to fill the visible area and avoid gaps
   const repeatedLogos = Array(4).fill(logos).flat();
   return (
@@ -545,9 +545,6 @@ const MarqueeRow: React.FC<MarqueeRowProps> = ({ logos, direction, duration = 15
 import React from "react";
 
 // import your logos from assets
-import tnsdc from "../../assets/tamil_nadu.jpg";
-import tripura from "../../assets/logo_sdp.webp";
-import naan from "../../assets/skill.png";
 import vels from "../../assets/Vels_University_logo 1.png";
 import anna from "../../assets/Anna_University_Logo.svg 1.png";
 import bharathiar from "../../assets/Bharathiar_University_logo 1.png";

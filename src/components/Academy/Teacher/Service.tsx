@@ -1,11 +1,9 @@
 import { motion, useScroll } from 'framer-motion';
 import { 
   GraduationCap,
-  Briefcase,
   BookOpen,
   Users,
   School,
-  Building2,
   ArrowRight,
   Download,
   FileSpreadsheet
@@ -163,10 +161,10 @@ const sendCourseListEmail = async (email: string, name: string) => {
 export default function Services() {
   const containerRef = useRef(null);
   const navigate = useNavigate();
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start start", "end end"]
-  });
+  useScroll({
+target: containerRef,
+offset: ["start start","end end"]
+});
 
   const [modalIsOpen, setModalOpen] = useState(false);
   const [courseModalIsOpen, setCourseModalOpen] = useState(false);
@@ -177,9 +175,7 @@ export default function Services() {
     message: '',
   });
 
-  const openModal = () => setModalOpen(true);
   const closeModal = () => setModalOpen(false);
-  const openCourseModal = () => setCourseModalOpen(true);
   const closeCourseModal = () => setCourseModalOpen(false);
 
   const handleChange = (e: any) => {

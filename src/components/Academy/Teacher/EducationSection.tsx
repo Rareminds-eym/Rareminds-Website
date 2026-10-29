@@ -1,6 +1,5 @@
 import React from 'react';
 import { GraduationCap, Laptop, ChartBar, Brain } from 'lucide-react';
-import { cn } from '@/lib/utils';
 
 
 
@@ -11,34 +10,12 @@ interface EducationSectionProps {
 }
 
 
-// Button component
-interface CtaButtonProps {
-  children: React.ReactNode;
-  className?: string;
-  onClick?: () => void;
-}
 
 
 
 
 
 
-const CtaButton = ({ children, className, onClick }: CtaButtonProps) => {
-  return (
-    <button
-      onClick={onClick}
-      className={cn(
-        "px-8 py-3 font-semibold text-white rounded-full",
-        "bg-education-orange hover:bg-orange-600 transition-colors",
-        "shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all",
-        "focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-opacity-50",
-        className
-      )}
-    >
-      {children}
-    </button>
-  );
-};
 
 // Feature item component
 const FeatureItem = ({

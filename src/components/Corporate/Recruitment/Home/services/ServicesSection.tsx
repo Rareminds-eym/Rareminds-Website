@@ -163,7 +163,7 @@ const ServicesSection = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-x-8 gap-y-10">
-          {services.map((service, index) => (
+          {services.map((service) => (
             <motion.div
               initial={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: 40 }}
               whileInView={shouldReduceMotion ? { opacity: 1 } : { opacity: 1, y: 0 }}

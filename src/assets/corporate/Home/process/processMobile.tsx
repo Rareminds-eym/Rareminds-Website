@@ -4,10 +4,7 @@ interface ProcessSVGProps extends React.SVGProps<SVGSVGElement> {
 }
 
 const ProcessSVGMob = ({
-  onHoverPart,
-  onLeavePart,
-  ...props
-}: ProcessSVGProps) => {
+  }: ProcessSVGProps) => {
   return (
     <svg
       width="321"

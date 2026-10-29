@@ -1,11 +1,8 @@
 import { useState } from "react";
 import HeroSection from "./components/HeroSection";
 // import { ProblemSection } from "./components/problemSection";
-import SolutionSection from "./components/SolutionSection";
 import WorkSection from "./components/WorkSection";
-import ImpactSection from "./components/ImpactSection";
 import { CTASection } from "./components/CTASection";
-import TestimonialsSection from "./components/TestimonialsSection";
 import { BookDemo } from "@/components/universities/BookDemo";
 import { HelmetProvider } from "react-helmet-async";
 import Seo from "@/components/Govt/Seo/Seo";

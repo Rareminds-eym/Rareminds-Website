@@ -1,10 +1,9 @@
 import React from 'react';
-import { Battery, Sprout, Dna,Folders, Heart, Eye, ShoppingBag, Brain, MonitorSmartphone, Briefcase } from 'lucide-react';
+import { Battery, Sprout, Dna,Folders, Heart, ShoppingBag, Brain, MonitorSmartphone, Briefcase } from 'lucide-react';
 import CorporateTraining from '@/pages/Corporate/Training/Home';
 
 
 // Util to combine class names
-const cn = (...classes: string[]) => classes.filter(Boolean).join(' ');
 
 // Interfaces
 interface SectorCardProps {
@@ -16,13 +15,7 @@ interface SectorCardProps {
   path?: { CorporateTraining: React.FC }; 
 }
 
-interface Program {
-  title: string;
-}
 
-interface ProgramListProps {
-  programs: Program[];
-}
 
 interface CTAButtonProps {
   children: React.ReactNode;
@@ -31,7 +24,7 @@ interface CTAButtonProps {
 }
 
 
-const SectorCard = ({ title, icon, color, description, path }: SectorCardProps) => {
+const SectorCard = ({ title, icon, description, path }: SectorCardProps) => {
   return (
     <div className="relative group h-36 md:h-64 [perspective:1000px]">
       <div className="relative w-full h-full transition-transform  duration-700 [transform-style:preserve-3d] group-hover:[transform:rotateX(-180deg)]">

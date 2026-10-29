@@ -5,6 +5,7 @@ export interface Testimonial {
   name: string;
   role?: string;  // We can use role or university/college here
   message: string;
+  avatarUrl?: string;
 }
 
 export const testimonialsdata: Testimonial[] = [

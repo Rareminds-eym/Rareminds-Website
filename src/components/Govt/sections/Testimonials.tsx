@@ -46,7 +46,7 @@ const Testimonials: React.FC = () => {
             <TestimonialCard
               key={`col1-${id}`}
               name={name}
-              role={role}
+              role={role ?? ""}
               message={message}
               avatarUrl={avatarUrl}
             />
@@ -67,7 +67,7 @@ const Testimonials: React.FC = () => {
             <TestimonialCard
               key={`col2-${id}`}
               name={name}
-              role={role}
+              role={role ?? ""}
               message={message}
               avatarUrl={avatarUrl}
             />
@@ -88,7 +88,7 @@ const Testimonials: React.FC = () => {
             <TestimonialCard
               key={`col3-${id}`}
               name={name}
-              role={role}
+              role={role ?? ""}
               message={message}
               avatarUrl={avatarUrl}
             />

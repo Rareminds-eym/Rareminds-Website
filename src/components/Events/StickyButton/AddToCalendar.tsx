@@ -38,7 +38,7 @@ export const AddToCalendar: React.FC<AddToCalendarProps> = ({ isVisible, onClose
             text: currentEvent.title,
             dates: `${startDate}/${endDate}`,
             details: cleanDescription,
-            location: currentEvent.location,
+            location: currentEvent.location ?? currentEvent.location_metadata?.address ?? '',
             trp: 'false',
             sprop: 'website:rareminds.com'
         });
@@ -51,7 +51,7 @@ export const AddToCalendar: React.FC<AddToCalendarProps> = ({ isVisible, onClose
             startdt: startDate,
             enddt: endDate,
             body: cleanDescription,
-            location: currentEvent.location,
+            location: currentEvent.location ?? currentEvent.location_metadata?.address ?? '',
             allday: 'false',
             uid: currentEvent.id || 'event-' + Date.now()
         });
@@ -69,8 +69,8 @@ export const AddToCalendar: React.FC<AddToCalendarProps> = ({ isVisible, onClose
             `DTEND:${endDate}`,
             `SUMMARY:${currentEvent.title}`,
             `DESCRIPTION:${cleanDescription}`,
-            `LOCATION:${currentEvent.location}`,
-            `ORGANIZER:CN=${currentEvent.organizer_name}:MAILTO:${currentEvent.organizer_email}`,
+            `LOCATION:${currentEvent.location ?? currentEvent.location_metadata?.address ?? ''}`,
+            `ORGANIZER:CN=${currentEvent.organizer_name ?? currentEvent.organizer_metadata?.name ?? ''}:MAILTO:${currentEvent.organizer_email ?? currentEvent.organizer_metadata?.email ?? ''}`,
             'STATUS:CONFIRMED',
             'BEGIN:VALARM',
             'TRIGGER:-PT15M',
@@ -161,7 +161,7 @@ export const AddToCalendar: React.FC<AddToCalendarProps> = ({ isVisible, onClose
                             })} at {currentEvent.event_time}
                         </p>
                         <p className="text-sm text-gray-600 mt-1">
-                            📍 {currentEvent.location} | ⏱️ {currentEvent.duration}
+                            📍 {currentEvent.location ?? currentEvent.location_metadata?.address ?? ''} | ⏱️ {currentEvent.duration}
                         </p>
                     </div>
                    

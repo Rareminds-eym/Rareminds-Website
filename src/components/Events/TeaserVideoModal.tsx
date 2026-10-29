@@ -60,27 +60,6 @@ const TeaserVideoModal: React.FC<TeaserVideoModalProps> = ({ open, videoUrl, onC
     setErrorMessage('');
   };
 
-  // Check if video URL is valid
-  const isValidVideoUrl = (url: string) => {
-    if (!url) return false;
-    
-    // Check for common video formats and streaming services
-    const videoPatterns = [
-      /\.(mp4|webm|ogg|avi|mov|wmv|flv|m4v)$/i, // File extensions
-      /^data:video\//i, // Data URLs
-      /^blob:/i, // Blob URLs
-      /youtube\.com\/watch/i,
-      /youtu\.be\//i,
-      /vimeo\.com\//i,
-      /dailymotion\.com\//i,
-      /facebook\.com\/.*\/videos/i,
-      /instagram\.com\/p\//i,
-      /twitch\.tv\//i
-    ];
-    
-    return videoPatterns.some(pattern => pattern.test(url));
-  };
-  
   // Check if it's a data URL (base64 video)
   const isDataUrl = (url: string) => {
     return url.startsWith('data:video/');
@@ -180,7 +159,7 @@ const TeaserVideoModal: React.FC<TeaserVideoModalProps> = ({ open, videoUrl, onC
     }
 
     // Check if it's a direct video file that might not be supported by ReactPlayer
-    if (isValidVideoUrl(videoUrl) && !ReactPlayer.canPlay(videoUrl)) {
+    if (/^(?:blob:|data:video\/)|\.(?:mp4|webm|ogg|avi|mov|wmv|flv|m4v)(?:[?#].*)?$/i.test(videoUrl)) {
       return (
         <div className="relative w-full max-w-2xl">
           <video
@@ -210,8 +189,8 @@ const TeaserVideoModal: React.FC<TeaserVideoModalProps> = ({ open, videoUrl, onC
 
     return (
       <div className="relative w-full max-w-2xl">
-        <ReactPlayer 
-          url={videoUrl} 
+        <ReactPlayer
+          src={videoUrl}
           controls 
           width="100%" 
           height="480px"
@@ -224,24 +203,6 @@ const TeaserVideoModal: React.FC<TeaserVideoModalProps> = ({ open, videoUrl, onC
             // Video is progressing, so it's working
             if (isLoading) {
               setIsLoading(false);
-            }
-          }}
-          config={{
-            file: {
-              attributes: {
-                controlsList: 'nodownload',
-                crossOrigin: 'anonymous'
-              }
-            },
-            youtube: {
-              playerVars: {
-                showinfo: 1
-              }
-            },
-            vimeo: {
-              playerOptions: {
-                responsive: true
-              }
             }
           }}
         />

@@ -38,6 +38,9 @@ interface ProjectPost {
   videos_url: string[] | null;
 }
 
+type ProjectSectionKey = 'introduction' | 'aboutProgram' | 'keyOutcomes' | 'strategicAlignment' | 'other';
+type ProjectSections = Record<ProjectSectionKey, any[]>;
+
 const ProjectDetail = () => {
   const { projectId } = useParams();
   
@@ -198,61 +201,37 @@ const ProjectDetail = () => {
   };
 
   // Function to render structured content from TipTap/ProseMirror JSON
-  const renderStructuredContent = (contentJson: any) => {
-    if (!contentJson) return null;
-
-    let content = contentJson;
-    if (typeof contentJson === 'string') {
-      try {
-        content = JSON.parse(contentJson);
-      } catch (e) {
-        return (
-          <div className="prose max-w-none">
-            <p className="text-gray-700 leading-relaxed">{contentJson}</p>
-          </div>
-        );
-      }
-    }
-
-    // Handle different content structures
-    if (content.content && Array.isArray(content.content)) {
-      return content.content.map((node: any, index: number) => renderNode(node, index));
-    } else if (Array.isArray(content)) {
-      return content.map((node: any, index: number) => renderNode(node, index));
-    } else if (content.type) {
-      return renderNode(content, 0);
-    } else {
-      return (
-        <div className="prose max-w-none">
-          <p className="text-gray-700 leading-relaxed">{String(content)}</p>
-        </div>
-      );
-    }
-  };
 
   // Function to extract sections from content
-  const extractSections = (contentJson: any) => {
-    if (!contentJson) return { sections: [], remainingContent: null };
-
-    let content = contentJson;
-    if (typeof contentJson === 'string') {
-      try {
-        content = JSON.parse(contentJson);
-      } catch (e) {
-        return { sections: [], remainingContent: contentJson };
-      }
-    }
-
-    const sections = {
+  const extractSections = (contentJson: any): ProjectSections => {
+    const emptySections = (): ProjectSections => ({
       introduction: [],
       aboutProgram: [],
       keyOutcomes: [],
       strategicAlignment: [],
-      other: []
-    };
+      other: [],
+    });
 
-    let currentSection = 'other';
-    let allContent = [];
+    if (!contentJson) return emptySections();
+
+    let content = contentJson;
+    if (typeof contentJson === 'string') {
+      try {
+        content = JSON.parse(contentJson);
+      } catch (e) {
+        const sections = emptySections();
+        sections.other.push({
+          type: 'paragraph',
+          content: [{ type: 'text', text: contentJson }],
+        });
+        return sections;
+      }
+    }
+
+    const sections = emptySections();
+
+    let currentSection: ProjectSectionKey = 'other';
+    let allContent: any[] = [];
 
     if (content.content && Array.isArray(content.content)) {
       allContent = content.content;
@@ -277,7 +256,7 @@ const ProjectDetail = () => {
         }
       }
       
-      sections[currentSection as keyof typeof sections].push(node);
+      sections[currentSection].push(node);
     });
 
     return sections;
@@ -647,7 +626,7 @@ const ProjectDetail = () => {
                 Program Videos
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {project.videos_url.map((videoUrl: string, index: number) => (
+                {project.videos_url.map((_videoUrl: string, index: number) => (
                   <div key={index} className="aspect-video bg-gray-100 rounded-xl flex items-center justify-center">
                     <Button variant="outline" className="h-auto p-4">
                       <PlayCircle className="h-6 w-6 mr-2" />

@@ -1,28 +1,6 @@
-import React from "react";
 import { Send, Book } from "lucide-react";
 
 
-const DeploymentCard = ({
-  icon: Icon,
-  title,
-  description
-}: {
-  icon: React.ElementType;
-  title: string;
-  description: string;
-}) => (
-  <div
-    className="bg-red-50 border-2  border-red-300 backdrop-blur-sm mt-10 rounded-3xl pt-12 pb-6 px-4 md:p-6 flex flex-col items-center text-center shadow-md hover:shadow-lg transition duration-300 relative"
-  >
-    {/* Icon container */}
-    <div className="absolute -top-6 md:-top-9 h-12 w-12 md:h-16 md:w-16 rounded-full shadow-md bg-gradient-to-tr from-red-100 to-red-200 border-2 border-orange-50 flex items-center justify-center">
-      <Icon className="h-7 w-7 text-gray-800" />
-    </div>
-
-    {/* Title */}
-    <h3 className="text-lg text-gray-600 md:text-2xl font-semibold mt-8">{title}</h3>
-  </div>
-);
 
 
 export const DeploymentSection = () => {

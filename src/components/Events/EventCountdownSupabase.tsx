@@ -17,7 +17,7 @@ const EventCountdownSupabase: React.FC<EventCountdownSupabaseProps> = ({
   backgroundColor = "from-orange-50 to-yellow-50",
   accentColor = "from-yellow-400 to-orange-400"
 }) => {
-  const { events, activeEvents, urgentEvents, loading, error, refetch } = useEventCountdown();
+  const { activeEvents, urgentEvents, loading, error, refetch } = useEventCountdown();
 
   // Determine which events to show
   const eventsToShow = showUrgentOnly 

@@ -4,7 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Send, CheckCircle, AlertCircle, Loader2 } from 'lucide-react';
 
 import { contactFormSchema, type ContactFormData } from '../lib/types';
-import { supabase } from '../lib/supabase';
+import { supabase } from '@/lib/supabaseClient';
 import FormField from './FormField';
 
 const ContactForm: React.FC = () => {

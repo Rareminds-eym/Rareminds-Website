@@ -3,6 +3,8 @@ import { supabase } from '../../lib/supabaseClient';
 import { Event } from '../../types/Events/event';
 
 export interface EventWithCountdown extends Event {
+  location: string;
+  capacity?: number;
   timeLeft: {
     days: number;
     hours: number;
@@ -82,6 +84,8 @@ export const useEventCountdown = () => {
 
         return {
           ...event,
+          location: event.location_metadata?.address ?? event.location ?? '',
+          capacity: event.content_metadata?.capacity,
           // Derive location_geo from location_metadata JSONB
           location_geo:
             event.location_metadata?.lat !== undefined && event.location_metadata?.lng !== undefined

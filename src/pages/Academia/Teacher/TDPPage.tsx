@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { ArrowLeft } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { Helmet } from "react-helmet-async";
@@ -391,28 +391,6 @@ const otherCourses = [
 	{ name: 'Institutional Value-Added Services', route: '/school/teacher/Courses/institutional-value-added' },
 ];
 
-const illustrations = {
-  'academic-excellence': {
-    whatMakesItDifferent: '/academy/courseBanner/what-makes-different-academic.svg',
-    whyItMatters: '/academy/courseBanner/why-it-matters-academic.svg',
-    howWeSupport: '/academy/courseBanner/how-we-support-academic.svg',
-  },
-  'capacity-building': {
-    whatMakesItDifferent: '/academy/courseBanner/what-makes-different-capacity.svg',
-    whyItMatters: '/academy/courseBanner/why-it-matters-capacity.svg',
-    howWeSupport: '/academy/courseBanner/how-we-support-capacity.svg',
-  },
-  'current-affairs': {
-    whatMakesItDifferent: '/academy/courseBanner/what-makes-different-current.svg',
-    whyItMatters: '/academy/courseBanner/why-it-matters-current.svg',
-    howWeSupport: '/academy/courseBanner/how-we-support-current.svg',
-  },
-  'skill-upgradation': {
-    whatMakesItDifferent: '/academy/courseBanner/what-makes-different-skill.svg',
-    whyItMatters: '/academy/courseBanner/why-it-matters-skill.svg',
-    howWeSupport: '/academy/courseBanner/how-we-support-skill.svg',
-  },
-};
 
 export default function TDPPage() {
 	const [selectedSection, setSelectedSection] = useState('academic-excellence');

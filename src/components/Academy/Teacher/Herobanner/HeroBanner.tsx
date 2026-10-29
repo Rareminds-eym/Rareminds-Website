@@ -13,7 +13,6 @@ interface HeroCarouselProps {
 }
 
 const HeroCarousel: React.FC<HeroCarouselProps> = ({
-  HeroToContact,
   HeroToLogo,
   transitionDuration = 500,
   rotationInterval = 5000,

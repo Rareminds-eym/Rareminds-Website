@@ -162,7 +162,7 @@ const AcademyContactSection = () => {
       label: "YouTube",
       size: 40,
     },
-  ].filter(Boolean);
+  ].filter((item) => item !== false);
 
 
 

@@ -1,5 +1,4 @@
 import { useParams, useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
 import { Helmet } from "react-helmet-async";
 import { ArrowLeft, CheckCircle, ArrowRight, Star, Award, Lightbulb, Users2, FileText, Target, CalendarCheck, Briefcase, Users, Heart, BarChart2 } from 'lucide-react';
 import {
@@ -11,8 +10,7 @@ import {
   communicationPersonalityDevelopmentDetails
 } from './Cources';
 import AcademyHeader from '@/components/Header/AcademyHeader';
-import React, { useEffect } from 'react';
-import { Book } from "@/components/ui/book";
+import { useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '../../../components/Academy/UI/badge';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../../../components/Academy/UI/table';

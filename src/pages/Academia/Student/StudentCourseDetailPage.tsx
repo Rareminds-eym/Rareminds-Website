@@ -3,7 +3,6 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, CheckCircle, Users, Target, Award, BookOpen, ChevronDown, ChevronUp } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { getSchoolCourseBySlug, getOtherSchoolCourses } from '@/services/school/schoolCourseService';
-import ExpandableText from '@/components/universities/sdp/shared/ExpandableText';
 import CorporateHeader from '@/components/Header/AcademyHeader';
 
 export default function StudentCourseDetailPage() {
