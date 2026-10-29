@@ -1,9 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
-import { useQueryClient } from "@tanstack/react-query";
 import { cn } from "../../lib/utils";
 import { useCompanySettings } from "../../hooks/useCompanySettings";
-import { supabase } from "../../lib/supabaseClient";
 
 export interface BrandLogoProps {
   /** Extra classes on the logo <img> (default "w-40 h-auto sm:w-64"). */
@@ -29,34 +27,10 @@ export default function BrandLogo({
   alt = "Rareminds Logo",
   to = "/",
 }: BrandLogoProps) {
-  const queryClient = useQueryClient();
   const { settings, isLoading, errorMessage } = useCompanySettings();
   const [logoLoadFailed, setLogoLoadFailed] = useState(false);
   const settingsError = errorMessage || (!isLoading && !settings ? 'Company settings are unavailable.' : null);
   const logoError = settings?.logo_url && logoLoadFailed ? 'Company logo could not be loaded.' : null;
-
-  // Subscribe to company_settings changes via Supabase Realtime
-  useEffect(() => {
-    const channel = supabase
-      .channel('company-settings-changes')
-      .on(
-        'postgres_changes',
-        {
-          event: 'UPDATE',
-          schema: 'public',
-          table: 'company_settings'
-        },
-        () => {
-          // Invalidate React Query cache to trigger refetch
-          queryClient.invalidateQueries({ queryKey: ['company-settings'] });
-        }
-      )
-      .subscribe();
-
-    return () => {
-      supabase.removeChannel(channel);
-    };
-  }, [queryClient]);
 
   return (
     <Link
