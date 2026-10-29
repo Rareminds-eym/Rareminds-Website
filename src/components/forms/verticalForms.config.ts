@@ -164,7 +164,7 @@ export const governmentForm: VerticalFormConfig = {
 export const academiaForm: VerticalFormConfig = {
 	vertical: "academia",
 	table: "acdemia_form",
-	notificationType: "teacher-service-enquiry",
+	notificationType: "academy-enquiry",
 	title: "Request Course Information",
 	submitLabel: "Get Course Info",
 	successMessage: "Thanks! We'll send you the course details shortly.",

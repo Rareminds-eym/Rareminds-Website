@@ -50,9 +50,10 @@ const AcademyContactSection = () => {
 		}
 
 		try {
-			await sendEmailNotification("academy-enquiry", {
+			await sendEmailNotification(payload.notificationType, {
 				...submission,
 				verification_proof: payload.otpProof,
+				phone_verification_proof: payload.phoneProof,
 			});
 		} catch (emailError) {
 			console.error("Email notification error:", emailError);

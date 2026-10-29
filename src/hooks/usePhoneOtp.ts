@@ -34,6 +34,7 @@ export function usePhoneOtp({
 	const [attempts, setAttempts] = useState(0);
 	const [phone, setPhone] = useState(""); // the number the code was sent to
 	const [verificationId, setVerificationId] = useState("");
+	const [proof, setProof] = useState(""); // single-use proof issued on success
 
 	useEffect(() => {
 		if (cooldown <= 0) return;
@@ -47,6 +48,7 @@ export function usePhoneOtp({
 		setAttempts(0);
 		setPhone("");
 		setVerificationId("");
+		setProof("");
 	};
 
 	const sendCode = async (rawPhone: string) => {
@@ -85,7 +87,12 @@ export function usePhoneOtp({
 		setStatus("verifying");
 		setError("");
 		try {
-			await verifyPhoneOtp(phone, verificationId, code);
+			const result = await verifyPhoneOtp(phone, verificationId, code);
+			setProof(
+				typeof result.verification_proof === "string"
+					? result.verification_proof
+					: "",
+			);
 			setStatus("verified");
 		} catch (e) {
 			setAttempts((a) => a + 1);
@@ -103,6 +110,7 @@ export function usePhoneOtp({
 		error,
 		cooldown,
 		phone,
+		proof,
 		minCodeLength,
 		maxCodeLength,
 		sendCode,

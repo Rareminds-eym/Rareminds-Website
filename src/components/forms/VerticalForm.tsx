@@ -34,6 +34,7 @@ export type SubmitPayload = {
 	notificationType: EmailNotificationType;
 	values: Record<string, string>;
 	otpProof: string;
+	phoneProof: string;
 	elapsedMs: number;
 };
 export type SubmitResult = { fieldErrors?: FieldErrors } | undefined;
@@ -76,6 +77,7 @@ const buildRow = (
 					phone: v.phone,
 					address: v.address,
 					message,
+					submitted_at: new Date().toISOString(),
 				},
 			};
 		default:
@@ -128,6 +130,7 @@ export async function submitViaEmailService(
 			message,
 			vertical: payload.vertical,
 			verification_proof: payload.otpProof,
+			phone_verification_proof: payload.phoneProof,
 		});
 	} catch (emailError) {
 		console.error("Email notification failed:", emailError);
@@ -278,11 +281,11 @@ export default function VerticalForm({
 			// 2) Only if it is new, send the code
 			otp.sendCode(values.email);
 		} catch (err) {
+			// Fail open: the duplicate check RPC may be unavailable (e.g. the
+			// migration has not been applied yet). The insert still enforces
+			// uniqueness through the unique indexes, so don't block the user.
 			console.error("Email duplicate check failed:", err);
-			setServerErrors((s) => ({
-				...s,
-				email: "We couldn't check your email. Please try again.",
-			}));
+			otp.sendCode(values.email);
 		} finally {
 			setChecking(false);
 		}
@@ -307,11 +310,9 @@ export default function VerticalForm({
 			}
 			phoneOtp.sendCode(values.phone);
 		} catch (err) {
+			// Fail open for the same reason as the email check above.
 			console.error("Phone duplicate check failed:", err);
-			setServerErrors((s) => ({
-				...s,
-				phone: "We couldn't check your phone number. Please try again.",
-			}));
+			phoneOtp.sendCode(values.phone);
 		} finally {
 			setChecking(false);
 		}
@@ -351,6 +352,7 @@ export default function VerticalForm({
 				notificationType: config.notificationType,
 				values: cleaned,
 				otpProof: otp.proof ?? "",
+				phoneProof: phoneOtp.proof,
 				elapsedMs: Date.now() - startedAt.current,
 			});
 			if (result?.fieldErrors && Object.keys(result.fieldErrors).length) {
@@ -488,13 +490,15 @@ export default function VerticalForm({
 				{waitingForCode && (
 					<button
 						type="button"
-						onClick={() => otp.sendCode(values.email)}
-						disabled={otp.cooldown > 0}
+						onClick={handleSendCode}
+						disabled={otp.cooldown > 0 || checking}
 						className="mt-1 text-sm underline disabled:no-underline disabled:opacity-60"
 					>
 						{otp.cooldown > 0
 							? `Resend code in ${otp.cooldown}s`
-							: "Resend code"}
+							: checking
+								? "Checking…"
+								: "Resend code"}
 					</button>
 				)}
 			</div>
@@ -573,13 +577,15 @@ export default function VerticalForm({
 				{waitingForCode && (
 					<button
 						type="button"
-						onClick={() => phoneOtp.sendCode(values.phone)}
-						disabled={phoneOtp.cooldown > 0}
+						onClick={handleSendPhoneCode}
+						disabled={phoneOtp.cooldown > 0 || checking}
 						className="mt-1 text-sm underline disabled:no-underline disabled:opacity-60"
 					>
 						{phoneOtp.cooldown > 0
 							? `Resend code in ${phoneOtp.cooldown}s`
-							: "Resend code"}
+							: checking
+								? "Checking…"
+								: "Resend code"}
 					</button>
 				)}
 			</div>

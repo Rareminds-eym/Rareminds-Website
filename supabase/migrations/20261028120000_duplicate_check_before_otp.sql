@@ -1,3 +1,39 @@
+-- Fail early with actionable counts instead of an opaque "could not create unique
+-- index" when duplicate submissions already exist (same style as
+-- 20260909150000_move_email_to_pages_bff.sql). Existing conflicts must be reviewed
+-- and cleaned before this migration can create the indexes.
+do $$
+declare
+  v_email_dups text[] := '{}';
+  v_phone_dups text[] := '{}';
+  v_tables text[] := array['contact_form','acdemia_form','footer_email','recruitment_forms','training_forms','government_form','demo_requests'];
+  v_phone_tables text[] := array['contact_form','acdemia_form','government_form'];
+  v_name text;
+  v_count bigint;
+begin
+  foreach v_name in array v_tables loop
+    execute format(
+      'select count(*) from (select lower(email) from %I where email <> '''' group by 1 having count(*) > 1) d',
+      v_name) into v_count;
+    if v_count > 0 then
+      v_email_dups := v_email_dups || format('%s: %s duplicate email group(s)', v_name, v_count);
+    end if;
+  end loop;
+  foreach v_name in array v_phone_tables loop
+    execute format(
+      'select count(*) from (select right(regexp_replace(phone::text, ''\D'', '''', ''g''), 10) from %I where phone::text <> '''' group by 1 having count(*) > 1) d',
+      v_name) into v_count;
+    if v_count > 0 then
+      v_phone_dups := v_phone_dups || format('%s: %s duplicate phone group(s)', v_name, v_count);
+    end if;
+  end loop;
+  if array_length(v_email_dups, 1) > 0 or array_length(v_phone_dups, 1) > 0 then
+    raise exception 'Migration blocked: review and remove existing duplicates before the unique indexes can be created. Email: %; Phone: %',
+      coalesce(array_to_string(v_email_dups, ', '), 'none'),
+      coalesce(array_to_string(v_phone_dups, ', '), 'none');
+  end if;
+end $$;
+
 create unique index if not exists contact_form_email_uq      on contact_form (lower(email)) where email <> '';
 create unique index if not exists acdemia_form_email_uq      on acdemia_form (lower(email)) where email <> '';
 create unique index if not exists footer_email_email_uq      on footer_email (lower(email)) where email <> '';

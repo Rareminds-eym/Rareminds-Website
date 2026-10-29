@@ -73,11 +73,18 @@ const FooterBar: React.FC<FooterBarProps> = ({ hideServices }) => {
 
 		setIsSubmitting(true);
 		try {
-			const dupCheck = await checkDuplicate("footer_email", { email });
-			if (dupCheck.email) {
-				setSuccessMessage("You have already subscribed with this email.");
-				setIsSubmitting(false);
-				return;
+			try {
+				const dupCheck = await checkDuplicate("footer_email", { email });
+				if (dupCheck.email) {
+					setSuccessMessage("You have already subscribed with this email.");
+					setIsSubmitting(false);
+					return;
+				}
+			} catch (checkError) {
+				// Fail open: the duplicate check RPC may be unavailable (e.g. the
+				// migration has not been applied yet). The insert below still
+				// enforces uniqueness through the unique index.
+				console.error("Duplicate check failed:", checkError);
 			}
 			const { error } = await supabase
 				.from("footer_email")
@@ -95,11 +102,7 @@ const FooterBar: React.FC<FooterBarProps> = ({ hideServices }) => {
 					setIsSubmitting(false);
 					return;
 				}
-				if (error.code === "23505") {
-					setSuccessMessage("This email is already subscribed");
-				} else {
-					setSuccessMessage("Error subscribing. Please try again.");
-				}
+				setSuccessMessage("Error subscribing. Please try again.");
 			} else {
 				setSuccessMessage("Thank you for subscribing");
 				setSubscriberEmail(null); // clears the box after success

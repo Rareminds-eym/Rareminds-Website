@@ -51,9 +51,10 @@ const ContactSection = () => {
 		}
 
 		try {
-			await sendEmailNotification("recruitment-enquiry", {
+			await sendEmailNotification(payload.notificationType, {
 				...(data as Record<string, unknown>),
 				verification_proof: payload.otpProof,
+				phone_verification_proof: payload.phoneProof,
 			});
 		} catch (emailError) {
 			console.error("Email notification error:", emailError);

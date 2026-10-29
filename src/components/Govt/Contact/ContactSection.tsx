@@ -1,15 +1,17 @@
 import { Icon } from "@iconify/react";
 import { motion } from "framer-motion";
-import { Contact, Mail, MapPin, Phone, PhoneCall, School } from "lucide-react";
-import VerticalForm, {
-	type SubmitPayload,
-	type SubmitResult,
-} from "@/components/forms/VerticalForm";
-import { institutionsForm } from "@/components/forms/verticalForms.config";
+import {
+	Building2,
+	Contact,
+	Mail,
+	MapPin,
+	Phone,
+	PhoneCall,
+} from "lucide-react";
+import VerticalForm from "@/components/forms/VerticalForm";
+import { governmentForm } from "@/components/forms/verticalForms.config";
 import { formatCompanyAddressLine } from "@/constants/companySettings";
 import { useCompanySettings } from "@/hooks/useCompanySettings";
-import { supabase } from "@/lib/supabaseClient";
-import { duplicateFieldErrors } from "@/utils/duplicateCheck";
 
 const ContactSection = () => {
 	const {
@@ -17,50 +19,6 @@ const ContactSection = () => {
 		isLoading: companySettingsLoading,
 		errorMessage: companySettingsError,
 	} = useCompanySettings();
-
-	// Saves the request first, then sends the email (same order as before)
-	const submitInstitutions = async (
-		payload: SubmitPayload,
-	): Promise<SubmitResult> => {
-		const v = payload.values;
-		const request = {
-			name: v.name,
-			university: v.university,
-			email: v.email,
-			course: v.course,
-			message: v.optionalMessage ?? "",
-		};
-
-		const { error } = await supabase.from("demo_requests").insert([request]);
-		if (error) {
-			const dup = duplicateFieldErrors(error);
-			if (dup) return { fieldErrors: dup };
-			throw error;
-		}
-
-		// The request is already saved here. If the email step fails we do not throw,
-		// so the person is not asked to submit again (same idea as the old "saved" state).
-		try {
-			const response = await fetch("/api/send-contact-email", {
-				method: "POST",
-				headers: { "Content-Type": "application/json" },
-				body: JSON.stringify({
-					...request,
-					verification_proof: payload.otpProof,
-				}),
-			});
-			const data = await response.json().catch(() => ({}));
-			if (!response.ok) {
-				throw new Error(
-					typeof data.error === "string"
-						? data.error
-						: "Failed to send contact email",
-				);
-			}
-		} catch (emailError) {
-			console.error("Contact email error:", emailError);
-		}
-	};
 
 	return (
 		<section
@@ -94,14 +52,13 @@ const ContactSection = () => {
 						<div className="bg-gray-50 backdrop-blur-sm border border-white/30 rounded-3xl overflow-hidden shadow-xl">
 							<div className="p-16">
 								<h3 className="text-lg font-semibold mb-10 flex items-center gap-3 text-gray-800">
-									<School size={20} />
-									Book A Free University Demo Now.
+									<Building2 size={20} />
+									{governmentForm.title}
 								</h3>
 
 								<VerticalForm
-									config={institutionsForm}
+									config={governmentForm}
 									showTitle={false}
-									onSubmit={submitInstitutions}
 									inputClassName="w-full rounded-md border bg-white/50 px-3 py-2 text-gray-800 placeholder:text-gray-400 outline-none focus:ring-2 disabled:opacity-60"
 									labelClassName="mb-2 block font-medium text-gray-700 text-sm"
 									actionsClassName="mt-6 flex flex-col sm:flex-row gap-4 justify-center items-center"

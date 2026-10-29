@@ -428,6 +428,106 @@ const verifyOtp = async (env: Env, email: string, otp: string) => {
 	return typeof proof === "string" && isUuid(proof) ? proof : null;
 };
 
+const storePhoneProof = async (env: Env, phone: string) => {
+	const response = await supabaseRequest(env, "rpc/store_phone_proof", {
+		method: "POST",
+		body: JSON.stringify({
+			p_phone: phone,
+			p_expires_at: new Date(Date.now() + 10 * 60 * 1000).toISOString(),
+		}),
+	});
+	const proof = (await response.json()) as unknown;
+	return typeof proof === "string" && isUuid(proof) ? proof : null;
+};
+
+/**
+ * Consumes a single-use OTP proof. Returns true/false when the database could
+ * answer, or null when validation itself is unavailable (for example the proof
+ * migration has not been applied yet) so callers fail open instead of silently
+ * dropping legitimate notifications.
+ */
+const consumeProof = async (
+	env: Env,
+	rpc: "consume_email_proof" | "consume_phone_proof",
+	args: Record<string, string>,
+): Promise<boolean | null> => {
+	try {
+		const response = await supabaseRequest(env, `rpc/${rpc}`, {
+			method: "POST",
+			body: JSON.stringify(args),
+		});
+		return (await response.json()) === true;
+	} catch (error) {
+		console.error("[email-bff] Proof validation unavailable", error);
+		return null;
+	}
+};
+
+// Every submission of these notification types comes from a form that already
+// forced OTP verification, so the proof must be present and valid.
+const EMAIL_PROOF_REQUIRED = new Set<string>([
+	"institution-enquiry",
+	"government-enquiry",
+	"recruitment-enquiry",
+	"academy-enquiry",
+]);
+const PHONE_PROOF_REQUIRED = new Set<string>([
+	"government-enquiry",
+	"academy-enquiry",
+]);
+
+const enforceNotificationProofs = async (
+	env: Env,
+	type: NotificationType,
+	record: Record<string, unknown>,
+) => {
+	const rawEmailProof = record.verification_proof;
+	const emailProof =
+		typeof rawEmailProof === "string" && isUuid(rawEmailProof)
+			? rawEmailProof
+			: "";
+	if (EMAIL_PROOF_REQUIRED.has(type) && !emailProof)
+		throw new HttpError(
+			"Email verification is required to submit this form",
+			403,
+		);
+	if (emailProof) {
+		const checked = await consumeProof(env, "consume_email_proof", {
+			p_proof: emailProof,
+			p_email: getEmail(record),
+		});
+		if (checked === false)
+			throw new HttpError(
+				"Email verification is invalid or expired. Please verify your email again.",
+				403,
+			);
+	}
+
+	const phone =
+		typeof record.phone === "string" ? record.phone.replace(/\D/g, "") : "";
+	const rawPhoneProof = record.phone_verification_proof;
+	const phoneProof =
+		typeof rawPhoneProof === "string" && isUuid(rawPhoneProof)
+			? rawPhoneProof
+			: "";
+	if (PHONE_PROOF_REQUIRED.has(type) && !phoneProof)
+		throw new HttpError(
+			"Phone verification is required to submit this form",
+			403,
+		);
+	if (phoneProof && phone) {
+		const checked = await consumeProof(env, "consume_phone_proof", {
+			p_proof: phoneProof,
+			p_phone: phone,
+		});
+		if (checked === false)
+			throw new HttpError(
+				"Phone verification is invalid or expired. Please verify your phone again.",
+				403,
+			);
+	}
+};
+
 const readBody = async (request: Request) => {
 	const text = await request.text();
 	if (!text || text.length > 32_000)
@@ -484,6 +584,11 @@ export async function onRequestPost(context: PagesContext) {
 			}
 			if (!isRecord(body.record))
 				throw new HttpError("record is required", 400);
+			await enforceNotificationProofs(
+				env,
+				type as NotificationType,
+				body.record,
+			);
 			await sendEmail(
 				env,
 				buildNotification(type as NotificationType, body.record),
@@ -541,9 +646,13 @@ export async function onRequestPost(context: PagesContext) {
 					{ success: false, error: "Invalid or expired OTP" },
 					400,
 				);
+			const proof = await storePhoneProof(env, phone);
+			if (!proof)
+				throw new HttpError("Phone verification could not be recorded", 503);
 			return json(request, {
 				success: true,
 				message: "Phone verified successfully",
+				verification_proof: proof,
 			});
 		}
 

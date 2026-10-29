@@ -1433,6 +1433,8 @@ const ContactPage: React.FC = () => {
 
 	// ---- email verification (code or Google) ----
 	const [verifiedEmail, setVerifiedEmail] = useState("");
+	// single-use proof from the last successful OTP check, bound to its email
+	const [emailProof, setEmailProof] = useState({ email: "", proof: "" });
 	const [otpSent, setOtpSent] = useState(false);
 	const [otp, setOtp] = useState("");
 	const [otpBusy, setOtpBusy] = useState(false);
@@ -1548,10 +1550,19 @@ const ContactPage: React.FC = () => {
 		setOtpMessage("");
 		setDupErrors((p) => ({ ...p, email: undefined }));
 		try {
-			const dup = await withTimeout(checkDuplicate("contact_form", { email }));
-			if (dup.email) {
-				setDupErrors((p) => ({ ...p, email: DUP_EMAIL }));
-				return; // no code is sent
+			try {
+				const dup = await withTimeout(
+					checkDuplicate("contact_form", { email }),
+				);
+				if (dup.email) {
+					setDupErrors((p) => ({ ...p, email: DUP_EMAIL }));
+					return; // no code is sent
+				}
+			} catch (checkError) {
+				// Fail open: the duplicate check RPC may be unavailable (e.g. the
+				// migration has not been applied yet). The insert still enforces
+				// uniqueness through the unique indexes, so don't block the user.
+				console.error("Duplicate check failed:", checkError);
 			}
 			await withTimeout(sendEmailOtp(email));
 			setOtpSent(true);
@@ -1583,7 +1594,8 @@ const ContactPage: React.FC = () => {
 		}
 		setOtpBusy(true);
 		try {
-			await withTimeout(verifyEmailOtp(email, otp));
+			const proof = await withTimeout(verifyEmailOtp(email, otp));
+			setEmailProof({ email, proof });
 			setVerifiedEmail(email);
 			setOtpSent(false);
 			setOtp("");
@@ -1608,20 +1620,19 @@ const ContactPage: React.FC = () => {
 		setPhoneChecking(true);
 		setDupErrors((p) => ({ ...p, phone: undefined }));
 		try {
-			const dup = await withTimeout(
-				checkDuplicate("contact_form", { phone: formData.phone }),
-			);
-			if (dup.phone) {
-				setDupErrors((p) => ({ ...p, phone: DUP_PHONE }));
-				return; // no SMS is sent
+			try {
+				const dup = await withTimeout(
+					checkDuplicate("contact_form", { phone: formData.phone }),
+				);
+				if (dup.phone) {
+					setDupErrors((p) => ({ ...p, phone: DUP_PHONE }));
+					return; // no SMS is sent
+				}
+			} catch (checkError) {
+				// Fail open for the same reason as the email check above.
+				console.error("Duplicate check failed:", checkError);
 			}
 			phoneOtp.sendCode(formData.phone);
-		} catch (err) {
-			console.error("Duplicate check failed:", err);
-			setDupErrors((p) => ({
-				...p,
-				phone: "We couldn't check your phone number. Please try again.",
-			}));
 		} finally {
 			setPhoneChecking(false);
 		}
@@ -1779,6 +1790,12 @@ const ContactPage: React.FC = () => {
 						role: clean.role || "Not specified",
 						phone: clean.phone || "Not provided",
 						message: clean.message || "Not provided",
+						...(emailProof.email === clean.email && emailProof.proof
+							? { verification_proof: emailProof.proof }
+							: {}),
+						...(phoneOtp.proof && isPhoneVerified
+							? { phone_verification_proof: phoneOtp.proof }
+							: {}),
 					}),
 				)
 				.catch((emailError) => {
