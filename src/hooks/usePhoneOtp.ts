@@ -17,8 +17,11 @@ const friendlyError = (e: unknown, step: "send" | "verify"): string => {
 		msg.includes("seconds")
 	)
 		return "Too many requests. Wait a minute, then try again.";
-	if (step === "verify")
+	if (step === "verify") {
+        if (msg.includes("unavailable") || msg.includes("recorded"))
+			return "We couldn't complete verification right now. Request a new code and try again.";
 		return "That code is incorrect or has expired. Check the code or request a new one.";
+	}
 	return "We couldn't send the code. Check the number and your connection, then try again.";
 };
 
