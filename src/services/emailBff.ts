@@ -1,40 +1,71 @@
 export type EmailNotificationType =
-  | 'general-contact'
-  | 'corporate-contact'
-  | 'training-enquiry'
-  | 'recruitment-enquiry'
-  | 'event-enquiry'
-  | 'teacher-service-enquiry'
-  | 'academy-enquiry'
-  | 'government-enquiry'
-  | 'download-notification';
+	| "general-contact"
+	| "corporate-contact"
+	| "training-enquiry"
+	| "recruitment-enquiry"
+	| "event-enquiry"
+	| "teacher-service-enquiry"
+	| "academy-enquiry"
+	| "government-enquiry"
+	| "institution-enquiry"
+	| "download-notification";
 
 type EmailBffResponse = {
-  success: boolean;
-  message?: string;
-  error?: string;
-  verification_proof?: string;
+	success: boolean;
+	message?: string;
+	error?: string;
+	verification_proof?: string;
+	verificationId?: string;
 };
 
-async function postEmailAction(action: 'notify' | 'send-otp' | 'verify-otp', body: Record<string, unknown>) {
-  const response = await fetch(`/api/email/${action}`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(body),
-  });
-  const result = await response.json().catch(() => ({})) as Partial<EmailBffResponse>;
-  if (!response.ok || result.success !== true) {
-    throw new Error(result.error || result.message || 'Email service is unavailable');
-  }
-  return result as EmailBffResponse;
+async function postEmailAction(
+	action:
+		| "notify"
+		| "send-otp"
+		| "verify-otp"
+		| "send-phone-otp"
+		| "verify-phone-otp",
+	body: Record<string, unknown>,
+) {
+	const response = await fetch(`/api/email/${action}`, {
+		method: "POST",
+		headers: { "Content-Type": "application/json" },
+		body: JSON.stringify(body),
+	});
+	const result = (await response
+		.json()
+		.catch(() => ({}))) as Partial<EmailBffResponse>;
+	if (!response.ok || result.success !== true) {
+		throw new Error(
+			result.error || result.message || "Email service is unavailable",
+		);
+	}
+	return result as EmailBffResponse;
 }
 
-export const sendEmailNotification = (type: EmailNotificationType, record: Record<string, unknown>) =>
-  postEmailAction('notify', { type, record });
+export const sendEmailNotification = (
+	type: EmailNotificationType,
+	record: Record<string, unknown>,
+) => postEmailAction("notify", { type, record });
 
-export const sendEmailOtp = (email: string) => postEmailAction('send-otp', { email });
+export const sendEmailOtp = (email: string) =>
+	postEmailAction("send-otp", { email });
 export const verifyEmailOtp = async (email: string, otp: string) => {
-  const result = await postEmailAction('verify-otp', { email, otp });
-  if (!result.verification_proof) throw new Error('Email verification proof was not issued');
-  return result.verification_proof;
+	const result = await postEmailAction("verify-otp", { email, otp });
+	if (!result.verification_proof)
+		throw new Error("Email verification proof was not issued");
+	return result.verification_proof;
 };
+
+export const sendPhoneOtp = async (phone: string) => {
+	const result = await postEmailAction("send-phone-otp", { phone });
+	if (!result.verificationId)
+		throw new Error("Phone verification could not be started");
+	return result.verificationId;
+};
+
+export const verifyPhoneOtp = (
+	phone: string,
+	verificationId: string,
+	code: string,
+) => postEmailAction("verify-phone-otp", { phone, verificationId, code });
