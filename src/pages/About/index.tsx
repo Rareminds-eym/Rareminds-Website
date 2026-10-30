@@ -1,4 +1,4 @@
-import React from 'react';
+import type React from 'react';
 import Hero from "../About/Hero"
 import Who from "../About/Who"
 import JourneyTimeline from "../About/Journey"

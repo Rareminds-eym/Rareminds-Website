@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import type React from 'react';
+import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Plus, HelpCircle, MessageCircle, Calendar, Download } from 'lucide-react';
 import FAQChatbot from "../../components/Academy/StickyButton/StickyButton/FAQChatbot";

@@ -1,4 +1,4 @@
-import React from 'react';
+import type React from 'react';
 import { testimonialsdata } from '../../../constants/testimonials';
 import { motion } from 'framer-motion';
 

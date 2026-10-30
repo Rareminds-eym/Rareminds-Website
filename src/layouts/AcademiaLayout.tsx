@@ -1,4 +1,5 @@
-import React, { ReactNode } from "react";
+import type React from "react";
+import type { ReactNode } from "react";
 import FooterBar from "@/components/Footer/FooterBar"; // Optional: remove if not needed
 import { usePageTracking } from "@/hooks/usePageTracking";
 

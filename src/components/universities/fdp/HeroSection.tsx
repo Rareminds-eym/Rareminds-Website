@@ -142,7 +142,7 @@ export default function HeroSection() {
     <section className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-[#A7D8DE] to-[#FCD5CE] text-white overflow-hidden">
       {banners.map((banner, index) => (
         <motion.div
-          key={index}
+          key={banner.poster}
           initial={false}
           animate={{
             opacity: currentBanner === index ? 1 : 0,
@@ -189,8 +189,8 @@ export default function HeroSection() {
                         <span className="block">Build Institutions</span>
                         <span className="block">That Build Legacies.</span>
                       </>
-                    ) : banner.title.match(/[^:.=,]+[:.=,]?/g)?.map((part, idx) => (
-                      <span key={idx} className="block">
+                    ) : banner.title.match(/[^:.=,]+[:.=,]?/g)?.map((part) => (
+                      <span key={part} className="block">
                         {part.trim()}
                       </span>
                     ))}
@@ -219,8 +219,8 @@ export default function HeroSection() {
                   <span className="block">engagement & assessment.</span>
                 </>
               ) : (
-                banner.subtitle.match(/[^:.&]+[:.&]?/g)?.map((part, i) => (
-                  <span key={i} className="block">
+                banner.subtitle.match(/[^:.&]+[:.&]?/g)?.map((part) => (
+                  <span key={part} className="block">
                     {part.trim()}
                   </span>
                 ))
@@ -234,10 +234,10 @@ export default function HeroSection() {
                 animate={{ y: currentBanner === index ? 0 : 20, opacity: currentBanner === index ? 1 : 0 }}
                 transition={{ duration: 0.5, delay: 1 }}
               >
-              {banner.cta.map((btn, i) => (
+              {banner.cta.map((btn) => (
                 btn.href ? (
                   <motion.a
-                    key={i}
+                    key={btn.text}
                     href={btn.href}
                     download
                     target="_blank"
@@ -251,7 +251,7 @@ export default function HeroSection() {
                   </motion.a>
                 ) : (
                   <motion.button
-                    key={i}
+                    key={btn.text}
                     onClick={() => {
                       console.log("CTA button clicked – opening modal");
                       setIsComingSoonOpen(true);
@@ -273,9 +273,10 @@ export default function HeroSection() {
       ))}
       
       <div className="absolute bottom-8 left-0 right-0 z-20 flex justify-center gap-2">
-        {banners.map((_, index) => (
+        {banners.map((banner, index) => (
           <button
-            key={index}
+            key={banner.poster}
+            type="button"
             onClick={() => setCurrentBanner(index)}
             className={`w-2 h-2 rounded-full transition-all duration-300 ${
               currentBanner === index 
@@ -295,9 +296,10 @@ export default function HeroSection() {
       />
       {/* Arrow down button */}
      <div className="hidden lg:block container ">
-        <div
+        <button
+          type="button"
           onClick={handleScrollDown}
-          className="w-max absolute bottom-[60px] left-1/2 -translate-x-1/2 cursor-pointer transition-opacity z-10"
+          className="w-max absolute bottom-[60px] left-1/2 -translate-x-1/2 cursor-pointer transition-opacity z-10 p-0 border-0 bg-transparent"
           aria-label="Scroll down"
           >
           <img
@@ -314,7 +316,7 @@ export default function HeroSection() {
            alt="Scroll down"
            className="absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2"
                />
-             </div>
+             </button>
            </div>
         </section>
                       
@@ -327,7 +329,7 @@ export default function HeroSection() {
         >
           {stats.map((stat, index) => (
             <motion.div
-              key={index}
+              key={stat.label}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.8 + index * 0.1, duration: 0.8 }}

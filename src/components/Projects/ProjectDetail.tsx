@@ -101,7 +101,7 @@ const ProjectDetail = () => {
     if (!node.type) return null;
 
     switch (node.type) {
-      case 'heading':
+      case 'heading': {
         const HeadingTag = `h${node.attrs?.level || 3}` as keyof JSX.IntrinsicElements;
         const headingClasses = {
           1: 'text-3xl font-bold text-gray-900 mb-6 leading-tight',
@@ -119,6 +119,7 @@ const ProjectDetail = () => {
             )}
           </HeadingTag>
         );
+      }
 
       case 'paragraph':
         if (!node.content || node.content.length === 0) {

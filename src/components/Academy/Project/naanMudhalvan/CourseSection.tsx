@@ -3,7 +3,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Navigation, Pagination, EffectCoverflow } from 'swiper/modules';
 import { motion } from 'framer-motion';
 import { Search } from 'lucide-react';
-import { Course } from '../types/course';
+import type { Course } from '../types/course';
 import { CourseCard } from './CourseCard';
 import { CourseModal } from './CourseModal';
 

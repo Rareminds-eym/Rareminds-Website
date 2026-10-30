@@ -542,7 +542,7 @@ const MarqueeRow: React.FC<MarqueeRowProps> = ({ logos, direction }) => {
 // export default PartnersAndCollaborations;
 
 
-import React from "react";
+import type React from "react";
 
 // import your logos from assets
 import vels from "../../assets/Vels_University_logo 1.png";

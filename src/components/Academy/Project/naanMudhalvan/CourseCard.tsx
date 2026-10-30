@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Course } from '../types/course';
+import type { Course } from '../types/course';
 
 interface CourseCardProps {
   course: Course;

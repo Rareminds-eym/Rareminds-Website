@@ -274,7 +274,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { Users, MapPin } from 'lucide-react';
-import { ClientType, PersonType } from '../types/project';
+import type { ClientType, PersonType } from '../types/project';
 import { getAllUniversities, loadCsvData } from '../types/projectsService';
 import { 
   Carousel, 

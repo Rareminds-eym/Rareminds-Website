@@ -1,4 +1,4 @@
-import React from 'react';
+import type React from 'react';
 import { Battery, Sprout, Dna,Folders, Heart, ShoppingBag, Brain, MonitorSmartphone, Briefcase } from 'lucide-react';
 import CorporateTraining from '@/pages/Corporate/Training/Home';
 

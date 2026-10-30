@@ -5,23 +5,57 @@ import { useState, useEffect } from 'react';
 import { getSchoolCourseBySlug, getOtherSchoolCourses } from '@/services/school/schoolCourseService';
 import CorporateHeader from '@/components/Header/AcademyHeader';
 
+interface SchoolCourseModule {
+  unit?: string;
+  title: string;
+  description?: string;
+  duration?: string;
+}
+
+interface SchoolCourse {
+  id: string;
+  slug: string;
+  name: string;
+  subtitle: string;
+  courseCategory: string;
+  serviceSlug: string;
+  duration: string;
+  mode: string;
+  level: string;
+  price: number;
+  overview: string;
+  whatYouLearn: string[];
+  whoShouldTake: string[];
+  outcomes: string[];
+  benefits: string[];
+  modules: SchoolCourseModule[];
+}
+
+interface OtherCourse {
+  id: string;
+  slug: string;
+  name: string;
+  duration: string;
+  mode: string;
+}
+
+// Extract education level from course subtitle
+const getEducationLevel = (subtitle: string) => {
+  if (!subtitle) return '';
+  if (subtitle.includes('Middle School')) return 'Middle School';
+  if (subtitle.includes('High School')) return 'High School';
+  if (subtitle.includes('Higher Secondary')) return 'Higher Secondary';
+  return '';
+};
+
 export default function StudentCourseDetailPage() {
   const { courseSlug } = useParams<{ courseSlug: string }>();
   const navigate = useNavigate();
-  const [course, setCourse] = useState<any>(null);
-  const [otherCourses, setOtherCourses] = useState<any[]>([]);
+  const [course, setCourse] = useState<SchoolCourse | null>(null);
+  const [otherCourses, setOtherCourses] = useState<OtherCourse[]>([]);
   const [loading, setLoading] = useState(true);
   const [expandedModule, setExpandedModule] = useState<number | null>(null);
   const [showAllBenefits, setShowAllBenefits] = useState(false);
-
-  // Extract education level from course subtitle
-  const getEducationLevel = (subtitle: string) => {
-    if (!subtitle) return '';
-    if (subtitle.includes('Middle School')) return 'Middle School';
-    if (subtitle.includes('High School')) return 'High School';
-    if (subtitle.includes('Higher Secondary')) return 'Higher Secondary';
-    return '';
-  };
 
   // Split benefits by semicolons to create bullet points
   const splitBenefits = (benefits: string[]) => {
@@ -77,6 +111,7 @@ export default function StudentCourseDetailPage() {
         <div className="text-center">
           <h1 className="text-2xl font-bold mb-4 text-gray-900">Course not found</h1>
           <button
+            type="button"
             onClick={() => navigate(-1)}
             className="text-gray-700 hover:text-gray-900 font-medium"
           >
@@ -184,7 +219,7 @@ export default function StudentCourseDetailPage() {
               <div className="grid md:grid-cols-2 gap-4">
                 {splitBenefits(course.whatYouLearn).map((item: string, index: number) => (
                   <motion.div
-                    key={index}
+                    key={item}
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: 0.3 + index * 0.05 }}
@@ -211,7 +246,7 @@ export default function StudentCourseDetailPage() {
               <ul className="space-y-3">
                 {course.whoShouldTake.map((item: string, index: number) => (
                   <motion.li
-                    key={index}
+                    key={item}
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: 0.4 + index * 0.05 }}
@@ -241,7 +276,7 @@ export default function StudentCourseDetailPage() {
               <div className="flex flex-wrap gap-3">
                 {splitBenefits(course.outcomes).map((outcome: string, index: number) => (
                   <motion.span
-                    key={index}
+                    key={outcome}
                     initial={{ opacity: 0, scale: 0.8 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ delay: 0.5 + index * 0.05 }}
@@ -267,7 +302,7 @@ export default function StudentCourseDetailPage() {
               <div className="space-y-4">
                 {splitBenefits(course.benefits).slice(0, showAllBenefits ? undefined : 3).map((benefit: string, index: number) => (
                   <motion.div
-                    key={index}
+                    key={benefit}
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: 0.55 + index * 0.05 }}
@@ -280,6 +315,7 @@ export default function StudentCourseDetailPage() {
               </div>
               {splitBenefits(course.benefits).length > 3 && (
                 <button
+                  type="button"
                   onClick={() => setShowAllBenefits(!showAllBenefits)}
                   className="mt-4 flex items-center gap-2 text-blue-700 hover:text-blue-800 font-semibold transition-colors"
                 >
@@ -299,7 +335,7 @@ export default function StudentCourseDetailPage() {
             </motion.div>
 
             {/* Module Lessons - Shows when a module is clicked */}
-            {expandedModule !== null && course.modules && course.modules[expandedModule] && (
+            {expandedModule !== null && course.modules?.[expandedModule] && (
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -409,9 +445,10 @@ export default function StudentCourseDetailPage() {
 
                   {/* Modules List */}
                   <div className="max-h-[600px] overflow-y-auto">
-                    {course.modules.map((module: any, index: number) => (
+                    {course.modules.map((module: SchoolCourseModule, index: number) => (
                       <button
-                        key={index}
+                        type="button"
+                        key={module.title}
                         onClick={() => setExpandedModule(expandedModule === index ? null : index)}
                         className={`w-full text-left p-4 hover:bg-indigo-50 transition-colors group border-b border-slate-100 last:border-b-0 ${
                           expandedModule === index ? 'bg-indigo-50' : ''

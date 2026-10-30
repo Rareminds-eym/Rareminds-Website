@@ -64,8 +64,9 @@
 
 // export default ServiceCarousel;
 
-import React, { useState, useEffect } from 'react';
-import { type ServiceData } from '../../UI/services';
+import type React from 'react';
+import { useState, useEffect } from 'react';
+import type { ServiceData } from '../../UI/services';
 
 interface ServiceCarouselProps {
   services: ServiceData[];

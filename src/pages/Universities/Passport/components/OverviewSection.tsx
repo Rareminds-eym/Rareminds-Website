@@ -1,4 +1,4 @@
-import { Database, Layers, Award, Briefcase, LucideIcon } from "lucide-react";
+import { Database, Layers, Award, Briefcase, type LucideIcon } from "lucide-react";
 
 type PointData = {
   id: string;

@@ -1,4 +1,4 @@
-import React from 'react';
+import type React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '../UI/button';
 import { ArrowRight, Award, Check, FileText, GraduationCap, Target, Users } from 'lucide-react';

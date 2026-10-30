@@ -66,8 +66,8 @@ function HeroMobile() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
         >
-          {banners[currentBanner].title.match(/[^:.]+[:.]?/g)?.map((part, idx) => (
-            <span key={idx} className="block">
+          {banners[currentBanner].title.match(/[^:.]+[:.]?/g)?.map((part) => (
+            <span key={part} className="block">
               {part.trim()}
             </span>
           ))}
@@ -94,8 +94,8 @@ function HeroMobile() {
               <span className="block">not just employees.</span>
             </>
           ) : (
-            banners[currentBanner].subtitle.match(/[^:.&]+[:.&]?/g)?.map((part, i) => (
-              <span key={i} className="block">
+            banners[currentBanner].subtitle.match(/[^:.&]+[:.&]?/g)?.map((part) => (
+              <span key={part} className="block">
                 {part.trim()}
               </span>
             ))
@@ -110,9 +110,10 @@ function HeroMobile() {
         </motion.div>
         {/* Move pagination and scroller inside the text section */}
         <div className="absolute left-0 right-0 bottom-20 z-20 flex justify-center gap-2">
-          {banners.map((_, index) => (
+          {banners.map((banner, index) => (
             <button
-              key={index}
+              key={banner.poster}
+              type="button"
               onClick={() => setCurrentBanner(index)}
               className={`w-2 h-2 rounded-full transition-all duration-300 ${
                 currentBanner === index ? 'bg-[#222B33] w-6' : 'bg-white/50 hover:bg-white/70'
@@ -123,6 +124,7 @@ function HeroMobile() {
         </div>
         <div className="absolute left-0 right-0 bottom-1 flex justify-center z-30">
           <button
+            type="button"
             onClick={handleScrollDown}
             aria-label="Scroll down"
             className="flex flex-col items-center"
@@ -172,7 +174,7 @@ export default function Hero() {
       <section className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-[#A7D8DE] to-[#FCD5CE] text-white overflow-hidden hidden lg:flex">
         {banners.map((banner, index) => (
           <motion.div
-            key={index}
+            key={banner.poster}
             initial={false}
             animate={{
               opacity: currentBanner === index ? 1 : 0,
@@ -213,8 +215,8 @@ export default function Hero() {
                   animate={{ scale: currentBanner === index ? 1 : 0.95 }}
                   transition={{ duration: 0.5, delay: 0.5 }}
                 >
-                  {banner.title.match(/[^:.]+[:.]?/g)?.map((part, idx) => (
-                    <span key={idx} className="block">
+                  {banner.title.match(/[^:.]+[:.]?/g)?.map((part) => (
+                    <span key={part} className="block">
                       {part.trim()}
                     </span>
                   ))}
@@ -244,8 +246,8 @@ export default function Hero() {
                       <span className="block">not just employees.</span>
                     </>
                   ) : (
-                    banner.subtitle.match(/[^:.&]+[:.&]?/g)?.map((part, i) => (
-                      <span key={i} className="block">
+                    banner.subtitle.match(/[^:.&]+[:.&]?/g)?.map((part) => (
+                      <span key={part} className="block">
                         {part.trim()}
                       </span>
                     ))
@@ -268,9 +270,10 @@ export default function Hero() {
         ))}
 
         <div className="absolute bottom-8 left-0 right-0 z-20 flex justify-center gap-2">
-          {banners.map((_, index) => (
+          {banners.map((banner, index) => (
             <button
-              key={index}
+              key={banner.poster}
+              type="button"
               onClick={() => setCurrentBanner(index)}
               className={`w-2 h-2 rounded-full transition-all duration-300 ${
                 currentBanner === index
@@ -291,9 +294,10 @@ export default function Hero() {
 
         {/* Arrow down button */}
         <div className="hidden lg:block container ">
-          <div
+          <button
+            type="button"
             onClick={handleScrollDown}
-            className="w-max absolute bottom-[60px] left-36 cursor-pointer transition-opacity z-10"
+            className="w-max absolute bottom-[60px] left-36 cursor-pointer transition-opacity z-10 p-0 border-0 bg-transparent"
             aria-label="Scroll down"
           >
             <img
@@ -310,7 +314,7 @@ export default function Hero() {
               alt="Scroll down"
               className="absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2"
             />
-          </div>
+          </button>
         </div>
 
       </section>

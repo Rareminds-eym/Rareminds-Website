@@ -1,6 +1,7 @@
 
 
-import React, { useState, useEffect, useCallback } from 'react';
+import type React from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { services } from '../../UI/services'; // Adjust this import path as needed
 import { ArrowDown } from 'lucide-react';
 import { useLocation, useNavigate } from 'react-router-dom';

@@ -1,5 +1,5 @@
-import React from 'react';
-import { useEventCountdown, EventWithCountdown } from '../../hooks/Events/useEventCountdown';
+import type React from 'react';
+import { useEventCountdown, type EventWithCountdown } from '../../hooks/Events/useEventCountdown';
 import { AlertCircle, Calendar, Clock, MapPin, Users, Loader2 } from 'lucide-react';
 
 interface EventCountdownSupabaseProps {

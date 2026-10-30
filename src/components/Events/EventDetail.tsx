@@ -21,7 +21,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useOptimizedEvents } from '../../hooks/Events/useOptimizedEvents';
 import { eventInterestedService } from '../../services/eventInterestedService';
-import { Event as AppEvent } from '../../types/Events/event';
+import type { Event as AppEvent } from '../../types/Events/event';
 import { trackEvent, ANALYTICS_EVENTS } from '@/utils/analytics';
 
 import Carousel from './Carousel';
@@ -239,13 +239,20 @@ const EventDetail: React.FC = () => {
   const [isMobile, setIsMobile] = React.useState(false);
   React.useEffect(() => {
     const mq = window.matchMedia('(max-width: 640px)');
+    // Older Safari (< 14) only supports the deprecated addListener/removeListener API
+    const legacyMq = mq as unknown as {
+      addEventListener?: (type: 'change', listener: (e: MediaQueryListEvent) => void) => void;
+      removeEventListener?: (type: 'change', listener: (e: MediaQueryListEvent) => void) => void;
+      addListener?: (listener: (e: MediaQueryListEvent) => void) => void;
+      removeListener?: (listener: (e: MediaQueryListEvent) => void) => void;
+    };
     const onChange = (e: MediaQueryListEvent) => setIsMobile(e.matches);
     setIsMobile(mq.matches);
-    if ((mq as any).addEventListener) (mq as any).addEventListener('change', onChange);
-    else (mq as any).addListener(onChange);
+    if (legacyMq.addEventListener) legacyMq.addEventListener('change', onChange);
+    else legacyMq.addListener?.(onChange);
     return () => {
-      if ((mq as any).removeEventListener) (mq as any).removeEventListener('change', onChange);
-      else (mq as any).removeListener(onChange);
+      if (legacyMq.removeEventListener) legacyMq.removeEventListener('change', onChange);
+      else legacyMq.removeListener?.(onChange);
     };
   }, []);
 
@@ -275,7 +282,7 @@ const EventDetail: React.FC = () => {
   // Load full event details when minimal event is available
   React.useEffect(() => {
     const loadFullDetails = async () => {
-      if (minimalEvent && minimalEvent.id && !fullEventData && !loadingFullDetails) {
+      if (minimalEvent?.id && !fullEventData && !loadingFullDetails) {
         setLoadingFullDetails(true);
 
         try {
@@ -283,7 +290,7 @@ const EventDetail: React.FC = () => {
           if (fullData) {
             setFullEventData(fullData);
           }
-        } catch (err) {
+        } catch {
           toast.error('Could not load full event details. Showing limited info.', {
             position: 'bottom-right', autoClose: 4000, hideProgressBar: true,
           });
@@ -299,7 +306,7 @@ const EventDetail: React.FC = () => {
   // Track event_detail_view once when event data is first available
   const hasTrackedDetailView = React.useRef<boolean>(false);
   React.useEffect(() => {
-    if (event && event.id && hasTrackedDetailView.current === false) {
+    if (event?.id && hasTrackedDetailView.current === false) {
       hasTrackedDetailView.current = true;
       trackEvent(ANALYTICS_EVENTS.EVENT_DETAIL_VIEW, {
         event_id: event.id,
@@ -311,7 +318,7 @@ const EventDetail: React.FC = () => {
         page_path: typeof window !== 'undefined' ? window.location.pathname : '',
       });
     }
-  }, [event, trackEvent]);
+  }, [event]);
 
   // Interest tracking state
   const [interestCount, setInterestCount] = React.useState(0);
@@ -337,7 +344,7 @@ const EventDetail: React.FC = () => {
     try {
       const count = await eventInterestedService.getInterestedCount(event.id);
       setInterestCount(count);
-    } catch (error) {
+    } catch {
       toast.error('Failed to load interest count. Please refresh.', {
         position: 'bottom-right', autoClose: 3000, hideProgressBar: true,
       });
@@ -364,7 +371,7 @@ const EventDetail: React.FC = () => {
       try {
         const interests = JSON.parse(storedInterests);
         setUserAlreadyInterested(interests.includes(event.id));
-      } catch (error) {
+      } catch {
         toast.warn('Could not read your interest preferences. Resetting...', {
           position: 'bottom-right', autoClose: 3000,
         });
@@ -386,7 +393,7 @@ const EventDetail: React.FC = () => {
       if (storedInterests) {
         try {
           interests = JSON.parse(storedInterests);
-        } catch (error) {
+        } catch {
           toast.warn('Preference storage was corrupted. Resetting...', {
             position: 'bottom-right', autoClose: 2000,
           });
@@ -417,7 +424,7 @@ const EventDetail: React.FC = () => {
         if (storedInterests) {
           try {
             interests = JSON.parse(storedInterests);
-          } catch (parseError) {
+          } catch {
             toast.warn('Preference storage issue detected. Resetting...', {
               position: 'bottom-right', autoClose: 2000,
             });

@@ -1,4 +1,5 @@
-import React, { useState  } from 'react';
+import type React from 'react';
+import { useState  } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { supabase } from '../../../lib/supabaseClient';
 import * as Toast from '@radix-ui/react-toast';

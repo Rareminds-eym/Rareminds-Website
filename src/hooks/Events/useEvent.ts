@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '../../lib/supabase';
-import { Event } from '../../types/Events/event';
+import type { Event } from '../../types/Events/event';
 import { testEnvironmentVariables } from '../../utils/testConnection';
 
 export const useEvents = () => {

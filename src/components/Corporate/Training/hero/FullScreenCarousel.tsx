@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useRef } from "react";
+import type React from "react";
+import { useState, useEffect, useRef } from "react";
 import { Icon } from "@iconify/react";
 import { AnimatePresence, motion } from "framer-motion";
 import arrowDown from "@/assets/corporate/Home/Carousal/arrowDown.svg";

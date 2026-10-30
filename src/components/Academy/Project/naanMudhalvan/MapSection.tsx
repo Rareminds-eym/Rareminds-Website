@@ -2,7 +2,7 @@ import { useState, useCallback, useRef } from 'react';
 import { GoogleMap, useLoadScript, Marker, InfoWindow } from '@react-google-maps/api';
 import { motion } from 'framer-motion';
 import { Search, Calendar, Users, MapPin } from 'lucide-react';
-import { EventLocation } from '../types/event';
+import type { EventLocation } from '../types/event';
 import { EventModal } from './EventModal';
 import { eventLocations } from '../Data/eventLocations';
 

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../../lib/supabaseClient';
-import { Event } from '../../types/Events/event';
+import type { Event } from '../../types/Events/event';
 
 export interface EventWithCountdown extends Event {
   location: string;

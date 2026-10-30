@@ -1,7 +1,7 @@
-import React from "react";
+import type React from "react";
 import { Calendar, X, ExternalLink } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Event } from '../../../types/Events/event';
+import type { Event } from '../../../types/Events/event';
  
 interface AddToCalendarProps {
     isVisible: boolean;
