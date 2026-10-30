@@ -177,7 +177,7 @@ export const TeaserVideoButton: React.FC<{ teaserVideo?: string }> = (props) => 
           >
             <span className={styles.teaserText}>Watch Teaser</span>
             {/* YouTube icon SVG, shown on hover */}
-            <svg className={styles.teaserIcon} viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <svg className={styles.teaserIcon} viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
               <path d="M23.498 6.186a2.994 2.994 0 0 0-2.112-2.112C19.633 3.5 12 3.5 12 3.5s-7.633 0-9.386.574A2.994 2.994 0 0 0 .502 6.186C0 7.94 0 12 0 12s0 4.06.502 5.814a2.994 2.994 0 0 0 2.112 2.112C4.367 20.5 12 20.5 12 20.5s7.633 0 9.386-.574a2.994 2.994 0 0 0 2.112-2.112C24 16.06 24 12 24 12s0-4.06-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
             </svg>
           </button>
@@ -521,10 +521,11 @@ const EventDetail: React.FC = () => {
             <p className="text-sm text-gray-500 mb-6">{error}</p>
             <div className="flex flex-col gap-3 sm:flex-row sm:justify-center">
               <button
+                type="button"
                 onClick={() => refetch()}
                 className="group inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-2xl hover:from-blue-600 hover:to-blue-700 transition-all duration-300 transform hover:scale-105 hover:shadow-lg"
               >
-                <svg className="w-4 h-4 mr-2 group-hover:rotate-180 transition-transform duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-4 h-4 mr-2 group-hover:rotate-180 transition-transform duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                 </svg>
                 Try Again
@@ -678,10 +679,11 @@ const EventDetail: React.FC = () => {
                     {event.media_metadata?.teaser_video && (
                       <div className="absolute top-3 left-3 sm:top-4 sm:left-4 z-20">
                         <button
-                          onClick={() => window.open(event.media_metadata!.teaser_video!, '_blank')}
+                          type="button"
+                          onClick={() => event.media_metadata?.teaser_video && window.open(event.media_metadata.teaser_video, '_blank')}
                           className="flex items-center gap-1.5 sm:gap-2 px-2.5 py-1.5 sm:px-4 sm:py-2 bg-red-600/90 hover:bg-red-700/90 text-white rounded-md sm:rounded-lg text-xs sm:text-sm font-semibold transition-all duration-300 hover:scale-105 backdrop-blur-sm border border-red-400/30"
                         >
-                          <svg className="w-3 h-3 sm:w-4 sm:h-4" fill="currentColor" viewBox="0 0 20 20">
+                          <svg className="w-3 h-3 sm:w-4 sm:h-4" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
                             <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clipRule="evenodd" />
                           </svg>
                           <span className="hidden sm:inline">Watch Teaser</span>
@@ -703,8 +705,8 @@ const EventDetail: React.FC = () => {
                     {/* Tags Section */}
                     <div className="flex flex-wrap gap-2 sm:gap-3 w-full">
                       {event.content_metadata?.event_tags && event.content_metadata.event_tags.length > 0 ? (
-                        event.content_metadata.event_tags.slice(0, 3).map((tag, index) => (
-                          <span key={index} className="px-3 py-1.5 bg-black text-white text-xs sm:text-sm font-medium rounded-full hover:bg-gray-800 transition-all duration-300 cursor-default" title={`Tag: ${tag}`}>
+                        event.content_metadata.event_tags.slice(0, 3).map((tag) => (
+                          <span key={tag.trim()} className="px-3 py-1.5 bg-black text-white text-xs sm:text-sm font-medium rounded-full hover:bg-gray-800 transition-all duration-300 cursor-default" title={`Tag: ${tag}`}>
                             {tag.trim()}
                           </span>
                         ))
@@ -889,7 +891,7 @@ const EventDetail: React.FC = () => {
                   <div className="flex items-center gap-3">
                     <button aria-label="Decrease quantity" onClick={rc ? undefined : () => setQuantity(q => Math.max(1, q - 1))} disabled={rc} className={`w-8 h-8 rounded-full text-lg leading-none flex items-center justify-center ${rc ? 'bg-gray-200 text-gray-400 cursor-not-allowed' : 'bg-slate-100 hover:bg-slate-200 text-slate-700'}`}>âˆ’</button>
                     <span className={`min-w-[1.5rem] text-center font-semibold ${rc ? 'text-gray-400' : 'text-slate-700'}`}>{String(quantity).padStart(2, '0')}</span>
-                    <button aria-label="Increase quantity" onClick={rc ? undefined : () => setQuantity(q => Math.min(99, q + 1))} disabled={rc} className={`w-8 h-8 rounded-full text-lg leading-none flex items-center justify-center ${rc ? 'bg-gray-200 text-gray-400 cursor-not-allowed' : 'bg-slate-100 hover:bg-slate-200 text-slate-700'}`}>+</button>
+                    <button type="button" aria-label="Increase quantity" onClick={rc ? undefined : () => setQuantity(q => Math.min(99, q + 1))} disabled={rc} className={`w-8 h-8 rounded-full text-lg leading-none flex items-center justify-center ${rc ? 'bg-gray-200 text-gray-400 cursor-not-allowed' : 'bg-slate-100 hover:bg-slate-200 text-slate-700'}`}>+</button>
                   </div>
                 </div>
                 <div className="my-5 border-t border-slate-200" />
@@ -908,8 +910,8 @@ const EventDetail: React.FC = () => {
                   </span>
                 </div>
                 <div className="space-y-3 mt-6">
-                  <button onClick={rc ? undefined : () => setModalOpen(true)} disabled={rc} className={`w-full font-semibold py-4 rounded-2xl transition-all duration-300 ${rc ? 'bg-gray-400 cursor-not-allowed text-gray-600' : 'bg-indigo-600 hover:bg-indigo-700 text-white active:scale-[0.99]'}`}>{regStatus.buttonText}</button>
-                  <button onClick={rc ? undefined : () => setContactModalOpen(true)} disabled={rc} className={`w-full py-4 font-semibold rounded-2xl transition-all duration-300 ${rc ? 'bg-red-300 cursor-not-allowed text-red-100' : 'bg-red-600 hover:bg-red-700 text-white active:scale-[0.99]'}`}>Enquiry</button>
+                  <button type="button" onClick={rc ? undefined : () => setModalOpen(true)} disabled={rc} className={`w-full font-semibold py-4 rounded-2xl transition-all duration-300 ${rc ? 'bg-gray-400 cursor-not-allowed text-gray-600' : 'bg-indigo-600 hover:bg-indigo-700 text-white active:scale-[0.99]'}`}>{regStatus.buttonText}</button>
+                  <button type="button" onClick={rc ? undefined : () => setContactModalOpen(true)} disabled={rc} className={`w-full py-4 font-semibold rounded-2xl transition-all duration-300 ${rc ? 'bg-red-300 cursor-not-allowed text-red-100' : 'bg-red-600 hover:bg-red-700 text-white active:scale-[0.99]'}`}>Enquiry</button>
                 </div>
               </div>
             );
