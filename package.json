@@ -68,6 +68,7 @@
     "zod": "^3.24.4"
   },
   "devDependencies": {
+    "@biomejs/biome": "^2.6.4",
     "@cloudflare/workers-types": "5.20260908.1",
     "@eslint/config-array": "^0.20.0",
     "@eslint/object-schema": "^2.1.6",
