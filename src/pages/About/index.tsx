@@ -9,12 +9,14 @@ import Achievements from "../About/Achievements"
 import CalltoAction from "../About/CalltoAction"
 import Partners from "../About/Partners"
 import Why from "../About/Why"
+import WhyChooseRareminds from "../About/WhyChoose"
 import FloatingAction from "../../components/Contact/StickyButton/StickyButton/FloatingAction";
 const About: React.FC = () => {
   return (
     <div className="relative w-full mt-23">
       <Hero />
        <MissionVisionValues />
+       <WhyChooseRareminds />
       <Achievements />
       <Who />
       <JourneyTimeline />
