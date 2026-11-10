@@ -1,4 +1,6 @@
-export const eventLocations = [
+import type { EventLocation } from "../types/event";
+
+export const eventLocations: EventLocation[] = [
     {
       id: '1',
       name: 'Chennai Tech Hackathon 2024',

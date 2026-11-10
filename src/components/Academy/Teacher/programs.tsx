@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Button } from '../UI/button';
 import { Calendar, GraduationCap, CheckSquare } from 'lucide-react';
 import CareerCounsellingBlueprint from './CareerCounsellingBlueprint';

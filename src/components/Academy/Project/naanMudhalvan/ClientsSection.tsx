@@ -273,8 +273,8 @@
 
 
 import { useState, useEffect, useRef } from 'react';
-import { Users, MapPin, Mail } from 'lucide-react';
-import { ClientType, PersonType } from '../types/project';
+import { Users, MapPin } from 'lucide-react';
+import type { ClientType, PersonType } from '../types/project';
 import { getAllUniversities, loadCsvData } from '../types/projectsService';
 import { 
   Carousel, 
@@ -288,10 +288,7 @@ import {
   Card, 
   CardHeader, 
   CardContent, 
-  CardFooter, 
-  CardTitle, 
-  CardDescription 
-} from '../ui/cards';
+  CardTitle} from '../ui/cards';
 import { Badge } from '../ui/badge';
 
 const ClientsSection = () => {

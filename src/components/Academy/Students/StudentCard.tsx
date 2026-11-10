@@ -1,5 +1,4 @@
 import { CheckCircle2, Lightbulb, MessageSquare, GraduationCap } from "lucide-react";
-import { cn } from "@/lib/utils";
 
  const StudentCard=() => {
   return (

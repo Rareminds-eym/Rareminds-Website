@@ -59,7 +59,7 @@ export default function FDPSolutions() {
       </div>
 
       {/* Custom diagonal background styling */}
-      <style jsx>{`
+      <style>{`
         .clip-diagonal-right {
           clip-path: polygon(30% 0%, 100% 0%, 100% 100%, 100% 100%);
         }

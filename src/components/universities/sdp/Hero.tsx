@@ -1,11 +1,28 @@
 import { motion } from 'framer-motion';
 import { Download, FileSpreadsheet, PhoneCall, Rocket, BadgeCheck, Users, X } from 'lucide-react';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, type ReactNode } from 'react';
 import { supabase } from '@/lib/supabaseClient';
 
-    
+type HeroCallToAction = {
+  text: string;
+  icon: ReactNode;
+  style: string;
+  pdfUrl?: string;
+  institution?: string;
+  href?: string;
+  target?: string;
+  rel?: string;
+};
 
-const banners = [
+const banners: Array<{
+  title: string;
+  subtitle: string;
+  video: string;
+  poster: string;
+  mobilePoster: string;
+  alt: string;
+  cta: HeroCallToAction[];
+}> = [
   {
     title: "Graduate With Skills That Pay!",
     subtitle: "Don't just pass exams.Get job-ready with our industry-aligned programs.",
@@ -147,8 +164,12 @@ function HeroModal({ open, onClose, pdfUrl, institution }: {
         setSuccess("");
         onClose();
       }, 2000);
-    } catch (err: any) {
-      setError(err.message || "An error occurred. Please try again.");
+    } catch (err: unknown) {
+      const message =
+        typeof err === "object" && err !== null && "message" in err && typeof err.message === "string"
+          ? err.message
+          : "";
+      setError(message || "An error occurred. Please try again.");
     }
     setLoading(false);
   };
@@ -169,6 +190,7 @@ function HeroModal({ open, onClose, pdfUrl, institution }: {
         className="bg-white max-w-xl w-full p-6 rounded-2xl shadow-lg relative"
       >
         <button
+          type="button"
           onClick={onClose}
           className="absolute top-4 right-4 text-gray-600 hover:text-black"
         >
@@ -179,8 +201,9 @@ function HeroModal({ open, onClose, pdfUrl, institution }: {
             Enter your details to receive the PDF
           </h3>
           <div>
-            <label className="block text-sm font-medium mb-1">Name</label>
+            <label htmlFor="sdp-hero-name" className="block text-sm font-medium mb-1">Name</label>
             <input
+              id="sdp-hero-name"
               type="text"
               required
               value={form.name}
@@ -189,8 +212,9 @@ function HeroModal({ open, onClose, pdfUrl, institution }: {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium mb-1">Email</label>
+            <label htmlFor="sdp-hero-email" className="block text-sm font-medium mb-1">Email</label>
             <input
+              id="sdp-hero-email"
               type="email"
               required
               value={form.email}
@@ -240,6 +264,7 @@ function InfoModal({ open, onClose }: { open: boolean; onClose: () => void }) {
         className="bg-white max-w-2xl w-full p-8 rounded-2xl shadow-lg relative overflow-y-auto max-h-[90vh]"
       >
         <button
+          type="button"
           onClick={onClose}
           className="absolute top-4 right-4 text-gray-600 hover:text-black"
         >
@@ -277,6 +302,7 @@ function InfoModal({ open, onClose }: { open: boolean; onClose: () => void }) {
               Ready to Bridge the Gap Between Classrooms and Careers?
             </p>
             <button
+              type="button"
               onClick={handleContactClick}
               className="bg-blue-700 text-white px-6 py-3 rounded-full font-semibold hover:bg-blue-800 transition"
             >
@@ -312,6 +338,7 @@ function ImpactModal({ open, onClose }: { open: boolean; onClose: () => void }) 
         className="bg-white max-w-2xl w-full p-8 rounded-2xl shadow-lg relative overflow-y-auto max-h-[90vh]"
       >
         <button
+          type="button"
           onClick={onClose}
           className="absolute top-4 right-4 text-gray-600 hover:text-black"
         >
@@ -348,6 +375,7 @@ function ImpactModal({ open, onClose }: { open: boolean; onClose: () => void }) 
               You’ve Seen the Impact. Now imagine what YOU can become.
             </p>
             <button
+              type="button"
               className="bg-blue-700 text-white px-6 py-3 rounded-full font-semibold hover:bg-blue-800 transition"
               onClick={handleServicesClick}
             >
@@ -409,8 +437,8 @@ function HeroMobile() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
-            {banners[currentBanner].title.match(/[^:.]+[:.]?/g)?.map((part, idx) => (
-              <span key={idx} className="block">
+            {banners[currentBanner].title.match(/[^:.]+[:.]?/g)?.map((part) => (
+              <span key={part} className="block">
                 {part.trim()}
               </span>
             ))}
@@ -426,8 +454,8 @@ function HeroMobile() {
                 <span className="block">Build your future, with expert-led modules</span>
                 <span className="block">in trending domains.</span>
               </>
-            ) : banners[currentBanner].subtitle.match(/[^:.&]+[:.&]?/g)?.map((part, i) => (
-              <span key={i} className="block">
+            ) : banners[currentBanner].subtitle.match(/[^:.&]+[:.&]?/g)?.map((part) => (
+              <span key={part} className="block">
                 {part.trim()}
               </span>
             ))}
@@ -445,72 +473,76 @@ function HeroMobile() {
           transition={{ duration: 0.7, delay: 0.3 }}
         >
           <div className="flex flex-col gap-4">
-          {banners[currentBanner].cta.map((btn, i) =>
+          {banners[currentBanner].cta.map((btn) =>
             btn.text === "See What You Can Become →" ? (
               <motion.button
-                key={i}
+                key={btn.text}
                 onClick={() => setImpactModalOpen(true)}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className={btn.style + " w-full flex justify-center items-center"}
+                className={`${btn.style} w-full flex justify-center items-center`}
               >
                 {btn.icon}
                 {btn.text}
               </motion.button>
             ) : btn.text === "Get Trained. Get Hired →" ? (
               <motion.button
-                key={i}
+                key={btn.text}
                 onClick={() => setInfoModalOpen(true)}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className={btn.style + " w-full flex justify-center items-center"}
+                className={`${btn.style} w-full flex justify-center items-center`}
               >
                 {btn.icon}
                 {btn.text}
               </motion.button>
             ) : btn.text === "Join the Future-Ready Tribe →" ? (
               <motion.button
-                key={i}
+                key={btn.text}
                 onClick={() => scrollToSection("contact-section")}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className={btn.style + " w-full flex justify-center items-center"}
+                className={`${btn.style} w-full flex justify-center items-center`}
               >
                 {btn.icon}
                 {btn.text}
               </motion.button>
             ) : btn.pdfUrl ? (
               <motion.button
-                key={i}
-                onClick={() => setModal({ open: true, pdfUrl: btn.pdfUrl, institution: btn.institution })}
+                key={btn.text}
+                onClick={() => {
+                  if (btn.pdfUrl) {
+                    setModal({ open: true, pdfUrl: btn.pdfUrl, institution: btn.institution ?? btn.text });
+                  }
+                }}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className={btn.style + " w-full flex justify-center items-center"}
+                className={`${btn.style} w-full flex justify-center items-center`}
               >
                 {btn.icon}
                 {btn.text}
               </motion.button>
             ) : btn.href ? (
               <motion.a
-                key={i}
+                key={btn.text}
                 href={btn.href}
                 download
                 target={btn.target || "_blank"}
                 rel={btn.rel || "noopener noreferrer"}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className={btn.style + " w-full flex justify-center items-center"}
+                className={`${btn.style} w-full flex justify-center items-center`}
               >
                 {btn.icon}
                 {btn.text}
               </motion.a>
             ) : (
               <motion.button
-                key={i}
+                key={btn.text}
                 onClick={() => {}}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className={btn.style + " w-full flex justify-center items-center"}
+                className={`${btn.style} w-full flex justify-center items-center`}
               >
                 {btn.icon}
                 {btn.text}
@@ -521,9 +553,9 @@ function HeroMobile() {
         </motion.div>
         {/* Pagination */}
         <div className="absolute left-0 right-0 bottom-18 z-20 flex justify-center gap-2 pt-4">
-          {banners.map((_, index) => (
+          {banners.map((banner, index) => (
             <button
-              key={index}
+              key={banner.title}
               onClick={() => setCurrentBanner(index)}
               className={`w-2 h-2 rounded-full transition-all duration-300 ${
                 currentBanner === index ? 'bg-[#222B33] w-6' : 'bg-white/50 hover:bg-white/70'
@@ -535,6 +567,7 @@ function HeroMobile() {
         {/* Scroll down button */}
         <div className="absolute left-0 right-0 bottom-1 flex justify-center z-30 ">
           <button
+            type="button"
             onClick={handleScrollDown}
             aria-label="Scroll down"
             className="flex flex-col items-center"
@@ -600,7 +633,7 @@ export default function Hero() {
       <section className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-[#A7D8DE] to-[#FCD5CE] text-white overflow-hidden hidden lg:flex">
         {banners.map((banner, index) => (
           <motion.div
-            key={index}
+            key={banner.title}
             initial={false}
             animate={{
               opacity: currentBanner === index ? 1 : 0,
@@ -647,8 +680,8 @@ export default function Hero() {
                   animate={{ scale: currentBanner === index ? 1 : 0.95 }}
                   transition={{ duration: 0.5, delay: 0.5 }}
                 >
-                  {banner.title.match(/[^:.]+[:.]?/g)?.map((part, idx) => (
-                    <span key={idx} className="block">
+                  {banner.title.match(/[^:.]+[:.]?/g)?.map((part) => (
+                    <span key={part} className="block">
                       {part.trim()}
                     </span>
                   ))}
@@ -665,8 +698,8 @@ export default function Hero() {
                   <span className="block">Build your future, with expert-led modules</span>
                   <span className="block">in trending domains.</span>
                 </>
-                 )   : banner.subtitle.match(/[^:.&]+[:.&]?/g)?.map((part, i) => (
-                        <span key={i} className="block">
+                 )   : banner.subtitle.match(/[^:.&]+[:.&]?/g)?.map((part) => (
+                        <span key={part} className="block">
                           {part.trim()}
                         </span>
                       ))}
@@ -678,10 +711,10 @@ export default function Hero() {
                   animate={{ y: currentBanner === index ? 0 : 20, opacity: currentBanner === index ? 1 : 0 }}
                   transition={{ duration: 0.5, delay: 1 }}
                 >
-                  {banner.cta.map((btn, i) =>
+                  {banner.cta.map((btn) =>
                     btn.text === "See What You Can Become →" ? (
                       <motion.button
-                        key={i}
+                        key={btn.text}
                         onClick={() => setImpactModalOpen(true)}
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
@@ -692,7 +725,7 @@ export default function Hero() {
                       </motion.button>
                     ) : btn.text === "Get Trained. Get Hired →" ? (
                       <motion.button
-                        key={i}
+                        key={btn.text}
                         onClick={() => setInfoModalOpen(true)}
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
@@ -703,7 +736,7 @@ export default function Hero() {
                       </motion.button>
                     ) : btn.text === "Join the Future-Ready Tribe →" ? (
                       <motion.button
-                        key={i}
+                        key={btn.text}
                         onClick={() => scrollToSection("contact-section")}
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
@@ -714,8 +747,12 @@ export default function Hero() {
                       </motion.button>
                     ) : btn.pdfUrl ? (
                       <motion.button
-                        key={i}
-                        onClick={() => setModal({ open: true, pdfUrl: btn.pdfUrl, institution: btn.institution })}
+                        key={btn.text}
+                        onClick={() => {
+                          if (btn.pdfUrl) {
+                            setModal({ open: true, pdfUrl: btn.pdfUrl, institution: btn.institution ?? btn.text });
+                          }
+                        }}
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
                         className={btn.style}
@@ -725,7 +762,7 @@ export default function Hero() {
                       </motion.button>
                     ) : btn.href ? (
                       <motion.a
-                        key={i}
+                        key={btn.text}
                         href={btn.href}
                         download
                         target={btn.target || "_blank"}
@@ -739,7 +776,7 @@ export default function Hero() {
                       </motion.a>
                     ) : (
                       <motion.button
-                        key={i}
+                        key={btn.text}
                         onClick={() => {}}
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
@@ -757,9 +794,9 @@ export default function Hero() {
         ))}
 
         <div className="absolute bottom-8 left-0 right-0 z-20 flex justify-center gap-2">
-          {banners.map((_, index) => (
+          {banners.map((banner, index) => (
             <button
-              key={index}
+              key={banner.title}
               onClick={() => setCurrentBanner(index)}
               className={`w-2 h-2 rounded-full transition-all duration-300 ${
                 currentBanner === index ? 'bg-[#222B33] w-6' : 'bg-white/50 hover:bg-white/70'
@@ -778,7 +815,15 @@ export default function Hero() {
 
         <div className="hidden lg:block container ">
           <div
+            role="button"
+            tabIndex={0}
             onClick={handleScrollDown}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                handleScrollDown();
+              }
+            }}
             className="w-max absolute bottom-[60px] left-36 cursor-pointer transition-opacity z-10"
             aria-label="Scroll down"
           >

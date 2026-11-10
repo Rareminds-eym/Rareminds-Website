@@ -8,7 +8,6 @@ import {
   MapPin,
   Send,
   CheckCircle2,
-  ArrowRight,
 } from "lucide-react";
 import { Icon } from "@iconify/react";
 import { useToast } from "@/hooks/use-toast";

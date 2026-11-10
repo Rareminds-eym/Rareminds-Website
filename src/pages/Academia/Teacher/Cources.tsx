@@ -383,7 +383,7 @@
 
 
 
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { 
   GraduationCap,
   Briefcase,
@@ -394,7 +394,7 @@ import {
   ArrowRight,
   Search
 } from 'lucide-react';
-import { useRef, useState, useEffect } from 'react';
+import { useRef, useState } from 'react';
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { Helmet } from "react-helmet-async";
 import { Input } from "../../../components/Academy/UI/input";

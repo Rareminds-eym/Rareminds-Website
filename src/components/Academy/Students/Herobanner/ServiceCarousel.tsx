@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { type ServiceData } from '../../UI/services';
+import type React from 'react';
+import { useState, useEffect } from 'react';
+import type { ServiceData } from '../../UI/services';
 
 interface ServiceCarouselProps {
   services: ServiceData[];
@@ -40,7 +41,7 @@ const ServiceCarousel: React.FC<ServiceCarouselProps> = ({
     <div className="relative w-full h-[400px] md:h-full flex items-center justify-center overflow-hidden rounded-2xl">
       {/* Background color overlay */}
       <div 
-        className={`absolute inset-0 opacity-20 transition-colors duration-500 ${activeService.color}`} 
+        className={`absolute inset-0 opacity-20 transition-colors duration-500 ${activeService.color ?? "bg-transparent"}`}
       />
         {/* Illustration */}
       <div 

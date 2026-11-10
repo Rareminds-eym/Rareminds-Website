@@ -1,7 +1,5 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { Button } from '@/components/ui/button';
-import { ArrowRight, ArrowDown } from 'lucide-react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { ArrowDown } from 'lucide-react';
 
 // Sample services data
 type ServiceData = {
@@ -77,21 +75,8 @@ const Hero = ({ HeroToLogo }: HeroCarouselProps) => {
 
   const activeService = services[activeIndex];
 
-  const location = useLocation();
-  const navigate = useNavigate();
 
-  const isSchoolPage = location.pathname === '/school/teacher';
 
-  const handleClick = useCallback(() => {
-    if (isSchoolPage) {
-      const section = document.getElementById('contact-section');
-      if (section) {
-        section.scrollIntoView({ behavior: 'smooth' });
-      }
-    } else {
-      navigate('/school/teacher#contact-section');
-    }
-  }, [isSchoolPage, navigate]);
 
   // User manual select service
   const handleServiceClick = (index: number) => {

@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { Star } from "lucide-react";
 
 export type Testimonial = {
-  // text: string;
+  text?: string;
   image: string;
   name: string;
   role: string;

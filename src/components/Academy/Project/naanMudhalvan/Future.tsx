@@ -1,4 +1,3 @@
-import React from 'react';
 import { Target, BookOpen, Users } from 'lucide-react';
 import { motion } from 'framer-motion';
 
@@ -20,7 +19,11 @@ const goals = [
   },
 ];
 
-export function Future({f_data}) {
+interface FutureProps {
+  f_data: { what_we_doing: string };
+}
+
+export function Future({ f_data }: FutureProps) {
   return (
     <div className="relative bg-gradient-to-b from-gray-50 to-white py-24 sm:py-32 overflow-hidden">
       <div className="absolute inset-0 bg-grid-pattern opacity-5" />

@@ -24,7 +24,7 @@ export default function ContactSection() {
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const { data, error } = await supabase
+    const { error } = await supabase
       .from("fdp_requests")
       .insert([
         {

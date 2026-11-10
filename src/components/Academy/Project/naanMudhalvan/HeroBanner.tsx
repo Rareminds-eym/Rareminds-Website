@@ -1,9 +1,12 @@
-import React from 'react';
 import { ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 
-export function HeroBanner({hero_data}) {
+interface HeroBannerProps {
+  hero_data: { pname: string; description: string[] };
+}
+
+export function HeroBanner({ hero_data }: HeroBannerProps) {
   console.log("Props received:",hero_data);
   return (
 

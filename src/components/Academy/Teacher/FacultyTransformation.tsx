@@ -14,9 +14,6 @@ import {
 import { MapPin, AlertCircle, BookOpen, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-interface FacultyTransformationProps {
-  Facultytocontact: () => void;
-}
 
 // Helper to chunk array into pairs of 2
 function chunkArray<T>(array: T[], size: number): T[][] {
@@ -125,7 +122,6 @@ const facultySections = [
 // SchoolCard component now inside this file
 function SchoolCard({
   schoolName,
-  location,
   problem,
   solution,
   outcome,

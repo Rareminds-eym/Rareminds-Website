@@ -1,12 +1,9 @@
-import React, { useEffect } from 'react';
-import { useState } from 'react';
+import { useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Helmet } from "react-helmet-async";
 import { MapPin, Users, Clock, BookOpen, Target, CheckCircle, ArrowLeft } from 'lucide-react';
 import { Button } from '../../../components/Academy/UI/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { useCallback } from 'react';
 import AcademyHeader from '../../../components/Header/AcademyHeader'
 import FloatingActionMenu  from '../../../components/Academy/StickyButton/StickyButton/FloatingAction'
 
@@ -17,7 +14,8 @@ interface CaseStudyData {
   bannerImage: string;
   quickSnapshot: {
     location: string;
-    studentsImpacted: string;
+    studentsImpacted?: string;
+    teachersTrained?: string;
     duration: string;
     trainers: string;
     theme: string;
@@ -29,6 +27,7 @@ interface CaseStudyData {
     principal?: string;
     student?: string;
     teacher?: string;
+    seniorTeacher?: string;
   };
   keyFeatures: string[];
   callToAction: string;
@@ -209,10 +208,6 @@ const caseStudiesData: Record<string, CaseStudyData> = {
   }
 };
 
-interface HeaderProps {
-
-  CasestudyDetailToCasestudy: () => void;
-}
 
 const CaseStudy = () => {
   const { id } = useParams<{ id: string }>();

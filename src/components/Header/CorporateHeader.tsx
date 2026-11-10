@@ -1,14 +1,53 @@
-import React, { useState, useEffect } from "react";
+import type React from "react";
+import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Home, BookOpen, Newspaper, Phone, BookAIcon, Menu, X } from "lucide-react";
+import { Home, BookOpen, Newspaper, Phone, BookAIcon, Images, Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import BrandLogo from "../BrandLogo/BrandLogo";
+
+type MenuButtonProps = {
+  isOpen: boolean;
+  toggle: () => void;
+};
+
+const MenuButton: React.FC<MenuButtonProps> = ({ isOpen, toggle }) => (
+  <motion.button
+    type="button"
+    id="corporate-menu-btn"
+    onClick={toggle}
+    aria-label={isOpen ? "Close navigation menu" : "Open navigation menu"}
+    className="relative z-50 w-10 h-10 flex items-center justify-center rounded-full bg-gray-50 hover:bg-gray-100 transition-colors"
+    whileTap={{ scale: 0.95 }}
+  >
+    <motion.span
+      initial={false}
+      animate={{ opacity: isOpen ? 0 : 1, rotate: isOpen ? 90 : 0 }}
+      transition={{ duration: 0.2 }}
+      className="absolute"
+    >
+      <Menu className="w-6 h-6 text-gray-800" />
+    </motion.span>
+    <motion.span
+      initial={false}
+      animate={{ opacity: isOpen ? 1 : 0, rotate: isOpen ? 0 : -90 }}
+      transition={{ duration: 0.2 }}
+      className="absolute"
+    >
+      <X className="w-6 h-6 text-gray-800" />
+    </motion.span>
+  </motion.button>
+);
 
 const CorporateHeader: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
 
-  const isRecruitmentPage = location.pathname.startsWith("/corporate/recruitment")? true : false;
+  // "Recruitment context" is the normal corporate pages. This header is
+  // only rendered on the corporate gallery path routes, which start with
+  // /corporate/recruitment or /corporate/training.
+  const isRecruitmentPage =
+    location.pathname.startsWith("/corporate/recruitment");
+  const isTrainingPage = location.pathname.includes("/corporate/training");
 
   const prefix = isRecruitmentPage ? "/corporate/recruitment" : "/corporate/training";
 
@@ -23,6 +62,7 @@ const CorporateHeader: React.FC = () => {
     },
     { path: `${prefix}/blogs`, label: "Blogs", icon: Newspaper },
     { path: `${prefix}/contact`, label: "Contact", icon: Phone },
+    { path: `${prefix}/gallery`, label: "Gallery", icon: Images },
     { path: `/corporate/skill-passport`, label: "Skill Passport", icon: BookAIcon },
   ];
 
@@ -35,39 +75,6 @@ const CorporateHeader: React.FC = () => {
       },
     },
   };
-
-  const MenuButton = ({
-    isOpen,
-    toggle,
-  }: {
-    isOpen: boolean;
-    toggle: () => void;
-  }) => (
-    <motion.button type="button"
-      id="corporate-menu-btn"
-      onClick={toggle}
-      aria-label={isOpen ? "Close navigation menu" : "Open navigation menu"}
-      className="relative z-50 w-10 h-10 flex items-center justify-center rounded-full bg-gray-50 hover:bg-gray-100 transition-colors"
-      whileTap={{ scale: 0.95 }}
-    >
-      <motion.span
-        initial={false}
-        animate={{ opacity: isOpen ? 0 : 1, rotate: isOpen ? 90 : 0 }}
-        transition={{ duration: 0.2 }}
-        className="absolute"
-      >
-        <Menu className="w-6 h-6 text-gray-800" />
-      </motion.span>
-      <motion.span
-        initial={false}
-        animate={{ opacity: isOpen ? 1 : 0, rotate: isOpen ? 0 : -90 }}
-        transition={{ duration: 0.2 }}
-        className="absolute"
-      >
-        <X className="w-6 h-6 text-gray-800" />
-      </motion.span>
-    </motion.button>
-  );
 
   useEffect(() => {
     if (!isOpen) return;
@@ -100,21 +107,13 @@ const CorporateHeader: React.FC = () => {
           <div className="hidden md:flex gap-4">
             <Link
               to="/corporate/recruitment"
-              className={
-                location.pathname.includes("/corporate/recruitment")
-                  ? "corporate-btn-1"
-                  : "corporate-btn-2"
-              }
+              className={isRecruitmentPage ? "corporate-btn-1" : "corporate-btn-2"}
             >
               Recruitment
             </Link>
             <Link
               to="/corporate/training"
-              className={
-                location.pathname.includes("/corporate/training")
-                  ? "corporate-btn-1"
-                  : "corporate-btn-2"
-              }
+              className={isTrainingPage ? "corporate-btn-1" : "corporate-btn-2"}
             >
               Training
             </Link>
@@ -147,10 +146,8 @@ const CorporateHeader: React.FC = () => {
                 const IconComponent = menuItem.icon;
                 const isActive =
                   location.pathname === menuItem.path ||
-                  (menuItem.path.includes("recruitment") &&
-                    location.pathname.includes("/corporate/recruitment")) ||
-                  (menuItem.path.includes("training") &&
-                    location.pathname.includes("/corporate/training"));
+                  (menuItem.path.includes("recruitment") && isRecruitmentPage) ||
+                  (menuItem.path.includes("training") && isTrainingPage);
 
                 return (
                   <motion.div

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Calendar, CircleChevronDown, Eye } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, type Variants } from "framer-motion";
 import { GooeyText } from "../../ui/GooeyText";
 import { ParticleButton } from "../../../components/ui/particle-button";
 
@@ -73,7 +73,7 @@ const heroSlides = [
   }
 ];
 
-const variants = {
+const variants: Variants = {
   enter: (direction: number) => ({
     x: direction > 0 ? window.innerWidth : -window.innerWidth,
     opacity: 0,

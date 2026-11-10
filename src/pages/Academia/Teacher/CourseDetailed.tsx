@@ -1,5 +1,4 @@
 import { useParams, useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
 import { Helmet } from "react-helmet-async";
 import { ArrowLeft, CheckCircle, ArrowRight, Star, Award, Lightbulb, Users2, FileText, Target, CalendarCheck, Briefcase, Users, Heart, BarChart2 } from 'lucide-react';
 import {
@@ -11,8 +10,7 @@ import {
   communicationPersonalityDevelopmentDetails
 } from './Cources';
 import AcademyHeader from '@/components/Header/AcademyHeader';
-import React, { useEffect } from 'react';
-import { Book } from "@/components/ui/book";
+import { useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '../../../components/Academy/UI/badge';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../../../components/Academy/UI/table';
@@ -165,6 +163,7 @@ export default function CourseDetailed() {
         <div className="text-center">
           <h2 className="text-2xl font-bold mb-4">Course not found</h2>
           <button
+            type="button"
             onClick={() => navigate(-1)}
             className="text-blue-600 hover:text-blue-800"
           >
@@ -209,6 +208,7 @@ export default function CourseDetailed() {
             {/* Foreground content */}
             <div className="relative z-10 container mx-auto px-6 pl-[8%] p-6 flex flex-col justify-center h-full">
               <button
+                type="button"
                 onClick={() => navigate('/school/teacher#course-cards-section')}
                 className="text-white mb-7 text-lg flex items-center gap-2 hover:underline"
               >
@@ -258,6 +258,7 @@ export default function CourseDetailed() {
   {/* Content on top */}
   <div className="relative z-10 container mx-auto px-6 flex flex-col justify-center h-full">
     <button
+      type="button"
       onClick={() => navigate('/school/teacher#course-cards-section')}
       className="text-black mb-7 text-lg flex items-center gap-2 hover:underline"
     >
@@ -287,7 +288,7 @@ export default function CourseDetailed() {
                   {data.title}
                 </h2>
                 {data.intro.map((p, i) => (
-                  <p key={i} className={`text-lg text-gray-700 leading-relaxed${i === 0 ? ' mb-8' : ''}`}>{p}</p>
+                  <p key={p} className={`text-lg text-gray-700 leading-relaxed${i === 0 ? ' mb-8' : ''}`}>{p}</p>
                 ))}              </div>
               
               {/* Stand Out Section */}
@@ -305,8 +306,8 @@ export default function CourseDetailed() {
                   </h3>
                   
                   <div className="space-y-6">
-                    {data.standOut.assists && data.standOut.assists.map((item, i) => (
-                      <div key={i} className="flex flex-col">
+                    {data.standOut.assists?.map((item) => (
+                      <div key={item.title} className="flex flex-col">
                         <h4 className="text-lg font-semibold text-gray-800 mb-1">
                           {item.title}
                         </h4>
@@ -325,10 +326,10 @@ export default function CourseDetailed() {
                   How RareMinds Supports Schools
                 </h3>
                 <div className="space-y-6">
-                  {data.highlights.map((item, i) => {
+                  {data.highlights.map((item) => {
                     const Icon = iconMap[item.icon as keyof typeof iconMap];
                     return (
-                      <div key={i} className="flex items-start space-x-4 p-4 bg-white/10 rounded-xl backdrop-blur-sm hover:bg-white/20 transition-colors">
+                      <div key={item.text} className="flex items-start space-x-4 p-4 bg-white/10 rounded-xl backdrop-blur-sm hover:bg-white/20 transition-colors">
                         {Icon && <Icon className="h-6 w-6 text-black mt-1 flex-shrink-0" />}
                         <span className="text-black">{item.text}</span>
                       </div>
@@ -351,7 +352,7 @@ export default function CourseDetailed() {
       <ul className="space-y-2">
         {otherCourses.map(course => (
           <li key={course.name}>
-            <button className="text-red-700 hover:underline text-left font-semibold" onClick={() => navigate(course.route)}>{course.name}</button>
+            <button type="button" className="text-red-700 hover:underline text-left font-semibold" onClick={() => navigate(course.route)}>{course.name}</button>
           </li>
         ))}
       </ul>
@@ -362,8 +363,8 @@ export default function CourseDetailed() {
         Why It Matters
       </h3>
       <ul className="space-y-4">
-        {data.whyItMatters.map((item, i) => (
-          <li key={i} className="flex items-start">
+        {data.whyItMatters.map((item) => (
+          <li key={item} className="flex items-start">
             <CheckCircle className="h-5 w-5 text-green-600 mt-1 mr-3 flex-shrink-0" />
             <span className="text-gray-700">{item}</span>
           </li>
@@ -529,6 +530,7 @@ export default function CourseDetailed() {
             <div className="absolute inset-0 bg-cover bg-center opacity-60" style={{ backgroundImage: `url(${course.image})` }} />
             <div className="relative z-10 container mx-auto px-6 flex flex-col justify-center h-full">
               <button
+                type="button"
                 onClick={() => navigate('/school/teacher#course-cards-section')}
                 className="text-black mb-7 text-lg flex items-center gap-2 hover:underline"
               >
@@ -648,6 +650,7 @@ export default function CourseDetailed() {
       <div className="text-center">
         <h2 className="text-2xl font-bold mb-4">Course details coming soon</h2>
         <button
+          type="button"
           onClick={() => navigate(-1)}
           className="text-blue-600 hover:text-blue-800"
         >

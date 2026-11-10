@@ -359,16 +359,7 @@
 // }
 
 
-import React from "react";
 import { Briefcase, University, GraduationCap, Settings, Box } from "lucide-react";
-
-const ICON_COLORS = [
-  { bg: "#E32A18", ring: "rgba(0,194,168,0.06)" },
-  { bg: "#E32A18", ring: "rgba(255,77,166,0.06)" },
-  { bg: "#E32A18", ring: "rgba(124,58,237,0.06)" },
-  { bg: "#E32A18", ring: "rgba(249,199,79,0.06)" },
-  { bg: "#E32A18", ring: "rgba(227,42,24,0.06)" },
-];
 
 const DATA = [
   {
@@ -398,7 +389,9 @@ const DATA = [
   },
 ];
 
-const CurvedCard = ({ item, idx, color }) => {
+type InstitutionItem = (typeof DATA)[number];
+
+const CurvedCard = ({ item, idx }: { item: InstitutionItem; idx: number }) => {
   const Icon = item.Icon;
 
   return (
@@ -479,7 +472,7 @@ const CurvedCard = ({ item, idx, color }) => {
   );
 };
 
-export default function CurvedInstitutionsSection({ items = DATA }) {
+export default function CurvedInstitutionsSection({ items = DATA }: { items?: InstitutionItem[] }) {
   return (
     <section
       aria-labelledby="curved-institutions-heading"
@@ -512,7 +505,6 @@ export default function CurvedInstitutionsSection({ items = DATA }) {
                 key={i}
                 item={it}
                 idx={i}
-                color={ICON_COLORS[i % ICON_COLORS.length]}
               />
             ))}
           </div>
@@ -524,7 +516,6 @@ export default function CurvedInstitutionsSection({ items = DATA }) {
                 key={i + 3}
                 item={it}
                 idx={i + 3}
-                color={ICON_COLORS[(i + 3) % ICON_COLORS.length]}
               />
             ))}
           </div>

@@ -1,7 +1,5 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { Button } from '@/components/ui/button';
-import { ArrowRight, ArrowDown } from 'lucide-react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { ArrowDown } from 'lucide-react';
 import { servicesStudent, type ServiceData } from '../../UI/servicesStudent';
 
 interface HeroCarouselProps {
@@ -14,7 +12,7 @@ interface HeroCarouselProps {
 
 export { servicesStudent, type ServiceData };
 
-const Hero = ({ HeroToLogo, HeroToContact, blurAmount = 0 }: HeroCarouselProps) => {
+const Hero = ({ HeroToLogo, blurAmount = 0 }: HeroCarouselProps) => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
   useEffect(() => {
@@ -29,19 +27,6 @@ const Hero = ({ HeroToLogo, HeroToContact, blurAmount = 0 }: HeroCarouselProps) 
   }, []);
 
   const activeService = servicesStudent[activeIndex];
-  const location = useLocation();
-  const navigate = useNavigate();
-  const isSchoolPage = location.pathname === '/school/student';
-  const handleClick = useCallback(() => {
-    if (isSchoolPage) {
-      const section = document.getElementById('contact-section');
-      if (section) {
-        section.scrollIntoView({ behavior: 'smooth' });
-      }
-    } else {
-      navigate('/school/student#contact-section');
-    }
-  }, [isSchoolPage, navigate]);
   const handleServiceClick = (index: number) => {
     setIsTransitioning(true);
     setTimeout(() => {

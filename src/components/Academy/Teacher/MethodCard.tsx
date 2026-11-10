@@ -1,5 +1,4 @@
 
-import React from 'react';
 import { Clock } from 'lucide-react';
 import { Card } from '../UI/card';
 import 'aos/dist/aos.css';

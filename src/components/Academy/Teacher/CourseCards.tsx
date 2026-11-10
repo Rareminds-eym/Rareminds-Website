@@ -2,11 +2,6 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "../UI/button";
 import { 
-  GraduationCap, 
-  Users, 
-  LineChart, 
-  Heart, 
-  Laptop, 
   ArrowRight, 
   Download,
   Calendar,

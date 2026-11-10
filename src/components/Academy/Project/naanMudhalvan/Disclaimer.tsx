@@ -1,4 +1,3 @@
-import React from 'react';
 import { Shield, CheckCircle2, AlertCircle } from 'lucide-react';
 
 export function Disclaimer() {

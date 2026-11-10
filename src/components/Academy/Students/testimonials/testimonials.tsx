@@ -1,12 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import TestimonialCard from './TestimonialCard';
 import { 
   Carousel,
   CarouselContent,
-  CarouselItem,
-  CarouselPrevious,
-  CarouselNext
-} from "../../UI/carousel";
+  CarouselItem} from "../../UI/carousel";
 
 const testimonials = [
   {

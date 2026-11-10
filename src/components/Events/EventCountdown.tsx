@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import type React from 'react';
+import { useState, useEffect } from 'react';
 import { MapPin } from 'lucide-react';
 
 interface EventCountdownProps {
@@ -18,9 +19,7 @@ interface TimeLeft {
 const EventCountdown: React.FC<EventCountdownProps> = ({ 
   eventDate, 
   eventTime, 
-  location, 
-  eventTitle 
-}) => {
+  location}) => {
   const [timeLeft, setTimeLeft] = useState<TimeLeft>({
     days: 0,
     hours: 0,

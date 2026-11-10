@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useRef } from "react";
+import type React from "react";
+import { useState, useEffect, useRef } from "react";
 import { Icon } from "@iconify/react";
 import { AnimatePresence, motion } from "framer-motion";
 import arrowDown from "@/assets/corporate/Home/Carousal/arrowDown.svg";
@@ -73,34 +74,6 @@ const FullScreenCarousel: React.FC<FullScreenCarouselProps> = ({
     touchEndX.current = null;
   };
 
-  const logos = [
-    "ace.png",
-    "ardent.png",
-    "BNM.png",
-    "bsvlogo.png",
-    "csm.png",
-    "DF.png",
-    "e4m.png",
-    "e4softwares.png",
-    "ESSGEE.png",
-    "fifthgen.png",
-    "goldensource.png",
-    "Infolob.png",
-    "ITC.png",
-    "motherson.png",
-    "Msafe.png",
-    "necb.png",
-    "NES.png",
-    "Nexgen.png",
-    "PCC.png",
-    "PFC.png",
-    "Quadgen.png",
-    "qwqer.png",
-    "sssi.png",
-    "Sugam.png",
-    "Verastar.png",
-    "Wipro-consumer-care.png",
-  ];
 
   const handleScrollDown = () => {
     window.scrollTo({

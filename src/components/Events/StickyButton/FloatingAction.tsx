@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import type React from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Plus, Calendar } from 'lucide-react';
 import { ChatButton } from './ChatButton';
 import { AddToCalendar } from './AddToCalendar';
-import { Event } from '../../../types/Events/event';
+import type { Event } from '../../../types/Events/event';
 
 interface MenuItem {
   id: string;
@@ -28,7 +29,7 @@ const FloatingActionMenu: React.FC<FloatingActionMenuProps> = ({ currentEvent })
   const [isOpen, setIsOpen] = useState(false);
   const [showChat, setShowChat] = useState(false);
   const [showAddToCalendar, setShowAddToCalendar] = useState(false);
-  const [activeIcon, setActiveIcon] = useState<React.ComponentType<any>>(Plus);
+  const [, setActiveIcon] = useState<React.ComponentType<any>>(Plus);
 
   const menuItems: MenuItem[] = [
     {

@@ -1,6 +1,5 @@
 import HeroSection from '@/components/universities/fdp/HeroSection';
 import ProgramsSection from '@/components/universities/fdp/ProgramsSection';
-import FAQChatbot from '@/components/universities/sdp/FAQChatbot';
 import LogoCarousel from '@/components/universities/fdp/LogoCarousel';
 import BenefitsSection from '@/components/universities/fdp/BenefitsSection';
 import TestimonialsSection from '@/components/universities/fdp/TestimonialsSection';

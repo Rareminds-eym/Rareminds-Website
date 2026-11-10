@@ -11,7 +11,7 @@ const IndutriesSVG = ({ ...props }: ProcessSVGProps) => {
   const [isHovered, setIsHovered] = useState(false);
 
   const [hasFocus, setHasFocus] = useState(false);
-  const [isPaused, setIsPaused] = useState(false);
+  const [isPaused] = useState(false);
   const prefersReducedMotion = usePrefersReducedMotion();
   const svgRef = useRef<SVGSVGElement>(null);
   const isInView = useInView(svgRef, { amount: 0.2 });

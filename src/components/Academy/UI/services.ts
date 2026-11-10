@@ -55,6 +55,7 @@ type ServiceData = {
     headline: string;
     subtext: string;
     illustration: string;
+    color?: string;
     alt: string;
 };
 
@@ -65,6 +66,7 @@ const services: ServiceData[] = [
       headline: "“Teach the Future, Not the Past”",
       subtext: "Train in NEP, Digital Pedagogy & Emotional Intelligence",
       illustration: "/academy/herobanner/1.png",
+      color: "bg-blue-500",
       alt: "Teachers delivering NEP-aligned subject instruction in a classroom focused on academic improvement through Rareminds programs",
     },
     {
@@ -73,6 +75,7 @@ const services: ServiceData[] = [
       headline: "“From Chalkboards to GPT:\nAre You Ready?”",
       subtext: "Upgrade to AI-integrated teaching",
       illustration: "/academy/herobanner/2.png",
+      color: "bg-purple-500",
       alt: "Educators participating in Rareminds-led teacher training focused on digital tools, pedagogy, and professional growth",
     },
     {
@@ -81,6 +84,7 @@ const services: ServiceData[] = [
       headline: "“A Principal’s Vision\nShapes a School’s Future.”",
       subtext: "Strategic leadership programs for HoDs & Principals",
       illustration: "/academy/herobanner/3.png",
+      color: "bg-pink-500",
       alt: "Students engaged in communication and life skills training sessions designed to build confidence and workplace readiness",
     },
     {
@@ -89,6 +93,7 @@ const services: ServiceData[] = [
       headline: "“Tech Won’t Replace Teachers,\nTeachers Who Use Tech Will”",
       subtext: "Learn to integrate LMS, digital tools & hybrid teaching",
       illustration: "/academy/herobanner/4.png",
+      color: "bg-green-500",
       alt: "Students discussing real-world topics through group activities and news-based learning as part of awareness-building modules",
     },
     {
@@ -97,6 +102,7 @@ const services: ServiceData[] = [
       headline: "“Empathy is a Superpower\nin Every Classroom.”",
       subtext: "Build emotional intelligence and inclusive practices",
       illustration: "/academy/herobanner/5.png",
+      color: "bg-yellow-500",
       alt: "Young learners exploring phonics, storytelling, and classroom games as part of Rareminds’ foundational skills enrichment program",
     }
 ];

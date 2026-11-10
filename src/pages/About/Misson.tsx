@@ -62,7 +62,6 @@
 
 // export default MissionVisionValues;
 
-import React from "react";
 import { FaFlask, FaEye, FaTrophy } from "react-icons/fa";
 
 const MissionVisionValues = () => {

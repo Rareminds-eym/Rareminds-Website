@@ -1,4 +1,3 @@
-import React from 'react';
 
 const categories = ['All', 'Naan Mudhalvan', 'KSDC' , 'AICTE','VTU', 'Vels', 'Acharya' , 'PES', 'BLDEA' ,'Tripura', 'TNSDC',  ];
 // const statuses = ['All', 'Active', 'Completed', 'In Progress'];

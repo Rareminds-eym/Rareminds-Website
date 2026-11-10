@@ -1,7 +1,7 @@
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/Academy/UI/tabs';
 import { Leaf, Shield, GraduationCap, BarChart3, Award, Calculator } from 'lucide-react';
 
 const Services = () => {
@@ -64,7 +64,6 @@ const Services = () => {
     }
   ];
 
-  const currentService = services.find(service => service.id === activeService) || services[0];
 
   return (
     <section className="bg-white py-20">

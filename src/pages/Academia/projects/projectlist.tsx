@@ -88,11 +88,10 @@
   //     </div>
   //   );
   // }
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Header } from '../../../components/Academy/Project/Project/Header';
 import { Filters } from '../../../components/Academy/Project/Project/Filters';
 import { ProjectCard } from '../../../components/Academy/Project/Project/ProjectCard';
-import { ProjectModal } from '../../../components/Academy/Project/Project/ProjectModal';
 import { projects } from '../../../components/Academy/Project/Data/projects';
 import { useProjectSearch } from '../../../components/Academy/Project/hooks/useProjectSearch';
 import AcademyHeader from '../../../components/Header/AcademyHeader';
@@ -106,11 +105,9 @@ export type Project = {
 };
 
 function Projectlist() {
-  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const {
     searchQuery,
     setSearchQuery,
-    filters,
     handleFilterChange,
     filteredProjects
   } = useProjectSearch(projects);
@@ -146,7 +143,6 @@ function Projectlist() {
             <ProjectCard
               key={project.id}
               project={project}
-              onClick={setSelectedProject}
             />
           ))}
         </div>

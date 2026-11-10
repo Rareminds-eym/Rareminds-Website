@@ -143,9 +143,8 @@
 // };
 
 // export default TestimonialsCarousel;
-import React from "react";
 import { motion } from "framer-motion";
-import { TestimonialType } from "..//UI/testimonial";
+import type { TestimonialType } from "..//UI/testimonial";
 import { Star, StarHalf } from "lucide-react";
 
 const testimonials: TestimonialType[] = [

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Button } from "../../UI/button";
 import CaseStudyCard from "./CaseStudyCard";
 import { ChevronLeft, ChevronRight } from "lucide-react";
@@ -32,7 +32,11 @@ const CaseStudy = () => {
         steps: [
           "Prepare your students for future careers with our hands-on learning programs"
         ]
-      }
+      },
+      testimonial: {
+        quote: "The program helped our students build confidence and practical skills.",
+        author: "Program participant"
+      },
     },
     {
       number: 2,
@@ -57,7 +61,11 @@ const CaseStudy = () => {
         steps: [
           "Comprehensive training modules designed to accelerate career advancement"
         ]
-      }
+      },
+      testimonial: {
+        quote: "The practical training helped us prepare for the next stage of our careers.",
+        author: "Program participant"
+      },
     }
   ];
   

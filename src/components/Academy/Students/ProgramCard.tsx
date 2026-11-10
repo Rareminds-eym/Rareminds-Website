@@ -8,7 +8,7 @@ import {
   import { Button } from "../UI/button";
   import { useState } from "react";
   import Autoplay from "embla-carousel-autoplay";
-  import React from "react";
+  import type React from "react";
   
   interface ProgramCardProps {
     imageUrl?: string;
@@ -19,7 +19,7 @@ import {
   }
   
  const ProgramCard =()=> {
-    const [api, setApi] = useState<any>();
+    const [, setApi] = useState<any>();
     const autoplayPlugin = Autoplay({ delay: 3000 });
   
     const Program = ({

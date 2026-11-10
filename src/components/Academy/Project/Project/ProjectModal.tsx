@@ -1,5 +1,4 @@
-import React from 'react';
-import { X, Users, Target, Calendar, ExternalLink } from 'lucide-react';
+import { X, Calendar, ExternalLink } from 'lucide-react';
 import type { Project } from '../types/';
 
 interface ProjectModalProps {

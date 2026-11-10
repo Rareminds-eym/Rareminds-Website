@@ -1,5 +1,4 @@
 
-import React from "react";
 import { motion } from "framer-motion";
 import { TestimonialsColumn, type Testimonial } from "../UI/testimonials-column";
 

@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import type React from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Menu, X, AlignJustify } from "lucide-react";
 import BrandLogo from "../BrandLogo/BrandLogo";
@@ -73,6 +74,14 @@ const GovernmentHeader: React.FC = () => {
             onClick={() => setIsMenuOpen(false)}
           >
             Blogs
+          </Link>
+
+          <Link
+            to="/government/gallery"
+            className="text-xl text-gray-800 md:text-4xl py-2 hover:text-red-600 mb-4"
+            onClick={() => setIsMenuOpen(false)}
+          >
+            Gallery
           </Link>
         </div>
       )}

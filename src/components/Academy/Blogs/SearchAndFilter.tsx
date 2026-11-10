@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Input } from "../UI/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../UI/select";
 import { Button } from "@/components/ui/button";
-import { Search, Filter } from "lucide-react";
+import { Search } from "lucide-react";
 import { categories } from "./blogData";
 import { useLocation } from "react-router-dom";
 
@@ -48,10 +48,6 @@ const SearchAndFilter = ({
     }
   };
 
-  const handleCategoryChange = (category: string) => {
-    setUserInteracted(true);
-    onCategoryFilter(category);
-  };
 
   const handleSubcategoryChange = (subcategory: string) => {
     setUserInteracted(true);

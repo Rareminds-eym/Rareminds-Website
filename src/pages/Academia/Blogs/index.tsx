@@ -3,7 +3,7 @@ import BlogListing from "../../../components/Academy/Blogs/BlogListing";
 import BlogDetail from "../../../components/Academy/Blogs/BlogDetail";
 
 const Blogs: React.FC = () => {
-  const [showDetail, setShowDetail] = useState(false);
+  const [showDetail] = useState(false);
 
   // NOTE: Since BlogListing doesn't accept an onSelectBlog prop, you need to:
   // Option 1: Use React Router to navigate between listing and detail pages

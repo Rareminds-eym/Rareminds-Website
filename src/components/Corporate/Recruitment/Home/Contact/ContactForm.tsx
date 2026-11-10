@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import type React from 'react';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Send, CheckCircle, AlertCircle, Loader2 } from 'lucide-react';
 
 import { contactFormSchema, type ContactFormData } from '../lib/types';
-import { supabase } from '../lib/supabase';
+import { supabase } from '@/lib/supabaseClient';
 import FormField from './FormField';
 
 const ContactForm: React.FC = () => {

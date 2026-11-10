@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { Calendar, ChartLine, Download, FileText, Book } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { supabase } from "@/lib/supabaseClient"; // Adjust the import path as necessary
 
@@ -39,20 +38,6 @@ const resources: Resource[] = [
   },
 ];
 
-const getIcon = (icon: IconType) => {
-  switch (icon) {
-    case "calendar":
-      return <Calendar className="h-6 w-6" />;
-    case "chart-line":
-      return <ChartLine className="h-6 w-6" />;
-    case "file-text":
-      return <FileText className="h-6 w-6" />;
-    case "book":
-      return <Book className="h-6 w-6" />;
-    default:
-      return <Download className="h-6 w-6" />;
-  }
-};
 
 const ResourcesPage = () => {
   const [modalOpen, setModalOpen] = useState(false);

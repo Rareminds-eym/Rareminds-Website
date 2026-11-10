@@ -1,90 +1,21 @@
-import React from 'react';
 import { motion } from 'framer-motion';
-import { Calendar, MapPin, Users } from 'lucide-react';
+import { MapPin, Users } from 'lucide-react';
 
-const events = [
-  // {
-  //   id: 1,
-  //   date: 'March 2024',
-  //   title: 'Chennai Tech Hackathon',
-  //   description: 'Over 500 students participated in this 24-hour coding challenge',
-  //   location: 'Chennai',
-  //   participants: 500,
-  //   icon: Calendar,
-  // },
-  // {
-  //   id: 2,
-  //   date: 'May 2024',
-  //   title: 'Coimbatore Innovation Summit',
-  //   description: 'Industry leaders shared insights with emerging talent',
-  //   location: 'Coimbatore',
-  //   participants: 300,
-  //   icon: Calendar,
-  // },
-  // {
-  //   id: 3,
-  //   date: 'July 2024',
-  //   title: 'Madurai Tech Fest',
-  //   description: 'A celebration of technology and innovation',
-  //   location: 'Madurai',
-  //   participants: 450,
-  //   icon: Calendar,
-  // },
-  // {
-  //   id: 3,
-  //   date: 'July 2024',
-  //   title: 'Madurai Tech Fest',
-  //   description: 'A celebration of technology and innovation',
-  //   location: 'Madurai',
-  //   participants: 450,
-  //   icon: Calendar,
-  // },
-  // {
-  //   id: 3,
-  //   date: 'July 2024',
-  //   title: 'Madurai Tech Fest',
-  //   description: 'A celebration of technology and innovation',
-  //   location: 'Madurai',
-  //   participants: 450,
-  //   icon: Calendar,
-  // },
-  // {
-  //   id: 3,
-  //   date: 'July 2024',
-  //   title: 'Madurai Tech Fest',
-  //   description: 'A celebration of technology and innovation',
-  //   location: 'Madurai',
-  //   participants: 450,
-  //   icon: Calendar,
-  // },
-  // {
-  //   id: 3,
-  //   date: 'July 2024',
-  //   title: 'Madurai Tech Fest',
-  //   description: 'A celebration of technology and innovation',
-  //   location: 'Madurai',
-  //   participants: 450,
-  //   icon: Calendar,
-  // },{
-  //   id: 3,
-  //   date: 'July 2024',
-  //   title: 'Madurai Tech Fest',
-  //   description: 'A celebration of technology and innovation',
-  //   location: 'Madurai',
-  //   participants: 450,
-  //   icon: Calendar,
-  // },{
-  //   id: 3,
-  //   date: 'July 2024',
-  //   title: 'Madurai Tech Fest',
-  //   description: 'A celebration of technology and innovation',
-  //   location: 'Madurai',
-  //   participants: 450,
-  //   icon: Calendar,
-  // },
-];
 
-export function Timeline({t_data}) {
+interface TimelineEvent {
+  date: string;
+  location: string;
+  participants: number;
+  title: string;
+  description: string;
+  icon: React.ComponentType<{ className?: string }>;
+}
+
+interface TimelineProps {
+  t_data: { event_time_line: TimelineEvent[] };
+}
+
+export function Timeline({ t_data }: TimelineProps) {
   return (
     <div className="bg-white py-24 sm:py-32">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
@@ -103,7 +34,7 @@ export function Timeline({t_data}) {
         </motion.div>
 
         <div className="mt-16 space-y-8">
-          {t_data.event_time_line.map((event:any,index:number) => (
+          {t_data.event_time_line.map((event, index) => (
             <motion.div
               key={index}
               initial={{ opacity: 0, x: index % 2 === 0 ? -20 : 20 }}

@@ -6,7 +6,6 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "../UI/carousel";
-import { cn } from "@/lib/utils";
 import Autoplay from "embla-carousel-autoplay";
 
 interface Testimonial {

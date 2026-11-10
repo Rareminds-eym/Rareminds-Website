@@ -12,7 +12,6 @@ interface ChildProps {
 }
 
 const Counselling: React.FC<ChildProps> = ({
-  onAction,
   overlayActive,
   partHover,
   setActivePart,

@@ -320,7 +320,6 @@
 // }
 
 
-import React from "react";
 import { GraduationCap, Target, Star, CheckCircle, Users } from "lucide-react";
 import student from "../../../../../public/passport/StepProcess/Benefits-Students.webp";
 export default function StudentBenefits() {

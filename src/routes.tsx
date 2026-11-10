@@ -1,20 +1,18 @@
-import { createBrowserRouter, Outlet, Navigate, useParams } from "react-router-dom";
 import { lazy, Suspense } from "react";
-import LoaderComponent from "./components/LoaderComponent";
-import ErrorBoundary from "./components/ErrorBoundary";
-import ScrollToTop from "./components/ScrollToTop";
-
-// Layouts
-import DefaultLayout from "./layouts/DefaultLayout";
-import CorporateLayout from "./layouts/CorporateLayout";
-import GovernmentLayout from "./layouts/GovernmentLayout";
-import AcademiaLayout from "./layouts/AcademiaLayout";
-import UniversitiesLayout from "./layouts/UniversitiesLayout";
-
+import { createBrowserRouter, Navigate, Outlet, useParams } from "react-router-dom";
+import CourseDetailedPage from "@/components/Academy/Students/CourseDetailedPage";
 // Direct imports for direct use in routes
 import BlogDetailAcademia from "./components/Academy/Blogs/BlogDetail";
+import ErrorBoundary from "./components/ErrorBoundary";
 import BlogDetailGov from "./components/Govt/Blogs/BlogDetail.tsx";
-import CourseDetailedPage from "@/components/Academy/Students/CourseDetailedPage";
+import LoaderComponent from "./components/LoaderComponent";
+import ScrollToTop from "./components/ScrollToTop";
+
+import AcademiaLayout from "./layouts/AcademiaLayout";
+import CorporateLayout from "./layouts/CorporateLayout";
+import DefaultLayout from "./layouts/DefaultLayout";
+import GovernmentLayout from "./layouts/GovernmentLayout";
+import UniversitiesLayout from "./layouts/UniversitiesLayout";
 
 
 // Lazy pages
@@ -119,10 +117,19 @@ const NewProjectDetail = lazy(() => import("./components/Projects/ProjectDetailN
 
 const InstitutionsBlogDetail = lazy(() => import("./components/universities/Blogs/BlogDetail"));
 
-const withSuspense = (Component: React.LazyExoticComponent<React.FC<{}>>) => (
+const withSuspense = (Component: React.LazyExoticComponent<React.ComponentType>) => (
   <Suspense fallback={<LoaderComponent />}>
     {" "}
     <Component />{" "}
+  </Suspense>
+);
+
+// Gallery sector routes (gallery_path values seeded in gallery_sectors --
+// they map 1:1 to the hyphenated sector slugs)
+const galleryAt = (slug: string) => (
+  <Suspense fallback={<LoaderComponent />}>
+    {" "}
+    <Gallery sector={slug} />{" "}
   </Suspense>
 );
 
@@ -192,6 +199,26 @@ const router = createBrowserRouter([
       {
         path: "/gallery",
         element: withSuspense(Gallery),
+      },
+      {
+        // Sector galleries as clean paths: /gallery/school-teachers,
+        // /gallery/school-students, /gallery/corporate-recruitment,
+        // /gallery/universities, /gallery/government. Legacy
+        // /gallery?sector=<slug> URLs redirect to these paths.
+        path: "/gallery/:sector",
+        element: withSuspense(Gallery),
+      },
+      {
+        path: "/corporate/recruitment/gallery",
+        element: galleryAt("corporate-recruitment"),
+      },
+      {
+        path: "/corporate/training/gallery",
+        element: galleryAt("corporate-training"),
+      },
+      {
+        path: "/universities/gallery",
+        element: galleryAt("universities"),
       },
       {
         path: "/about",
@@ -318,6 +345,10 @@ const router = createBrowserRouter([
           </Suspense>
         ),
       },
+      {
+        path: "/government/gallery",
+        element: galleryAt("government"),
+      },
     ],
   },
   {
@@ -352,6 +383,14 @@ const router = createBrowserRouter([
       {
         path: "/school/teacher",
         element: withSuspense(School),
+      },
+      {
+        path: "/school/teacher/gallery",
+        element: galleryAt("school-teachers"),
+      },
+      {
+        path: "/school/student/gallery",
+        element: galleryAt("school-students"),
       },
       {
         path: "/school/blogs",

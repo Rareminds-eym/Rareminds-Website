@@ -46,3 +46,5 @@ dist-ssr
 
 # Wrangler (Cloudflare Workers)
 .wrangler
+# Local lint report artifacts
+biome-out.txt
