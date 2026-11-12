@@ -1,15 +1,9 @@
 import type React from "react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Check, ChevronDown, ChevronLeft, ChevronRight, ChevronUp, Maximize, Pause, Play, Search, X } from "lucide-react";
+import { Check, ChevronDown, ChevronLeft, ChevronRight, ChevronUp, Image as ImageIcon, Maximize, Pause, Play, Search, X } from "lucide-react";
 import { motion } from "framer-motion";
 import { supabase } from "@/lib/supabaseClient";
-import {
-  DEMO_SECTORS,
-  FILTER_OPTIONS,
-  demoSectorItems,
-  type DemoMedia,
-} from "@/data/galleryDemo";
 import "./galleryPage.css";
 
 /**
@@ -70,31 +64,6 @@ const ITEM_COLUMNS =
   "video_provider, subtitles_url, duration_seconds, event_year, institution_type, " +
   "organization_name, location";
 
-/** Demo video source for the hosted-player fallback (public sample clip). */
-const DEMO_VIDEO_URL =
-  "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4";
-
-/** The Categories dropdown is a sector navigator: every sector gallery
- *  path shows all six sectors here, and picking an option navigates to
- *  that sector's /gallery/<slug> path (the barrel's rotation order). */
-const SECTOR_NAV_OPTIONS: Array<{ label: string; path: string }> = [
-  { label: "School Teacher", path: "/gallery/school-teachers" },
-  { label: "Universities", path: "/gallery/universities" },
-  { label: "Government", path: "/gallery/government" },
-  { label: "Corporate Training", path: "/gallery/corporate-training" },
-  { label: "Corporate Recruitment", path: "/gallery/corporate-recruitment" },
-  { label: "School Students", path: "/gallery/school-students" },
-];
-
-/** Display label for the current sector's path (title-cases any slug
- *  that is not part of the navigator list, e.g. a db-only sector). */
-const sectorNavLabel = (slug: string) =>
-  SECTOR_NAV_OPTIONS.find((o) => o.path === `/gallery/${slug}`)?.label ??
-  slug
-    .split("-")
-    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-    .join(" ");
-
 const timeFormat = (seconds: number) => {
   const m = Math.floor(seconds / 60);
   return `${m}:${String(Math.floor(seconds % 60)).padStart(2, "0")}`;
@@ -110,27 +79,11 @@ const mediaHaystack = (it: SectorItem) =>
     .replace(/\s+/g, " ")
     .trim();
 
-/** Maps one design demo row into a SectorItem. */
-function mapDemoItem(demo: DemoMedia, topics: string[], _sortOrder: number): SectorItem {
-  return {
-    id: demo.title,
-    media_type: demo.media_type,
-    title: demo.title,
-    caption: null,
-    alt_text: demo.title,
-    image_url: `/gallery/${demo.slug}.jpg`,
-    video_url: demo.media_type === "video" ? DEMO_VIDEO_URL : null,
-    thumbnail_url: `/gallery/${demo.slug}.jpg`,
-    video_provider: demo.media_type === "video" ? "hosted" : null,
-    subtitles_url: null,
-    duration_seconds: demo.media_type === "video" ? 135 : null,
-    event_year: demo.event_year,
-    category: demo.category,
-    organization_name: demo.organization_name,
-    location: demo.location,
-    topics,
-  };
-}
+const hasRealMedia = (it: { image_url?: string | null; thumbnail_url?: string | null; video_url?: string | null }) => {
+  const url = it.image_url || it.thumbnail_url || it.video_url;
+  if (!url || typeof url !== "string") return false;
+  return url.trim().length > 0;
+};
 
 /* ------------------------------------------------------------------ */
 /* page                                                                */
@@ -138,9 +91,13 @@ function mapDemoItem(demo: DemoMedia, topics: string[], _sortOrder: number): Sec
 
 const SectorGallery: React.FC<Props> = ({ sector }) => {
   const [info, setInfo] = useState<SectorInfo | null>(null);
+  const [sectorOptions, setSectorOptions] = useState<
+    Array<Pick<SectorInfo, "slug" | "title">>
+  >([]);
   const [items, setItems] = useState<SectorItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [failedItemImages, setFailedItemImages] = useState<Record<string, boolean>>({});
 
   /* filters */
   const [tab, setTab] = useState<"all" | "photo" | "video">("all");
@@ -162,18 +119,24 @@ const SectorGallery: React.FC<Props> = ({ sector }) => {
       setError(null);
 
       try {
-        // 1. The sector row (RLS public policy returns active ones)
-        const { data: sectorRow, error: sectorError } = await supabase
+        // Load active sectors for both this page and its sector navigator.
+        const { data: sectorRows, error: sectorError } = await supabase
           .from("gallery_sectors")
           .select(
             "id, slug, title, group_name, description, parent_path, gallery_path, topic_options",
           )
-          .eq("slug", sector)
-          .maybeSingle();
+          .eq("is_active", true)
+          .order("sort_order", { ascending: true });
 
-        if (sectorError || !sectorRow) throw new Error(sectorError?.message ?? "Gallery not found.");
+        if (sectorError) throw new Error(sectorError.message);
+        const availableSectors = sectorRows ?? [];
+        const sectorRow = availableSectors.find((row) => row.slug === sector);
+        if (!sectorRow) throw new Error("Gallery not found.");
 
-        // 2. Placement rows join the published items.
+        setInfo(sectorRow as SectorInfo);
+        setSectorOptions(availableSectors.map(({ slug, title }) => ({ slug, title })));
+
+        // Placement rows join the published items.
         //    Never use select('*') on gallery_item_sectors: two columns are private.
         const { data, error: itemsError } = await supabase
           .from("gallery_item_sectors")
@@ -181,59 +144,49 @@ const SectorGallery: React.FC<Props> = ({ sector }) => {
           .eq("sector_id", (sectorRow as SectorInfo).id)
           .order("sort_order", { ascending: true });
 
-        if (itemsError) throw new Error(itemsError.message);
+        if (itemsError) {
+          console.warn("Could not load gallery items for sector:", itemsError.message);
+          if (!cancelled) setItems([]);
+        } else if (!cancelled) {
+          const rows = (data ?? []) as unknown as Array<{
+            topics: string[];
+            sort_order: number;
+            gallery_items: Record<string, unknown> | null;
+          }>;
 
-        const rows = (data ?? []) as unknown as Array<{
-          topics: string[];
-          sort_order: number;
-          gallery_items: Record<string, unknown> | null;
-        }>;
-
-        setInfo(sectorRow as SectorInfo);
-        setItems(
-          rows
-            .map((row) => {
-              const it = (row.gallery_items ?? {}) as Record<string, unknown>;
-              return {
-                id: String(it.id ?? ""),
-                media_type: (it.media_type as SectorItem["media_type"]) ?? "photo",
-                title: String(it.title ?? ""),
-                caption: (it.caption as string | null) ?? null,
-                alt_text: (it.alt_text as string | null) ?? null,
-                image_url: (it.image_url as string | null) ?? null,
-                video_url: (it.video_url as string | null) ?? null,
-                thumbnail_url: (it.thumbnail_url as string | null) ?? null,
-                video_provider: (it.video_provider as SectorItem["video_provider"]) ?? null,
-                subtitles_url: (it.subtitles_url as string | null) ?? null,
-                duration_seconds: (it.duration_seconds as number | null) ?? null,
-                event_year: (it.event_year as number | null) ?? null,
-                category: (it.institution_type as string | null) ?? null,
-                organization_name: (it.organization_name as string | null) ?? null,
-                location: (it.location as string | null) ?? null,
-                topics: row.topics ?? [],
-              } as SectorItem;
-            })
-            .filter((it) => it.title),
-        );
-      } catch (e) {
-        // Database unavailable / nothing yet — fall back to the design demo data
-        const demoSector = DEMO_SECTORS.find((s) => s.slug === sector);
-        if (!demoSector) {
-          setError(e instanceof Error ? e.message : "Gallery not found.");
-        } else {
-          setInfo({
-            id: demoSector.slug,
-            slug: demoSector.slug,
-            title: demoSector.title,
-            group_name: demoSector.title,
-            description: demoSector.description,
-            parent_path: demoSector.parent_path,
-            gallery_path: demoSector.gallery_path,
-            topic_options: demoSector.topic_options,
-          });
           setItems(
-            demoSectorItems(sector).map((row) => mapDemoItem(row.item, row.topics, row.sort_order)),
+            rows
+              .map((row) => {
+                const it = (row.gallery_items ?? {}) as Record<string, unknown>;
+                return {
+                  id: String(it.id ?? ""),
+                  media_type: (it.media_type as SectorItem["media_type"]) ?? "photo",
+                  title: String(it.title ?? ""),
+                  caption: (it.caption as string | null) ?? null,
+                  alt_text: (it.alt_text as string | null) ?? null,
+                  image_url: (it.image_url as string | null) ?? null,
+                  video_url: (it.video_url as string | null) ?? null,
+                  thumbnail_url: (it.thumbnail_url as string | null) ?? null,
+                  video_provider: (it.video_provider as SectorItem["video_provider"]) ?? null,
+                  subtitles_url: (it.subtitles_url as string | null) ?? null,
+                  duration_seconds: (it.duration_seconds as number | null) ?? null,
+                  event_year: (it.event_year as number | null) ?? null,
+                  category: (it.institution_type as string | null) ?? null,
+                  organization_name: (it.organization_name as string | null) ?? null,
+                  location: (it.location as string | null) ?? null,
+                  topics: row.topics ?? [],
+                } as SectorItem;
+              })
+              .filter((it) => Boolean(it.title && hasRealMedia(it))),
           );
+        }
+      } catch (e) {
+        console.error("Failed to load sector gallery:", e);
+        if (!cancelled) {
+          setInfo(null);
+          setSectorOptions([]);
+          setItems([]);
+          setError("Content not available, please try again later.");
         }
       } finally {
         if (!cancelled) setLoading(false);
@@ -263,6 +216,11 @@ const SectorGallery: React.FC<Props> = ({ sector }) => {
     setTab("all");
   }, [sector]);
 
+  const availableItems = useMemo(
+    () => items.filter((it) => !failedItemImages[it.id]),
+    [items, failedItemImages],
+  );
+
   /* derived lists */
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -270,9 +228,9 @@ const SectorGallery: React.FC<Props> = ({ sector }) => {
     /* A live search looks at EVERY photo and video of this sector. The
        tab chips and dropdown filters only constrain the unsearched view
        so a match is never hidden by the filter the visitor had on. */
-    if (q) return items.filter((it) => mediaHaystack(it).includes(q));
+    if (q) return availableItems.filter((it) => mediaHaystack(it).includes(q));
 
-    return items.filter((it) => {
+    return availableItems.filter((it) => {
       if (tab !== "all" && it.media_type !== tab) return false;
       if (topic && !(it.topics ?? []).includes(topic)) return false;
       if (name !== "All" && it.organization_name !== name) return false;
@@ -280,32 +238,29 @@ const SectorGallery: React.FC<Props> = ({ sector }) => {
       if (location !== "All" && it.location !== location) return false;
       return true;
     });
-  }, [items, tab, topic, query, name, year, location]);
+  }, [availableItems, tab, topic, query, name, year, location]);
 
   const counts = useMemo(
     () => ({
-      all: items.length,
-      photo: items.filter((it) => it.media_type === "photo").length,
-      video: items.filter((it) => it.media_type === "video").length,
+      all: availableItems.length,
+      photo: availableItems.filter((it) => it.media_type === "photo").length,
+      video: availableItems.filter((it) => it.media_type === "video").length,
     }),
-    [items],
+    [availableItems],
   );
 
   /* dropdown options merged with values found in the data */
   const options = useMemo(() => {
-    const merge = (base: string[], extra: (string | null)[]) => {
-      const set = new Set(base);
-      extra.forEach((v) => {
-        if (v) set.add(v);
-      });
-      return ["All", ...[...set]];
-    };
+    const fromItems = (values: (string | null)[]) => [
+      "All",
+      ...new Set(values.filter((value): value is string => Boolean(value))),
+    ];
     return {
-      names: merge(FILTER_OPTIONS.names, items.map((it) => it.organization_name)),
-      years: merge(FILTER_OPTIONS.years, items.map((it) => (it.event_year ? String(it.event_year) : null))),
-      locations: merge(FILTER_OPTIONS.locations, items.map((it) => it.location)),
+      names: fromItems(availableItems.map((it) => it.organization_name)),
+      years: fromItems(availableItems.map((it) => (it.event_year ? String(it.event_year) : null))),
+      locations: fromItems(availableItems.map((it) => it.location)),
     };
-  }, [items]);
+  }, [availableItems]);
 
   /* pager state (Previous / numbers / Next, centered under the grid) */
   const pageCount = Math.max(Math.ceil(filtered.length / PAGE_SIZE), 1);
@@ -368,8 +323,37 @@ const SectorGallery: React.FC<Props> = ({ sector }) => {
 
   const sectorTitle = info?.title ?? sector;
 
-  if (error && !loading) {
-    return <p className="g-sub py-16 text-center">{error}</p>;
+  if (!loading && (error || availableItems.length === 0)) {
+    return (
+      <section className="g-sector">
+        {/* breadcrumb */}
+        <nav className="g-crumbs" aria-label="Breadcrumb">
+          <a href="/">Home</a>
+          <span className="sep">›</span>
+          <span>{sectorTitle}</span>
+          <span className="sep">›</span>
+          <span className="text-gray-500">Gallery</span>
+        </nav>
+
+        {/* title + description */}
+        <h1 className="g-title">{sectorTitle}</h1>
+        {info?.description ? <p className="g-sub">{info.description}</p> : null}
+
+        <div className="py-20 text-center">
+          <div className="max-w-md mx-auto p-8 rounded-2xl bg-[#fafafa] border border-gray-200 shadow-sm">
+            <p className="text-gray-700 text-lg font-medium" role="alert">
+              {error ?? "Content not available, please try again later."}
+            </p>
+            <Link
+              to="/gallery"
+              className="inline-flex items-center gap-2 mt-6 px-6 py-2.5 rounded-full bg-[#111111] text-white text-sm font-medium hover:bg-black transition-colors"
+            >
+              Back to Gallery
+            </Link>
+          </div>
+        </div>
+      </section>
+    );
   }
 
   return (
@@ -397,7 +381,7 @@ const SectorGallery: React.FC<Props> = ({ sector }) => {
           {/* gallery heading */}
           <div className="g-head">
             <h2>Gallery</h2>
-            <span className="count">{items.length} items</span>
+            <span className="count">{availableItems.length} items</span>
           </div>
 
           {/* filter bar */}
@@ -417,62 +401,65 @@ const SectorGallery: React.FC<Props> = ({ sector }) => {
             counts={counts}
             options={options}
             chips={info?.topic_options ?? []}
-            items={items}
-            sectorLabel={sectorNavLabel(sector)}
+            items={availableItems}
+            sectorLabel={info?.title ?? sector}
+            sectorOptions={sectorOptions}
           />
 
           {/* grid of media cards (current page only) */}
           <div className="g-grid">
             {filtered.length === 0 ? (
-              <p className="col-span-full py-10 text-center text-[13px] text-[#4b5563]">
+              <p
+                className="col-span-full py-10 text-center text-[13px] text-[#4b5563]"
+                role="status"
+              >
                 {query.trim()
                   ? `No photos or videos match “${query.trim()}” in this sector`
-                  : "No images or videos"}
+                  : "No photos or videos match your selected filters."}
               </p>
             ) : (
-              pageItems.map((it, i) => (
-                <motion.article
-                  key={it.id}
-                  initial={{ opacity: 0, y: 24 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: "-40px" }}
-                  transition={{
-                    duration: 0.5,
-                    delay: i * 0.07,
-                    ease: "easeOut",
-                  }}
-                >
-                  <button
-                    type="button"
-                    className="g-card"
-                    onClick={() => setLightbox(pageStart + i)}
-                    aria-label={`Open ${it.title}`}
+              pageItems.map((it, i) => {
+                const imgUrl = it.thumbnail_url ?? it.image_url;
+
+                return (
+                  <motion.article
+                    key={it.id}
+                    initial={{ opacity: 0, y: 24 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: "-40px" }}
+                    transition={{
+                      duration: 0.5,
+                      delay: i * 0.07,
+                      ease: "easeOut",
+                    }}
                   >
-                    <img
-                      src={it.thumbnail_url ?? it.image_url ?? "/gallery/media-01.jpg"}
-                      alt={it.alt_text ?? it.title}
-                      loading="lazy"
-                      onError={(e) => {
-                        const img = e.currentTarget;
-                        if (!img.dataset.fallback) {
-                          img.dataset.fallback = "1";
-                          if (it.image_url && it.image_url !== img.src) img.src = it.image_url;
-                          else img.src = "/gallery/media-01.jpg";
-                        } else img.style.visibility = "hidden";
-                      }}
-                    />
-                    <span className="g-card-badge">
-                      {it.media_type === "video" ? "Video" : "Photo"}
-                    </span>
-                    {it.media_type === "video" ? (
-                      <span className="g-card-play">
-                        <Play size={18} className="ml-0.5" />
+                    <button
+                      type="button"
+                      className="g-card"
+                      onClick={() => setLightbox(pageStart + i)}
+                      aria-label={`Open ${it.title}`}
+                    >
+                      <img
+                        src={imgUrl!}
+                        alt={it.alt_text ?? it.title}
+                        loading="lazy"
+                        onError={() => {
+                          setFailedItemImages((prev) => ({ ...prev, [it.id]: true }));
+                        }}
+                      />
+                      <span className="g-card-badge">
+                        {it.media_type === "video" ? "Video" : "Photo"}
                       </span>
-                    ) : null}
-                  </button>
-                  <h3 className="g-card-title">{it.title}</h3>
-                </motion.article>
-              ))
+                      {it.media_type === "video" ? (
+                        <span className="g-card-play">
+                          <Play size={18} className="ml-0.5" />
+                        </span>
+                      ) : null}
+                    </button>
+                    <h3 className="g-card-title">{it.title}</h3>
+                  </motion.article>
+                );
+              })
             )}
           </div>
 
@@ -585,6 +572,7 @@ type FilterBarProps = {
   /** Display label of the sector this gallery belongs to (shown as the
    *  Categories dropdown value). */
   sectorLabel: string;
+  sectorOptions: Array<Pick<SectorInfo, "slug" | "title">>;
 };
 
 const FilterBar: React.FC<FilterBarProps> = (p) => {
@@ -739,7 +727,7 @@ const FilterBar: React.FC<FilterBarProps> = (p) => {
       ) : null}
 
       <div className="dd-row">
-        <SectorNavDrop value={p.sectorLabel} z={4} />
+        <SectorNavDrop value={p.sectorLabel} options={p.sectorOptions} z={4} />
         <Drop label="Names" value={p.name} options={p.options.names} onChange={p.setName} z={3} />
         <Drop label="Years" value={p.year} options={p.options.years} onChange={p.setYear} z={2} />
         <Drop
@@ -760,8 +748,9 @@ const FilterBar: React.FC<FilterBarProps> = (p) => {
  *  ticked in the menu. */
 const SectorNavDrop: React.FC<{
   value: string;
+  options: Array<Pick<SectorInfo, "slug" | "title">>;
   z: number;
-}> = ({ value, z }) => {
+}> = ({ value, options, z }) => {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -795,21 +784,21 @@ const SectorNavDrop: React.FC<{
 
       {open ? (
         <div className="dd__menu" role="listbox" aria-label="Categories">
-          {SECTOR_NAV_OPTIONS.map((o) => {
-            const selected = o.label === value;
+          {options.map((o) => {
+            const selected = o.title === value;
             return (
               <button
-                key={o.path}
+                key={o.slug}
                 type="button"
                 role="option"
                 aria-selected={selected}
                 className={`dd__opt${selected ? " is-selected" : ""}`}
                 onClick={() => {
                   setOpen(false);
-                  navigate(o.path);
+                  navigate(`/gallery/${o.slug}`);
                 }}
               >
-                <span>{o.label}</span>
+                <span>{o.title}</span>
                 {selected ? <Check size={15} className="dd__icon" /> : null}
               </button>
             );
@@ -912,7 +901,15 @@ const Lightbox: React.FC<{
   onPrev: () => void;
   onNext: () => void;
 }> = ({ item, index, total, sectorLabel, onClose, onPrev, onNext }) => {
-  const isVideo = item.media_type === "video" && item.video_provider === "hosted";
+  const [imgBroken, setImgBroken] = useState(false);
+  useEffect(() => {
+    setImgBroken(false);
+  }, [item.id]);
+
+  const isVideo =
+    item.media_type === "video" &&
+    item.video_provider === "hosted" &&
+    !!item.video_url;
 
   return (
     <motion.div
@@ -939,26 +936,32 @@ const Lightbox: React.FC<{
 
       {/* media */}
       <div className="g-lb-media-wrap">
-        {isVideo ? (
+        {isVideo && item.video_url ? (
           <VideoPlayer
-            src={item.video_url ?? DEMO_VIDEO_URL}
+            src={item.video_url}
             poster={item.thumbnail_url ?? undefined}
             duration={item.duration_seconds}
             subtitles={item.subtitles_url}
           />
+        ) : item.media_type === "video" ? (
+          <div className="g-lb-media">
+            <div className="g-lb-note">Video unavailable</div>
+          </div>
         ) : (
           <div className="g-lb-media">
-            <img
-              src={item.image_url ?? item.thumbnail_url ?? "/gallery/media-01.jpg"}
-              alt={item.alt_text ?? item.title}
-              onError={(e) => {
-                const img = e.currentTarget;
-                if (!img.dataset.fallback) {
-                  img.dataset.fallback = "1";
-                  img.src = item.thumbnail_url ?? "/gallery/media-01.jpg";
-                } else img.style.visibility = "hidden";
-              }}
-            />
+            {(item.image_url ?? item.thumbnail_url) && !imgBroken ? (
+              <img
+                src={(item.image_url ?? item.thumbnail_url)!}
+                alt={item.alt_text ?? item.title}
+                onError={() => setImgBroken(true)}
+              />
+            ) : (
+              <div className="g-lb-empty-placeholder">
+                <ImageIcon size={48} className="text-[#f0d9a6] mb-3 opacity-80" />
+                <div className="text-white text-base font-serif font-bold">{item.title}</div>
+                <div className="g-lb-note mt-2">Image unavailable</div>
+              </div>
+            )}
           </div>
         )}
 
