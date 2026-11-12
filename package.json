@@ -95,7 +95,7 @@
     "ts-node": "^10.9.2",
     "typescript": "^5.8.3",
     "vite": "^6.3.5",
-    "wrangler": "4.130.0"
+    "wrangler": "^4.130.0"
   },
   "description": "This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.",
   "main": "index.js",
