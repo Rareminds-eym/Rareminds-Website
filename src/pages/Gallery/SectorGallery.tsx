@@ -323,65 +323,36 @@ const SectorGallery: React.FC<Props> = ({ sector }) => {
 
   const sectorTitle = info?.title ?? sector;
 
-  if (!loading && (error || availableItems.length === 0)) {
-    return (
-      <section className="g-sector">
-        {/* breadcrumb */}
-        <nav className="g-crumbs" aria-label="Breadcrumb">
-          <a href="/">Home</a>
-          <span className="sep">›</span>
-          <span>{sectorTitle}</span>
-          <span className="sep">›</span>
-          <span className="text-gray-500">Gallery</span>
-        </nav>
-
-        {/* title + description */}
-        <h1 className="g-title">{sectorTitle}</h1>
-        {info?.description ? <p className="g-sub">{info.description}</p> : null}
-
-        <div className="py-20 text-center">
-          <div className="max-w-md mx-auto p-8 rounded-2xl bg-[#fafafa] border border-gray-200 shadow-sm">
-            <p className="text-gray-700 text-lg font-medium" role="alert">
-              {error ?? "Content not available, please try again later."}
-            </p>
-            <Link
-              to="/gallery"
-              className="inline-flex items-center gap-2 mt-6 px-6 py-2.5 rounded-full bg-[#111111] text-white text-sm font-medium hover:bg-black transition-colors"
-            >
-              Back to Gallery
-            </Link>
-          </div>
-        </div>
-      </section>
-    );
+  if (error && !loading) {
+    return <p className="g-sub py-16 text-center">{error}</p>;
   }
 
   return (
-    <section className="g-sector">
+    <section className="mx-auto max-w-[1440px] px-5 pb-10 pt-2 text-[#111] md:px-14 md:pb-16 md:pt-5">
       {loading ? (
         /* skeleton while the query runs */
-        <div className="g-grid" aria-busy="true">
+        <div className="grid grid-cols-2 gap-4 min-[768px]:grid-cols-3 min-[768px]:gap-7 min-[1025px]:grid-cols-4" aria-busy="true">
           {skeletonGrid()}
         </div>
       ) : (
         <>
           {/* breadcrumb */}
-          <nav className="g-crumbs" aria-label="Breadcrumb">
-            <a href="/">Home</a>
-            <span className="sep">›</span>
+          <nav className="flex flex-wrap items-center gap-2 py-4 pb-2.5 text-[13px] text-gray-500 md:pt-[26px]" aria-label="Breadcrumb">
+            <a className="text-gray-800 no-underline hover:underline" href="/">Home</a>
+            <span className="text-gray-400">›</span>
             <span>{sectorTitle}</span>
-            <span className="sep">›</span>
+            <span className="text-gray-400">›</span>
             <span className="text-gray-500">Gallery</span>
           </nav>
 
           {/* title + description */}
-          <h1 className="g-title">{sectorTitle}</h1>
-          {info?.description ? <p className="g-sub">{info.description}</p> : null}
+          <h1 className="my-[6px] mb-[10px] font-[Georgia,Times_New_Roman,serif] text-[30px] font-bold leading-[1.1] text-[#0a0a0a] md:text-[44px]">{sectorTitle}</h1>
+          {info?.description ? <p className="max-w-[620px] text-[15px] leading-[1.5] text-gray-600">{info.description}</p> : null}
 
           {/* gallery heading */}
           <div className="g-head">
             <h2>Gallery</h2>
-            <span className="count">{availableItems.length} items</span>
+            <span className="count">{items.length} items</span>
           </div>
 
           {/* filter bar */}
@@ -407,7 +378,7 @@ const SectorGallery: React.FC<Props> = ({ sector }) => {
           />
 
           {/* grid of media cards (current page only) */}
-          <div className="g-grid">
+          <div className="grid grid-cols-2 gap-4 min-[768px]:grid-cols-3 min-[768px]:gap-7 min-[1025px]:grid-cols-4">
             {filtered.length === 0 ? (
               <p
                 className="col-span-full py-10 text-center text-[13px] text-[#4b5563]"
@@ -418,57 +389,58 @@ const SectorGallery: React.FC<Props> = ({ sector }) => {
                   : "No photos or videos match your selected filters."}
               </p>
             ) : (
-              pageItems.map((it, i) => {
-                const imgUrl = it.thumbnail_url ?? it.image_url;
-
-                return (
-                  <motion.article
-                    key={it.id}
-                    initial={{ opacity: 0, y: 24 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true, margin: "-40px" }}
-                    transition={{
-                      duration: 0.5,
-                      delay: i * 0.07,
-                      ease: "easeOut",
-                    }}
+              pageItems.map((it, i) => (
+                <motion.article
+                  key={it.id}
+                  initial={{ opacity: 0, y: 24 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-40px" }}
+                  transition={{
+                    duration: 0.5,
+                    delay: i * 0.07,
+                    ease: "easeOut",
+                  }}
+                >
+                  <button
+                    type="button"
+                    className="g-card"
+                    onClick={() => setLightbox(pageStart + i)}
+                    aria-label={`Open ${it.title}`}
                   >
-                    <button
-                      type="button"
-                      className="g-card"
-                      onClick={() => setLightbox(pageStart + i)}
-                      aria-label={`Open ${it.title}`}
-                    >
-                      <img
-                        src={imgUrl!}
-                        alt={it.alt_text ?? it.title}
-                        loading="lazy"
-                        onError={() => {
-                          setFailedItemImages((prev) => ({ ...prev, [it.id]: true }));
-                        }}
-                      />
-                      <span className="g-card-badge">
-                        {it.media_type === "video" ? "Video" : "Photo"}
+                    <img
+                      src={it.thumbnail_url ?? it.image_url ?? "/gallery/media-01.jpg"}
+                      alt={it.alt_text ?? it.title}
+                      loading="lazy"
+                      onError={(e) => {
+                        const img = e.currentTarget;
+                        if (!img.dataset.fallback) {
+                          img.dataset.fallback = "1";
+                          if (it.image_url && it.image_url !== img.src) img.src = it.image_url;
+                          else img.src = "/gallery/media-01.jpg";
+                        } else img.style.visibility = "hidden";
+                      }}
+                    />
+                    <span className="g-card-badge">
+                      {it.media_type === "video" ? "Video" : "Photo"}
+                    </span>
+                    {it.media_type === "video" ? (
+                      <span className="g-card-play">
+                        <Play size={18} className="ml-0.5" />
                       </span>
-                      {it.media_type === "video" ? (
-                        <span className="g-card-play">
-                          <Play size={18} className="ml-0.5" />
-                        </span>
-                      ) : null}
-                    </button>
-                    <h3 className="g-card-title">{it.title}</h3>
-                  </motion.article>
-                );
-              })
+                    ) : null}
+                  </button>
+                  <h3 className="g-card-title">{it.title}</h3>
+                </motion.article>
+              ))
             )}
           </div>
 
           {/* pager (Previous / numbers / Next, centered under the grid) */}
           {filtered.length > 0 ? (
-            <nav className="g-pager" aria-label="Gallery pages">
+            <nav className="g-pager mt-7 flex flex-wrap items-center justify-center gap-[14px]" aria-label="Gallery pages">
               <button
                 type="button"
-                className="g-pager__btn"
+                className="flex min-w-28 cursor-pointer flex-col items-center justify-center gap-[5px] rounded-[10px] border border-gray-200 bg-white px-[26px] py-3 text-[15px] font-medium leading-[1.2] text-gray-900 shadow-[0_1px_2px_rgba(0,0,0,0.04)] transition-[border-color,box-shadow,background-color,opacity] duration-200 enabled:hover:border-[#e3c583] enabled:hover:bg-[#fffdf6] enabled:hover:shadow-[0_2px_8px_rgba(227,197,131,0.45)] enabled:active:translate-y-px disabled:cursor-default disabled:bg-gray-50 disabled:opacity-55 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#e3c583]"
                 disabled={page === 1}
                 onClick={() => goToPage(page - 1)}
                 aria-label="Previous page"
@@ -481,7 +453,7 @@ const SectorGallery: React.FC<Props> = ({ sector }) => {
                 <button
                   key={n}
                   type="button"
-                  className={`g-pager__num${n === page ? " is-active" : ""}`}
+                  className={`min-w-[46px] cursor-pointer rounded-[10px] border border-gray-200 bg-white px-0 py-3 text-[15px] text-gray-800 shadow-[0_1px_2px_rgba(0,0,0,0.04)] transition-[border-color,box-shadow] duration-200 hover:border-[#e3c583] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#e3c583]${n === page ? " min-w-9 cursor-default border-0 bg-transparent px-1 font-medium text-gray-700 shadow-none" : ""}`}
                   aria-current={n === page ? "page" : undefined}
                   aria-label={n === page ? `Page ${n}, current page` : `Go to page ${n}`}
                   onClick={() => goToPage(n)}
@@ -492,7 +464,7 @@ const SectorGallery: React.FC<Props> = ({ sector }) => {
 
               <button
                 type="button"
-                className="g-pager__btn"
+                className="flex min-w-28 cursor-pointer flex-col items-center justify-center gap-[5px] rounded-[10px] border border-gray-200 bg-white px-[26px] py-3 text-[15px] font-medium leading-[1.2] text-gray-900 shadow-[0_1px_2px_rgba(0,0,0,0.04)] transition-[border-color,box-shadow,background-color,opacity] duration-200 enabled:hover:border-[#e3c583] enabled:hover:bg-[#fffdf6] enabled:hover:shadow-[0_2px_8px_rgba(227,197,131,0.45)] enabled:active:translate-y-px disabled:cursor-default disabled:bg-gray-50 disabled:opacity-55 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#e3c583]"
                 disabled={page === pageCount}
                 onClick={() => goToPage(page + 1)}
                 aria-label="Next page"
@@ -531,8 +503,8 @@ const SectorGallery: React.FC<Props> = ({ sector }) => {
 function skeletonGrid() {
   return SKELETON_KEYS.map((key, i) => (
     <div key={key}>
-      <div className="g-skeleton" style={{ animationDelay: `${i * 0.09}s` }} />
-      <div className="g-skeleton-title" style={{ animationDelay: `${i * 0.09}s` }} />
+      <div className="aspect-[4/3] animate-[g-pulse_1.4s_ease-in-out_infinite] rounded-[14px] bg-gray-200" style={{ animationDelay: `${i * 0.09}s` }} />
+      <div className="mt-[10px] h-3 w-[55%] animate-[g-pulse_1.4s_ease-in-out_infinite] rounded-md bg-gray-200" style={{ animationDelay: `${i * 0.09}s` }} />
     </div>
   ));
 }
@@ -619,16 +591,16 @@ const FilterBar: React.FC<FilterBarProps> = (p) => {
   ];
 
   return (
-    <div className="filter-bar">
-      <div className="filter-bar__controls">
-        <div className="chips" role="tablist" aria-label="Media type">
+    <div className="filter-bar flex flex-col gap-4">
+      <div className="flex flex-wrap items-center justify-between gap-4">
+        <div className="inline-flex flex-wrap gap-[10px]" role="tablist" aria-label="Media type">
           {tabs.map((t) => (
             <button
               key={t.key}
               type="button"
               role="tab"
               aria-selected={p.tab === t.key}
-              className={`chip${p.tab === t.key ? " is-active" : ""}`}
+              className={`cursor-pointer whitespace-nowrap rounded-full border border-gray-200 bg-white px-[18px] py-[9px] text-[13px] text-gray-800 transition-[background-color,border-color,color,box-shadow] duration-200${p.tab === t.key ? " border-[#f0d9a6] bg-[#f0d9a6] font-semibold text-[#111] shadow-[0_1px_6px_rgba(227,197,131,0.55)]" : " hover:border-[#e3c583]"}`}
               onClick={() => p.setTab(t.key)}
             >
               {t.label}
@@ -636,9 +608,10 @@ const FilterBar: React.FC<FilterBarProps> = (p) => {
           ))}
         </div>
 
-        <div className="search" ref={searchRef}>
+        <div className="relative w-full min-[641px]:w-[300px] min-[641px]:max-w-full" ref={searchRef}>
           <input
             type="text"
+            className="w-full rounded-[10px] border border-gray-200 bg-white py-[11px] pl-4 pr-16 text-[13px] text-[#111] outline-none transition-[border-color,box-shadow] duration-200 placeholder:text-gray-400 focus:border-[#e3c583] focus:shadow-[0_1px_6px_rgba(227,197,131,0.4)]"
             value={draft}
             placeholder="Search title or caption"
             aria-label="Search title or caption"
@@ -655,7 +628,7 @@ const FilterBar: React.FC<FilterBarProps> = (p) => {
           {draft ? (
             <button
               type="button"
-              className="search__clear"
+              className="absolute right-9 top-1/2 flex -translate-y-1/2 cursor-pointer items-center justify-center rounded-lg border-0 bg-transparent p-1.5 text-gray-500 hover:text-[#111]"
               aria-label="Clear search"
               onClick={() => {
                 setDraft("");
@@ -667,7 +640,7 @@ const FilterBar: React.FC<FilterBarProps> = (p) => {
           ) : null}
           <button
             type="button"
-            className="search__go"
+            className="absolute right-1 top-1/2 flex h-[30px] w-[30px] -translate-y-1/2 cursor-pointer items-center justify-center rounded-lg border-0 bg-[#f0d9a6] text-[#111] hover:bg-[#e3c583]"
             aria-label="Search"
             onClick={() => submit(draft)}
           >
@@ -675,10 +648,10 @@ const FilterBar: React.FC<FilterBarProps> = (p) => {
           </button>
 
           {suggestOn ? (
-            <div className="suggest" role="listbox" aria-label="Search suggestions">
+            <div className="absolute left-0 top-[calc(100%+6px)] z-[30] w-full min-w-[280px] rounded-xl border border-gray-200 bg-white p-1.5 shadow-[0_12px_32px_rgba(0,0,0,0.12)]" role="listbox" aria-label="Search suggestions">
               {suggestions.length > 0 ? (
                 <>
-                  <div className="suggest__head">
+                  <div className="px-[10px] py-1.5 text-[0.7rem] font-semibold uppercase tracking-[0.04em] text-gray-400">
                     {q ? "Media titles in this sector" : "All photos & videos in this sector"}
                   </div>
                   {suggestions.map((it, i) => (
@@ -687,20 +660,20 @@ const FilterBar: React.FC<FilterBarProps> = (p) => {
                       role="option"
                       aria-selected={i === 0}
                       tabIndex={0}
-                      className={`suggest__opt${i === 0 ? " is-first" : ""}`}
+                      className={`flex cursor-pointer items-center justify-between gap-[10px] rounded-lg px-[10px] py-2 hover:bg-gray-100${i === 0 ? " bg-gray-100" : ""}`}
                       onMouseDown={(e) => e.preventDefault()}
                       onClick={() => submit(it.title)}
                       onKeyDown={(e) => e.key === "Enter" && submit(it.title)}
                     >
-                      <span className="suggest__title">{it.title}</span>
-                      <span className="suggest__type">
+                      <span className="overflow-hidden text-ellipsis whitespace-nowrap text-[13px] text-[#111]">{it.title}</span>
+                      <span className="shrink-0 text-xs text-gray-500">
                         {it.media_type === "photo" ? "Photo" : "Video"}
                       </span>
                     </div>
                   ))}
                 </>
               ) : (
-                <div className="suggest__head">
+                <div className="px-[10px] py-1.5 text-[0.7rem] font-semibold uppercase tracking-[0.04em] text-gray-400">
                   No photos or videos match “{draft.trim()}” in this sector
                 </div>
               )}
@@ -711,12 +684,12 @@ const FilterBar: React.FC<FilterBarProps> = (p) => {
 
       {/* topic chips */}
       {p.chips.length > 0 ? (
-        <div className="topic-chips">
+        <div className="flex flex-wrap gap-[10px]">
           {p.chips.map((c) => (
             <button
               key={c}
               type="button"
-              className={`topic-chip${p.topic === c ? " is-active" : ""}`}
+              className={`cursor-pointer rounded-full border border-gray-200 bg-white px-[15px] py-[7px] text-[13px] text-gray-700 transition-[background-color,border-color,color] duration-200${p.topic === c ? " border-[#f0d9a6] bg-[#f0d9a6] font-semibold text-[#111]" : " hover:border-[#e3c583] hover:bg-[#fffdf6]"}`}
               aria-pressed={p.topic === c}
               onClick={() => p.setTopic(p.topic === c ? null : c)}
             >
@@ -727,7 +700,7 @@ const FilterBar: React.FC<FilterBarProps> = (p) => {
       ) : null}
 
       <div className="dd-row">
-        <SectorNavDrop value={p.sectorLabel} options={p.sectorOptions} z={4} />
+        <SectorNavDrop value={p.sectorLabel} z={4} />
         <Drop label="Names" value={p.name} options={p.options.names} onChange={p.setName} z={3} />
         <Drop label="Years" value={p.year} options={p.options.years} onChange={p.setYear} z={2} />
         <Drop
@@ -769,36 +742,36 @@ const SectorNavDrop: React.FC<{
   }, []);
 
   return (
-    <div className="dd" ref={ref} style={{ zIndex: open ? 20 : z }}>
-      <span className="dd__label">Categories</span>
+    <div className="relative flex min-w-40 flex-[1_1_160px] flex-col gap-1.5" ref={ref} style={{ zIndex: open ? 20 : z }}>
+      <span className="text-xs text-gray-500">Categories</span>
       <button
         type="button"
-        className={`dd__btn${open ? " is-open" : ""}`}
+        className={`inline-flex cursor-pointer items-center justify-between gap-[10px] rounded-[10px] border bg-white px-[14px] py-[10px] text-left text-[13px] text-gray-500 transition-[border-color,background-color,box-shadow] duration-200${open ? " border-[#e3c583] shadow-[0_1px_6px_rgba(227,197,131,0.45)] hover:border-[#e3c583]" : " border-gray-200 hover:border-gray-300"}`}
         aria-haspopup="listbox"
         aria-expanded={open}
         onClick={() => setOpen((o) => !o)}
       >
-        <span className="dd__value is-strong">{value}</span>
-        {open ? <ChevronUp size={15} className="dd__icon" /> : <ChevronDown size={15} className="dd__icon" />}
+        <span className="font-semibold text-[#111]">{value}</span>
+        {open ? <ChevronUp size={15} className="shrink-0 text-gray-500" /> : <ChevronDown size={15} className="shrink-0 text-gray-500" />}
       </button>
 
       {open ? (
         <div className="dd__menu" role="listbox" aria-label="Categories">
-          {options.map((o) => {
-            const selected = o.title === value;
+          {SECTOR_NAV_OPTIONS.map((o) => {
+            const selected = o.label === value;
             return (
               <button
                 key={o.slug}
                 type="button"
                 role="option"
                 aria-selected={selected}
-                className={`dd__opt${selected ? " is-selected" : ""}`}
+                className={`flex cursor-pointer items-center justify-between gap-[10px] whitespace-nowrap rounded-lg border-0 bg-transparent px-[10px] py-2 text-left text-[13px] text-gray-700${selected ? " bg-[#f0d9a6] font-semibold text-[#111] hover:bg-[#f0d9a6]" : " hover:bg-gray-100"}`}
                 onClick={() => {
                   setOpen(false);
                   navigate(`/gallery/${o.slug}`);
                 }}
               >
-                <span>{o.title}</span>
+                <span>{o.label}</span>
                 {selected ? <Check size={15} className="dd__icon" /> : null}
               </button>
             );
@@ -835,21 +808,21 @@ const Drop: React.FC<{
   const hasValue = value !== "All";
 
   return (
-    <div className={`dd${hasValue ? " has-value" : ""}`} ref={ref} style={{ zIndex: open ? 20 : z }}>
-      <span className="dd__label">{label}</span>
+    <div className="relative flex min-w-40 flex-[1_1_160px] flex-col gap-1.5" ref={ref} style={{ zIndex: open ? 20 : z }}>
+      <span className="text-xs text-gray-500">{label}</span>
       <button
         type="button"
-        className={`dd__btn${open ? " is-open" : ""}`}
+        className={`inline-flex cursor-pointer items-center justify-between gap-[10px] rounded-[10px] border px-[14px] py-[10px] text-left text-[13px] transition-[border-color,background-color,box-shadow] duration-200${hasValue ? " border-[#e3c583] bg-[#fdf6e4] text-[#111] hover:border-[#e3c583]" : open ? " border-[#e3c583] bg-white text-gray-500 shadow-[0_1px_6px_rgba(227,197,131,0.45)] hover:border-[#e3c583]" : " border-gray-200 bg-white text-gray-500 hover:border-gray-300"}${open && hasValue ? " shadow-[0_1px_6px_rgba(227,197,131,0.45)]" : ""}`}
         aria-haspopup="listbox"
         aria-expanded={open}
         onClick={() => setOpen((o) => !o)}
       >
-        <span className={`dd__value${hasValue ? " is-strong" : ""}`}>{value}</span>
-        {open ? <ChevronUp size={15} className="dd__icon" /> : <ChevronDown size={15} className="dd__icon" />}
+        <span className={hasValue ? "font-semibold text-[#111]" : ""}>{value}</span>
+        {open ? <ChevronUp size={15} className="shrink-0 text-gray-500" /> : <ChevronDown size={15} className="shrink-0 text-gray-500" />}
       </button>
 
       {open ? (
-        <div className="dd__menu" role="listbox" aria-label={label}>
+        <div className="absolute left-0 top-[calc(100%+6px)] flex max-h-[260px] min-w-full flex-col gap-0.5 overflow-y-auto rounded-xl border border-gray-200 bg-white p-1.5 shadow-[0_12px_32px_rgba(0,0,0,0.12)]" role="listbox" aria-label={label}>
           {options.map((o) => {
             const selected = o === value;
             return (
@@ -858,14 +831,14 @@ const Drop: React.FC<{
                 type="button"
                 role="option"
                 aria-selected={selected}
-                className={`dd__opt${selected ? " is-selected" : ""}`}
+                className={`flex cursor-pointer items-center justify-between gap-[10px] whitespace-nowrap rounded-lg border-0 bg-transparent px-[10px] py-2 text-left text-[13px] text-gray-700${selected ? " bg-[#f0d9a6] font-semibold text-[#111] hover:bg-[#f0d9a6]" : " hover:bg-gray-100"}`}
                 onClick={() => {
                   onChange(o);
                   setOpen(false);
                 }}
               >
                 <span>{o}</span>
-                {selected ? <Check size={15} className="dd__icon" /> : null}
+                {selected ? <Check size={15} className="shrink-0 text-gray-500" /> : null}
               </button>
             );
           })}
@@ -880,9 +853,9 @@ const Drop: React.FC<{
 /* ------------------------------------------------------------------ */
 
 const BackCta: React.FC = () => (
-  <div className="g-back">
-    <h2>Back to the sectors</h2>
-    <Link to="/gallery" className="g-back__btn">
+  <div className="mt-14 flex flex-wrap items-center justify-between gap-5 pt-[10px] pb-1 md:mt-[88px]">
+    <h2 className="font-[Georgia,Times_New_Roman,serif] text-[22px] font-bold text-[#0a0a0a] md:text-[30px]">Back to the sectors</h2>
+    <Link to="/gallery" className="rounded-lg bg-[#f0d9a6] px-[18px] py-[11px] text-[13px] text-[#111] no-underline transition-colors duration-200 hover:bg-[#e3c583]">
       Back to sectors
     </Link>
   </div>
@@ -913,7 +886,7 @@ const Lightbox: React.FC<{
 
   return (
     <motion.div
-      className="g-lightbox"
+      className="fixed inset-0 z-[90] flex flex-col overflow-hidden bg-[#0a0a0b]"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
@@ -923,20 +896,20 @@ const Lightbox: React.FC<{
       aria-label={item.title}
     >
       {/* top bar */}
-      <div className="g-lb-bar">
-        <span className="g-lb-badge">{isVideo ? "Video" : "Photo"}</span>
-        <span className="g-lb-name">{item.title}</span>
-        <span className="g-lb-counter hidden sm:inline">
+      <div className="flex items-center gap-3 px-4 pb-1 pt-[14px] text-white md:px-[22px] md:pb-1.5 md:pt-[18px]">
+        <span className="shrink-0 rounded-full bg-[rgba(255,255,255,0.14)] px-3 py-[5px] text-[11px] tracking-[0.02em] text-gray-100">{isVideo ? "Video" : "Photo"}</span>
+        <span className="overflow-hidden text-ellipsis whitespace-nowrap text-[15px] font-medium">{item.title}</span>
+        <span className="ml-auto hidden text-[13px] text-gray-200 sm:inline">
           {index + 1} / {total}
         </span>
-        <button type="button" className="g-lb-close" onClick={onClose} aria-label="Close">
+        <button type="button" className="flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-full border border-[rgba(255,255,255,0.16)] bg-[rgba(255,255,255,0.06)] text-white transition-colors duration-200 hover:bg-[rgba(255,255,255,0.16)]" onClick={onClose} aria-label="Close">
           <X size={18} />
         </button>
       </div>
 
       {/* media */}
       <div className="g-lb-media-wrap">
-        {isVideo && item.video_url ? (
+        {isVideo ? (
           <VideoPlayer
             src={item.video_url}
             poster={item.thumbnail_url ?? undefined}
@@ -949,40 +922,38 @@ const Lightbox: React.FC<{
           </div>
         ) : (
           <div className="g-lb-media">
-            {(item.image_url ?? item.thumbnail_url) && !imgBroken ? (
-              <img
-                src={(item.image_url ?? item.thumbnail_url)!}
-                alt={item.alt_text ?? item.title}
-                onError={() => setImgBroken(true)}
-              />
-            ) : (
-              <div className="g-lb-empty-placeholder">
-                <ImageIcon size={48} className="text-[#f0d9a6] mb-3 opacity-80" />
-                <div className="text-white text-base font-serif font-bold">{item.title}</div>
-                <div className="g-lb-note mt-2">Image unavailable</div>
-              </div>
-            )}
+            <img
+              src={item.image_url ?? item.thumbnail_url ?? "/gallery/media-01.jpg"}
+              alt={item.alt_text ?? item.title}
+              onError={(e) => {
+                const img = e.currentTarget;
+                if (!img.dataset.fallback) {
+                  img.dataset.fallback = "1";
+                  img.src = item.thumbnail_url ?? "/gallery/media-01.jpg";
+                } else img.style.visibility = "hidden";
+              }}
+            />
           </div>
         )}
 
         {/* prev / next */}
-        <button type="button" className="g-lb-arrow g-lb-arrow--left" onClick={onPrev} aria-label="Previous">
+        <button type="button" className="absolute bottom-[14px] left-4 z-10 flex h-[42px] w-[42px] -translate-y-0 cursor-pointer items-center justify-center rounded-full border border-[rgba(255,255,255,0.14)] bg-[rgba(255,255,255,0.08)] text-gray-100 transition-colors duration-200 hover:bg-[rgba(255,255,255,0.2)] md:bottom-auto md:left-[46px] md:top-1/2 md:-translate-y-1/2" onClick={onPrev} aria-label="Previous">
           <ChevronDown size={20} style={{ transform: "rotate(90deg)" }} />
         </button>
-        <button type="button" className="g-lb-arrow g-lb-arrow--right" onClick={onNext} aria-label="Next">
+        <button type="button" className="absolute bottom-[14px] right-4 z-10 flex h-[42px] w-[42px] -translate-y-0 cursor-pointer items-center justify-center rounded-full border border-[rgba(255,255,255,0.14)] bg-[rgba(255,255,255,0.08)] text-gray-100 transition-colors duration-200 hover:bg-[rgba(255,255,255,0.2)] md:bottom-auto md:right-[46px] md:top-1/2 md:-translate-y-1/2" onClick={onNext} aria-label="Next">
           <ChevronDown size={20} style={{ transform: "rotate(-90deg)" }} />
         </button>
 
         {/* mobile counter */}
-        <span className="g-lb-mobile-count">
+        <span className="absolute bottom-[26px] left-1/2 -translate-x-1/2 text-[13px] text-gray-200 md:hidden">
           {index + 1} / {total}
         </span>
       </div>
 
       {/* meta */}
-      <div className="g-lb-meta">
-        <p className="name">{item.title}</p>
-        <p className="info">
+      <div className="px-[22px] pb-[76px] pt-3 text-white md:pb-[26px]">
+        <p className="text-base leading-[1.3]">{item.title}</p>
+        <p className="mt-1 text-[13px] text-gray-400">
           {sectorLabel} · {isVideo ? "Video" : "Photo"}
           <span className="sm:hidden"> · {index + 1} of {total}</span>
         </p>
@@ -1053,9 +1024,9 @@ const VideoPlayer: React.FC<{
   if (broken) {
     // graceful fallback: the thumbnail with a small note
     return (
-      <div className="g-lb-media">
-        {poster ? <img src={poster} alt="" /> : null}
-        <div className="g-lb-note">Video unavailable</div>
+      <div className="relative h-auto max-h-full w-full max-w-[1100px] aspect-video overflow-hidden rounded-[14px] bg-[#111]">
+        {poster ? <img className="block h-full w-full object-contain" src={poster} alt="" /> : null}
+        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[rgba(17,17,17,0.85)] px-4 py-2 text-[13px] text-gray-200">Video unavailable</div>
       </div>
     );
   }
@@ -1063,9 +1034,10 @@ const VideoPlayer: React.FC<{
   const total = ref.current?.duration || duration || 0;
 
   return (
-    <div className="g-lb-media" ref={wrapRef}>
+    <div className="relative h-auto max-h-full w-full max-w-[1100px] aspect-video overflow-hidden rounded-[14px] bg-[#111]" ref={wrapRef}>
       {/* biome-ignore lint/a11y/useMediaCaption: The current gallery schema only supplies optional subtitle URLs, not caption tracks. */}
       <video
+        className="block h-full w-full object-contain"
         ref={ref}
         src={src}
         poster={poster ?? undefined}
@@ -1076,12 +1048,12 @@ const VideoPlayer: React.FC<{
         {subtitles ? <track kind="subtitles" src={subtitles} /> : null}
       </video>
 
-      <div className="g-lb-controls">
-        <button type="button" className="g-lc-btn" onClick={toggle} aria-label={playing ? "Pause" : "Play"}>
+      <div className="absolute inset-x-0 bottom-0 flex items-center gap-[14px] bg-[linear-gradient(to_top,rgba(0,0,0,0.6),rgba(0,0,0,0))] px-4 py-[10px] text-white">
+        <button type="button" className="flex cursor-pointer border-0 bg-transparent p-1 text-white" onClick={toggle} aria-label={playing ? "Pause" : "Play"}>
           {playing ? <Pause size={18} /> : <Play size={18} />}
         </button>
         <div
-          className="g-lc-track"
+          className="relative h-1 flex-1 cursor-pointer rounded-full bg-[rgba(255,255,255,0.28)]"
           onClick={seek}
           onKeyDown={(event) => {
             const video = ref.current;
@@ -1102,13 +1074,13 @@ const VideoPlayer: React.FC<{
           aria-valuetext={`${timeFormat(current)} of ${timeFormat(total)}`}
         >
           {total > 0 ? (
-            <span className="g-lc-fill" style={{ width: `${(current / total) * 100}%` }} />
+            <span className="absolute inset-y-0 left-0 rounded-full bg-[#f0d9a6]" style={{ width: `${(current / total) * 100}%` }} />
           ) : null}
         </div>
-        <span className="g-lc-time">
+        <span className="whitespace-nowrap text-xs text-gray-100">
           {timeFormat(current)} / {total > 0 ? timeFormat(total) : "0:00"}
         </span>
-        <button type="button" className="g-lc-btn" onClick={full} aria-label="Fullscreen">
+        <button type="button" className="flex cursor-pointer border-0 bg-transparent p-1 text-white" onClick={full} aria-label="Fullscreen">
           <Maximize size={16} />
         </button>
       </div>
