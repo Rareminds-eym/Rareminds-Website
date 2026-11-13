@@ -127,25 +127,25 @@ select 'video', v.title, v.caption, null,
 from (values
     -- media-03 (video) skyscraper clip
     ('Media title 03', 'Upward tilt clip between the office towers.',
-     'https://www.w3schools.com/html/mov_bbb.mp4',
+     'https://cdn.rareminds.in/gallery/videos/media-03.mp4',
      'https://cdn.rareminds.in/gallery/videos/media-03.jpg',
      'hosted', 135, DATE '2023-02-09', 2023,
      'Visvesvaraya Technological University', 'University', 'Karnataka'),
     -- media-06 (video) triptych clip
     ('Media title 06', 'Triptych motion piece from the showcase reel.',
-     'https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4',
+     'https://cdn.rareminds.in/gallery/videos/media-06.mp4',
      'https://cdn.rareminds.in/gallery/videos/media-06.jpg',
      'hosted', 155, DATE '2024-03-14', 2024,
      'VELS', 'University', 'Tamil Nadu'),
     -- media-09 (video) fog walk clip
     ('Media title 09', 'Fog-path walk recorded during the outreach camp.',
-     'https://vjs.zencdn.net/v/oceans.mp4',
+     'https://cdn.rareminds.in/gallery/videos/media-09.mp4',
      'https://cdn.rareminds.in/gallery/videos/media-09.jpg',
      'hosted', 110, DATE '2019-11-02', 2019,
      'PES', 'College', 'Pan India'),
     -- media-12 (video) cap still-life clip
     ('Media title 12', 'Slow push-in on the merch still-life setup.',
-     'https://www.w3schools.com/html/movie.mp4',
+     'https://cdn.rareminds.in/gallery/videos/media-12.mp4',
      'https://cdn.rareminds.in/gallery/videos/media-12.jpg',
      'hosted', 128, DATE '2023-08-18', 2023,
      'AICTE', 'College', 'Pan India')
