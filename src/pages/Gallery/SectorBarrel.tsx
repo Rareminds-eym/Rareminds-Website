@@ -136,8 +136,10 @@ const SectorBarrel: React.FC = () => {
   const sector = sectors[active];
 
   return (
-    <section className="gallery-page">
-      <h1 className="gallery-heading">Gallery</h1>
+    <section className="mx-auto max-w-[1440px] px-5 py-8 pb-10 md:px-14 md:py-11 md:pb-14">
+      <h1 className="mb-[6px] font-[Georgia,Times_New_Roman,serif] text-xl font-bold text-[#111] md:text-[26px]">
+        Gallery
+      </h1>
 
       {loading || error || sectors.length === 0 ? (
         <p className="gallery-caption" role={error ? "alert" : "status"}>
