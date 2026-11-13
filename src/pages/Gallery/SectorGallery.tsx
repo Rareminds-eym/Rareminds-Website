@@ -280,12 +280,12 @@ const SectorGallery: React.FC<Props> = ({ sector }) => {
       // Keep the Previous/Next pager buttons visible in the viewport after
       // paging, so the visitor can keep stepping through pages without
       // scrolling back down to find them.
-      const pager = document.querySelector(".g-pager");
+      const pager = document.querySelector<HTMLElement>("[data-gallery-pager]");
       if (pager) {
         pager.scrollIntoView({ behavior: "smooth", block: "nearest" });
         return;
       }
-      const bar = document.querySelector(".filter-bar");
+      const bar = document.querySelector<HTMLElement>("[data-gallery-filter-bar]");
       if (!bar) return;
       const top = bar.getBoundingClientRect().top + window.scrollY - 6;
       window.scrollTo({ top: Math.max(top, 0), behavior: "smooth" });
@@ -324,7 +324,11 @@ const SectorGallery: React.FC<Props> = ({ sector }) => {
   const sectorTitle = info?.title ?? sector;
 
   if (error && !loading) {
-    return <p className="g-sub py-16 text-center">{error}</p>;
+    return (
+      <p className="max-w-[620px] py-16 text-center text-[15px] leading-[1.5] text-gray-600">
+        {error}
+      </p>
+    );
   }
 
   return (
@@ -350,9 +354,11 @@ const SectorGallery: React.FC<Props> = ({ sector }) => {
           {info?.description ? <p className="max-w-[620px] text-[15px] leading-[1.5] text-gray-600">{info.description}</p> : null}
 
           {/* gallery heading */}
-          <div className="g-head">
-            <h2>Gallery</h2>
-            <span className="count">{items.length} items</span>
+          <div className="mb-[18px] mt-[34px] flex items-baseline justify-between">
+            <h2 className="font-[Georgia,Times_New_Roman,serif] text-[26px] font-bold text-[#0a0a0a]">
+              Gallery
+            </h2>
+            <span className="text-[13px] text-[#4b5563]">{items.length} items</span>
           </div>
 
           {/* filter bar */}
@@ -403,11 +409,12 @@ const SectorGallery: React.FC<Props> = ({ sector }) => {
                 >
                   <button
                     type="button"
-                    className="g-card"
+                    className="group relative block aspect-[4/3] w-full cursor-pointer overflow-hidden rounded-[14px] border-0 bg-gray-200 p-0 text-left"
                     onClick={() => setLightbox(pageStart + i)}
                     aria-label={`Open ${it.title}`}
                   >
                     <img
+                      className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.06]"
                       src={it.thumbnail_url ?? it.image_url ?? "/gallery/media-01.jpg"}
                       alt={it.alt_text ?? it.title}
                       loading="lazy"
@@ -417,19 +424,21 @@ const SectorGallery: React.FC<Props> = ({ sector }) => {
                           img.dataset.fallback = "1";
                           if (it.image_url && it.image_url !== img.src) img.src = it.image_url;
                           else img.src = "/gallery/media-01.jpg";
-                        } else img.style.visibility = "hidden";
+                        } else img.classList.add("invisible");
                       }}
                     />
-                    <span className="g-card-badge">
+                    <span className="absolute left-[10px] top-[10px] z-[2] rounded-full bg-[rgba(17,17,17,0.82)] px-3 py-[5px] text-[11px] leading-[1.2] tracking-[0.02em] text-white">
                       {it.media_type === "video" ? "Video" : "Photo"}
                     </span>
                     {it.media_type === "video" ? (
-                      <span className="g-card-play">
+                      <span className="absolute left-1/2 top-1/2 flex h-[46px] w-[46px] -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-[rgba(255,255,255,0.92)] text-[#111] transition-[transform,background-color] duration-300 group-hover:scale-[1.08] group-hover:bg-white">
                         <Play size={18} className="ml-0.5" />
                       </span>
                     ) : null}
                   </button>
-                  <h3 className="g-card-title">{it.title}</h3>
+                  <h3 className="mt-[10px] text-[13.5px] leading-[1.35] text-gray-900">
+                    {it.title}
+                  </h3>
                 </motion.article>
               ))
             )}
@@ -437,7 +446,11 @@ const SectorGallery: React.FC<Props> = ({ sector }) => {
 
           {/* pager (Previous / numbers / Next, centered under the grid) */}
           {filtered.length > 0 ? (
-            <nav className="g-pager mt-7 flex flex-wrap items-center justify-center gap-[14px]" aria-label="Gallery pages">
+            <nav
+              className="mt-7 flex flex-wrap items-center justify-center gap-[14px]"
+              data-gallery-pager
+              aria-label="Gallery pages"
+            >
               <button
                 type="button"
                 className="flex min-w-28 cursor-pointer flex-col items-center justify-center gap-[5px] rounded-[10px] border border-gray-200 bg-white px-[26px] py-3 text-[15px] font-medium leading-[1.2] text-gray-900 shadow-[0_1px_2px_rgba(0,0,0,0.04)] transition-[border-color,box-shadow,background-color,opacity] duration-200 enabled:hover:border-[#e3c583] enabled:hover:bg-[#fffdf6] enabled:hover:shadow-[0_2px_8px_rgba(227,197,131,0.45)] enabled:active:translate-y-px disabled:cursor-default disabled:bg-gray-50 disabled:opacity-55 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#e3c583]"
@@ -591,7 +604,7 @@ const FilterBar: React.FC<FilterBarProps> = (p) => {
   ];
 
   return (
-    <div className="filter-bar flex flex-col gap-4">
+    <div className="flex flex-col gap-4" data-gallery-filter-bar>
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div className="inline-flex flex-wrap gap-[10px]" role="tablist" aria-label="Media type">
           {tabs.map((t) => (
@@ -699,8 +712,12 @@ const FilterBar: React.FC<FilterBarProps> = (p) => {
         </div>
       ) : null}
 
-      <div className="dd-row">
-        <SectorNavDrop value={p.sectorLabel} z={4} />
+      <div className="mb-[19px] flex flex-wrap gap-x-5 gap-y-[14px]">
+        <SectorNavDrop
+          value={p.sectorLabel}
+          options={p.sectorOptions}
+          z={4}
+        />
         <Drop label="Names" value={p.name} options={p.options.names} onChange={p.setName} z={3} />
         <Drop label="Years" value={p.year} options={p.options.years} onChange={p.setYear} z={2} />
         <Drop
@@ -756,9 +773,13 @@ const SectorNavDrop: React.FC<{
       </button>
 
       {open ? (
-        <div className="dd__menu" role="listbox" aria-label="Categories">
-          {SECTOR_NAV_OPTIONS.map((o) => {
-            const selected = o.label === value;
+        <div
+          className="absolute left-0 top-[calc(100%+6px)] flex max-h-[260px] min-w-full flex-col gap-0.5 overflow-y-auto rounded-xl border border-gray-200 bg-white p-1.5 shadow-[0_12px_32px_rgba(0,0,0,0.12)]"
+          role="listbox"
+          aria-label="Categories"
+        >
+          {options.map((o) => {
+            const selected = o.title === value;
             return (
               <button
                 key={o.slug}
@@ -771,8 +792,8 @@ const SectorNavDrop: React.FC<{
                   navigate(`/gallery/${o.slug}`);
                 }}
               >
-                <span>{o.label}</span>
-                {selected ? <Check size={15} className="dd__icon" /> : null}
+                <span>{o.title}</span>
+                {selected ? <Check size={15} className="shrink-0 text-gray-500" /> : null}
               </button>
             );
           })}
@@ -908,7 +929,7 @@ const Lightbox: React.FC<{
       </div>
 
       {/* media */}
-      <div className="g-lb-media-wrap">
+      <div className="relative flex min-h-0 flex-1 items-center justify-center">
         {isVideo ? (
           <VideoPlayer
             src={item.video_url}
@@ -917,12 +938,15 @@ const Lightbox: React.FC<{
             subtitles={item.subtitles_url}
           />
         ) : item.media_type === "video" ? (
-          <div className="g-lb-media">
-            <div className="g-lb-note">Video unavailable</div>
+          <div className="relative flex h-full w-full items-center justify-center">
+            <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[rgba(17,17,17,0.85)] px-4 py-2 text-[13px] text-gray-200">
+              Video unavailable
+            </div>
           </div>
         ) : (
-          <div className="g-lb-media">
+          <div className="relative flex h-full w-full items-center justify-center">
             <img
+              className="block h-full w-full object-contain"
               src={item.image_url ?? item.thumbnail_url ?? "/gallery/media-01.jpg"}
               alt={item.alt_text ?? item.title}
               onError={(e) => {
@@ -930,7 +954,7 @@ const Lightbox: React.FC<{
                 if (!img.dataset.fallback) {
                   img.dataset.fallback = "1";
                   img.src = item.thumbnail_url ?? "/gallery/media-01.jpg";
-                } else img.style.visibility = "hidden";
+                } else img.classList.add("invisible");
               }}
             />
           </div>

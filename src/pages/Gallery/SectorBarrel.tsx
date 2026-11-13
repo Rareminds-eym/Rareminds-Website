@@ -142,14 +142,17 @@ const SectorBarrel: React.FC = () => {
       </h1>
 
       {loading || error || sectors.length === 0 ? (
-        <p className="gallery-caption" role={error ? "alert" : "status"}>
+        <p
+          className="mt-7 text-center text-base text-gray-800 md:mt-[42px] md:text-xl"
+          role={error ? "alert" : "status"}
+        >
           {loading
             ? "Loading gallery sectors…"
             : error ?? "No gallery content is available right now. Please try again later."}
         </p>
       ) : (
         <>
-          <div className={`gallery-stage${isMobile ? " is-mobile" : ""}`}>
+          <div className="relative mt-12 h-[560px] md:mt-24 md:h-[426px]">
             {sectors.map((s, index) => {
               const offset = offsetOf(index);
               const distance = Math.abs(offset);
@@ -158,6 +161,7 @@ const SectorBarrel: React.FC = () => {
               const visible = distance <= 2;
               const { top: cardTop, main: cardMain } = getSectorLabels(s.title, s.group_name);
               const hasImage = Boolean(s.card_image_url) && !failedImages[s.id];
+              const labelVisible = focused || isCenter || !hasImage;
 
               return (
                 <button
@@ -167,7 +171,11 @@ const SectorBarrel: React.FC = () => {
                   onClick={() => openSector(index, s.slug)}
                   onMouseEnter={() => setPaused(true)}
                   onMouseLeave={() => setPaused(false)}
-                  className={`gallery-card${focused ? " is-focused" : ""}`}
+                  className={`absolute left-1/2 top-1/2 aspect-video w-[86%] max-w-none cursor-pointer overflow-hidden rounded-[20px] border-0 bg-gray-300 p-0 transition-[transform,opacity,filter,box-shadow,border] duration-700 ease-[cubic-bezier(0.22,0.61,0.36,1)] md:w-[762px] md:max-w-[56%] md:rounded-[28px] ${
+                    focused
+                      ? "border-2 border-[#f0d9a6] shadow-[0_28px_70px_rgba(0,0,0,0.32)] ring-1 ring-[rgba(240,217,166,0.6)]"
+                      : "shadow-[0_24px_60px_rgba(0,0,0,0.28)]"
+                  }`}
                   style={{
                     zIndex: 10 - distance,
                     pointerEvents: visible ? "auto" : "none",
@@ -180,6 +188,7 @@ const SectorBarrel: React.FC = () => {
                 >
                   {hasImage ? (
                     <img
+                      className="absolute inset-0 block h-full w-full object-cover"
                       src={s.card_image_url!}
                       alt={s.title}
                       draggable={false}
@@ -188,9 +197,9 @@ const SectorBarrel: React.FC = () => {
                       }
                     />
                   ) : (
-                    <div className="gallery-card-placeholder gallery-empty-card">
-                      <div className="gallery-empty-card-inner">
-                        <div className="gallery-empty-card-icon">
+                    <div className="absolute inset-0 flex h-full w-full items-center justify-center bg-[radial-gradient(circle_at_50%_25%,#334155_0%,#1e293b_55%,#0f172a_100%)]">
+                      <div className="flex -translate-y-6 flex-col items-center gap-3 opacity-[0.85]">
+                        <div className="flex h-[60px] w-[60px] items-center justify-center rounded-full border border-[rgba(240,217,166,0.35)] bg-[rgba(255,255,255,0.08)] text-[#f0d9a6]">
                           <svg
                             width="32"
                             height="32"
@@ -207,21 +216,26 @@ const SectorBarrel: React.FC = () => {
                             <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21" />
                           </svg>
                         </div>
-                        <span className="gallery-empty-card-badge">
+                        <span className="rounded-full border border-[rgba(240,217,166,0.25)] bg-[rgba(0,0,0,0.4)] px-[14px] py-1 text-[13px] font-semibold uppercase tracking-[0.08em] text-[#f0d9a6]">
                           {s.group_name || "Sector"}
                         </span>
                       </div>
                     </div>
                   )}
-                  <span className="gallery-card-shade" />
+                  <span className="absolute inset-0 bg-[linear-gradient(to_top,rgba(0,0,0,0.55),rgba(0,0,0,0.10)_45%,rgba(0,0,0,0)_70%)]" />
                   <span
-                    className={`gallery-card-label ${
-                      focused || isCenter || !hasImage ? "is-visible" : ""
-                    }${!hasImage ? " is-empty-card" : ""}`}
-                    style={{ transitionDelay: focused ? "150ms" : "0ms" }}
+                    className={`absolute bottom-[18px] left-4 z-[2] flex flex-col items-start gap-0.5 text-left transition-[opacity,transform] duration-[450ms] md:bottom-[74px] md:left-[26px] ${
+                      labelVisible
+                        ? "translate-y-0 opacity-100"
+                        : "translate-y-[10px] opacity-0"
+                    } ${focused ? "delay-[150ms]" : "delay-0"}`}
                   >
-                    {cardTop && <em className="gallery-card-label-top">{cardTop}</em>}
-                    <strong className="gallery-card-label-main">
+                    {cardTop && (
+                      <em className="font-[Georgia,Times_New_Roman,serif] text-[15px] not-italic leading-[1.1] text-[#f0d9a6] [text-shadow:0_1px_8px_rgba(0,0,0,0.45)] md:text-[22px]">
+                        {cardTop}
+                      </em>
+                    )}
+                    <strong className="font-[Georgia,Times_New_Roman,serif] text-[28px] font-bold leading-[1.05] text-white [text-shadow:0_2px_14px_rgba(0,0,0,0.55)] md:text-[46px]">
                       {cardMain}
                     </strong>
                   </span>
@@ -230,14 +244,20 @@ const SectorBarrel: React.FC = () => {
             })}
           </div>
 
-          <p className="gallery-caption" aria-live="polite">
+          <p
+            className="mt-7 text-center text-base text-gray-800 md:mt-[42px] md:text-xl"
+            aria-live="polite"
+          >
             {paused && sector ? sector.title : "Hover a card to pause"}
           </p>
 
-          <nav className="gallery-arrows" aria-label="Rotate the gallery barrel">
+          <nav
+            className="mt-[14px] flex items-center justify-center gap-4 md:mt-[18px]"
+            aria-label="Rotate the gallery barrel"
+          >
             <button
               type="button"
-              className="gallery-arrow"
+              className="flex h-[42px] w-[42px] cursor-pointer items-center justify-center rounded-full border border-[#e3c583] bg-[#f0d9a6] text-[#111] transition-[background-color,box-shadow,transform] duration-200 hover:bg-[#e3c583] hover:shadow-[0_2px_10px_rgba(227,197,131,0.55)] active:scale-[0.94] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-[#e3c583] md:h-[46px] md:w-[46px]"
               aria-label="Rotate to the previous sector"
               onClick={() => step(-1)}
             >
@@ -253,7 +273,7 @@ const SectorBarrel: React.FC = () => {
             </button>
             <button
               type="button"
-              className="gallery-arrow"
+              className="flex h-[42px] w-[42px] cursor-pointer items-center justify-center rounded-full border border-[#e3c583] bg-[#f0d9a6] text-[#111] transition-[background-color,box-shadow,transform] duration-200 hover:bg-[#e3c583] hover:shadow-[0_2px_10px_rgba(227,197,131,0.55)] active:scale-[0.94] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-[#e3c583] md:h-[46px] md:w-[46px]"
               aria-label="Rotate to the next sector"
               onClick={() => step(1)}
             >
